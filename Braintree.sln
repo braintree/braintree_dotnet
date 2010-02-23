@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C# Express 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree", "Braintree\Braintree.csproj", "{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree.Tests", "Braintree.Tests\Braintree.Tests.csproj", "{60234E7B-1181-4EFF-96EE-624B4524D788}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
