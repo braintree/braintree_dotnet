@@ -61,7 +61,7 @@ namespace Braintree.Tests
                 CardholderName = "Drew",
                 Options = new CreditCardOptionsRequest
                 {
-                    VerifyCard = "true"
+                    VerifyCard = true
                 }
             };
 

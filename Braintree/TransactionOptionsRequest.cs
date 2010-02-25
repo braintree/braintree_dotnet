@@ -20,10 +20,10 @@ namespace Braintree
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("store-in-vault", StoreInVault.ToString()));
-            builder.Append(BuildXMLElement("add-billing-address-to-payment-method", AddBillingAddressToPaymentMethod.ToString()));
-            builder.Append(BuildXMLElement("store-shipping-address-in-vault", StoreShippingAddressInVault.ToString()));
-            builder.Append(BuildXMLElement("submit-for-settlement", SubmitForSettlement.ToString()));
+            builder.Append(BuildXMLElement("store-in-vault", StoreInVault));
+            builder.Append(BuildXMLElement("add-billing-address-to-payment-method", AddBillingAddressToPaymentMethod));
+            builder.Append(BuildXMLElement("store-shipping-address-in-vault", StoreShippingAddressInVault));
+            builder.Append(BuildXMLElement("submit-for-settlement", SubmitForSettlement));
             builder.Append(String.Format("</{0}>", rootElement));
 
             return builder.ToString();
@@ -37,10 +37,10 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             return new QueryString().
-                Append(ParentBracketChildString(root, "store-in-vault"), StoreInVault.ToString()).
-                Append(ParentBracketChildString(root, "add-billing-address-to-payment-method"), AddBillingAddressToPaymentMethod.ToString()).
-                Append(ParentBracketChildString(root, "store-shipping-address-in-vault"), StoreShippingAddressInVault.ToString()).
-                Append(ParentBracketChildString(root, "submit-for-settlement"), SubmitForSettlement.ToString()).
+                Append(ParentBracketChildString(root, "store-in-vault"), StoreInVault).
+                Append(ParentBracketChildString(root, "add-billing-address-to-payment-method"), AddBillingAddressToPaymentMethod).
+                Append(ParentBracketChildString(root, "store-shipping-address-in-vault"), StoreShippingAddressInVault).
+                Append(ParentBracketChildString(root, "submit-for-settlement"), SubmitForSettlement).
                 ToString();
         }
     }

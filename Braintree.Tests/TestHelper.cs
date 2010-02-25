@@ -4,6 +4,7 @@ using System.Text;
 using System.Web;
 using System.Net;
 using System.IO;
+using NUnit.Framework;
 
 namespace Braintree.Tests
 {
@@ -35,6 +36,13 @@ namespace Braintree.Tests
             response.Close();
 
             return query;
+        }
+
+        public static void AreDatesEqual(DateTime expected, DateTime actual)
+        {
+            Assert.AreEqual(expected.Day, actual.Day);
+            Assert.AreEqual(expected.Month, actual.Month);
+            Assert.AreEqual(expected.Year, actual.Year);
         }
     }
 }

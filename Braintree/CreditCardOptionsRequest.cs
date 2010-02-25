@@ -6,7 +6,7 @@ namespace Braintree
 {
     public class CreditCardOptionsRequest : Request
     {
-        public String VerifyCard { get; set; }
+        public Boolean VerifyCard { get; set; }
 
         internal override String ToXml()
         {

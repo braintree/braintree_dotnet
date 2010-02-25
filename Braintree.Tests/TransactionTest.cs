@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using Braintree;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
@@ -17,7 +18,7 @@ namespace Braintree.Tests
             gateway = new BraintreeGateway
             {
                 Environment = Environment.DEVELOPMENT,
-                MerchantID = "integration_merchant_id",
+                MerchantId = "integration_merchant_id",
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
@@ -45,7 +46,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -59,8 +60,8 @@ namespace Braintree.Tests
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
-            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
             CreditCard creditCardDetails = transaction.CreditCardDetails;
             Assert.AreEqual("411111", creditCardDetails.Bin);
@@ -77,13 +78,13 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 OrderId = "123",
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     CVV = "321",
                     ExpirationDate = "05/2009"
                 },
-                CustomerRequest = new CustomerRequest
+                Customer = new CustomerRequest
                 {
                     FirstName = "Dan",
                     LastName = "Smith",
@@ -93,7 +94,7 @@ namespace Braintree.Tests
                     Fax = "419-555-1235",
                     Website = "http://braintreepaymentsolutions.com"
                 },
-                BillingAddressRequest = new AddressRequest
+                BillingAddress = new AddressRequest
                 {
                     FirstName = "Carl",
                     LastName = "Jones",
@@ -105,7 +106,7 @@ namespace Braintree.Tests
                     PostalCode = "60622",
                     CountryName = "United States of America",
                 },
-                ShippingAddressRequest = new AddressRequest
+                ShippingAddress = new AddressRequest
                 {
                     FirstName = "Andrew",
                     LastName = "Mason",
@@ -181,18 +182,18 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Token = paymentToken,
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
                 },
-                CustomerRequest = new CustomerRequest
+                Customer = new CustomerRequest
                 {
-                    ID = customerId,
+                    Id = customerId,
                     FirstName = "Jane",
                 },
-                TransactionOptionsRequest = new TransactionOptionsRequest
+                Options = new TransactionOptionsRequest
                 {
                     StoreInVault = true
                 }
@@ -207,7 +208,7 @@ namespace Braintree.Tests
             Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
 
             Customer customer = transaction.CustomerDetails;
-            Assert.AreEqual(customerId, customer.ID);
+            Assert.AreEqual(customerId, customer.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
         }
 
@@ -217,16 +218,16 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                CustomerRequest = new CustomerRequest
+                Customer = new CustomerRequest
                 {
                     FirstName = "Jane"
                 },
-                TransactionOptionsRequest = new TransactionOptionsRequest
+                Options = new TransactionOptionsRequest
                 {
                     StoreInVault = true
                 }
@@ -241,7 +242,7 @@ namespace Braintree.Tests
             Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
 
             Customer customerDetails = transaction.CustomerDetails;
-            Assert.IsNotNull(customerDetails.ID);
+            Assert.IsNotNull(customerDetails.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
         }
 
@@ -251,20 +252,20 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                BillingAddressRequest = new AddressRequest
+                BillingAddress = new AddressRequest
                 {
                     FirstName = "Carl",
                 },
-                ShippingAddressRequest = new AddressRequest
+                ShippingAddress = new AddressRequest
                 {
                     FirstName = "Andrew"
                 },
-                TransactionOptionsRequest = new TransactionOptionsRequest
+                Options = new TransactionOptionsRequest
                 {
                     StoreInVault = true,
                     AddBillingAddressToPaymentMethod = true,
@@ -288,8 +289,8 @@ namespace Braintree.Tests
             Assert.AreEqual("Carl", customer.Addresses[0].FirstName);
             Assert.AreEqual("Andrew", customer.Addresses[1].FirstName);
 
-            Assert.IsNotNull(transaction.BillingAddressDetails.ID);
-            Assert.IsNotNull(transaction.ShippingAddressDetails.ID);
+            Assert.IsNotNull(transaction.BillingAddressDetails.Id);
+            Assert.IsNotNull(transaction.ShippingAddressDetails.Id);
         }
 
         [Test]
@@ -298,7 +299,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.DECLINE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -333,7 +334,7 @@ namespace Braintree.Tests
                     { "store_me", "custom value" },
                     { "another_stored_field", "custom value2" }
                 },
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -358,7 +359,7 @@ namespace Braintree.Tests
                 {
                     { "unkown_custom_field", "custom value" }
                 },
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -367,7 +368,7 @@ namespace Braintree.Tests
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual("91526", result.Errors.ForObject("transaction").OnField("custom_fields").Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CUSTOM_FIELD_IS_INVALID, result.Errors.ForObject("transaction").OnField("custom_fields")[0].Code);
         }
 
         [Test]
@@ -376,7 +377,7 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest creditCardRequest = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 CVV = "123",
                 Number = "5105105105105100",
                 ExpirationDate = "05/12"
@@ -406,26 +407,26 @@ namespace Braintree.Tests
 
             gateway.CreditCard.Create(new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 CVV = "123",
                 Number = "5105105105105100",
                 ExpirationDate = "05/12"
             });
 
-            Address shippingAddress = gateway.Address.Create(customer.ID, new AddressRequest { FirstName = "Carl" }).Target;
+            Address shippingAddress = gateway.Address.Create(customer.Id, new AddressRequest { FirstName = "Carl" }).Target;
 
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CustomerID = customer.ID,
-                ShippingAddressId = shippingAddress.ID
+                CustomerId = customer.Id,
+                ShippingAddressId = shippingAddress.Id
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(shippingAddress.ID, transaction.ShippingAddressDetails.ID);
+            Assert.AreEqual(shippingAddress.Id, transaction.ShippingAddressDetails.Id);
             Assert.AreEqual("Carl", transaction.ShippingAddressDetails.FirstName);
         }
 
@@ -434,7 +435,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
@@ -445,7 +446,7 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             Assert.IsNull(result.Target);
 
-            Assert.AreEqual("81502", result.Errors.ForObject("transaction").OnField("amount").Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
             Dictionary<String, String> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
@@ -463,7 +464,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -478,8 +479,8 @@ namespace Braintree.Tests
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
-            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
             CreditCard creditCardDetails = transaction.CreditCardDetails;
             Assert.AreEqual("411111", creditCardDetails.Bin);
@@ -495,7 +496,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -529,7 +530,7 @@ namespace Braintree.Tests
                     { "store_me", "custom value"},
                     { "another_stored_field", "custom value2" }
                 },
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -549,7 +550,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
@@ -560,7 +561,7 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             Assert.IsNull(result.Target);
 
-            Assert.AreEqual("81502", result.Errors.ForObject("transaction").OnField("amount").Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
 
             Dictionary<String, String> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
@@ -569,12 +570,12 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Find_WithAValidTransactionID()
+        public void Find_WithAValidTransactionId()
         {
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -583,9 +584,9 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-            Transaction foundTransaction = gateway.Transaction.Find(transaction.ID);
+            Transaction foundTransaction = gateway.Transaction.Find(transaction.Id);
 
-            Assert.AreEqual(transaction.ID, foundTransaction.ID);
+            Assert.AreEqual(transaction.Id, foundTransaction.Id);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, foundTransaction.Status);
             Assert.AreEqual("05/2008", foundTransaction.CreditCardDetails.ExpirationDate);
         }
@@ -593,7 +594,7 @@ namespace Braintree.Tests
         [Test]
         public void Find_WithBadId()
         {
-            Assert.Throws<NotFoundError>(() => gateway.Transaction.Find("badId"));
+            Assert.Throws<NotFoundException>(() => gateway.Transaction.Find("badId"));
         }
 
         [Test]
@@ -602,7 +603,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -610,17 +611,17 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Result<Transaction> result = gateway.Transaction.Void(transaction.ID);
+            Result<Transaction> result = gateway.Transaction.Void(transaction.Id);
             Assert.IsTrue(result.IsSuccess());
 
-            Assert.AreEqual(transaction.ID, result.Target.ID);
+            Assert.AreEqual(transaction.Id, result.Target.Id);
             Assert.AreEqual(TransactionStatus.VOIDED, result.Target.Status);
         }
 
         [Test]
         public void Void_WithBadId()
         {
-            Assert.Throws<NotFoundError>(() => gateway.Transaction.Void("badId"));
+            Assert.Throws<NotFoundException>(() => gateway.Transaction.Void("badId"));
         }
 
         [Test]
@@ -629,7 +630,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -637,12 +638,12 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Result<Transaction> result = gateway.Transaction.Void(transaction.ID);
+            Result<Transaction> result = gateway.Transaction.Void(transaction.Id);
             Assert.IsTrue(result.IsSuccess());
 
-            result = gateway.Transaction.Void(transaction.ID);
+            result = gateway.Transaction.Void(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual("91504", result.Errors.ForObject("transaction").OnField("base").Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_BE_VOIDED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
         }
 
         [Test]
@@ -651,7 +652,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -660,7 +661,7 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.ID);
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id);
 
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
@@ -673,7 +674,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -681,7 +682,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.ID, Decimal.Parse("50.00"));
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, Decimal.Parse("50.00"));
 
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
@@ -694,7 +695,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -702,18 +703,18 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.ID);
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id);
             Assert.IsTrue(result.IsSuccess());
 
-            result = gateway.Transaction.SubmitForSettlement(transaction.ID);
+            result = gateway.Transaction.SubmitForSettlement(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual("91507", result.Errors.ForObject("transaction").OnField("base").Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_SETTLEMENT, result.Errors.ForObject("transaction").OnField("base")[0].Code);
         }
 
         [Test]
         public void SubmitForSettlement_WithBadId()
         {
-            Assert.Throws<NotFoundError>(() => gateway.Transaction.SubmitForSettlement("badId"));
+            Assert.Throws<NotFoundException>(() => gateway.Transaction.SubmitForSettlement("badId"));
         }
 
         [Test]
@@ -742,7 +743,7 @@ namespace Braintree.Tests
 
             PagedCollection nextPage = pagedCollection.GetNextPage();
             Assert.AreEqual(2, nextPage.CurrentPageNumber);
-            Assert.AreNotEqual(pagedCollection.Transactions[0].ID, nextPage.Transactions[0].ID);
+            Assert.AreNotEqual(pagedCollection.Transactions[0].Id, nextPage.Transactions[0].Id);
         }
 
         [Test]
@@ -751,21 +752,21 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
                 },
-                TransactionOptionsRequest = new TransactionOptionsRequest
+                Options = new TransactionOptionsRequest
                 {
                     SubmitForSettlement = true
                 }
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Settle(transaction.ID);
+            Settle(transaction.Id);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.ID);
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id);
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(transaction.Amount, result.Target.Amount);
@@ -783,7 +784,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCardRequest = new CreditCardRequest
+                CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -793,10 +794,10 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.ID);
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
 
-            Assert.AreEqual("91506", result.Errors.ForObject("transaction").OnField("base").Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
         }
     }
 }

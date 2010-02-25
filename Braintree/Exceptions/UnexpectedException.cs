@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Braintree
+namespace Braintree.Exceptions
 {
-    public class NotFoundError : Exception
+    public class UnexpectedException : Exception
     {
     }
 }

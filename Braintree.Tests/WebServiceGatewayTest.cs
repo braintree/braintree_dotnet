@@ -12,7 +12,7 @@ namespace Braintree
         public void SslCertificateSuccessful()
         {
             Configuration.Environment = Environment.QA;
-            Configuration.MerchantID = "integration_merchant_id";
+            Configuration.MerchantId = "integration_merchant_id";
             Configuration.PublicKey = "integration_public_key";
             Configuration.PrivateKey = "integration_private_key";
 

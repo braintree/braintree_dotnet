@@ -6,7 +6,7 @@ namespace Braintree
 {
     public class TransparentRedirectRequest : Request
     {
-        private String ID;
+        private String Id;
 
         public TransparentRedirectRequest(String queryString)
         {
@@ -19,7 +19,7 @@ namespace Braintree
                 paramMap[items[0]] = items[1];
             }
 
-            ID = paramMap["id"];
+            Id = paramMap["id"];
         }
 
         internal override string ToXml(string rootElement)
@@ -30,7 +30,7 @@ namespace Braintree
         internal override String ToXml()
         {
             StringBuilder builder = new StringBuilder();
-            builder.Append(BuildXMLElement("id", ID));
+            builder.Append(BuildXMLElement("id", Id));
             
             return builder.ToString();
         }

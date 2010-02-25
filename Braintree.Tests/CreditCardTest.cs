@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Braintree;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
@@ -15,7 +16,7 @@ namespace Braintree.Tests
             gateway = new BraintreeGateway
             {
                 Environment = Environment.DEVELOPMENT,
-                MerchantID = "integration_merchant_id",
+                MerchantId = "integration_merchant_id",
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
@@ -44,14 +45,14 @@ namespace Braintree.Tests
 
 
         [Test]
-        public void Create_CreatesCreditCardForGivenCustomerID()
+        public void Create_CreatesCreditCardForGivenCustomerId()
         {
             String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardRequest = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
                 CVV = "123",
@@ -65,8 +66,8 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
-            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
         }
 
         [Test]
@@ -74,7 +75,7 @@ namespace Braintree.Tests
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
-            CreditCardRequest trParams = new CreditCardRequest { CustomerID = customer.ID };
+            CreditCardRequest trParams = new CreditCardRequest { CustomerId = customer.Id };
 
             CreditCardRequest request = new CreditCardRequest
             {
@@ -104,7 +105,7 @@ namespace Braintree.Tests
 
             var creditCardRequest = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
                 CVV = "123",
@@ -112,15 +113,15 @@ namespace Braintree.Tests
             };
 
             CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardRequest).Target;
-            CreditCard creditCard = gateway.CreditCard.Find(originalCreditCard.Token).Target;
+            CreditCard creditCard = gateway.CreditCard.Find(originalCreditCard.Token);
 
             Assert.AreEqual("510510", creditCard.Bin);
             Assert.AreEqual("5100", creditCard.LastFour);
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
-            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
         }
 
         [Test]
@@ -131,7 +132,7 @@ namespace Braintree.Tests
 
             var creditCardCreateRequest = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
                 CVV = "123",
@@ -142,7 +143,7 @@ namespace Braintree.Tests
 
             var creditCardUpdateRequest = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 Number = "4111111111111111",
                 ExpirationDate = "12/05",
                 CVV = "321",
@@ -156,8 +157,8 @@ namespace Braintree.Tests
             Assert.AreEqual("12", creditCard.ExpirationMonth);
             Assert.AreEqual("2005", creditCard.ExpirationYear);
             Assert.AreEqual("Dave Inchy", creditCard.CardholderName);
-            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
         }
 
         [Test]
@@ -166,7 +167,7 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest createRequest = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
@@ -203,7 +204,7 @@ namespace Braintree.Tests
 
             var creditCardRequest = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
                 CVV = "123",
@@ -212,9 +213,9 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
 
-            Assert.AreEqual(creditCard.Token, gateway.CreditCard.Find(creditCard.Token).Target.Token);
+            Assert.AreEqual(creditCard.Token, gateway.CreditCard.Find(creditCard.Token).Token);
             gateway.CreditCard.Delete(creditCard.Token);
-            Assert.Throws<NotFoundError>(() => gateway.CreditCard.Find(creditCard.Token));
+            Assert.Throws<NotFoundException>(() => gateway.CreditCard.Find(creditCard.Token));
         }
 
         [Test]
@@ -223,14 +224,14 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = "4111111111111111",
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
-                    VerifyCard = "true"
+                    VerifyCard = true
                 }
             };
 
@@ -244,14 +245,14 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
-                    VerifyCard = "true"
+                    VerifyCard = true
                 }
             };
 

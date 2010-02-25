@@ -32,11 +32,11 @@ namespace Braintree
             return new Result<CreditCard>(new NodeWrapper(creditCardXML));
         }
 
-        public Result<CreditCard> Find(String token)
+        public CreditCard Find(String token)
         {
             XmlNode creditCardXML = WebServiceGateway.Get("/payment_methods/" + token);
 
-            return new Result<CreditCard>(new NodeWrapper(creditCardXML));
+            return new CreditCard(new NodeWrapper(creditCardXML));
         }
 
         public void Delete(String token)

@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Xml;
 using System.Text;
+using Braintree.Exceptions;
 
 namespace Braintree
 {
@@ -72,16 +73,24 @@ namespace Braintree
                 var response = (HttpWebResponse)e.Response;
                 if (response == null) throw e;
 
-                switch (response.StatusCode.ToString())
+                switch (response.StatusCode)
                 {
-                    case "NotFound":
-                        throw new NotFoundError();
-                    case "422":
+                    case HttpStatusCode.Unauthorized:
+                        throw new AuthenticationException();
+                    case HttpStatusCode.Forbidden:
+                        throw new AuthorizationException();
+                    case HttpStatusCode.NotFound:
+                        throw new NotFoundException();
+                    case (HttpStatusCode)422: // UnprocessableEntity
                         XmlNode doc = ParseResponseStream(((HttpWebResponse)e.Response).GetResponseStream());
                         e.Response.Close();
                         return doc;
+                    case HttpStatusCode.InternalServerError:
+                        throw new ServerException();
+                    case HttpStatusCode.ServiceUnavailable:
+                        throw new DownForMaintenanceException();
                     default:
-                        throw e;
+                        throw new UnexpectedException { Source = "Unexpected HTTP_RESPONSE " + response.StatusCode };
                 }
             }
         }

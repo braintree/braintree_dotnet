@@ -7,8 +7,8 @@ namespace Braintree
 {
     public class Address
     {
-        public String ID { get; protected set; }
-        public String CustomerID { get; protected set; }
+        public String Id { get; protected set; }
+        public String CustomerId { get; protected set; }
         public String FirstName { get; protected set; }
         public String LastName { get; protected set; }
         public String Company { get; protected set; }
@@ -23,8 +23,8 @@ namespace Braintree
         {
             if (node == null) return;
 
-            ID = node.GetString("id");
-            CustomerID = node.GetString("customer-id");
+            Id = node.GetString("id");
+            CustomerId = node.GetString("customer-id");
             FirstName = node.GetString("first-name");
             LastName = node.GetString("last-name");
             Company = node.GetString("company");

@@ -7,20 +7,20 @@ namespace Braintree
 {
     public enum TransactionStatus
     {
-        AUTHORIZED, PROCESSOR_DECLINED, SETTLED, SUBMITTED_FOR_SETTLEMENT, VOIDED
+        AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, SETTLED, SETTLEMENT_FAILED, SUBMITTED_FOR_SETTLEMENT, UNKNOWN, UNRECOGNIZED, VOIDED
     }
 
     public enum TransactionType
     {
-        CREDIT, SALE
+        CREDIT, SALE, UNRECOGNIZED
     }
 
     public class Transaction
     {
-        public String ID { get; protected set; }
-        public Decimal Amount { get; protected set; }
+        public String Id { get; protected set; }
+        public Decimal? Amount { get; protected set; }
         public Address BillingAddressDetails { get; protected set; }
-        public DateTime CreatedAt { get; protected set; }
+        public DateTime? CreatedAt { get; protected set; }
         public CreditCard CreditCardDetails { get; protected set; }
         public Customer CustomerDetails { get; protected set; }
         public String OrderId { get; protected set; }
@@ -29,18 +29,18 @@ namespace Braintree
         public Address ShippingAddressDetails { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public TransactionType Type { get; protected set; }
-        public DateTime UpdatedAt { get; protected set; }
+        public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
 
         internal Transaction(NodeWrapper node)
         {
             if (node == null) return;
 
-            ID = node.GetString("id");
-            Amount = Decimal.Parse(node.GetString("amount"));
+            Id = node.GetString("id");
+            Amount = node.GetDecimal("amount");
             OrderId = node.GetString("order-id");
-            Status = (TransactionStatus)Enum.Parse(typeof(TransactionStatus), node.GetString("status"), true);
-            Type = (TransactionType)Enum.Parse(typeof(TransactionType), node.GetString("type"), true);
+            Status = (TransactionStatus)EnumUtil.Find(typeof(TransactionStatus), node.GetString("status"), "unrecognized");
+            Type = (TransactionType)EnumUtil.Find(typeof(TransactionType), node.GetString("type"), "unrecognized");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             CustomFields = node.GetDictionary("custom-fields");
@@ -50,39 +50,36 @@ namespace Braintree
             BillingAddressDetails = new Address(node.GetNode("billing"));
             ShippingAddressDetails = new Address(node.GetNode("shipping"));
 
-            var createdAt = node.GetDateTime("created-at");
-            if (createdAt != null) CreatedAt = (DateTime)createdAt;
-
-            var updatedAt = node.GetDateTime("updated-at");
-            if (updatedAt != null) UpdatedAt = (DateTime)updatedAt;
+            CreatedAt = node.GetDateTime("created-at");
+            UpdatedAt = node.GetDateTime("updated-at");
         }
 
         public CreditCard GetVaultCreditCard()
         {
             if (CreditCardDetails.Token == null) return null;
 
-            return new CreditCardGateway().Find(CreditCardDetails.Token).Target;
+            return new CreditCardGateway().Find(CreditCardDetails.Token);
         }
 
         public Customer GetVaultCustomer()
         {
-            if (CustomerDetails.ID == null) return null;
+            if (CustomerDetails.Id == null) return null;
 
-            return new CustomerGateway().Find(CustomerDetails.ID).Target;
+            return new CustomerGateway().Find(CustomerDetails.Id);
         }
 
         public Address GetVaultBillingAddress()
         {
-            if (BillingAddressDetails.ID == null) return null;
+            if (BillingAddressDetails.Id == null) return null;
 
-            return new AddressGateway().Find(CustomerDetails.ID, BillingAddressDetails.ID).Target;
+            return new AddressGateway().Find(CustomerDetails.Id, BillingAddressDetails.Id);
         }
 
         public Address GetVaultShippingAddress()
         {
-            if (ShippingAddressDetails.ID == null) return null;
+            if (ShippingAddressDetails.Id == null) return null;
 
-            return new AddressGateway().Find(CustomerDetails.ID, ShippingAddressDetails.ID).Target;
+            return new AddressGateway().Find(CustomerDetails.Id, ShippingAddressDetails.Id);
         }
     }
 }

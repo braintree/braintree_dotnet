@@ -12,10 +12,10 @@ namespace Braintree
             set { Configuration.Environment = value; }
         }
 
-        public String MerchantID
+        public String MerchantId
         {
-            get { return Configuration.MerchantID; }
-            set { Configuration.MerchantID = value; }
+            get { return Configuration.MerchantId; }
+            set { Configuration.MerchantId = value; }
         }
 
         public String PublicKey
@@ -43,6 +43,11 @@ namespace Braintree
         public CreditCardGateway CreditCard
         {
             get { return new CreditCardGateway(); }
+        }
+
+        public SubscriptionGateway Subscription
+        {
+            get { return new SubscriptionGateway(); }
         }
 
         public TransactionGateway Transaction

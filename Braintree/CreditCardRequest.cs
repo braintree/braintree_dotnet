@@ -6,7 +6,7 @@ namespace Braintree
     public class CreditCardRequest : Request
     {
         public String Token { get; set; }
-        public String CustomerID { get; set; }
+        public String CustomerId { get; set; }
         public String Number { get; set; }
         public String CardholderName { get; set; }
         public String CVV { get; set; }
@@ -29,7 +29,7 @@ namespace Braintree
             builder.Append(BuildXMLElement("token", Token));
             builder.Append(BuildXMLElement("billing-address", BillingAddress));
             builder.Append(BuildXMLElement("options", Options));
-            builder.Append(BuildXMLElement("customer-id", CustomerID));
+            builder.Append(BuildXMLElement("customer-id", CustomerId));
             builder.Append(BuildXMLElement("number", Number));
             builder.Append(BuildXMLElement("cardholder-name", CardholderName));
             builder.Append(BuildXMLElement("expiration-month", ExpirationMonth));
@@ -52,7 +52,7 @@ namespace Braintree
             return new QueryString().
                 Append(ParentBracketChildString(root, "billing_addres"), BillingAddress).
                 Append(ParentBracketChildString(root, "options"), Options).
-                Append(ParentBracketChildString(root, "customer_id"), CustomerID).
+                Append(ParentBracketChildString(root, "customer_id"), CustomerId).
                 Append(ParentBracketChildString(root, "cardholder_name"), CardholderName).
                 Append(ParentBracketChildString(root, "cvv"), CVV).
                 Append(ParentBracketChildString(root, "number"), Number).

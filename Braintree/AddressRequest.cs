@@ -6,7 +6,7 @@ namespace Braintree
 {
     public class AddressRequest : Request
     {
-        public String CustomerID { get; set; }
+        public String CustomerId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String Company { get; set; }

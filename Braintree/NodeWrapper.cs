@@ -35,6 +35,13 @@ namespace Braintree
             return Int32.Parse(GetString(path));
         }
 
+        public Decimal? GetDecimal(String path)
+        {
+            if (GetString(path) == null) return null;
+
+            return Decimal.Parse(GetString(path));
+        }
+
         public String GetName()
         {
             return node.Name;
@@ -79,7 +86,7 @@ namespace Braintree
             return result;
         }
 
-        public List<NodeWrapper> GetArray(String path)
+        public List<NodeWrapper> GetList(String path)
         {
             XmlNodeList list = node.SelectNodes(path);
             var result = new List<NodeWrapper>();
@@ -96,13 +103,11 @@ namespace Braintree
             return node.OuterXml;
         }
 
-        public Boolean GetBoolean(String path)
+        public Boolean? GetBoolean(String path)
         {
-            var value = GetString(path);
+            if (GetString(path) == null) return null;
 
-            if (value == null) return false;
-
-            return Boolean.Parse(value);
+            return Boolean.Parse(GetString(path));
         }
 
         public DateTime? GetDateTime(String path)
@@ -157,7 +162,7 @@ namespace Braintree
         {
             var formParameters = new Dictionary<String, String>();
 
-            foreach (NodeWrapper paramNode in GetArray(".//*[not(*)]"))
+            foreach (NodeWrapper paramNode in GetList(".//*[not(*)]"))
             {
                 formParameters[GetFormElementName(paramNode)] = paramNode.GetString(".");
             }

@@ -97,7 +97,7 @@ namespace Braintree
             int totalItems = (Int32)response.GetInteger("total-items");
 
             List<Transaction> transactions = new List<Transaction>();
-            foreach (NodeWrapper transactionNode in response.GetArray("transaction"))
+            foreach (NodeWrapper transactionNode in response.GetList("transaction"))
             {
                 transactions.Add(new Transaction(transactionNode));
             }

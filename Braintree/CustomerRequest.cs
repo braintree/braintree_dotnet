@@ -6,8 +6,8 @@ namespace Braintree
 {
     public class CustomerRequest : Request
     {
-        public String ID { get; set; }
-        public String CustomerID { get; set; }
+        public String Id { get; set; }
+        public String CustomerId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }
         public String Company { get; set; }
@@ -27,7 +27,7 @@ namespace Braintree
         {
             var builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("id", ID));
+            builder.Append(BuildXMLElement("id", Id));
             builder.Append(BuildXMLElement("first-name", FirstName));
             builder.Append(BuildXMLElement("last-name", LastName));
             builder.Append(BuildXMLElement("company", Company));
@@ -50,7 +50,7 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             return new QueryString().
-                Append(ParentBracketChildString(root, "id"), ID).
+                Append(ParentBracketChildString(root, "id"), Id).
                 Append(ParentBracketChildString(root, "first_name"), FirstName).
                 Append(ParentBracketChildString(root, "last_name"), LastName).
                 Append(ParentBracketChildString(root, "company"), Company).
@@ -60,7 +60,7 @@ namespace Braintree
                 Append(ParentBracketChildString(root, "website"), Website).
                 Append(ParentBracketChildString(root, "credit_card"), CreditCard).
                 Append(ParentBracketChildString(root, "custom_fields"), CustomFields).
-                Append("customer_id", CustomerID).
+                Append("customer_id", CustomerId).
                 ToString();
         }
     }

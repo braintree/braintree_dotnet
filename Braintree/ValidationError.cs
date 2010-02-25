@@ -6,12 +6,12 @@ namespace Braintree
 {
     public class ValidationError
     {
-        public String Code { get; protected set; }
+        public ValidationErrorCode Code { get; protected set; }
         public String Message { get; protected set; }
 
         public ValidationError(String code, String message)
         {
-            Code = code;
+            Code = (ValidationErrorCode)Int32.Parse(code);
             Message = message;
         }
     }

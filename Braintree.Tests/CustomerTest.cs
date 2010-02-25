@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Braintree;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
@@ -17,7 +18,7 @@ namespace Braintree.Tests
             gateway = new BraintreeGateway
             {
                 Environment = Environment.DEVELOPMENT,
-                MerchantID = "integration_merchant_id",
+                MerchantId = "integration_merchant_id",
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
@@ -29,7 +30,7 @@ namespace Braintree.Tests
             String id = Guid.NewGuid().ToString();
             var createRequest = new CustomerRequest
             {
-                ID = id,
+                Id = id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
@@ -59,8 +60,8 @@ namespace Braintree.Tests
             };
 
             Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
-            Customer customer = gateway.Customer.Find(createdCustomer.ID).Target;
-            Assert.AreEqual(id, customer.ID);
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+            Assert.AreEqual(id, customer.Id);
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
@@ -68,16 +69,16 @@ namespace Braintree.Tests
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.disney.com", customer.Website);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
             Assert.AreEqual(1, customer.CreditCards.Length);
             Assert.AreEqual("510510", customer.CreditCards[0].Bin);
             Assert.AreEqual("5100", customer.CreditCards[0].LastFour);
             Assert.AreEqual("05", customer.CreditCards[0].ExpirationMonth);
             Assert.AreEqual("2012", customer.CreditCards[0].ExpirationYear);
             Assert.AreEqual("Michael Angelo", customer.CreditCards[0].CardholderName);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Value.Year);
             Assert.AreEqual("Mike", customer.Addresses[0].FirstName);
             Assert.AreEqual("Smith", customer.Addresses[0].LastName);
             Assert.AreEqual("Smith Co.", customer.Addresses[0].Company);
@@ -90,9 +91,9 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Find_RaisesIfIDIsInvalid()
+        public void Find_RaisesIfIdIsInvalid()
         {
-            Assert.Throws<NotFoundError>(() => gateway.Customer.Find("DOES_NOT_EXIST_999"));
+            Assert.Throws<NotFoundException>(() => gateway.Customer.Find("DOES_NOT_EXIST_999"));
         }
 
         [Test]
@@ -133,8 +134,8 @@ namespace Braintree.Tests
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.disney.com", customer.Website);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
         }
 
         [Test]
@@ -166,16 +167,16 @@ namespace Braintree.Tests
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.disney.com", customer.Website);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
             Assert.AreEqual(1, customer.CreditCards.Length);
             Assert.AreEqual("510510", customer.CreditCards[0].Bin);
             Assert.AreEqual("5100", customer.CreditCards[0].LastFour);
             Assert.AreEqual("05", customer.CreditCards[0].ExpirationMonth);
             Assert.AreEqual("2012", customer.CreditCards[0].ExpirationYear);
             Assert.AreEqual("Michael Angelo", customer.CreditCards[0].CardholderName);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Value.Year);
         }
 
         [Test]
@@ -219,17 +220,17 @@ namespace Braintree.Tests
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.disney.com", customer.Website);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
             Assert.AreEqual(1, customer.CreditCards.Length);
             Assert.AreEqual("510510", customer.CreditCards[0].Bin);
             Assert.AreEqual("5100", customer.CreditCards[0].LastFour);
             Assert.AreEqual("05", customer.CreditCards[0].ExpirationMonth);
             Assert.AreEqual("2012", customer.CreditCards[0].ExpirationYear);
             Assert.AreEqual("Michael Angelo", customer.CreditCards[0].CardholderName);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Year);
-            Assert.AreEqual(customer.Addresses[0].ID, customer.CreditCards[0].BillingAddress.ID);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Value.Year);
+            Assert.AreEqual(customer.Addresses[0].Id, customer.CreditCards[0].BillingAddress.Id);
             Assert.AreEqual("Michael", customer.Addresses[0].FirstName);
             Assert.AreEqual("Angelo", customer.Addresses[0].LastName);
             Assert.AreEqual("Angelo Co.", customer.Addresses[0].Company);
@@ -303,7 +304,7 @@ namespace Braintree.Tests
 
             CustomerRequest trParams = new CustomerRequest
             {
-                CustomerID = createdCustomer.ID
+                CustomerId = createdCustomer.Id
             };
 
             CustomerRequest request = new CustomerRequest
@@ -323,11 +324,11 @@ namespace Braintree.Tests
         [Test]
         public void Update_UpdatesCustomerWithNewValues()
         {
-            string oldID = Guid.NewGuid().ToString();
-            string newID = Guid.NewGuid().ToString();
+            string oldId = Guid.NewGuid().ToString();
+            string newId = Guid.NewGuid().ToString();
             var createRequest = new CustomerRequest()
             {
-                ID = oldID,
+                Id = oldId,
                 FirstName = "Old First",
                 LastName = "Old Last",
                 Company = "Old Company",
@@ -341,7 +342,7 @@ namespace Braintree.Tests
 
             var updateRequest = new CustomerRequest()
             {
-                ID = newID,
+                Id = newId,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
@@ -351,8 +352,8 @@ namespace Braintree.Tests
                 Website = "www.disney.com"
             };
 
-            Customer updatedCustomer = gateway.Customer.Update(oldID, updateRequest).Target;
-            Assert.AreEqual(newID, updatedCustomer.ID);
+            Customer updatedCustomer = gateway.Customer.Update(oldId, updateRequest).Target;
+            Assert.AreEqual(newId, updatedCustomer.Id);
             Assert.AreEqual("Michael", updatedCustomer.FirstName);
             Assert.AreEqual("Angelo", updatedCustomer.LastName);
             Assert.AreEqual("Some Company", updatedCustomer.Company);
@@ -360,18 +361,18 @@ namespace Braintree.Tests
             Assert.AreEqual("312.555.1111", updatedCustomer.Phone);
             Assert.AreEqual("312.555.1112", updatedCustomer.Fax);
             Assert.AreEqual("www.disney.com", updatedCustomer.Website);
-            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.CreatedAt.Year);
-            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.UpdatedAt.Year);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.UpdatedAt.Value.Year);
         }
 
         [Test]
         public void Delete_DeletesTheCustomer()
         {
             String id = Guid.NewGuid().ToString();
-            gateway.Customer.Create(new CustomerRequest() { ID = id });
-            Assert.AreEqual(id, gateway.Customer.Find(id).Target.ID);
+            gateway.Customer.Create(new CustomerRequest() { Id = id });
+            Assert.AreEqual(id, gateway.Customer.Find(id).Id);
             gateway.Customer.Delete(id);
-            Assert.Throws<NotFoundError>(() => gateway.Customer.Find(id));
+            Assert.Throws<NotFoundException>(() => gateway.Customer.Find(id));
         }
     }
 }

@@ -42,6 +42,12 @@ namespace Braintree
             return builder.ToString();
         }
 
+
+        internal String BuildXMLElement(String tagName, Boolean value)
+        {
+            return String.Format("<{0}>{1}</{0}>", tagName, value.ToString().ToLower());
+        }
+
         internal String BuildXMLElement(String tagName, String value)
         {
             // TODO: xml escape

@@ -14,9 +14,9 @@ namespace Braintree.Tests
         public void OnField_WithValidationError()
         {
             ValidationErrors errors = new ValidationErrors();
-            errors.AddError("country_name", new ValidationError("1", "invalid country"));
-            Assert.AreEqual("1", errors.OnField("country_name").Code);
-            Assert.AreEqual("invalid country", errors.OnField("country_name").Message);
+            errors.AddError("country_name", new ValidationError("91803", "invalid country"));
+            Assert.AreEqual(ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED, errors.OnField("country_name")[0].Code);
+            Assert.AreEqual("invalid country", errors.OnField("country_name")[0].Message);
         }
 
         [Test]
@@ -30,12 +30,12 @@ namespace Braintree.Tests
         public void ForObject_WithNestedErrors()
         {
             ValidationErrors addressErrors = new ValidationErrors();
-            addressErrors.AddError("country_name", new ValidationError("1", "invalid country"));
+            addressErrors.AddError("country_name", new ValidationError("91803", "invalid country"));
 
             ValidationErrors errors = new ValidationErrors();
             errors.AddErrors("address", addressErrors);
-            Assert.AreEqual("1", errors.ForObject("address").OnField("country_name").Code);
-            Assert.AreEqual("invalid country", errors.ForObject("address").OnField("country_name").Message);
+            Assert.AreEqual(ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED, errors.ForObject("address").OnField("country_name")[0].Code);
+            Assert.AreEqual("invalid country", errors.ForObject("address").OnField("country_name")[0].Message);
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace Braintree.Tests
             doc.LoadXml(builder.ToString());
             ValidationErrors errors = new ValidationErrors(new NodeWrapper(doc.ChildNodes[1]));
             Assert.AreEqual(1, errors.DeepSize());
-            Assert.AreEqual("91803", errors.ForObject("address").OnField("country_name").Code);
+            Assert.AreEqual(ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED, errors.ForObject("address").OnField("country_name")[0].Code);
         }
 
         [Test]
@@ -109,12 +109,12 @@ namespace Braintree.Tests
             builder.Append("    <address>");
             builder.Append("      <errors type=\"array\">");
             builder.Append("        <error>");
-            builder.Append("          <code>1</code>");
+            builder.Append("          <code>91803</code>");
             builder.Append("          <message>Country name is not an accepted country.</message>");
             builder.Append("          <attribute type=\"symbol\">country_name</attribute>");
             builder.Append("        </error>");
             builder.Append("        <error>");
-            builder.Append("          <code>2</code>");
+            builder.Append("          <code>81812</code>");
             builder.Append("          <message>Street address is too long.</message>");
             builder.Append("          <attribute type=\"symbol\">street_address</attribute>");
             builder.Append("        </error>");
@@ -128,8 +128,8 @@ namespace Braintree.Tests
             doc.LoadXml(builder.ToString());
             ValidationErrors errors = new ValidationErrors(new NodeWrapper(doc.ChildNodes[1]));
             Assert.AreEqual(2, errors.DeepSize());
-            Assert.AreEqual("1", errors.ForObject("address").OnField("country_name").Code);
-            Assert.AreEqual("2", errors.ForObject("address").OnField("street_address").Code);
+            Assert.AreEqual(ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED, errors.ForObject("address").OnField("country_name")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.ADDRESS_STREET_ADDRESS_IS_TOO_LONG, errors.ForObject("address").OnField("street_address")[0].Code);
         }
 
         [Test]
@@ -159,7 +159,39 @@ namespace Braintree.Tests
             doc.LoadXml(builder.ToString());
             ValidationErrors errors = new ValidationErrors(new NodeWrapper(doc.ChildNodes[1]));
             Assert.AreEqual(1, errors.DeepSize());
-            Assert.AreEqual("91803", errors.ForObject("credit-card").ForObject("billing-address").OnField("country_name").Code);
+            Assert.AreEqual(ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED, errors.ForObject("credit-card").ForObject("billing-address").OnField("country_name")[0].Code);
+        }
+
+        [Test]
+        public void Constructor_ParsesMultipleErrorsOnSingleField()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            builder.Append("<api-error-response>");
+            builder.Append("  <errors>");
+            builder.Append("    <transaction>");
+            builder.Append("      <errors type=\"array\">");
+            builder.Append("        <error>");
+            builder.Append("          <code>91516</code>");
+            builder.Append("          <message>Cannot provide both payment_method_token and customer_id unless the payment_method belongs to the customer.</message>");
+            builder.Append("          <attribute type=\"symbol\">base</attribute>");
+            builder.Append("        </error>");
+            builder.Append("        <error>");
+            builder.Append("          <code>91515</code>");
+            builder.Append("          <message>Cannot provide both payment_method_token and credit_card attributes.</message>");
+            builder.Append("          <attribute type=\"symbol\">base</attribute>");
+            builder.Append("        </error>");
+            builder.Append("      </errors>");
+            builder.Append("    </transaction>");
+            builder.Append("    <errors type=\"array\"/>");
+            builder.Append("  </errors>");
+            builder.Append("</api-error-response>");
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(builder.ToString());
+            ValidationErrors errors = new ValidationErrors(new NodeWrapper(doc.ChildNodes[1]));
+            Assert.AreEqual(2, errors.DeepSize());
+            Assert.AreEqual(2, errors.ForObject("transaction").OnField("base").Count);
         }
 
         [Test]
@@ -209,15 +241,15 @@ namespace Braintree.Tests
 
             Assert.AreEqual(3, errors.ForObject("customer").DeepSize());
             Assert.AreEqual(1, errors.ForObject("customer").size());
-            Assert.AreEqual("81608", errors.ForObject("customer").OnField("first_name").Code);
+            Assert.AreEqual(ValidationErrorCode.CUSTOMER_FIRST_NAME_IS_TOO_LONG, errors.ForObject("customer").OnField("first_name")[0].Code);
 
             Assert.AreEqual(2, errors.ForObject("customer").ForObject("credit-card").DeepSize());
             Assert.AreEqual(1, errors.ForObject("customer").ForObject("credit-card").size());
-            Assert.AreEqual("81715", errors.ForObject("customer").ForObject("credit-card").OnField("number").Code);
+            Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_NUMBER_IS_INVALID, errors.ForObject("customer").ForObject("credit-card").OnField("number")[0].Code);
 
             Assert.AreEqual(1, errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").DeepSize());
             Assert.AreEqual(1, errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").size());
-            Assert.AreEqual("91803", errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_name").Code);
+            Assert.AreEqual(ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED, errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_name")[0].Code);
         }
     }
 }

@@ -7,11 +7,11 @@ namespace Braintree
 {
     public class CustomerGateway
     {
-        public Result<Customer> Find(String ID)
+        public Customer Find(String Id)
         {
-            XmlNode customerXML = WebServiceGateway.Get("/customers/" + ID);
+            XmlNode customerXML = WebServiceGateway.Get("/customers/" + Id);
 
-            return new Result<Customer>(new NodeWrapper(customerXML));
+            return new Customer(new NodeWrapper(customerXML));
         }
 
         public Result<Customer> Create(CustomerRequest request)
@@ -21,14 +21,14 @@ namespace Braintree
             return new Result<Customer>(new NodeWrapper(customerXML));
         }
 
-        public void Delete(String ID)
+        public void Delete(String Id)
         {
-            WebServiceGateway.Delete("/customers/" + ID);
+            WebServiceGateway.Delete("/customers/" + Id);
         }
 
-        public Result<Customer> Update(String ID, CustomerRequest request)
+        public Result<Customer> Update(String Id, CustomerRequest request)
         {
-            XmlNode customerXML = WebServiceGateway.Put("/customers/" + ID, request);
+            XmlNode customerXML = WebServiceGateway.Put("/customers/" + Id, request);
 
             return new Result<Customer>(new NodeWrapper(customerXML));
         }

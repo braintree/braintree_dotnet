@@ -7,7 +7,7 @@ namespace Braintree
     public class Configuration
     {
         public static Environment Environment { get; set; }
-        public static String MerchantID { get; set; }
+        public static String MerchantId { get; set; }
         public static String PublicKey { get; set; }
         public static String PrivateKey { get; set; }
 
@@ -15,7 +15,7 @@ namespace Braintree
 
         public static String BaseMerchantURL()
         {
-            return Environment.GatewayURL + "/merchants/" + MerchantID;
+            return Environment.GatewayURL + "/merchants/" + MerchantId;
         }
 
         public static String GetAuthorizationHeader()

@@ -48,6 +48,10 @@ namespace Braintree
             {
                 return new Transaction(node) as T;
             }
+            else if (typeof(T) == typeof(Subscription))
+            {
+                return new Subscription(node) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }

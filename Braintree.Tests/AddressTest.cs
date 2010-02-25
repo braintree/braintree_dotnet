@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Braintree;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
@@ -17,21 +18,21 @@ namespace Braintree.Tests
             gateway = new BraintreeGateway
             {
                 Environment = Environment.DEVELOPMENT,
-                MerchantID = "integration_merchant_id",
+                MerchantId = "integration_merchant_id",
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
         }
 
         [Test]
-        public void Create_CreatesAddressForGivenCustomerID()
+        public void Create_CreatesAddressForGivenCustomerId()
         {
             String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressRequest = new AddressRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Angelo Co.",
@@ -43,7 +44,7 @@ namespace Braintree.Tests
                 CountryName = "United States of America"
             };
 
-            Address address = gateway.Address.Create(customer.ID, addressRequest).Target;
+            Address address = gateway.Address.Create(customer.Id, addressRequest).Target;
 
             Assert.AreEqual("Michael", address.FirstName);
             Assert.AreEqual("Angelo", address.LastName);
@@ -64,7 +65,7 @@ namespace Braintree.Tests
 
             var addressRequest = new AddressRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Angelo Co.",
@@ -76,8 +77,8 @@ namespace Braintree.Tests
                 CountryName = "United States of America"
             };
 
-            Address createdAddress = gateway.Address.Create(customer.ID, addressRequest).Target;
-            Address address = gateway.Address.Find(customer.ID, createdAddress.ID).Target;
+            Address createdAddress = gateway.Address.Create(customer.Id, addressRequest).Target;
+            Address address = gateway.Address.Find(customer.Id, createdAddress.Id);
 
             Assert.AreEqual("Michael", address.FirstName);
             Assert.AreEqual("Angelo", address.LastName);
@@ -91,14 +92,14 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Update_UpdatesAddressForGivenCustomerIDAndAddressID()
+        public void Update_UpdatesAddressForGivenCustomerIdAndAddressId()
         {
             String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressCreateRequest = new AddressRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 FirstName = "Dave",
                 LastName = "Inchy",
                 Company = "Leon Ardo Co.",
@@ -110,11 +111,11 @@ namespace Braintree.Tests
                 CountryName = "Canada"
             };
 
-            Address originalAddress = gateway.Address.Create(customer.ID, addressCreateRequest).Target;
+            Address originalAddress = gateway.Address.Create(customer.Id, addressCreateRequest).Target;
 
             var addressUpdateRequest = new AddressRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Angelo Co.",
@@ -126,7 +127,7 @@ namespace Braintree.Tests
                 CountryName = "United States of America"
             };
 
-            Address address = gateway.Address.Update(customer.ID, originalAddress.ID, addressUpdateRequest).Target;
+            Address address = gateway.Address.Update(customer.Id, originalAddress.Id, addressUpdateRequest).Target;
 
             Assert.AreEqual("Michael", address.FirstName);
             Assert.AreEqual("Angelo", address.LastName);
@@ -146,15 +147,15 @@ namespace Braintree.Tests
 
             var addressRequest = new AddressRequest
             {
-                CustomerID = customer.ID,
+                CustomerId = customer.Id,
                 StreetAddress = "1 E Main St",
                 ExtendedAddress = "Apt 3",
             };
 
-            Address createdAddress = gateway.Address.Create(customer.ID, addressRequest).Target;
-            Assert.AreEqual(createdAddress.ID, gateway.Address.Find(customer.ID, createdAddress.ID).Target.ID);
-            gateway.Address.Delete(customer.ID, createdAddress.ID);
-            Assert.Throws<NotFoundError>(() => gateway.Address.Find(customer.ID, createdAddress.ID));
+            Address createdAddress = gateway.Address.Create(customer.Id, addressRequest).Target;
+            Assert.AreEqual(createdAddress.Id, gateway.Address.Find(customer.Id, createdAddress.Id).Id);
+            gateway.Address.Delete(customer.Id, createdAddress.Id);
+            Assert.Throws<NotFoundException>(() => gateway.Address.Find(customer.Id, createdAddress.Id));
         }
 
         [Test]
@@ -163,11 +164,11 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             AddressRequest request = new AddressRequest() { CountryName = "United States of Hammer" };
 
-            Result<Address> createResult = gateway.Address.Create(customer.ID, request);
+            Result<Address> createResult = gateway.Address.Create(customer.Id, request);
             Assert.IsFalse(createResult.IsSuccess());
             Dictionary<String, String> parameters = createResult.Parameters;
             Assert.AreEqual("integration_merchant_id", parameters["merchant_id"]);
-            Assert.AreEqual(customer.ID, parameters["customer_id"]);
+            Assert.AreEqual(customer.Id, parameters["customer_id"]);
             Assert.AreEqual("United States of Hammer", parameters["address[country_name]"]);
         }
     }

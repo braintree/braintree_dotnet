@@ -24,6 +24,10 @@ namespace Braintree
             {
                 return AppendRequest(key, (Request)value);
             }
+            if (value is Boolean)
+            {
+                return AppendString(key, value.ToString().ToLower());
+            }
             else if (value is Dictionary<String, String>)
             {
                 foreach (KeyValuePair<String, String> pair in (Dictionary<String, String>)value)

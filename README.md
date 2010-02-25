@@ -10,7 +10,7 @@ The Braintree assembly provides integration access to the Braintree Gateway.
 
     using System;
     using Braintree;
-
+    
     namespace BraintreeExample
     {
         class Program
@@ -20,29 +20,29 @@ The Braintree assembly provides integration access to the Braintree Gateway.
                 var gateway = new BraintreeGateway
                 {
                     Environment = Braintree.Environment.SANDBOX,
-                    MerchantID = "the_merchant_id",
+                    MerchantId = "the_merchant_id",
                     PublicKey = "a_public_key",
                     PrivateKey = "a_private_key"
                 };
-
+    
                 var request = new TransactionRequest
                 {
                     Amount = 100.00M,
-                    CreditCardRequest = new CreditCardRequest
+                    CreditCard = new CreditCardRequest
                     {
                         Number = "5105105105105100",
                         ExpirationDate = "05/12"
                     }
                 };
-
+    
                 Transaction transaction = gateway.Transaction.Sale(request).Target;
-
-                Console.WriteLine(String.Format("Transaction ID: {0}", transaction.ID));
+    
+                Console.WriteLine(String.Format("Transaction ID: {0}", transaction.Id));
                 Console.WriteLine(String.Format("Status: {0}", transaction.Status));
             }
         }
     }
-
+    
 ## License
 
 See the LICENSE file.

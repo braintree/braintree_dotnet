@@ -7,28 +7,28 @@ namespace Braintree
 {
     public class AddressGateway
     {
-        public Result<Address> Create(String customerID, AddressRequest request)
+        public Result<Address> Create(String customerId, AddressRequest request)
         {
-            XmlNode addressXML = WebServiceGateway.Post("/customers/" + customerID + "/addresses", request);
+            XmlNode addressXML = WebServiceGateway.Post("/customers/" + customerId + "/addresses", request);
 
             return new Result<Address>(new NodeWrapper(addressXML));
         }
 
-        public void Delete(String customerID, String id)
+        public void Delete(String customerId, String id)
         {
-            WebServiceGateway.Delete("/customers/" + customerID + "/addresses/" + id);
+            WebServiceGateway.Delete("/customers/" + customerId + "/addresses/" + id);
         }
 
-        public Result<Address> Find(String customerID, String id)
+        public Address Find(String customerId, String id)
         {
-            XmlNode addressXML = WebServiceGateway.Get("/customers/" + customerID + "/addresses/" + id);
+            XmlNode addressXML = WebServiceGateway.Get("/customers/" + customerId + "/addresses/" + id);
 
-            return new Result<Address>(new NodeWrapper(addressXML));
+            return new Address(new NodeWrapper(addressXML));
         }
 
-        public Result<Address> Update(String customerID, String id, AddressRequest request)
+        public Result<Address> Update(String customerId, String id, AddressRequest request)
         {
-            XmlNode addressXML = WebServiceGateway.Put("/customers/" + customerID + "/addresses/" + id, request);
+            XmlNode addressXML = WebServiceGateway.Put("/customers/" + customerId + "/addresses/" + id, request);
 
             return new Result<Address>(new NodeWrapper(addressXML));
         }
