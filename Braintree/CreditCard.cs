@@ -6,6 +6,22 @@ using System.Security.Cryptography;
 
 namespace Braintree
 {
+    /// <summary>
+    /// A credit card returned by the Braintree Gateway
+    /// </summary>
+    /// <remarks>
+    /// A credit card can belong to:
+    /// <ul>
+    ///   <li>a <see cref="Customer"/> as a stored credit card</li>
+    ///   <li>a <see cref="Transaction"/> as the credit card used for the transaction</li>
+    /// </ul>
+    /// </remarks>
+    /// <example>
+    /// Credit Cards can be retrieved via the gateway using the associated credit card token:
+    /// <code>
+    ///     CreditCard creditCard = gateway.CreditCard.Find("token");
+    /// </code>
+    /// </example>
     public class CreditCard
     {
         public String Bin { get; protected set; }

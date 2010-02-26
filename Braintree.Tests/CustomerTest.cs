@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Braintree;
 using Braintree.Exceptions;
 
 namespace Braintree.Tests
@@ -373,6 +371,35 @@ namespace Braintree.Tests
             Assert.AreEqual(id, gateway.Customer.Find(id).Id);
             gateway.Customer.Delete(id);
             Assert.Throws<NotFoundException>(() => gateway.Customer.Find(id));
+        }
+
+        [Test]
+        public void All_WithNoPageNumber()
+        {
+            PagedCollection<Customer> pagedCollection = gateway.Customer.All();
+
+            Assert.IsTrue(pagedCollection.TotalItems > 0);
+            Assert.IsTrue(pagedCollection.PageSize > 0);
+            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
+            Assert.IsNotNull(pagedCollection.Items[0]);
+        }
+
+        [Test]
+        public void All_WithPageNumber()
+        {
+            PagedCollection<Customer> pagedCollection = gateway.Customer.All(2);
+            Assert.AreEqual(2, pagedCollection.CurrentPageNumber);
+        }
+
+        [Test]
+        public void All_CanTraversePages()
+        {
+            PagedCollection<Customer> pagedCollection = gateway.Customer.All();
+            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
+
+            PagedCollection<Customer> nextPage = pagedCollection.GetNextPage();
+            Assert.AreEqual(2, nextPage.CurrentPageNumber);
+            Assert.AreNotEqual(pagedCollection.Items[0].Id, nextPage.Items[0].Id);
         }
     }
 }

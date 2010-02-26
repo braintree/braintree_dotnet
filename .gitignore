@@ -1,1 +1,7 @@
-/.DS_Store
+Braintree/bin/*
+Braintree/obj/*
+Braintree.Tests/bin/*
+Braintree.Tests/obj/*
+TestResult.xml
+/Help
+/Output

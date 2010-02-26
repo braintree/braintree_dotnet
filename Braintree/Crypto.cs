@@ -7,7 +7,7 @@ namespace Braintree
 {
     public class Crypto
     {
-        public String HmacHash(String key, String message)
+        public virtual String HmacHash(String key, String message)
         {
             var hmac = new HMACSHA1(Sha1Bytes(key));
             byte[] hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
@@ -15,7 +15,7 @@ namespace Braintree
             return BitConverter.ToString(hashBytes).Replace("-", "");
         }
 
-        public byte[] Sha1Bytes(String s)
+        public virtual byte[] Sha1Bytes(String s)
         {
             byte[] data = Encoding.UTF8.GetBytes(s);
             return new SHA1CryptoServiceProvider().ComputeHash(data);

@@ -5,26 +5,29 @@ using System.Xml;
 
 namespace Braintree
 {
+    /// <summary>
+    /// Provides operations for creating, finding, updating, and deleting credit cards in the vault
+    /// </summary>
     public class CreditCardGateway
     {
-        public String TransparentRedirectURLForCreate()
+        public virtual String TransparentRedirectURLForCreate()
         {
             return Configuration.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request";
         }
 
-        public String TransparentRedirectURLForUpdate()
+        public virtual String TransparentRedirectURLForUpdate()
         {
             return Configuration.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request";
         }
 
-        public Result<CreditCard> Create(CreditCardRequest request)
+        public virtual Result<CreditCard> Create(CreditCardRequest request)
         {
             XmlNode creditCardXML = WebServiceGateway.Post("/payment_methods", request);
 
             return new Result<CreditCard>(new NodeWrapper(creditCardXML));
         }
 
-        public Result<CreditCard> ConfirmTransparentRedirect(String queryString)
+        public virtual Result<CreditCard> ConfirmTransparentRedirect(String queryString)
         {
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
             XmlNode creditCardXML = WebServiceGateway.Post("/payment_methods/all/confirm_transparent_redirect_request", trRequest);
@@ -32,19 +35,19 @@ namespace Braintree
             return new Result<CreditCard>(new NodeWrapper(creditCardXML));
         }
 
-        public CreditCard Find(String token)
+        public virtual CreditCard Find(String token)
         {
             XmlNode creditCardXML = WebServiceGateway.Get("/payment_methods/" + token);
 
             return new CreditCard(new NodeWrapper(creditCardXML));
         }
 
-        public void Delete(String token)
+        public virtual void Delete(String token)
         {
             WebServiceGateway.Delete("/payment_methods/" + token);
         }
 
-        public Result<CreditCard> Update(String token, CreditCardRequest request)
+        public virtual Result<CreditCard> Update(String token, CreditCardRequest request)
         {
             XmlNode creditCardXML = WebServiceGateway.Put("/payment_methods/" + token, request);
 

@@ -4,6 +4,22 @@ using System.Text;
 
 namespace Braintree
 {
+    /// <summary>
+    /// A class for building requests to manipulate <see cref="Subscription"/> records in the vault.
+    /// </summary>
+    /// <example>
+    /// A subscription request can be constructed as follows:
+    /// <code>
+    /// SubscriptionRequest request = new SubscriptionRequest
+    /// {
+    ///     PaymentMethodToken = "token",
+    ///     PlanId = "planId",
+    ///     HasTrialPeriod = true,
+    ///     TrialDuration = 2,
+    ///     TrialDurationUnit = SubscriptionDurationUnit.MONTH
+    /// };
+    /// </code>
+    /// </example>
     public class SubscriptionRequest : Request
     {
         public Boolean? HasTrialPeriod { get; set; }

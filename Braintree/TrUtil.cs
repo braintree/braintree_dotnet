@@ -28,6 +28,14 @@ namespace Braintree
             return trHash + "|" + trContent;
         }
 
+        public static Boolean IsValidTrQueryString(String queryString)
+        {
+            string[] delimeters = new string[1];
+            delimeters[0] = "&hash=";
+            String[] dataSections = queryString.TrimStart('?').Split(delimeters, StringSplitOptions.None);
+            return dataSections[1] == new Crypto().HmacHash(Configuration.PrivateKey, dataSections[0]).ToLower();
+        }
+
         public static Boolean IsTrDataValid(String trData)
         {
             String[] dataSections = trData.Split('|');

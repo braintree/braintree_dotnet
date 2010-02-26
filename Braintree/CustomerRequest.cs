@@ -4,6 +4,44 @@ using System.Text;
 
 namespace Braintree
 {
+    /// <summary>
+    /// A class for building requests to manipulate <see cref="Customer"/> records in the vault.
+    /// </summary>
+    /// <example>
+    /// A customer request can be constructed as follows:
+    /// <code>
+    /// var createRequest = new CustomerRequest
+    /// {
+    ///     Id = id,
+    ///     FirstName = "Michael",
+    ///     LastName = "Angelo",
+    ///     Company = "Some Company",
+    ///     Email = "mike.a@example.com",
+    ///     Phone = "312.555.1111",
+    ///     Fax = "312.555.1112",
+    ///     Website = "www.example.com",
+    ///     CreditCard = new CreditCardRequest
+    ///     {
+    ///         Number = "5105105105105100",
+    ///         ExpirationDate = "05/12",
+    ///         CVV = "123",
+    ///         CardholderName = "Michael Angelo",
+    ///         BillingAddress = new AddressRequest()
+    ///         {
+    ///             FirstName = "Mike",
+    ///             LastName = "Smith",
+    ///             Company = "Smith Co.",
+    ///             StreetAddress = "1 W Main St",
+    ///             ExtendedAddress = "Suite 330",
+    ///             Locality = "Chicago",
+    ///             Region = "IL",
+    ///             PostalCode = "60622",
+    ///             CountryName = "United States of America"
+    ///         }
+    ///     }
+    /// };
+    /// </code>
+    /// </example>
     public class CustomerRequest : Request
     {
         public String Id { get; set; }

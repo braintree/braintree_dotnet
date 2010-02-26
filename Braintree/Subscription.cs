@@ -4,19 +4,57 @@ using System.Text;
 
 namespace Braintree
 {
+    /// <summary>
+    /// The available duration units for <see cref="Subscription"/>
+    /// </summary>
     public enum SubscriptionDurationUnit
     {
-        DAY, MONTH, UNRECOGNIZED
-    }
-
-    public enum SubscriptionStatus
-    {
-        ACTIVE,
-        CANCELED,
-        PAST_DUE,
+        /// <summary>
+        /// A duration unit used for subscription periods measured in days
+        /// </summary>
+        DAY,
+        /// <summary>
+        /// A duration unit used for subscription periods measured in months
+        /// </summary>
+        MONTH,
+        /// <summary>
+        /// A placeholder for unrecognized duration units, implemented for future compatibility  
+        /// </summary>
         UNRECOGNIZED
     }
 
+    /// <summary>
+    /// The possible statuses for <see cref="Subscription"/>
+    /// </summary>
+    public enum SubscriptionStatus
+    {
+        /// <summary>
+        /// Indicates that the <see cref="Subscription"/> is currently active and in good standing 
+        /// </summary>
+        ACTIVE,
+        /// <summary>
+        /// Indicates that the <see cref="Subscription"/> has been canceled and will not be billed 
+        /// </summary>
+        CANCELED,
+        /// <summary>
+        /// Indicates that the <see cref="Subscription"/> is currently active but past due 
+        /// </summary>
+        PAST_DUE,
+        /// <summary>
+        /// A placeholder for unrecognized subscription statuses, implemented for future compatibility  
+        /// </summary>
+        UNRECOGNIZED
+    }
+
+    /// <summary>
+    /// A subscription returned by the Braintree Gateway
+    /// </summary>
+    /// <example>
+    /// Subscriptions can be retrieved via the gateway using the associated subscription id:
+    /// <code>
+    ///     Subscription subscription = gateway.Subscription.Find("subscriptionId");
+    /// </code>
+    /// </example>
     public class Subscription
     {
         public DateTime? BillingPeriodEndDate { get; protected set; }

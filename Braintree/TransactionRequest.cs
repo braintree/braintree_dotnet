@@ -4,6 +4,23 @@ using System.Text;
 
 namespace Braintree
 {
+    /// <summary>
+    /// A class for building requests to manipulate <see cref="Transaction"/> records in the vault.
+    /// </summary>
+    /// <example>
+    /// A transaction request can be constructed as follows:
+    /// <code>
+    /// var request = new TransactionRequest
+    /// {
+    ///     Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+    ///     CreditCard = new CreditCardRequest
+    ///     {
+    ///         Number = SandboxValues.CreditCardNumber.VISA,
+    ///         ExpirationDate = "05/2009",
+    ///     }
+    /// };
+    /// </code>
+    /// </example>
     public class TransactionRequest : Request
     {
         public CreditCardRequest CreditCard { get; set; }

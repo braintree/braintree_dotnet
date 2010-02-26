@@ -22,19 +22,19 @@ namespace Braintree
             nestedErrors = new Dictionary<String, ValidationErrors>();
         }
 
-        public void AddError(String fieldName, ValidationError error)
+        public virtual void AddError(String fieldName, ValidationError error)
         {
             if (!errors.ContainsKey(fieldName)) errors[fieldName] = new List<ValidationError>();
 
             errors[fieldName].Add(error);
         }
 
-        public void AddErrors(String objectName, ValidationErrors errors)
+        public virtual void AddErrors(String objectName, ValidationErrors errors)
         {
             nestedErrors[objectName] = errors;
         }
 
-        public int DeepSize()
+        public virtual int DeepSize()
         {
             int size = 0;
 
@@ -51,21 +51,21 @@ namespace Braintree
             return size;
         }
 
-        public ValidationErrors ForObject(String objectName)
+        public virtual ValidationErrors ForObject(String objectName)
         {
             if (nestedErrors.ContainsKey(objectName)) return nestedErrors[objectName];
 
             return null;
         }
 
-        public List<ValidationError> OnField(String fieldName)
+        public virtual List<ValidationError> OnField(String fieldName)
         {
             if (errors.ContainsKey(fieldName)) return errors[fieldName];
 
             return null;
         }
 
-        public int size()
+        public virtual int size()
         {
             return errors.Count;
         }

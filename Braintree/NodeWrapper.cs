@@ -14,7 +14,7 @@ namespace Braintree
             this.node = node;
         }
 
-        public String GetString(String path)
+        public virtual String GetString(String path)
         {
             if (GetNode(path) == null) return null;
 
@@ -23,36 +23,36 @@ namespace Braintree
             return value.Length == 0 ? null : value;
         }
 
-        protected String GetString()
+        protected virtual String GetString()
         {
             return node.InnerText;
         }
 
-        public Int32? GetInteger(String path)
+        public virtual Int32? GetInteger(String path)
         {
             if (GetString(path) == null) return null;
 
             return Int32.Parse(GetString(path));
         }
 
-        public Decimal? GetDecimal(String path)
+        public virtual Decimal? GetDecimal(String path)
         {
             if (GetString(path) == null) return null;
 
             return Decimal.Parse(GetString(path));
         }
 
-        public String GetName()
+        public virtual String GetName()
         {
             return node.Name;
         }
 
-        public Boolean IsRootNode()
+        public virtual Boolean IsRootNode()
         {
             return (node.ParentNode == null);
         }
 
-        public NodeWrapper GetNode(String path)
+        public virtual NodeWrapper GetNode(String path)
         {
             XmlNode subNode = node.SelectSingleNode(path);
             if (subNode == null) return null;
@@ -60,7 +60,7 @@ namespace Braintree
             return new NodeWrapper(subNode);
         }
 
-        public Dictionary<String, String> GetDictionary(String path)
+        public virtual Dictionary<String, String> GetDictionary(String path)
         {
             if (GetNode(path) == null) return null;
 
@@ -74,7 +74,7 @@ namespace Braintree
             return result;
         }
 
-        public List<NodeWrapper> GetChildren()
+        public virtual List<NodeWrapper> GetChildren()
         {
             XmlNodeList list = node.ChildNodes;
             var result = new List<NodeWrapper>();
@@ -86,7 +86,7 @@ namespace Braintree
             return result;
         }
 
-        public List<NodeWrapper> GetList(String path)
+        public virtual List<NodeWrapper> GetList(String path)
         {
             XmlNodeList list = node.SelectNodes(path);
             var result = new List<NodeWrapper>();
@@ -98,19 +98,19 @@ namespace Braintree
             return result;
         }
 
-        public String OuterXml()
+        public virtual String OuterXml()
         {
             return node.OuterXml;
         }
 
-        public Boolean? GetBoolean(String path)
+        public virtual Boolean? GetBoolean(String path)
         {
             if (GetString(path) == null) return null;
 
             return Boolean.Parse(GetString(path));
         }
 
-        public DateTime? GetDateTime(String path)
+        public virtual DateTime? GetDateTime(String path)
         {
             var value = GetString(path);
             if (value == null) return null;
@@ -118,7 +118,7 @@ namespace Braintree
             return DateTime.Parse(GetString(path));
         }
 
-        public Boolean IsSuccess()
+        public virtual Boolean IsSuccess()
         {
             return GetNode("//api-error-response") == null;
         }
@@ -158,7 +158,7 @@ namespace Braintree
             return formElementName;
         }
 
-        public Dictionary<String, String> GetFormParameters()
+        public virtual Dictionary<String, String> GetFormParameters()
         {
             var formParameters = new Dictionary<String, String>();
 

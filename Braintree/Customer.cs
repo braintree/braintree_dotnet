@@ -7,6 +7,15 @@ using System.Xml.Serialization;
 
 namespace Braintree
 {
+    /// <summary>
+    /// A customer returned by the Braintree Gateway
+    /// </summary>
+    /// <example>
+    /// Customers can be retrieved via the gateway using the associated customer id:
+    /// <code>
+    ///     Customer customer = gateway.Customer.Find("customerId");
+    /// </code>
+    /// </example>
     public class Customer
     {   
         public String Id { get; protected set; }

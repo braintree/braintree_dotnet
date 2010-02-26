@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Braintree
 {
-    public class PagedCollection
+    public class PagedCollection<T>
     {
+        public delegate PagedCollection<T> PagingDelegate();
+
         public Int32 CurrentPageNumber { get; protected set; }
         public Int32 PageSize { get; protected set; }
-        public String Query { get; protected set; }
         public Int32 TotalItems { get; protected set; }
-        public List<Transaction> Transactions { get; protected set; }
+        public List<T> Items { get; protected set; }
+        private PagingDelegate NextPage;
 
-        public PagedCollection(String query, List<Transaction> transactions, int currentPageNumber, int totalItems, int pageSize)
+        public PagedCollection(List<T> items, int currentPageNumber, int totalItems, int pageSize, PagingDelegate nextPage)
         {
-            Query = query;
-            Transactions = transactions;
+            Items = items;
             CurrentPageNumber = currentPageNumber;
             TotalItems = totalItems;
             PageSize = pageSize;
+            NextPage = nextPage;
         }
 
-        public PagedCollection GetNextPage()
+        public virtual PagedCollection<T> GetNextPage()
         {
-            return new TransactionGateway().Search(Query, CurrentPageNumber + 1);
+            return NextPage();
         }
     }
 }

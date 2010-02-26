@@ -15,18 +15,27 @@ namespace Braintree
         CREDIT, SALE, UNRECOGNIZED
     }
 
+    /// <summary>
+    /// A transaction returned by the Braintree Gateway
+    /// </summary>
+    /// <example>
+    /// Transactions can be retrieved via the gateway using the associated transaction id:
+    /// <code>
+    ///     Transaction transaction = gateway.Transaction.Find("transactionId");
+    /// </code>
+    /// </example>
     public class Transaction
     {
         public String Id { get; protected set; }
         public Decimal? Amount { get; protected set; }
-        public Address BillingAddressDetails { get; protected set; }
+        public Address BillingAddress { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
-        public CreditCard CreditCardDetails { get; protected set; }
-        public Customer CustomerDetails { get; protected set; }
+        public CreditCard CreditCard { get; protected set; }
+        public Customer Customer { get; protected set; }
         public String OrderId { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
-        public Address ShippingAddressDetails { get; protected set; }
+        public Address ShippingAddress { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
@@ -44,42 +53,131 @@ namespace Braintree
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             CustomFields = node.GetDictionary("custom-fields");
-            CreditCardDetails = new CreditCard(node.GetNode("credit-card"));
-            CustomerDetails = new Customer(node.GetNode("customer"));
+            CreditCard = new CreditCard(node.GetNode("credit-card"));
+            Customer = new Customer(node.GetNode("customer"));
 
-            BillingAddressDetails = new Address(node.GetNode("billing"));
-            ShippingAddressDetails = new Address(node.GetNode("shipping"));
+            BillingAddress = new Address(node.GetNode("billing"));
+            ShippingAddress = new Address(node.GetNode("shipping"));
 
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
         }
 
-        public CreditCard GetVaultCreditCard()
+        /// <summary>
+        /// Returns the current <see cref="CreditCard"/> associated with this transaction if one exists
+        /// </summary>
+        /// <returns>
+        /// The current <see cref="CreditCard"/> associated with this transaction if one exists
+        /// </returns>
+        /// <remarks>
+        /// When retrieving a transaction from the gateway, the credit card used in the transaction is returned in the response.
+        /// If the credit card record has been updated in the vault since the transaction occurred, this method can be used to 
+        /// retrieve the updated credit card information.  This is typically useful in situations where a transaction fails, for
+        /// example when a credit card expires, and a new transaction needs to be submitted once the new credit card information
+        /// has been submitted.
+        /// </remarks>
+        /// <example>
+        /// The vault <see cref="CreditCard"/> can be retrieved from the transaction directly:
+        /// <code>
+        ///     Transaction transaction = gateway.Transaction.Find("transactionId");
+        ///     CreditCard creditCard = transaction.GetVaultCreditCard();
+        /// </code>
+        /// </example>
+        /// <example>
+        /// Failed transactions can be resubmitted with updated <see cref="CreditCard"/> information:
+        /// <code>
+        ///     Transaction failedTransaction = gateway.Transaction.Find("transactionId");
+        ///     CreditCard updatedCreditCard = transaction.GetVaultCreditCard();
+        ///
+        ///     TransactionRequest request = new TransactionRequest
+        ///     {
+        ///         Amount = failedTransaction.Amount,
+        ///         PaymentMethodToken = updatedCreditCard.Token
+        ///     };
+        ///     
+        ///     Result&lt;Transaction&gt; result = gateway.Transaction.Sale(request);
+        /// </code>
+        /// </example>
+        public virtual CreditCard GetVaultCreditCard()
         {
-            if (CreditCardDetails.Token == null) return null;
+            if (CreditCard.Token == null) return null;
 
-            return new CreditCardGateway().Find(CreditCardDetails.Token);
+            return new CreditCardGateway().Find(CreditCard.Token);
         }
 
-        public Customer GetVaultCustomer()
+        /// <summary>
+        /// Returns the current <see cref="Customer"/> associated with this transaction if one exists
+        /// </summary>
+        /// <returns>
+        /// The current <see cref="Customer"/> associated with this transaction if one exists
+        /// </returns>
+        /// <remarks>
+        /// When retrieving a transaction from the gateway, the customer associated with the transaction is returned in the response.
+        /// If the customer record has been updated in the vault since the transaction occurred, this method can be used to 
+        /// retrieve the updated customer information.
+        /// </remarks>
+        /// <example>
+        /// The vault <see cref="Customer"/> can be retrieved from the transaction directly:
+        /// <code>
+        ///     Transaction transaction = gateway.Transaction.Find("transactionId");
+        ///     Customer customer = transaction.GetVaultCustomer();
+        /// </code>
+        /// </example>
+        public virtual Customer GetVaultCustomer()
         {
-            if (CustomerDetails.Id == null) return null;
+            if (Customer.Id == null) return null;
 
-            return new CustomerGateway().Find(CustomerDetails.Id);
+            return new CustomerGateway().Find(Customer.Id);
         }
 
-        public Address GetVaultBillingAddress()
+        /// <summary>
+        /// Returns the current billing <see cref="Address"/> associated with this transaction if one exists
+        /// </summary>
+        /// <returns>
+        /// The current billing <see cref="Address"/> associated with this transaction if one exists
+        /// </returns>
+        /// <remarks>
+        /// When retrieving a transaction from the gateway, the billing address associated with the transaction is returned in the response.
+        /// If the billing address has been updated in the vault since the transaction occurred, this method can be used to 
+        /// retrieve the updated billing address.
+        /// </remarks>
+        /// <example>
+        /// The vault billing <see cref="Address"/> can be retrieved from the transaction directly:
+        /// <code>
+        ///     Transaction transaction = gateway.Transaction.Find("transactionId");
+        ///     Address billingAddress = transaction.GetVaultBillingAddress();
+        /// </code>
+        /// </example>
+        public virtual Address GetVaultBillingAddress()
         {
-            if (BillingAddressDetails.Id == null) return null;
+            if (BillingAddress.Id == null) return null;
 
-            return new AddressGateway().Find(CustomerDetails.Id, BillingAddressDetails.Id);
+            return new AddressGateway().Find(Customer.Id, BillingAddress.Id);
         }
 
-        public Address GetVaultShippingAddress()
+        /// <summary>
+        /// Returns the current shipping <see cref="Address"/> associated with this transaction if one exists
+        /// </summary>
+        /// <returns>
+        /// The current shipping <see cref="Address"/> associated with this transaction if one exists
+        /// </returns>
+        /// <remarks>
+        /// When retrieving a transaction from the gateway, the shipping address associated with the transaction is returned in the response.
+        /// If the shipping address has been updated in the vault since the transaction occurred, this method can be used to 
+        /// retrieve the updated shipping address.
+        /// </remarks>
+        /// <example>
+        /// The vault shipping <see cref="Address"/> can be retrieved from the transaction directly:
+        /// <code>
+        ///     Transaction transaction = gateway.Transaction.Find("transactionId");
+        ///     Address shippingAddress = transaction.GetVaultShippingAddress();
+        /// </code>
+        /// </example>
+        public virtual Address GetVaultShippingAddress()
         {
-            if (ShippingAddressDetails.Id == null) return null;
+            if (ShippingAddress.Id == null) return null;
 
-            return new AddressGateway().Find(CustomerDetails.Id, ShippingAddressDetails.Id);
+            return new AddressGateway().Find(Customer.Id, ShippingAddress.Id);
         }
     }
 }

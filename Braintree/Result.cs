@@ -25,7 +25,7 @@ namespace Braintree
             }
         }
 
-        public Boolean IsSuccess()
+        public virtual Boolean IsSuccess()
         {
             return Errors == null;
         }

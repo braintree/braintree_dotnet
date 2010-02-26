@@ -14,7 +14,7 @@ namespace Braintree
             builder = new StringBuilder();
         }
 
-        public QueryString Append(String key, Object value)
+        public virtual QueryString Append(String key, Object value)
         {
             if (value == null)
             {
@@ -40,7 +40,7 @@ namespace Braintree
             return AppendString(key, value.ToString());
         }
 
-        protected QueryString AppendString(String key, String value)
+        protected virtual QueryString AppendString(String key, String value)
         {
             if (key != null && !(key == "") && value != null)
             {
@@ -53,7 +53,7 @@ namespace Braintree
             return this;
         }
 
-        protected QueryString AppendRequest(String parent, Request request)
+        protected virtual QueryString AppendRequest(String parent, Request request)
         {
             if (request == null)
             {
@@ -73,7 +73,7 @@ namespace Braintree
         }
 
 
-        protected String EncodeParam(String key, String value)
+        protected virtual String EncodeParam(String key, String value)
         {
             return HttpUtility.UrlEncode(key) + "=" + HttpUtility.UrlEncode(value);
         }

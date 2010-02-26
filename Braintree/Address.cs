@@ -5,6 +5,23 @@ using System.Xml;
 
 namespace Braintree
 {
+    /// <summary>
+    /// An address returned by the Braintree Gateway
+    /// </summary>
+    /// <remarks>
+    /// An address can belong to:
+    /// <ul>
+    ///   <li>a <see cref="CreditCard"/> as the billing address</li>
+    ///   <li>a <see cref="Customer"/> as an address</li>
+    ///   <li>a <see cref="Transaction"/> as a billing or shipping address</li>
+    /// </ul>
+    /// </remarks>
+    /// <example>
+    /// Addresses can be retrieved via the gateway using the associated customer Id and address Id:
+    /// <code>
+    ///     Address address = gateway.Address.Find("customerId", "addressId");
+    /// </code>
+    /// </example>
     public class Address
     {
         public String Id { get; protected set; }

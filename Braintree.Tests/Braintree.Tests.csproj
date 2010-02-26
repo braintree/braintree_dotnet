@@ -65,6 +65,8 @@
     <Compile Include="SubscriptionTest.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="TransactionTest.cs" />
+    <Compile Include="TransparentRedirectRequestTest.cs" />
+    <Compile Include="TrUtilTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
     <Compile Include="WebServiceGatewayTest.cs" />
   </ItemGroup>

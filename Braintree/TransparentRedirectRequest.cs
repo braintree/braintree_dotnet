@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Braintree.Exceptions;
+using System.Net;
 
 namespace Braintree
 {
@@ -10,6 +12,13 @@ namespace Braintree
 
         public TransparentRedirectRequest(String queryString)
         {
+            queryString = queryString.TrimStart('?');
+
+            if (!TrUtil.IsValidTrQueryString(queryString))
+            {
+                throw new ForgedQueryStringException();
+            }
+
             Dictionary<String, String> paramMap = new Dictionary<String, String>();
             String[] queryParams = queryString.Split('&');
 
@@ -18,6 +27,8 @@ namespace Braintree
                 String[] items = queryParam.Split('=');
                 paramMap[items[0]] = items[1];
             }
+
+            WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]));
 
             Id = paramMap["id"];
         }

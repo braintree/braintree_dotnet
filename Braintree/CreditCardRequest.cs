@@ -3,6 +3,29 @@ using System.Text;
 
 namespace Braintree
 {
+    /// <summary>
+    /// A class for building requests to manipulate <see cref="CreditCard"/> records in the vault.
+    /// </summary>
+    /// <example>
+    /// A credit card request can be constructed as follows:
+    /// <code>
+    /// CreditCardRequest createRequest = new CreditCardRequest
+    /// {
+    ///     CustomerId = customer.Id,
+    ///     CardholderName = "John Doe",
+    ///     Number = "5105105105105100",
+    ///     ExpirationDate = "05/12",
+    ///     BillingAddress = new AddressRequest
+    ///     {
+    ///         PostalCode = "44444"
+    ///     },
+    ///     Options = new CreditCardOptionsRequest
+    ///     {
+    ///         VerifyCard = true
+    ///     }
+    /// };
+    /// </code>
+    /// </example>
     public class CreditCardRequest : Request
     {
         public String Token { get; set; }

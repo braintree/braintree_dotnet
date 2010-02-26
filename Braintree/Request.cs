@@ -11,21 +11,21 @@ namespace Braintree
         public abstract String ToQueryString();
         public abstract String ToQueryString(String root);
 
-        internal String BuildXMLElement(Request request)
+        internal virtual String BuildXMLElement(Request request)
         {
             if (request == null) return "";
 
             return request.ToXml();
         }
 
-        internal String BuildXMLElement(String tagName, Request request)
+        internal virtual String BuildXMLElement(String tagName, Request request)
         {
             if (request == null) return "";
 
             return request.ToXml(tagName);
         }
 
-        internal String BuildXMLElement(String rootElement, Dictionary<String, String> elements)
+        internal virtual String BuildXMLElement(String rootElement, Dictionary<String, String> elements)
         {
             if (elements == null) return "";
 
@@ -43,12 +43,12 @@ namespace Braintree
         }
 
 
-        internal String BuildXMLElement(String tagName, Boolean value)
+        internal virtual String BuildXMLElement(String tagName, Boolean value)
         {
             return String.Format("<{0}>{1}</{0}>", tagName, value.ToString().ToLower());
         }
 
-        internal String BuildXMLElement(String tagName, String value)
+        internal virtual String BuildXMLElement(String tagName, String value)
         {
             // TODO: xml escape
             if (value == null) return "";
@@ -56,7 +56,7 @@ namespace Braintree
             return String.Format("<{0}>{1}</{0}>", tagName, value);
         }
 
-        protected String ParentBracketChildString(String parent, String child)
+        protected virtual String ParentBracketChildString(String parent, String child)
         {
             return String.Format("{0}[{1}]", parent, child);
         }

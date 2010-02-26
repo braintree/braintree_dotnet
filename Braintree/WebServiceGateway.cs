@@ -73,25 +73,16 @@ namespace Braintree
                 var response = (HttpWebResponse)e.Response;
                 if (response == null) throw e;
 
-                switch (response.StatusCode)
+                if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
                 {
-                    case HttpStatusCode.Unauthorized:
-                        throw new AuthenticationException();
-                    case HttpStatusCode.Forbidden:
-                        throw new AuthorizationException();
-                    case HttpStatusCode.NotFound:
-                        throw new NotFoundException();
-                    case (HttpStatusCode)422: // UnprocessableEntity
-                        XmlNode doc = ParseResponseStream(((HttpWebResponse)e.Response).GetResponseStream());
-                        e.Response.Close();
-                        return doc;
-                    case HttpStatusCode.InternalServerError:
-                        throw new ServerException();
-                    case HttpStatusCode.ServiceUnavailable:
-                        throw new DownForMaintenanceException();
-                    default:
-                        throw new UnexpectedException { Source = "Unexpected HTTP_RESPONSE " + response.StatusCode };
+                    XmlNode doc = ParseResponseStream(((HttpWebResponse)e.Response).GetResponseStream());
+                    e.Response.Close();
+                    return doc;
                 }
+
+                ThrowExceptionIfErrorStatusCode(response.StatusCode);
+
+                throw e;
             }
         }
 
@@ -108,6 +99,33 @@ namespace Braintree
                 doc.LoadXml(body);
                 return doc.ChildNodes[1];
             }
+        }
+
+        internal static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode)
+        {
+            if (httpStatusCode != HttpStatusCode.OK && httpStatusCode != HttpStatusCode.Created)
+            {
+                switch (httpStatusCode)
+                {
+                    case HttpStatusCode.Unauthorized:
+                        throw new AuthenticationException();
+                    case HttpStatusCode.Forbidden:
+                        throw new AuthorizationException();
+                    case HttpStatusCode.NotFound:
+                        throw new NotFoundException();
+                    case HttpStatusCode.InternalServerError:
+                        throw new ServerException();
+                    case HttpStatusCode.ServiceUnavailable:
+                        throw new DownForMaintenanceException();
+                    default:
+                        throw new UnexpectedException { Source = "Unexpected HTTP_RESPONSE " + httpStatusCode };
+                }
+            }
+        }
+
+        private static Boolean IsErrorCode(int responseCode)
+        {
+            return responseCode != 200 && responseCode != 201 && responseCode != 422;
         }
     }
 }

@@ -63,12 +63,12 @@ namespace Braintree.Tests
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
-            CreditCard creditCardDetails = transaction.CreditCardDetails;
-            Assert.AreEqual("411111", creditCardDetails.Bin);
-            Assert.AreEqual("1111", creditCardDetails.LastFour);
-            Assert.AreEqual("05", creditCardDetails.ExpirationMonth);
-            Assert.AreEqual("2009", creditCardDetails.ExpirationYear);
-            Assert.AreEqual("05/2009", creditCardDetails.ExpirationDate);
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
         }
 
         [Test]
@@ -131,15 +131,15 @@ namespace Braintree.Tests
             Assert.IsNull(transaction.GetVaultCustomer());
 
             Assert.IsNull(transaction.GetVaultCreditCard());
-            CreditCard creditCardDetails = transaction.CreditCardDetails;
-            Assert.AreEqual("411111", creditCardDetails.Bin);
-            Assert.AreEqual("1111", creditCardDetails.LastFour);
-            Assert.AreEqual("05", creditCardDetails.ExpirationMonth);
-            Assert.AreEqual("2009", creditCardDetails.ExpirationYear);
-            Assert.AreEqual("05/2009", creditCardDetails.ExpirationDate);
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
 
             Assert.IsNull(transaction.GetVaultCustomer());
-            Customer customer = transaction.CustomerDetails;
+            Customer customer = transaction.Customer;
             Assert.AreEqual("Dan", customer.FirstName);
             Assert.AreEqual("Smith", customer.LastName);
             Assert.AreEqual("Braintree Payment Solutions", customer.Company);
@@ -149,28 +149,28 @@ namespace Braintree.Tests
             Assert.AreEqual("http://braintreepaymentsolutions.com", customer.Website);
 
             Assert.IsNull(transaction.GetVaultBillingAddress());
-            Address billingDetails = transaction.BillingAddressDetails;
-            Assert.AreEqual("Carl", billingDetails.FirstName);
-            Assert.AreEqual("Jones", billingDetails.LastName);
-            Assert.AreEqual("Braintree", billingDetails.Company);
-            Assert.AreEqual("123 E Main St", billingDetails.StreetAddress);
-            Assert.AreEqual("Suite 403", billingDetails.ExtendedAddress);
-            Assert.AreEqual("Chicago", billingDetails.Locality);
-            Assert.AreEqual("IL", billingDetails.Region);
-            Assert.AreEqual("60622", billingDetails.PostalCode);
-            Assert.AreEqual("United States of America", billingDetails.CountryName);
+            Address billingAddress = transaction.BillingAddress;
+            Assert.AreEqual("Carl", billingAddress.FirstName);
+            Assert.AreEqual("Jones", billingAddress.LastName);
+            Assert.AreEqual("Braintree", billingAddress.Company);
+            Assert.AreEqual("123 E Main St", billingAddress.StreetAddress);
+            Assert.AreEqual("Suite 403", billingAddress.ExtendedAddress);
+            Assert.AreEqual("Chicago", billingAddress.Locality);
+            Assert.AreEqual("IL", billingAddress.Region);
+            Assert.AreEqual("60622", billingAddress.PostalCode);
+            Assert.AreEqual("United States of America", billingAddress.CountryName);
 
             Assert.IsNull(transaction.GetVaultShippingAddress());
-            Address shippingDetails = transaction.ShippingAddressDetails;
-            Assert.AreEqual("Andrew", shippingDetails.FirstName);
-            Assert.AreEqual("Mason", shippingDetails.LastName);
-            Assert.AreEqual("Braintree Shipping", shippingDetails.Company);
-            Assert.AreEqual("456 W Main St", shippingDetails.StreetAddress);
-            Assert.AreEqual("Apt 2F", shippingDetails.ExtendedAddress);
-            Assert.AreEqual("Bartlett", shippingDetails.Locality);
-            Assert.AreEqual("MA", shippingDetails.Region);
-            Assert.AreEqual("60103", shippingDetails.PostalCode);
-            Assert.AreEqual("Mexico", shippingDetails.CountryName);
+            Address shippingAddress = transaction.ShippingAddress;
+            Assert.AreEqual("Andrew", shippingAddress.FirstName);
+            Assert.AreEqual("Mason", shippingAddress.LastName);
+            Assert.AreEqual("Braintree Shipping", shippingAddress.Company);
+            Assert.AreEqual("456 W Main St", shippingAddress.StreetAddress);
+            Assert.AreEqual("Apt 2F", shippingAddress.ExtendedAddress);
+            Assert.AreEqual("Bartlett", shippingAddress.Locality);
+            Assert.AreEqual("MA", shippingAddress.Region);
+            Assert.AreEqual("60103", shippingAddress.PostalCode);
+            Assert.AreEqual("Mexico", shippingAddress.CountryName);
         }
 
         [Test]
@@ -203,11 +203,11 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            CreditCard creditCardDetails = transaction.CreditCardDetails;
-            Assert.AreEqual(paymentToken, creditCardDetails.Token);
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual(paymentToken, creditCard.Token);
             Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
 
-            Customer customer = transaction.CustomerDetails;
+            Customer customer = transaction.Customer;
             Assert.AreEqual(customerId, customer.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
         }
@@ -237,12 +237,12 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            CreditCard creditCardDetails = transaction.CreditCardDetails;
-            Assert.IsNotNull(creditCardDetails.Token);
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.IsNotNull(creditCard.Token);
             Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
 
-            Customer customerDetails = transaction.CustomerDetails;
-            Assert.IsNotNull(customerDetails.Id);
+            Customer customer = transaction.Customer;
+            Assert.IsNotNull(customer.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
         }
 
@@ -289,8 +289,8 @@ namespace Braintree.Tests
             Assert.AreEqual("Carl", customer.Addresses[0].FirstName);
             Assert.AreEqual("Andrew", customer.Addresses[1].FirstName);
 
-            Assert.IsNotNull(transaction.BillingAddressDetails.Id);
-            Assert.IsNotNull(transaction.ShippingAddressDetails.Id);
+            Assert.IsNotNull(transaction.BillingAddress.Id);
+            Assert.IsNotNull(transaction.ShippingAddress.Id);
         }
 
         [Test]
@@ -315,12 +315,12 @@ namespace Braintree.Tests
             Assert.AreEqual("2000", transaction.ProcessorResponseCode);
             Assert.IsNotNull(transaction.ProcessorResponseText);
 
-            CreditCard creditCardDetails = transaction.CreditCardDetails;
-            Assert.AreEqual("411111", creditCardDetails.Bin);
-            Assert.AreEqual("1111", creditCardDetails.LastFour);
-            Assert.AreEqual("05", creditCardDetails.ExpirationMonth);
-            Assert.AreEqual("2009", creditCardDetails.ExpirationYear);
-            Assert.AreEqual("05/2009", creditCardDetails.ExpirationDate);
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
         }
 
         [Test]
@@ -395,9 +395,9 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(creditCard.Token, transaction.CreditCardDetails.Token);
-            Assert.AreEqual("510510", transaction.CreditCardDetails.Bin);
-            Assert.AreEqual("05/2012", transaction.CreditCardDetails.ExpirationDate);
+            Assert.AreEqual(creditCard.Token, transaction.CreditCard.Token);
+            Assert.AreEqual("510510", transaction.CreditCard.Bin);
+            Assert.AreEqual("05/2012", transaction.CreditCard.ExpirationDate);
         }
 
         [Test]
@@ -426,8 +426,8 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(shippingAddress.Id, transaction.ShippingAddressDetails.Id);
-            Assert.AreEqual("Carl", transaction.ShippingAddressDetails.FirstName);
+            Assert.AreEqual(shippingAddress.Id, transaction.ShippingAddress.Id);
+            Assert.AreEqual("Carl", transaction.ShippingAddress.FirstName);
         }
 
         [Test]
@@ -482,12 +482,12 @@ namespace Braintree.Tests
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
-            CreditCard creditCardDetails = transaction.CreditCardDetails;
-            Assert.AreEqual("411111", creditCardDetails.Bin);
-            Assert.AreEqual("1111", creditCardDetails.LastFour);
-            Assert.AreEqual("05", creditCardDetails.ExpirationMonth);
-            Assert.AreEqual("2009", creditCardDetails.ExpirationYear);
-            Assert.AreEqual("05/2009", creditCardDetails.ExpirationDate);
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
         }
 
         [Test]
@@ -511,7 +511,7 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionType.CREDIT, transaction.Type);
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
 
-            CreditCard creditCard = transaction.CreditCardDetails;
+            CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
             Assert.AreEqual("1111", creditCard.LastFour);
             Assert.AreEqual("05", creditCard.ExpirationMonth);
@@ -588,7 +588,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(transaction.Id, foundTransaction.Id);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, foundTransaction.Status);
-            Assert.AreEqual("05/2008", foundTransaction.CreditCardDetails.ExpirationDate);
+            Assert.AreEqual("05/2008", foundTransaction.CreditCard.ExpirationDate);
         }
 
         [Test]
@@ -720,30 +720,30 @@ namespace Braintree.Tests
         [Test]
         public void Search_WithMatches()
         {
-            PagedCollection pagedCollection = gateway.Transaction.Search("411111");
+            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111");
 
             Assert.IsTrue(pagedCollection.TotalItems > 0);
             Assert.IsTrue(pagedCollection.PageSize > 0);
             Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
-            Assert.AreEqual("411111", pagedCollection.Transactions[0].CreditCardDetails.Bin);
+            Assert.AreEqual("411111", pagedCollection.Items[0].CreditCard.Bin);
         }
 
         [Test]
         public void Search_WithPageNumber()
         {
-            PagedCollection pagedCollection = gateway.Transaction.Search("411111", 2);
+            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111", 2);
             Assert.AreEqual(2, pagedCollection.CurrentPageNumber);
         }
 
         [Test]
         public void Search_CanTraversePages()
         {
-            PagedCollection pagedCollection = gateway.Transaction.Search("411111");
+            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111");
             Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
 
-            PagedCollection nextPage = pagedCollection.GetNextPage();
+            PagedCollection<Transaction> nextPage = pagedCollection.GetNextPage();
             Assert.AreEqual(2, nextPage.CurrentPageNumber);
-            Assert.AreNotEqual(pagedCollection.Transactions[0].Id, nextPage.Transactions[0].Id);
+            Assert.AreNotEqual(pagedCollection.Items[0].Id, nextPage.Items[0].Id);
         }
 
         [Test]
