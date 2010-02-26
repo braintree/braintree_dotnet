@@ -1,0 +1,1481 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\pair\braintree-dotnet\braintree.shfbproj" started="2/25/2010 7:26:59 PM">
+<buildStep step="Initializing">
+</buildStep>
+<buildStep step="FindingTools">
+Finding tools...
+Found Sandcastle tools in 'C:\Program Files (x86)\Sandcastle\'
+</buildStep>
+<buildStep step="ValidatingDocumentationSources">
+Validating and copying documentation source information
+Source: C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-1.1.0.dll
+    Found assembly 'C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-1.1.0.dll'
+Source: C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-1.1.0.xml
+
+Copying XML comments files
+    C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-1.1.0.XML -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Braintree-1.1.0.XML
+</buildStep>
+<buildStep step="GenerateSharedContent">
+Generating shared content files (en-US, English (United States))...
+    Last step completed in 00:00:00.0156
+</buildStep>
+<buildStep step="GenerateApiFilter">
+Generating API filter for MRefBuilder...
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="GenerateReflectionInfo">
+Generating reflection information...
+[C:\Windows\Microsoft.NET\Framework64\v3.5\MSBuild.exe]
+GenerateRefInfo:
+  MrefBuilder (v2.4.10520.1)
+  Copyright c Microsoft 2006
+  Info: Loaded 1 assemblies for reflection and 0 dependency assemblies.
+  Info: Wrote information on 2 namespaces, 47 types, and 402 members
+  XslTransform (v2.4.10520.1)
+  Copyright c Microsoft 2005-2006
+  Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
+    Last step completed in 00:00:02.2657
+</buildStep>
+<buildStep step="GenerateNamespaceSummaries">
+Generating namespace summary information...
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="ApplyVisibilityProperties">
+Applying visibility properties to reflection information file
+    0 attribute nodes removed
+    0 explicit interface implementations removed
+    0 local and base class EII elements removed
+    319 inherited member elements removed
+    9 protected members noted for removal
+    0 protected inherited framework members noted for removal
+    Removing previously noted unwanted APIs and elements
+    Last step completed in 00:00:00.0781
+</buildStep>
+<buildStep step="TransformReflectionInfo">
+Transforming reflection output...
+[C:\Windows\Microsoft.NET\Framework64\v3.5\MSBuild.exe]
+TransformManifest:
+  XslTransform (v2.4.10520.1)
+  Copyright c Microsoft 2005-2006
+  Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\ApplyVSDocModel.xsl'.
+  Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\AddGuidFilenames.xsl'.
+  XslTransform (v2.4.10520.1)
+  Copyright c Microsoft 2005-2006
+  Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
+    Last step completed in 00:00:03.0470
+</buildStep>
+<buildStep step="ModifyHelpTopicFilenames">
+Modifying help topic filenames in reflection information file
+    Unique name M_Braintree_AddressRequest_ToQueryString_1 generated for M:Braintree.AddressRequest.ToQueryString(System.String)
+    Unique name M_Braintree_CreditCardOptionsRequest_ToQueryString_1 generated for M:Braintree.CreditCardOptionsRequest.ToQueryString(System.String)
+    Unique name M_Braintree_CreditCardRequest_ToQueryString_1 generated for M:Braintree.CreditCardRequest.ToQueryString(System.String)
+    Unique name M_Braintree_CustomerRequest_ToQueryString_1 generated for M:Braintree.CustomerRequest.ToQueryString(System.String)
+    Unique name M_Braintree_Request_ToQueryString_1 generated for M:Braintree.Request.ToQueryString(System.String)
+    Unique name M_Braintree_SubscriptionRequest_ToQueryString_1 generated for M:Braintree.SubscriptionRequest.ToQueryString(System.String)
+    Unique name M_Braintree_TransactionGateway_Search_1 generated for M:Braintree.TransactionGateway.Search(System.String,System.Int32)
+    Unique name M_Braintree_TransactionGateway_SubmitForSettlement_1 generated for M:Braintree.TransactionGateway.SubmitForSettlement(System.String,System.Decimal)
+    Unique name M_Braintree_TransactionOptionsRequest_ToQueryString_1 generated for M:Braintree.TransactionOptionsRequest.ToQueryString(System.String)
+    Unique name M_Braintree_TransactionRequest_ToQueryString_1 generated for M:Braintree.TransactionRequest.ToQueryString(System.String)
+    Unique name M_Braintree_TransparentRedirectRequest_ToQueryString_1 generated for M:Braintree.TransparentRedirectRequest.ToQueryString(System.String)
+    Unique name M_Braintree_ValidationErrors__ctor_1 generated for M:Braintree.ValidationErrors.#ctor(Braintree.NodeWrapper)
+    Last step completed in 00:00:00.0469
+</buildStep>
+<buildStep step="CopyStandardContent">
+Copying standard help content...
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\adm.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\adm_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\adm_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\adm_dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm_dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\alert_caution.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\alert_caution.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\alert_note.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\alert_note.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\alert_security.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\alert_security.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\big_adm.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_adm.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\big_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\big_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\big_kw.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_kw.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\box.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\box.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\Caution.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\Caution.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\CFW.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\CFW.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\collall.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collall.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\collapse.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\collapse_all.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse_all.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\copycode.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycode.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\copycodeHighlight.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycodeHighlight.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\dropdown.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dropdown.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\dropdownHover.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dropdownHover.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\drpdown.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpdown.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\drpdown_orange.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpdown_orange.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\drpdown_orange_up.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpdown_orange_up.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\drpup.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpup.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\exp.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\exp.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\expall.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\expall.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\expand_all.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\expand_all.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\filter1a.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\filter1a.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\filter1c.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\filter1c.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\footer.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\footer.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\gradient.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\gradient.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\greencheck.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\greencheck.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\greychck.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\greychck.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\header_prev_next.jpg -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\header_prev_next.jpg
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\header_sql_tutorial_blank.jpg -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\header_sql_tutorial_blank.jpg
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\header_sql_tutorial_logo.GIF -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\header_sql_tutorial_logo.GIF
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw_adm.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw_adm_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw_adm_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw_adm_dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm_dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_dev.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\kw_dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_dev_arch.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\LastChild.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\LastChild.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\load.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\load.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\load_hover.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\load_hover.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\note.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\note.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pencil.GIF -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pencil.GIF
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privclass.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privclass.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privdelegate.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privdelegate.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privenum.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privenum.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privenumeration.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privenumeration.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privevent.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privevent.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privextension.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privextension.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privfield.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privfield.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privinterface.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privinterface.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privmethod.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privmethod.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privproperty.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privproperty.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\privstructure.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privstructure.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protclass.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protclass.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protdelegate.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protdelegate.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protenum.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protenum.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protenumeration.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protenumeration.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protevent.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protevent.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protextension.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protextension.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protfield.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protfield.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protinterface.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protinterface.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protmethod.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protmethod.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protoperator.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protoperator.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protproperty.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protproperty.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\protstructure.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protstructure.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubclass.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubclass.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubdelegate.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubdelegate.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubenum.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubenum.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubenumeration.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubenumeration.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubevent.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubevent.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubextension.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubextension.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubfield.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubfield.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubinterface.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubinterface.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubmethod.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubmethod.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\puboperator.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\puboperator.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubproperty.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubproperty.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\pubstructure.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubstructure.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\requirements1a.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\requirements1a.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\requirements1c.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\requirements1c.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\save.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\save.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\save_hover.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\save_hover.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\security.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\security.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\seealso1a.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\seealso1a.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\seealso1c.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\seealso1c.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\static.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\static.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\xna.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\xna.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\CheckboxMenu.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\CheckboxMenu.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\CommonUtilities.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\CommonUtilities.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\Dropdown.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\Dropdown.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\EventUtilities.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\EventUtilities.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\script_feedBack.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_feedBack.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\script_manifold.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_manifold.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\SplitScreen.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\SplitScreen.js
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\styles\Presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Presentation.css
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\styles\Whidbey\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Whidbey\presentation.css
+    Last step completed in 00:00:00.4219
+</buildStep>
+<buildStep step="CopyAdditionalContent">
+Copying additional content files...
+No additional content to copy
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="MergeTablesOfContents">
+Merging conceptual and additional tables of contents...
+    Last step completed in 00:00:00.0313
+</buildStep>
+<buildStep step="CreateBuildAssemblerConfigs">
+Creating Sandcastle configuration files...
+    sandcastle.config
+    Last step completed in 00:00:00.0156
+</buildStep>
+<buildStep step="MergeCustomConfigs">
+Merging custom build component configurations
+C:\Users\pair\braintree-dotnet\Help\Working\sandcastle.config
+    No additional help attributes defined.  The 'MS Help 2 Attributes' component was not added.
+    Last step completed in 00:00:00.0313
+</buildStep>
+<buildStep step="BuildReferenceTopics">
+Building reference help topics...
+[C:\Windows\Microsoft.NET\Framework64\v3.5\MSBuild.exe]
+BuildReferenceTopics:
+  BuildAssembler (v2.4.10520.1)
+  Copyright c Microsoft 2006
+  Info: CopyFromFileComponent: Instantiating component.
+  Info: CopyFromFileComponent: Loading data file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005\Transforms\skeleton.xml'.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Searching for files that match '*.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'reflection.xml'.
+  Info: CopyFromIndexComponent: Indexed 170635 elements in 107 files.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 1 subcomponents.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 1 subcomponents.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 1 subcomponents.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 1 subcomponents.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 1 subcomponents.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 1 subcomponents.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 1 subcomponents.
+  Info: IfThenComponent: Instantiating component.
+  Info: SyntaxComponent: Instantiating component.
+  Info: SyntaxComponent: Loaded 3 syntax generators.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Windows\Microsoft.NET\Framework\v2.0.50727\en\*.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\pair\braintree-dotnet\Help\Working\Braintree-1.1.0.XML'.
+  Info: CopyFromIndexComponent: Indexed 81316 elements in 50 files.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Instantiating component.
+  Info: ForEachComponent: Loading subcomponents.
+  Info: IfThenComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ForEachComponent: Loaded 2 subcomponents.
+  Info: CopyFromIndexComponent: Instantiating component.
+  Info: CopyFromIndexComponent: Loaded 0 copy components.
+  Info: ShowMissingComponent: Instantiating component.
+  Info: ShowMissingComponent: 
+      [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
+      Show Missing Documentation Component. Copyright c 2006-2010, Eric Woodruff, All Rights Reserved
+      http://SHFB.CodePlex.com
+  Info: VersionInfoComponent: Instantiating component.
+  Info: VersionInfoComponent: 
+      [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
+      Version Information Component. Copyright c 2006-2010, Eric Woodruff, All Rights Reserved
+      http://SHFB.CodePlex.com
+  Info: CodeBlockComponent: Instantiating component.
+  Info: CodeBlockComponent: 
+      [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
+      Code Block Component. Copyright c 2006-2010, Eric Woodruff, All Rights Reserved.
+      Portions copyright (c) 2003, Jonathan de Halleux, All rights reserved.
+      http://SHFB.CodePlex.com
+  Info: TransformComponent: Instantiating component.
+  Info: PostTransformComponent: Instantiating component.
+  Info: PostTransformComponent: 
+      [Sandcastle Help File Builder BuildAssembler Components, version 1.8.0.3]
+      Post-Transform Component. Copyright c 2006-2010, Eric Woodruff, All Rights Reserved
+      http://SHFB.CodePlex.com
+  Info: SharedContentComponent: Instantiating component.
+  Info: SharedContentComponent: Searching for files that match 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\shared_content.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\shared_content.xml'.
+  Info: SharedContentComponent: Found 1 files in C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\shared_content.xml.
+  Info: SharedContentComponent: Searching for files that match 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\reference_content.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\reference_content.xml'.
+  Info: SharedContentComponent: Found 1 files in C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\reference_content.xml.
+  Info: SharedContentComponent: Searching for files that match 'C:\Program Files (x86)\Sandcastle\Presentation\shared\content\syntax_content.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Program Files (x86)\Sandcastle\Presentation\shared\content\syntax_content.xml'.
+  Info: SharedContentComponent: Found 1 files in C:\Program Files (x86)\Sandcastle\Presentation\shared\content\syntax_content.xml.
+  Info: SharedContentComponent: Searching for files that match 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\feedback_content.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\feedBack_content.xml'.
+  Info: SharedContentComponent: Found 1 files in C:\Program Files (x86)\Sandcastle\Presentation\vs2005\content\feedback_content.xml.
+  Info: SharedContentComponent: Searching for files that match 'SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'roottopictitle' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'rootlink' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'runningheadertext' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'locationinformation' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'assemblynameandmodule' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'copycode' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'locale' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\SharedBuilderContent.xml'.
+  Info: SharedContentComponent: Found 1 files in SharedBuilderContent.xml.
+  Info: SharedContentComponent: Searching for files that match 'PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Loading shared content file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'header' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'footer' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_alias' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_product' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_body' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_send' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'fb_headerfeedback' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_alias' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_product' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Overriding shared content item 'feedback_body' with value in file 'C:\Users\pair\braintree-dotnet\Help\Working\PresentationStyleBuilderContent.xml'.
+  Info: SharedContentComponent: Found 1 files in PresentationStyleBuilderContent.xml.
+  Info: SharedContentComponent: Loaded 584 shared content items.
+  Info: ResolveReferenceLinksComponent2: Instantiating component.
+  Info: ResolveReferenceLinksComponent2: Creating MSDN URL resolver.
+  Info: ResolveReferenceLinksComponent2: Searching directory 'C:\Program Files (x86)\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
+  Info: ResolveReferenceLinksComponent2: Searching directory 'C:\Users\pair\braintree-dotnet\Help\Working' for targets files of the form 'reflection.xml'.
+  Info: ResolveReferenceLinksComponent2: Loaded 170635 reference targets.
+  Info: SaveComponent: Instantiating component.
+  Info: BuildAssembler: Building topic N:Braintree
+  Info: BuildAssembler: Building topic T:Braintree.Address
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Address
+  Info: BuildAssembler: Building topic Properties.T:Braintree.Address
+  Info: BuildAssembler: Building topic P:Braintree.Address.Company
+  Info: BuildAssembler: Building topic P:Braintree.Address.CountryName
+  Info: BuildAssembler: Building topic P:Braintree.Address.CustomerId
+  Info: BuildAssembler: Building topic P:Braintree.Address.ExtendedAddress
+  Info: BuildAssembler: Building topic P:Braintree.Address.FirstName
+  Info: BuildAssembler: Building topic P:Braintree.Address.Id
+  Info: BuildAssembler: Building topic P:Braintree.Address.LastName
+  Info: BuildAssembler: Building topic P:Braintree.Address.Locality
+  Info: BuildAssembler: Building topic P:Braintree.Address.PostalCode
+  Info: BuildAssembler: Building topic P:Braintree.Address.Region
+  Info: BuildAssembler: Building topic P:Braintree.Address.StreetAddress
+  Info: BuildAssembler: Building topic T:Braintree.AddressGateway
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.AddressGateway
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.AddressGateway.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.AddressGateway
+  Info: BuildAssembler: Building topic M:Braintree.AddressGateway.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.AddressGateway.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.AddressGateway.Create(System.String,Braintree.AddressRequest)
+  Info: BuildAssembler: Building topic M:Braintree.AddressGateway.Delete(System.String,System.String)
+  Info: BuildAssembler: Building topic M:Braintree.AddressGateway.Find(System.String,System.String)
+  Info: BuildAssembler: Building topic M:Braintree.AddressGateway.Update(System.String,System.String,Braintree.AddressRequest)
+  Info: BuildAssembler: Building topic T:Braintree.AddressRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.AddressRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.AddressRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.AddressRequest
+  Info: BuildAssembler: Building topic Properties.T:Braintree.AddressRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.AddressRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.AddressRequest.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.AddressRequest.#ctor
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.Company
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.CountryName
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.CustomerId
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.ExtendedAddress
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.FirstName
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.LastName
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.Locality
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.PostalCode
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.Region
+  Info: BuildAssembler: Building topic P:Braintree.AddressRequest.StreetAddress
+  Info: BuildAssembler: Building topic M:Braintree.AddressRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.AddressRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.BraintreeGateway
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.BraintreeGateway
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.BraintreeGateway.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.BraintreeGateway
+  Info: BuildAssembler: Building topic Properties.T:Braintree.BraintreeGateway
+  Info: BuildAssembler: Building topic M:Braintree.BraintreeGateway.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.BraintreeGateway.#ctor
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.Address
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.CreditCard
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.Customer
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.Environment
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.MerchantId
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.PrivateKey
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.PublicKey
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.Subscription
+  Info: BuildAssembler: Building topic P:Braintree.BraintreeGateway.Transaction
+  Info: BuildAssembler: Building topic M:Braintree.BraintreeGateway.TrData(Braintree.Request,System.String)
+  Info: BuildAssembler: Building topic T:Braintree.Configuration
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Configuration
+  Info: BuildAssembler: Building topic Methods.T:Braintree.Configuration
+  Info: BuildAssembler: Building topic Properties.T:Braintree.Configuration
+  Info: BuildAssembler: Building topic M:Braintree.Configuration.BaseMerchantURL
+  Info: BuildAssembler: Building topic P:Braintree.Configuration.Environment
+  Info: BuildAssembler: Building topic M:Braintree.Configuration.GetAuthorizationHeader
+  Info: BuildAssembler: Building topic P:Braintree.Configuration.MerchantId
+  Info: BuildAssembler: Building topic P:Braintree.Configuration.PrivateKey
+  Info: BuildAssembler: Building topic P:Braintree.Configuration.PublicKey
+  Info: BuildAssembler: Building topic T:Braintree.CreditCard
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.CreditCard
+  Info: BuildAssembler: Building topic Properties.T:Braintree.CreditCard
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.BillingAddress
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.Bin
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.CardholderName
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.CardType
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.CreatedAt
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.CustomerId
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.CustomerLocation
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.Default
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.ExpirationDate
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.ExpirationMonth
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.ExpirationYear
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.LastFour
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.Token
+  Info: BuildAssembler: Building topic P:Braintree.CreditCard.UpdatedAt
+  Info: BuildAssembler: Building topic T:Braintree.CreditCardGateway
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.CreditCardGateway
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardGateway.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.CreditCardGateway
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardGateway.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.ConfirmTransparentRedirect(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.Create(Braintree.CreditCardRequest)
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.Delete(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.Find(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.TransparentRedirectURLForCreate
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.TransparentRedirectURLForUpdate
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardGateway.Update(System.String,Braintree.CreditCardRequest)
+  Info: BuildAssembler: Building topic T:Braintree.CreditCardOptionsRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.CreditCardOptionsRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardOptionsRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.CreditCardOptionsRequest
+  Info: BuildAssembler: Building topic Properties.T:Braintree.CreditCardOptionsRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.CreditCardOptionsRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardOptionsRequest.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardOptionsRequest.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardOptionsRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardOptionsRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardOptionsRequest.VerifyCard
+  Info: BuildAssembler: Building topic T:Braintree.CreditCardRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.CreditCardRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.CreditCardRequest
+  Info: BuildAssembler: Building topic Properties.T:Braintree.CreditCardRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.CreditCardRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardRequest.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardRequest.#ctor
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.BillingAddress
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.CardholderName
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.CustomerId
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.CVV
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.ExpirationDate
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.ExpirationMonth
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.ExpirationYear
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.Number
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.Options
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.PaymentMethodToken
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardRequest.Token
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.CreditCardVerification
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.CreditCardVerification
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardVerification.#ctor
+  Info: BuildAssembler: Building topic Properties.T:Braintree.CreditCardVerification
+  Info: BuildAssembler: Building topic M:Braintree.CreditCardVerification.#ctor(Braintree.NodeWrapper)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CreditCardVerification.#ctor(Braintree.NodeWrapper)
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.AvsErrorResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.AvsPostalCodeResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.AvsStreetAddressResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.CvvResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.ProcessorResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.ProcessorResponseText
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.Status
+  Info: BuildAssembler: Building topic T:Braintree.Crypto
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Crypto
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Crypto.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.Crypto
+  Info: BuildAssembler: Building topic M:Braintree.Crypto.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Crypto.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.Crypto.HmacHash(System.String,System.String)
+  Info: BuildAssembler: Building topic M:Braintree.Crypto.Sha1Bytes(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.Customer
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Customer
+  Info: BuildAssembler: Building topic Properties.T:Braintree.Customer
+  Info: BuildAssembler: Building topic P:Braintree.Customer.Addresses
+  Info: BuildAssembler: Building topic P:Braintree.Customer.Company
+  Info: BuildAssembler: Building topic P:Braintree.Customer.CreatedAt
+  Info: BuildAssembler: Building topic P:Braintree.Customer.CreditCards
+  Info: BuildAssembler: Building topic P:Braintree.Customer.CustomFields
+  Info: BuildAssembler: Building topic P:Braintree.Customer.Email
+  Info: BuildAssembler: Building topic P:Braintree.Customer.Fax
+  Info: BuildAssembler: Building topic P:Braintree.Customer.FirstName
+  Info: BuildAssembler: Building topic P:Braintree.Customer.Id
+  Info: BuildAssembler: Building topic P:Braintree.Customer.LastName
+  Info: BuildAssembler: Building topic P:Braintree.Customer.Phone
+  Info: BuildAssembler: Building topic P:Braintree.Customer.UpdatedAt
+  Info: BuildAssembler: Building topic P:Braintree.Customer.Website
+  Info: BuildAssembler: Building topic T:Braintree.CustomerGateway
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.CustomerGateway
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CustomerGateway.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.CustomerGateway
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CustomerGateway.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.ConfirmTransparentRedirect(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.Create(Braintree.CustomerRequest)
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.Delete(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.Find(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.TransparentRedirectURLForCreate
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.TransparentRedirectURLForUpdate
+  Info: BuildAssembler: Building topic M:Braintree.CustomerGateway.Update(System.String,Braintree.CustomerRequest)
+  Info: BuildAssembler: Building topic T:Braintree.CustomerRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.CustomerRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CustomerRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.CustomerRequest
+  Info: BuildAssembler: Building topic Properties.T:Braintree.CustomerRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.CustomerRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.CustomerRequest.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.CustomerRequest.#ctor
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.Company
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.CreditCard
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.CustomerId
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.CustomFields
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.Email
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.Fax
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.FirstName
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.Id
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.LastName
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.Phone
+  Info: BuildAssembler: Building topic M:Braintree.CustomerRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.CustomerRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic P:Braintree.CustomerRequest.Website
+  Info: BuildAssembler: Building topic T:Braintree.EnumUtil
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.EnumUtil
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.EnumUtil.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.EnumUtil
+  Info: BuildAssembler: Building topic M:Braintree.EnumUtil.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.EnumUtil.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.EnumUtil.Find(System.Type,System.String,System.String)
+  Info: BuildAssembler: Building topic T:Braintree.Environment
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Environment
+  Info: BuildAssembler: Building topic Properties.T:Braintree.Environment
+  Info: BuildAssembler: Building topic Fields.T:Braintree.Environment
+  Info: BuildAssembler: Building topic F:Braintree.Environment.DEVELOPMENT
+  Info: BuildAssembler: Building topic P:Braintree.Environment.GatewayURL
+  Info: BuildAssembler: Building topic F:Braintree.Environment.PRODUCTION
+  Info: BuildAssembler: Building topic F:Braintree.Environment.QA
+  Info: BuildAssembler: Building topic F:Braintree.Environment.SANDBOX
+  Info: BuildAssembler: Building topic T:Braintree.NodeWrapper
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.NodeWrapper
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.NodeWrapper.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.NodeWrapper
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.#ctor(System.Xml.XmlNode)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.NodeWrapper.#ctor(System.Xml.XmlNode)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetBoolean(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetChildren
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetDateTime(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetDecimal(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetDictionary(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetFormParameters
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetInteger(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetList(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetName
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetNode(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.GetString(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.IsRootNode
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.IsSuccess
+  Info: BuildAssembler: Building topic M:Braintree.NodeWrapper.OuterXml
+  Info: BuildAssembler: Building topic T:Braintree.PagedCollection
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.PagedCollection
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.PagedCollection.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.PagedCollection
+  Info: BuildAssembler: Building topic Properties.T:Braintree.PagedCollection
+  Info: BuildAssembler: Building topic M:Braintree.PagedCollection.#ctor(System.String,System.Collections.Generic.List{Braintree.Transaction},System.Int32,System.Int32,System.Int32)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.PagedCollection.#ctor(System.String,System.Collections.Generic.List{Braintree.Transaction},System.Int32,System.Int32,System.Int32)
+  Info: BuildAssembler: Building topic P:Braintree.PagedCollection.CurrentPageNumber
+  Info: BuildAssembler: Building topic M:Braintree.PagedCollection.GetNextPage
+  Info: BuildAssembler: Building topic P:Braintree.PagedCollection.PageSize
+  Info: BuildAssembler: Building topic P:Braintree.PagedCollection.Query
+  Info: BuildAssembler: Building topic P:Braintree.PagedCollection.TotalItems
+  Info: BuildAssembler: Building topic P:Braintree.PagedCollection.Transactions
+  Info: BuildAssembler: Building topic T:Braintree.QueryString
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.QueryString
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.QueryString.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.QueryString
+  Info: BuildAssembler: Building topic M:Braintree.QueryString.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.QueryString.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.QueryString.Append(System.String,System.Object)
+  Info: BuildAssembler: Building topic M:Braintree.QueryString.ToString
+  Info: BuildAssembler: Building topic T:Braintree.Request
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Request
+  Info: BuildAssembler: Building topic Methods.T:Braintree.Request
+  Info: BuildAssembler: Building topic Overload:Braintree.Request.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.Request.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.Request.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.Result`1
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Result`1
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Result`1.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.Result`1
+  Info: BuildAssembler: Building topic Properties.T:Braintree.Result`1
+  Info: BuildAssembler: Building topic M:Braintree.Result`1.#ctor(Braintree.NodeWrapper)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Result`1.#ctor(Braintree.NodeWrapper)
+  Info: BuildAssembler: Building topic P:Braintree.Result`1.CreditCardVerification
+  Info: BuildAssembler: Building topic P:Braintree.Result`1.Errors
+  Info: BuildAssembler: Building topic M:Braintree.Result`1.IsSuccess
+  Info: BuildAssembler: Building topic P:Braintree.Result`1.Parameters
+  Info: BuildAssembler: Building topic P:Braintree.Result`1.Target
+  Info: BuildAssembler: Building topic T:Braintree.SandboxValues
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.SandboxValues
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SandboxValues.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.SandboxValues.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SandboxValues.#ctor
+  Info: BuildAssembler: Building topic T:Braintree.SandboxValues.CreditCardNumber
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.SandboxValues.CreditCardNumber
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SandboxValues.CreditCardNumber.#ctor
+  Info: BuildAssembler: Building topic Fields.T:Braintree.SandboxValues.CreditCardNumber
+  Info: BuildAssembler: Building topic M:Braintree.SandboxValues.CreditCardNumber.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SandboxValues.CreditCardNumber.#ctor
+  Info: BuildAssembler: Building topic F:Braintree.SandboxValues.CreditCardNumber.VISA
+  Info: BuildAssembler: Building topic T:Braintree.SandboxValues.TransactionAmount
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.SandboxValues.TransactionAmount
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SandboxValues.TransactionAmount.#ctor
+  Info: BuildAssembler: Building topic Fields.T:Braintree.SandboxValues.TransactionAmount
+  Info: BuildAssembler: Building topic M:Braintree.SandboxValues.TransactionAmount.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SandboxValues.TransactionAmount.#ctor
+  Info: BuildAssembler: Building topic F:Braintree.SandboxValues.TransactionAmount.AUTHORIZE
+  Info: BuildAssembler: Building topic F:Braintree.SandboxValues.TransactionAmount.DECLINE
+  Info: BuildAssembler: Building topic T:Braintree.Subscription
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Subscription
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Subscription.#ctor
+  Info: BuildAssembler: Building topic Properties.T:Braintree.Subscription
+  Info: BuildAssembler: Building topic M:Braintree.Subscription.#ctor(Braintree.NodeWrapper)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Subscription.#ctor(Braintree.NodeWrapper)
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.BillingPeriodEndDate
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.BillingPeriodStartDate
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.FailureCount
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.FirstBillingDate
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.HasTrialPeriod
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.Id
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.NextBillingDate
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.PaymentMethodToken
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.PlanId
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.Price
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.Status
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.Transactions
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.TrialDuration
+  Info: BuildAssembler: Building topic P:Braintree.Subscription.TrialDurationUnit
+  Info: BuildAssembler: Building topic T:Braintree.SubscriptionDurationUnit
+  Info: BuildAssembler: Building topic T:Braintree.SubscriptionGateway
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.SubscriptionGateway
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SubscriptionGateway.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.SubscriptionGateway
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionGateway.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SubscriptionGateway.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionGateway.Cancel(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionGateway.Create(Braintree.SubscriptionRequest)
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionGateway.Find(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionGateway.Update(System.String,Braintree.SubscriptionRequest)
+  Info: BuildAssembler: Building topic T:Braintree.SubscriptionRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.SubscriptionRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SubscriptionRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.SubscriptionRequest
+  Info: BuildAssembler: Building topic Properties.T:Braintree.SubscriptionRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.SubscriptionRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionRequest.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.SubscriptionRequest.#ctor
+  Info: BuildAssembler: Building topic P:Braintree.SubscriptionRequest.HasTrialPeriod
+  Info: BuildAssembler: Building topic P:Braintree.SubscriptionRequest.Id
+  Info: BuildAssembler: Building topic P:Braintree.SubscriptionRequest.PaymentMethodToken
+  Info: BuildAssembler: Building topic P:Braintree.SubscriptionRequest.PlanId
+  Info: BuildAssembler: Building topic P:Braintree.SubscriptionRequest.Price
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.SubscriptionRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic P:Braintree.SubscriptionRequest.TrialDuration
+  Info: BuildAssembler: Building topic P:Braintree.SubscriptionRequest.TrialDurationUnit
+  Info: BuildAssembler: Building topic T:Braintree.SubscriptionStatus
+  Info: BuildAssembler: Building topic T:Braintree.Transaction
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Transaction
+  Info: BuildAssembler: Building topic Methods.T:Braintree.Transaction
+  Info: BuildAssembler: Building topic Properties.T:Braintree.Transaction
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.Amount
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.BillingAddressDetails
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.CreatedAt
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.CreditCardDetails
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.CustomerDetails
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.CustomFields
+  Info: BuildAssembler: Building topic M:Braintree.Transaction.GetVaultBillingAddress
+  Info: BuildAssembler: Building topic M:Braintree.Transaction.GetVaultCreditCard
+  Info: BuildAssembler: Building topic M:Braintree.Transaction.GetVaultCustomer
+  Info: BuildAssembler: Building topic M:Braintree.Transaction.GetVaultShippingAddress
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.Id
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.OrderId
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.ProcessorResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.ProcessorResponseText
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.ShippingAddressDetails
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.Status
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.Type
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.UpdatedAt
+  Info: BuildAssembler: Building topic T:Braintree.TransactionGateway
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.TransactionGateway
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransactionGateway.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.TransactionGateway
+  Info: BuildAssembler: Building topic Overload:Braintree.TransactionGateway.Search
+  Info: BuildAssembler: Building topic Overload:Braintree.TransactionGateway.SubmitForSettlement
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransactionGateway.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.ConfirmTransparentRedirect(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.Credit(Braintree.TransactionRequest)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.CreditTrData(Braintree.TransactionRequest,System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.Find(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.Refund(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.Sale(Braintree.TransactionRequest)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.SaleTrData(Braintree.TransactionRequest,System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.Search(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.Search(System.String,System.Int32)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.SubmitForSettlement(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.SubmitForSettlement(System.String,System.Decimal)
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.TransparentRedirectURLForCreate
+  Info: BuildAssembler: Building topic M:Braintree.TransactionGateway.Void(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.TransactionOptionsRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.TransactionOptionsRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransactionOptionsRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.TransactionOptionsRequest
+  Info: BuildAssembler: Building topic Properties.T:Braintree.TransactionOptionsRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.TransactionOptionsRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.TransactionOptionsRequest.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransactionOptionsRequest.#ctor
+  Info: BuildAssembler: Building topic P:Braintree.TransactionOptionsRequest.AddBillingAddressToPaymentMethod
+  Info: BuildAssembler: Building topic P:Braintree.TransactionOptionsRequest.StoreInVault
+  Info: BuildAssembler: Building topic P:Braintree.TransactionOptionsRequest.StoreShippingAddressInVault
+  Info: BuildAssembler: Building topic P:Braintree.TransactionOptionsRequest.SubmitForSettlement
+  Info: BuildAssembler: Building topic M:Braintree.TransactionOptionsRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.TransactionOptionsRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.TransactionRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.TransactionRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransactionRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.TransactionRequest
+  Info: BuildAssembler: Building topic Properties.T:Braintree.TransactionRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.TransactionRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.TransactionRequest.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransactionRequest.#ctor
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.Amount
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.BillingAddress
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.CreditCard
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.Customer
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.CustomerId
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.CustomFields
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.Options
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.OrderId
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.PaymentMethodToken
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.ShippingAddress
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.ShippingAddressId
+  Info: BuildAssembler: Building topic M:Braintree.TransactionRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.TransactionRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic P:Braintree.TransactionRequest.Type
+  Info: BuildAssembler: Building topic T:Braintree.TransactionStatus
+  Info: BuildAssembler: Building topic T:Braintree.TransactionType
+  Info: BuildAssembler: Building topic T:Braintree.TransparentRedirectRequest
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.TransparentRedirectRequest
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransparentRedirectRequest.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.TransparentRedirectRequest
+  Info: BuildAssembler: Building topic Overload:Braintree.TransparentRedirectRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.TransparentRedirectRequest.#ctor(System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TransparentRedirectRequest.#ctor(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TransparentRedirectRequest.ToQueryString
+  Info: BuildAssembler: Building topic M:Braintree.TransparentRedirectRequest.ToQueryString(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.TrUtil
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.TrUtil
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TrUtil.#ctor
+  Info: BuildAssembler: Building topic Methods.T:Braintree.TrUtil
+  Info: BuildAssembler: Building topic M:Braintree.TrUtil.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.TrUtil.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.TrUtil.BuildTrData(Braintree.Request,System.String)
+  Info: BuildAssembler: Building topic M:Braintree.TrUtil.IsTrDataValid(System.String)
+  Info: BuildAssembler: Building topic T:Braintree.ValidationError
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.ValidationError
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.ValidationError.#ctor
+  Info: BuildAssembler: Building topic Properties.T:Braintree.ValidationError
+  Info: BuildAssembler: Building topic M:Braintree.ValidationError.#ctor(System.String,System.String)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.ValidationError.#ctor(System.String,System.String)
+  Info: BuildAssembler: Building topic P:Braintree.ValidationError.Code
+  Info: BuildAssembler: Building topic P:Braintree.ValidationError.Message
+  Info: BuildAssembler: Building topic T:Braintree.ValidationErrorCode
+  Info: BuildAssembler: Building topic T:Braintree.ValidationErrors
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.ValidationErrors
+  Info: BuildAssembler: Building topic Methods.T:Braintree.ValidationErrors
+  Info: BuildAssembler: Building topic Overload:Braintree.ValidationErrors.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.ValidationErrors.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.ValidationErrors.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.ValidationErrors.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.#ctor(Braintree.NodeWrapper)
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.ValidationErrors.#ctor(Braintree.NodeWrapper)
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.AddError(System.String,Braintree.ValidationError)
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.AddErrors(System.String,Braintree.ValidationErrors)
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.DeepSize
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.ForObject(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.OnField(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.ValidationErrors.size
+  Info: BuildAssembler: Building topic T:Braintree.WebServiceGateway
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.WebServiceGateway
+  Info: BuildAssembler: Building topic Methods.T:Braintree.WebServiceGateway
+  Info: BuildAssembler: Building topic M:Braintree.WebServiceGateway.Get(System.String)
+  Info: BuildAssembler: Building topic M:Braintree.WebServiceGateway.Put(System.String)
+  Info: BuildAssembler: Building topic N:Braintree.Exceptions
+  Info: BuildAssembler: Building topic T:Braintree.Exceptions.AuthenticationException
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Exceptions.AuthenticationException
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.AuthenticationException.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.Exceptions.AuthenticationException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.AuthenticationException.#ctor
+  Info: BuildAssembler: Building topic T:Braintree.Exceptions.AuthorizationException
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Exceptions.AuthorizationException
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.AuthorizationException.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.Exceptions.AuthorizationException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.AuthorizationException.#ctor
+  Info: BuildAssembler: Building topic T:Braintree.Exceptions.DownForMaintenanceException
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Exceptions.DownForMaintenanceException
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.DownForMaintenanceException.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.Exceptions.DownForMaintenanceException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.DownForMaintenanceException.#ctor
+  Info: BuildAssembler: Building topic T:Braintree.Exceptions.NotFoundException
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Exceptions.NotFoundException
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.NotFoundException.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.Exceptions.NotFoundException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.NotFoundException.#ctor
+  Info: BuildAssembler: Building topic T:Braintree.Exceptions.ServerException
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Exceptions.ServerException
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.ServerException.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.Exceptions.ServerException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.ServerException.#ctor
+  Info: BuildAssembler: Building topic T:Braintree.Exceptions.UnexpectedException
+  Info: BuildAssembler: Building topic AllMembers.T:Braintree.Exceptions.UnexpectedException
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.UnexpectedException.#ctor
+  Info: BuildAssembler: Building topic M:Braintree.Exceptions.UnexpectedException.#ctor
+  Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.UnexpectedException.#ctor
+  Info: Processed 438 topics
+    Last step completed in 00:00:44.7046
+</buildStep>
+<buildStep step="GenerateIntermediateTableOfContents">
+Generating intermediate table of contents file...
+[C:\Windows\Microsoft.NET\Framework64\v3.5\MSBuild.exe]
+GenerateIntermediateTOC:
+  XslTransform (v2.4.10520.1)
+  Copyright c Microsoft 2005-2006
+  Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\CreateVSToc.xsl'.
+
+Clearing any prior web output
+    Last step completed in 00:00:00.9532
+</buildStep>
+<buildStep step="ExtractingHtmlInfo">
+Extracting HTML info for HTML Help 1 and/or website...
+[C:\Windows\Microsoft.NET\Framework64\v3.5\MSBuild.exe]
+Sandcastle Help File Builder HTML Extract, version 1.8.0.3
+Copyright c 2008-2010, Eric Woodruff, All Rights Reserved
+E-Mail: Eric@EWoodruff.us
+
+Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
+Processed 438 HTML files
+Sorting keywords and generating See Also indices
+Saving website keyword index to C:\Users\pair\braintree-dotnet\Help\Working\WebKI.xml
+Saving website table of contents to C:\Users\pair\braintree-dotnet\Help\Working\WebTOC.xml
+    Last step completed in 00:00:01.0625
+</buildStep>
+<buildStep step="GenerateHelpFormatTableOfContents">
+Generating website table of contents file...
+    Last step completed in 00:00:00.0156
+</buildStep>
+<buildStep step="UpdateTableOfContents">
+Updating table of contents with additional content items and determining default topic...
+    Last step completed in 00:00:00.0000
+</buildStep>
+<buildStep step="GenerateFullTextIndex">
+Generating full-text index for the website...
+
+    Last step completed in 00:00:02.0782
+</buildStep>
+<buildStep step="CopyingWebsiteFiles">
+Copying website files to output folder...
+
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_100.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_100.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_101.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_101.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_102.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_102.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_103.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_103.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_104.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_104.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_105.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_105.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_106.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_106.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_107.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_107.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_108.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_108.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_109.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_109.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_110.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_110.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_111.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_111.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_112.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_112.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_113.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_113.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_114.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_114.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_115.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_115.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_116.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_116.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_117.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_117.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_118.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_118.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_119.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_119.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_120.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_120.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_97.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_97.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_98.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_98.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_99.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_99.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\fti\FTI_Files.bin -&gt; C:\Users\pair\braintree-dotnet\Help\fti\FTI_Files.bin
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Address.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Address.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_AddressGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_AddressGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_AddressRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_AddressRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_BraintreeGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_BraintreeGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Configuration.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Configuration.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_CreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_CreditCardGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_CreditCardGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_CreditCardOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_CreditCardOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_CreditCardRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_CreditCardRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_CreditCardVerification.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_CreditCardVerification.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Crypto.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Crypto.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Customer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Customer.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_CustomerGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_CustomerGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_CustomerRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_CustomerRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_EnumUtil.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_EnumUtil.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Environment.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Environment.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Exceptions_AuthenticationException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Exceptions_AuthenticationException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Exceptions_AuthorizationException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Exceptions_AuthorizationException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Exceptions_DownForMaintenanceException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Exceptions_DownForMaintenanceException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Exceptions_NotFoundException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Exceptions_NotFoundException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Exceptions_ServerException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Exceptions_ServerException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Exceptions_UnexpectedException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Exceptions_UnexpectedException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_NodeWrapper.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_NodeWrapper.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_PagedCollection.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_PagedCollection.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_QueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_QueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Request.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Request.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Result_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Result_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_SandboxValues.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_SandboxValues.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_SandboxValues_CreditCardNumber.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_SandboxValues_CreditCardNumber.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_SandboxValues_TransactionAmount.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_SandboxValues_TransactionAmount.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Subscription.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Subscription.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_SubscriptionGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_SubscriptionGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_SubscriptionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_SubscriptionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_Transaction.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_Transaction.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_TransactionGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_TransactionGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_TransactionOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_TransactionOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_TransactionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_TransactionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_TransparentRedirectRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_TransparentRedirectRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_TrUtil.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_TrUtil.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_ValidationError.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_ValidationError.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_ValidationErrors.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_ValidationErrors.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\AllMembers_T_Braintree_WebServiceGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\AllMembers_T_Braintree_WebServiceGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Fields_T_Braintree_Environment.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Fields_T_Braintree_Environment.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Fields_T_Braintree_SandboxValues_CreditCardNumber.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Fields_T_Braintree_SandboxValues_CreditCardNumber.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Fields_T_Braintree_SandboxValues_TransactionAmount.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Fields_T_Braintree_SandboxValues_TransactionAmount.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\F_Braintree_Environment_DEVELOPMENT.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\F_Braintree_Environment_DEVELOPMENT.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\F_Braintree_Environment_PRODUCTION.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\F_Braintree_Environment_PRODUCTION.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\F_Braintree_Environment_QA.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\F_Braintree_Environment_QA.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\F_Braintree_Environment_SANDBOX.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\F_Braintree_Environment_SANDBOX.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\F_Braintree_SandboxValues_CreditCardNumber_VISA.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\F_Braintree_SandboxValues_CreditCardNumber_VISA.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\F_Braintree_SandboxValues_TransactionAmount_AUTHORIZE.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\F_Braintree_SandboxValues_TransactionAmount_AUTHORIZE.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\F_Braintree_SandboxValues_TransactionAmount_DECLINE.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\F_Braintree_SandboxValues_TransactionAmount_DECLINE.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_AddressGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_AddressGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_AddressRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_AddressRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_BraintreeGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_BraintreeGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_Configuration.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_Configuration.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_CreditCardGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_CreditCardGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_CreditCardOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_CreditCardOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_CreditCardRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_CreditCardRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_Crypto.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_Crypto.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_CustomerGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_CustomerGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_CustomerRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_CustomerRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_EnumUtil.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_EnumUtil.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_NodeWrapper.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_NodeWrapper.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_PagedCollection.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_PagedCollection.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_QueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_QueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_Request.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_Request.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_Result_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_Result_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_SubscriptionGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_SubscriptionGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_SubscriptionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_SubscriptionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_Transaction.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_Transaction.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_TransactionGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_TransactionGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_TransactionOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_TransactionOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_TransactionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_TransactionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_TransparentRedirectRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_TransparentRedirectRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_TrUtil.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_TrUtil.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_ValidationErrors.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_ValidationErrors.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Methods_T_Braintree_WebServiceGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Methods_T_Braintree_WebServiceGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressGateway_Create.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressGateway_Create.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressGateway_Delete.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressGateway_Delete.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressGateway_Find.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressGateway_Find.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressGateway_Update.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressGateway_Update.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressGateway__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressGateway__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_AddressRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_AddressRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_BraintreeGateway_TrData.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_BraintreeGateway_TrData.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_BraintreeGateway__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_BraintreeGateway__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Configuration_BaseMerchantURL.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Configuration_BaseMerchantURL.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Configuration_GetAuthorizationHeader.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Configuration_GetAuthorizationHeader.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway_ConfirmTransparentRedirect.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway_ConfirmTransparentRedirect.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway_Create.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway_Create.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway_Delete.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway_Delete.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway_Find.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway_Find.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway_TransparentRedirectURLForCreate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway_TransparentRedirectURLForCreate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway_TransparentRedirectURLForUpdate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway_TransparentRedirectURLForUpdate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway_Update.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway_Update.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardGateway__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardGateway__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardOptionsRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardOptionsRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardOptionsRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardOptionsRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardOptionsRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardOptionsRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CreditCardVerification__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CreditCardVerification__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Crypto_HmacHash.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Crypto_HmacHash.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Crypto_Sha1Bytes.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Crypto_Sha1Bytes.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Crypto__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Crypto__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway_ConfirmTransparentRedirect.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway_ConfirmTransparentRedirect.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway_Create.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway_Create.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway_Delete.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway_Delete.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway_Find.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway_Find.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway_TransparentRedirectURLForCreate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway_TransparentRedirectURLForCreate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway_TransparentRedirectURLForUpdate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway_TransparentRedirectURLForUpdate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway_Update.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway_Update.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerGateway__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerGateway__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_CustomerRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_CustomerRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_EnumUtil_Find.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_EnumUtil_Find.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_EnumUtil__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_EnumUtil__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Exceptions_AuthenticationException__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Exceptions_AuthenticationException__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Exceptions_AuthorizationException__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Exceptions_AuthorizationException__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Exceptions_DownForMaintenanceException__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Exceptions_DownForMaintenanceException__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Exceptions_NotFoundException__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Exceptions_NotFoundException__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Exceptions_ServerException__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Exceptions_ServerException__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Exceptions_UnexpectedException__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Exceptions_UnexpectedException__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetBoolean.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetBoolean.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetChildren.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetChildren.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetDateTime.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetDateTime.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetDecimal.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetDecimal.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetDictionary.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetDictionary.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetFormParameters.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetFormParameters.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetInteger.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetInteger.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetList.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetList.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetNode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetNode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_GetString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_GetString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_IsRootNode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_IsRootNode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_IsSuccess.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_IsSuccess.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper_OuterXml.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper_OuterXml.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_NodeWrapper__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_NodeWrapper__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_PagedCollection_GetNextPage.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_PagedCollection_GetNextPage.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_PagedCollection__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_PagedCollection__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_QueryString_Append.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_QueryString_Append.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_QueryString_ToString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_QueryString_ToString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_QueryString__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_QueryString__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Request_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Request_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Request_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Request_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Result_1_IsSuccess.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Result_1_IsSuccess.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Result_1__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Result_1__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SandboxValues_CreditCardNumber__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SandboxValues_CreditCardNumber__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SandboxValues_TransactionAmount__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SandboxValues_TransactionAmount__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SandboxValues__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SandboxValues__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionGateway_Cancel.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionGateway_Cancel.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionGateway_Create.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionGateway_Create.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionGateway_Find.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionGateway_Find.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionGateway_Update.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionGateway_Update.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionGateway__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionGateway__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_SubscriptionRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_SubscriptionRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Subscription__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Subscription__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_ConfirmTransparentRedirect.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_ConfirmTransparentRedirect.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_Credit.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_Credit.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_CreditTrData.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_CreditTrData.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_Find.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_Find.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_Refund.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_Refund.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_Sale.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_Sale.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_SaleTrData.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_SaleTrData.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_Search.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_Search.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_Search_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_Search_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_SubmitForSettlement.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_SubmitForSettlement.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_SubmitForSettlement_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_SubmitForSettlement_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_TransparentRedirectURLForCreate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_TransparentRedirectURLForCreate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway_Void.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway_Void.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionGateway__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionGateway__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionOptionsRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionOptionsRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionOptionsRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionOptionsRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionOptionsRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionOptionsRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransactionRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransactionRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Transaction_GetVaultBillingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Transaction_GetVaultBillingAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Transaction_GetVaultCreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Transaction_GetVaultCreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Transaction_GetVaultCustomer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Transaction_GetVaultCustomer.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_Transaction_GetVaultShippingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_Transaction_GetVaultShippingAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransparentRedirectRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransparentRedirectRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransparentRedirectRequest_ToQueryString_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransparentRedirectRequest_ToQueryString_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TransparentRedirectRequest__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TransparentRedirectRequest__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TrUtil_BuildTrData.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TrUtil_BuildTrData.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TrUtil_IsTrDataValid.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TrUtil_IsTrDataValid.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_TrUtil__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_TrUtil__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors_AddError.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors_AddError.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors_AddErrors.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors_AddErrors.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors_DeepSize.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors_DeepSize.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors_ForObject.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors_ForObject.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors_OnField.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors_OnField.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors_size.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors_size.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationErrors__ctor_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationErrors__ctor_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_ValidationError__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_ValidationError__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_WebServiceGateway_Get.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_WebServiceGateway_Get.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\M_Braintree_WebServiceGateway_Put.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\M_Braintree_WebServiceGateway_Put.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\N_Braintree.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\N_Braintree.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\N_Braintree_Exceptions.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\N_Braintree_Exceptions.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_AddressRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_AddressRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_CreditCardOptionsRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_CreditCardOptionsRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_CreditCardRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_CreditCardRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_CustomerRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_CustomerRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_Request_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_Request_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_SubscriptionRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_SubscriptionRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_TransactionGateway_Search.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_TransactionGateway_Search.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_TransactionGateway_SubmitForSettlement.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_TransactionGateway_SubmitForSettlement.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_TransactionOptionsRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_TransactionOptionsRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_TransactionRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_TransactionRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_TransparentRedirectRequest_ToQueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_TransparentRedirectRequest_ToQueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Overload_Braintree_ValidationErrors__ctor.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Overload_Braintree_ValidationErrors__ctor.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_Address.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_Address.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_AddressRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_AddressRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_BraintreeGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_BraintreeGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_Configuration.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_Configuration.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_CreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_CreditCardOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_CreditCardOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_CreditCardRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_CreditCardRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_CreditCardVerification.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_CreditCardVerification.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_Customer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_Customer.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_CustomerRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_CustomerRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_Environment.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_Environment.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_PagedCollection.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_PagedCollection.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_Result_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_Result_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_Subscription.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_Subscription.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_SubscriptionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_SubscriptionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_Transaction.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_Transaction.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_TransactionOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_TransactionOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_TransactionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_TransactionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\Properties_T_Braintree_ValidationError.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\Properties_T_Braintree_ValidationError.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_Company.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_Company.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_CountryName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_CountryName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_CustomerId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_CustomerId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_ExtendedAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_ExtendedAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_FirstName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_FirstName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_LastName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_LastName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_Locality.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_Locality.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_PostalCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_PostalCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_Region.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_Region.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_StreetAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_StreetAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_Company.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_Company.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_CountryName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_CountryName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_CustomerId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_CustomerId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_ExtendedAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_ExtendedAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_FirstName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_FirstName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_Id.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_Id.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_LastName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_LastName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_Locality.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_Locality.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_PostalCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_PostalCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_Region.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_Region.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_StreetAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_StreetAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_Address.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_Address.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_CreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_Customer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_Customer.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_Environment.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_Environment.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_MerchantId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_MerchantId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_PrivateKey.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_PrivateKey.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_PublicKey.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_PublicKey.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_Subscription.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_Subscription.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_Transaction.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_Transaction.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Configuration_Environment.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Configuration_Environment.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Configuration_MerchantId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Configuration_MerchantId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Configuration_PrivateKey.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Configuration_PrivateKey.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Configuration_PublicKey.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Configuration_PublicKey.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardOptionsRequest_VerifyCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardOptionsRequest_VerifyCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_BillingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_BillingAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_CardholderName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_CardholderName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_CustomerId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_CustomerId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_CVV.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_CVV.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_ExpirationDate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_ExpirationDate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_ExpirationMonth.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_ExpirationMonth.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_ExpirationYear.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_ExpirationYear.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_Number.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_Number.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_Options.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_Options.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_PaymentMethodToken.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_PaymentMethodToken.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_Token.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_Token.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_AvsErrorResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_AvsErrorResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_AvsPostalCodeResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_AvsPostalCodeResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_AvsStreetAddressResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_AvsStreetAddressResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_CvvResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_CvvResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_ProcessorResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_ProcessorResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_ProcessorResponseText.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_ProcessorResponseText.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_Status.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_Status.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_BillingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_BillingAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_Bin.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_Bin.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_CardholderName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_CardholderName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_CardType.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_CardType.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_CreatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_CreatedAt.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_CustomerId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_CustomerId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_CustomerLocation.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_CustomerLocation.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_Default.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_Default.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_ExpirationDate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_ExpirationDate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_ExpirationMonth.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_ExpirationMonth.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_ExpirationYear.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_ExpirationYear.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_LastFour.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_LastFour.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_Token.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_Token.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCard_UpdatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCard_UpdatedAt.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_Company.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_Company.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_CreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_CustomerId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_CustomerId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_CustomFields.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_CustomFields.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_Email.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_Email.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_Fax.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_Fax.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_FirstName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_FirstName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_Id.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_Id.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_LastName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_LastName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_Phone.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_Phone.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CustomerRequest_Website.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CustomerRequest_Website.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_Addresses.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_Addresses.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_Company.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_Company.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_CreatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_CreatedAt.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_CreditCards.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_CreditCards.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_CustomFields.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_CustomFields.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_Email.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_Email.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_Fax.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_Fax.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_FirstName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_FirstName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_Id.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_Id.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_LastName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_LastName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_Phone.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_Phone.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_UpdatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_UpdatedAt.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Customer_Website.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Customer_Website.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Environment_GatewayURL.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Environment_GatewayURL.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_PagedCollection_CurrentPageNumber.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_PagedCollection_CurrentPageNumber.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_PagedCollection_PageSize.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_PagedCollection_PageSize.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_PagedCollection_Query.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_PagedCollection_Query.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_PagedCollection_TotalItems.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_PagedCollection_TotalItems.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_PagedCollection_Transactions.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_PagedCollection_Transactions.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Result_1_CreditCardVerification.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Result_1_CreditCardVerification.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Result_1_Errors.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Result_1_Errors.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Result_1_Parameters.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Result_1_Parameters.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Result_1_Target.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Result_1_Target.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_SubscriptionRequest_HasTrialPeriod.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_SubscriptionRequest_HasTrialPeriod.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_SubscriptionRequest_Id.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_SubscriptionRequest_Id.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_SubscriptionRequest_PaymentMethodToken.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_SubscriptionRequest_PaymentMethodToken.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_SubscriptionRequest_PlanId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_SubscriptionRequest_PlanId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_SubscriptionRequest_Price.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_SubscriptionRequest_Price.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_SubscriptionRequest_TrialDuration.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_SubscriptionRequest_TrialDuration.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_SubscriptionRequest_TrialDurationUnit.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_SubscriptionRequest_TrialDurationUnit.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_BillingPeriodEndDate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_BillingPeriodEndDate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_BillingPeriodStartDate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_BillingPeriodStartDate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_FailureCount.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_FailureCount.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_FirstBillingDate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_FirstBillingDate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_HasTrialPeriod.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_HasTrialPeriod.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_Id.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_Id.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_NextBillingDate.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_NextBillingDate.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_PaymentMethodToken.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_PaymentMethodToken.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_PlanId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_PlanId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_Price.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_Price.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_Status.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_Status.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_Transactions.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_Transactions.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_TrialDuration.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_TrialDuration.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Subscription_TrialDurationUnit.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Subscription_TrialDurationUnit.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionOptionsRequest_AddBillingAddressToPaymentMethod.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionOptionsRequest_AddBillingAddressToPaymentMethod.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionOptionsRequest_StoreInVault.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionOptionsRequest_StoreInVault.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionOptionsRequest_StoreShippingAddressInVault.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionOptionsRequest_StoreShippingAddressInVault.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionOptionsRequest_SubmitForSettlement.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionOptionsRequest_SubmitForSettlement.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_Amount.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_Amount.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_BillingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_BillingAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_CreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_Customer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_Customer.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_CustomerId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_CustomerId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_CustomFields.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_CustomFields.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_Options.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_Options.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_OrderId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_OrderId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_PaymentMethodToken.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_PaymentMethodToken.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_ShippingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_ShippingAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_ShippingAddressId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_ShippingAddressId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionRequest_Type.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionRequest_Type.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Amount.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Amount.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_BillingAddressDetails.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_BillingAddressDetails.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CreatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CreatedAt.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CreditCardDetails.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CreditCardDetails.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CustomerDetails.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CustomerDetails.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CustomFields.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CustomFields.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Id.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Id.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_OrderId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_OrderId.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_ProcessorResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_ProcessorResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_ProcessorResponseText.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_ProcessorResponseText.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_ShippingAddressDetails.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_ShippingAddressDetails.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Status.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Status.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Type.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Type.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_UpdatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_UpdatedAt.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_ValidationError_Code.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_ValidationError_Code.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_ValidationError_Message.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_ValidationError_Message.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Address.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Address.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_AddressGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_AddressGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_AddressRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_AddressRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_BraintreeGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_BraintreeGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Configuration.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Configuration.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_CreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_CreditCardGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_CreditCardGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_CreditCardOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_CreditCardOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_CreditCardRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_CreditCardRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_CreditCardVerification.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_CreditCardVerification.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Crypto.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Crypto.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Customer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Customer.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_CustomerGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_CustomerGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_CustomerRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_CustomerRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_EnumUtil.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_EnumUtil.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Environment.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Environment.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Exceptions_AuthenticationException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Exceptions_AuthenticationException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Exceptions_AuthorizationException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Exceptions_AuthorizationException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Exceptions_DownForMaintenanceException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Exceptions_DownForMaintenanceException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Exceptions_NotFoundException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Exceptions_NotFoundException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Exceptions_ServerException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Exceptions_ServerException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Exceptions_UnexpectedException.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Exceptions_UnexpectedException.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_NodeWrapper.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_NodeWrapper.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_PagedCollection.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_PagedCollection.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_QueryString.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_QueryString.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Request.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Request.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Result_1.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Result_1.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_SandboxValues.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_SandboxValues.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_SandboxValues_CreditCardNumber.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_SandboxValues_CreditCardNumber.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_SandboxValues_TransactionAmount.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_SandboxValues_TransactionAmount.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Subscription.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Subscription.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_SubscriptionDurationUnit.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_SubscriptionDurationUnit.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_SubscriptionGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_SubscriptionGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_SubscriptionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_SubscriptionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_SubscriptionStatus.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_SubscriptionStatus.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_Transaction.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_Transaction.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_TransactionGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_TransactionGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_TransactionOptionsRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_TransactionOptionsRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_TransactionRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_TransactionRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_TransactionStatus.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_TransactionStatus.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_TransactionType.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_TransactionType.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_TransparentRedirectRequest.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_TransparentRedirectRequest.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_TrUtil.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_TrUtil.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_ValidationError.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_ValidationError.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_ValidationErrorCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_ValidationErrorCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_ValidationErrors.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_ValidationErrors.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\T_Braintree_WebServiceGateway.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\T_Braintree_WebServiceGateway.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\adm.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\adm_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\adm_dev.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\adm_dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\adm_dev_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\alert_caution.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\alert_caution.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\alert_note.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\alert_note.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\alert_security.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\alert_security.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_adm.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\big_adm.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\big_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\big_dev.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\big_kw.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\big_kw.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\box.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\box.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\Caution.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\Caution.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\CFW.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\CFW.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collall.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\collall.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\collapse.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse_all.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\collapse_all.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycode.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\copycode.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycodeHighlight.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\copycodeHighlight.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\CopyCode_h.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\CopyCode_h.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\dev.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\dev_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dropdown.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\dropdown.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dropdownHover.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\dropdownHover.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpdown.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\drpdown.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpdown_orange.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\drpdown_orange.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpdown_orange_up.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\drpdown_orange_up.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\drpup.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\drpup.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\exp.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\exp.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\expall.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\expall.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\expand_all.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\expand_all.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\filter1a.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\filter1a.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\filter1c.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\filter1c.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\footer.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\footer.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\gradient.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\gradient.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\greencheck.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\greencheck.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\greychck.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\greychck.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\header_prev_next.jpg -&gt; C:\Users\pair\braintree-dotnet\Help\icons\header_prev_next.jpg
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\header_sql_tutorial_blank.jpg -&gt; C:\Users\pair\braintree-dotnet\Help\icons\header_sql_tutorial_blank.jpg
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\header_sql_tutorial_logo.GIF -&gt; C:\Users\pair\braintree-dotnet\Help\icons\header_sql_tutorial_logo.GIF
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw_adm.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw_adm_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw_adm_dev.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_adm_dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw_adm_dev_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw_dev.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\kw_dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\kw_dev_arch.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\LastChild.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\LastChild.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\load.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\load.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\load_hover.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\load_hover.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\note.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\note.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pencil.GIF -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pencil.GIF
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privclass.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privclass.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privdelegate.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privdelegate.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privenum.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privenum.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privenumeration.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privenumeration.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privevent.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privevent.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privextension.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privextension.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privfield.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privfield.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privinterface.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privinterface.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privmethod.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privmethod.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privproperty.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privproperty.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\privstructure.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\privstructure.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protclass.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protclass.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protdelegate.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protdelegate.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protenum.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protenum.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protenumeration.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protenumeration.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protevent.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protevent.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protextension.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protextension.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protfield.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protfield.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protinterface.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protinterface.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protmethod.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protmethod.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protoperator.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protoperator.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protproperty.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protproperty.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\protstructure.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\protstructure.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubclass.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubclass.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubdelegate.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubdelegate.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubenum.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubenum.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubenumeration.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubenumeration.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubevent.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubevent.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubextension.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubextension.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubfield.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubfield.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubinterface.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubinterface.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubmethod.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubmethod.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\puboperator.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\puboperator.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubproperty.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubproperty.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\pubstructure.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\pubstructure.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\requirements1a.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\requirements1a.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\requirements1c.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\requirements1c.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\save.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\save.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\save_hover.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\save_hover.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\security.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\security.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\seealso1a.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\seealso1a.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\seealso1c.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\seealso1c.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\static.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\static.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\xna.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\xna.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\CheckboxMenu.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\CheckboxMenu.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\CommonUtilities.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\CommonUtilities.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\Dropdown.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\Dropdown.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\EventUtilities.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\EventUtilities.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\highlight.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\highlight.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_feedBack.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\script_feedBack.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_manifold.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\script_manifold.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\SplitScreen.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\SplitScreen.js
+C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\highlight.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\highlight.css
+C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\Presentation.css
+C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Whidbey\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\Whidbey\presentation.css
+    Last step completed in 00:00:03.0470
+</buildStep>
+<buildStep step="CleanIntermediates">
+Removing intermediate files...
+    Last step completed in 00:00:00.1875
+</buildStep>
+<buildStep step="Completed">
+
+Build completed successfully at 02/25/2010 07:27 PM.  Total time: 00:00:58.0956
+
+</buildStep>
+</shfbBuild>
