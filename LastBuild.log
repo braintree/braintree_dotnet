@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\pair\braintree-dotnet\braintree.shfbproj" started="2/25/2010 7:26:59 PM">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\pair\braintree-dotnet\braintree.shfbproj" started="2/26/2010 10:53:40 AM">
 <buildStep step="Initializing">
 </buildStep>
 <buildStep step="FindingTools">
@@ -17,11 +17,11 @@ Copying XML comments files
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0205
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0029
 </buildStep>
 <buildStep step="GenerateReflectionInfo">
 Generating reflection information...
@@ -34,11 +34,11 @@ GenerateRefInfo:
   XslTransform (v2.4.10520.1)
   Copyright c Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:02.2657
+    Last step completed in 00:00:03.8285
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0029
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
@@ -49,7 +49,7 @@ Applying visibility properties to reflection information file
     9 protected members noted for removal
     0 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.0821
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -62,7 +62,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright c Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:03.0470
+    Last step completed in 00:00:05.3671
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -78,7 +78,7 @@ Modifying help topic filenames in reflection information file
     Unique name M_Braintree_TransactionRequest_ToQueryString_1 generated for M:Braintree.TransactionRequest.ToQueryString(System.String)
     Unique name M_Braintree_TransparentRedirectRequest_ToQueryString_1 generated for M:Braintree.TransparentRedirectRequest.ToQueryString(System.String)
     Unique name M_Braintree_ValidationErrors__ctor_1 generated for M:Braintree.ValidationErrors.#ctor(Braintree.NodeWrapper)
-    Last step completed in 00:00:00.0469
+    Last step completed in 00:00:00.0547
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -100,7 +100,7 @@ C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\CFW.gif -&gt; C:\Use
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\collall.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collall.gif
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\collapse.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse.gif
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\collapse_all.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse_all.gif
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\copycode.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycode.gif
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\CopyCode.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\CopyCode.gif
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\copycodeHighlight.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycodeHighlight.gif
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dev.gif
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\icons\dev_arch.gif -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dev_arch.gif
@@ -186,18 +186,18 @@ C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\EventUtilities.js 
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\script_feedBack.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_feedBack.js
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\script_manifold.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_manifold.js
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\SplitScreen.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\SplitScreen.js
-C:\Program Files (x86)\Sandcastle\Presentation\vs2005\styles\Presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Presentation.css
+C:\Program Files (x86)\Sandcastle\Presentation\vs2005\styles\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\presentation.css
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\styles\Whidbey\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.4219
+    Last step completed in 00:00:00.5207
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
 No additional content to copy
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0127
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0225
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
@@ -208,7 +208,7 @@ Creating Sandcastle configuration files...
 Merging custom build component configurations
 C:\Users\pair\braintree-dotnet\Help\Working\sandcastle.config
     No additional help attributes defined.  The 'MS Help 2 Attributes' component was not added.
-    Last step completed in 00:00:00.0313
+    Last step completed in 00:00:00.0352
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -852,7 +852,7 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:Braintree.Exceptions.UnexpectedException.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.UnexpectedException.#ctor
   Info: Processed 438 topics
-    Last step completed in 00:00:44.7046
+    Last step completed in 00:01:01.9145
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -863,7 +863,7 @@ GenerateIntermediateTOC:
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\CreateVSToc.xsl'.
 
 Clearing any prior web output
-    Last step completed in 00:00:00.9532
+    Last step completed in 00:00:00.9790
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for HTML Help 1 and/or website...
@@ -877,20 +877,20 @@ Processed 438 HTML files
 Sorting keywords and generating See Also indices
 Saving website keyword index to C:\Users\pair\braintree-dotnet\Help\Working\WebKI.xml
 Saving website table of contents to C:\Users\pair\braintree-dotnet\Help\Working\WebTOC.xml
-    Last step completed in 00:00:01.0625
+    Last step completed in 00:00:01.2027
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating website table of contents file...
-    Last step completed in 00:00:00.0156
+    Last step completed in 00:00:00.0039
 </buildStep>
 <buildStep step="UpdateTableOfContents">
 Updating table of contents with additional content items and determining default topic...
-    Last step completed in 00:00:00.0000
+    Last step completed in 00:00:00.0039
 </buildStep>
 <buildStep step="GenerateFullTextIndex">
 Generating full-text index for the website...
 
-    Last step completed in 00:00:02.0782
+    Last step completed in 00:00:02.2285
 </buildStep>
 <buildStep step="CopyingWebsiteFiles">
 Copying website files to output folder...
@@ -1376,7 +1376,7 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\CFW.gif -&gt; C:\Users\
 C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collall.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\collall.gif
 C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\collapse.gif
 C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\collapse_all.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\collapse_all.gif
-C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycode.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\copycode.gif
+C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\CopyCode.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\CopyCode.gif
 C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\copycodeHighlight.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\copycodeHighlight.gif
 C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\CopyCode_h.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\CopyCode_h.gif
 C:\Users\pair\braintree-dotnet\Help\Working\Output\icons\dev.gif -&gt; C:\Users\pair\braintree-dotnet\Help\icons\dev.gif
@@ -1465,17 +1465,17 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_feedBack.js -&
 C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\script_manifold.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\script_manifold.js
 C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\SplitScreen.js -&gt; C:\Users\pair\braintree-dotnet\Help\scripts\SplitScreen.js
 C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\highlight.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\highlight.css
-C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\Presentation.css
+C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\presentation.css
 C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Whidbey\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\Whidbey\presentation.css
-    Last step completed in 00:00:03.0470
+    Last step completed in 00:00:02.0204
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.1875
+    Last step completed in 00:00:00.2120
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 02/25/2010 07:27 PM.  Total time: 00:00:58.0956
+Build completed successfully at 02/26/2010 10:54 AM.  Total time: 00:01:18.7413
 
 </buildStep>
 </shfbBuild>
