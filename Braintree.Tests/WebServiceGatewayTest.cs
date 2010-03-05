@@ -16,7 +16,7 @@ namespace Braintree
             Configuration.PublicKey = "integration_public_key";
             Configuration.PrivateKey = "integration_private_key";
 
-            WebServiceGateway.Get("/customers/131866");
+            WebServiceGateway.Get("/customers");
         }
     }
 }

@@ -50,6 +50,14 @@ namespace Braintree
             }
         }
 
+        public String MaskedNumber
+        {
+            get
+            {
+                return String.Format("{0}******{1}", Bin, LastFour);
+            }
+        }
+
         internal CreditCard(NodeWrapper node)
         {
             if (node == null) return;
