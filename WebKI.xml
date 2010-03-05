@@ -225,6 +225,7 @@
   <HelpKINode Title="BraintreeGateway.Transaction property" Url="html/P_Braintree_BraintreeGateway_Transaction.htm" />
   <HelpKINode Title="BraintreeGateway.TrData method" Url="html/M_Braintree_BraintreeGateway_TrData.htm" />
   <HelpKINode Title="BuildTrData method" Url="html/M_Braintree_TrUtil_BuildTrData.htm" />
+  <HelpKINode Title="ByFormField method" Url="html/M_Braintree_ValidationErrors_ByFormField.htm" />
   <HelpKINode Title="Cancel method" Url="html/M_Braintree_SubscriptionGateway_Cancel.htm" />
   <HelpKINode Title="CANCELED enumeration member" Url="html/T_Braintree_SubscriptionStatus.htm" />
   <HelpKINode Title="CardholderName property" Url="html/P_Braintree_CreditCardRequest_CardholderName.htm" />
@@ -286,6 +287,7 @@
   <HelpKINode Title="CreditCard.ExpirationMonth property" Url="html/P_Braintree_CreditCard_ExpirationMonth.htm" />
   <HelpKINode Title="CreditCard.ExpirationYear property" Url="html/P_Braintree_CreditCard_ExpirationYear.htm" />
   <HelpKINode Title="CreditCard.LastFour property" Url="html/P_Braintree_CreditCard_LastFour.htm" />
+  <HelpKINode Title="CreditCard.MaskedNumber property" Url="html/P_Braintree_CreditCard_MaskedNumber.htm" />
   <HelpKINode Title="CreditCard.Token property" Url="html/P_Braintree_CreditCard_Token.htm" />
   <HelpKINode Title="CreditCard.UpdatedAt property" Url="html/P_Braintree_CreditCard_UpdatedAt.htm" />
   <HelpKINode Title="CreditCardGateway class" Url="html/AllMembers_T_Braintree_CreditCardGateway.htm" />
@@ -601,6 +603,7 @@
   <HelpKINode Title="LastName property" Url="html/P_Braintree_Customer_LastName.htm" />
   <HelpKINode Title="Locality property" Url="html/P_Braintree_AddressRequest_Locality.htm" />
   <HelpKINode Title="Locality property" Url="html/P_Braintree_Address_Locality.htm" />
+  <HelpKINode Title="MaskedNumber property" Url="html/P_Braintree_CreditCard_MaskedNumber.htm" />
   <HelpKINode Title="MerchantId property" Url="html/P_Braintree_BraintreeGateway_MerchantId.htm" />
   <HelpKINode Title="MerchantId property" Url="html/P_Braintree_Configuration_MerchantId.htm" />
   <HelpKINode Title="Message property" Url="html/P_Braintree_ValidationError_Message.htm" />
@@ -1083,6 +1086,7 @@
   </HelpKINode>
   <HelpKINode Title="ValidationErrors.AddError method" Url="html/M_Braintree_ValidationErrors_AddError.htm" />
   <HelpKINode Title="ValidationErrors.AddErrors method" Url="html/M_Braintree_ValidationErrors_AddErrors.htm" />
+  <HelpKINode Title="ValidationErrors.ByFormField method" Url="html/M_Braintree_ValidationErrors_ByFormField.htm" />
   <HelpKINode Title="ValidationErrors.DeepSize method" Url="html/M_Braintree_ValidationErrors_DeepSize.htm" />
   <HelpKINode Title="ValidationErrors.ForObject method" Url="html/M_Braintree_ValidationErrors_ForObject.htm" />
   <HelpKINode Title="ValidationErrors.OnField method" Url="html/M_Braintree_ValidationErrors_OnField.htm" />
