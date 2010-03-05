@@ -251,5 +251,63 @@ namespace Braintree.Tests
             Assert.AreEqual(1, errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").size());
             Assert.AreEqual(ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED, errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_name")[0].Code);
         }
+
+        [Test]
+        public void ByFormField_FlattensErrorsToFormElementNames()
+        {
+            var errors = new ValidationErrors();
+            errors.AddError("some_error", new ValidationError("1", "some error"));
+            errors.AddError("some_error", new ValidationError("2", "some other error"));
+
+            var nestedErrors = new ValidationErrors();
+            nestedErrors.AddError("some_nested_error", new ValidationError("3", "some nested error"));
+            nestedErrors.AddError("some_nested_error", new ValidationError("4", "some other nested error"));
+
+            var nestedNestedErrors = new ValidationErrors();
+            nestedNestedErrors.AddError("some_nested_nested_error", new ValidationError("5", "some nested nested error"));
+            nestedNestedErrors.AddError("some_nested_nested_error", new ValidationError("6", "some other nested nested error"));
+
+            nestedErrors.AddErrors("some_nested_object", nestedNestedErrors);
+            errors.AddErrors("some_object", nestedErrors);
+
+            Dictionary<String, List<String>> formErrors = errors.ByFormField();
+            Assert.AreEqual("some error", formErrors["some_error"][0]);
+            Assert.AreEqual("some other error", formErrors["some_error"][1]);
+
+            Assert.AreEqual("some nested error", formErrors["some_object[some_nested_error]"][0]);
+            Assert.AreEqual("some other nested error", formErrors["some_object[some_nested_error]"][1]);
+
+            Assert.AreEqual("some nested nested error", formErrors["some_object[some_nested_object][some_nested_nested_error]"][0]);
+            Assert.AreEqual("some other nested nested error", formErrors["some_object[some_nested_object][some_nested_nested_error]"][1]);
+        }
+
+        [Test]
+        public void ByFormField_UnderscoresNodes()
+        {
+            var errors = new ValidationErrors();
+            errors.AddError("some-error", new ValidationError("1", "some error"));
+            errors.AddError("some-error", new ValidationError("2", "some other error"));
+
+            var nestedErrors = new ValidationErrors();
+            nestedErrors.AddError("some-nested-error", new ValidationError("3", "some nested error"));
+            nestedErrors.AddError("some-nested-error", new ValidationError("4", "some other nested error"));
+
+            var nestedNestedErrors = new ValidationErrors();
+            nestedNestedErrors.AddError("some-nested-nested-error", new ValidationError("5", "some nested nested error"));
+            nestedNestedErrors.AddError("some-nested-nested-error", new ValidationError("6", "some other nested nested error"));
+
+            nestedErrors.AddErrors("some-nested-object", nestedNestedErrors);
+            errors.AddErrors("some-object", nestedErrors);
+
+            Dictionary<String, List<String>> formErrors = errors.ByFormField();
+            Assert.AreEqual("some error", formErrors["some_error"][0]);
+            Assert.AreEqual("some other error", formErrors["some_error"][1]);
+
+            Assert.AreEqual("some nested error", formErrors["some_object[some_nested_error]"][0]);
+            Assert.AreEqual("some other nested error", formErrors["some_object[some_nested_error]"][1]);
+
+            Assert.AreEqual("some nested nested error", formErrors["some_object[some_nested_object][some_nested_nested_error]"][0]);
+            Assert.AreEqual("some other nested nested error", formErrors["some_object[some_nested_object][some_nested_nested_error]"][1]);
+        }
     }
 }

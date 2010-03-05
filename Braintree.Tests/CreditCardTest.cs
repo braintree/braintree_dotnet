@@ -63,6 +63,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual("510510", creditCard.Bin);
             Assert.AreEqual("5100", creditCard.LastFour);
+            Assert.AreEqual("510510******5100", creditCard.MaskedNumber);
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);

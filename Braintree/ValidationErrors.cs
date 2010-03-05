@@ -100,5 +100,46 @@ namespace Braintree
                 errors[childError.GetString("attribute")].Add(new ValidationError(childError.GetString("code"), childError.GetString("message")));
             }
         }
+
+        public Dictionary<String, List<String>> ByFormField()
+        {
+            var dict = new Dictionary<String, List<String>>();
+
+            foreach (var pair in errors)
+            {
+                String keyName = pair.Key.Replace('-', '_');
+
+                if (!dict.ContainsKey(keyName)) dict[keyName] = new List<String>();
+
+                foreach (var error in pair.Value)
+                {
+                    dict[keyName].Add(error.Message);
+                }
+            }
+
+            foreach (var pair in nestedErrors)
+            {
+                foreach (var error in pair.Value.ByFormField())
+                {
+                    String keyName = pair.Key.Replace('-', '_');
+
+                    dict[ComposeFieldName(keyName, error.Key)] = error.Value;
+                }
+            }
+
+            return dict;
+        }
+
+        protected String ComposeFieldName(String prefix, String element)
+        {
+            var fieldName = prefix;
+
+            foreach (var node in element.Replace("]", "").Split('['))
+            {
+                fieldName = String.Format("{0}[{1}]", fieldName, node);
+            }
+
+            return fieldName;
+        }
     }
 }
