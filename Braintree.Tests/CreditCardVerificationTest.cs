@@ -8,7 +8,7 @@ using System.Xml;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class CreditCardVerificationTest
+    public class CreditCardVerificationTest
     {
         [Test]
         public void ConstructFromResponse()

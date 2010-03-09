@@ -6,7 +6,7 @@ using NUnit.Framework;
 namespace Braintree
 {
     [TestFixture]
-    class WebServiceGatewayTest
+    public class WebServiceGatewayTest
     {
         [Test]
         public void SslCertificateSuccessful()

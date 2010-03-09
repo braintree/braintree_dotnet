@@ -7,7 +7,7 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class QueryStringTest
+    public class QueryStringTest
     {
         [Test]
         public void Append()

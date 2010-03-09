@@ -7,7 +7,7 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class ConfigurationTest
+    public class ConfigurationTest
     {
         [Test]
         public void BaseMerchantURL_ReturnsDevelopmentURL()

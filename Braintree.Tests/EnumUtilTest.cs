@@ -8,7 +8,7 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class EnumUtilTest
+    public class EnumUtilTest
     {
         [Test]
         public void Find_FindsValidEnumValue()

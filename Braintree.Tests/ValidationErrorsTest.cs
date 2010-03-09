@@ -8,7 +8,7 @@ using System.Xml;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class ValidationErrorsTest
+    public class ValidationErrorsTest
     {
         [Test]
         public void OnField_WithValidationError()

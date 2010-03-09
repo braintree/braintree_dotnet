@@ -8,7 +8,7 @@ using Braintree.Exceptions;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class TransactionTest
+    public class TransactionTest
     {
         private BraintreeGateway gateway;
 

@@ -9,7 +9,7 @@ using Braintree.Exceptions;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class TransparentRedirectRequestTest
+    public class TransparentRedirectRequestTest
     {
 
         [SetUp]
