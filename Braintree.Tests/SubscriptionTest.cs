@@ -55,7 +55,18 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             DateTime now = DateTime.Now;
-            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, TimeZoneInfo.CreateCustomTimeZone("UTC-8", new TimeSpan(-8, 0, 0), "", ""));
+
+            TimeZoneInfo utcMinusEight = null;
+            foreach (var tz in TimeZoneInfo.GetSystemTimeZones())
+            {
+                if (tz.BaseUtcOffset.TotalHours == -8)
+                {
+                    utcMinusEight = tz;
+                    break;
+                }
+            }
+
+            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, utcMinusEight);
 
             DateTime expectedBillingPeriodEndDate = mountainDate.AddMonths(plan.BillingFrequency).AddDays(-1);
 
@@ -93,7 +104,17 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             DateTime now = DateTime.Now;
-            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, TimeZoneInfo.CreateCustomTimeZone("UTC-8", new TimeSpan(-8, 0, 0), "", ""));
+            
+            TimeZoneInfo utcMinusEight = null;
+            foreach (var tz in TimeZoneInfo.GetSystemTimeZones())
+            {
+                if (tz.BaseUtcOffset.TotalHours == -8)
+                {
+                    utcMinusEight = tz;
+                    break;
+                }
+            }
+            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, utcMinusEight);
 
             DateTime expectedFirstAndNextDate = mountainDate.AddDays(plan.TrialDuration);
 
