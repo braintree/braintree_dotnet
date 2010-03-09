@@ -5,3 +5,7 @@ Braintree.Tests/obj/*
 TestResult.xml
 /Help
 /Output
+%temp%/
+Braintree.Tests/test-results/
+C:\\NUnitPrimaryTrace.txt
+

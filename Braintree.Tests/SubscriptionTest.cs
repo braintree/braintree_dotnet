@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -55,7 +55,7 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             DateTime now = DateTime.Now;
-            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time"));
+            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles"));
 
             DateTime expectedBillingPeriodEndDate = mountainDate.AddMonths(plan.BillingFrequency).AddDays(-1);
 
@@ -93,7 +93,7 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             DateTime now = DateTime.Now;
-            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time"));
+            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles"));
 
             DateTime expectedFirstAndNextDate = mountainDate.AddDays(plan.TrialDuration);
 
