@@ -594,7 +594,15 @@ namespace Braintree.Tests
         [Test]
         public void Find_WithBadId()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Transaction.Find("badId"));
+            try
+            {
+                gateway.Transaction.Find("badId");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -621,7 +629,15 @@ namespace Braintree.Tests
         [Test]
         public void Void_WithBadId()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Transaction.Void("badId"));
+            try
+            {
+                gateway.Transaction.Void("badId");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -714,7 +730,15 @@ namespace Braintree.Tests
         [Test]
         public void SubmitForSettlement_WithBadId()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Transaction.SubmitForSettlement("badId"));
+            try
+            {
+                gateway.Transaction.SubmitForSettlement("badId");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]

@@ -155,7 +155,15 @@ namespace Braintree.Tests
             Address createdAddress = gateway.Address.Create(customer.Id, addressRequest).Target;
             Assert.AreEqual(createdAddress.Id, gateway.Address.Find(customer.Id, createdAddress.Id).Id);
             gateway.Address.Delete(customer.Id, createdAddress.Id);
-            Assert.Throws<NotFoundException>(() => gateway.Address.Find(customer.Id, createdAddress.Id));
+            try
+            {
+                gateway.Address.Find(customer.Id, createdAddress.Id);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]

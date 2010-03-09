@@ -271,7 +271,7 @@ namespace Braintree.Tests
             Subscription updatedSubscription = result.Target;
 
             Assert.AreEqual(newId, updatedSubscription.Id);
-            Assert.NotNull(gateway.Subscription.Find(newId));
+            Assert.IsNotNull(gateway.Subscription.Find(newId));
         }
 
         [Test]
@@ -351,7 +351,15 @@ namespace Braintree.Tests
                 PlanId = "noSuchPlanId"
             };
 
-            Assert.Throws<NotFoundException>(() => gateway.Subscription.Create(createRequest));
+            try
+            {
+                gateway.Subscription.Create(createRequest);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -363,7 +371,15 @@ namespace Braintree.Tests
                 PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
             };
 
-            Assert.Throws<NotFoundException>(() => gateway.Subscription.Create(createRequest));
+            try
+            {
+                gateway.Subscription.Create(createRequest);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]

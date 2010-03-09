@@ -91,7 +91,15 @@ namespace Braintree.Tests
         [Test]
         public void Find_RaisesIfIdIsInvalid()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Customer.Find("DOES_NOT_EXIST_999"));
+            try
+            {
+                gateway.Customer.Find("DOES_NOT_EXIST_999");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -370,7 +378,16 @@ namespace Braintree.Tests
             gateway.Customer.Create(new CustomerRequest() { Id = id });
             Assert.AreEqual(id, gateway.Customer.Find(id).Id);
             gateway.Customer.Delete(id);
-            Assert.Throws<NotFoundException>(() => gateway.Customer.Find(id));
+
+            try
+            {
+                gateway.Customer.Find(id);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]

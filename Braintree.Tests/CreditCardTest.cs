@@ -216,7 +216,15 @@ namespace Braintree.Tests
 
             Assert.AreEqual(creditCard.Token, gateway.CreditCard.Find(creditCard.Token).Token);
             gateway.CreditCard.Delete(creditCard.Token);
-            Assert.Throws<NotFoundException>(() => gateway.CreditCard.Find(creditCard.Token));
+            try
+            {
+                gateway.CreditCard.Find(creditCard.Token);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
