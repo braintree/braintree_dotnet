@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -17,7 +17,7 @@ namespace Braintree.Tests
             Configuration.PublicKey = "integration_public_key";
             Configuration.PrivateKey = "integration_private_key";
 
-            Assert.AreEqual("http://192.168.65.1:3000/merchants/integration_merchant_id", Configuration.BaseMerchantURL());
+            Assert.AreEqual("http://localhost:3000/merchants/integration_merchant_id", Configuration.BaseMerchantURL());
         }
 
         [Test]
