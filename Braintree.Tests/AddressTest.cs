@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -27,7 +27,6 @@ namespace Braintree.Tests
         [Test]
         public void Create_CreatesAddressForGivenCustomerId()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressRequest = new AddressRequest
@@ -60,7 +59,6 @@ namespace Braintree.Tests
         [Test]
         public void Find_FindsAddress()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressRequest = new AddressRequest
@@ -94,7 +92,6 @@ namespace Braintree.Tests
         [Test]
         public void Update_UpdatesAddressForGivenCustomerIdAndAddressId()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressCreateRequest = new AddressRequest

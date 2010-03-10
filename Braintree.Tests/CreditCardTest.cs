@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -47,7 +47,6 @@ namespace Braintree.Tests
         [Test]
         public void Create_CreatesCreditCardForGivenCustomerId()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardRequest = new CreditCardRequest
@@ -101,7 +100,6 @@ namespace Braintree.Tests
         [Test]
         public void Find_FindsCreditCardByToken()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardRequest = new CreditCardRequest
@@ -128,7 +126,6 @@ namespace Braintree.Tests
         [Test]
         public void Update_UpdatesCreditCardByToken()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardCreateRequest = new CreditCardRequest
@@ -200,7 +197,6 @@ namespace Braintree.Tests
         [Test]
         public void Delete_DeletesTheCreditCard()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardRequest = new CreditCardRequest

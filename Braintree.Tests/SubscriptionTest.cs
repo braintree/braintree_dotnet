@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
@@ -279,7 +279,7 @@ namespace Braintree.Tests
                 Id = oldId
             };
 
-            Subscription subscription = gateway.Subscription.Create(request).Target;
+            gateway.Subscription.Create(request);
 
             String newId = "new-id-" + new Random().Next(1000000);
             SubscriptionRequest updateRequest = new SubscriptionRequest

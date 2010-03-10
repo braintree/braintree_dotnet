@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Braintree.Exceptions;
@@ -344,7 +344,7 @@ namespace Braintree.Tests
                 Website = "old.example.com"
             };
 
-            var originalCustomer = gateway.Customer.Create(createRequest);
+            gateway.Customer.Create(createRequest);
 
             var updateRequest = new CustomerRequest()
             {

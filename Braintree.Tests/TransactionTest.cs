@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -285,7 +285,6 @@ namespace Braintree.Tests
             Customer customer = transaction.GetVaultCustomer();
             Assert.AreEqual(2, customer.Addresses.Length);
 
-            List<Address> addresses = new List<Address>(customer.Addresses);
             Assert.AreEqual("Carl", customer.Addresses[0].FirstName);
             Assert.AreEqual("Andrew", customer.Addresses[1].FirstName);
 
