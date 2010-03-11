@@ -56,23 +56,24 @@ namespace Braintree.Tests
 
             DateTime now = DateTime.Now;
 
-            TimeZoneInfo utcMinusEight = null;
-            foreach (var tz in TimeZoneInfo.GetSystemTimeZones())
+            TimeZoneInfo pst;
+            try
             {
-                if (tz.BaseUtcOffset.TotalHours == -8)
-                {
-                    utcMinusEight = tz;
-                    break;
-                }
+                // for platforms using windows timezone ids
+                pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            }
+            catch(TimeZoneNotFoundException)
+            {
+                // for platforms using Olson timezone ids
+                pst = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
             }
 
-            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, utcMinusEight);
+            DateTime safeDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, pst);
+            DateTime expectedBillingPeriodEndDate = safeDate.AddMonths(plan.BillingFrequency).AddDays(-1);
 
-            DateTime expectedBillingPeriodEndDate = mountainDate.AddMonths(plan.BillingFrequency).AddDays(-1);
-
-            DateTime expectedNextBillingDate = mountainDate.AddMonths(plan.BillingFrequency);
-            DateTime expectedBillingPeriodStartDate = mountainDate;
-            DateTime expectedFirstDate = mountainDate;
+            DateTime expectedNextBillingDate = safeDate.AddMonths(plan.BillingFrequency);
+            DateTime expectedBillingPeriodStartDate = safeDate;
+            DateTime expectedFirstDate = safeDate;
 
             Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
             Assert.AreEqual(plan.Id, subscription.PlanId);
@@ -105,18 +106,20 @@ namespace Braintree.Tests
 
             DateTime now = DateTime.Now;
             
-            TimeZoneInfo utcMinusEight = null;
-            foreach (var tz in TimeZoneInfo.GetSystemTimeZones())
+            TimeZoneInfo pst;
+            try
             {
-                if (tz.BaseUtcOffset.TotalHours == -8)
-                {
-                    utcMinusEight = tz;
-                    break;
-                }
+                // for platforms using windows timezone ids
+                pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
             }
-            DateTime mountainDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, utcMinusEight);
+            catch(TimeZoneNotFoundException)
+            {
+                // for platforms using Olson timezone ids
+                pst = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
+            }
+            DateTime safeDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, pst);
 
-            DateTime expectedFirstAndNextDate = mountainDate.AddDays(plan.TrialDuration);
+            DateTime expectedFirstAndNextDate = safeDate.AddDays(plan.TrialDuration);
 
             Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
             Assert.AreEqual(plan.Id, subscription.PlanId);
