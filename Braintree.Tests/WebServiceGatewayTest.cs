@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 
-namespace Braintree
+namespace Braintree.Tests
 {
     [TestFixture]
     public class WebServiceGatewayTest
