@@ -120,7 +120,9 @@ namespace Braintree
                     case HttpStatusCode.ServiceUnavailable:
                         throw new DownForMaintenanceException();
                     default:
-                        throw new UnexpectedException { Source = "Unexpected HTTP_RESPONSE " + httpStatusCode };
+						var exception = new UnexpectedException();
+						exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;
+                        throw exception;
                 }
             }
         }
