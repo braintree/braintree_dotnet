@@ -35,6 +35,7 @@ namespace Braintree
         public CreditCard CreditCard { get; protected set; }
         public Customer Customer { get; protected set; }
         public String OrderId { get; protected set; }
+        public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
         public Address ShippingAddress { get; protected set; }
@@ -52,6 +53,7 @@ namespace Braintree
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)EnumUtil.Find(typeof(TransactionStatus), node.GetString("status"), "unrecognized");
             Type = (TransactionType)EnumUtil.Find(typeof(TransactionType), node.GetString("type"), "unrecognized");
+            ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             CustomFields = node.GetDictionary("custom-fields");

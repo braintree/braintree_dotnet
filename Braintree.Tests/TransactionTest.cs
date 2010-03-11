@@ -62,6 +62,7 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
