@@ -56,19 +56,7 @@ namespace Braintree.Tests
 
             DateTime now = DateTime.Now;
 
-            TimeZoneInfo pst;
-            try
-            {
-                // for platforms using windows timezone ids
-                pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-            }
-            catch(TimeZoneNotFoundException)
-            {
-                // for platforms using Olson timezone ids
-                pst = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
-            }
-
-            DateTime safeDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, pst);
+            DateTime safeDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, PacificStandardTime());
             DateTime expectedBillingPeriodEndDate = safeDate.AddMonths(plan.BillingFrequency).AddDays(-1);
 
             DateTime expectedNextBillingDate = safeDate.AddMonths(plan.BillingFrequency);
@@ -88,7 +76,7 @@ namespace Braintree.Tests
             TestHelper.AreDatesEqual(expectedNextBillingDate, subscription.NextBillingDate.Value);
             TestHelper.AreDatesEqual(expectedFirstDate, subscription.FirstBillingDate.Value);
         }
-
+        
         [Test]
         public void Create_SubscriptionWithTrial()
         {
@@ -105,19 +93,8 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             DateTime now = DateTime.Now;
-            
-            TimeZoneInfo pst;
-            try
-            {
-                // for platforms using windows timezone ids
-                pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
-            }
-            catch(TimeZoneNotFoundException)
-            {
-                // for platforms using Olson timezone ids
-                pst = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
-            }
-            DateTime safeDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, pst);
+
+            DateTime safeDate = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.Local, PacificStandardTime());
 
             DateTime expectedFirstAndNextDate = safeDate.AddDays(plan.TrialDuration);
 
@@ -483,6 +460,22 @@ namespace Braintree.Tests
             Assert.IsTrue(cancelResult.IsSuccess());
             Assert.AreEqual(SubscriptionStatus.CANCELED, cancelResult.Target.Status);
             Assert.AreEqual(SubscriptionStatus.CANCELED, gateway.Subscription.Find(createResult.Target.Id).Status);
+        }
+
+        private static TimeZoneInfo PacificStandardTime ()
+        {
+            TimeZoneInfo pst;
+            try
+            {
+                // for platforms using windows timezone ids
+                pst = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            }
+            catch(TimeZoneNotFoundException)
+            {
+                // for platforms using Olson timezone ids
+                pst = TimeZoneInfo.FindSystemTimeZoneById("America/Los_Angeles");
+            }
+            return pst;
         }
     }
 }
