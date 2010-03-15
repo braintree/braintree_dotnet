@@ -22,7 +22,10 @@ namespace Braintree
 
         private static String DevelopmentUrl()
         {
-            return System.Environment.GetEnvironmentVariable("GATEWAY_URL") ?? "http://localhost:3000";
+            var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
+            var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
+
+            return String.Format("http://{0}:{1}", host, port);
         }
     }
 }
