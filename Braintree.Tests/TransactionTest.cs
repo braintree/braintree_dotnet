@@ -790,7 +790,16 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             Settle(transaction.Id);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id);
+            Result<Transaction> result;
+            try
+            {
+                result = gateway.Transaction.Refund(transaction.Id);
+            }
+            catch(Exception e)
+            {
+                System.Console.WriteLine("Got exception! " + e.Source);
+                throw e;
+            }
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(transaction.Amount, result.Target.Amount);
@@ -818,7 +827,16 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id);
+            Result<Transaction> result;
+            try
+            {
+                result = gateway.Transaction.Refund(transaction.Id);
+            }
+            catch(Exception e)
+            {
+                System.Console.WriteLine("Got exception! " + e.Source);
+                throw e;
+            }
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
