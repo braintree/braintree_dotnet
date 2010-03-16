@@ -17,7 +17,11 @@ namespace Braintree.Tests
             Configuration.PublicKey = "integration_public_key";
             Configuration.PrivateKey = "integration_private_key";
 
-            Assert.AreEqual("http://localhost:3000/merchants/integration_merchant_id", Configuration.BaseMerchantURL());
+            var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
+            var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
+            var expected = String.Format("http://{0}:{1}/merchants/integration_merchant_id", host, port);
+
+            Assert.AreEqual(expected, Configuration.BaseMerchantURL());
         }
 
         [Test]
