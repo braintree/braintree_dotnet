@@ -73,6 +73,7 @@ namespace Braintree
         public List<Transaction> Transactions { get; protected set; }
         public Int32? TrialDuration { get; protected set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; protected set; }
+        public String MerchantAccountId { get; protected set; }
 
         public Subscription(NodeWrapper node)
         {
@@ -93,6 +94,7 @@ namespace Braintree
             {
                 TrialDurationUnit = (SubscriptionDurationUnit)EnumUtil.Find(typeof(SubscriptionDurationUnit), trialDurationUnitStr, "unrecognized");
             }
+            MerchantAccountId = node.GetString("merchant-account-id");
             Transactions = new List<Transaction>();
             foreach (NodeWrapper transactionResponse in node.GetList("transactions/transaction"))
             {

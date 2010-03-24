@@ -56,6 +56,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
             Assert.AreEqual(plan.Id, subscription.PlanId);
+            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
             Assert.AreEqual(plan.Price, subscription.Price);
             Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
@@ -85,6 +86,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
             Assert.AreEqual(plan.Id, subscription.PlanId);
+            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
             Assert.AreEqual(plan.Price, subscription.Price);
             Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
@@ -174,6 +176,24 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             Assert.AreEqual(newId, subscription.Id);
+        }
+
+        [Test]
+        public void Create_SetMerchantAccountId()
+        {
+            Plan plan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
         }
 
         [Test]
@@ -280,6 +300,29 @@ namespace Braintree.Tests
             subscription = result.Target;
 
             Assert.AreEqual(newPlan.Id, subscription.PlanId);
+        }
+
+        [Test]
+        public void UpdateMerchantAccountId()
+        {
+            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = originalPlan.Id,
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest {
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+            };
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
         }
 
         [Test]

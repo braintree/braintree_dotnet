@@ -31,6 +31,7 @@ namespace Braintree
         public Decimal Price { get; set; }
         public Int32 TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
+        public String MerchantAccountId { get; set; }
 
         internal override String ToXml()
         {
@@ -52,6 +53,7 @@ namespace Braintree
                     builder.Append(BuildXMLElement("trial-duration-unit", TrialDurationUnit.ToString().ToLower()));
                 }
             }
+            builder.Append(BuildXMLElement("merchant-account-id", MerchantAccountId));
             builder.Append(BuildXMLElement("id", Id));
             builder.Append(BuildXMLElement("plan-id", PlanId));
             if (Price != 0) builder.Append(BuildXMLElement("price", Price.ToString()));

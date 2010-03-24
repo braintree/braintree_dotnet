@@ -70,6 +70,7 @@
     <Compile Include="TrUtilTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
     <Compile Include="WebServiceGatewayTest.cs" />
+    <Compile Include="MerchantAccount.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">
