@@ -57,7 +57,7 @@ namespace Braintree
         {
             if (nestedErrors.ContainsKey(objectName)) return nestedErrors[objectName];
 
-            return null;
+            return new ValidationErrors();
         }
 
         public virtual List<ValidationError> OnField(String fieldName)

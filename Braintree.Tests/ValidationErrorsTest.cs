@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -42,7 +42,7 @@ namespace Braintree.Tests
         public void ForObject_WithNonExistingObject()
         {
             ValidationErrors errors = new ValidationErrors();
-            Assert.IsNull(errors.ForObject("address"));
+            Assert.AreEqual(0, errors.ForObject("address").size());
         }
 
         [Test]
