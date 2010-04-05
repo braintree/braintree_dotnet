@@ -16,11 +16,6 @@ namespace Braintree
         {
             queryString = queryString.TrimStart('?');
 
-            if (!TrUtil.IsValidTrQueryString(queryString))
-            {
-                throw new ForgedQueryStringException();
-            }
-
             Dictionary<String, String> paramMap = new Dictionary<String, String>();
             String[] queryParams = queryString.Split('&');
 
@@ -31,6 +26,11 @@ namespace Braintree
             }
 
             WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]));
+
+            if (!TrUtil.IsValidTrQueryString(queryString))
+            {
+                throw new ForgedQueryStringException();
+            }
 
             Id = paramMap["id"];
         }

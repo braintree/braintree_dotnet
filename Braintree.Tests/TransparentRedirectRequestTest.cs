@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +26,7 @@ namespace Braintree.Tests
         {
             try
             {
-                new TransparentRedirectRequest("http_status=300&id=6kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9" + "this makes it invalid");
+                new TransparentRedirectRequest("http_status=200&id=7kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9" + "this makes it invalid");
                 Assert.Fail("Expected ForgedQueryStringException.");
             }
             catch(ForgedQueryStringException)
@@ -60,6 +60,61 @@ namespace Braintree.Tests
             }
             catch (ServerException)
             {
+                // expected
+            }
+        }
+
+
+        [Test]
+        public void Constructor_RaisesDownForMaintenanceExceptionIfDownForMaintenance()
+        {
+            BraintreeGateway gateway = new BraintreeGateway()
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+
+            try {
+                CustomerRequest trParams = new CustomerRequest();
+                CustomerRequest request = new CustomerRequest
+                {
+                    FirstName = "John",
+                    LastName = "Doe"
+                };
+
+                String queryString = TestHelper.QueryStringForTR(trParams, request, Configuration.BaseMerchantURL() + "/test/maintenance");
+                gateway.Customer.ConfirmTransparentRedirect(queryString);
+                Assert.Fail("Expected DownForMaintenanceException");
+            } catch (Braintree.Exceptions.DownForMaintenanceException) {
+                // expected
+            }
+        }
+
+        [Test]
+        public void Constructor_AuthenticationExceptionIfBadCredentials()
+        {
+            BraintreeGateway gateway = new BraintreeGateway()
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "bad_key"
+            };
+
+            try {
+                CustomerRequest trParams = new CustomerRequest();
+                CustomerRequest request = new CustomerRequest
+                {
+                    FirstName = "John",
+                    LastName = "Doe"
+                };
+
+                String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate());
+                gateway.Customer.ConfirmTransparentRedirect(queryString);
+                Assert.Fail("Expected AuthenticationException");
+            } catch (Braintree.Exceptions.AuthenticationException) {
                 // expected
             }
         }
