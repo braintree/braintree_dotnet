@@ -361,5 +361,67 @@ namespace Braintree.Tests
             Assert.AreEqual("expiration_date", errors.ForObject("customer").ForObject("credit-card").All()[1].Attribute);
             Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_EXPIRATION_DATE_IS_INVALID, errors.ForObject("customer").ForObject("credit-card").All()[1].Code);
         }
+
+        [Test]
+        public void DeepAll_ReturnsValidationErrorsAtEveryLevel()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            builder.Append("<api-error-response>");
+            builder.Append("  <errors>");
+            builder.Append("    <customer>");
+            builder.Append("      <errors type=\"array\">");
+            builder.Append("        <error>");
+            builder.Append("          <code>81608</code>");
+            builder.Append("          <message>First name is too long.</message>");
+            builder.Append("          <attribute type=\"symbol\">first_name</attribute>");
+            builder.Append("        </error>");
+            builder.Append("      </errors>");
+            builder.Append("      <credit-card>");
+            builder.Append("        <errors type=\"array\">");
+            builder.Append("          <error>");
+            builder.Append("            <code>81715</code>");
+            builder.Append("            <message>Credit card number is invalid.</message>");
+            builder.Append("            <attribute type=\"symbol\">number</attribute>");
+            builder.Append("          </error>");
+            builder.Append("          <error>");
+            builder.Append("            <code>81710</code>");
+            builder.Append("            <message>Expiration date is invalid.</message>");
+            builder.Append("            <attribute type=\"symbol\">expiration_date</attribute>");
+            builder.Append("          </error>");
+            builder.Append("        </errors>");
+            builder.Append("      </credit-card>");
+            builder.Append("    </customer>");
+            builder.Append("    <errors type=\"array\"/>");
+            builder.Append("  </errors>");
+            builder.Append("</api-error-response>");
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(builder.ToString());
+            ValidationErrors errors = new ValidationErrors(new NodeWrapper(doc.ChildNodes[1]));
+
+            Assert.AreEqual(3, errors.DeepAll().Count);
+
+            Assert.AreEqual("first_name", errors.DeepAll()[0].Attribute);
+            Assert.AreEqual(ValidationErrorCode.CUSTOMER_FIRST_NAME_IS_TOO_LONG, errors.DeepAll()[0].Code);
+
+            Assert.AreEqual("number", errors.DeepAll()[1].Attribute);
+            Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_NUMBER_IS_INVALID, errors.DeepAll()[1].Code);
+
+            Assert.AreEqual("expiration_date", errors.DeepAll()[2].Attribute);
+            Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_EXPIRATION_DATE_IS_INVALID, errors.DeepAll()[2].Code);
+
+
+            Assert.AreEqual(3, errors.ForObject("customer").DeepAll().Count);
+
+            Assert.AreEqual("first_name", errors.ForObject("customer").DeepAll()[0].Attribute);
+            Assert.AreEqual(ValidationErrorCode.CUSTOMER_FIRST_NAME_IS_TOO_LONG, errors.ForObject("customer").DeepAll()[0].Code);
+
+            Assert.AreEqual("number", errors.ForObject("customer").DeepAll()[1].Attribute);
+            Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_NUMBER_IS_INVALID, errors.ForObject("customer").DeepAll()[1].Code);
+
+            Assert.AreEqual("expiration_date", errors.ForObject("customer").DeepAll()[2].Attribute);
+            Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_EXPIRATION_DATE_IS_INVALID, errors.ForObject("customer").DeepAll()[2].Code);
+        }
     }
 }
