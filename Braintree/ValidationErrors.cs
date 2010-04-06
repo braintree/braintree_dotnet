@@ -13,6 +13,23 @@ namespace Braintree
         public int Count {
             get { return errors.Count; }
         }
+        public int DeepCount {
+            get {
+                int size = 0;
+
+                foreach (List<ValidationError> errorList in errors.Values)
+                {
+                    size += errorList.Count;
+                }
+
+                foreach (ValidationErrors nestedError in nestedErrors.Values)
+                {
+                    size += nestedError.DeepCount;
+                }
+
+                return size;
+            }
+        }
 
         public ValidationErrors(NodeWrapper node)
         {
@@ -98,23 +115,6 @@ namespace Braintree
                 results.AddRange(validationErrors.DeepAll());
             }
             return results;
-        }
-
-        public virtual int DeepSize()
-        {
-            int size = 0;
-
-            foreach (List<ValidationError> errorList in errors.Values)
-            {
-                size += errorList.Count;
-            }
-
-            foreach (ValidationErrors nestedError in nestedErrors.Values)
-            {
-                size += nestedError.DeepSize();
-            }
-
-            return size;
         }
 
         public virtual ValidationErrors ForObject(String objectName)
