@@ -124,6 +124,37 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_FindsAssociatedSubscriptions()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123"
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+            String id = Guid.NewGuid().ToString();
+            var subscriptionRequest = new SubscriptionRequest
+            {
+                Id = id,
+                PlanId = "integration_trialless_plan",
+                PaymentMethodToken = originalCreditCard.Token,
+                Price = 1.00M
+            };
+            gateway.Subscription.Create(subscriptionRequest);
+
+            CreditCard creditCard = gateway.CreditCard.Find(originalCreditCard.Token);
+            Subscription subscription = creditCard.Subscriptions[0];
+            Assert.AreEqual(id, subscription.Id);
+            Assert.AreEqual("integration_trialless_plan", subscription.PlanId);
+            Assert.AreEqual(1.00M, subscription.Price);
+        }
+
+        [Test]
         public void Update_UpdatesCreditCardByToken()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;

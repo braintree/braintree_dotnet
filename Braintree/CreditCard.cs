@@ -34,6 +34,7 @@ namespace Braintree
         public Boolean? Default { get; protected set; }
         public String CustomerLocation { get; protected set; }
         public String LastFour { get; protected set; }
+        public Subscription[] Subscriptions { get; protected set; }
         public String Token { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Address BillingAddress { get; protected set; }
@@ -77,6 +78,13 @@ namespace Braintree
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
             BillingAddress = new Address(node.GetNode("billing-address"));
+
+            var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
+            Subscriptions = new Subscription[subscriptionXmlNodes.Count];
+            for (int i = 0; i < subscriptionXmlNodes.Count; i++)
+            {
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i]);
+            }
         }
     }
 }
