@@ -192,6 +192,37 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_SetsDefaultIfSpecified()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var request1 = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo"
+            };
+
+            var request2 = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo",
+                Default = true
+            };
+
+            CreditCard card1 = gateway.CreditCard.Create(request1).Target;
+            CreditCard card2 = gateway.CreditCard.Create(request2).Target;
+
+            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).Default.Value);
+            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).Default.Value);
+        }
+
+        [Test]
         public void Update_UpdatesDefaultIfSpecified()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
