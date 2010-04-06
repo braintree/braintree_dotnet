@@ -253,6 +253,35 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnPlanId()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = trialPlan.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                PlanId().Is(trialPlan.Id);
+
+            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+        }
+
+        [Test]
         public void Update_Id()
         {
             String oldId = "old-id-" + new Random().Next(1000000);
@@ -326,7 +355,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void increasePriceAndTransaction()
+        public void IncreasePriceAndTransaction()
         {
             Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest

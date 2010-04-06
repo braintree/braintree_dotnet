@@ -39,5 +39,29 @@ namespace Braintree
 
             return new Result<Subscription>(new NodeWrapper(subscriptionXML));
         }
+
+        public virtual PagedCollection<Subscription> Search(SubscriptionSearchRequest query)
+        {
+            return Search(query, 1);
+        }
+
+        public virtual PagedCollection<Subscription> Search(SubscriptionSearchRequest query, int pageNumber)
+        {
+            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search?page=" + pageNumber, query));
+
+            int currentPageNumber = response.GetInteger("current-page-number").Value;
+            int pageSize = response.GetInteger("page-size").Value;
+            int totalItems = response.GetInteger("total-items").Value;
+
+            List<Subscription> subscriptions = new List<Subscription>();
+            foreach (NodeWrapper subscriptionNode in response.GetList("subscription"))
+            {
+                subscriptions.Add(new Subscription(subscriptionNode));
+            }
+
+            return new PagedCollection<Subscription>(subscriptions, currentPageNumber, totalItems, pageSize, delegate() {
+                return Search(query, pageNumber + 1);
+            });
+        }
     }
 }

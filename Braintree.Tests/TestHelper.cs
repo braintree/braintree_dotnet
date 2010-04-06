@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Web;
@@ -43,6 +43,30 @@ namespace Braintree.Tests
             Assert.AreEqual(expected.Day, actual.Day);
             Assert.AreEqual(expected.Month, actual.Month);
             Assert.AreEqual(expected.Year, actual.Year);
+        }
+
+        public static Boolean IncludesOnAnyPage(PagedCollection<Subscription> collection, Subscription subscription)
+        {
+            foreach (Subscription item in collection.Items)
+            {
+                if (item.Id.Equals(subscription.Id))
+                {
+                    return true;
+                }
+            }
+
+            if (collection.IsLastPage()) {
+                return false;
+            }
+
+            return IncludesOnAnyPage(collection.GetNextPage(), subscription);
+        }
+
+        public static PagedCollection<T> MockPagedCollection<T>(int currentPageNumber, int totalItems, int pageSize)
+        {
+            return new PagedCollection<T>(new List<T>(), currentPageNumber, totalItems, pageSize, delegate() {
+                return MockPagedCollection<T>(currentPageNumber + 1, totalItems, pageSize);
+            });
         }
     }
 }

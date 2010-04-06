@@ -43,12 +43,12 @@ namespace Braintree
             CustomFields = new Dictionary<String, String>();
         }
 
-        internal override String ToXml()
+        public override String ToXml()
         {
             return ToXml("transaction");
         }
 
-        internal override String ToXml(String rootElement)
+        public override String ToXml(String rootElement)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));

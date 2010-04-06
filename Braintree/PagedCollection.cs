@@ -28,5 +28,21 @@ namespace Braintree
         {
             return NextPage();
         }
+
+        public virtual Boolean IsLastPage()
+        {
+            return TotalPages() == CurrentPageNumber;
+        }
+
+        public virtual Int32 TotalPages()
+        {
+            var totalPages = TotalItems / PageSize;
+            if (TotalItems % PageSize != 0)
+            {
+                totalPages += 1;
+            }
+
+            return totalPages;
+        }
     }
 }

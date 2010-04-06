@@ -35,12 +35,12 @@ namespace Braintree
             Id = paramMap["id"];
         }
 
-        internal override string ToXml(string rootElement)
+        public override string ToXml(string rootElement)
         {
             throw new NotImplementedException();
         }
 
-        internal override String ToXml()
+        public override String ToXml()
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(BuildXMLElement("id", Id));

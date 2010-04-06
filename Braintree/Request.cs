@@ -8,8 +8,8 @@ namespace Braintree
 {
     public abstract class Request
     {
-        internal abstract String ToXml();
-        internal abstract String ToXml(String rootElement);
+        public abstract String ToXml();
+        public abstract String ToXml(String rootElement);
         public abstract String ToQueryString();
         public abstract String ToQueryString(String root);
 

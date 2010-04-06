@@ -33,12 +33,12 @@ namespace Braintree
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
         public String MerchantAccountId { get; set; }
 
-        internal override String ToXml()
+        public override String ToXml()
         {
             return ToXml("subscription");
         }
 
-        internal override String ToXml(String rootElement)
+        public override String ToXml(String rootElement)
         {
             var builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));

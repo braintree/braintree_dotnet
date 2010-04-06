@@ -88,6 +88,9 @@
     <Compile Include="ValidationErrors.cs" />
     <Compile Include="WebServiceGateway.cs" />
     <Compile Include="NodeWrapper.cs" />
+    <Compile Include="SubscriptionSearchRequest.cs" />
+    <Compile Include="TextNode.cs" />
+    <Compile Include="SearchCriteria.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
