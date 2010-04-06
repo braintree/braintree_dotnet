@@ -41,6 +41,7 @@ namespace Braintree
         public String ExpirationYear { get; set; }
         public String ExpirationDate { get; set; }
         public String PaymentMethodToken { get; set; }
+        public Boolean? Default { get; set; }
 
         internal override String ToXml()
         {
@@ -51,16 +52,20 @@ namespace Braintree
         {
             var builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("token", Token));
             builder.Append(BuildXMLElement("billing-address", BillingAddress));
-            builder.Append(BuildXMLElement("options", Options));
-            builder.Append(BuildXMLElement("customer-id", CustomerId));
-            builder.Append(BuildXMLElement("number", Number));
             builder.Append(BuildXMLElement("cardholder-name", CardholderName));
+            builder.Append(BuildXMLElement("customer-id", CustomerId));
+            builder.Append(BuildXMLElement("cvv", CVV));
+            if (Default.HasValue)
+            {
+                builder.Append(BuildXMLElement("default", Default.Value));
+            }
+            builder.Append(BuildXMLElement("expiration-date", ExpirationDate));
             builder.Append(BuildXMLElement("expiration-month", ExpirationMonth));
             builder.Append(BuildXMLElement("expiration-year", ExpirationYear));
-            builder.Append(BuildXMLElement("expiration-date", ExpirationDate));
-            builder.Append(BuildXMLElement("cvv", CVV));
+            builder.Append(BuildXMLElement("number", Number));
+            builder.Append(BuildXMLElement("options", Options));
+            builder.Append(BuildXMLElement("token", Token));
             builder.Append(String.Format("</{0}>", rootElement));
 
             return builder.ToString();

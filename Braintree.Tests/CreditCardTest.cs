@@ -66,6 +66,7 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
+            Assert.IsTrue(creditCard.Default.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
         }
@@ -188,6 +189,38 @@ namespace Braintree.Tests
             Assert.AreEqual("Dave Inchy", creditCard.CardholderName);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+        }
+
+        [Test]
+        public void Update_UpdatesDefaultIfSpecified()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo"
+            };
+
+            CreditCard card1 = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+            CreditCard card2 = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            Assert.IsTrue(card1.Default.Value);
+            Assert.IsFalse(card2.Default.Value);
+
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                Default = true
+            };
+
+            gateway.CreditCard.Update(card2.Token, creditCardUpdateRequest);
+
+            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).Default.Value);
+            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).Default.Value);
         }
 
         [Test]
