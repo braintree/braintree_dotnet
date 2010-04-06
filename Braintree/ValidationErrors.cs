@@ -10,6 +10,9 @@ namespace Braintree
     {
         private Dictionary<String, List<ValidationError>> errors;
         private Dictionary<String, ValidationErrors> nestedErrors;
+        public int Count {
+            get { return errors.Count; }
+        }
 
         public ValidationErrors(NodeWrapper node)
         {
@@ -67,10 +70,7 @@ namespace Braintree
             return null;
         }
 
-        public virtual int size()
-        {
-            return errors.Count;
-        }
+
 
         private void PopulateErrors(NodeWrapper node)
         {
@@ -99,7 +99,7 @@ namespace Braintree
             {
                 if (!errors.ContainsKey(childError.GetString("attribute"))) errors[childError.GetString("attribute")] = new List<ValidationError>();
 
-                errors[childError.GetString("attribute")].Add(new ValidationError(childError.GetString("code"), childError.GetString("message")));
+                errors[childError.GetString("attribute")].Add(new ValidationError(childError.GetString("attribute"), childError.GetString("code"), childError.GetString("message")));
             }
         }
 
@@ -142,6 +142,16 @@ namespace Braintree
             }
 
             return fieldName;
+        }
+
+        public List<ValidationError> All()
+        {
+            var results = new List<ValidationError>();
+            foreach (KeyValuePair<String, List<ValidationError>> pair in errors) {
+                results.AddRange(pair.Value);
+            }
+
+            return results;
         }
     }
 }
