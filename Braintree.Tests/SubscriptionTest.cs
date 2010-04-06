@@ -253,7 +253,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Search_OnPlanId()
+        public void Search_OnPlanIdIs()
         {
             Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
             Plan trialPlan = Plan.PLAN_WITH_TRIAL;
@@ -274,6 +274,122 @@ namespace Braintree.Tests
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 PlanId().Is(trialPlan.Id);
+
+            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+        }
+
+        [Test]
+        public void Search_OnPlanIdIsNot()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = trialPlan.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                PlanId().IsNot(triallessPlan.Id);
+
+            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+        }
+
+        [Test]
+        public void Search_OnPlanIdStartsWith()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = trialPlan.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                PlanId().StartsWith("integration_trial_p");
+
+            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+        }
+
+        [Test]
+        public void Search_OnPlanIdEndsWith()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = trialPlan.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                PlanId().EndsWith("trial_plan");
+
+            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+        }
+
+        [Test]
+        public void Search_OnPlanIdContains()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = trialPlan.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                PlanId().Contains("ion_trial_pl");
 
             PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
 

@@ -20,6 +20,11 @@ namespace Braintree
             return new TextNode("planId", this);
         }
 
+        public virtual TextNode DaysPastDue()
+        {
+            return new TextNode("daysPastDue", this);
+        }
+
         internal virtual void AddCriteria(String name, SearchCriteria criteria)
         {
             Criteria.Add(name, criteria);
