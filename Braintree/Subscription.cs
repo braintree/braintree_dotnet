@@ -32,7 +32,7 @@ namespace Braintree
     {
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active and in good standing
-        /// </summary
+        /// </summary>
         public static SubscriptionStatus ACTIVE = new SubscriptionStatus("Active");
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> has been canceled and will not be billed

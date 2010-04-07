@@ -8,7 +8,7 @@ using System.Xml;
 namespace Braintree
 {
     /// <summary>
-    /// Provides operations for creating, finding, updating, and deleting subscriptions in the vault
+    /// Provides operations for creating, finding, updating, searching, and deleting subscriptions in the vault
     /// </summary>
     public class SubscriptionGateway
     {
@@ -42,6 +42,19 @@ namespace Braintree
             return new Result<Subscription>(new NodeWrapper(subscriptionXML));
         }
 
+        /// <summary>
+        /// Search for subscriptions based on PlanId, DaysPastDue and Status
+        /// </summary>
+        /// <example>
+        /// Quick Start Example:
+        /// <code>
+        /// BraintreeGateway gateway = new BraintreeGateway(...);
+        /// gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
+        ///     search.PlanId().StartsWith("abc");
+        ///     search.DaysPastDue().Is("30");
+        ///     search.Status().IncludedIn(Subscription.Status.ACTIVE, Subscription.Status.CANCELED);
+        /// });
+        /// </code>
         public virtual PagedCollection<Subscription> Search(SubscriptionSearchRequest query)
         {
             return Search(query, 1);
