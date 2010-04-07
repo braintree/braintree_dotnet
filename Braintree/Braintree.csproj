@@ -92,6 +92,7 @@
     <Compile Include="TextNode.cs" />
     <Compile Include="SearchCriteria.cs" />
     <Compile Include="MultipleValueNode.cs" />
+    <Compile Include="SearchNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

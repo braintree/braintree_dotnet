@@ -4,15 +4,10 @@ using System;
 
 namespace Braintree
 {
-    public class TextNode
+    public class TextNode : SearchNode
     {
-        private String Name;
-        private SubscriptionSearchRequest Parent;
-
-        public TextNode(String name, SubscriptionSearchRequest parent)
+        public TextNode(String name, SubscriptionSearchRequest parent) : base(name, parent)
         {
-            Name = name;
-            Parent = parent;
         }
 
         public SubscriptionSearchRequest Contains(String value) {

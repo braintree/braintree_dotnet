@@ -4,15 +4,10 @@ using System;
 
 namespace Braintree
 {
-    public class MultipleValueNode
+    public class MultipleValueNode : SearchNode
     {
-        private String Name;
-        private SubscriptionSearchRequest Parent;
-
-        public MultipleValueNode(String name, SubscriptionSearchRequest parent)
+        public MultipleValueNode(String name, SubscriptionSearchRequest parent) : base(name, parent)
         {
-            Name = name;
-            Parent = parent;
         }
 
         public SubscriptionSearchRequest IncludedIn(params object[] values) {

@@ -455,6 +455,35 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnStatusInMultipleValues()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            Subscription activeSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription canceledSubscription = gateway.Subscription.Create(request2).Target;
+            gateway.Subscription.Cancel(canceledSubscription.Id);
+
+            PagedCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
+                search.Status().IncludedIn(SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELED);
+            });
+
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, activeSubscription));
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, canceledSubscription));
+        }
+
+        [Test]
         public void Update_Id()
         {
             String oldId = "old-id-" + new Random().Next(1000000);
