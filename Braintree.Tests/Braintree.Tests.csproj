@@ -73,6 +73,7 @@
     <Compile Include="MerchantAccount.cs" />
     <Compile Include="SubscriptionSearchRequestTest.cs" />
     <Compile Include="PagedCollectionTest.cs" />
+    <Compile Include="CollectionUtilTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

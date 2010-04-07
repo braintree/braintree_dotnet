@@ -93,6 +93,7 @@
     <Compile Include="SearchCriteria.cs" />
     <Compile Include="MultipleValueNode.cs" />
     <Compile Include="SearchNode.cs" />
+    <Compile Include="CollectionUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

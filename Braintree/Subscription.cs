@@ -28,24 +28,38 @@ namespace Braintree
     /// <summary>
     /// The possible statuses for <see cref="Subscription"/>
     /// </summary>
-    public enum SubscriptionStatus
+    public class SubscriptionStatus
     {
         /// <summary>
-        /// Indicates that the <see cref="Subscription"/> is currently active and in good standing 
-        /// </summary>
-        ACTIVE,
+        /// Indicates that the <see cref="Subscription"/> is currently active and in good standing
+        /// </summary
+        public static SubscriptionStatus ACTIVE = new SubscriptionStatus("Active");
         /// <summary>
-        /// Indicates that the <see cref="Subscription"/> has been canceled and will not be billed 
+        /// Indicates that the <see cref="Subscription"/> has been canceled and will not be billed
         /// </summary>
-        CANCELED,
+        public static SubscriptionStatus CANCELED = new SubscriptionStatus("Canceled");
         /// <summary>
-        /// Indicates that the <see cref="Subscription"/> is currently active but past due 
+        /// Indicates that the <see cref="Subscription"/> is currently active but past due
         /// </summary>
-        PAST_DUE,
+        public static SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
         /// <summary>
-        /// A placeholder for unrecognized subscription statuses, implemented for future compatibility  
+        /// A placeholder for unrecognized subscription statuses, implemented for future compatibility
         /// </summary>
-        UNRECOGNIZED
+        public static SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
+
+        public static SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, PAST_DUE};
+
+        private String Name;
+
+        public SubscriptionStatus(String name)
+        {
+            Name = name;
+        }
+
+        public override String ToString()
+        {
+            return Name;
+        }
     }
 
     /// <summary>
@@ -86,21 +100,19 @@ namespace Braintree
             PaymentMethodToken = node.GetString("payment-method-token");
             PlanId = node.GetString("plan-id");
             Price = node.GetDecimal("price");
-            Status = (SubscriptionStatus)EnumUtil.Find(typeof(SubscriptionStatus), node.GetString("status"), "unrecognized");
+            Status = (SubscriptionStatus)CollectionUtil.Find(SubscriptionStatus.STATUSES, node.GetString("status"), SubscriptionStatus.UNRECOGNIZED);
             HasTrialPeriod = node.GetBoolean("trial-period");
             TrialDuration = node.GetInteger("trial-duration");
             String trialDurationUnitStr = node.GetString("trial-duration-unit");
-            if (trialDurationUnitStr != null)
-            {
+            if (trialDurationUnitStr != null) {
                 TrialDurationUnit = (SubscriptionDurationUnit)EnumUtil.Find(typeof(SubscriptionDurationUnit), trialDurationUnitStr, "unrecognized");
             }
             MerchantAccountId = node.GetString("merchant-account-id");
-            Transactions = new List<Transaction>();
-            foreach (NodeWrapper transactionResponse in node.GetList("transactions/transaction"))
-            {
+            Transactions = new List<Transaction> ();
+            foreach (NodeWrapper transactionResponse in node.GetList("transactions/transaction")) {
                 Transactions.Add(new Transaction(transactionResponse));
             }
         }
-
+        
     }
 }
