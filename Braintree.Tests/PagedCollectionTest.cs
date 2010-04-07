@@ -24,6 +24,15 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void TotalPages_ZeroPages()
+        {
+            PagedCollection<Subscription> collection = TestHelper.MockPagedCollection<Subscription>(1, 0, 50);
+            Assert.AreEqual(1, collection.TotalPages());
+            Assert.IsTrue(collection.IsLastPage());
+        }
+
+
+        [Test]
         public void IsLastPage_OnFirstPage()
         {
             PagedCollection<Subscription> collection = TestHelper.MockPagedCollection<Subscription>(1, 10, 5);

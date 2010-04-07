@@ -36,6 +36,11 @@ namespace Braintree
 
         public virtual Int32 TotalPages()
         {
+            if (TotalItems == 0)
+            {
+                return 1;
+            }
+            
             var totalPages = TotalItems / PageSize;
             if (TotalItems % PageSize != 0)
             {
