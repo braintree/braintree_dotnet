@@ -47,6 +47,7 @@ namespace Braintree
         /// </summary>
         /// <example>
         /// Quick Start Example:
+        /// </example>
         /// <code>
         /// BraintreeGateway gateway = new BraintreeGateway(...);
         /// gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
