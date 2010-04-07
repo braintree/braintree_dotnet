@@ -282,6 +282,34 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnPlanIdIsWithDelegate()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = trialPlan.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id
+            };
+
+            Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
+
+            PagedCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
+                search.PlanId().Is(trialPlan.Id);
+            });
+
+            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+        }
+
+        [Test]
         public void Search_OnPlanIdIsNot()
         {
             Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;

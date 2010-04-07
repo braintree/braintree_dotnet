@@ -12,6 +12,8 @@ namespace Braintree
     /// </summary>
     public class SubscriptionGateway
     {
+        public delegate void SearchDelegate(SubscriptionSearchRequest search);
+
         public virtual Result<Subscription> Create(SubscriptionRequest request)
         {
             XmlNode subscriptionXML = WebServiceGateway.Post("/subscriptions", request);
@@ -62,6 +64,18 @@ namespace Braintree
             return new PagedCollection<Subscription>(subscriptions, currentPageNumber, totalItems, pageSize, delegate() {
                 return Search(query, pageNumber + 1);
             });
+        }
+
+        public virtual PagedCollection<Subscription> Search(SearchDelegate searchDelegate)
+        {
+            return Search(searchDelegate, 1);
+        }
+
+        public virtual PagedCollection<Subscription> Search(SearchDelegate searchDelegate, int pageNumber)
+        {
+            var search = new SubscriptionSearchRequest();
+            searchDelegate(search);
+            return Search(search, pageNumber);
         }
     }
 }
