@@ -91,6 +91,7 @@
     <Compile Include="SubscriptionSearchRequest.cs" />
     <Compile Include="TextNode.cs" />
     <Compile Include="SearchCriteria.cs" />
+    <Compile Include="MultipleValueNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

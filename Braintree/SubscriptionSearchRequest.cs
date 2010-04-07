@@ -9,10 +9,12 @@ namespace Braintree
     public class SubscriptionSearchRequest : Request
     {
         private Dictionary<String, SearchCriteria> Criteria;
+        private Dictionary<String, SearchCriteria> MultipleValueCriteria;
 
         public SubscriptionSearchRequest()
         {
             Criteria = new Dictionary<String, SearchCriteria>();
+            MultipleValueCriteria = new Dictionary<String, SearchCriteria>();
         }
 
         public virtual TextNode PlanId()
@@ -25,9 +27,20 @@ namespace Braintree
             return new TextNode("daysPastDue", this);
         }
 
+        public virtual MultipleValueNode Status()
+        {
+            return new MultipleValueNode("status", this);
+        }
+
         internal virtual void AddCriteria(String name, SearchCriteria criteria)
         {
             Criteria.Add(name, criteria);
+        }
+
+
+        internal virtual void AddMultipleValueCriteria(String name, SearchCriteria criteria)
+        {
+            MultipleValueCriteria.Add(name, criteria);
         }
 
         public override String ToXml()
@@ -37,6 +50,10 @@ namespace Braintree
             foreach (KeyValuePair<String, SearchCriteria> pair in Criteria)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value.ToXml()));
+            }
+            foreach (KeyValuePair<String, SearchCriteria> pair in MultipleValueCriteria)
+            {
+                builder.Append(BuildXMLElement(pair.Key, pair.Value.ToXml(), "array"));
             }
             builder.Append("</search>");
             return builder.ToString();

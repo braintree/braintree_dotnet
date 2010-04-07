@@ -58,6 +58,13 @@ namespace Braintree
             return String.Format("<{0}>{1}</{0}>", tagName, value);
         }
 
+        internal virtual String BuildXMLElement(String tagName, String value, String type)
+        {
+            if (value == null) return "";
+
+            return String.Format("<{0} type=\"{2}\">{1}</{0}>", tagName, value, type);
+        }
+
         protected virtual String ParentBracketChildString(String parent, String child)
         {
             return String.Format("{0}[{1}]", parent, child);
