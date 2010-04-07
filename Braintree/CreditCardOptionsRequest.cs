@@ -39,6 +39,7 @@ namespace Braintree
         {
             return new QueryString().
                 Append(ParentBracketChildString(root, "verify_card"), VerifyCard).
+                Append(ParentBracketChildString(root, "make_default"), MakeDefault).
                 ToString();
         }
     }

@@ -75,11 +75,11 @@ namespace Braintree
         {
             return new QueryString().
                 Append(ParentBracketChildString(root, "billing_addres"), BillingAddress).
-                Append(ParentBracketChildString(root, "options"), Options).
                 Append(ParentBracketChildString(root, "customer_id"), CustomerId).
                 Append(ParentBracketChildString(root, "cardholder_name"), CardholderName).
                 Append(ParentBracketChildString(root, "cvv"), CVV).
                 Append(ParentBracketChildString(root, "number"), Number).
+                Append(ParentBracketChildString(root, "options"), Options).
                 Append(ParentBracketChildString(root, "expiration_date"), ExpirationDate).
                 Append(ParentBracketChildString(root, "token"), Token).
                 Append("payment_method_token", PaymentMethodToken).

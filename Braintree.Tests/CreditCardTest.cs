@@ -99,6 +99,66 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInTRParams()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.IsTrue(creditCard.Default.Value);
+
+            CreditCardRequest trParams = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+
+            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            Assert.IsTrue(card.Default.Value);
+        }
+
+        [Test]
+        public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInRequest()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.IsTrue(creditCard.Default.Value);
+
+            CreditCardRequest trParams = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+
+            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            Assert.IsTrue(card.Default.Value);
+        }
+
+        [Test]
         public void Find_FindsCreditCardByToken()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;

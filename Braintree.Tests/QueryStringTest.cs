@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -61,12 +61,13 @@ namespace Braintree.Tests
                 CardholderName = "Drew",
                 Options = new CreditCardOptionsRequest
                 {
-                    VerifyCard = true
+                    VerifyCard = true,
+                    MakeDefault = true
                 }
             };
 
             String actual = new QueryString().Append("[credit_card]", request).ToString();
-            Assert.AreEqual("%5bcredit_card%5d%5boptions%5d%5bverify_card%5d=true&%5bcredit_card%5d%5bcardholder_name%5d=Drew&%5bcredit_card%5d%5bcvv%5d=123", actual);
+            Assert.AreEqual("%5bcredit_card%5d%5bcardholder_name%5d=Drew&%5bcredit_card%5d%5bcvv%5d=123&%5bcredit_card%5d%5boptions%5d%5bverify_card%5d=true&%5bcredit_card%5d%5boptions%5d%5bmake_default%5d=true", actual);
         }
     }
 }
