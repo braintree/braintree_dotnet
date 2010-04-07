@@ -41,7 +41,6 @@ namespace Braintree
         public String ExpirationYear { get; set; }
         public String ExpirationDate { get; set; }
         public String PaymentMethodToken { get; set; }
-        public Boolean? Default { get; set; }
 
         public override String ToXml()
         {
@@ -56,10 +55,6 @@ namespace Braintree
             builder.Append(BuildXMLElement("cardholder-name", CardholderName));
             builder.Append(BuildXMLElement("customer-id", CustomerId));
             builder.Append(BuildXMLElement("cvv", CVV));
-            if (Default.HasValue)
-            {
-                builder.Append(BuildXMLElement("default", Default.Value));
-            }
             builder.Append(BuildXMLElement("expiration-date", ExpirationDate));
             builder.Append(BuildXMLElement("expiration-month", ExpirationMonth));
             builder.Append(BuildXMLElement("expiration-year", ExpirationYear));
@@ -78,7 +73,6 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-
             return new QueryString().
                 Append(ParentBracketChildString(root, "billing_addres"), BillingAddress).
                 Append(ParentBracketChildString(root, "options"), Options).

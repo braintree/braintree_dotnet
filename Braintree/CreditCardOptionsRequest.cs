@@ -9,6 +9,7 @@ namespace Braintree
     public class CreditCardOptionsRequest : Request
     {
         public Boolean VerifyCard { get; set; }
+        public Boolean MakeDefault { get; set; }
 
         public override String ToXml()
         {
@@ -19,6 +20,10 @@ namespace Braintree
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));
+            if (MakeDefault)
+            {
+                builder.Append(BuildXMLElement("make-default", MakeDefault));
+            }
             builder.Append(BuildXMLElement("verify-card", VerifyCard));
             builder.Append(String.Format("</{0}>", rootElement));
             

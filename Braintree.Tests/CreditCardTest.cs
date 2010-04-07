@@ -212,7 +212,10 @@ namespace Braintree.Tests
                 ExpirationDate = "05/12",
                 CVV = "123",
                 CardholderName = "Michael Angelo",
-                Default = true
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                },
             };
 
             CreditCard card1 = gateway.CreditCard.Create(request1).Target;
@@ -245,7 +248,10 @@ namespace Braintree.Tests
 
             var creditCardUpdateRequest = new CreditCardRequest
             {
-                Default = true
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                }
             };
 
             gateway.CreditCard.Update(card2.Token, creditCardUpdateRequest);
