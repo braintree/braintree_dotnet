@@ -7,7 +7,7 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class CryptoTest
+    public class CryptoTest
     {
         [Test]
         public void hmacHash_ReturnsCorrectHash()

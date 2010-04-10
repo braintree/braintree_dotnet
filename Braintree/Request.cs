@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,8 +8,8 @@ namespace Braintree
 {
     public abstract class Request
     {
-        internal abstract String ToXml();
-        internal abstract String ToXml(String rootElement);
+        public abstract String ToXml();
+        public abstract String ToXml(String rootElement);
         public abstract String ToQueryString();
         public abstract String ToQueryString(String root);
 
@@ -54,6 +56,13 @@ namespace Braintree
             if (value == null) return "";
 
             return String.Format("<{0}>{1}</{0}>", tagName, value);
+        }
+
+        internal virtual String BuildXMLElement(String tagName, String value, String type)
+        {
+            if (value == null) return "";
+
+            return String.Format("<{0} type=\"{2}\">{1}</{0}>", tagName, value, type);
         }
 
         protected virtual String ParentBracketChildString(String parent, String child)

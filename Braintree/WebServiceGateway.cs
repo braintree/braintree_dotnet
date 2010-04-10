@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.IO;
 using System.Net;
 using System.Xml;
@@ -46,6 +48,7 @@ namespace Braintree
                 var request = WebRequest.Create(Configuration.BaseMerchantURL() + URL) as HttpWebRequest;
                 request.Headers.Add("Authorization", Configuration.GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", "1");
+                request.Accept = "application/xml";
                 request.UserAgent = "Braintree .NET " + typeof(WebServiceGateway).Assembly.GetName().Version.ToString();
                 request.Method = method;
                 request.KeepAlive = false;
@@ -118,14 +121,11 @@ namespace Braintree
                     case HttpStatusCode.ServiceUnavailable:
                         throw new DownForMaintenanceException();
                     default:
-                        throw new UnexpectedException { Source = "Unexpected HTTP_RESPONSE " + httpStatusCode };
+						var exception = new UnexpectedException();
+						exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;
+                        throw exception;
                 }
             }
-        }
-
-        private static Boolean IsErrorCode(int responseCode)
-        {
-            return responseCode != 200 && responseCode != 201 && responseCode != 422;
         }
     }
 }

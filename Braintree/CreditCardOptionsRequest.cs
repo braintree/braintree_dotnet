@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -7,16 +9,21 @@ namespace Braintree
     public class CreditCardOptionsRequest : Request
     {
         public Boolean VerifyCard { get; set; }
+        public Boolean MakeDefault { get; set; }
 
-        internal override String ToXml()
+        public override String ToXml()
         {
             return ToXml("options");
         }
 
-        internal override String ToXml(String rootElement)
+        public override String ToXml(String rootElement)
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));
+            if (MakeDefault)
+            {
+                builder.Append(BuildXMLElement("make-default", MakeDefault));
+            }
             builder.Append(BuildXMLElement("verify-card", VerifyCard));
             builder.Append(String.Format("</{0}>", rootElement));
             
@@ -32,6 +39,7 @@ namespace Braintree
         {
             return new QueryString().
                 Append(ParentBracketChildString(root, "verify_card"), VerifyCard).
+                Append(ParentBracketChildString(root, "make_default"), MakeDefault).
                 ToString();
         }
     }

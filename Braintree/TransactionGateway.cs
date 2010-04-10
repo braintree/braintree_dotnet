@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Xml;
 
@@ -72,7 +74,9 @@ namespace Braintree
 
         public virtual Result<Transaction> SubmitForSettlement(String id, Decimal amount)
         {
-            TransactionRequest request = new TransactionRequest { Amount = amount };
+            TransactionRequest request = new TransactionRequest();
+			request.Amount = amount;
+			
             XmlNode response = WebServiceGateway.Put("/transactions/" + id + "/submit_for_settlement", request);
 
             return new Result<Transaction>(new NodeWrapper(response));

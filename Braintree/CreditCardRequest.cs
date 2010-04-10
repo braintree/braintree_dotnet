@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.Text;
 
 namespace Braintree
@@ -40,25 +42,25 @@ namespace Braintree
         public String ExpirationDate { get; set; }
         public String PaymentMethodToken { get; set; }
 
-        internal override String ToXml()
+        public override String ToXml()
         {
             return ToXml("credit-card");
         }
 
-        internal override String ToXml(String rootElement)
+        public override String ToXml(String rootElement)
         {
             var builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("token", Token));
             builder.Append(BuildXMLElement("billing-address", BillingAddress));
-            builder.Append(BuildXMLElement("options", Options));
-            builder.Append(BuildXMLElement("customer-id", CustomerId));
-            builder.Append(BuildXMLElement("number", Number));
             builder.Append(BuildXMLElement("cardholder-name", CardholderName));
+            builder.Append(BuildXMLElement("customer-id", CustomerId));
+            builder.Append(BuildXMLElement("cvv", CVV));
+            builder.Append(BuildXMLElement("expiration-date", ExpirationDate));
             builder.Append(BuildXMLElement("expiration-month", ExpirationMonth));
             builder.Append(BuildXMLElement("expiration-year", ExpirationYear));
-            builder.Append(BuildXMLElement("expiration-date", ExpirationDate));
-            builder.Append(BuildXMLElement("cvv", CVV));
+            builder.Append(BuildXMLElement("number", Number));
+            builder.Append(BuildXMLElement("options", Options));
+            builder.Append(BuildXMLElement("token", Token));
             builder.Append(String.Format("</{0}>", rootElement));
 
             return builder.ToString();
@@ -71,14 +73,13 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-
             return new QueryString().
                 Append(ParentBracketChildString(root, "billing_addres"), BillingAddress).
-                Append(ParentBracketChildString(root, "options"), Options).
                 Append(ParentBracketChildString(root, "customer_id"), CustomerId).
                 Append(ParentBracketChildString(root, "cardholder_name"), CardholderName).
                 Append(ParentBracketChildString(root, "cvv"), CVV).
                 Append(ParentBracketChildString(root, "number"), Number).
+                Append(ParentBracketChildString(root, "options"), Options).
                 Append(ParentBracketChildString(root, "expiration_date"), ExpirationDate).
                 Append(ParentBracketChildString(root, "token"), Token).
                 Append("payment_method_token", PaymentMethodToken).

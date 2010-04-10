@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -7,7 +7,7 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class ConfigurationTest
+    public class ConfigurationTest
     {
         [Test]
         public void BaseMerchantURL_ReturnsDevelopmentURL()
@@ -17,7 +17,11 @@ namespace Braintree.Tests
             Configuration.PublicKey = "integration_public_key";
             Configuration.PrivateKey = "integration_private_key";
 
-            Assert.AreEqual("http://192.168.65.1:3000/merchants/integration_merchant_id", Configuration.BaseMerchantURL());
+            var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
+            var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
+            var expected = String.Format("http://{0}:{1}/merchants/integration_merchant_id", host, port);
+
+            Assert.AreEqual(expected, Configuration.BaseMerchantURL());
         }
 
         [Test]

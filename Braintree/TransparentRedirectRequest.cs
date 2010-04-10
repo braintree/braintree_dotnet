@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Braintree.Exceptions;
@@ -14,11 +16,6 @@ namespace Braintree
         {
             queryString = queryString.TrimStart('?');
 
-            if (!TrUtil.IsValidTrQueryString(queryString))
-            {
-                throw new ForgedQueryStringException();
-            }
-
             Dictionary<String, String> paramMap = new Dictionary<String, String>();
             String[] queryParams = queryString.Split('&');
 
@@ -30,15 +27,20 @@ namespace Braintree
 
             WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]));
 
+            if (!TrUtil.IsValidTrQueryString(queryString))
+            {
+                throw new ForgedQueryStringException();
+            }
+
             Id = paramMap["id"];
         }
 
-        internal override string ToXml(string rootElement)
+        public override string ToXml(string rootElement)
         {
             throw new NotImplementedException();
         }
 
-        internal override String ToXml()
+        public override String ToXml()
         {
             StringBuilder builder = new StringBuilder();
             builder.Append(BuildXMLElement("id", Id));

@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 
 namespace Braintree
@@ -25,6 +27,27 @@ namespace Braintree
         public virtual PagedCollection<T> GetNextPage()
         {
             return NextPage();
+        }
+
+        public virtual Boolean IsLastPage()
+        {
+            return TotalPages() == CurrentPageNumber;
+        }
+
+        public virtual Int32 TotalPages()
+        {
+            if (TotalItems == 0)
+            {
+                return 1;
+            }
+            
+            var totalPages = TotalItems / PageSize;
+            if (TotalItems % PageSize != 0)
+            {
+                totalPages += 1;
+            }
+
+            return totalPages;
         }
     }
 }

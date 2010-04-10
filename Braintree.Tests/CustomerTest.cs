@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Braintree.Exceptions;
@@ -6,7 +6,7 @@ using Braintree.Exceptions;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class CustomerTest
+    public class CustomerTest
     {
         private BraintreeGateway gateway;
 
@@ -91,7 +91,15 @@ namespace Braintree.Tests
         [Test]
         public void Find_RaisesIfIdIsInvalid()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Customer.Find("DOES_NOT_EXIST_999"));
+            try
+            {
+                gateway.Customer.Find("DOES_NOT_EXIST_999");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -336,7 +344,7 @@ namespace Braintree.Tests
                 Website = "old.example.com"
             };
 
-            var originalCustomer = gateway.Customer.Create(createRequest);
+            gateway.Customer.Create(createRequest);
 
             var updateRequest = new CustomerRequest()
             {
@@ -370,7 +378,16 @@ namespace Braintree.Tests
             gateway.Customer.Create(new CustomerRequest() { Id = id });
             Assert.AreEqual(id, gateway.Customer.Find(id).Id);
             gateway.Customer.Delete(id);
-            Assert.Throws<NotFoundException>(() => gateway.Customer.Find(id));
+
+            try
+            {
+                gateway.Customer.Find(id);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]

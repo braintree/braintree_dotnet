@@ -1,4 +1,6 @@
-﻿using System;
+#pragma warning disable 1591
+
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,6 +10,26 @@ namespace Braintree
     {
         private Dictionary<String, List<ValidationError>> errors;
         private Dictionary<String, ValidationErrors> nestedErrors;
+        public int Count {
+            get { return errors.Count; }
+        }
+        public int DeepCount {
+            get {
+                int size = 0;
+
+                foreach (List<ValidationError> errorList in errors.Values)
+                {
+                    size += errorList.Count;
+                }
+
+                foreach (ValidationErrors nestedError in nestedErrors.Values)
+                {
+                    size += nestedError.DeepCount;
+                }
+
+                return size;
+            }
+        }
 
         public ValidationErrors(NodeWrapper node)
         {
@@ -34,71 +56,14 @@ namespace Braintree
             nestedErrors[objectName] = errors;
         }
 
-        public virtual int DeepSize()
+        public List<ValidationError> All()
         {
-            int size = 0;
-
-            foreach (List<ValidationError> errorList in errors.Values)
-            {
-                size += errorList.Count;
+            var results = new List<ValidationError>();
+            foreach (List<ValidationError> validationErrors in errors.Values) {
+                results.AddRange(validationErrors);
             }
 
-            foreach (ValidationErrors nestedError in nestedErrors.Values)
-            {
-                size += nestedError.DeepSize();
-            }
-
-            return size;
-        }
-
-        public virtual ValidationErrors ForObject(String objectName)
-        {
-            if (nestedErrors.ContainsKey(objectName)) return nestedErrors[objectName];
-
-            return null;
-        }
-
-        public virtual List<ValidationError> OnField(String fieldName)
-        {
-            if (errors.ContainsKey(fieldName)) return errors[fieldName];
-
-            return null;
-        }
-
-        public virtual int size()
-        {
-            return errors.Count;
-        }
-
-        private void PopulateErrors(NodeWrapper node)
-        {
-            if (node.GetName() == "api-error-response")
-            {
-                node = node.GetNode("errors");
-            }
-
-            List<NodeWrapper> errorResponses = node.GetChildren();
-            foreach (NodeWrapper errorResponse in errorResponses)
-            {
-                if (errorResponse.GetName() != "errors")
-                {
-                    nestedErrors[errorResponse.GetName()] = new ValidationErrors(errorResponse);
-                }
-                else
-                {
-                    PopulateTopLevelErrors(errorResponse.GetList("error"));
-                }
-            }
-        }
-
-        private void PopulateTopLevelErrors(List<NodeWrapper> childErrors)
-        {
-            foreach (NodeWrapper childError in childErrors)
-            {
-                if (!errors.ContainsKey(childError.GetString("attribute"))) errors[childError.GetString("attribute")] = new List<ValidationError>();
-
-                errors[childError.GetString("attribute")].Add(new ValidationError(childError.GetString("code"), childError.GetString("message")));
-            }
+            return results;
         }
 
         public Dictionary<String, List<String>> ByFormField()
@@ -140,6 +105,61 @@ namespace Braintree
             }
 
             return fieldName;
+        }
+
+        public List<ValidationError> DeepAll()
+        {
+            var results = new List<ValidationError>();
+            results.AddRange(All());
+            foreach (var validationErrors in nestedErrors.Values) {
+                results.AddRange(validationErrors.DeepAll());
+            }
+            return results;
+        }
+
+        public virtual ValidationErrors ForObject(String objectName)
+        {
+            if (nestedErrors.ContainsKey(objectName)) return nestedErrors[objectName];
+
+            return new ValidationErrors();
+        }
+
+        public virtual List<ValidationError> OnField(String fieldName)
+        {
+            if (errors.ContainsKey(fieldName)) return errors[fieldName];
+
+            return null;
+        }
+
+        private void PopulateErrors(NodeWrapper node)
+        {
+            if (node.GetName() == "api-error-response")
+            {
+                node = node.GetNode("errors");
+            }
+
+            List<NodeWrapper> errorResponses = node.GetChildren();
+            foreach (NodeWrapper errorResponse in errorResponses)
+            {
+                if (errorResponse.GetName() != "errors")
+                {
+                    nestedErrors[errorResponse.GetName()] = new ValidationErrors(errorResponse);
+                }
+                else
+                {
+                    PopulateTopLevelErrors(errorResponse.GetList("error"));
+                }
+            }
+        }
+
+        private void PopulateTopLevelErrors(List<NodeWrapper> childErrors)
+        {
+            foreach (NodeWrapper childError in childErrors)
+            {
+                if (!errors.ContainsKey(childError.GetString("attribute"))) errors[childError.GetString("attribute")] = new List<ValidationError>();
+
+                errors[childError.GetString("attribute")].Add(new ValidationError(childError.GetString("attribute"), childError.GetString("code"), childError.GetString("message")));
+            }
         }
     }
 }

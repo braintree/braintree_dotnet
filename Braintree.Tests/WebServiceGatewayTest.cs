@@ -1,22 +1,56 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 
-namespace Braintree
+namespace Braintree.Tests
 {
     [TestFixture]
-    class WebServiceGatewayTest
+    public class WebServiceGatewayTest
     {
-        [Test]
-        public void SslCertificateSuccessful()
-        {
-            Configuration.Environment = Environment.QA;
-            Configuration.MerchantId = "integration_merchant_id";
-            Configuration.PublicKey = "integration_public_key";
-            Configuration.PrivateKey = "integration_private_key";
 
-            WebServiceGateway.Get("/customers");
+        [SetUp]
+        public void Setup()
+        {
+            Configuration.MerchantId = "dummy";
+            Configuration.PublicKey = "dummy";
+            Configuration.PrivateKey = "dummy";
+        }
+
+        [Test]
+        public void QASSLCertificateSuccessful()
+        {
+            try {
+                Configuration.Environment = Environment.QA;
+                WebServiceGateway.Get("/");
+                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
+            } catch (Braintree.Exceptions.AuthenticationException) {
+                // expected
+            }
+        }
+
+        [Test]
+        public void SandboxSSLCertificateSuccessful()
+        {
+            try {
+                Configuration.Environment = Environment.SANDBOX;
+                WebServiceGateway.Get("/");
+                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
+            } catch (Braintree.Exceptions.AuthenticationException) {
+                // expected
+            }
+        }
+
+        [Test]
+        public void ProductionSSLCertificateSuccessful()
+        {
+            try {
+                Configuration.Environment = Environment.PRODUCTION;
+                WebServiceGateway.Get("/");
+                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
+            } catch (Braintree.Exceptions.AuthenticationException) {
+                // expected
+            }
         }
     }
 }

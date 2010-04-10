@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
@@ -8,7 +8,7 @@ using Braintree.Exceptions;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class AddressTest
+    public class AddressTest
     {
         private BraintreeGateway gateway;
 
@@ -27,7 +27,6 @@ namespace Braintree.Tests
         [Test]
         public void Create_CreatesAddressForGivenCustomerId()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressRequest = new AddressRequest
@@ -60,7 +59,6 @@ namespace Braintree.Tests
         [Test]
         public void Find_FindsAddress()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressRequest = new AddressRequest
@@ -94,7 +92,6 @@ namespace Braintree.Tests
         [Test]
         public void Update_UpdatesAddressForGivenCustomerIdAndAddressId()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var addressCreateRequest = new AddressRequest
@@ -155,7 +152,15 @@ namespace Braintree.Tests
             Address createdAddress = gateway.Address.Create(customer.Id, addressRequest).Target;
             Assert.AreEqual(createdAddress.Id, gateway.Address.Find(customer.Id, createdAddress.Id).Id);
             gateway.Address.Delete(customer.Id, createdAddress.Id);
-            Assert.Throws<NotFoundException>(() => gateway.Address.Find(customer.Id, createdAddress.Id));
+            try
+            {
+                gateway.Address.Find(customer.Id, createdAddress.Id);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]

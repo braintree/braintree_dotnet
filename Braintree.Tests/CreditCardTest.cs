@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -6,7 +6,7 @@ using Braintree.Exceptions;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class CreditCardTest
+    public class CreditCardTest
     {
         private BraintreeGateway gateway;
 
@@ -47,7 +47,6 @@ namespace Braintree.Tests
         [Test]
         public void Create_CreatesCreditCardForGivenCustomerId()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardRequest = new CreditCardRequest
@@ -67,6 +66,7 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
+            Assert.IsTrue(creditCard.Default.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
         }
@@ -99,9 +99,68 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInTRParams()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.IsTrue(creditCard.Default.Value);
+
+            CreditCardRequest trParams = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+
+            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            Assert.IsTrue(card.Default.Value);
+        }
+
+        [Test]
+        public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInRequest()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.IsTrue(creditCard.Default.Value);
+
+            CreditCardRequest trParams = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+
+            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            Assert.IsTrue(card.Default.Value);
+        }
+
+        [Test]
         public void Find_FindsCreditCardByToken()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardRequest = new CreditCardRequest
@@ -126,9 +185,39 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_FindsAssociatedSubscriptions()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123"
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+            String id = Guid.NewGuid().ToString();
+            var subscriptionRequest = new SubscriptionRequest
+            {
+                Id = id,
+                PlanId = "integration_trialless_plan",
+                PaymentMethodToken = originalCreditCard.Token,
+                Price = 1.00M
+            };
+            gateway.Subscription.Create(subscriptionRequest);
+
+            CreditCard creditCard = gateway.CreditCard.Find(originalCreditCard.Token);
+            Subscription subscription = creditCard.Subscriptions[0];
+            Assert.AreEqual(id, subscription.Id);
+            Assert.AreEqual("integration_trialless_plan", subscription.PlanId);
+            Assert.AreEqual(1.00M, subscription.Price);
+        }
+
+        [Test]
         public void Update_UpdatesCreditCardByToken()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardCreateRequest = new CreditCardRequest
@@ -160,6 +249,75 @@ namespace Braintree.Tests
             Assert.AreEqual("Dave Inchy", creditCard.CardholderName);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+        }
+
+        [Test]
+        public void Create_SetsDefaultIfSpecified()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var request1 = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo"
+            };
+
+            var request2 = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo",
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                },
+            };
+
+            CreditCard card1 = gateway.CreditCard.Create(request1).Target;
+            CreditCard card2 = gateway.CreditCard.Create(request2).Target;
+
+            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).Default.Value);
+            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).Default.Value);
+        }
+
+        [Test]
+        public void Update_UpdatesDefaultIfSpecified()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo"
+            };
+
+            CreditCard card1 = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+            CreditCard card2 = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            Assert.IsTrue(card1.Default.Value);
+            Assert.IsFalse(card2.Default.Value);
+
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            };
+
+            gateway.CreditCard.Update(card2.Token, creditCardUpdateRequest);
+
+            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).Default.Value);
+            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).Default.Value);
         }
 
         [Test]
@@ -200,7 +358,6 @@ namespace Braintree.Tests
         [Test]
         public void Delete_DeletesTheCreditCard()
         {
-            String id = Guid.NewGuid().ToString();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             var creditCardRequest = new CreditCardRequest
@@ -216,7 +373,15 @@ namespace Braintree.Tests
 
             Assert.AreEqual(creditCard.Token, gateway.CreditCard.Find(creditCard.Token).Token);
             gateway.CreditCard.Delete(creditCard.Token);
-            Assert.Throws<NotFoundException>(() => gateway.CreditCard.Find(creditCard.Token));
+            try
+            {
+                gateway.CreditCard.Find(creditCard.Token);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]

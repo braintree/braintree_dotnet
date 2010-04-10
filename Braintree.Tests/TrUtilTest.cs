@@ -8,7 +8,7 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class TrUtilTest
+    public class TrUtilTest
     {
         [SetUp]
         public void Setup()

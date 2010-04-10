@@ -9,11 +9,9 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-1.1.2</AssemblyName>
+    <AssemblyName>Braintree-1.2.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>
-    </StartupObject>
     <TargetFrameworkSubset>
     </TargetFrameworkSubset>
   </PropertyGroup>
@@ -25,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-1.1.2.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-1.2.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -35,10 +33,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-1.1.2.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-1.2.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -90,6 +88,12 @@
     <Compile Include="ValidationErrors.cs" />
     <Compile Include="WebServiceGateway.cs" />
     <Compile Include="NodeWrapper.cs" />
+    <Compile Include="SubscriptionSearchRequest.cs" />
+    <Compile Include="TextNode.cs" />
+    <Compile Include="SearchCriteria.cs" />
+    <Compile Include="MultipleValueNode.cs" />
+    <Compile Include="SearchNode.cs" />
+    <Compile Include="CollectionUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

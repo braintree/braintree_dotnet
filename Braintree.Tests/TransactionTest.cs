@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -8,7 +8,7 @@ using Braintree.Exceptions;
 namespace Braintree.Tests
 {
     [TestFixture]
-    class TransactionTest
+    public class TransactionTest
     {
         private BraintreeGateway gateway;
 
@@ -62,6 +62,7 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
@@ -285,7 +286,6 @@ namespace Braintree.Tests
             Customer customer = transaction.GetVaultCustomer();
             Assert.AreEqual(2, customer.Addresses.Length);
 
-            List<Address> addresses = new List<Address>(customer.Addresses);
             Assert.AreEqual("Carl", customer.Addresses[0].FirstName);
             Assert.AreEqual("Andrew", customer.Addresses[1].FirstName);
 
@@ -594,7 +594,15 @@ namespace Braintree.Tests
         [Test]
         public void Find_WithBadId()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Transaction.Find("badId"));
+            try
+            {
+                gateway.Transaction.Find("badId");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -621,7 +629,15 @@ namespace Braintree.Tests
         [Test]
         public void Void_WithBadId()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Transaction.Void("badId"));
+            try
+            {
+                gateway.Transaction.Void("badId");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -714,7 +730,15 @@ namespace Braintree.Tests
         [Test]
         public void SubmitForSettlement_WithBadId()
         {
-            Assert.Throws<NotFoundException>(() => gateway.Transaction.SubmitForSettlement("badId"));
+            try
+            {
+                gateway.Transaction.SubmitForSettlement("badId");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -766,7 +790,16 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             Settle(transaction.Id);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id);
+            Result<Transaction> result;
+            try
+            {
+                result = gateway.Transaction.Refund(transaction.Id);
+            }
+            catch(Exception e)
+            {
+                System.Console.WriteLine("Got exception! " + e.Source);
+                throw e;
+            }
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(transaction.Amount, result.Target.Amount);
@@ -794,7 +827,16 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id);
+            Result<Transaction> result;
+            try
+            {
+                result = gateway.Transaction.Refund(transaction.Id);
+            }
+            catch(Exception e)
+            {
+                System.Console.WriteLine("Got exception! " + e.Source);
+                throw e;
+            }
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
