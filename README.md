@@ -10,7 +10,7 @@ The Braintree assembly provides integration access to the Braintree Gateway.
 
     using System;
     using Braintree;
-    
+
     namespace BraintreeExample
     {
         class Program
@@ -24,25 +24,47 @@ The Braintree assembly provides integration access to the Braintree Gateway.
                     PublicKey = "a_public_key",
                     PrivateKey = "a_private_key"
                 };
-    
-                var request = new TransactionRequest
+
+                TransactionRequest request = new TransactionRequest
                 {
-                    Amount = 100.00M,
+                    Amount = 1000M,
                     CreditCard = new CreditCardRequest
                     {
-                        Number = "5105105105105100",
-                        ExpirationDate = "05/12"
+                        Number = "4111111111111111",
+                        ExpirationDate = "05/2012"
                     }
                 };
-    
-                Transaction transaction = gateway.Transaction.Sale(request).Target;
-    
-                Console.WriteLine(String.Format("Transaction ID: {0}", transaction.Id));
-                Console.WriteLine(String.Format("Status: {0}", transaction.Status));
+
+                Result<Transaction> result = gateway.Transaction.Sale(request);
+
+                if (result.IsSuccess())
+                {
+                    Transaction transaction = result.Target;
+                    if (transaction.Status == TransactionStatus.AUTHORIZED)
+                    {
+                        Console.WriteLine("Success!: " + transaction.Id);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Error processing transaction:");
+                        Console.WriteLine("  Status: " + transaction.Status);
+                        Console.WriteLine("  Code: " + transaction.ProcessorResponseCode);
+                        Console.WriteLine("  Text: " + transaction.ProcessorResponseText);
+                    }
+                }
+                else
+                {
+                    foreach (ValidationError error in result.Errors.DeepAll())
+                    {
+                        Console.WriteLine("Attribute: " + error.Attribute);
+                        Console.WriteLine("  Code: " + error.Code);
+                        Console.WriteLine("  Message: " + error.Message);
+                    }
+                }
             }
         }
     }
-    
+
 ## License
 
 See the LICENSE file.
