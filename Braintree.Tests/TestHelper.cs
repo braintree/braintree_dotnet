@@ -45,6 +45,11 @@ namespace Braintree.Tests
             Assert.AreEqual(expected.Year, actual.Year);
         }
 
+        public static void AssertIncludes(String expected, String all)
+        {
+            Assert.IsTrue(all.IndexOf(expected) >= 0, "Expected:\n" + all + "\nto include:\n" + expected);
+        }
+
         public static Boolean IncludesOnAnyPage(PagedCollection<Subscription> collection, Subscription subscription)
         {
             foreach (Subscription item in collection.Items)

@@ -5,27 +5,42 @@ using System.Text;
 
 namespace Braintree
 {
-    public class SearchCriteria
+    public class SearchCriteria : Request
     {
         private String Xml;
 
         public SearchCriteria(String type, String value)
         {
-             Xml = String.Format("<{0}>{1}</{0}>", type, value);
+            Xml = BuildXMLElement(type, value);
         }
 
         public SearchCriteria(object[] items)
         {
             StringBuilder builder = new StringBuilder();
             foreach(object item in items) {
-                builder.AppendFormat("<item>{0}</item>", item.ToString());
+                builder.Append(BuildXMLElement("item", item.ToString()));
             }
             Xml = builder.ToString();
         }
 
-        public virtual String ToXml()
+        public override String ToXml()
         {
             return Xml;
+        }
+
+        public override String ToXml(String rootElement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override String ToQueryString()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override String ToQueryString(String root)
+        {
+            throw new NotImplementedException();
         }
     }
 }

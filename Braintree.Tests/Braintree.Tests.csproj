@@ -74,6 +74,7 @@
     <Compile Include="SubscriptionSearchRequestTest.cs" />
     <Compile Include="PagedCollectionTest.cs" />
     <Compile Include="CollectionUtilTest.cs" />
+    <Compile Include="RequestTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

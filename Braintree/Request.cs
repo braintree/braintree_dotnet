@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Text;
 
 namespace Braintree
@@ -36,7 +37,7 @@ namespace Braintree
 
             foreach (KeyValuePair<String, String> element in elements)
             {
-                builder.Append(String.Format("<{0}>{1}</{0}>", element.Key, element.Value));
+                builder.Append(String.Format("<{0}>{1}</{0}>", SecurityElement.Escape(element.Key), SecurityElement.Escape(element.Value)));
             }
 
             builder.Append(String.Format("</{0}>", rootElement));
@@ -55,7 +56,7 @@ namespace Braintree
             // TODO: xml escape
             if (value == null) return "";
 
-            return String.Format("<{0}>{1}</{0}>", tagName, value);
+            return String.Format("<{0}>{1}</{0}>", tagName,  SecurityElement.Escape(value));
         }
 
         internal virtual String BuildXMLElement(String tagName, String value, String type)
