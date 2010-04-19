@@ -19,12 +19,12 @@ namespace Braintree
 
         public virtual TextNode PlanId()
         {
-            return new TextNode("planId", this);
+            return new TextNode("plan-id", this);
         }
 
         public virtual TextNode DaysPastDue()
         {
-            return new TextNode("daysPastDue", this);
+            return new TextNode("days-past-due", this);
         }
 
         public virtual MultipleValueNode Status()
@@ -49,11 +49,11 @@ namespace Braintree
             builder.Append("<search>");
             foreach (KeyValuePair<String, SearchCriteria> pair in Criteria)
             {
-                builder.Append(BuildXMLElement(pair.Key, pair.Value.ToXml()));
+                builder.AppendFormat("<{0}>{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
             foreach (KeyValuePair<String, SearchCriteria> pair in MultipleValueCriteria)
             {
-                builder.Append(BuildXMLElement(pair.Key, pair.Value.ToXml(), "array"));
+                builder.AppendFormat("<{0} type=\"array\">{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
             builder.Append("</search>");
             return builder.ToString();

@@ -1,3 +1,8 @@
+## 1.2.1
+
+* Escape all XML
+* Updated quick start example in README
+
 ## 1.2.0
 
 * Added subscription search

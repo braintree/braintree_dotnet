@@ -16,7 +16,7 @@ namespace Braintree
         }
 
         public SubscriptionSearchRequest EndsWith(String value) {
-            Parent.AddCriteria(Name, new SearchCriteria("endsWith", value));
+            Parent.AddCriteria(Name, new SearchCriteria("ends-with", value));
             return Parent;
         }
 
@@ -26,12 +26,12 @@ namespace Braintree
         }
 
         public SubscriptionSearchRequest IsNot(String value) {
-            Parent.AddCriteria(Name, new SearchCriteria("isNot", value));
+            Parent.AddCriteria(Name, new SearchCriteria("is-not", value));
             return Parent;
         }
 
         public SubscriptionSearchRequest StartsWith(String value) {
-            Parent.AddCriteria(Name, new SearchCriteria("startsWith", value));
+            Parent.AddCriteria(Name, new SearchCriteria("starts-with", value));
             return Parent;
         }
     }

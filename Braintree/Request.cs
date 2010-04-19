@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Text;
 
 namespace Braintree
@@ -36,7 +37,7 @@ namespace Braintree
 
             foreach (KeyValuePair<String, String> element in elements)
             {
-                builder.Append(String.Format("<{0}>{1}</{0}>", element.Key, element.Value));
+                builder.Append(BuildXMLElement(element.Key, element.Value));
             }
 
             builder.Append(String.Format("</{0}>", rootElement));
@@ -44,25 +45,16 @@ namespace Braintree
             return builder.ToString();
         }
 
-
         internal virtual String BuildXMLElement(String tagName, Boolean value)
         {
-            return String.Format("<{0}>{1}</{0}>", tagName, value.ToString().ToLower());
+            return BuildXMLElement(tagName, value.ToString().ToLower());
         }
 
         internal virtual String BuildXMLElement(String tagName, String value)
         {
-            // TODO: xml escape
             if (value == null) return "";
 
-            return String.Format("<{0}>{1}</{0}>", tagName, value);
-        }
-
-        internal virtual String BuildXMLElement(String tagName, String value, String type)
-        {
-            if (value == null) return "";
-
-            return String.Format("<{0} type=\"{2}\">{1}</{0}>", tagName, value, type);
+            return String.Format("<{0}>{1}</{0}>", SecurityElement.Escape(tagName), SecurityElement.Escape(value));
         }
 
         protected virtual String ParentBracketChildString(String parent, String child)

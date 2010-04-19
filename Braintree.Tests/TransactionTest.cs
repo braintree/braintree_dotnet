@@ -83,7 +83,8 @@ namespace Braintree.Tests
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     CVV = "321",
-                    ExpirationDate = "05/2009"
+                    ExpirationDate = "05/2009",
+                    CardholderName = "John Doe"
                 },
                 Customer = new CustomerRequest
                 {
@@ -138,6 +139,7 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+            Assert.AreEqual("John Doe", creditCard.CardholderName);
 
             Assert.IsNull(transaction.GetVaultCustomer());
             Customer customer = transaction.Customer;

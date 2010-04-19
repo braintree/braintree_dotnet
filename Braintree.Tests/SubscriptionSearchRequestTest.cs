@@ -12,7 +12,7 @@ namespace Braintree.Tests
         public void ToXml_PlanIdIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId().Is("abc");
-            var xml = "<search><planId><is>abc</is></planId></search>";
+            var xml = "<search><plan-id><is>abc</is></plan-id></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
@@ -20,7 +20,7 @@ namespace Braintree.Tests
         public void ToXml_DaysPastDueIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue().Is("30");
-            var xml = "<search><daysPastDue><is>30</is></daysPastDue></search>";
+            var xml = "<search><days-past-due><is>30</is></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
@@ -28,7 +28,7 @@ namespace Braintree.Tests
         public void ToXml_DaysPastDueIsNot()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue().IsNot("30");
-            var xml = "<search><daysPastDue><isNot>30</isNot></daysPastDue></search>";
+            var xml = "<search><days-past-due><is-not>30</is-not></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
@@ -36,7 +36,7 @@ namespace Braintree.Tests
         public void ToXml_DaysPastDueStartsWith()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue().StartsWith("30");
-            var xml = "<search><daysPastDue><startsWith>30</startsWith></daysPastDue></search>";
+            var xml = "<search><days-past-due><starts-with>30</starts-with></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
@@ -44,7 +44,7 @@ namespace Braintree.Tests
         public void ToXml_DaysPastDueEndsWith()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue().EndsWith("30");
-            var xml = "<search><daysPastDue><endsWith>30</endsWith></daysPastDue></search>";
+            var xml = "<search><days-past-due><ends-with>30</ends-with></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
@@ -52,7 +52,7 @@ namespace Braintree.Tests
         public void ToXml_DaysPastDueContains()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue().Contains("30");
-            var xml = "<search><daysPastDue><contains>30</contains></daysPastDue></search>";
+            var xml = "<search><days-past-due><contains>30</contains></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
     }
