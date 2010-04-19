@@ -53,7 +53,7 @@ namespace Braintree
             }
             foreach (KeyValuePair<String, SearchCriteria> pair in MultipleValueCriteria)
             {
-                builder.Append(BuildXMLElement(pair.Key, pair.Value.ToXml(), "array"));
+                builder.AppendFormat("<{0} type=\"array\">{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
             builder.Append("</search>");
             return builder.ToString();
