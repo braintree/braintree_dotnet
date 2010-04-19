@@ -864,7 +864,8 @@
     <HelpKINode Title="methods" Url="html/Methods_T_Braintree_SearchCriteria.htm" />
   </HelpKINode>
   <HelpKINode Title="SearchCriteria.SearchCriteria constructor" Url="html/Overload_Braintree_SearchCriteria__ctor.htm" />
-  <HelpKINode Title="SearchCriteria.ToXml method" Url="html/M_Braintree_SearchCriteria_ToXml.htm" />
+  <HelpKINode Title="SearchCriteria.ToQueryString method" Url="html/Overload_Braintree_SearchCriteria_ToQueryString.htm" />
+  <HelpKINode Title="SearchCriteria.ToXml method" Url="html/Overload_Braintree_SearchCriteria_ToXml.htm" />
   <HelpKINode Title="SearchNode class" Url="html/AllMembers_T_Braintree_SearchNode.htm" />
   <HelpKINode Title="SearchNode class" Url="html/T_Braintree_SearchNode.htm" />
   <HelpKINode Title="SearchNode class">
@@ -1023,6 +1024,7 @@
   <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_CreditCardRequest_ToQueryString.htm" />
   <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_CustomerRequest_ToQueryString.htm" />
   <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_Request_ToQueryString.htm" />
+  <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_SearchCriteria_ToQueryString.htm" />
   <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_SubscriptionRequest_ToQueryString.htm" />
   <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_SubscriptionSearchRequest_ToQueryString.htm" />
   <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_TransactionOptionsRequest_ToQueryString.htm" />
@@ -1032,12 +1034,12 @@
   <HelpKINode Title="ToString method" Url="html/M_Braintree_SubscriptionStatus_ToString.htm" />
   <HelpKINode Title="TotalItems property" Url="html/P_Braintree_PagedCollection_1_TotalItems.htm" />
   <HelpKINode Title="TotalPages method" Url="html/M_Braintree_PagedCollection_1_TotalPages.htm" />
-  <HelpKINode Title="ToXml method" Url="html/M_Braintree_SearchCriteria_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_AddressRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_CreditCardOptionsRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_CreditCardRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_CustomerRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_Request_ToXml.htm" />
+  <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_SearchCriteria_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_SubscriptionRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_SubscriptionSearchRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_TransactionOptionsRequest_ToXml.htm" />
