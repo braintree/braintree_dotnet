@@ -1,3 +1,7 @@
+## 1.2.1
+
+* Escape all XML
+
 ## 1.2.0
 
 * Added subscription search
