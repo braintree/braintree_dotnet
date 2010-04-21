@@ -309,8 +309,8 @@ namespace Braintree.Tests
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
 
             Assert.AreEqual(2000.00, transaction.Amount);
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
@@ -330,7 +330,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                Amount = SandboxValues.TransactionAmount.DECLINE,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CustomFields = new Dictionary<String, String>
                 {
                     { "store_me", "custom value" },
@@ -447,6 +447,8 @@ namespace Braintree.Tests
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.IsNull(result.Target);
+            Assert.IsNull(result.Transaction);
+            Assert.IsNull(result.CreditCardVerification);
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
             Dictionary<String, String> parameters = result.Parameters;
@@ -526,7 +528,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                Amount = SandboxValues.TransactionAmount.DECLINE,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CustomFields = new Dictionary<String, String>
                 {
                     { "store_me", "custom value"},

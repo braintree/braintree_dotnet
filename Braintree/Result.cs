@@ -9,6 +9,7 @@ namespace Braintree
     public class Result<T> where T : class
     {
         public CreditCardVerification CreditCardVerification { get; protected set; }
+        public Transaction Transaction { get; protected set; }
         public ValidationErrors Errors { get; protected set; }
         public Dictionary<String, String> Parameters { get; protected set; }
         public T Target { get; protected set; }
@@ -22,8 +23,17 @@ namespace Braintree
             else
             {
                 Errors = new ValidationErrors(node);
-                CreditCardVerification = new CreditCardVerification(node.GetNode("//verification"));
-                Parameters = node.GetNode("//params").GetFormParameters();
+                NodeWrapper verificationNode = node.GetNode("verification");
+                if (verificationNode != null) {
+                    CreditCardVerification = new CreditCardVerification(verificationNode);
+                }
+
+                NodeWrapper transactionNode = node.GetNode("transaction");
+                if (transactionNode != null)
+                {
+                    Transaction = new Transaction(transactionNode);
+                }
+                Parameters = node.GetNode("params").GetFormParameters();
             }
         }
 
