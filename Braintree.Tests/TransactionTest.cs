@@ -768,7 +768,7 @@ namespace Braintree.Tests
             Assert.IsTrue(pagedCollection.ApproximateCount > 0);
             Assert.AreEqual("411111", pagedCollection.FirstItem.CreditCard.Bin);
         }
-        
+
         [Test]
         public void Refund_WithABasicTransaction()
         {

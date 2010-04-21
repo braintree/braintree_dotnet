@@ -389,5 +389,20 @@ namespace Braintree.Tests
                 // expected
             }
         }
+
+        [Test]
+        public void All() {
+            PagedCollection<Customer> collection = gateway.Customer.All();
+
+            Assert.IsTrue(collection.ApproximateCount > 100);
+    
+            List<String> items = new List<String>();
+            foreach (Customer item in collection) {
+                items.Add(item.Id);
+            }
+
+            HashSet<String> uniqueItems = new HashSet<String>(items);
+            Assert.AreEqual(uniqueItems.Count, collection.ApproximateCount);
+        }
     }
 }
