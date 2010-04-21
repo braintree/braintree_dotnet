@@ -55,12 +55,12 @@ namespace Braintree
             return Configuration.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
         }
 
-        public PagedCollection<Customer> All()
+        public ResourceCollection<Customer> All()
         {
             return All(1);
         }
 
-        public PagedCollection<Customer> All(Int32 pageNumber)
+        public ResourceCollection<Customer> All(Int32 pageNumber)
         {
             String queryString = new QueryString().Append("page", pageNumber).ToString();
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Get("/customers?" + queryString));
@@ -73,7 +73,7 @@ namespace Braintree
                 customers.Add(new Customer(node));
             }
 
-            return new PagedCollection<Customer>(customers, totalItems, delegate() { return All(pageNumber + 1); });
+            return new ResourceCollection<Customer>(customers, totalItems, delegate() { return All(pageNumber + 1); });
         }
     }
 }

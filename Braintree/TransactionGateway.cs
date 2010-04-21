@@ -89,12 +89,12 @@ namespace Braintree
             return new Result<Transaction>(new NodeWrapper(response));
         }
 
-        public virtual PagedCollection<Transaction> Search(String query)
+        public virtual ResourceCollection<Transaction> Search(String query)
         {
             return Search(query, 1);
         }
 
-        public virtual PagedCollection<Transaction> Search(String query, int pageNumber)
+        public virtual ResourceCollection<Transaction> Search(String query, int pageNumber)
         {
             String queryString = new QueryString().Append("q", query).Append("page", pageNumber).ToString();
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Get("/transactions/all/search?" + queryString));
@@ -107,7 +107,7 @@ namespace Braintree
                 transactions.Add(new Transaction(transactionNode));
             }
 
-            return new PagedCollection<Transaction>(transactions, totalItems, delegate() { return Search(query, pageNumber + 1); });
+            return new ResourceCollection<Transaction>(transactions, totalItems, delegate() { return Search(query, pageNumber + 1); });
         }
     }
 }

@@ -50,7 +50,7 @@ namespace Braintree.Tests
             Assert.IsTrue(all.IndexOf(expected) >= 0, "Expected:\n" + all + "\nto include:\n" + expected);
         }
 
-        public static Boolean IncludesSubscription(PagedCollection<Subscription> collection, Subscription subscription)
+        public static Boolean IncludesSubscription(ResourceCollection<Subscription> collection, Subscription subscription)
         {
             foreach (Subscription item in collection)
             {
@@ -61,10 +61,10 @@ namespace Braintree.Tests
             return false;
         }
 
-        public static PagedCollection<T> MockPagedCollection<T>(int totalItems) where T : class
+        public static ResourceCollection<T> MockResourceCollection<T>(int totalItems) where T : class
         {
-            return new PagedCollection<T>(new List<T>(), totalItems, delegate() {
-                return MockPagedCollection<T>(totalItems);
+            return new ResourceCollection<T>(new List<T>(), totalItems, delegate() {
+                return MockResourceCollection<T>(totalItems);
             });
         }
     }

@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class PagedCollection<T> : System.Collections.IEnumerable where T : class
+    public class ResourceCollection<T> : System.Collections.IEnumerable where T : class
     {
-        public delegate PagedCollection<T> PagingDelegate();
+        public delegate ResourceCollection<T> PagingDelegate();
 
         public Int32 ApproximateCount { get; protected set; }
         protected List<T> Items;
@@ -25,7 +25,7 @@ namespace Braintree
             }
         }
 
-        public PagedCollection(List<T> items, int totalItems, PagingDelegate nextPage)
+        public ResourceCollection(List<T> items, int totalItems, PagingDelegate nextPage)
         {
             Items = items;
             ApproximateCount = totalItems;
@@ -34,7 +34,7 @@ namespace Braintree
 
         public System.Collections.IEnumerator GetEnumerator()
         {
-            PagedCollection<T> page = this;
+            ResourceCollection<T> page = this;
             while (page.Items.Count > 0)
             {
                 foreach(T item in page.Items)
@@ -45,7 +45,7 @@ namespace Braintree
             }
         }
 
-        protected virtual PagedCollection<T> GetNextPage()
+        protected virtual ResourceCollection<T> GetNextPage()
         {
             return NextPage();
         }

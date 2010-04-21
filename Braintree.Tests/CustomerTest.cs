@@ -392,7 +392,7 @@ namespace Braintree.Tests
 
         [Test]
         public void All() {
-            PagedCollection<Customer> collection = gateway.Customer.All();
+            ResourceCollection<Customer> collection = gateway.Customer.All();
 
             Assert.IsTrue(collection.ApproximateCount > 100);
     
