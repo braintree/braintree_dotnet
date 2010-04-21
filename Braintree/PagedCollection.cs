@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class PagedCollection<T>
+    public class PagedCollection<T> : System.Collections.IEnumerable
     {
         public delegate PagedCollection<T> PagingDelegate();
 
@@ -22,6 +22,19 @@ namespace Braintree
             TotalItems = totalItems;
             PageSize = pageSize;
             NextPage = nextPage;
+        }
+
+        public System.Collections.IEnumerator GetEnumerator()
+        {
+            PagedCollection<T> page = this;
+            while (page.Items.Count > 0)
+            {
+                foreach(T item in page.Items)
+                {
+                    yield return item;
+                }
+                page = page.GetNextPage();
+            }
         }
 
         public virtual PagedCollection<T> GetNextPage()

@@ -277,8 +277,8 @@ namespace Braintree.Tests
 
             PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -305,8 +305,8 @@ namespace Braintree.Tests
                 search.PlanId().Is(trialPlan.Id);
             });
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -334,8 +334,8 @@ namespace Braintree.Tests
 
             PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -363,8 +363,8 @@ namespace Braintree.Tests
 
             PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -392,8 +392,8 @@ namespace Braintree.Tests
 
             PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -421,8 +421,8 @@ namespace Braintree.Tests
 
             PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -450,8 +450,8 @@ namespace Braintree.Tests
                 search.Status().IncludedIn(SubscriptionStatus.ACTIVE);
             });
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, activeSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, canceledSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, canceledSubscription));
         }
 
         [Test]
@@ -479,8 +479,8 @@ namespace Braintree.Tests
                 search.Status().IncludedIn(SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELED);
             });
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, activeSubscription));
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, canceledSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, canceledSubscription));
         }
 
         [Test]

@@ -50,21 +50,15 @@ namespace Braintree.Tests
             Assert.IsTrue(all.IndexOf(expected) >= 0, "Expected:\n" + all + "\nto include:\n" + expected);
         }
 
-        public static Boolean IncludesOnAnyPage(PagedCollection<Subscription> collection, Subscription subscription)
+        public static Boolean IncludesSubscription(PagedCollection<Subscription> collection, Subscription subscription)
         {
-            foreach (Subscription item in collection.Items)
+            foreach (Subscription item in collection)
             {
-                if (item.Id.Equals(subscription.Id))
-                {
+                if (item.Id.Equals(subscription.Id)) {
                     return true;
                 }
             }
-
-            if (collection.IsLastPage()) {
-                return false;
-            }
-
-            return IncludesOnAnyPage(collection.GetNextPage(), subscription);
+            return false;
         }
 
         public static PagedCollection<T> MockPagedCollection<T>(int currentPageNumber, int totalItems, int pageSize)

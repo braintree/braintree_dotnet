@@ -746,6 +746,21 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void BasicSearch() {
+            PagedCollection<Transaction> collection = gateway.Transaction.Search("411111");
+
+            Assert.IsTrue(collection.TotalItems > 100);
+    
+            List<String> items = new List<String>();
+            foreach (Transaction item in collection) {
+                items.Add(item.Id);
+            }
+
+            HashSet<String> uniqueItems = new HashSet<String>(items);
+            Assert.AreEqual(uniqueItems.Count, collection.TotalItems);
+        }
+
+        [Test]
         public void Search_WithMatches()
         {
             PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111");
