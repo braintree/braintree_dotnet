@@ -749,7 +749,7 @@ namespace Braintree.Tests
         public void BasicSearch() {
             PagedCollection<Transaction> collection = gateway.Transaction.Search("411111");
 
-            Assert.IsTrue(collection.TotalItems > 100);
+            Assert.IsTrue(collection.ApproximateCount > 100);
     
             List<String> items = new List<String>();
             foreach (Transaction item in collection) {
@@ -757,7 +757,7 @@ namespace Braintree.Tests
             }
 
             HashSet<String> uniqueItems = new HashSet<String>(items);
-            Assert.AreEqual(uniqueItems.Count, collection.TotalItems);
+            Assert.AreEqual(uniqueItems.Count, collection.ApproximateCount);
         }
 
         [Test]
@@ -765,30 +765,10 @@ namespace Braintree.Tests
         {
             PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111");
 
-            Assert.IsTrue(pagedCollection.TotalItems > 0);
-            Assert.IsTrue(pagedCollection.PageSize > 0);
-            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
-            Assert.AreEqual("411111", pagedCollection.Items[0].CreditCard.Bin);
+            Assert.IsTrue(pagedCollection.ApproximateCount > 0);
+            Assert.AreEqual("411111", pagedCollection.FirstItem.CreditCard.Bin);
         }
-
-        [Test]
-        public void Search_WithPageNumber()
-        {
-            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111", 2);
-            Assert.AreEqual(2, pagedCollection.CurrentPageNumber);
-        }
-
-        [Test]
-        public void Search_CanTraversePages()
-        {
-            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111");
-            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
-
-            PagedCollection<Transaction> nextPage = pagedCollection.GetNextPage();
-            Assert.AreEqual(2, nextPage.CurrentPageNumber);
-            Assert.AreNotEqual(pagedCollection.Items[0].Id, nextPage.Items[0].Id);
-        }
-
+        
         [Test]
         public void Refund_WithABasicTransaction()
         {

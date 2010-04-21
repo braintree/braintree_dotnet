@@ -61,10 +61,10 @@ namespace Braintree.Tests
             return false;
         }
 
-        public static PagedCollection<T> MockPagedCollection<T>(int currentPageNumber, int totalItems, int pageSize)
+        public static PagedCollection<T> MockPagedCollection<T>(int totalItems) where T : class
         {
-            return new PagedCollection<T>(new List<T>(), currentPageNumber, totalItems, pageSize, delegate() {
-                return MockPagedCollection<T>(currentPageNumber + 1, totalItems, pageSize);
+            return new PagedCollection<T>(new List<T>(), totalItems, delegate() {
+                return MockPagedCollection<T>(totalItems);
             });
         }
     }

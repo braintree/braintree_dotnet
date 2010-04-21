@@ -65,8 +65,6 @@ namespace Braintree
             String queryString = new QueryString().Append("page", pageNumber).ToString();
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Get("/customers?" + queryString));
             
-            int currentPageNumber = response.GetInteger("current-page-number").Value;
-            int pageSize = response.GetInteger("page-size").Value;
             int totalItems = response.GetInteger("total-items").Value;
 
             List<Customer> customers = new List<Customer>();
@@ -75,7 +73,7 @@ namespace Braintree
                 customers.Add(new Customer(node));
             }
 
-            return new PagedCollection<Customer>(customers, currentPageNumber, totalItems, pageSize, delegate() { return All(pageNumber + 1); });
+            return new PagedCollection<Customer>(customers, totalItems, delegate() { return All(pageNumber + 1); });
         }
     }
 }

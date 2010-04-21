@@ -65,8 +65,6 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search?page=" + pageNumber, query));
 
-            int currentPageNumber = response.GetInteger("current-page-number").Value;
-            int pageSize = response.GetInteger("page-size").Value;
             int totalItems = response.GetInteger("total-items").Value;
 
             List<Subscription> subscriptions = new List<Subscription>();
@@ -75,7 +73,7 @@ namespace Braintree
                 subscriptions.Add(new Subscription(subscriptionNode));
             }
 
-            return new PagedCollection<Subscription>(subscriptions, currentPageNumber, totalItems, pageSize, delegate() {
+            return new PagedCollection<Subscription>(subscriptions, totalItems, delegate() {
                 return Search(query, pageNumber + 1);
             });
         }

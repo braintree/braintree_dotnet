@@ -5,22 +5,30 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class PagedCollection<T> : System.Collections.IEnumerable
+    public class PagedCollection<T> : System.Collections.IEnumerable where T : class
     {
         public delegate PagedCollection<T> PagingDelegate();
 
-        public Int32 CurrentPageNumber { get; protected set; }
-        public Int32 PageSize { get; protected set; }
-        public Int32 TotalItems { get; protected set; }
-        public List<T> Items { get; protected set; }
+        public Int32 ApproximateCount { get; protected set; }
+        protected List<T> Items;
         private PagingDelegate NextPage;
+        public T FirstItem {
+            get {
+                if (Items.Count > 0)
+                {
+                    return Items[0];
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
 
-        public PagedCollection(List<T> items, int currentPageNumber, int totalItems, int pageSize, PagingDelegate nextPage)
+        public PagedCollection(List<T> items, int totalItems, PagingDelegate nextPage)
         {
             Items = items;
-            CurrentPageNumber = currentPageNumber;
-            TotalItems = totalItems;
-            PageSize = pageSize;
+            ApproximateCount = totalItems;
             NextPage = nextPage;
         }
 
@@ -37,30 +45,9 @@ namespace Braintree
             }
         }
 
-        public virtual PagedCollection<T> GetNextPage()
+        protected virtual PagedCollection<T> GetNextPage()
         {
             return NextPage();
-        }
-
-        public virtual Boolean IsLastPage()
-        {
-            return TotalPages() == CurrentPageNumber;
-        }
-
-        public virtual Int32 TotalPages()
-        {
-            if (TotalItems == 0)
-            {
-                return 1;
-            }
-            
-            var totalPages = TotalItems / PageSize;
-            if (TotalItems % PageSize != 0)
-            {
-                totalPages += 1;
-            }
-
-            return totalPages;
         }
     }
 }

@@ -98,9 +98,7 @@ namespace Braintree
         {
             String queryString = new QueryString().Append("q", query).Append("page", pageNumber).ToString();
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Get("/transactions/all/search?" + queryString));
-            
-            int currentPageNumber = response.GetInteger("current-page-number").Value;
-            int pageSize = response.GetInteger("page-size").Value;
+
             int totalItems = response.GetInteger("total-items").Value;
 
             List<Transaction> transactions = new List<Transaction>();
@@ -109,7 +107,7 @@ namespace Braintree
                 transactions.Add(new Transaction(transactionNode));
             }
 
-            return new PagedCollection<Transaction>(transactions, currentPageNumber, totalItems, pageSize, delegate() { return Search(query, pageNumber + 1); });
+            return new PagedCollection<Transaction>(transactions, totalItems, delegate() { return Search(query, pageNumber + 1); });
         }
     }
 }
