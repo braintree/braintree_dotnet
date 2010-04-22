@@ -17,6 +17,7 @@ namespace Braintree
     /// <code>
     ///     Customer customer = gateway.Customer.Find("customerId");
     /// </code>
+    /// For more information about Customers, see <a href="http://www.braintreepaymentsolutions.com/gateway/customer-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/customer-api</a>
     /// </example>
     public class Customer
     {   
