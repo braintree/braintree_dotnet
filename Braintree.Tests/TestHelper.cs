@@ -17,8 +17,6 @@ namespace Braintree.Tests
             postData += req.ToQueryString();
 
             var request = WebRequest.Create(postURL) as HttpWebRequest;
-            request.Headers.Add("X-ApiVersion", "1");
-            request.UserAgent = "Braintree .NET Tests";
 
             request.Method = "POST";
             request.KeepAlive = false;

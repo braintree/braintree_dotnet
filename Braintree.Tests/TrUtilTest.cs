@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +17,13 @@ namespace Braintree.Tests
             Configuration.MerchantId = "integration_merchant_id";
             Configuration.PublicKey = "integration_public_key";
             Configuration.PrivateKey = "integration_private_key";
+        }
+
+        [Test]
+        public void IncludesApiVersion()
+        {
+            String tr_data = TrUtil.BuildTrData(new TransactionRequest(), "example.com");
+            TestHelper.AssertIncludes("api_version=2", tr_data);
         }
 
         [Test]
