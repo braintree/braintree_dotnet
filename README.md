@@ -40,17 +40,15 @@ The Braintree assembly provides integration access to the Braintree Gateway.
                 if (result.IsSuccess())
                 {
                     Transaction transaction = result.Target;
-                    if (transaction.Status == TransactionStatus.AUTHORIZED)
-                    {
-                        Console.WriteLine("Success!: " + transaction.Id);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Error processing transaction:");
-                        Console.WriteLine("  Status: " + transaction.Status);
-                        Console.WriteLine("  Code: " + transaction.ProcessorResponseCode);
-                        Console.WriteLine("  Text: " + transaction.ProcessorResponseText);
-                    }
+                    Console.WriteLine("Success!: " + transaction.Id);
+                }
+                else if (result.Transaction != null)
+                {
+                    Transaction transaction = result.Transaction;
+                    Console.WriteLine("Error processing transaction:");
+                    Console.WriteLine("  Status: " + transaction.Status);
+                    Console.WriteLine("  Code: " + transaction.ProcessorResponseCode);
+                    Console.WriteLine("  Text: " + transaction.ProcessorResponseText);
                 }
                 else
                 {
