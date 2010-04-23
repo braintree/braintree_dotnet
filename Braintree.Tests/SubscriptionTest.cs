@@ -720,5 +720,39 @@ namespace Braintree.Tests
             Assert.AreEqual(SubscriptionStatus.CANCELED, cancelResult.Target.Status);
             Assert.AreEqual(SubscriptionStatus.CANCELED, gateway.Subscription.Find(createResult.Target.Id).Status);
         }
+
+        [Test]
+        public void RetryCharge_WithoutAmount()
+        {
+            SubscriptionSearchRequest search = new SubscriptionSearchRequest().Status().IncludedIn(SubscriptionStatus.PAST_DUE);
+            Subscription subscription = gateway.Subscription.Search(search).FirstItem;
+
+            Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(subscription.Price, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+
+        [Test]
+        public void RetryCharge_WithAmount()
+        {
+            SubscriptionSearchRequest search = new SubscriptionSearchRequest().Status().IncludedIn(SubscriptionStatus.PAST_DUE);
+            Subscription subscription = gateway.Subscription.Search(search).FirstItem;
+
+            Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id, SandboxValues.TransactionAmount.AUTHORIZE);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
     }
 }
