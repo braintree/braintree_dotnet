@@ -391,32 +391,18 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void All_WithNoPageNumber()
-        {
-            PagedCollection<Customer> pagedCollection = gateway.Customer.All();
+        public void All() {
+            ResourceCollection<Customer> collection = gateway.Customer.All();
 
-            Assert.IsTrue(pagedCollection.TotalItems > 0);
-            Assert.IsTrue(pagedCollection.PageSize > 0);
-            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
-            Assert.IsNotNull(pagedCollection.Items[0]);
-        }
+            Assert.IsTrue(collection.ApproximateCount > 100);
+    
+            List<String> items = new List<String>();
+            foreach (Customer item in collection) {
+                items.Add(item.Id);
+            }
 
-        [Test]
-        public void All_WithPageNumber()
-        {
-            PagedCollection<Customer> pagedCollection = gateway.Customer.All(2);
-            Assert.AreEqual(2, pagedCollection.CurrentPageNumber);
-        }
-
-        [Test]
-        public void All_CanTraversePages()
-        {
-            PagedCollection<Customer> pagedCollection = gateway.Customer.All();
-            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
-
-            PagedCollection<Customer> nextPage = pagedCollection.GetNextPage();
-            Assert.AreEqual(2, nextPage.CurrentPageNumber);
-            Assert.AreNotEqual(pagedCollection.Items[0].Id, nextPage.Items[0].Id);
+            HashSet<String> uniqueItems = new HashSet<String>(items);
+            Assert.AreEqual(uniqueItems.Count, collection.ApproximateCount);
         }
     }
 }

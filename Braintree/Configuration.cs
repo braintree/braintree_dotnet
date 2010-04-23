@@ -12,6 +12,7 @@ namespace Braintree
         public static String MerchantId { get; set; }
         public static String PublicKey { get; set; }
         public static String PrivateKey { get; set; }
+        public static String ApiVersion = "2";
 
         private Configuration() { }
 

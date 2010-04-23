@@ -13,7 +13,7 @@ namespace Braintree
             String dateString = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmss");
 
             String trContent = new QueryString().
-                Append("api_version", "1").
+                Append("api_version", Configuration.ApiVersion).
                 Append("public_key", Configuration.PublicKey).
                 Append("redirect_url", redirectURL).
                 Append("time", dateString).

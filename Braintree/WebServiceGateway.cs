@@ -47,7 +47,7 @@ namespace Braintree
             {
                 var request = WebRequest.Create(Configuration.BaseMerchantURL() + URL) as HttpWebRequest;
                 request.Headers.Add("Authorization", Configuration.GetAuthorizationHeader());
-                request.Headers.Add("X-ApiVersion", "1");
+                request.Headers.Add("X-ApiVersion", Configuration.ApiVersion);
                 request.Accept = "application/xml";
                 request.UserAgent = "Braintree .NET " + typeof(WebServiceGateway).Assembly.GetName().Version.ToString();
                 request.Method = method;

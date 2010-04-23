@@ -17,8 +17,6 @@ namespace Braintree.Tests
             postData += req.ToQueryString();
 
             var request = WebRequest.Create(postURL) as HttpWebRequest;
-            request.Headers.Add("X-ApiVersion", "1");
-            request.UserAgent = "Braintree .NET Tests";
 
             request.Method = "POST";
             request.KeepAlive = false;
@@ -50,27 +48,21 @@ namespace Braintree.Tests
             Assert.IsTrue(all.IndexOf(expected) >= 0, "Expected:\n" + all + "\nto include:\n" + expected);
         }
 
-        public static Boolean IncludesOnAnyPage(PagedCollection<Subscription> collection, Subscription subscription)
+        public static Boolean IncludesSubscription(ResourceCollection<Subscription> collection, Subscription subscription)
         {
-            foreach (Subscription item in collection.Items)
+            foreach (Subscription item in collection)
             {
-                if (item.Id.Equals(subscription.Id))
-                {
+                if (item.Id.Equals(subscription.Id)) {
                     return true;
                 }
             }
-
-            if (collection.IsLastPage()) {
-                return false;
-            }
-
-            return IncludesOnAnyPage(collection.GetNextPage(), subscription);
+            return false;
         }
 
-        public static PagedCollection<T> MockPagedCollection<T>(int currentPageNumber, int totalItems, int pageSize)
+        public static ResourceCollection<T> MockResourceCollection<T>(int totalItems) where T : class
         {
-            return new PagedCollection<T>(new List<T>(), currentPageNumber, totalItems, pageSize, delegate() {
-                return MockPagedCollection<T>(currentPageNumber + 1, totalItems, pageSize);
+            return new ResourceCollection<T>(new List<T>(), totalItems, delegate() {
+                return MockResourceCollection<T>(totalItems);
             });
         }
     }

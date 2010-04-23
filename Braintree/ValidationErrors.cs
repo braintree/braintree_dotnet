@@ -6,6 +6,13 @@ using System.Text;
 
 namespace Braintree
 {
+
+    /// <summary>
+    /// A collection of Validation Errors returned by the Braintree Gateway
+    /// </summary>
+    /// <example>
+    /// For more information about Validation Errors, see <a href="http://www.braintreepaymentsolutions.com/gateway/validation-errors" target="_blank">http://www.braintreepaymentsolutions.com/gateway/validation-errors</a>
+    /// </example>
     public class ValidationErrors
     {
         private Dictionary<String, List<ValidationError>> errors;

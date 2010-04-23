@@ -309,8 +309,8 @@ namespace Braintree.Tests
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
 
             Assert.AreEqual(2000.00, transaction.Amount);
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
@@ -330,7 +330,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                Amount = SandboxValues.TransactionAmount.DECLINE,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CustomFields = new Dictionary<String, String>
                 {
                     { "store_me", "custom value" },
@@ -447,6 +447,8 @@ namespace Braintree.Tests
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.IsNull(result.Target);
+            Assert.IsNull(result.Transaction);
+            Assert.IsNull(result.CreditCardVerification);
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
             Dictionary<String, String> parameters = result.Parameters;
@@ -526,7 +528,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                Amount = SandboxValues.TransactionAmount.DECLINE,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CustomFields = new Dictionary<String, String>
                 {
                     { "store_me", "custom value"},
@@ -744,32 +746,27 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void BasicSearch() {
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search("411111");
+
+            Assert.IsTrue(collection.ApproximateCount > 100);
+    
+            List<String> items = new List<String>();
+            foreach (Transaction item in collection) {
+                items.Add(item.Id);
+            }
+
+            HashSet<String> uniqueItems = new HashSet<String>(items);
+            Assert.AreEqual(uniqueItems.Count, collection.ApproximateCount);
+        }
+
+        [Test]
         public void Search_WithMatches()
         {
-            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111");
+            ResourceCollection<Transaction> resourceCollection = gateway.Transaction.Search("411111");
 
-            Assert.IsTrue(pagedCollection.TotalItems > 0);
-            Assert.IsTrue(pagedCollection.PageSize > 0);
-            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
-            Assert.AreEqual("411111", pagedCollection.Items[0].CreditCard.Bin);
-        }
-
-        [Test]
-        public void Search_WithPageNumber()
-        {
-            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111", 2);
-            Assert.AreEqual(2, pagedCollection.CurrentPageNumber);
-        }
-
-        [Test]
-        public void Search_CanTraversePages()
-        {
-            PagedCollection<Transaction> pagedCollection = gateway.Transaction.Search("411111");
-            Assert.AreEqual(1, pagedCollection.CurrentPageNumber);
-
-            PagedCollection<Transaction> nextPage = pagedCollection.GetNextPage();
-            Assert.AreEqual(2, nextPage.CurrentPageNumber);
-            Assert.AreNotEqual(pagedCollection.Items[0].Id, nextPage.Items[0].Id);
+            Assert.IsTrue(resourceCollection.ApproximateCount > 0);
+            Assert.AreEqual("411111", resourceCollection.FirstItem.CreditCard.Bin);
         }
 
         [Test]

@@ -275,10 +275,10 @@ namespace Braintree.Tests
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 PlanId().Is(trialPlan.Id);
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -301,12 +301,12 @@ namespace Braintree.Tests
             Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
                 search.PlanId().Is(trialPlan.Id);
             });
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -332,10 +332,10 @@ namespace Braintree.Tests
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 PlanId().IsNot(triallessPlan.Id);
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -361,10 +361,10 @@ namespace Braintree.Tests
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 PlanId().StartsWith("integration_trial_p");
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -390,10 +390,10 @@ namespace Braintree.Tests
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 PlanId().EndsWith("trial_plan");
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -419,10 +419,10 @@ namespace Braintree.Tests
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 PlanId().Contains("ion_trial_pl");
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(request);
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, trialSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, triallessSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, triallessSubscription));
         }
 
         [Test]
@@ -446,12 +446,12 @@ namespace Braintree.Tests
             Subscription canceledSubscription = gateway.Subscription.Create(request2).Target;
             gateway.Subscription.Cancel(canceledSubscription.Id);
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
                 search.Status().IncludedIn(SubscriptionStatus.ACTIVE);
             });
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, activeSubscription));
-            Assert.IsFalse(TestHelper.IncludesOnAnyPage(collection, canceledSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, canceledSubscription));
         }
 
         [Test]
@@ -475,12 +475,12 @@ namespace Braintree.Tests
             Subscription canceledSubscription = gateway.Subscription.Create(request2).Target;
             gateway.Subscription.Cancel(canceledSubscription.Id);
 
-            PagedCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
                 search.Status().IncludedIn(SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELED);
             });
 
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, activeSubscription));
-            Assert.IsTrue(TestHelper.IncludesOnAnyPage(collection, canceledSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, canceledSubscription));
         }
 
         [Test]

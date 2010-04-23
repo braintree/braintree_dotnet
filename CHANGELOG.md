@@ -1,3 +1,8 @@
+## 2.0.0
+
+* Updated IsSuccess() on transaction results to return false on declined transactions
+* Search results now implement IEnumerable and will automatically paginate data
+
 ## 1.2.1
 
 * Escape all XML

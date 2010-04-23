@@ -56,17 +56,15 @@ namespace Braintree
         ///     search.Status().IncludedIn(Subscription.Status.ACTIVE, Subscription.Status.CANCELED);
         /// });
         /// </code>
-        public virtual PagedCollection<Subscription> Search(SubscriptionSearchRequest query)
+        public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query)
         {
             return Search(query, 1);
         }
 
-        public virtual PagedCollection<Subscription> Search(SubscriptionSearchRequest query, int pageNumber)
+        public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query, int pageNumber)
         {
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search?page=" + pageNumber, query));
 
-            int currentPageNumber = response.GetInteger("current-page-number").Value;
-            int pageSize = response.GetInteger("page-size").Value;
             int totalItems = response.GetInteger("total-items").Value;
 
             List<Subscription> subscriptions = new List<Subscription>();
@@ -75,17 +73,17 @@ namespace Braintree
                 subscriptions.Add(new Subscription(subscriptionNode));
             }
 
-            return new PagedCollection<Subscription>(subscriptions, currentPageNumber, totalItems, pageSize, delegate() {
+            return new ResourceCollection<Subscription>(subscriptions, totalItems, delegate() {
                 return Search(query, pageNumber + 1);
             });
         }
 
-        public virtual PagedCollection<Subscription> Search(SearchDelegate searchDelegate)
+        public virtual ResourceCollection<Subscription> Search(SearchDelegate searchDelegate)
         {
             return Search(searchDelegate, 1);
         }
 
-        public virtual PagedCollection<Subscription> Search(SearchDelegate searchDelegate, int pageNumber)
+        public virtual ResourceCollection<Subscription> Search(SearchDelegate searchDelegate, int pageNumber)
         {
             var search = new SubscriptionSearchRequest();
             searchDelegate(search);
