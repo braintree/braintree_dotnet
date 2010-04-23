@@ -76,7 +76,9 @@
   <HelpKINode Title="All method" Url="html/Overload_Braintree_CustomerGateway_All.htm" />
   <HelpKINode Title="Amount property" Url="html/P_Braintree_TransactionRequest_Amount.htm" />
   <HelpKINode Title="Amount property" Url="html/P_Braintree_Transaction_Amount.htm" />
+  <HelpKINode Title="ApiVersion field" Url="html/F_Braintree_Configuration_ApiVersion.htm" />
   <HelpKINode Title="Append method" Url="html/M_Braintree_QueryString_Append.htm" />
+  <HelpKINode Title="ApproximateCount property" Url="html/P_Braintree_ResourceCollection_1_ApproximateCount.htm" />
   <HelpKINode Title="Attribute property" Url="html/P_Braintree_ValidationError_Attribute.htm" />
   <HelpKINode Title="AuthenticationException class" Url="html/AllMembers_T_Braintree_Exceptions_AuthenticationException.htm" />
   <HelpKINode Title="AuthenticationException class" Url="html/T_Braintree_Exceptions_AuthenticationException.htm" />
@@ -162,16 +164,16 @@
   <HelpKINode Title="Braintree.MultipleValueNode class" Url="html/T_Braintree_MultipleValueNode.htm" />
   <HelpKINode Title="Braintree.NodeWrapper class" Url="html/AllMembers_T_Braintree_NodeWrapper.htm" />
   <HelpKINode Title="Braintree.NodeWrapper class" Url="html/T_Braintree_NodeWrapper.htm" />
-  <HelpKINode Title="Braintree.PagedCollection(Of T) class" Url="html/AllMembers_T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="Braintree.PagedCollection(Of T) class" Url="html/T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="Braintree.PagedCollection(Of T).PagingDelegate delegate" Url="html/T_Braintree_PagedCollection_1_PagingDelegate.htm" />
-  <HelpKINode Title="Braintree.PagedCollection&lt;T&gt; class" Url="html/AllMembers_T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="Braintree.PagedCollection&lt;T&gt; class" Url="html/T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="Braintree.PagedCollection&lt;T&gt;.PagingDelegate delegate" Url="html/T_Braintree_PagedCollection_1_PagingDelegate.htm" />
   <HelpKINode Title="Braintree.QueryString class" Url="html/AllMembers_T_Braintree_QueryString.htm" />
   <HelpKINode Title="Braintree.QueryString class" Url="html/T_Braintree_QueryString.htm" />
   <HelpKINode Title="Braintree.Request class" Url="html/AllMembers_T_Braintree_Request.htm" />
   <HelpKINode Title="Braintree.Request class" Url="html/T_Braintree_Request.htm" />
+  <HelpKINode Title="Braintree.ResourceCollection(Of T) class" Url="html/AllMembers_T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="Braintree.ResourceCollection(Of T) class" Url="html/T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="Braintree.ResourceCollection(Of T).PagingDelegate delegate" Url="html/T_Braintree_ResourceCollection_1_PagingDelegate.htm" />
+  <HelpKINode Title="Braintree.ResourceCollection&lt;T&gt; class" Url="html/AllMembers_T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="Braintree.ResourceCollection&lt;T&gt; class" Url="html/T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="Braintree.ResourceCollection&lt;T&gt;.PagingDelegate delegate" Url="html/T_Braintree_ResourceCollection_1_PagingDelegate.htm" />
   <HelpKINode Title="Braintree.Result(Of T) class" Url="html/AllMembers_T_Braintree_Result_1.htm" />
   <HelpKINode Title="Braintree.Result(Of T) class" Url="html/T_Braintree_Result_1.htm" />
   <HelpKINode Title="Braintree.Result&lt;T&gt; class" Url="html/AllMembers_T_Braintree_Result_1.htm" />
@@ -268,9 +270,11 @@
   <HelpKINode Title="Configuration class">
     <HelpKINode Title="about Configuration class" Url="html/T_Braintree_Configuration.htm" />
     <HelpKINode Title="all members" Url="html/AllMembers_T_Braintree_Configuration.htm" />
+    <HelpKINode Title="fields" Url="html/Fields_T_Braintree_Configuration.htm" />
     <HelpKINode Title="methods" Url="html/Methods_T_Braintree_Configuration.htm" />
     <HelpKINode Title="properties" Url="html/Properties_T_Braintree_Configuration.htm" />
   </HelpKINode>
+  <HelpKINode Title="Configuration.ApiVersion field" Url="html/F_Braintree_Configuration_ApiVersion.htm" />
   <HelpKINode Title="Configuration.BaseMerchantURL method" Url="html/M_Braintree_Configuration_BaseMerchantURL.htm" />
   <HelpKINode Title="Configuration.Environment property" Url="html/P_Braintree_Configuration_Environment.htm" />
   <HelpKINode Title="Configuration.GetAuthorizationHeader method" Url="html/M_Braintree_Configuration_GetAuthorizationHeader.htm" />
@@ -426,7 +430,6 @@
   <HelpKINode Title="Crypto.Crypto constructor" Url="html/M_Braintree_Crypto__ctor.htm" />
   <HelpKINode Title="Crypto.HmacHash method" Url="html/M_Braintree_Crypto_HmacHash.htm" />
   <HelpKINode Title="Crypto.Sha1Bytes method" Url="html/M_Braintree_Crypto_Sha1Bytes.htm" />
-  <HelpKINode Title="CurrentPageNumber property" Url="html/P_Braintree_PagedCollection_1_CurrentPageNumber.htm" />
   <HelpKINode Title="Customer class" Url="html/AllMembers_T_Braintree_Customer.htm" />
   <HelpKINode Title="Customer class" Url="html/T_Braintree_Customer.htm" />
   <HelpKINode Title="Customer class">
@@ -586,6 +589,7 @@
   <HelpKINode Title="Find method" Url="html/M_Braintree_SubscriptionGateway_Find.htm" />
   <HelpKINode Title="Find method" Url="html/M_Braintree_TransactionGateway_Find.htm" />
   <HelpKINode Title="FirstBillingDate property" Url="html/P_Braintree_Subscription_FirstBillingDate.htm" />
+  <HelpKINode Title="FirstItem property" Url="html/P_Braintree_ResourceCollection_1_FirstItem.htm" />
   <HelpKINode Title="FirstName property" Url="html/P_Braintree_AddressRequest_FirstName.htm" />
   <HelpKINode Title="FirstName property" Url="html/P_Braintree_Address_FirstName.htm" />
   <HelpKINode Title="FirstName property" Url="html/P_Braintree_CustomerRequest_FirstName.htm" />
@@ -608,11 +612,11 @@
   <HelpKINode Title="GetDateTime method" Url="html/M_Braintree_NodeWrapper_GetDateTime.htm" />
   <HelpKINode Title="GetDecimal method" Url="html/M_Braintree_NodeWrapper_GetDecimal.htm" />
   <HelpKINode Title="GetDictionary method" Url="html/M_Braintree_NodeWrapper_GetDictionary.htm" />
+  <HelpKINode Title="GetEnumerator method" Url="html/M_Braintree_ResourceCollection_1_GetEnumerator.htm" />
   <HelpKINode Title="GetFormParameters method" Url="html/M_Braintree_NodeWrapper_GetFormParameters.htm" />
   <HelpKINode Title="GetInteger method" Url="html/M_Braintree_NodeWrapper_GetInteger.htm" />
   <HelpKINode Title="GetList method" Url="html/M_Braintree_NodeWrapper_GetList.htm" />
   <HelpKINode Title="GetName method" Url="html/M_Braintree_NodeWrapper_GetName.htm" />
-  <HelpKINode Title="GetNextPage method" Url="html/M_Braintree_PagedCollection_1_GetNextPage.htm" />
   <HelpKINode Title="GetNode method" Url="html/M_Braintree_NodeWrapper_GetNode.htm" />
   <HelpKINode Title="GetString method" Url="html/M_Braintree_NodeWrapper_GetString.htm" />
   <HelpKINode Title="GetVaultBillingAddress method" Url="html/M_Braintree_Transaction_GetVaultBillingAddress.htm" />
@@ -630,14 +634,12 @@
   <HelpKINode Title="Id property" Url="html/P_Braintree_Transaction_Id.htm" />
   <HelpKINode Title="IncludedIn method" Url="html/M_Braintree_MultipleValueNode_IncludedIn.htm" />
   <HelpKINode Title="Is method" Url="html/M_Braintree_TextNode_Is.htm" />
-  <HelpKINode Title="IsLastPage method" Url="html/M_Braintree_PagedCollection_1_IsLastPage.htm" />
   <HelpKINode Title="IsNot method" Url="html/M_Braintree_TextNode_IsNot.htm" />
   <HelpKINode Title="IsRootNode method" Url="html/M_Braintree_NodeWrapper_IsRootNode.htm" />
   <HelpKINode Title="IsSuccess method" Url="html/M_Braintree_NodeWrapper_IsSuccess.htm" />
   <HelpKINode Title="IsSuccess method" Url="html/M_Braintree_Result_1_IsSuccess.htm" />
   <HelpKINode Title="IsTrDataValid method" Url="html/M_Braintree_TrUtil_IsTrDataValid.htm" />
   <HelpKINode Title="IsValidTrQueryString method" Url="html/M_Braintree_TrUtil_IsValidTrQueryString.htm" />
-  <HelpKINode Title="Items property" Url="html/P_Braintree_PagedCollection_1_Items.htm" />
   <HelpKINode Title="LastFour property" Url="html/P_Braintree_CreditCard_LastFour.htm" />
   <HelpKINode Title="LastName property" Url="html/P_Braintree_AddressRequest_LastName.htm" />
   <HelpKINode Title="LastName property" Url="html/P_Braintree_Address_LastName.htm" />
@@ -702,43 +704,6 @@
   <HelpKINode Title="OrderId property" Url="html/P_Braintree_TransactionRequest_OrderId.htm" />
   <HelpKINode Title="OrderId property" Url="html/P_Braintree_Transaction_OrderId.htm" />
   <HelpKINode Title="OuterXml method" Url="html/M_Braintree_NodeWrapper_OuterXml.htm" />
-  <HelpKINode Title="PagedCollection(Of T) class" Url="html/AllMembers_T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="PagedCollection(Of T) class" Url="html/T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="PagedCollection(Of T) class">
-    <HelpKINode Title="about PagedCollection(Of T) class" Url="html/T_Braintree_PagedCollection_1.htm" />
-    <HelpKINode Title="all members" Url="html/AllMembers_T_Braintree_PagedCollection_1.htm" />
-    <HelpKINode Title="constructor" Url="html/M_Braintree_PagedCollection_1__ctor.htm" />
-    <HelpKINode Title="methods" Url="html/Methods_T_Braintree_PagedCollection_1.htm" />
-    <HelpKINode Title="properties" Url="html/Properties_T_Braintree_PagedCollection_1.htm" />
-  </HelpKINode>
-  <HelpKINode Title="PagedCollection(Of T).CurrentPageNumber property" Url="html/P_Braintree_PagedCollection_1_CurrentPageNumber.htm" />
-  <HelpKINode Title="PagedCollection(Of T).GetNextPage method" Url="html/M_Braintree_PagedCollection_1_GetNextPage.htm" />
-  <HelpKINode Title="PagedCollection(Of T).IsLastPage method" Url="html/M_Braintree_PagedCollection_1_IsLastPage.htm" />
-  <HelpKINode Title="PagedCollection(Of T).Items property" Url="html/P_Braintree_PagedCollection_1_Items.htm" />
-  <HelpKINode Title="PagedCollection(Of T).PagedCollection constructor" Url="html/M_Braintree_PagedCollection_1__ctor.htm" />
-  <HelpKINode Title="PagedCollection(Of T).PageSize property" Url="html/P_Braintree_PagedCollection_1_PageSize.htm" />
-  <HelpKINode Title="PagedCollection(Of T).PagingDelegate delegate" Url="html/T_Braintree_PagedCollection_1_PagingDelegate.htm" />
-  <HelpKINode Title="PagedCollection(Of T).TotalItems property" Url="html/P_Braintree_PagedCollection_1_TotalItems.htm" />
-  <HelpKINode Title="PagedCollection(Of T).TotalPages method" Url="html/M_Braintree_PagedCollection_1_TotalPages.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt; class" Url="html/AllMembers_T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt; class" Url="html/T_Braintree_PagedCollection_1.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt; class">
-    <HelpKINode Title="about PagedCollection&lt;T&gt; class" Url="html/T_Braintree_PagedCollection_1.htm" />
-    <HelpKINode Title="all members" Url="html/AllMembers_T_Braintree_PagedCollection_1.htm" />
-    <HelpKINode Title="constructor" Url="html/M_Braintree_PagedCollection_1__ctor.htm" />
-    <HelpKINode Title="methods" Url="html/Methods_T_Braintree_PagedCollection_1.htm" />
-    <HelpKINode Title="properties" Url="html/Properties_T_Braintree_PagedCollection_1.htm" />
-  </HelpKINode>
-  <HelpKINode Title="PagedCollection&lt;T&gt;.CurrentPageNumber property" Url="html/P_Braintree_PagedCollection_1_CurrentPageNumber.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.GetNextPage method" Url="html/M_Braintree_PagedCollection_1_GetNextPage.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.IsLastPage method" Url="html/M_Braintree_PagedCollection_1_IsLastPage.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.Items property" Url="html/P_Braintree_PagedCollection_1_Items.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.PagedCollection constructor" Url="html/M_Braintree_PagedCollection_1__ctor.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.PageSize property" Url="html/P_Braintree_PagedCollection_1_PageSize.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.PagingDelegate delegate" Url="html/T_Braintree_PagedCollection_1_PagingDelegate.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.TotalItems property" Url="html/P_Braintree_PagedCollection_1_TotalItems.htm" />
-  <HelpKINode Title="PagedCollection&lt;T&gt;.TotalPages method" Url="html/M_Braintree_PagedCollection_1_TotalPages.htm" />
-  <HelpKINode Title="PageSize property" Url="html/P_Braintree_PagedCollection_1_PageSize.htm" />
   <HelpKINode Title="Parameters property" Url="html/P_Braintree_Result_1_Parameters.htm" />
   <HelpKINode Title="PAST_DUE field" Url="html/F_Braintree_SubscriptionStatus_PAST_DUE.htm" />
   <HelpKINode Title="PaymentMethodToken property" Url="html/P_Braintree_CreditCardRequest_PaymentMethodToken.htm" />
@@ -790,6 +755,34 @@
   </HelpKINode>
   <HelpKINode Title="Request.ToQueryString method" Url="html/Overload_Braintree_Request_ToQueryString.htm" />
   <HelpKINode Title="Request.ToXml method" Url="html/Overload_Braintree_Request_ToXml.htm" />
+  <HelpKINode Title="ResourceCollection(Of T) class" Url="html/AllMembers_T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="ResourceCollection(Of T) class" Url="html/T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="ResourceCollection(Of T) class">
+    <HelpKINode Title="about ResourceCollection(Of T) class" Url="html/T_Braintree_ResourceCollection_1.htm" />
+    <HelpKINode Title="all members" Url="html/AllMembers_T_Braintree_ResourceCollection_1.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Braintree_ResourceCollection_1__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Braintree_ResourceCollection_1.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Braintree_ResourceCollection_1.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ResourceCollection(Of T).ApproximateCount property" Url="html/P_Braintree_ResourceCollection_1_ApproximateCount.htm" />
+  <HelpKINode Title="ResourceCollection(Of T).FirstItem property" Url="html/P_Braintree_ResourceCollection_1_FirstItem.htm" />
+  <HelpKINode Title="ResourceCollection(Of T).GetEnumerator method" Url="html/M_Braintree_ResourceCollection_1_GetEnumerator.htm" />
+  <HelpKINode Title="ResourceCollection(Of T).PagingDelegate delegate" Url="html/T_Braintree_ResourceCollection_1_PagingDelegate.htm" />
+  <HelpKINode Title="ResourceCollection(Of T).ResourceCollection constructor" Url="html/M_Braintree_ResourceCollection_1__ctor.htm" />
+  <HelpKINode Title="ResourceCollection&lt;T&gt; class" Url="html/AllMembers_T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="ResourceCollection&lt;T&gt; class" Url="html/T_Braintree_ResourceCollection_1.htm" />
+  <HelpKINode Title="ResourceCollection&lt;T&gt; class">
+    <HelpKINode Title="about ResourceCollection&lt;T&gt; class" Url="html/T_Braintree_ResourceCollection_1.htm" />
+    <HelpKINode Title="all members" Url="html/AllMembers_T_Braintree_ResourceCollection_1.htm" />
+    <HelpKINode Title="constructor" Url="html/M_Braintree_ResourceCollection_1__ctor.htm" />
+    <HelpKINode Title="methods" Url="html/Methods_T_Braintree_ResourceCollection_1.htm" />
+    <HelpKINode Title="properties" Url="html/Properties_T_Braintree_ResourceCollection_1.htm" />
+  </HelpKINode>
+  <HelpKINode Title="ResourceCollection&lt;T&gt;.ApproximateCount property" Url="html/P_Braintree_ResourceCollection_1_ApproximateCount.htm" />
+  <HelpKINode Title="ResourceCollection&lt;T&gt;.FirstItem property" Url="html/P_Braintree_ResourceCollection_1_FirstItem.htm" />
+  <HelpKINode Title="ResourceCollection&lt;T&gt;.GetEnumerator method" Url="html/M_Braintree_ResourceCollection_1_GetEnumerator.htm" />
+  <HelpKINode Title="ResourceCollection&lt;T&gt;.PagingDelegate delegate" Url="html/T_Braintree_ResourceCollection_1_PagingDelegate.htm" />
+  <HelpKINode Title="ResourceCollection&lt;T&gt;.ResourceCollection constructor" Url="html/M_Braintree_ResourceCollection_1__ctor.htm" />
   <HelpKINode Title="Result(Of T) class" Url="html/AllMembers_T_Braintree_Result_1.htm" />
   <HelpKINode Title="Result(Of T) class" Url="html/T_Braintree_Result_1.htm" />
   <HelpKINode Title="Result(Of T) class">
@@ -805,6 +798,7 @@
   <HelpKINode Title="Result(Of T).Parameters property" Url="html/P_Braintree_Result_1_Parameters.htm" />
   <HelpKINode Title="Result(Of T).Result constructor" Url="html/M_Braintree_Result_1__ctor.htm" />
   <HelpKINode Title="Result(Of T).Target property" Url="html/P_Braintree_Result_1_Target.htm" />
+  <HelpKINode Title="Result(Of T).Transaction property" Url="html/P_Braintree_Result_1_Transaction.htm" />
   <HelpKINode Title="Result&lt;T&gt; class" Url="html/AllMembers_T_Braintree_Result_1.htm" />
   <HelpKINode Title="Result&lt;T&gt; class" Url="html/T_Braintree_Result_1.htm" />
   <HelpKINode Title="Result&lt;T&gt; class">
@@ -820,6 +814,7 @@
   <HelpKINode Title="Result&lt;T&gt;.Parameters property" Url="html/P_Braintree_Result_1_Parameters.htm" />
   <HelpKINode Title="Result&lt;T&gt;.Result constructor" Url="html/M_Braintree_Result_1__ctor.htm" />
   <HelpKINode Title="Result&lt;T&gt;.Target property" Url="html/P_Braintree_Result_1_Target.htm" />
+  <HelpKINode Title="Result&lt;T&gt;.Transaction property" Url="html/P_Braintree_Result_1_Transaction.htm" />
   <HelpKINode Title="SALE enumeration member" Url="html/T_Braintree_TransactionType.htm" />
   <HelpKINode Title="Sale method" Url="html/M_Braintree_TransactionGateway_Sale.htm" />
   <HelpKINode Title="SaleTrData method" Url="html/M_Braintree_TransactionGateway_SaleTrData.htm" />
@@ -1032,8 +1027,6 @@
   <HelpKINode Title="ToQueryString method" Url="html/Overload_Braintree_TransparentRedirectRequest_ToQueryString.htm" />
   <HelpKINode Title="ToString method" Url="html/M_Braintree_QueryString_ToString.htm" />
   <HelpKINode Title="ToString method" Url="html/M_Braintree_SubscriptionStatus_ToString.htm" />
-  <HelpKINode Title="TotalItems property" Url="html/P_Braintree_PagedCollection_1_TotalItems.htm" />
-  <HelpKINode Title="TotalPages method" Url="html/M_Braintree_PagedCollection_1_TotalPages.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_AddressRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_CreditCardOptionsRequest_ToXml.htm" />
   <HelpKINode Title="ToXml method" Url="html/Overload_Braintree_CreditCardRequest_ToXml.htm" />
@@ -1054,6 +1047,7 @@
     <HelpKINode Title="properties" Url="html/Properties_T_Braintree_Transaction.htm" />
   </HelpKINode>
   <HelpKINode Title="Transaction property" Url="html/P_Braintree_BraintreeGateway_Transaction.htm" />
+  <HelpKINode Title="Transaction property" Url="html/P_Braintree_Result_1_Transaction.htm" />
   <HelpKINode Title="Transaction.Amount property" Url="html/P_Braintree_Transaction_Amount.htm" />
   <HelpKINode Title="Transaction.BillingAddress property" Url="html/P_Braintree_Transaction_BillingAddress.htm" />
   <HelpKINode Title="Transaction.CreatedAt property" Url="html/P_Braintree_Transaction_CreatedAt.htm" />
