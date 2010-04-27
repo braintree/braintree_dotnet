@@ -4,33 +4,33 @@ using System;
 
 namespace Braintree
 {
-    public class TextNode : SearchNode
+    public class TextNode<T> : SearchNode<T> where T : SearchRequest
     {
-        public TextNode(String name, SubscriptionSearchRequest parent) : base(name, parent)
+        public TextNode(String name, T parent) : base(name, parent)
         {
         }
 
-        public SubscriptionSearchRequest Contains(String value) {
+        public T Contains(String value) {
             Parent.AddCriteria(Name, new SearchCriteria("contains", value));
             return Parent;
         }
 
-        public SubscriptionSearchRequest EndsWith(String value) {
+        public T EndsWith(String value) {
             Parent.AddCriteria(Name, new SearchCriteria("ends-with", value));
             return Parent;
         }
 
-        public SubscriptionSearchRequest Is(String value) {
+        public T Is(String value) {
             Parent.AddCriteria(Name, new SearchCriteria("is", value));
             return Parent;
         }
 
-        public SubscriptionSearchRequest IsNot(String value) {
+        public T IsNot(String value) {
             Parent.AddCriteria(Name, new SearchCriteria("is-not", value));
             return Parent;
         }
 
-        public SubscriptionSearchRequest StartsWith(String value) {
+        public T StartsWith(String value) {
             Parent.AddCriteria(Name, new SearchCriteria("starts-with", value));
             return Parent;
         }

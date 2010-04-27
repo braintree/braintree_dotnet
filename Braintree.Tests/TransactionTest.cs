@@ -41,6 +41,74 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnAllTextFields()
+        {
+            String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());
+            String firstName = String.Format("Tim{0}", new Random().Next(1000000).ToString());
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/2012",
+                    CardholderName = "Tom Smith",
+                    Token = creditCardToken
+                },
+                BillingAddress = new AddressRequest
+                {
+                    Company = "Braintree",
+                    CountryName = "United States of America",
+                    ExtendedAddress = "Suite 123",
+                    FirstName = firstName,
+                    LastName = "Smith",
+                    Locality = "Chicago",
+                    PostalCode = "12345",
+                    Region = "IL",
+                    StreetAddress = "123 Main St"
+                },
+                Customer = new CustomerRequest
+                {
+                    Company = "Braintree",
+                    Email = "smith@example.com",
+                    Fax = "5551231234",
+                    FirstName = "Tim",
+                    LastName = "Smith",
+                    Phone = "5551231234",
+                    Website = "http://example.com"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                },
+                ShippingAddress = new AddressRequest
+                {
+                    Company = "Braintree P.S.",
+                    CountryName = "Mexico",
+                    ExtendedAddress = "Apt 456",
+                    FirstName = "Thomas",
+                    LastName = "Smithy",
+                    Locality = "Braintree",
+                    PostalCode = "54321",
+                    Region = "MA",
+                    StreetAddress = "456 Road"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id().Is(transaction.Id).
+                BillingCompany().Is("Braintree");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(transaction.Id, collection.FirstItem.Id);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest

@@ -4,13 +4,13 @@ using System;
 
 namespace Braintree
 {
-    public class MultipleValueNode : SearchNode
+    public class MultipleValueNode<T> : SearchNode<T> where T : SearchRequest
     {
-        public MultipleValueNode(String name, SubscriptionSearchRequest parent) : base(name, parent)
+        public MultipleValueNode(String name, T parent) : base(name, parent)
         {
         }
 
-        public SubscriptionSearchRequest IncludedIn(params object[] values) {
+        public T IncludedIn(params object[] values) {
             Parent.AddMultipleValueCriteria(Name, new SearchCriteria(values));
             return Parent;
         }

@@ -95,6 +95,8 @@
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="ResourceCollection.cs" />
     <Compile Include="SubscriptionTransactionRequest.cs" />
+    <Compile Include="TransactionSearchRequest.cs" />
+    <Compile Include="SearchRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

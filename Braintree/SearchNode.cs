@@ -4,12 +4,12 @@ using System;
 
 namespace Braintree
 {
-    public class SearchNode
+    public class SearchNode<T>
     {
         protected String Name;
-        protected SubscriptionSearchRequest Parent;
+        protected T Parent;
 
-        public SearchNode(String name, SubscriptionSearchRequest parent)
+        public SearchNode(String name, T parent)
         {
             Name = name;
             Parent = parent;

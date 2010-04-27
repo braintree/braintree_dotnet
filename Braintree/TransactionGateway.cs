@@ -89,6 +89,11 @@ namespace Braintree
             return new Result<Transaction>(new NodeWrapper(response));
         }
 
+        public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query)
+        {
+            return Search(query, 1);
+        }
+
         public virtual ResourceCollection<Transaction> Search(String query)
         {
             return Search(query, 1);
@@ -108,6 +113,23 @@ namespace Braintree
             }
 
             return new ResourceCollection<Transaction>(transactions, totalItems, delegate() { return Search(query, pageNumber + 1); });
+        }
+
+        public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query, int pageNumber)
+        {
+            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/transactions/advanced_search?page=" + pageNumber, query));
+
+            int totalItems = response.GetInteger("total-items").Value;
+
+            List<Transaction> transactions = new List<Transaction>();
+            foreach (NodeWrapper subscriptionNode in response.GetList("transaction"))
+            {
+                transactions.Add(new Transaction(subscriptionNode));
+            }
+
+            return new ResourceCollection<Transaction>(transactions, totalItems, delegate() {
+                return Search(query, pageNumber + 1);
+            });
         }
     }
 }
