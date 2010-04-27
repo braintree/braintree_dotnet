@@ -216,6 +216,78 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithVaultCustomerAndNewCreditCard()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@compuserve.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.disney.com"
+            }).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Bob the Builder",
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                },
+                CustomerId = customer.Id
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("Bob the Builder", transaction.CreditCard.CardholderName);
+            Assert.IsNull(transaction.GetVaultCreditCard());
+        }
+
+        [Test]
+        public void Sale_WithVaultCustomerAndNewCreditCardStoresInVault()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@compuserver.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.disney.com"
+            }).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Bob the Builder",
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                },
+                CustomerId = customer.Id,
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("Bob the Builder", transaction.CreditCard.CardholderName);
+            Assert.AreEqual("Bob the Builder", transaction.GetVaultCreditCard().CardholderName);
+        }
+
+        [Test]
         public void Sale_WithStoreInVaultWithoutSpecifyingToken()
         {
             TransactionRequest request = new TransactionRequest
