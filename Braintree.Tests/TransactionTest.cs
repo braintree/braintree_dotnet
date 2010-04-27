@@ -73,7 +73,7 @@ namespace Braintree.Tests
                     Company = "Braintree",
                     Email = "smith@example.com",
                     Fax = "5551231234",
-                    FirstName = "Tim",
+                    FirstName = "Tom",
                     LastName = "Smith",
                     Phone = "5551231234",
                     Website = "http://example.com"
@@ -82,6 +82,7 @@ namespace Braintree.Tests
                 {
                     StoreInVault = true
                 },
+                OrderId = "myorder",
                 ShippingAddress = new AddressRequest
                 {
                     Company = "Braintree P.S.",
@@ -99,8 +100,39 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
-                Id().Is(transaction.Id).
-                BillingCompany().Is("Braintree");
+                Id.Is(transaction.Id).
+                BillingCompany.Is("Braintree").
+                BillingCountryName.Is("United States of America").
+                BillingExtendedAddress.Is("Suite 123").
+                BillingFirstName.Is(firstName).
+                BillingLastName.Is("Smith").
+                BillingLocality.Is("Chicago").
+                BillingPostalCode.Is("12345").
+                BillingRegion.Is("IL").
+                BillingStreetAddress.Is("123 Main St").
+                CreditCardCardholderName.Is("Tom Smith").
+                CreditCardExpirationDate.Is("05/2012").
+                CreditCardNumber.Is(SandboxValues.CreditCardNumber.VISA).
+                CustomerCompany.Is("Braintree").
+                CustomerEmail.Is("smith@example.com").
+                CustomerFax.Is("5551231234").
+                CustomerFirstName.Is("Tom").
+                CustomerId.Is(transaction.Customer.Id).
+                CustomerLastName.Is("Smith").
+                CustomerPhone.Is("5551231234").
+                CustomerWebsite.Is("http://example.com").
+                OrderId.Is("myorder").
+                PaymentMethodToken.Is(creditCardToken).
+                ProcessorAuthorizationCode.Is(transaction.ProcessorAuthorizationCode).
+                ShippingCompany.Is("Braintree P.S.").
+                ShippingCountryName.Is("Mexico").
+                ShippingExtendedAddress.Is("Apt 456").
+                ShippingFirstName.Is("Thomas").
+                ShippingLastName.Is("Smithy").
+                ShippingLocality.Is("Braintree").
+                ShippingPostalCode.Is("54321").
+                ShippingRegion.Is("MA").
+                ShippingStreetAddress.Is("456 Road");
 
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
 
