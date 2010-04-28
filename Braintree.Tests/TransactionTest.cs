@@ -357,6 +357,59 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnTransactionType()
+        {
+            String name = new Random().Next(1000000).ToString();
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010",
+                    CardholderName = name
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction creditTransaction = gateway.Transaction.Credit(request).Target;
+
+            Transaction saleTransaction = gateway.Transaction.Sale(request).Target;
+
+            Settle(saleTransaction.Id);
+            Transaction refundTransaction = gateway.Transaction.Refund(saleTransaction.Id).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                CreditCardCardholderName.Is(name).
+                Type.Is(TransactionType.CREDIT);
+
+            Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                CreditCardCardholderName.Is(name).
+                Type.Is(TransactionType.CREDIT).
+                Refund.Is(true);
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(refundTransaction.Id, collection.FirstItem.Id);
+
+            searchRequest = new TransactionSearchRequest().
+                CreditCardCardholderName.Is(name).
+                Type.Is(TransactionType.CREDIT).
+                Refund.Is(false);
+
+            collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(creditTransaction.Id, collection.FirstItem.Id);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest

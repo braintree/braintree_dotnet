@@ -57,7 +57,8 @@ namespace Braintree
             builder.Append(BuildXMLElement("order-id", OrderId));
             builder.Append(BuildXMLElement("payment-method-token", PaymentMethodToken));
             builder.Append(BuildXMLElement("shipping-address-id", ShippingAddressId));
-            builder.Append(BuildXMLElement("type", Type.ToString().ToLower()));
+
+            if (Type != null) builder.Append(BuildXMLElement("type", Type.ToString().ToLower()));
             builder.Append(BuildXMLElement("custom-fields", CustomFields));
             builder.Append(BuildXMLElement(CreditCard));
             builder.Append(BuildXMLElement(Customer));
@@ -77,7 +78,6 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             QueryString qs = new QueryString().
-                Append(ParentBracketChildString(root, "type"), Type.ToString().ToLower()).
                 Append(ParentBracketChildString(root, "customer_id"), CustomerId).
                 Append(ParentBracketChildString(root, "order_id"), OrderId).
                 Append(ParentBracketChildString(root, "payment_method_token"), PaymentMethodToken).
@@ -90,6 +90,7 @@ namespace Braintree
                 Append(ParentBracketChildString(root, "options"), Options).
                 Append("payment_method_token", PaymentMethodToken);
 
+            if (Type != null) qs.Append(ParentBracketChildString(root, "type"), Type.ToString().ToLower());
             if (Amount != 0) qs.Append(ParentBracketChildString(root, "amount"), Amount.ToString());
 
             return qs.ToString();

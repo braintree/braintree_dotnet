@@ -10,11 +10,13 @@ namespace Braintree
     {
         private Dictionary<String, SearchCriteria> Criteria;
         private Dictionary<String, SearchCriteria> MultipleValueCriteria;
+        private Dictionary<String, String> KeyValueCriteria;
 
         protected SearchRequest()
         {
             Criteria = new Dictionary<String, SearchCriteria>();
             MultipleValueCriteria = new Dictionary<String, SearchCriteria>();
+            KeyValueCriteria = new Dictionary<String, String>();
         }
 
         internal virtual void AddCriteria(String name, SearchCriteria criteria)
@@ -25,6 +27,11 @@ namespace Braintree
         internal virtual void AddMultipleValueCriteria(String name, SearchCriteria criteria)
         {
             MultipleValueCriteria.Add(name, criteria);
+        }
+
+        internal virtual void AddCriteria(String name, String value)
+        {
+            KeyValueCriteria.Add(name, value);
         }
 
         public override String ToXml()
@@ -39,6 +46,11 @@ namespace Braintree
             {
                 builder.AppendFormat("<{0} type=\"array\">{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
+            foreach (KeyValuePair<String, String> pair in KeyValueCriteria)
+            {
+                builder.AppendFormat("<{0}>{1}</{0}>", pair.Key, pair.Value);
+            }
+
             builder.Append("</search>");
             return builder.ToString();
         }

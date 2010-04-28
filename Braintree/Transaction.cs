@@ -7,7 +7,7 @@ using System.Xml;
 
 namespace Braintree
 {
-    public class TransactionStatus
+    public class TransactionStatus : Enumeration
     {
         public static readonly TransactionStatus AUTHORIZED = new TransactionStatus("authorized");
         public static readonly TransactionStatus AUTHORIZING = new TransactionStatus("authorizing");
@@ -26,17 +26,7 @@ namespace Braintree
             SETTLEMENT_FAILED, SUBMITTED_FOR_SETTLEMENT, UNKNOWN, VOIDED
         };
 
-        private String Name;
-
-        private TransactionStatus(String name)
-        {
-            Name = name;
-        }
-
-        public override String ToString()
-        {
-            return Name;
-        }
+        protected TransactionStatus(String name) : base(name) {}
     }
 
     public abstract class TransactionSource
@@ -48,9 +38,15 @@ namespace Braintree
         public static readonly String[] ALL = { API, CONTROL_PANEL, RECURRING };
     }
 
-    public enum TransactionType
+    public class TransactionType : Enumeration
     {
-        CREDIT, SALE, UNRECOGNIZED
+        public static readonly TransactionType CREDIT = new TransactionType("credit");
+        public static readonly TransactionType SALE = new TransactionType("sale");
+        public static readonly TransactionType UNRECOGNIZED = new TransactionType("unrecognized");
+
+        public static readonly TransactionType[] ALL = { CREDIT, SALE };
+
+        protected TransactionType(String name) : base(name) {}
     }
 
     public abstract class TransactionCreatedUsing
@@ -98,7 +94,7 @@ namespace Braintree
             Amount = node.GetDecimal("amount");
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
-            Type = (TransactionType)EnumUtil.Find(typeof(TransactionType), node.GetString("type"), "unrecognized");
+            Type = (TransactionType)CollectionUtil.Find(TransactionType.ALL, node.GetString("type"), TransactionType.UNRECOGNIZED);
             MerchantAccountId = node.GetString("merchant-account-id");
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");

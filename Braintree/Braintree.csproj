@@ -99,6 +99,8 @@
     <Compile Include="SearchRequest.cs" />
     <Compile Include="EqualityNode.cs" />
     <Compile Include="PartialMatchNode.cs" />
+    <Compile Include="Enumeration.cs" />
+    <Compile Include="KeyValueNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
