@@ -32,7 +32,7 @@ namespace Braintree
     /// <summary>
     /// The possible statuses for <see cref="Subscription"/>
     /// </summary>
-    public class SubscriptionStatus
+    public class SubscriptionStatus : Enumeration
     {
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active and in good standing
@@ -53,17 +53,7 @@ namespace Braintree
 
         public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, PAST_DUE};
 
-        protected String Name;
-
-        protected SubscriptionStatus(String name)
-        {
-            Name = name;
-        }
-
-        public override String ToString()
-        {
-            return Name;
-        }
+        protected SubscriptionStatus(String name) : base(name) {}
     }
 
     /// <summary>
