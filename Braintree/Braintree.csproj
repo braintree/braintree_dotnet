@@ -58,7 +58,6 @@
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerGateway.cs" />
     <Compile Include="CustomerRequest.cs" />
-    <Compile Include="EnumUtil.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Exceptions\AuthenticationException.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />

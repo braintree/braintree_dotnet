@@ -9,20 +9,24 @@ namespace Braintree
     /// <summary>
     /// The available duration units for <see cref="Subscription"/>
     /// </summary>
-    public enum SubscriptionDurationUnit
+    public class SubscriptionDurationUnit : Enumeration
     {
         /// <summary>
         /// A duration unit used for subscription periods measured in days
         /// </summary>
-        DAY,
+        public static readonly SubscriptionDurationUnit DAY = new SubscriptionDurationUnit("day");
         /// <summary>
         /// A duration unit used for subscription periods measured in months
         /// </summary>
-        MONTH,
+        public static readonly SubscriptionDurationUnit MONTH = new SubscriptionDurationUnit("month");
         /// <summary>
         /// A placeholder for unrecognized duration units, implemented for future compatibility  
         /// </summary>
-        UNRECOGNIZED
+        public static readonly SubscriptionDurationUnit UNRECOGNIZED = new SubscriptionDurationUnit("unrecognized");
+
+        public static readonly SubscriptionDurationUnit[] ALL = { DAY, MONTH };
+
+        protected SubscriptionDurationUnit(String name) : base(name) {}
     }
 
     /// <summary>
@@ -106,7 +110,7 @@ namespace Braintree
             TrialDuration = node.GetInteger("trial-duration");
             String trialDurationUnitStr = node.GetString("trial-duration-unit");
             if (trialDurationUnitStr != null) {
-                TrialDurationUnit = (SubscriptionDurationUnit)EnumUtil.Find(typeof(SubscriptionDurationUnit), trialDurationUnitStr, "unrecognized");
+                TrialDurationUnit = (SubscriptionDurationUnit)CollectionUtil.Find(SubscriptionDurationUnit.ALL, trialDurationUnitStr, SubscriptionDurationUnit.UNRECOGNIZED);
             }
             MerchantAccountId = node.GetString("merchant-account-id");
             Transactions = new List<Transaction> ();
