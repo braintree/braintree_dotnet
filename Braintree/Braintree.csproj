@@ -97,6 +97,8 @@
     <Compile Include="SubscriptionTransactionRequest.cs" />
     <Compile Include="TransactionSearchRequest.cs" />
     <Compile Include="SearchRequest.cs" />
+    <Compile Include="EqualityNode.cs" />
+    <Compile Include="PartialMatchNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

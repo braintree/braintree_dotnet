@@ -78,14 +78,14 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("credit-card-cardholder-name", this);
             }
         }
-        public TextNode<TransactionSearchRequest> CreditCardExpirationDate
+        public EqualityNode<TransactionSearchRequest> CreditCardExpirationDate
         {
             get
             {
                 return new TextNode<TransactionSearchRequest>("credit-card-expiration-date", this);
             }
         }
-        public TextNode<TransactionSearchRequest> CreditCardNumber
+        public PartialMatchNode<TransactionSearchRequest> CreditCardNumber
         {
             get
             {
