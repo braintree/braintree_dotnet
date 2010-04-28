@@ -113,6 +113,7 @@ namespace Braintree.Tests
                 CreditCardCardholderName.Is("Tom Smith").
                 CreditCardExpirationDate.Is("05/2012").
                 CreditCardNumber.Is(SandboxValues.CreditCardNumber.VISA).
+                Currency.Is("USD").
                 CustomerCompany.Is("Braintree").
                 CustomerEmail.Is("smith@example.com").
                 CustomerFax.Is("5551231234").

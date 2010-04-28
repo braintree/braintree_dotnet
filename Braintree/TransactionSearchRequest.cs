@@ -127,6 +127,13 @@ namespace Braintree
                 return new MultipleValueNode<TransactionSearchRequest>("credit-card-customer-location", this, Braintree.CreditCardCustomerLocation.ALL);
             }
         }
+        public TextNode<TransactionSearchRequest> Currency
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("currency", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> CustomerCompany
         {
             get
@@ -218,6 +225,13 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("processor-authorization-code", this);
             }
         }
+        public KeyValueNode<TransactionSearchRequest> Refund
+        {
+            get
+            {
+                return new KeyValueNode<TransactionSearchRequest>("refund", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> ShippingCompany
         {
             get
@@ -302,13 +316,7 @@ namespace Braintree
                 return new MultipleValueNode<TransactionSearchRequest>("type", this, TransactionType.ALL);
             }
         }
-        public KeyValueNode<TransactionSearchRequest> Refund
-        {
-            get
-            {
-                return new KeyValueNode<TransactionSearchRequest>("refund", this);
-            }
-        }
+
         public TransactionSearchRequest() : base()
         {
         }
