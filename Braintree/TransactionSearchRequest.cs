@@ -99,6 +99,13 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("credit-card-number", this);
             }
         }
+        public MultipleValueNode<TransactionSearchRequest> CreditCardCardType
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest>("credit-card-card-type", this, Braintree.CreditCardCardType.ALL);
+            }
+        }
         public MultipleValueNode<TransactionSearchRequest> CreditCardCustomerLocation
         {
             get
@@ -258,6 +265,13 @@ namespace Braintree
             get
             {
                 return new TextNode<TransactionSearchRequest>("shipping-street-address", this);
+            }
+        }
+        public MultipleValueNode<TransactionSearchRequest> Status
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest>("status", this, TransactionStatus.ALL);
             }
         }
 

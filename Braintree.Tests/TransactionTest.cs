@@ -249,6 +249,80 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnCreditCardType()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.Is(CreditCardCardType.VISA);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.Is(transaction.CreditCard.CardType);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.Is(CreditCardCardType.MASTER_CARD);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnStatus()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Status.Is(TransactionStatus.AUTHORIZED);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Status.IncludedIn(TransactionStatus.AUTHORIZED, TransactionStatus.GATEWAY_REJECTED);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Status.Is(TransactionStatus.GATEWAY_REJECTED);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest

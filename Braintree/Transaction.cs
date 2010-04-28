@@ -7,9 +7,36 @@ using System.Xml;
 
 namespace Braintree
 {
-    public enum TransactionStatus
+    public class TransactionStatus
     {
-        AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, SETTLED, SETTLEMENT_FAILED, SUBMITTED_FOR_SETTLEMENT, UNKNOWN, UNRECOGNIZED, VOIDED
+        public static readonly TransactionStatus AUTHORIZED = new TransactionStatus("authorized");
+        public static readonly TransactionStatus AUTHORIZING = new TransactionStatus("authorizing");
+        public static readonly TransactionStatus FAILED = new TransactionStatus("failed");
+        public static readonly TransactionStatus GATEWAY_REJECTED = new TransactionStatus("gateway_rejected");
+        public static readonly TransactionStatus PROCESSOR_DECLINED = new TransactionStatus("processor_declined");
+        public static readonly TransactionStatus SETTLED = new TransactionStatus("settled");
+        public static readonly TransactionStatus SETTLEMENT_FAILED = new TransactionStatus("settlement_failed");
+        public static readonly TransactionStatus SUBMITTED_FOR_SETTLEMENT = new TransactionStatus("submitted_for_settlement");
+        public static readonly TransactionStatus UNKNOWN = new TransactionStatus("unknown");
+        public static readonly TransactionStatus UNRECOGNIZED = new TransactionStatus("unrecognized");
+        public static readonly TransactionStatus VOIDED = new TransactionStatus("voided");
+
+        public static readonly TransactionStatus[] ALL = {
+            AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, SETTLED,
+            SETTLEMENT_FAILED, SUBMITTED_FOR_SETTLEMENT, UNKNOWN, VOIDED
+        };
+
+        private String Name;
+
+        private TransactionStatus(String name)
+        {
+            Name = name;
+        }
+
+        public override String ToString()
+        {
+            return Name;
+        }
     }
 
     public enum TransactionType
@@ -61,7 +88,7 @@ namespace Braintree
             Id = node.GetString("id");
             Amount = node.GetDecimal("amount");
             OrderId = node.GetString("order-id");
-            Status = (TransactionStatus)EnumUtil.Find(typeof(TransactionStatus), node.GetString("status"), "unrecognized");
+            Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
             Type = (TransactionType)EnumUtil.Find(typeof(TransactionType), node.GetString("type"), "unrecognized");
             MerchantAccountId = node.GetString("merchant-account-id");
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");

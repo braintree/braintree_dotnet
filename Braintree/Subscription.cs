@@ -33,25 +33,25 @@ namespace Braintree
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active and in good standing
         /// </summary>
-        public static SubscriptionStatus ACTIVE = new SubscriptionStatus("Active");
+        public static readonly SubscriptionStatus ACTIVE = new SubscriptionStatus("Active");
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> has been canceled and will not be billed
         /// </summary>
-        public static SubscriptionStatus CANCELED = new SubscriptionStatus("Canceled");
+        public static readonly SubscriptionStatus CANCELED = new SubscriptionStatus("Canceled");
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active but past due
         /// </summary>
-        public static SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
+        public static readonly SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
         /// <summary>
         /// A placeholder for unrecognized subscription statuses, implemented for future compatibility
         /// </summary>
-        public static SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
+        public static readonly SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
 
-        public static SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, PAST_DUE};
+        public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, PAST_DUE};
 
-        private String Name;
+        protected String Name;
 
-        public SubscriptionStatus(String name)
+        protected SubscriptionStatus(String name)
         {
             Name = name;
         }

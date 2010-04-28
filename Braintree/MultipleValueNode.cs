@@ -7,15 +7,15 @@ namespace Braintree
 {
     public class MultipleValueNode<T> : SearchNode<T> where T : SearchRequest
     {
-        protected List<String> AllowedValues;
+        protected List<object> AllowedValues;
 
         public MultipleValueNode(String name, T parent) : base(name, parent)
         {
         }
 
-        public MultipleValueNode(String name, T parent, String[] allowedValues) : base(name, parent)
+        public MultipleValueNode(String name, T parent, object[] allowedValues) : base(name, parent)
         {
-            AllowedValues = new List<String>(allowedValues);
+            AllowedValues = new List<object>(allowedValues);
         }
 
         public T IncludedIn(params object[] values)
@@ -36,7 +36,7 @@ namespace Braintree
 
             foreach (object value in values)
             {
-                if (!AllowedValues.Contains(value.ToString()))
+                if (!AllowedValues.Contains(value))
                 {
                     throw new ArgumentOutOfRangeException(String.Format("The {0} node does not accept {1} as a value.", Name, value));
                 }
