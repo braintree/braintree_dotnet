@@ -38,7 +38,7 @@ namespace Braintree.Tests
         public void ToXML_EscapesGeneratedXMLForArrayElements()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                Status().IncludedIn("<active");
+                Status.IncludedIn("<active");
 
             TestHelper.AssertIncludes("<status type=\"array\"><item>&lt;active</item></status>", request.ToXml());
         }
@@ -47,7 +47,7 @@ namespace Braintree.Tests
         public void ToXML_EscapesGeneratedXMLForSearchCriteria()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId().Is("<my-id");
+                PlanId.Is("<my-id");
 
             TestHelper.AssertIncludes("<plan-id><is>&lt;my-id</is></plan-id>", request.ToXml());
         }

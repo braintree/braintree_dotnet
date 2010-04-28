@@ -6,23 +6,30 @@ namespace Braintree
 {
     public class SubscriptionSearchRequest : SearchRequest
     {
+        public TextNode<SubscriptionSearchRequest> PlanId
+        {
+            get
+            {
+                return new TextNode<SubscriptionSearchRequest>("plan-id", this);
+            }
+        }
+        public TextNode<SubscriptionSearchRequest> DaysPastDue
+        {
+            get
+            {
+                return new TextNode<SubscriptionSearchRequest>("days-past-due", this);
+            }
+        }
+        public MultipleValueNode<SubscriptionSearchRequest> Status
+        {
+            get
+            {
+                return new MultipleValueNode<SubscriptionSearchRequest>("status", this);
+            }
+        }
+
         public SubscriptionSearchRequest() : base()
         {
-        }
-
-        public virtual TextNode<SubscriptionSearchRequest> PlanId()
-        {
-            return new TextNode<SubscriptionSearchRequest>("plan-id", this);
-        }
-
-        public virtual TextNode<SubscriptionSearchRequest> DaysPastDue()
-        {
-            return new TextNode<SubscriptionSearchRequest>("days-past-due", this);
-        }
-
-        public virtual MultipleValueNode<SubscriptionSearchRequest> Status()
-        {
-            return new MultipleValueNode<SubscriptionSearchRequest>("status", this);
         }
     }
 }
