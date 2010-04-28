@@ -21,6 +21,8 @@ namespace Braintree
     {
         public const String FULL_INFORMATION = "full_information";
         public const String TOKEN = "token";
+
+        public static readonly String[] ALL = {FULL_INFORMATION, TOKEN};
     }
 
     /// <summary>

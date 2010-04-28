@@ -75,7 +75,7 @@ namespace Braintree
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("created-using", this);
+                return new MultipleValueNode<TransactionSearchRequest>("created-using", this, TransactionCreatedUsing.ALL);
             }
         }
         public TextNode<TransactionSearchRequest> CreditCardCardholderName
