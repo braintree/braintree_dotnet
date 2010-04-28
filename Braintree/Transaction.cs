@@ -17,6 +17,12 @@ namespace Braintree
         CREDIT, SALE, UNRECOGNIZED
     }
 
+    public abstract class TransactionCreatedUsing
+    {
+        public const String FULL_INFORMATION = "full_information";
+        public const String TOKEN = "token";
+    }
+
     /// <summary>
     /// A transaction returned by the Braintree Gateway
     /// </summary>

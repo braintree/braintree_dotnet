@@ -71,6 +71,13 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("billing-street-address", this);
             }
         }
+        public MultipleValueNode<TransactionSearchRequest> CreatedUsing
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest>("created-using", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> CreditCardCardholderName
         {
             get

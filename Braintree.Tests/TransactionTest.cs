@@ -141,6 +141,46 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnCreatedUsing()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedUsing.IncludedIn(TransactionCreatedUsing.FULL_INFORMATION);
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedUsing.IncludedIn(TransactionCreatedUsing.FULL_INFORMATION, TransactionCreatedUsing.TOKEN);
+
+            collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedUsing.IncludedIn(TransactionCreatedUsing.TOKEN);
+
+            collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(0, collection.ApproximateCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
