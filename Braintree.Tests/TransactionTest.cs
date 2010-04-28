@@ -323,6 +323,40 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnSource()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Source.Is(TransactionSource.API);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Source.IncludedIn(TransactionSource.API, TransactionSource.CONTROL_PANEL);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Source.Is(TransactionSource.CONTROL_PANEL);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest

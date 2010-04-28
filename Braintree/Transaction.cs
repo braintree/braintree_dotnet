@@ -39,6 +39,15 @@ namespace Braintree
         }
     }
 
+    public abstract class TransactionSource
+    {
+        public const String API = "api";
+        public const String CONTROL_PANEL = "control_panel";
+        public const String RECURRING = "recurring";
+
+        public static readonly String[] ALL = { API, CONTROL_PANEL, RECURRING };
+    }
+
     public enum TransactionType
     {
         CREDIT, SALE, UNRECOGNIZED

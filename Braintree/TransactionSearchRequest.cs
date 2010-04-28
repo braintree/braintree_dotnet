@@ -274,6 +274,13 @@ namespace Braintree
                 return new MultipleValueNode<TransactionSearchRequest>("status", this, TransactionStatus.ALL);
             }
         }
+        public MultipleValueNode<TransactionSearchRequest> Source
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest>("source", this, TransactionSource.ALL);
+            }
+        }
 
         public TransactionSearchRequest() : base()
         {

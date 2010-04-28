@@ -38,7 +38,11 @@ namespace Braintree
             {
                 if (!AllowedValues.Contains(value))
                 {
-                    throw new ArgumentOutOfRangeException(String.Format("The {0} node does not accept {1} as a value.", Name, value));
+                    List<String> valid = new List<String>();
+                    foreach (object item in AllowedValues) {
+                        valid.Add(item.ToString());
+                    }
+                    throw new ArgumentOutOfRangeException(String.Format("The {0} node does not accept {1} as a value.  Valid values are: {2}", Name, value, String.Join(", ", valid.ToArray())));
                 }
             }
         }
