@@ -102,6 +102,7 @@
     <Compile Include="Enumeration.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="RangeNode.cs" />
+    <Compile Include="DateRangeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

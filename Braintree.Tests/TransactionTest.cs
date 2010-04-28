@@ -450,6 +450,51 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnCreatedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime createdAt = transaction.CreatedAt.Value;
+            DateTime threeHoursEarlier = createdAt.AddHours(-3);
+            DateTime oneHourEarlier = createdAt.AddHours(-1);
+            DateTime oneHourLater = createdAt.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest

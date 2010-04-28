@@ -14,6 +14,11 @@ namespace Braintree
             Xml = BuildXMLElement(type, value);
         }
 
+        public SearchCriteria(String type, DateTime value)
+        {
+            Xml = BuildXMLElement(type, value);
+        }
+
         public SearchCriteria(object[] items)
         {
             StringBuilder builder = new StringBuilder();

@@ -50,6 +50,11 @@ namespace Braintree
             return BuildXMLElement(tagName, value.ToString().ToLower());
         }
 
+        internal virtual String BuildXMLElement(String tagName, DateTime value)
+        {
+            return String.Format("<{0} type=\"datetime\">{1:u}</{0}>", SecurityElement.Escape(tagName), value.ToUniversalTime());
+        }
+
         internal virtual String BuildXMLElement(String tagName, String value)
         {
             if (value == null) return "";

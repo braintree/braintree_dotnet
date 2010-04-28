@@ -78,6 +78,13 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("billing-street-address", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> CreatedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("created-at", this);
+            }
+        }
         public MultipleValueNode<TransactionSearchRequest> CreatedUsing
         {
             get
