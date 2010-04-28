@@ -410,6 +410,46 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.Between(500M, 1500M);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.GreaterThanOrEqualTo(500M);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.LessThanOrEqualTo(1500M);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.Between(500M, 900M);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest

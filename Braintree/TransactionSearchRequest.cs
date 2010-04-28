@@ -8,6 +8,13 @@ namespace Braintree
 {
     public class TransactionSearchRequest : SearchRequest
     {
+        public RangeNode<TransactionSearchRequest> Amount
+        {
+            get
+            {
+                return new RangeNode<TransactionSearchRequest>("amount", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> BillingCompany
         {
             get

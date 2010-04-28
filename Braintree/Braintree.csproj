@@ -101,6 +101,7 @@
     <Compile Include="PartialMatchNode.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="KeyValueNode.cs" />
+    <Compile Include="RangeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
