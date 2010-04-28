@@ -8,6 +8,14 @@ using System.Security.Cryptography;
 
 namespace Braintree
 {
+    public abstract class CreditCardCustomerLocation
+    {
+        public const String US = "us";
+        public const String INTERNATIONAL = "international";
+
+        public static readonly String[] ALL = {US, INTERNATIONAL};
+    }
+
     /// <summary>
     /// A credit card returned by the Braintree Gateway
     /// </summary>

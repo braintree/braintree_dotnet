@@ -99,6 +99,13 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("credit-card-number", this);
             }
         }
+        public MultipleValueNode<TransactionSearchRequest> CreditCardCustomerLocation
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest>("credit-card-customer-location", this, Braintree.CreditCardCustomerLocation.ALL);
+            }
+        }
         public TextNode<TransactionSearchRequest> CustomerCompany
         {
             get
@@ -160,6 +167,13 @@ namespace Braintree
             get
             {
                 return new TextNode<TransactionSearchRequest>("id", this);
+            }
+        }
+        public MultipleValueNode<TransactionSearchRequest> MerchantAccountId
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest>("merchant-account-id", this);
             }
         }
         public TextNode<TransactionSearchRequest> OrderId

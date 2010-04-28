@@ -43,6 +43,7 @@ namespace Braintree
         public DateTime? CreatedAt { get; protected set; }
         public CreditCard CreditCard { get; protected set; }
         public Customer Customer { get; protected set; }
+        public String MerchantAccountId { get; protected set; }
         public String OrderId { get; protected set; }
         public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
@@ -62,6 +63,7 @@ namespace Braintree
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)EnumUtil.Find(typeof(TransactionStatus), node.GetString("status"), "unrecognized");
             Type = (TransactionType)EnumUtil.Find(typeof(TransactionType), node.GetString("type"), "unrecognized");
+            MerchantAccountId = node.GetString("merchant-account-id");
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");

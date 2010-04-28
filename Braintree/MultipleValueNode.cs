@@ -25,6 +25,11 @@ namespace Braintree
             return Parent;
         }
 
+        public T Is(object value)
+        {
+            return IncludedIn(value);
+        }
+
         private void RaiseErrorOnInvalidValue(object[] values)
         {
             if (AllowedValues == null) return;
