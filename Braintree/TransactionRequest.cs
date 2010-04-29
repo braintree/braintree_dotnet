@@ -28,6 +28,7 @@ namespace Braintree
         public CreditCardRequest CreditCard { get; set; }
         public Decimal Amount { get; set; }
         public String OrderId { get; set; }
+        public String MerchantAccountId { get; set; }
         public CustomerRequest Customer { get; set; }
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
@@ -57,6 +58,7 @@ namespace Braintree
             builder.Append(BuildXMLElement("order-id", OrderId));
             builder.Append(BuildXMLElement("payment-method-token", PaymentMethodToken));
             builder.Append(BuildXMLElement("shipping-address-id", ShippingAddressId));
+            builder.Append(BuildXMLElement("merchant-account-id", MerchantAccountId));
 
             if (Type != null) builder.Append(BuildXMLElement("type", Type.ToString().ToLower()));
             builder.Append(BuildXMLElement("custom-fields", CustomFields));
