@@ -142,6 +142,50 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void searchOnTextNodeOperators() {
+            var request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/2012",
+                    CardholderName = "Tom Smith"
+                }
+            };
+
+        Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+        var searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.StartsWith("Tom");
+
+        ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(1, collection.ApproximateCount);
+
+        searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.EndsWith("Smith");
+
+        collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(1, collection.ApproximateCount);
+
+        searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.Contains("m Sm");
+
+        collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(1, collection.ApproximateCount);
+
+        searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.IsNot("Tom Smith");
+
+        collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(0, collection.ApproximateCount);
+    }
+
+        [Test]
         public void Search_OnCreatedUsing()
         {
             TransactionRequest request = new TransactionRequest
