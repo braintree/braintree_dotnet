@@ -61,7 +61,9 @@ namespace Braintree
             builder.Append(BuildXMLElement("merchant-account-id", MerchantAccountId));
 
             if (Type != null) builder.Append(BuildXMLElement("type", Type.ToString().ToLower()));
-            builder.Append(BuildXMLElement("custom-fields", CustomFields));
+
+            if (CustomFields.Count != 0) builder.Append(BuildXMLElement("custom-fields", CustomFields));
+
             builder.Append(BuildXMLElement(CreditCard));
             builder.Append(BuildXMLElement(Customer));
             builder.Append(BuildXMLElement("billing", BillingAddress));
@@ -84,7 +86,6 @@ namespace Braintree
                 Append(ParentBracketChildString(root, "order_id"), OrderId).
                 Append(ParentBracketChildString(root, "payment_method_token"), PaymentMethodToken).
                 Append(ParentBracketChildString(root, "shipping_address_id"), ShippingAddressId).
-                Append(ParentBracketChildString(root, "custom_fields"), CustomFields).
                 Append(ParentBracketChildString(root, "credit_card"), CreditCard).
                 Append(ParentBracketChildString(root, "customer"), Customer).
                 Append(ParentBracketChildString(root, "billing"), BillingAddress).
@@ -94,6 +95,7 @@ namespace Braintree
 
             if (Type != null) qs.Append(ParentBracketChildString(root, "type"), Type.ToString().ToLower());
             if (Amount != 0) qs.Append(ParentBracketChildString(root, "amount"), Amount.ToString());
+            if (CustomFields.Count != 0) qs.Append(ParentBracketChildString(root, "custom_fields"), CustomFields);
 
             return qs.ToString();
         }

@@ -59,6 +59,16 @@ namespace Braintree
             return new Result<Transaction>(new NodeWrapper(response));
         }
 
+        public virtual Result<Transaction> Refund(String id, Decimal amount)
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = amount
+            };
+            XmlNode response = WebServiceGateway.Post("/transactions/" + id + "/refund", request);
+            return new Result<Transaction>(new NodeWrapper(response));
+        }
+
         public virtual Result<Transaction> Sale(TransactionRequest request)
         {
             request.Type = TransactionType.SALE;

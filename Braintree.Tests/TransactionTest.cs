@@ -1482,6 +1482,32 @@ namespace Braintree.Tests
             Assert.AreEqual(transaction.Amount, result.Target.Amount);
         }
 
+        [Test]
+        public void Refund_WithAPartialAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Settle(transaction.Id);
+
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, Decimal.Parse("500.00"));
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual(Decimal.Parse("500.00"), result.Target.Amount);
+        }
+
         private void Settle(String transactionId)
         {
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Put("/transactions/" + transactionId + "/settle"));
