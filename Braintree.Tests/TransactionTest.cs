@@ -158,7 +158,7 @@ namespace Braintree.Tests
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                CreatedUsing.IncludedIn(TransactionCreatedUsing.FULL_INFORMATION);
+                CreatedUsing.Is(TransactionCreatedUsing.FULL_INFORMATION);
 
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
 
@@ -174,7 +174,7 @@ namespace Braintree.Tests
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                CreatedUsing.IncludedIn(TransactionCreatedUsing.TOKEN);
+                CreatedUsing.Is(TransactionCreatedUsing.TOKEN);
 
             collection = gateway.Transaction.Search(searchRequest);
 
