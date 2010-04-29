@@ -8,24 +8,31 @@ namespace Braintree
 {
     public abstract class SearchRequest : Request
     {
-        private Dictionary<String, List<SearchCriteria>> Criteria;
+        private Dictionary<String, SearchCriteria> Criteria;
         private Dictionary<String, SearchCriteria> MultipleValueCriteria;
+        private Dictionary<String, List<SearchCriteria>> RangeCriteria;
         private Dictionary<String, String> KeyValueCriteria;
 
         protected SearchRequest()
         {
-            Criteria = new Dictionary<String, List<SearchCriteria>>();
+            Criteria = new Dictionary<String, SearchCriteria>();
             MultipleValueCriteria = new Dictionary<String, SearchCriteria>();
+            RangeCriteria = new Dictionary<String, List<SearchCriteria>>();
             KeyValueCriteria = new Dictionary<String, String>();
         }
 
         internal virtual void AddCriteria(String name, SearchCriteria criteria)
         {
-            if (!Criteria.ContainsKey(name))
+            Criteria.Add(name, criteria);
+        }
+
+        internal virtual void AddRangeCriteria(String name, SearchCriteria criteria)
+        {
+            if (!RangeCriteria.ContainsKey(name))
             {
-                Criteria.Add(name, new List<SearchCriteria>());
+                RangeCriteria.Add(name, new List<SearchCriteria>());
             }
-            Criteria[name].Add(criteria);
+            RangeCriteria[name].Add(criteria);
         }
 
         internal virtual void AddMultipleValueCriteria(String name, SearchCriteria criteria)
@@ -42,7 +49,11 @@ namespace Braintree
         {
             var builder = new StringBuilder();
             builder.Append("<search>");
-            foreach (KeyValuePair<String, List<SearchCriteria>> pair in Criteria)
+            foreach (KeyValuePair<String, SearchCriteria> pair in Criteria)
+            {
+                builder.AppendFormat("<{0}>{1}</{0}>", pair.Key, pair.Value.ToXml());
+            }
+            foreach (KeyValuePair<String, List<SearchCriteria>> pair in RangeCriteria)
             {
                 builder.AppendFormat("<{0}>", pair.Key);
                 foreach (SearchCriteria criteria in pair.Value)

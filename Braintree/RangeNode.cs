@@ -17,12 +17,12 @@ namespace Braintree
         }
 
         public T GreaterThanOrEqualTo(object min) {
-            Parent.AddCriteria(Name, new SearchCriteria("min", min.ToString()));
+            Parent.AddRangeCriteria(Name, new SearchCriteria("min", min.ToString()));
             return Parent;
         }
 
         public T LessThanOrEqualTo(object max) {
-            Parent.AddCriteria(Name, new SearchCriteria("max", max.ToString()));
+            Parent.AddRangeCriteria(Name, new SearchCriteria("max", max.ToString()));
             return Parent;
         }
     }
