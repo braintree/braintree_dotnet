@@ -321,6 +321,78 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_CreatesNewBillingAddressByDefault()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John"
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+
+
+            var updateRequest = new CreditCardRequest
+            {
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    LastName = "Jones"
+                }
+            };
+
+            CreditCard updatedCreditCard = gateway.CreditCard.Update(creditCard.Token, updateRequest).Target;
+
+            Assert.IsNull(updatedCreditCard.BillingAddress.FirstName);
+            Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
+            Assert.AreNotEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
+        }
+
+        [Test]
+        public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrue()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John"
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+
+
+            var updateRequest = new CreditCardRequest
+            {
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    LastName = "Jones",
+                    Options = new CreditCardAddressOptionsRequest
+                    {
+                        UpdateExisting = true
+                    }
+                }
+            };
+
+            CreditCard updatedCreditCard = gateway.CreditCard.Update(creditCard.Token, updateRequest).Target;
+
+            Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
+            Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
+            Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
+        }
+
+        [Test]
         public void UpdateViaTransparentRedirect()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -330,7 +402,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
-                BillingAddress = new AddressRequest
+                BillingAddress = new CreditCardAddressRequest
                 {
                     PostalCode = "44444"
                 }

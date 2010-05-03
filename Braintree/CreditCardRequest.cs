@@ -35,7 +35,7 @@ namespace Braintree
         public String Number { get; set; }
         public String CardholderName { get; set; }
         public String CVV { get; set; }
-        public AddressRequest BillingAddress { get; set; }
+        public CreditCardAddressRequest BillingAddress { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
         public String ExpirationMonth { get; set; }
         public String ExpirationYear { get; set; }

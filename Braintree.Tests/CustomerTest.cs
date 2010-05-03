@@ -42,7 +42,7 @@ namespace Braintree.Tests
                     ExpirationDate = "05/12",
                     CVV = "123",
                     CardholderName = "Michael Angelo",
-                    BillingAddress = new AddressRequest()
+                    BillingAddress = new CreditCardAddressRequest()
                     {
                         FirstName = "Mike",
                         LastName = "Smith",
@@ -203,7 +203,7 @@ namespace Braintree.Tests
                     ExpirationDate = "05/12",
                     CVV = "123",
                     CardholderName = "Michael Angelo",
-                    BillingAddress = new AddressRequest()
+                    BillingAddress = new CreditCardAddressRequest()
                     {
                         FirstName = "Michael",
                         LastName = "Angelo",

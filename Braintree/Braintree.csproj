@@ -102,6 +102,8 @@
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="RangeNode.cs" />
     <Compile Include="DateRangeNode.cs" />
+    <Compile Include="CreditCardAddressRequest.cs" />
+    <Compile Include="CreditCardAddressOptionsRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
