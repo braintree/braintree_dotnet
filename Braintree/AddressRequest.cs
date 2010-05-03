@@ -78,12 +78,12 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return QueryStringBody(new QueryString(), root).ToString();
+            return QueryStringBody(root).ToString();
         }
 
-        protected virtual QueryString QueryStringBody(QueryString queryString, String root)
+        protected virtual QueryString QueryStringBody(String root)
         {
-            return queryString.
+            return new QueryString().
                 Append(ParentBracketChildString(root, "first_name"), FirstName).
                 Append(ParentBracketChildString(root, "last_name"), LastName).
                 Append(ParentBracketChildString(root, "company"), Company).

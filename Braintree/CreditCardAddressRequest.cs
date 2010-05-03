@@ -13,9 +13,9 @@ namespace Braintree
             return base.XmlBody() + BuildXMLElement("options", Options);
         }
 
-        protected override QueryString QueryStringBody(QueryString queryString, String root)
+        protected override QueryString QueryStringBody(String root)
         {
-            return base.QueryStringBody(queryString, root)
+             return base.QueryStringBody(root)
                 .Append(ParentBracketChildString(root, "options"), Options);
         }
     }
