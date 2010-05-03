@@ -74,7 +74,7 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             return new QueryString().
-                Append(ParentBracketChildString(root, "billing_addres"), BillingAddress).
+                Append(ParentBracketChildString(root, "billing_address"), BillingAddress).
                 Append(ParentBracketChildString(root, "customer_id"), CustomerId).
                 Append(ParentBracketChildString(root, "cardholder_name"), CardholderName).
                 Append(ParentBracketChildString(root, "cvv"), CVV).

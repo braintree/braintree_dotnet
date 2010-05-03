@@ -78,7 +78,12 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return new QueryString().
+            return QueryStringBody(new QueryString(), root).ToString();
+        }
+
+        protected virtual QueryString QueryStringBody(QueryString queryString, String root)
+        {
+            return queryString.
                 Append(ParentBracketChildString(root, "first_name"), FirstName).
                 Append(ParentBracketChildString(root, "last_name"), LastName).
                 Append(ParentBracketChildString(root, "company"), Company).
@@ -87,8 +92,7 @@ namespace Braintree
                 Append(ParentBracketChildString(root, "locality"), Locality).
                 Append(ParentBracketChildString(root, "region"), Region).
                 Append(ParentBracketChildString(root, "postal_code"), PostalCode).
-                Append(ParentBracketChildString(root, "country_name"), CountryName).
-                ToString();
+                Append(ParentBracketChildString(root, "country_name"), CountryName);
         }
     }
 }

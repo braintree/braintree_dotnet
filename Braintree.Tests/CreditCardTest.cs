@@ -372,7 +372,6 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
 
-
             var updateRequest = new CreditCardRequest
             {
                 BillingAddress = new CreditCardAddressRequest
@@ -386,6 +385,52 @@ namespace Braintree.Tests
             };
 
             CreditCard updatedCreditCard = gateway.CreditCard.Update(creditCard.Token, updateRequest).Target;
+
+            Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
+            Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
+            Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
+        }
+
+        [Test]
+        public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrueViaTransparentRedirect()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John"
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+
+            CreditCardRequest trParams = new CreditCardRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    Options = new CreditCardAddressOptionsRequest
+                    {
+                        UpdateExisting = true
+                    }
+                }
+            };
+
+            CreditCardRequest updateRequest = new CreditCardRequest
+            {
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    LastName = "Jones"
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate());
+            CreditCard updatedCreditCard = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
 
             Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);

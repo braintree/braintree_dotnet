@@ -26,12 +26,14 @@ namespace Braintree
 
         public override String ToQueryString()
         {
-            return "";
+            return ToQueryString("options");
         }
 
         public override String ToQueryString(String root)
         {
-            return "";
+            return new QueryString().
+                Append(ParentBracketChildString(root, "update_existing"), UpdateExisting).
+                ToString();
         }
 
     }
