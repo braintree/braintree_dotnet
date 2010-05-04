@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using Braintree.Exceptions;
 using System.Net;
 
@@ -25,7 +26,13 @@ namespace Braintree
                 paramMap[items[0]] = items[1];
             }
 
-            WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]));
+            String message = null;
+            if (paramMap.ContainsKey("bt_message"))
+            {
+                message = HttpUtility.UrlDecode(paramMap["bt_message"]);
+            }
+
+            WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]), message);
 
             if (!TrUtil.IsValidTrQueryString(queryString))
             {
