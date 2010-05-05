@@ -1,77 +1,35 @@
 #pragma warning disable 1591
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Braintree
 {
-    public class SubscriptionSearchRequest : Request
+    public class SubscriptionSearchRequest : SearchRequest
     {
-        private Dictionary<String, SearchCriteria> Criteria;
-        private Dictionary<String, SearchCriteria> MultipleValueCriteria;
-
-        public SubscriptionSearchRequest()
+        public TextNode<SubscriptionSearchRequest> PlanId
         {
-            Criteria = new Dictionary<String, SearchCriteria>();
-            MultipleValueCriteria = new Dictionary<String, SearchCriteria>();
-        }
-
-        public virtual TextNode PlanId()
-        {
-            return new TextNode("plan-id", this);
-        }
-
-        public virtual TextNode DaysPastDue()
-        {
-            return new TextNode("days-past-due", this);
-        }
-
-        public virtual MultipleValueNode Status()
-        {
-            return new MultipleValueNode("status", this);
-        }
-
-        internal virtual void AddCriteria(String name, SearchCriteria criteria)
-        {
-            Criteria.Add(name, criteria);
-        }
-
-
-        internal virtual void AddMultipleValueCriteria(String name, SearchCriteria criteria)
-        {
-            MultipleValueCriteria.Add(name, criteria);
-        }
-
-        public override String ToXml()
-        {
-            var builder = new StringBuilder();
-            builder.Append("<search>");
-            foreach (KeyValuePair<String, SearchCriteria> pair in Criteria)
+            get
             {
-                builder.AppendFormat("<{0}>{1}</{0}>", pair.Key, pair.Value.ToXml());
+                return new TextNode<SubscriptionSearchRequest>("plan-id", this);
             }
-            foreach (KeyValuePair<String, SearchCriteria> pair in MultipleValueCriteria)
+        }
+        public TextNode<SubscriptionSearchRequest> DaysPastDue
+        {
+            get
             {
-                builder.AppendFormat("<{0} type=\"array\">{1}</{0}>", pair.Key, pair.Value.ToXml());
+                return new TextNode<SubscriptionSearchRequest>("days-past-due", this);
             }
-            builder.Append("</search>");
-            return builder.ToString();
+        }
+        public MultipleValueNode<SubscriptionSearchRequest> Status
+        {
+            get
+            {
+                return new MultipleValueNode<SubscriptionSearchRequest>("status", this);
+            }
         }
 
-        public override String ToXml(String rootElement)
+        public SubscriptionSearchRequest() : base()
         {
-            return "";
-        }
-
-        public override String ToQueryString()
-        {
-            return "";
-        }
-
-        public override String ToQueryString(String root)
-        {
-            return "";
         }
     }
 }

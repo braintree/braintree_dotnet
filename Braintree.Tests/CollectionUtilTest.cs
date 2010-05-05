@@ -19,7 +19,7 @@ namespace Braintree.Tests
         [Test]
         public void Find_ReturnsUNRECOGNIZEDForInValidEnumValue()
         {
-            Assert.AreEqual(TransactionStatus.UNRECOGNIZED, EnumUtil.Find(typeof(TransactionStatus), "pants", "unrecognized"));
+            Assert.AreEqual(SubscriptionDurationUnit.UNRECOGNIZED, CollectionUtil.Find(SubscriptionDurationUnit.ALL, "pants", SubscriptionDurationUnit.UNRECOGNIZED));
         }
     }
 }

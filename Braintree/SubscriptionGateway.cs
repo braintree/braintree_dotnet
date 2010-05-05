@@ -89,5 +89,25 @@ namespace Braintree
             searchDelegate(search);
             return Search(search, pageNumber);
         }
+
+        private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest) {
+           XmlNode response = WebServiceGateway.Post("/transactions", txnRequest);
+           return new Result<Transaction>(new NodeWrapper(response));
+       }
+
+       public Result<Transaction> RetryCharge(String subscriptionId) {
+          return RetryCharge(new SubscriptionTransactionRequest
+            {
+                SubscriptionId = subscriptionId
+            });
+       }
+
+       public Result<Transaction> RetryCharge(String subscriptionId, Decimal amount) {
+           return RetryCharge(new SubscriptionTransactionRequest
+           {
+               SubscriptionId = subscriptionId,
+               Amount = amount
+           });
+       }
     }
 }

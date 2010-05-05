@@ -9,57 +9,51 @@ namespace Braintree
     /// <summary>
     /// The available duration units for <see cref="Subscription"/>
     /// </summary>
-    public enum SubscriptionDurationUnit
+    public class SubscriptionDurationUnit : Enumeration
     {
         /// <summary>
         /// A duration unit used for subscription periods measured in days
         /// </summary>
-        DAY,
+        public static readonly SubscriptionDurationUnit DAY = new SubscriptionDurationUnit("day");
         /// <summary>
         /// A duration unit used for subscription periods measured in months
         /// </summary>
-        MONTH,
+        public static readonly SubscriptionDurationUnit MONTH = new SubscriptionDurationUnit("month");
         /// <summary>
         /// A placeholder for unrecognized duration units, implemented for future compatibility  
         /// </summary>
-        UNRECOGNIZED
+        public static readonly SubscriptionDurationUnit UNRECOGNIZED = new SubscriptionDurationUnit("unrecognized");
+
+        public static readonly SubscriptionDurationUnit[] ALL = { DAY, MONTH };
+
+        protected SubscriptionDurationUnit(String name) : base(name) {}
     }
 
     /// <summary>
     /// The possible statuses for <see cref="Subscription"/>
     /// </summary>
-    public class SubscriptionStatus
+    public class SubscriptionStatus : Enumeration
     {
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active and in good standing
         /// </summary>
-        public static SubscriptionStatus ACTIVE = new SubscriptionStatus("Active");
+        public static readonly SubscriptionStatus ACTIVE = new SubscriptionStatus("Active");
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> has been canceled and will not be billed
         /// </summary>
-        public static SubscriptionStatus CANCELED = new SubscriptionStatus("Canceled");
+        public static readonly SubscriptionStatus CANCELED = new SubscriptionStatus("Canceled");
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active but past due
         /// </summary>
-        public static SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
+        public static readonly SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
         /// <summary>
         /// A placeholder for unrecognized subscription statuses, implemented for future compatibility
         /// </summary>
-        public static SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
+        public static readonly SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
 
-        public static SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, PAST_DUE};
+        public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, PAST_DUE};
 
-        private String Name;
-
-        public SubscriptionStatus(String name)
-        {
-            Name = name;
-        }
-
-        public override String ToString()
-        {
-            return Name;
-        }
+        protected SubscriptionStatus(String name) : base(name) {}
     }
 
     /// <summary>
@@ -106,7 +100,7 @@ namespace Braintree
             TrialDuration = node.GetInteger("trial-duration");
             String trialDurationUnitStr = node.GetString("trial-duration-unit");
             if (trialDurationUnitStr != null) {
-                TrialDurationUnit = (SubscriptionDurationUnit)EnumUtil.Find(typeof(SubscriptionDurationUnit), trialDurationUnitStr, "unrecognized");
+                TrialDurationUnit = (SubscriptionDurationUnit)CollectionUtil.Find(SubscriptionDurationUnit.ALL, trialDurationUnitStr, SubscriptionDurationUnit.UNRECOGNIZED);
             }
             MerchantAccountId = node.GetString("merchant-account-id");
             Transactions = new List<Transaction> ();

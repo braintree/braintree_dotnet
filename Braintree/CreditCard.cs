@@ -8,6 +8,36 @@ using System.Security.Cryptography;
 
 namespace Braintree
 {
+    public abstract class CreditCardCustomerLocation
+    {
+        public const String US = "us";
+        public const String INTERNATIONAL = "international";
+
+        public static readonly String[] ALL = {US, INTERNATIONAL};
+    }
+
+    public abstract class CreditCardCardType
+    {
+        public const String AMEX = "American Express";
+        public const String CARTE_BLANCHE = "Carte Blanche";
+        public const String CHINA_UNION_PAY = "China UnionPay";
+        public const String DINERS_CLUB_INTERNATIONAL = "Diners Club";
+        public const String DISCOVER = "Discover";
+        public const String JCB = "JCB";
+        public const String LASER = "Laser";
+        public const String MAESTRO = "Maestro";
+        public const String MASTER_CARD = "MasterCard";
+        public const String SOLO = "Solo";
+        public const String SWITCH = "Switch";
+        public const String VISA = "Visa";
+        public const String UNKNOWN = "Unknown";
+
+        public static readonly String[] ALL = {
+            AMEX, CARTE_BLANCHE, CHINA_UNION_PAY, DINERS_CLUB_INTERNATIONAL, DISCOVER,
+            JCB, LASER, MAESTRO, MASTER_CARD, SOLO, SWITCH, VISA, UNKNOWN
+        };
+    }
+
     /// <summary>
     /// A credit card returned by the Braintree Gateway
     /// </summary>

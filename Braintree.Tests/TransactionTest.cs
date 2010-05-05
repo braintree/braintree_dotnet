@@ -41,6 +41,530 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnAllTextFields()
+        {
+            String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());
+            String firstName = String.Format("Tim{0}", new Random().Next(1000000).ToString());
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/2012",
+                    CardholderName = "Tom Smith",
+                    Token = creditCardToken
+                },
+                BillingAddress = new AddressRequest
+                {
+                    Company = "Braintree",
+                    CountryName = "United States of America",
+                    ExtendedAddress = "Suite 123",
+                    FirstName = firstName,
+                    LastName = "Smith",
+                    Locality = "Chicago",
+                    PostalCode = "12345",
+                    Region = "IL",
+                    StreetAddress = "123 Main St"
+                },
+                Customer = new CustomerRequest
+                {
+                    Company = "Braintree",
+                    Email = "smith@example.com",
+                    Fax = "5551231234",
+                    FirstName = "Tom",
+                    LastName = "Smith",
+                    Phone = "5551231234",
+                    Website = "http://example.com"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                },
+                OrderId = "myorder",
+                ShippingAddress = new AddressRequest
+                {
+                    Company = "Braintree P.S.",
+                    CountryName = "Mexico",
+                    ExtendedAddress = "Apt 456",
+                    FirstName = "Thomas",
+                    LastName = "Smithy",
+                    Locality = "Braintree",
+                    PostalCode = "54321",
+                    Region = "MA",
+                    StreetAddress = "456 Road"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                BillingCompany.Is("Braintree").
+                BillingCountryName.Is("United States of America").
+                BillingExtendedAddress.Is("Suite 123").
+                BillingFirstName.Is(firstName).
+                BillingLastName.Is("Smith").
+                BillingLocality.Is("Chicago").
+                BillingPostalCode.Is("12345").
+                BillingRegion.Is("IL").
+                BillingStreetAddress.Is("123 Main St").
+                CreditCardCardholderName.Is("Tom Smith").
+                CreditCardExpirationDate.Is("05/2012").
+                CreditCardNumber.Is(SandboxValues.CreditCardNumber.VISA).
+                Currency.Is("USD").
+                CustomerCompany.Is("Braintree").
+                CustomerEmail.Is("smith@example.com").
+                CustomerFax.Is("5551231234").
+                CustomerFirstName.Is("Tom").
+                CustomerId.Is(transaction.Customer.Id).
+                CustomerLastName.Is("Smith").
+                CustomerPhone.Is("5551231234").
+                CustomerWebsite.Is("http://example.com").
+                OrderId.Is("myorder").
+                PaymentMethodToken.Is(creditCardToken).
+                ProcessorAuthorizationCode.Is(transaction.ProcessorAuthorizationCode).
+                ShippingCompany.Is("Braintree P.S.").
+                ShippingCountryName.Is("Mexico").
+                ShippingExtendedAddress.Is("Apt 456").
+                ShippingFirstName.Is("Thomas").
+                ShippingLastName.Is("Smithy").
+                ShippingLocality.Is("Braintree").
+                ShippingPostalCode.Is("54321").
+                ShippingRegion.Is("MA").
+                ShippingStreetAddress.Is("456 Road");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(transaction.Id, collection.FirstItem.Id);
+        }
+
+        [Test]
+        public void searchOnTextNodeOperators() {
+            var request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/2012",
+                    CardholderName = "Tom Smith"
+                }
+            };
+
+        Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+        var searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.StartsWith("Tom");
+
+        ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(1, collection.ApproximateCount);
+
+        searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.EndsWith("Smith");
+
+        collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(1, collection.ApproximateCount);
+
+        searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.Contains("m Sm");
+
+        collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(1, collection.ApproximateCount);
+
+        searchRequest = new TransactionSearchRequest().
+            Id.Is(transaction.Id).
+            CreditCardCardholderName.IsNot("Tom Smith");
+
+        collection = gateway.Transaction.Search(searchRequest);
+        Assert.AreEqual(0, collection.ApproximateCount);
+    }
+
+        [Test]
+        public void Search_OnCreatedUsing()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedUsing.Is(TransactionCreatedUsing.FULL_INFORMATION);
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedUsing.IncludedIn(TransactionCreatedUsing.FULL_INFORMATION, TransactionCreatedUsing.TOKEN);
+
+            collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedUsing.Is(TransactionCreatedUsing.TOKEN);
+
+            collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(0, collection.ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnCreditCardCustomerLocation()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCustomerLocation.Is(CreditCardCustomerLocation.US);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCustomerLocation.IncludedIn(CreditCardCustomerLocation.US, CreditCardCustomerLocation.INTERNATIONAL);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCustomerLocation.Is(CreditCardCustomerLocation.INTERNATIONAL);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnMerchantAccountId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                MerchantAccountId.Is(transaction.MerchantAccountId);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                MerchantAccountId.IncludedIn(transaction.MerchantAccountId, "badmerchantaccountid");
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                MerchantAccountId.Is("badmerchantaccountid");
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnCreditCardType()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.Is(CreditCardCardType.VISA);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.Is(transaction.CreditCard.CardType);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardType.Is(CreditCardCardType.MASTER_CARD);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnStatus()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Status.Is(TransactionStatus.AUTHORIZED);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Status.IncludedIn(TransactionStatus.AUTHORIZED, TransactionStatus.GATEWAY_REJECTED);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Status.Is(TransactionStatus.GATEWAY_REJECTED);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnSource()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Source.Is(TransactionSource.API);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Source.IncludedIn(TransactionSource.API, TransactionSource.CONTROL_PANEL);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Source.Is(TransactionSource.CONTROL_PANEL);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnTransactionType()
+        {
+            String name = new Random().Next(1000000).ToString();
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010",
+                    CardholderName = name
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction creditTransaction = gateway.Transaction.Credit(request).Target;
+
+            Transaction saleTransaction = gateway.Transaction.Sale(request).Target;
+
+            Settle(saleTransaction.Id);
+            Transaction refundTransaction = gateway.Transaction.Refund(saleTransaction.Id).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                CreditCardCardholderName.Is(name).
+                Type.Is(TransactionType.CREDIT);
+
+            Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                CreditCardCardholderName.Is(name).
+                Type.Is(TransactionType.CREDIT).
+                Refund.Is(true);
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(refundTransaction.Id, collection.FirstItem.Id);
+
+            searchRequest = new TransactionSearchRequest().
+                CreditCardCardholderName.Is(name).
+                Type.Is(TransactionType.CREDIT).
+                Refund.Is(false);
+
+            collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(creditTransaction.Id, collection.FirstItem.Id);
+        }
+
+        [Test]
+        public void Search_OnAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.Between(500M, 1500M);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.GreaterThanOrEqualTo(500M);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.LessThanOrEqualTo(1500M);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                Amount.Between(500M, 900M);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnCreatedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime createdAt = transaction.CreatedAt.Value;
+            DateTime threeHoursEarlier = createdAt.AddHours(-3);
+            DateTime oneHourEarlier = createdAt.AddHours(-1);
+            DateTime oneHourLater = createdAt.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
+        public void Search_OnCreatedAtUsingLocalTime()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreatedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
@@ -177,6 +701,47 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_SpecifyingMerchantAccountId()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+        }
+
+        [Test]
+        public void Sale_WithoutSpecifyingMerchantAccountIdFallsBackToDefault()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+        }
+
+        [Test]
         public void Sale_WithStoreInVaultAndSpecifyingToken()
         {
             String customerId = new Random().Next(1000000).ToString();
@@ -213,6 +778,78 @@ namespace Braintree.Tests
             Customer customer = transaction.Customer;
             Assert.AreEqual(customerId, customer.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
+        }
+
+        [Test]
+        public void Sale_WithVaultCustomerAndNewCreditCard()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@compuserve.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.disney.com"
+            }).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Bob the Builder",
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                },
+                CustomerId = customer.Id
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("Bob the Builder", transaction.CreditCard.CardholderName);
+            Assert.IsNull(transaction.GetVaultCreditCard());
+        }
+
+        [Test]
+        public void Sale_WithVaultCustomerAndNewCreditCardStoresInVault()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@compuserver.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.disney.com"
+            }).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Bob the Builder",
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                },
+                CustomerId = customer.Id,
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("Bob the Builder", transaction.CreditCard.CardholderName);
+            Assert.AreEqual("Bob the Builder", transaction.GetVaultCreditCard().CardholderName);
         }
 
         [Test]
@@ -524,6 +1161,47 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Credit_SpecifyingMerchantAccountId()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Credit(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+        }
+
+        [Test]
+        public void Credit_WithoutSpecifyingMerchantAccountIdFallsBackToDefault()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Credit(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+        }
+
+        [Test]
         public void Credit_WithCustomFields()
         {
             TransactionRequest request = new TransactionRequest
@@ -802,6 +1480,32 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(transaction.Amount, result.Target.Amount);
+        }
+
+        [Test]
+        public void Refund_WithAPartialAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Settle(transaction.Id);
+
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, Decimal.Parse("500.00"));
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual(Decimal.Parse("500.00"), result.Target.Amount);
         }
 
         private void Settle(String transactionId)

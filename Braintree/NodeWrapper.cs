@@ -117,7 +117,7 @@ namespace Braintree
             var value = GetString(path);
             if (value == null) return null;
 
-            return DateTime.Parse(GetString(path));
+            return DateTime.Parse(GetString(path)).ToUniversalTime();
         }
 
         public virtual Boolean IsSuccess()

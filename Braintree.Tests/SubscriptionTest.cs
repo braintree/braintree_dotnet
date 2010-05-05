@@ -273,7 +273,7 @@ namespace Braintree.Tests
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId().Is(trialPlan.Id);
+                PlanId.Is(trialPlan.Id);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -302,7 +302,7 @@ namespace Braintree.Tests
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
-                search.PlanId().Is(trialPlan.Id);
+                search.PlanId.Is(trialPlan.Id);
             });
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
@@ -330,7 +330,7 @@ namespace Braintree.Tests
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId().IsNot(triallessPlan.Id);
+                PlanId.IsNot(triallessPlan.Id);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -359,7 +359,7 @@ namespace Braintree.Tests
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId().StartsWith("integration_trial_p");
+                PlanId.StartsWith("integration_trial_p");
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -388,7 +388,7 @@ namespace Braintree.Tests
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId().EndsWith("trial_plan");
+                PlanId.EndsWith("trial_plan");
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -417,7 +417,7 @@ namespace Braintree.Tests
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId().Contains("ion_trial_pl");
+                PlanId.Contains("ion_trial_pl");
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -447,7 +447,7 @@ namespace Braintree.Tests
             gateway.Subscription.Cancel(canceledSubscription.Id);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
-                search.Status().IncludedIn(SubscriptionStatus.ACTIVE);
+                search.Status.IncludedIn(SubscriptionStatus.ACTIVE);
             });
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
@@ -476,7 +476,7 @@ namespace Braintree.Tests
             gateway.Subscription.Cancel(canceledSubscription.Id);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
-                search.Status().IncludedIn(SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELED);
+                search.Status.IncludedIn(SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELED);
             });
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
@@ -719,6 +719,40 @@ namespace Braintree.Tests
             Assert.IsTrue(cancelResult.IsSuccess());
             Assert.AreEqual(SubscriptionStatus.CANCELED, cancelResult.Target.Status);
             Assert.AreEqual(SubscriptionStatus.CANCELED, gateway.Subscription.Find(createResult.Target.Id).Status);
+        }
+
+        [Test]
+        public void RetryCharge_WithoutAmount()
+        {
+            SubscriptionSearchRequest search = new SubscriptionSearchRequest().Status.IncludedIn(SubscriptionStatus.PAST_DUE);
+            Subscription subscription = gateway.Subscription.Search(search).FirstItem;
+
+            Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(subscription.Price, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+
+        [Test]
+        public void RetryCharge_WithAmount()
+        {
+            SubscriptionSearchRequest search = new SubscriptionSearchRequest().Status.IncludedIn(SubscriptionStatus.PAST_DUE);
+            Subscription subscription = gateway.Subscription.Search(search).FirstItem;
+
+            Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id, SandboxValues.TransactionAmount.AUTHORIZE);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
         }
     }
 }

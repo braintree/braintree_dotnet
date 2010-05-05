@@ -49,6 +49,15 @@ namespace Braintree
         {
             var builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", rootElement));
+            builder.Append(XmlBody());
+            builder.Append(String.Format("</{0}>", rootElement));
+
+            return builder.ToString();
+        }
+
+        protected virtual String XmlBody()
+        {
+            var builder = new StringBuilder();
             builder.Append(BuildXMLElement("first-name", FirstName));
             builder.Append(BuildXMLElement("last-name", LastName));
             builder.Append(BuildXMLElement("company", Company));
@@ -58,7 +67,6 @@ namespace Braintree
             builder.Append(BuildXMLElement("region", Region));
             builder.Append(BuildXMLElement("postal-code", PostalCode));
             builder.Append(BuildXMLElement("country-name", CountryName));
-            builder.Append(String.Format("</{0}>", rootElement));
 
             return builder.ToString();
         }
@@ -70,6 +78,11 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
+            return QueryStringBody(root).ToString();
+        }
+
+        protected virtual QueryString QueryStringBody(String root)
+        {
             return new QueryString().
                 Append(ParentBracketChildString(root, "first_name"), FirstName).
                 Append(ParentBracketChildString(root, "last_name"), LastName).
@@ -79,8 +92,7 @@ namespace Braintree
                 Append(ParentBracketChildString(root, "locality"), Locality).
                 Append(ParentBracketChildString(root, "region"), Region).
                 Append(ParentBracketChildString(root, "postal_code"), PostalCode).
-                Append(ParentBracketChildString(root, "country_name"), CountryName).
-                ToString();
+                Append(ParentBracketChildString(root, "country_name"), CountryName);
         }
     }
 }

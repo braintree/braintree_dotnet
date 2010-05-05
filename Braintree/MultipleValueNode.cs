@@ -1,18 +1,50 @@
 #pragma warning disable 1591
 
 using System;
+using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class MultipleValueNode : SearchNode
+    public class MultipleValueNode<T> : SearchNode<T> where T : SearchRequest
     {
-        public MultipleValueNode(String name, SubscriptionSearchRequest parent) : base(name, parent)
+        protected List<object> AllowedValues;
+
+        public MultipleValueNode(String name, T parent) : base(name, parent)
         {
         }
 
-        public SubscriptionSearchRequest IncludedIn(params object[] values) {
+        public MultipleValueNode(String name, T parent, object[] allowedValues) : base(name, parent)
+        {
+            AllowedValues = new List<object>(allowedValues);
+        }
+
+        public T IncludedIn(params object[] values)
+        {
+            RaiseErrorOnInvalidValue(values);
             Parent.AddMultipleValueCriteria(Name, new SearchCriteria(values));
             return Parent;
+        }
+
+        public T Is(object value)
+        {
+            return IncludedIn(value);
+        }
+
+        private void RaiseErrorOnInvalidValue(object[] values)
+        {
+            if (AllowedValues == null) return;
+
+            foreach (object value in values)
+            {
+                if (!AllowedValues.Contains(value))
+                {
+                    List<String> valid = new List<String>();
+                    foreach (object item in AllowedValues) {
+                        valid.Add(item.ToString());
+                    }
+                    throw new ArgumentOutOfRangeException(String.Format("The {0} node does not accept {1} as a value.  Valid values are: {2}", Name, value, String.Join(", ", valid.ToArray())));
+                }
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Braintree
         public String Number { get; set; }
         public String CardholderName { get; set; }
         public String CVV { get; set; }
-        public AddressRequest BillingAddress { get; set; }
+        public CreditCardAddressRequest BillingAddress { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
         public String ExpirationMonth { get; set; }
         public String ExpirationYear { get; set; }
@@ -74,7 +74,7 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             return new QueryString().
-                Append(ParentBracketChildString(root, "billing_addres"), BillingAddress).
+                Append(ParentBracketChildString(root, "billing_address"), BillingAddress).
                 Append(ParentBracketChildString(root, "customer_id"), CustomerId).
                 Append(ParentBracketChildString(root, "cardholder_name"), CardholderName).
                 Append(ParentBracketChildString(root, "cvv"), CVV).
