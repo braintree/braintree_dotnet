@@ -1,3 +1,14 @@
+## 2.1.0
+
+* Added transaction advanced search
+* Added ability to partially refund transactions
+* Added ability to manually retry past-due subscriptions
+* Added new transaction error codes
+* Allow merchant account to be specified when creating transactions
+* Allow creating a transaction with a vault customer and new credit card
+* Allow existing billing address to be updated when updating credit card
+* **Backwards incomaptible change**: CreditCardRequest.BillingAddress has changed from type AddressRequest to CreditCardAddressRequest
+
 ## 2.0.0
 
 * Updated IsSuccess() on transaction results to return false on declined transactions
