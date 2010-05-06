@@ -99,16 +99,25 @@ namespace Braintree
             return new Result<Transaction>(new NodeWrapper(response));
         }
 
+        /// <summary>
+        /// Search for transactions on a variety of criteria. See: http://www.braintreepaymentsolutions.com/gateway/transaction-api#searching
+        /// </summary>
         public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query)
         {
             return Search(query, 1);
         }
 
+        /// <summary>
+        /// Search for transactions on a variety of criteria. See: http://www.braintreepaymentsolutions.com/gateway/transaction-api#searching
+        /// </summary>
         public virtual ResourceCollection<Transaction> Search(String query)
         {
             return Search(query, 1);
         }
 
+        /// <summary>
+        /// Search for transactions on a variety of criteria. See: http://www.braintreepaymentsolutions.com/gateway/transaction-api#searching
+        /// </summary>
         public virtual ResourceCollection<Transaction> Search(String query, int pageNumber)
         {
             String queryString = new QueryString().Append("q", query).Append("page", pageNumber).ToString();
@@ -125,6 +134,9 @@ namespace Braintree
             return new ResourceCollection<Transaction>(transactions, totalItems, delegate() { return Search(query, pageNumber + 1); });
         }
 
+        /// <summary>
+        /// Search for transactions on a variety of criteria. See: http://www.braintreepaymentsolutions.com/gateway/transaction-api#searching
+        /// </summary>
         public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query, int pageNumber)
         {
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/transactions/advanced_search?page=" + pageNumber, query));
