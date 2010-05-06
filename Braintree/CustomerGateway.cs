@@ -55,25 +55,28 @@ namespace Braintree
             return Configuration.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
         }
 
-        public ResourceCollection<Customer> All()
+        public virtual ResourceCollection<Customer> All()
         {
-            return All(1);
+            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/customers/advanced_search_ids"));
+
+            return new ResourceCollection<Customer>(response, delegate(String[] ids) {
+                return FetchCustomers(ids);
+            });
         }
 
-        public ResourceCollection<Customer> All(Int32 pageNumber)
+        private List<Customer> FetchCustomers(String[] ids)
         {
-            String queryString = new QueryString().Append("page", pageNumber).ToString();
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Get("/customers?" + queryString));
-            
-            int totalItems = response.GetInteger("total-items").Value;
+            CustomerSearchRequest query = new CustomerSearchRequest().
+                Ids.IncludedIn(ids);
+
+            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/customers/advanced_search", query));
 
             List<Customer> customers = new List<Customer>();
             foreach (NodeWrapper node in response.GetList("customer"))
             {
                 customers.Add(new Customer(node));
             }
-
-            return new ResourceCollection<Customer>(customers, totalItems, delegate() { return All(pageNumber + 1); });
+            return customers;
         }
     }
 }

@@ -401,8 +401,7 @@ namespace Braintree.Tests
                 items.Add(item.Id);
             }
 
-            HashSet<String> uniqueItems = new HashSet<String>(items);
-            Assert.AreEqual(uniqueItems.Count, collection.ApproximateCount);
+            Assert.AreEqual(items.Count, collection.ApproximateCount);
         }
     }
 }

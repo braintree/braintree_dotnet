@@ -100,6 +100,16 @@ namespace Braintree
             return result;
         }
 
+        public virtual List<String> GetStrings(String path)
+        {
+            List<String> strings = new List<String>();
+            foreach(NodeWrapper stringNode in GetList(path))
+            {
+                strings.Add(stringNode.GetString("."));
+            }
+            return strings;
+        }
+
         public virtual String OuterXml()
         {
             return node.OuterXml;

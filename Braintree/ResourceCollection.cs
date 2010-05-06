@@ -7,47 +7,56 @@ namespace Braintree
 {
     public class ResourceCollection<T> : System.Collections.IEnumerable where T : class
     {
-        public delegate ResourceCollection<T> PagingDelegate();
+        public delegate List<T> PagingDelegate(String[] ids);
 
-        public Int32 ApproximateCount { get; protected set; }
-        protected List<T> Items;
+        public Int32 ApproximateCount {
+            get
+            {
+                return Ids.Count;
+            }
+        }
+        private Int32 PageSize;
+        private List<String> Ids;
         private PagingDelegate NextPage;
         public T FirstItem {
             get {
-                if (Items.Count > 0)
-                {
-                    return Items[0];
-                }
-                else
-                {
-                    return null;
-                }
+                return NextPage(new String[] { Ids[0] })[0];
             }
         }
 
-        public ResourceCollection(List<T> items, int totalItems, PagingDelegate nextPage)
+        public ResourceCollection(NodeWrapper response, PagingDelegate nextPage)
         {
-            Items = items;
-            ApproximateCount = totalItems;
             NextPage = nextPage;
+            Ids = response.GetStrings("ids/*");
+            PageSize = Int32.Parse(response.GetString("page-size"));
         }
 
         public System.Collections.IEnumerator GetEnumerator()
         {
-            ResourceCollection<T> page = this;
-            while (page.Items.Count > 0)
+            foreach(List<String> batchIds in BatchIds(Ids, PageSize))
             {
-                foreach(T item in page.Items)
+                List<T> items = NextPage(batchIds.ToArray());
+                foreach(T item in items)
                 {
                     yield return item;
                 }
-                page = page.GetNextPage();
             }
         }
 
-        protected virtual ResourceCollection<T> GetNextPage()
+        private List<List<String>> BatchIds(List<String> ids, Int32 size)
         {
-            return NextPage();
+            List<List<String>> batches = new List<List<String>>();
+
+            for (Int32 index = 0; index < ids.Count; index += size) {
+                Int32 count = size;
+                if (index + count > ids.Count)
+                {
+                    count = ids.Count - index;
+                }
+                batches.Add(ids.GetRange(index, count));
+            }
+
+            return batches;
         }
     }
 }

@@ -100,6 +100,7 @@ namespace Braintree
             {
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(body);
+                if (doc.ChildNodes.Count == 1) return doc.ChildNodes[0];
                 return doc.ChildNodes[1];
             }
         }

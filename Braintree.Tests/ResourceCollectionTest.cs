@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Collections.Generic;
+using System.Xml;
 using NUnit.Framework;
 using Braintree;
 
@@ -9,23 +10,47 @@ namespace Braintree.Tests
     [TestFixture]
     public class ResourceCollectionTest
     {
-        [Test]
-        public void Test_FirstItem_IsNull()
-        {
-            ResourceCollection<Subscription> collection = TestHelper.MockResourceCollection<Subscription>(0);
-            Assert.IsNull(collection.FirstItem);
-        }
+        private String[] values = new String[] { "a", "b", "c", "d", "e" };
 
         [Test]
-        public void Test_FirstItem_WithResults()
+        public void ResourceCollection_IteratesOverCollectionsProperly()
         {
-            List<String> strings = new List<String>();
-            strings.Add("abc");
-            strings.Add("def");
-            strings.Add("ghi");
+            String body = @"<search-results>
+                              <page-size>2</page-size>
+                              <ids type='array'>
+                                <items>0</items>
+                                <items>1</items>
+                                <items>2</items>
+                                <items>3</items>
+                                <items>4</items>
+                              </ids>
+                            </search-results>";
 
-            ResourceCollection<String> collection = new ResourceCollection<String>(strings, 3, null);
-            Assert.AreEqual("abc", collection.FirstItem);
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(body);
+            NodeWrapper xml = new NodeWrapper(doc.ChildNodes[0]);
+
+            ResourceCollection<String> resourceCollection = new ResourceCollection<String>(xml, delegate(String[] ids) {
+                List<String> results = new List<String>();
+
+                foreach (String id in ids)
+                {
+                    results.Add(values[Int32.Parse(id)]);
+                }
+
+                return results;
+            });
+
+            int index = 0;
+            int count = 0;
+            foreach (String item in resourceCollection)
+            {
+                Assert.AreEqual(values[index], item);
+                index++;
+                count++;
+            }
+
+            Assert.AreEqual(values.Length, count);
         }
     }
 }

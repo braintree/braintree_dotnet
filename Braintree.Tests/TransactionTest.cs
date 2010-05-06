@@ -1424,30 +1424,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void BasicSearch() {
-            ResourceCollection<Transaction> collection = gateway.Transaction.Search("411111");
-
-            Assert.IsTrue(collection.ApproximateCount > 100);
-    
-            List<String> items = new List<String>();
-            foreach (Transaction item in collection) {
-                items.Add(item.Id);
-            }
-
-            HashSet<String> uniqueItems = new HashSet<String>(items);
-            Assert.AreEqual(uniqueItems.Count, collection.ApproximateCount);
-        }
-
-        [Test]
-        public void Search_WithMatches()
-        {
-            ResourceCollection<Transaction> resourceCollection = gateway.Transaction.Search("411111");
-
-            Assert.IsTrue(resourceCollection.ApproximateCount > 0);
-            Assert.AreEqual("411111", resourceCollection.FirstItem.CreditCard.Bin);
-        }
-
-        [Test]
         public void Refund_WithABasicTransaction()
         {
             TransactionRequest request = new TransactionRequest
