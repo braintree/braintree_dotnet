@@ -137,7 +137,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
 
-            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(1, collection.MaximumCount);
             Assert.AreEqual(transaction.Id, collection.FirstItem.Id);
         }
 
@@ -161,28 +161,28 @@ namespace Braintree.Tests
             CreditCardCardholderName.StartsWith("Tom");
 
         ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(1, collection.ApproximateCount);
+        Assert.AreEqual(1, collection.MaximumCount);
 
         searchRequest = new TransactionSearchRequest().
             Id.Is(transaction.Id).
             CreditCardCardholderName.EndsWith("Smith");
 
         collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(1, collection.ApproximateCount);
+        Assert.AreEqual(1, collection.MaximumCount);
 
         searchRequest = new TransactionSearchRequest().
             Id.Is(transaction.Id).
             CreditCardCardholderName.Contains("m Sm");
 
         collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(1, collection.ApproximateCount);
+        Assert.AreEqual(1, collection.MaximumCount);
 
         searchRequest = new TransactionSearchRequest().
             Id.Is(transaction.Id).
             CreditCardCardholderName.IsNot("Tom Smith");
 
         collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(0, collection.ApproximateCount);
+        Assert.AreEqual(0, collection.MaximumCount);
     }
 
         [Test]
@@ -206,7 +206,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
 
-            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(1, collection.MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
@@ -214,7 +214,7 @@ namespace Braintree.Tests
 
             collection = gateway.Transaction.Search(searchRequest);
 
-            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(1, collection.MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
@@ -222,7 +222,7 @@ namespace Braintree.Tests
 
             collection = gateway.Transaction.Search(searchRequest);
 
-            Assert.AreEqual(0, collection.ApproximateCount);
+            Assert.AreEqual(0, collection.MaximumCount);
         }
 
         [Test]
@@ -244,19 +244,19 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 CreditCardCustomerLocation.Is(CreditCardCustomerLocation.US);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreditCardCustomerLocation.IncludedIn(CreditCardCustomerLocation.US, CreditCardCustomerLocation.INTERNATIONAL);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreditCardCustomerLocation.Is(CreditCardCustomerLocation.INTERNATIONAL);
 
-            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -278,19 +278,19 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 MerchantAccountId.Is(transaction.MerchantAccountId);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 MerchantAccountId.IncludedIn(transaction.MerchantAccountId, "badmerchantaccountid");
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 MerchantAccountId.Is("badmerchantaccountid");
 
-            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -312,25 +312,25 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 CreditCardCardType.Is(CreditCardCardType.VISA);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreditCardCardType.Is(transaction.CreditCard.CardType);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreditCardCardType.Is(CreditCardCardType.MASTER_CARD);
 
-            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -352,19 +352,19 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 Status.Is(TransactionStatus.AUTHORIZED);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 Status.IncludedIn(TransactionStatus.AUTHORIZED, TransactionStatus.GATEWAY_REJECTED);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 Status.Is(TransactionStatus.GATEWAY_REJECTED);
 
-            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -386,19 +386,19 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 Source.Is(TransactionSource.API);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 Source.IncludedIn(TransactionSource.API, TransactionSource.CONTROL_PANEL);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 Source.Is(TransactionSource.CONTROL_PANEL);
 
-            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -431,7 +431,7 @@ namespace Braintree.Tests
                 CreditCardCardholderName.Is(name).
                 Type.Is(TransactionType.CREDIT);
 
-            Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 CreditCardCardholderName.Is(name).
@@ -440,7 +440,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
 
-            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(1, collection.MaximumCount);
             Assert.AreEqual(refundTransaction.Id, collection.FirstItem.Id);
 
             searchRequest = new TransactionSearchRequest().
@@ -450,7 +450,7 @@ namespace Braintree.Tests
 
             collection = gateway.Transaction.Search(searchRequest);
 
-            Assert.AreEqual(1, collection.ApproximateCount);
+            Assert.AreEqual(1, collection.MaximumCount);
             Assert.AreEqual(creditTransaction.Id, collection.FirstItem.Id);
         }
 
@@ -473,25 +473,25 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 Amount.Between(500M, 1500M);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 Amount.GreaterThanOrEqualTo(500M);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 Amount.LessThanOrEqualTo(1500M);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 Amount.Between(500M, 900M);
 
-            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -518,25 +518,25 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 CreatedAt.Between(oneHourEarlier, oneHourLater);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreatedAt.GreaterThanOrEqualTo(oneHourEarlier);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreatedAt.LessThanOrEqualTo(oneHourLater);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
                 CreatedAt.Between(threeHoursEarlier, oneHourEarlier);
 
-            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -561,7 +561,7 @@ namespace Braintree.Tests
                 Id.Is(transaction.Id).
                 CreatedAt.Between(oneHourEarlier, oneHourLater);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).ApproximateCount);
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]

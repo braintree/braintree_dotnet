@@ -9,7 +9,7 @@ namespace Braintree
     {
         public delegate List<T> PagingDelegate(String[] ids);
 
-        public Int32 ApproximateCount {
+        public Int32 MaximumCount {
             get
             {
                 return Ids.Count;
