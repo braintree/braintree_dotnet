@@ -41,6 +41,28 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void TrData_QueryStringParams()
+        {
+            String trData = gateway.Transaction.SaleTrData(new TransactionRequest {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Bob the Builder",
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                }
+            }, "http://example.com");
+            Assert.IsTrue(trData.Contains("store_in_vault"));
+            Assert.IsTrue(trData.Contains("add_billing_address_to_payment_method"));
+            Assert.IsTrue(trData.Contains("store_shipping_address_in_vault"));
+            Assert.IsTrue(trData.Contains("submit_for_settlement"));
+        }
+
+        [Test]
         public void Search_OnAllTextFields()
         {
             String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());
