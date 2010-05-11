@@ -105,6 +105,7 @@
     <Compile Include="CreditCardAddressRequest.cs" />
     <Compile Include="CreditCardAddressOptionsRequest.cs" />
     <Compile Include="CustomerSearchRequest.cs" />
+    <Compile Include="Exceptions\UpgradeRequiredException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

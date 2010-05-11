@@ -105,7 +105,7 @@ namespace Braintree
             }
         }
 
-        internal static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
+        public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
         {
             if (httpStatusCode != HttpStatusCode.OK && httpStatusCode != HttpStatusCode.Created)
             {
@@ -121,6 +121,8 @@ namespace Braintree
                         throw new ServerException();
                     case HttpStatusCode.ServiceUnavailable:
                         throw new DownForMaintenanceException();
+                    case (HttpStatusCode) 426:
+                        throw new UpgradeRequiredException();
                     default:
 						var exception = new UnexpectedException();
 						exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;
