@@ -531,7 +531,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = "4111111111111111",
+                Number = "5105105105105100",
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -541,7 +541,8 @@ namespace Braintree.Tests
             };
 
             Result<CreditCard> result = gateway.CreditCard.Create(request);
-            Assert.IsTrue(result.IsSuccess());
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.CreditCardVerification.MerchantAccountId);
         }
 
         [Test]

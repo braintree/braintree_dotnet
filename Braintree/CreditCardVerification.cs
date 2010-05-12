@@ -15,6 +15,7 @@ namespace Braintree
         public String CvvResponseCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
+        public String MerchantAccountId { get; protected set; }
         public String Status { get; protected set; }
 
         public CreditCardVerification(NodeWrapper node)
@@ -27,6 +28,7 @@ namespace Braintree
             CvvResponseCode = node.GetString("cvv-response-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            MerchantAccountId = node.GetString("merchant-account-id");
             Status = node.GetString("status");
         }
     }
