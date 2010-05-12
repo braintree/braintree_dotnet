@@ -523,6 +523,28 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void verifyValidCreditCardSpecifyingMerhantAccount()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                }
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
         public void verifyInvalidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;

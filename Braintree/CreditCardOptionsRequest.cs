@@ -10,6 +10,7 @@ namespace Braintree
     {
         public Boolean VerifyCard { get; set; }
         public Boolean MakeDefault { get; set; }
+        public String VerificationMerchantAccountId { get; set; }
 
         public override String ToXml()
         {
@@ -24,6 +25,7 @@ namespace Braintree
             {
                 builder.Append(BuildXMLElement("make-default", MakeDefault));
             }
+            builder.Append(BuildXMLElement("verification-merchant-account-id", VerificationMerchantAccountId));
             builder.Append(BuildXMLElement("verify-card", VerifyCard));
             builder.Append(String.Format("</{0}>", rootElement));
             
@@ -38,6 +40,7 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             return new QueryString().
+                Append(ParentBracketChildString(root, "verification_merchant_account_id"), VerificationMerchantAccountId).
                 Append(ParentBracketChildString(root, "verify_card"), VerifyCard).
                 Append(ParentBracketChildString(root, "make_default"), MakeDefault).
                 ToString();
