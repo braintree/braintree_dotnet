@@ -16,26 +16,11 @@ namespace Braintree
             Nodes = new Dictionary<string, string>();
         }
 
-        public RequestBuilder Append(string node, bool? content)
-        {
-            if (content.HasValue)
-            {
-                Nodes.Add(node, content.ToString().ToLower());
-            }
-
-            return this;
-        }
-
         public RequestBuilder Append(string node, object content)
         {
-            if (content == null) return this;
+            if (content == null || content.ToString() == "") return this;
 
-            var value = content.ToString().Trim();
-
-            if (value != "")
-            {
-                Nodes.Add(node, value);
-            }
+            Nodes.Add(node, content.ToString());
 
             return this;
         }
