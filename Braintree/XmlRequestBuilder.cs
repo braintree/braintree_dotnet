@@ -7,43 +7,9 @@ using System.Text;
 
 namespace Braintree
 {
-    public class XmlRequestBuilder
+    public class XmlRequestBuilder : RequestBuilder
     {
-        protected string Parent { get; set; }
-        protected Dictionary<string, string> Nodes { get; set; }
-
-        public XmlRequestBuilder (string parent)
-         {
-            Parent = parent;
-            Nodes = new Dictionary<string, string>();
-        }
-
-        public XmlRequestBuilder Append(string node, string content)
-        {
-            if (content != null && content.Trim() != "")
-            {
-                Nodes.Add(node, content);
-            }
-
-            return this;
-        }
-
-        public XmlRequestBuilder Append(string node, decimal content)
-        {
-            Nodes.Add(node, content.ToString());
-
-            return this;
-        }
-
-        public XmlRequestBuilder Append(string node, bool? content)
-        {
-            if (content.HasValue)
-            {
-                Nodes.Add(node, content.Value.ToString().ToLower());
-            }
-
-            return this;
-        }
+        public XmlRequestBuilder(string parent) : base(parent) {}
 
         public override string ToString()
         {

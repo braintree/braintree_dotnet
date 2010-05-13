@@ -107,6 +107,7 @@
     <Compile Include="CustomerSearchRequest.cs" />
     <Compile Include="Exceptions\UpgradeRequiredException.cs" />
     <Compile Include="XmlRequestBuilder.cs" />
+    <Compile Include="RequestBuilder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
