@@ -24,14 +24,14 @@ namespace Braintree
     /// </example>
     public class SubscriptionRequest : Request
     {
-        public Boolean? HasTrialPeriod { get; set; }
-        public String Id { get; set; }
-        public String PaymentMethodToken { get; set; }
-        public String PlanId { get; set; }
-        public Decimal Price { get; set; }
-        public Int32 TrialDuration { get; set; }
+        public bool? HasTrialPeriod { get; set; }
+        public string Id { get; set; }
+        public string PaymentMethodToken { get; set; }
+        public string PlanId { get; set; }
+        public decimal? Price { get; set; }
+        public int? TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
-        public String MerchantAccountId { get; set; }
+        public string MerchantAccountId { get; set; }
 
         public override String ToXml()
         {
@@ -44,20 +44,11 @@ namespace Braintree
                 Append("id", Id).
                 Append("merchant_account_id", MerchantAccountId).
                 Append("payment_method_token", PaymentMethodToken).
-                Append("plan_id", PlanId);
-
-            if (Price != 0) builder.Append("price", Price);
-
-            if (HasTrialPeriod.HasValue)
-            {
-                builder.Append("trial_period", HasTrialPeriod);
-
-                if (HasTrialPeriod.Value)
-                {
-                    if (TrialDuration != 0) builder.Append("trial_duration", TrialDuration);
-                    builder.Append("trial_duration_unit", TrialDurationUnit.ToString());
-                }
-            }
+                Append("plan_id", PlanId).
+                Append("price", Price).
+                Append("trial_period", HasTrialPeriod).
+                Append("trial_duration", TrialDuration).
+                Append("trial_duration_unit", TrialDurationUnit);
 
             return builder.ToString();
         }
