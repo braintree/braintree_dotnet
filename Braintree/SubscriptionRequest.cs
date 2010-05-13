@@ -35,30 +35,39 @@ namespace Braintree
 
         public override String ToXml()
         {
-            return ToXml("subscription");
+            return Build(new XmlRequestBuilder("subscription"));
         }
 
-        public override String ToXml(String rootElement)
+        protected String Build(XmlRequestBuilder builder)
         {
-            var builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("payment-method-token", PaymentMethodToken));
+            builder.
+                Append("id", Id).
+                Append("merchant_account_id", MerchantAccountId).
+                Append("payment_method_token", PaymentMethodToken).
+                Append("plan_id", PlanId);
+
+            if (Price != 0) builder.Append("price", Price);
+
             if (HasTrialPeriod.HasValue)
             {
-                builder.Append(BuildXMLElement("trial-period", HasTrialPeriod.Value));
+                builder.Append("trial_period", HasTrialPeriod);
 
                 if (HasTrialPeriod.Value)
                 {
-                    if (TrialDuration != 0) builder.Append(BuildXMLElement("trial-duration", TrialDuration.ToString()));
-                    builder.Append(BuildXMLElement("trial-duration-unit", TrialDurationUnit.ToString().ToLower()));
+                    if (TrialDuration != 0) builder.Append("trial_duration", TrialDuration);
+                    builder.Append("trial_duration_unit", TrialDurationUnit.ToString());
                 }
             }
-            builder.Append(BuildXMLElement("merchant-account-id", MerchantAccountId));
-            builder.Append(BuildXMLElement("id", Id));
-            builder.Append(BuildXMLElement("plan-id", PlanId));
-            if (Price != 0) builder.Append(BuildXMLElement("price", Price.ToString()));
-            builder.Append(String.Format("</{0}>", rootElement));
+
+            Console.WriteLine(builder.ToString());
             return builder.ToString();
+        }
+
+        // -------------------------------
+
+        public override String ToXml(String rootElement)
+        {
+            return Build(new XmlRequestBuilder(rootElement));
         }
 
         public override String ToQueryString()
