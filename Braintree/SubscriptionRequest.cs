@@ -59,7 +59,6 @@ namespace Braintree
                 }
             }
 
-            Console.WriteLine(builder.ToString());
             return builder.ToString();
         }
 
