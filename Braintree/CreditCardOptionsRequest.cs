@@ -8,28 +8,27 @@ namespace Braintree
 {
     public class CreditCardOptionsRequest : Request
     {
-        public Boolean VerifyCard { get; set; }
-        public Boolean MakeDefault { get; set; }
-        public String VerificationMerchantAccountId { get; set; }
+        public bool? VerifyCard { get; set; }
+        public bool? MakeDefault { get; set; }
+        public string VerificationMerchantAccountId { get; set; }
+
 
         public override String ToXml()
         {
-            return ToXml("options");
+            return Build(new XmlRequestBuilder("options")).ToString();
         }
 
         public override String ToXml(String rootElement)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            if (MakeDefault)
-            {
-                builder.Append(BuildXMLElement("make-default", MakeDefault));
-            }
-            builder.Append(BuildXMLElement("verification-merchant-account-id", VerificationMerchantAccountId));
-            builder.Append(BuildXMLElement("verify-card", VerifyCard));
-            builder.Append(String.Format("</{0}>", rootElement));
-            
-            return builder.ToString();
+            return Build(new XmlRequestBuilder(rootElement)).ToString();
+        }
+
+        protected virtual RequestBuilder Build(RequestBuilder builder)
+        {
+            return builder.
+                Append("make_default", MakeDefault).
+                Append("verification_merchant_account_id", VerificationMerchantAccountId).
+                Append("verify_card", VerifyCard);
         }
 
         public override String ToQueryString()
