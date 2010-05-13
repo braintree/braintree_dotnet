@@ -8,9 +8,9 @@ namespace Braintree
     {
         public CreditCardAddressOptionsRequest Options { get; set; }
 
-        protected override String XmlBody()
+        protected override RequestBuilder Build(RequestBuilder builder)
         {
-            return base.XmlBody() + BuildXMLElement("options", Options);
+            return base.Build(builder).Append("options", Options);
         }
 
         protected override QueryString QueryStringBody(String root)

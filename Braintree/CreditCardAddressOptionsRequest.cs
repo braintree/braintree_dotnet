@@ -11,17 +11,17 @@ namespace Braintree
 
         public override String ToXml()
         {
-            return ToXml("options");
+            return Build(new XmlRequestBuilder()).ToString();
         }
 
         public override String ToXml(String rootElement)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("update-existing", UpdateExisting));
-            builder.Append(String.Format("</{0}>", rootElement));
-            
-            return builder.ToString();
+            return Build(new XmlRequestBuilder(rootElement)).ToString();
+        }
+
+        protected virtual RequestBuilder Build(RequestBuilder builder)
+        {
+            return builder.Append("update_existing", UpdateExisting);
         }
 
         public override String ToQueryString()

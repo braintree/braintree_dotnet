@@ -38,7 +38,7 @@ namespace Braintree
             return Build(new XmlRequestBuilder("subscription"));
         }
 
-        protected String Build(XmlRequestBuilder builder)
+        protected String Build(RequestBuilder builder)
         {
             builder.
                 Append("id", Id).
