@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Security;
 using System.Text;
 
 namespace Braintree
@@ -10,6 +11,18 @@ namespace Braintree
     {
         public XmlRequestBuilder() : base() {}
         public XmlRequestBuilder(string parent) : base(parent) {}
+
+        protected override string Format(object content)
+        {
+            if (content.GetType().IsSubclassOf(typeof(Request)))
+            {
+                return ((Request) content).ToInnerXml();
+            }
+            else
+            {
+                return SecurityElement.Escape(content.ToString());
+            }
+        }
 
         public override string ToString()
         {

@@ -12,25 +12,6 @@ namespace Braintree
         public bool? MakeDefault { get; set; }
         public string VerificationMerchantAccountId { get; set; }
 
-
-        public override String ToXml()
-        {
-            return Build(new XmlRequestBuilder("options")).ToString();
-        }
-
-        public override String ToXml(String rootElement)
-        {
-            return Build(new XmlRequestBuilder(rootElement)).ToString();
-        }
-
-        protected virtual RequestBuilder Build(RequestBuilder builder)
-        {
-            return builder.
-                Append("make_default", MakeDefault).
-                Append("verification_merchant_account_id", VerificationMerchantAccountId).
-                Append("verify_card", VerifyCard);
-        }
-
         public override String ToQueryString()
         {
             return ToQueryString("options");

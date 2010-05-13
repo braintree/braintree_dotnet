@@ -31,7 +31,6 @@ namespace Braintree.Tests
 
             var addressRequest = new AddressRequest
             {
-                CustomerId = customer.Id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Angelo Co.",
@@ -63,7 +62,6 @@ namespace Braintree.Tests
 
             var addressRequest = new AddressRequest
             {
-                CustomerId = customer.Id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Angelo Co.",
@@ -96,7 +94,6 @@ namespace Braintree.Tests
 
             var addressCreateRequest = new AddressRequest
             {
-                CustomerId = customer.Id,
                 FirstName = "Dave",
                 LastName = "Inchy",
                 Company = "Leon Ardo Co.",
@@ -112,7 +109,6 @@ namespace Braintree.Tests
 
             var addressUpdateRequest = new AddressRequest
             {
-                CustomerId = customer.Id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Angelo Co.",
@@ -144,7 +140,6 @@ namespace Braintree.Tests
 
             var addressRequest = new AddressRequest
             {
-                CustomerId = customer.Id,
                 StreetAddress = "1 E Main St",
                 ExtendedAddress = "Apt 3",
             };

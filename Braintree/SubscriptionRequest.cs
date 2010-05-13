@@ -33,31 +33,9 @@ namespace Braintree
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
         public string MerchantAccountId { get; set; }
 
-        public override String ToXml()
+        protected override RequestBuilder Build(RequestBuilder builder)
         {
-            return Build(new XmlRequestBuilder("subscription"));
-        }
-
-        protected String Build(RequestBuilder builder)
-        {
-            builder.
-                Append("id", Id).
-                Append("merchant_account_id", MerchantAccountId).
-                Append("payment_method_token", PaymentMethodToken).
-                Append("plan_id", PlanId).
-                Append("price", Price).
-                Append("trial_period", HasTrialPeriod).
-                Append("trial_duration", TrialDuration).
-                Append("trial_duration_unit", TrialDurationUnit);
-
-            return builder.ToString();
-        }
-
-        // -------------------------------
-
-        public override String ToXml(String rootElement)
-        {
-            return Build(new XmlRequestBuilder(rootElement));
+            return base.Build(builder).Override("has_trial_period", "trial_period", HasTrialPeriod);
         }
 
         public override String ToQueryString()

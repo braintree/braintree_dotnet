@@ -29,7 +29,6 @@ namespace Braintree
     /// </example>
     public class AddressRequest : Request
     {
-        public string CustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Company { get; set; }
@@ -39,31 +38,6 @@ namespace Braintree
         public string Region { get; set; }
         public string PostalCode { get; set; }
         public string CountryName { get; set; }
-
-
-        public override String ToXml()
-        {
-            return Build(new XmlRequestBuilder("address")).ToString();
-        }
-
-        public override String ToXml(String rootElement)
-        {
-            return Build(new XmlRequestBuilder(rootElement)).ToString();
-        }
-
-        protected virtual RequestBuilder Build(RequestBuilder builder)
-        {
-            return builder.
-                Append("company", Company).
-                Append("country_name", CountryName).
-                Append("extended_address", ExtendedAddress).
-                Append("first_name", FirstName).
-                Append("last_name", LastName).
-                Append("locality", Locality).
-                Append("postal_code", PostalCode).
-                Append("region", Region).
-                Append("street_address", StreetAddress);
-        }
 
         public override string ToQueryString()
         {

@@ -9,10 +9,56 @@ namespace Braintree
 {
     public abstract class Request
     {
-        public abstract String ToXml();
-        public abstract String ToXml(String rootElement);
         public abstract String ToQueryString();
         public abstract String ToQueryString(String root);
+
+        protected virtual string GetNodeName()
+        {
+            return Underscore(this.GetType().Name.Replace("Request", ""));
+        }
+
+        public virtual String ToXml()
+        {
+            return Build(new XmlRequestBuilder(GetNodeName())).ToString();
+        }
+
+        public virtual String ToXml(String rootElement)
+        {
+            return Build(new XmlRequestBuilder(rootElement)).ToString();
+        }
+
+        public virtual String ToInnerXml()
+        {
+            return Build(new XmlRequestBuilder()).ToString();
+        }
+
+        protected virtual RequestBuilder Build(RequestBuilder builder)
+        {
+            foreach (var property in this.GetType().GetProperties()) {
+                builder.Append(Underscore(property.Name), property.GetValue(this, null));
+            }
+
+            return builder;
+        }
+
+        protected string Underscore(string nodeName)
+        {
+            var result = new StringBuilder();
+
+            foreach (char character in nodeName) {
+                if (char.IsUpper(character))
+                {
+                    if (result.ToString().Length != 0) result.Append('_');
+                    result.Append(char.ToLower(character));
+                }
+                else
+                {
+                    result.Append(character);
+                }
+            }
+
+            return result.ToString();
+        }
 
         internal virtual String BuildXMLElement(Request request)
         {

@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Security;
+using System.Text;
 
 namespace Braintree
 {
@@ -11,34 +12,35 @@ namespace Braintree
         protected string Parent { get; set; }
         protected Dictionary<string, string> Nodes { get; set; }
 
-        public RequestBuilder ()
+        protected abstract string Format(object content);
+
+        internal virtual RequestBuilder Append(string node, object content)
+        {
+            if (content == null || content.ToString() == "") return this;
+
+            Nodes.Add(SecurityElement.Escape(node), Format(content));
+
+            return this;
+        }
+
+        internal RequestBuilder ()
         {
             Nodes = new Dictionary<string, string>();
         }
 
-        public RequestBuilder (string parent)
+        internal RequestBuilder (string parent)
          {
             Parent = parent;
             Nodes = new Dictionary<string, string>();
         }
 
-        public RequestBuilder Append(string node, Request content)
+        internal virtual RequestBuilder Override(string original, string corrected, object content)
         {
-            if (content == null) return this;
+            Nodes.Remove(original);
 
-            Nodes.Add(SecurityElement.Escape(node), content.ToXml());
-
-            return this;
+            return Append(corrected, content);
         }
 
-        public RequestBuilder Append(string node, object content)
-        {
-            if (content == null || content.ToString() == "") return this;
-
-            Nodes.Add(SecurityElement.Escape(node), SecurityElement.Escape(content.ToString()));
-
-            return this;
-        }
 
         public abstract override string ToString();
     }

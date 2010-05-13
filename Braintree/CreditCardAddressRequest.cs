@@ -8,11 +8,6 @@ namespace Braintree
     {
         public CreditCardAddressOptionsRequest Options { get; set; }
 
-        protected override RequestBuilder Build(RequestBuilder builder)
-        {
-            return base.Build(builder).Append("options", Options);
-        }
-
         protected override QueryString QueryStringBody(String root)
         {
              return base.QueryStringBody(root)
