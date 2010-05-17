@@ -1,3 +1,10 @@
+## 2.2.0
+
+* Prevent race condition when pulling back collection results -- search results represent the state of the data at the time the query was run
+* Rename ResourceCollection's ApproximateCount to MaximumCount because items that no longer match the query will not be returned in the result set
+* Correctly handle HTTP error 426 (Upgrade Required) -- the error code is returned when your client library version is no longer compatible with the gateway
+* Properly handle Transaction Options in TR Data
+
 ## 2.1.0
 
 * Added transaction advanced search
