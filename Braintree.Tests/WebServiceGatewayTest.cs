@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Net;
 using NUnit.Framework;
 
 namespace Braintree.Tests
@@ -49,6 +50,17 @@ namespace Braintree.Tests
                 WebServiceGateway.Get("/");
                 Assert.Fail ("Expected an AuthenticationException but none was thrown.");
             } catch (Braintree.Exceptions.AuthenticationException) {
+                // expected
+            }
+        }
+
+        [Test]
+        public void ThrowExceptionIfErrorStatusCodeIsUpgradeRequired()
+        {
+            try {
+                WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 426, null);
+                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
+            } catch (Braintree.Exceptions.UpgradeRequiredException) {
                 // expected
             }
         }

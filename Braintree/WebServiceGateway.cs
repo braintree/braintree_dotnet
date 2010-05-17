@@ -83,7 +83,7 @@ namespace Braintree
                     return doc;
                 }
 
-                ThrowExceptionIfErrorStatusCode(response.StatusCode);
+                ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
 
                 throw e;
             }
@@ -100,11 +100,12 @@ namespace Braintree
             {
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(body);
+                if (doc.ChildNodes.Count == 1) return doc.ChildNodes[0];
                 return doc.ChildNodes[1];
             }
         }
 
-        internal static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode)
+        public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
         {
             if (httpStatusCode != HttpStatusCode.OK && httpStatusCode != HttpStatusCode.Created)
             {
@@ -113,13 +114,15 @@ namespace Braintree
                     case HttpStatusCode.Unauthorized:
                         throw new AuthenticationException();
                     case HttpStatusCode.Forbidden:
-                        throw new AuthorizationException();
+                        throw new AuthorizationException(message);
                     case HttpStatusCode.NotFound:
                         throw new NotFoundException();
                     case HttpStatusCode.InternalServerError:
                         throw new ServerException();
                     case HttpStatusCode.ServiceUnavailable:
                         throw new DownForMaintenanceException();
+                    case (HttpStatusCode) 426:
+                        throw new UpgradeRequiredException();
                     default:
 						var exception = new UnexpectedException();
 						exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;

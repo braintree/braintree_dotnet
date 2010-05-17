@@ -58,12 +58,5 @@ namespace Braintree.Tests
             }
             return false;
         }
-
-        public static ResourceCollection<T> MockResourceCollection<T>(int totalItems) where T : class
-        {
-            return new ResourceCollection<T>(new List<T>(), totalItems, delegate() {
-                return MockResourceCollection<T>(totalItems);
-            });
-        }
     }
 }

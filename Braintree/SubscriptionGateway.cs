@@ -58,36 +58,32 @@ namespace Braintree
         /// </code>
         public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query)
         {
-            return Search(query, 1);
+            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search_ids", query));
+
+            return new ResourceCollection<Subscription>(response, delegate(String[] ids) {
+                return FetchSubscriptions(query, ids);
+            });
         }
 
-        public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query, int pageNumber)
+        private List<Subscription> FetchSubscriptions(SubscriptionSearchRequest query, String[] ids)
         {
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search?page=" + pageNumber, query));
+            query.Ids.IncludedIn(ids);
 
-            int totalItems = response.GetInteger("total-items").Value;
+            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search", query));
 
             List<Subscription> subscriptions = new List<Subscription>();
-            foreach (NodeWrapper subscriptionNode in response.GetList("subscription"))
+            foreach (NodeWrapper node in response.GetList("subscription"))
             {
-                subscriptions.Add(new Subscription(subscriptionNode));
+                subscriptions.Add(new Subscription(node));
             }
-
-            return new ResourceCollection<Subscription>(subscriptions, totalItems, delegate() {
-                return Search(query, pageNumber + 1);
-            });
+            return subscriptions;
         }
 
         public virtual ResourceCollection<Subscription> Search(SearchDelegate searchDelegate)
         {
-            return Search(searchDelegate, 1);
-        }
-
-        public virtual ResourceCollection<Subscription> Search(SearchDelegate searchDelegate, int pageNumber)
-        {
-            var search = new SubscriptionSearchRequest();
-            searchDelegate(search);
-            return Search(search, pageNumber);
+            SubscriptionSearchRequest query = new SubscriptionSearchRequest();
+            searchDelegate(query);
+            return Search(query);
         }
 
         private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest) {

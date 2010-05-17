@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Web;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -64,6 +65,35 @@ namespace Braintree.Tests
             }
         }
 
+        [Test]
+        public void Constructor_RaisesAuthorizationExceptionIfStatusIs403()
+        {
+            try
+            {
+                new TransparentRedirectRequest("http_status=403&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc");
+                Assert.Fail("Expected ServerException.");
+            }
+            catch (AuthorizationException)
+            {
+                // expected
+            }
+        }
+
+        [Test]
+        public void Constructor_RaisesAuthorizationExceptionWithMessageIfStatusIs403AndBtMessageIsInQueryString()
+        {
+            String message = "Invalid params: transaction[bad]";
+
+            try
+            {
+                new TransparentRedirectRequest(String.Format("http_status=403&bt_message={0}&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", HttpUtility.UrlEncode(message)));
+                Assert.Fail("Expected ServerException.");
+            }
+            catch (AuthorizationException e)
+            {
+                Assert.AreEqual(message, e.Message);
+            }
+        }
 
         [Test]
         public void Constructor_RaisesDownForMaintenanceExceptionIfDownForMaintenance()

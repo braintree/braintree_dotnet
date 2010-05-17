@@ -6,6 +6,13 @@ namespace Braintree
 {
     public class SubscriptionSearchRequest : SearchRequest
     {
+        public MultipleValueNode<SubscriptionSearchRequest> Ids
+        {
+            get
+            {
+                return new MultipleValueNode<SubscriptionSearchRequest>("ids", this);
+            }
+        }
         public TextNode<SubscriptionSearchRequest> PlanId
         {
             get

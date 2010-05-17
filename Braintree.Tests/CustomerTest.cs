@@ -394,15 +394,14 @@ namespace Braintree.Tests
         public void All() {
             ResourceCollection<Customer> collection = gateway.Customer.All();
 
-            Assert.IsTrue(collection.ApproximateCount > 100);
+            Assert.IsTrue(collection.MaximumCount > 100);
     
             List<String> items = new List<String>();
             foreach (Customer item in collection) {
                 items.Add(item.Id);
             }
 
-            HashSet<String> uniqueItems = new HashSet<String>(items);
-            Assert.AreEqual(uniqueItems.Count, collection.ApproximateCount);
+            Assert.AreEqual(items.Count, collection.MaximumCount);
         }
     }
 }

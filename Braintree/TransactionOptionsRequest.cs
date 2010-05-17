@@ -39,10 +39,10 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             return new QueryString().
-                Append(ParentBracketChildString(root, "store-in-vault"), StoreInVault).
-                Append(ParentBracketChildString(root, "add-billing-address-to-payment-method"), AddBillingAddressToPaymentMethod).
-                Append(ParentBracketChildString(root, "store-shipping-address-in-vault"), StoreShippingAddressInVault).
-                Append(ParentBracketChildString(root, "submit-for-settlement"), SubmitForSettlement).
+                Append(ParentBracketChildString(root, "store_in_vault"), StoreInVault).
+                Append(ParentBracketChildString(root, "add_billing_address_to_payment_method"), AddBillingAddressToPaymentMethod).
+                Append(ParentBracketChildString(root, "store_shipping_address_in_vault"), StoreShippingAddressInVault).
+                Append(ParentBracketChildString(root, "submit_for_settlement"), SubmitForSettlement).
                 ToString();
         }
     }

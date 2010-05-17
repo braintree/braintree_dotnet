@@ -19,8 +19,8 @@
     <FrameworkVersion>2.0.50727</FrameworkVersion>
     <HelpFileFormat>Website</HelpFileFormat>
     <DocumentationSources>
-      <DocumentationSource sourceFile="Braintree\bin\Debug\Braintree-2.0.0.dll" />
-<DocumentationSource sourceFile="Braintree\bin\Debug\Braintree-2.0.0.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="Braintree.Tests\bin\Debug\Braintree-2.1.0.dll" />
+<DocumentationSource sourceFile="Braintree.Tests\bin\Debug\Braintree-2.1.0.xml" /></DocumentationSources>
     <NamingMethod>MemberName</NamingMethod>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="Braintree" isDocumented="True">Quick Start Example:

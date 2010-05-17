@@ -197,6 +197,13 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("id", this);
             }
         }
+        public MultipleValueNode<TransactionSearchRequest> Ids
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest>("ids", this);
+            }
+        }
         public MultipleValueNode<TransactionSearchRequest> MerchantAccountId
         {
             get

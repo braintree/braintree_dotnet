@@ -6,8 +6,7 @@ using System.Text;
 
 namespace Braintree.Exceptions
 {
-    public class AuthorizationException : Exception
+    public class UpgradeRequiredException : Exception
     {
-        public AuthorizationException(String message) : base(message) {}
     }
 }

@@ -37,6 +37,10 @@ namespace Braintree
 
         internal virtual void AddMultipleValueCriteria(String name, SearchCriteria criteria)
         {
+            if (MultipleValueCriteria.ContainsKey(name))
+            {
+                MultipleValueCriteria.Remove(name);
+            }
             MultipleValueCriteria.Add(name, criteria);
         }
 
