@@ -14,7 +14,6 @@ namespace Braintree
     /// <code>
     ///  var addressRequest = new AddressRequest
     ///  {
-    ///      CustomerId = customer.Id,
     ///      FirstName = "Michael",
     ///      LastName = "Angelo",
     ///      Company = "Angelo Co.",
