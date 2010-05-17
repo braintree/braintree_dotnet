@@ -7,7 +7,22 @@ namespace Braintree
 {
     public class CreditCardAddressOptionsRequest : Request
     {
-        public bool? UpdateExisting { get; set; }
+        public Boolean UpdateExisting { get; set; }
+
+        public override String ToXml()
+        {
+            return ToXml("options");
+        }
+
+        public override String ToXml(String rootElement)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(String.Format("<{0}>", rootElement));
+            builder.Append(BuildXMLElement("update-existing", UpdateExisting));
+            builder.Append(String.Format("</{0}>", rootElement));
+            
+            return builder.ToString();
+        }
 
         public override String ToQueryString()
         {

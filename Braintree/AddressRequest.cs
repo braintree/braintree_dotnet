@@ -29,27 +29,58 @@ namespace Braintree
     /// </example>
     public class AddressRequest : Request
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Company { get; set; }
-        public string StreetAddress { get; set; }
-        public string ExtendedAddress { get; set; }
-        public string Locality { get; set; }
-        public string Region { get; set; }
-        public string PostalCode { get; set; }
-        public string CountryName { get; set; }
+        public String FirstName { get; set; }
+        public String LastName { get; set; }
+        public String Company { get; set; }
+        public String StreetAddress { get; set; }
+        public String ExtendedAddress { get; set; }
+        public String Locality { get; set; }
+        public String Region { get; set; }
+        public String PostalCode { get; set; }
+        public String CountryName { get; set; }
 
-        public override string ToQueryString()
+        public override String ToXml()
+        {
+            return ToXml("address");
+        }
+
+        public override String ToXml(String rootElement)
+        {
+            var builder = new StringBuilder();
+            builder.Append(String.Format("<{0}>", rootElement));
+            builder.Append(XmlBody());
+            builder.Append(String.Format("</{0}>", rootElement));
+
+            return builder.ToString();
+        }
+
+        protected virtual String XmlBody()
+        {
+            var builder = new StringBuilder();
+            builder.Append(BuildXMLElement("first-name", FirstName));
+            builder.Append(BuildXMLElement("last-name", LastName));
+            builder.Append(BuildXMLElement("company", Company));
+            builder.Append(BuildXMLElement("street-address", StreetAddress));
+            builder.Append(BuildXMLElement("extended-address", ExtendedAddress));
+            builder.Append(BuildXMLElement("locality", Locality));
+            builder.Append(BuildXMLElement("region", Region));
+            builder.Append(BuildXMLElement("postal-code", PostalCode));
+            builder.Append(BuildXMLElement("country-name", CountryName));
+
+            return builder.ToString();
+        }
+
+        public override String ToQueryString()
         {
             return ToQueryString("address");
         }
 
-        public override string ToQueryString(string root)
+        public override String ToQueryString(String root)
         {
             return QueryStringBody(root).ToString();
         }
 
-        protected virtual QueryString QueryStringBody(string root)
+        protected virtual QueryString QueryStringBody(String root)
         {
             return new QueryString().
                 Append(ParentBracketChildString(root, "first_name"), FirstName).

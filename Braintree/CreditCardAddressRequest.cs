@@ -8,6 +8,11 @@ namespace Braintree
     {
         public CreditCardAddressOptionsRequest Options { get; set; }
 
+        protected override String XmlBody()
+        {
+            return base.XmlBody() + BuildXMLElement("options", Options);
+        }
+
         protected override QueryString QueryStringBody(String root)
         {
              return base.QueryStringBody(root)

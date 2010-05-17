@@ -30,29 +30,48 @@ namespace Braintree
     /// </example>
     public class CreditCardRequest : Request
     {
-        public string Token { get; set; }
-        public string CustomerId { get; set; }
-        public string Number { get; set; }
-        public string CardholderName { get; set; }
-        public string CVV { get; set; }
+        public String Token { get; set; }
+        public String CustomerId { get; set; }
+        public String Number { get; set; }
+        public String CardholderName { get; set; }
+        public String CVV { get; set; }
         public CreditCardAddressRequest BillingAddress { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
-        public string ExpirationMonth { get; set; }
-        public string ExpirationYear { get; set; }
-        public string ExpirationDate { get; set; }
-        public string PaymentMethodToken { get; set; }
+        public String ExpirationMonth { get; set; }
+        public String ExpirationYear { get; set; }
+        public String ExpirationDate { get; set; }
+        public String PaymentMethodToken { get; set; }
 
-        protected override RequestBuilder Build(RequestBuilder builder)
+        public override String ToXml()
         {
-            return base.Build(builder).Override("c_v_v", "cvv", CVV);
+            return ToXml("credit-card");
         }
 
-        public override string ToQueryString()
+        public override String ToXml(String rootElement)
+        {
+            var builder = new StringBuilder();
+            builder.Append(String.Format("<{0}>", rootElement));
+            builder.Append(BuildXMLElement("billing-address", BillingAddress));
+            builder.Append(BuildXMLElement("cardholder-name", CardholderName));
+            builder.Append(BuildXMLElement("customer-id", CustomerId));
+            builder.Append(BuildXMLElement("cvv", CVV));
+            builder.Append(BuildXMLElement("expiration-date", ExpirationDate));
+            builder.Append(BuildXMLElement("expiration-month", ExpirationMonth));
+            builder.Append(BuildXMLElement("expiration-year", ExpirationYear));
+            builder.Append(BuildXMLElement("number", Number));
+            builder.Append(BuildXMLElement("options", Options));
+            builder.Append(BuildXMLElement("token", Token));
+            builder.Append(String.Format("</{0}>", rootElement));
+
+            return builder.ToString();
+        }
+
+        public override String ToQueryString()
         {
             return ToQueryString("credit_card");
         }
 
-        public override string ToQueryString(string root)
+        public override String ToQueryString(String root)
         {
             return new QueryString().
                 Append(ParentBracketChildString(root, "billing_address"), BillingAddress).

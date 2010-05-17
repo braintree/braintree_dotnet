@@ -24,18 +24,41 @@ namespace Braintree
     /// </example>
     public class SubscriptionRequest : Request
     {
-        public bool? HasTrialPeriod { get; set; }
-        public string Id { get; set; }
-        public string PaymentMethodToken { get; set; }
-        public string PlanId { get; set; }
-        public decimal? Price { get; set; }
-        public int? TrialDuration { get; set; }
+        public Boolean? HasTrialPeriod { get; set; }
+        public String Id { get; set; }
+        public String PaymentMethodToken { get; set; }
+        public String PlanId { get; set; }
+        public Decimal Price { get; set; }
+        public Int32 TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
-        public string MerchantAccountId { get; set; }
+        public String MerchantAccountId { get; set; }
 
-        protected override RequestBuilder Build(RequestBuilder builder)
+        public override String ToXml()
         {
-            return base.Build(builder).Override("has_trial_period", "trial_period", HasTrialPeriod);
+            return ToXml("subscription");
+        }
+
+        public override String ToXml(String rootElement)
+        {
+            var builder = new StringBuilder();
+            builder.Append(String.Format("<{0}>", rootElement));
+            builder.Append(BuildXMLElement("payment-method-token", PaymentMethodToken));
+            if (HasTrialPeriod.HasValue)
+            {
+                builder.Append(BuildXMLElement("trial-period", HasTrialPeriod.Value));
+
+                if (HasTrialPeriod.Value)
+                {
+                    if (TrialDuration != 0) builder.Append(BuildXMLElement("trial-duration", TrialDuration.ToString()));
+                    builder.Append(BuildXMLElement("trial-duration-unit", TrialDurationUnit.ToString().ToLower()));
+                }
+            }
+            builder.Append(BuildXMLElement("merchant-account-id", MerchantAccountId));
+            builder.Append(BuildXMLElement("id", Id));
+            builder.Append(BuildXMLElement("plan-id", PlanId));
+            if (Price != 0) builder.Append(BuildXMLElement("price", Price.ToString()));
+            builder.Append(String.Format("</{0}>", rootElement));
+            return builder.ToString();
         }
 
         public override String ToQueryString()
