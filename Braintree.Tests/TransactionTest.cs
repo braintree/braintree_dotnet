@@ -1006,8 +1006,8 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual("custom value", transaction.CustomFields["store-me"]);
-            Assert.AreEqual("custom value2", transaction.CustomFields["another-stored-field"]);
+            Assert.AreEqual("custom value", transaction.CustomFields["store_me"]);
+            Assert.AreEqual("custom value2", transaction.CustomFields["another_stored_field"]);
         }
 
         [Test]
@@ -1245,8 +1245,8 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual("custom value", transaction.CustomFields["store-me"]);
-            Assert.AreEqual("custom value2", transaction.CustomFields["another-stored-field"]);
+            Assert.AreEqual("custom value", transaction.CustomFields["store_me"]);
+            Assert.AreEqual("custom value2", transaction.CustomFields["another_stored_field"]);
         }
 
         [Test]
