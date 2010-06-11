@@ -1415,6 +1415,27 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void StatusHistory_HasCorrectValues()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            String transactionId = gateway.Transaction.Sale(request).Target.Id;
+            Transaction transaction = gateway.Transaction.SubmitForSettlement(transactionId, Decimal.Parse("50.00")).Target;
+
+            Assert.AreEqual(2, transaction.StatusHistory.Length);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.StatusHistory[0].Status);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.StatusHistory[1].Status);
+        }
+
+        [Test]
         public void SubmitForSettlement_WithValidationError()
         {
             TransactionRequest request = new TransactionRequest
