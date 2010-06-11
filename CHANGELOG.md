@@ -1,3 +1,8 @@
+## 2.2.1
+
+* Added AvsErrorResponseCode, AvsPostalCodeResponseCode, AvsStreetAddressResponseCode, CurrencyIsoCode, CvvResponseCode to Transaction
+* Added CreatedAt, UpdatedAt to Address
+
 ## 2.2.0
 
 * Prevent race condition when pulling back collection results -- search results represent the state of the data at the time the query was run
