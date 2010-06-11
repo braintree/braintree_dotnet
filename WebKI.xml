@@ -15,6 +15,7 @@
   <HelpKINode Title="Address property" Url="html/P_Braintree_BraintreeGateway_Address.htm" />
   <HelpKINode Title="Address.Company property" Url="html/P_Braintree_Address_Company.htm" />
   <HelpKINode Title="Address.CountryName property" Url="html/P_Braintree_Address_CountryName.htm" />
+  <HelpKINode Title="Address.CreatedAt property" Url="html/P_Braintree_Address_CreatedAt.htm" />
   <HelpKINode Title="Address.CustomerId property" Url="html/P_Braintree_Address_CustomerId.htm" />
   <HelpKINode Title="Address.ExtendedAddress property" Url="html/P_Braintree_Address_ExtendedAddress.htm" />
   <HelpKINode Title="Address.FirstName property" Url="html/P_Braintree_Address_FirstName.htm" />
@@ -24,6 +25,7 @@
   <HelpKINode Title="Address.PostalCode property" Url="html/P_Braintree_Address_PostalCode.htm" />
   <HelpKINode Title="Address.Region property" Url="html/P_Braintree_Address_Region.htm" />
   <HelpKINode Title="Address.StreetAddress property" Url="html/P_Braintree_Address_StreetAddress.htm" />
+  <HelpKINode Title="Address.UpdatedAt property" Url="html/P_Braintree_Address_UpdatedAt.htm" />
   <HelpKINode Title="Addresses property" Url="html/P_Braintree_Customer_Addresses.htm" />
   <HelpKINode Title="AddressGateway class" Url="html/AllMembers_T_Braintree_AddressGateway.htm" />
   <HelpKINode Title="AddressGateway class" Url="html/T_Braintree_AddressGateway.htm" />
@@ -110,8 +112,11 @@
   <HelpKINode Title="AUTHORIZED field" Url="html/F_Braintree_TransactionStatus_AUTHORIZED.htm" />
   <HelpKINode Title="AUTHORIZING field" Url="html/F_Braintree_TransactionStatus_AUTHORIZING.htm" />
   <HelpKINode Title="AvsErrorResponseCode property" Url="html/P_Braintree_CreditCardVerification_AvsErrorResponseCode.htm" />
+  <HelpKINode Title="AvsErrorResponseCode property" Url="html/P_Braintree_Transaction_AvsErrorResponseCode.htm" />
   <HelpKINode Title="AvsPostalCodeResponseCode property" Url="html/P_Braintree_CreditCardVerification_AvsPostalCodeResponseCode.htm" />
+  <HelpKINode Title="AvsPostalCodeResponseCode property" Url="html/P_Braintree_Transaction_AvsPostalCodeResponseCode.htm" />
   <HelpKINode Title="AvsStreetAddressResponseCode property" Url="html/P_Braintree_CreditCardVerification_AvsStreetAddressResponseCode.htm" />
+  <HelpKINode Title="AvsStreetAddressResponseCode property" Url="html/P_Braintree_Transaction_AvsStreetAddressResponseCode.htm" />
   <HelpKINode Title="BaseMerchantURL method" Url="html/M_Braintree_Configuration_BaseMerchantURL.htm" />
   <HelpKINode Title="Between method" Url="html/M_Braintree_DateRangeNode_1_Between.htm" />
   <HelpKINode Title="Between method" Url="html/M_Braintree_RangeNode_1_Between.htm" />
@@ -367,6 +372,7 @@
   <HelpKINode Title="Create method" Url="html/M_Braintree_CreditCardGateway_Create.htm" />
   <HelpKINode Title="Create method" Url="html/M_Braintree_CustomerGateway_Create.htm" />
   <HelpKINode Title="Create method" Url="html/M_Braintree_SubscriptionGateway_Create.htm" />
+  <HelpKINode Title="CreatedAt property" Url="html/P_Braintree_Address_CreatedAt.htm" />
   <HelpKINode Title="CreatedAt property" Url="html/P_Braintree_CreditCard_CreatedAt.htm" />
   <HelpKINode Title="CreatedAt property" Url="html/P_Braintree_Customer_CreatedAt.htm" />
   <HelpKINode Title="CreatedAt property" Url="html/P_Braintree_TransactionSearchRequest_CreatedAt.htm" />
@@ -489,6 +495,7 @@
   <HelpKINode Title="CreditCardOptionsRequest.MakeDefault property" Url="html/P_Braintree_CreditCardOptionsRequest_MakeDefault.htm" />
   <HelpKINode Title="CreditCardOptionsRequest.ToQueryString method" Url="html/Overload_Braintree_CreditCardOptionsRequest_ToQueryString.htm" />
   <HelpKINode Title="CreditCardOptionsRequest.ToXml method" Url="html/Overload_Braintree_CreditCardOptionsRequest_ToXml.htm" />
+  <HelpKINode Title="CreditCardOptionsRequest.VerificationMerchantAccountId property" Url="html/P_Braintree_CreditCardOptionsRequest_VerificationMerchantAccountId.htm" />
   <HelpKINode Title="CreditCardOptionsRequest.VerifyCard property" Url="html/P_Braintree_CreditCardOptionsRequest_VerifyCard.htm" />
   <HelpKINode Title="CreditCardRequest class" Url="html/AllMembers_T_Braintree_CreditCardRequest.htm" />
   <HelpKINode Title="CreditCardRequest class" Url="html/T_Braintree_CreditCardRequest.htm" />
@@ -528,6 +535,7 @@
   <HelpKINode Title="CreditCardVerification.AvsStreetAddressResponseCode property" Url="html/P_Braintree_CreditCardVerification_AvsStreetAddressResponseCode.htm" />
   <HelpKINode Title="CreditCardVerification.CreditCardVerification constructor" Url="html/M_Braintree_CreditCardVerification__ctor.htm" />
   <HelpKINode Title="CreditCardVerification.CvvResponseCode property" Url="html/P_Braintree_CreditCardVerification_CvvResponseCode.htm" />
+  <HelpKINode Title="CreditCardVerification.MerchantAccountId property" Url="html/P_Braintree_CreditCardVerification_MerchantAccountId.htm" />
   <HelpKINode Title="CreditCardVerification.ProcessorResponseCode property" Url="html/P_Braintree_CreditCardVerification_ProcessorResponseCode.htm" />
   <HelpKINode Title="CreditCardVerification.ProcessorResponseText property" Url="html/P_Braintree_CreditCardVerification_ProcessorResponseText.htm" />
   <HelpKINode Title="CreditCardVerification.Status property" Url="html/P_Braintree_CreditCardVerification_Status.htm" />
@@ -567,6 +575,7 @@
   <HelpKINode Title="Crypto.HmacHash method" Url="html/M_Braintree_Crypto_HmacHash.htm" />
   <HelpKINode Title="Crypto.Sha1Bytes method" Url="html/M_Braintree_Crypto_Sha1Bytes.htm" />
   <HelpKINode Title="Currency property" Url="html/P_Braintree_TransactionSearchRequest_Currency.htm" />
+  <HelpKINode Title="CurrencyIsoCode property" Url="html/P_Braintree_Transaction_CurrencyIsoCode.htm" />
   <HelpKINode Title="Customer class" Url="html/AllMembers_T_Braintree_Customer.htm" />
   <HelpKINode Title="Customer class" Url="html/T_Braintree_Customer.htm" />
   <HelpKINode Title="Customer class">
@@ -676,6 +685,7 @@
   <HelpKINode Title="CustomFields property" Url="html/P_Braintree_Transaction_CustomFields.htm" />
   <HelpKINode Title="CVV property" Url="html/P_Braintree_CreditCardRequest_CVV.htm" />
   <HelpKINode Title="CvvResponseCode property" Url="html/P_Braintree_CreditCardVerification_CvvResponseCode.htm" />
+  <HelpKINode Title="CvvResponseCode property" Url="html/P_Braintree_Transaction_CvvResponseCode.htm" />
   <HelpKINode Title="DateRangeNode(Of T) class" Url="html/AllMembers_T_Braintree_DateRangeNode_1.htm" />
   <HelpKINode Title="DateRangeNode(Of T) class" Url="html/T_Braintree_DateRangeNode_1.htm" />
   <HelpKINode Title="DateRangeNode(Of T) class">
@@ -886,6 +896,7 @@
   <HelpKINode Title="MaskedNumber property" Url="html/P_Braintree_CreditCard_MaskedNumber.htm" />
   <HelpKINode Title="MASTER_CARD field" Url="html/F_Braintree_CreditCardCardType_MASTER_CARD.htm" />
   <HelpKINode Title="MaximumCount property" Url="html/P_Braintree_ResourceCollection_1_MaximumCount.htm" />
+  <HelpKINode Title="MerchantAccountId property" Url="html/P_Braintree_CreditCardVerification_MerchantAccountId.htm" />
   <HelpKINode Title="MerchantAccountId property" Url="html/P_Braintree_SubscriptionRequest_MerchantAccountId.htm" />
   <HelpKINode Title="MerchantAccountId property" Url="html/P_Braintree_Subscription_MerchantAccountId.htm" />
   <HelpKINode Title="MerchantAccountId property" Url="html/P_Braintree_TransactionRequest_MerchantAccountId.htm" />
@@ -1284,6 +1295,7 @@
   <HelpKINode Title="SubscriptionGateway.SubscriptionGateway constructor" Url="html/M_Braintree_SubscriptionGateway__ctor.htm" />
   <HelpKINode Title="SubscriptionGateway.Update method" Url="html/M_Braintree_SubscriptionGateway_Update.htm" />
   <HelpKINode Title="SubscriptionId property" Url="html/P_Braintree_SubscriptionTransactionRequest_SubscriptionId.htm" />
+  <HelpKINode Title="SubscriptionId property" Url="html/P_Braintree_Transaction_SubscriptionId.htm" />
   <HelpKINode Title="SubscriptionRequest class" Url="html/AllMembers_T_Braintree_SubscriptionRequest.htm" />
   <HelpKINode Title="SubscriptionRequest class" Url="html/T_Braintree_SubscriptionRequest.htm" />
   <HelpKINode Title="SubscriptionRequest class">
@@ -1419,11 +1431,16 @@
   <HelpKINode Title="Transaction property" Url="html/P_Braintree_BraintreeGateway_Transaction.htm" />
   <HelpKINode Title="Transaction property" Url="html/P_Braintree_Result_1_Transaction.htm" />
   <HelpKINode Title="Transaction.Amount property" Url="html/P_Braintree_Transaction_Amount.htm" />
+  <HelpKINode Title="Transaction.AvsErrorResponseCode property" Url="html/P_Braintree_Transaction_AvsErrorResponseCode.htm" />
+  <HelpKINode Title="Transaction.AvsPostalCodeResponseCode property" Url="html/P_Braintree_Transaction_AvsPostalCodeResponseCode.htm" />
+  <HelpKINode Title="Transaction.AvsStreetAddressResponseCode property" Url="html/P_Braintree_Transaction_AvsStreetAddressResponseCode.htm" />
   <HelpKINode Title="Transaction.BillingAddress property" Url="html/P_Braintree_Transaction_BillingAddress.htm" />
   <HelpKINode Title="Transaction.CreatedAt property" Url="html/P_Braintree_Transaction_CreatedAt.htm" />
   <HelpKINode Title="Transaction.CreditCard property" Url="html/P_Braintree_Transaction_CreditCard.htm" />
+  <HelpKINode Title="Transaction.CurrencyIsoCode property" Url="html/P_Braintree_Transaction_CurrencyIsoCode.htm" />
   <HelpKINode Title="Transaction.Customer property" Url="html/P_Braintree_Transaction_Customer.htm" />
   <HelpKINode Title="Transaction.CustomFields property" Url="html/P_Braintree_Transaction_CustomFields.htm" />
+  <HelpKINode Title="Transaction.CvvResponseCode property" Url="html/P_Braintree_Transaction_CvvResponseCode.htm" />
   <HelpKINode Title="Transaction.GetVaultBillingAddress method" Url="html/M_Braintree_Transaction_GetVaultBillingAddress.htm" />
   <HelpKINode Title="Transaction.GetVaultCreditCard method" Url="html/M_Braintree_Transaction_GetVaultCreditCard.htm" />
   <HelpKINode Title="Transaction.GetVaultCustomer method" Url="html/M_Braintree_Transaction_GetVaultCustomer.htm" />
@@ -1436,6 +1453,7 @@
   <HelpKINode Title="Transaction.ProcessorResponseText property" Url="html/P_Braintree_Transaction_ProcessorResponseText.htm" />
   <HelpKINode Title="Transaction.ShippingAddress property" Url="html/P_Braintree_Transaction_ShippingAddress.htm" />
   <HelpKINode Title="Transaction.Status property" Url="html/P_Braintree_Transaction_Status.htm" />
+  <HelpKINode Title="Transaction.SubscriptionId property" Url="html/P_Braintree_Transaction_SubscriptionId.htm" />
   <HelpKINode Title="Transaction.Type property" Url="html/P_Braintree_Transaction_Type.htm" />
   <HelpKINode Title="Transaction.UpdatedAt property" Url="html/P_Braintree_Transaction_UpdatedAt.htm" />
   <HelpKINode Title="TransactionCreatedUsing class" Url="html/AllMembers_T_Braintree_TransactionCreatedUsing.htm" />
@@ -1691,6 +1709,7 @@
   <HelpKINode Title="Update method" Url="html/M_Braintree_CreditCardGateway_Update.htm" />
   <HelpKINode Title="Update method" Url="html/M_Braintree_CustomerGateway_Update.htm" />
   <HelpKINode Title="Update method" Url="html/M_Braintree_SubscriptionGateway_Update.htm" />
+  <HelpKINode Title="UpdatedAt property" Url="html/P_Braintree_Address_UpdatedAt.htm" />
   <HelpKINode Title="UpdatedAt property" Url="html/P_Braintree_CreditCard_UpdatedAt.htm" />
   <HelpKINode Title="UpdatedAt property" Url="html/P_Braintree_Customer_UpdatedAt.htm" />
   <HelpKINode Title="UpdatedAt property" Url="html/P_Braintree_Transaction_UpdatedAt.htm" />
@@ -1736,6 +1755,7 @@
   <HelpKINode Title="ValidationErrors.ForObject method" Url="html/M_Braintree_ValidationErrors_ForObject.htm" />
   <HelpKINode Title="ValidationErrors.OnField method" Url="html/M_Braintree_ValidationErrors_OnField.htm" />
   <HelpKINode Title="ValidationErrors.ValidationErrors constructor" Url="html/Overload_Braintree_ValidationErrors__ctor.htm" />
+  <HelpKINode Title="VerificationMerchantAccountId property" Url="html/P_Braintree_CreditCardOptionsRequest_VerificationMerchantAccountId.htm" />
   <HelpKINode Title="VerifyCard property" Url="html/P_Braintree_CreditCardOptionsRequest_VerifyCard.htm" />
   <HelpKINode Title="VISA field" Url="html/F_Braintree_CreditCardCardType_VISA.htm" />
   <HelpKINode Title="VISA field" Url="html/F_Braintree_SandboxValues_CreditCardNumber_VISA.htm" />

@@ -1,12 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <HelpTOC>
 
-  <HelpTOCNode Id="71ef7267-81f9-46a0-be6d-d757adb4135c" Title="Braintree Namespace" Url="html/N_Braintree.htm">
-    <HelpTOCNode Id="07f26c90-6b9d-4077-9bea-0aedae8f7ed2" Title="Address Class" Url="html/T_Braintree_Address.htm">
+  <HelpTOCNode Id="21d4bdc9-9287-4a9d-9a12-7919b2f57113" Title="Braintree Namespace" Url="html/N_Braintree.htm">
+    <HelpTOCNode Id="c4ee9fde-33a4-4090-89d4-3a977dc8e7e7" Title="Address Class" Url="html/T_Braintree_Address.htm">
       <HelpTOCNode Title="Address Members" Url="html/AllMembers_T_Braintree_Address.htm" />
-      <HelpTOCNode Id="a2829b08-8a35-4d83-95b7-b6fbc63a00f0" Title="Address Properties " Url="html/Properties_T_Braintree_Address.htm">
+      <HelpTOCNode Id="62d66d1f-cc13-4a9f-9cd3-5c91b6acb400" Title="Address Properties " Url="html/Properties_T_Braintree_Address.htm">
         <HelpTOCNode Title="Company Property " Url="html/P_Braintree_Address_Company.htm" />
         <HelpTOCNode Title="CountryName Property " Url="html/P_Braintree_Address_CountryName.htm" />
+        <HelpTOCNode Title="CreatedAt Property " Url="html/P_Braintree_Address_CreatedAt.htm" />
         <HelpTOCNode Title="CustomerId Property " Url="html/P_Braintree_Address_CustomerId.htm" />
         <HelpTOCNode Title="ExtendedAddress Property " Url="html/P_Braintree_Address_ExtendedAddress.htm" />
         <HelpTOCNode Title="FirstName Property " Url="html/P_Braintree_Address_FirstName.htm" />
@@ -16,32 +17,33 @@
         <HelpTOCNode Title="PostalCode Property " Url="html/P_Braintree_Address_PostalCode.htm" />
         <HelpTOCNode Title="Region Property " Url="html/P_Braintree_Address_Region.htm" />
         <HelpTOCNode Title="StreetAddress Property " Url="html/P_Braintree_Address_StreetAddress.htm" />
+        <HelpTOCNode Title="UpdatedAt Property " Url="html/P_Braintree_Address_UpdatedAt.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="efc88295-4881-4bd8-9942-4847b9f1fd51" Title="AddressGateway Class" Url="html/T_Braintree_AddressGateway.htm">
+    <HelpTOCNode Id="f3c4233d-f8cc-492d-acb4-31817ad962eb" Title="AddressGateway Class" Url="html/T_Braintree_AddressGateway.htm">
       <HelpTOCNode Title="AddressGateway Members" Url="html/AllMembers_T_Braintree_AddressGateway.htm" />
       <HelpTOCNode Title="AddressGateway Constructor " Url="html/M_Braintree_AddressGateway__ctor.htm" />
-      <HelpTOCNode Id="3f8b74bc-d8f8-46d3-997d-49afc1d9eeda" Title="AddressGateway Methods " Url="html/Methods_T_Braintree_AddressGateway.htm">
+      <HelpTOCNode Id="d1ea9aed-71ce-47f0-b4ec-3bc1f7f89733" Title="AddressGateway Methods " Url="html/Methods_T_Braintree_AddressGateway.htm">
         <HelpTOCNode Title="Create Method " Url="html/M_Braintree_AddressGateway_Create.htm" />
         <HelpTOCNode Title="Delete Method " Url="html/M_Braintree_AddressGateway_Delete.htm" />
         <HelpTOCNode Title="Find Method " Url="html/M_Braintree_AddressGateway_Find.htm" />
         <HelpTOCNode Title="Update Method " Url="html/M_Braintree_AddressGateway_Update.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="0e81b1f5-3556-47b1-a436-4b32e2e261c6" Title="AddressRequest Class" Url="html/T_Braintree_AddressRequest.htm">
+    <HelpTOCNode Id="3f5c2d73-211c-4f78-9a82-5d5d380b5895" Title="AddressRequest Class" Url="html/T_Braintree_AddressRequest.htm">
       <HelpTOCNode Title="AddressRequest Members" Url="html/AllMembers_T_Braintree_AddressRequest.htm" />
       <HelpTOCNode Title="AddressRequest Constructor " Url="html/M_Braintree_AddressRequest__ctor.htm" />
-      <HelpTOCNode Id="297b58aa-b531-4a9d-937a-32501a45d4e4" Title="AddressRequest Methods " Url="html/Methods_T_Braintree_AddressRequest.htm">
-        <HelpTOCNode Id="77c0c400-81b5-4b21-8573-1b96495012de" Title="ToQueryString Method " Url="html/Overload_Braintree_AddressRequest_ToQueryString.htm">
+      <HelpTOCNode Id="84485d00-6fc5-4a25-ba2d-e131fc935bab" Title="AddressRequest Methods " Url="html/Methods_T_Braintree_AddressRequest.htm">
+        <HelpTOCNode Id="9847758f-ce06-4d36-9a8c-1b570746a94e" Title="ToQueryString Method " Url="html/Overload_Braintree_AddressRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_AddressRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_AddressRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="0db94116-e8e6-4dee-a8bb-ea4b66e9f79e" Title="ToXml Method " Url="html/Overload_Braintree_AddressRequest_ToXml.htm">
+        <HelpTOCNode Id="18588e2b-1948-49fe-93b4-b38742be0521" Title="ToXml Method " Url="html/Overload_Braintree_AddressRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_AddressRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_AddressRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="3a49f3cf-df68-4ab1-9ee2-277c0bc2f0aa" Title="AddressRequest Properties " Url="html/Properties_T_Braintree_AddressRequest.htm">
+      <HelpTOCNode Id="e9632c4d-0a33-4ef0-abd4-258825ab6187" Title="AddressRequest Properties " Url="html/Properties_T_Braintree_AddressRequest.htm">
         <HelpTOCNode Title="Company Property " Url="html/P_Braintree_AddressRequest_Company.htm" />
         <HelpTOCNode Title="CountryName Property " Url="html/P_Braintree_AddressRequest_CountryName.htm" />
         <HelpTOCNode Title="ExtendedAddress Property " Url="html/P_Braintree_AddressRequest_ExtendedAddress.htm" />
@@ -53,13 +55,13 @@
         <HelpTOCNode Title="StreetAddress Property " Url="html/P_Braintree_AddressRequest_StreetAddress.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="22ff8703-396b-4ca6-b5dd-e162d2bf2688" Title="BraintreeGateway Class" Url="html/T_Braintree_BraintreeGateway.htm">
+    <HelpTOCNode Id="8801d77c-8621-46e9-b00a-f5e80649cb90" Title="BraintreeGateway Class" Url="html/T_Braintree_BraintreeGateway.htm">
       <HelpTOCNode Title="BraintreeGateway Members" Url="html/AllMembers_T_Braintree_BraintreeGateway.htm" />
       <HelpTOCNode Title="BraintreeGateway Constructor " Url="html/M_Braintree_BraintreeGateway__ctor.htm" />
-      <HelpTOCNode Id="4384a239-ad78-4d09-8cb1-ae15991b3560" Title="BraintreeGateway Methods " Url="html/Methods_T_Braintree_BraintreeGateway.htm">
+      <HelpTOCNode Id="7ac56b1a-1890-4b6a-924f-2a4d2b93f025" Title="BraintreeGateway Methods " Url="html/Methods_T_Braintree_BraintreeGateway.htm">
         <HelpTOCNode Title="TrData Method " Url="html/M_Braintree_BraintreeGateway_TrData.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="3367e330-bf7a-4e3e-9097-0799c9eaba71" Title="BraintreeGateway Properties " Url="html/Properties_T_Braintree_BraintreeGateway.htm">
+      <HelpTOCNode Id="10a6dd02-f1b6-4821-b09b-2c7822414a9e" Title="BraintreeGateway Properties " Url="html/Properties_T_Braintree_BraintreeGateway.htm">
         <HelpTOCNode Title="Address Property " Url="html/P_Braintree_BraintreeGateway_Address.htm" />
         <HelpTOCNode Title="CreditCard Property " Url="html/P_Braintree_BraintreeGateway_CreditCard.htm" />
         <HelpTOCNode Title="Customer Property " Url="html/P_Braintree_BraintreeGateway_Customer.htm" />
@@ -71,32 +73,32 @@
         <HelpTOCNode Title="Transaction Property " Url="html/P_Braintree_BraintreeGateway_Transaction.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="0dd48efb-b81c-42f5-a16a-6f931cafdf39" Title="CollectionUtil Class" Url="html/T_Braintree_CollectionUtil.htm">
+    <HelpTOCNode Id="3cdcca77-6521-4b12-b3c1-9abdbbede3b2" Title="CollectionUtil Class" Url="html/T_Braintree_CollectionUtil.htm">
       <HelpTOCNode Title="CollectionUtil Members" Url="html/AllMembers_T_Braintree_CollectionUtil.htm" />
       <HelpTOCNode Title="CollectionUtil Constructor " Url="html/M_Braintree_CollectionUtil__ctor.htm" />
-      <HelpTOCNode Id="32314ee7-2efb-4813-99e2-3c03b4c78e78" Title="CollectionUtil Methods " Url="html/Methods_T_Braintree_CollectionUtil.htm">
+      <HelpTOCNode Id="52d69278-b5a9-4578-ae1f-917662334fb6" Title="CollectionUtil Methods " Url="html/Methods_T_Braintree_CollectionUtil.htm">
         <HelpTOCNode Title="Find Method " Url="html/M_Braintree_CollectionUtil_Find.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="0b151029-f8d2-4033-bf00-916804fe88eb" Title="Configuration Class" Url="html/T_Braintree_Configuration.htm">
+    <HelpTOCNode Id="97e47e93-6c1d-4d90-9121-72209b4d9bfa" Title="Configuration Class" Url="html/T_Braintree_Configuration.htm">
       <HelpTOCNode Title="Configuration Members" Url="html/AllMembers_T_Braintree_Configuration.htm" />
-      <HelpTOCNode Id="7d137ff4-baf8-4284-a14d-1c39f7e4590a" Title="Configuration Fields" Url="html/Fields_T_Braintree_Configuration.htm">
+      <HelpTOCNode Id="5aa2687a-6826-43b6-a209-3b23adbfb0e3" Title="Configuration Fields" Url="html/Fields_T_Braintree_Configuration.htm">
         <HelpTOCNode Title="ApiVersion Field" Url="html/F_Braintree_Configuration_ApiVersion.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="7d0ff14f-b7d3-484b-989f-e55b85947846" Title="Configuration Methods " Url="html/Methods_T_Braintree_Configuration.htm">
+      <HelpTOCNode Id="fb0a6886-4cd4-4587-82b4-6862f3821f7e" Title="Configuration Methods " Url="html/Methods_T_Braintree_Configuration.htm">
         <HelpTOCNode Title="BaseMerchantURL Method " Url="html/M_Braintree_Configuration_BaseMerchantURL.htm" />
         <HelpTOCNode Title="GetAuthorizationHeader Method " Url="html/M_Braintree_Configuration_GetAuthorizationHeader.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="173bbf1a-4d7b-4d69-b051-5d1400282e9a" Title="Configuration Properties " Url="html/Properties_T_Braintree_Configuration.htm">
+      <HelpTOCNode Id="df78d306-3156-47d2-b9b9-bdbc87db5372" Title="Configuration Properties " Url="html/Properties_T_Braintree_Configuration.htm">
         <HelpTOCNode Title="Environment Property " Url="html/P_Braintree_Configuration_Environment.htm" />
         <HelpTOCNode Title="MerchantId Property " Url="html/P_Braintree_Configuration_MerchantId.htm" />
         <HelpTOCNode Title="PrivateKey Property " Url="html/P_Braintree_Configuration_PrivateKey.htm" />
         <HelpTOCNode Title="PublicKey Property " Url="html/P_Braintree_Configuration_PublicKey.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="68733377-378e-4cf9-bc1c-2648e6788ef2" Title="CreditCard Class" Url="html/T_Braintree_CreditCard.htm">
+    <HelpTOCNode Id="266ea909-38c4-45f6-ae85-1a17b20285d3" Title="CreditCard Class" Url="html/T_Braintree_CreditCard.htm">
       <HelpTOCNode Title="CreditCard Members" Url="html/AllMembers_T_Braintree_CreditCard.htm" />
-      <HelpTOCNode Id="f02afa0c-89db-4d2d-8330-b876086cea77" Title="CreditCard Properties " Url="html/Properties_T_Braintree_CreditCard.htm">
+      <HelpTOCNode Id="e3941e0b-0711-4cf2-b9b2-c18d86b1959f" Title="CreditCard Properties " Url="html/Properties_T_Braintree_CreditCard.htm">
         <HelpTOCNode Title="BillingAddress Property " Url="html/P_Braintree_CreditCard_BillingAddress.htm" />
         <HelpTOCNode Title="Bin Property " Url="html/P_Braintree_CreditCard_Bin.htm" />
         <HelpTOCNode Title="CardholderName Property " Url="html/P_Braintree_CreditCard_CardholderName.htm" />
@@ -115,33 +117,33 @@
         <HelpTOCNode Title="UpdatedAt Property " Url="html/P_Braintree_CreditCard_UpdatedAt.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="da47abfb-4f3d-4abd-a1f8-8b09ea768924" Title="CreditCardAddressOptionsRequest Class" Url="html/T_Braintree_CreditCardAddressOptionsRequest.htm">
+    <HelpTOCNode Id="d46a844d-67b0-495d-b6d8-20001677291f" Title="CreditCardAddressOptionsRequest Class" Url="html/T_Braintree_CreditCardAddressOptionsRequest.htm">
       <HelpTOCNode Title="CreditCardAddressOptionsRequest Members" Url="html/AllMembers_T_Braintree_CreditCardAddressOptionsRequest.htm" />
       <HelpTOCNode Title="CreditCardAddressOptionsRequest Constructor " Url="html/M_Braintree_CreditCardAddressOptionsRequest__ctor.htm" />
-      <HelpTOCNode Id="56bec00c-b654-4926-96cf-91f0e33e0319" Title="CreditCardAddressOptionsRequest Methods " Url="html/Methods_T_Braintree_CreditCardAddressOptionsRequest.htm">
-        <HelpTOCNode Id="d77ebde7-9544-44ea-8dd0-fedadb3850c0" Title="ToQueryString Method " Url="html/Overload_Braintree_CreditCardAddressOptionsRequest_ToQueryString.htm">
+      <HelpTOCNode Id="7e3d496e-97ba-4394-9eea-b3655efe300a" Title="CreditCardAddressOptionsRequest Methods " Url="html/Methods_T_Braintree_CreditCardAddressOptionsRequest.htm">
+        <HelpTOCNode Id="c5d3f373-3af8-42ff-a1e1-a81c4b61bf7f" Title="ToQueryString Method " Url="html/Overload_Braintree_CreditCardAddressOptionsRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_CreditCardAddressOptionsRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_CreditCardAddressOptionsRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="4d4089ca-91bc-4713-847f-c1812c32c04d" Title="ToXml Method " Url="html/Overload_Braintree_CreditCardAddressOptionsRequest_ToXml.htm">
+        <HelpTOCNode Id="521dd77a-69e0-47c6-ab2d-0b10288112f9" Title="ToXml Method " Url="html/Overload_Braintree_CreditCardAddressOptionsRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_CreditCardAddressOptionsRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_CreditCardAddressOptionsRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="c9976faf-40e4-4373-a983-08125159f6eb" Title="CreditCardAddressOptionsRequest Properties " Url="html/Properties_T_Braintree_CreditCardAddressOptionsRequest.htm">
+      <HelpTOCNode Id="3d8f9d7f-1769-4595-acce-3cfbf45cc461" Title="CreditCardAddressOptionsRequest Properties " Url="html/Properties_T_Braintree_CreditCardAddressOptionsRequest.htm">
         <HelpTOCNode Title="UpdateExisting Property " Url="html/P_Braintree_CreditCardAddressOptionsRequest_UpdateExisting.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="a141419a-95b6-439b-884b-56eeec59dc7b" Title="CreditCardAddressRequest Class" Url="html/T_Braintree_CreditCardAddressRequest.htm">
+    <HelpTOCNode Id="b14a3f1e-dacc-4864-af9c-54d864759fe8" Title="CreditCardAddressRequest Class" Url="html/T_Braintree_CreditCardAddressRequest.htm">
       <HelpTOCNode Title="CreditCardAddressRequest Members" Url="html/AllMembers_T_Braintree_CreditCardAddressRequest.htm" />
       <HelpTOCNode Title="CreditCardAddressRequest Constructor " Url="html/M_Braintree_CreditCardAddressRequest__ctor.htm" />
-      <HelpTOCNode Id="583de59d-3d9a-4244-92a0-b5d620fa5e8e" Title="CreditCardAddressRequest Properties " Url="html/Properties_T_Braintree_CreditCardAddressRequest.htm">
+      <HelpTOCNode Id="d832dc06-87b9-427e-9fac-79b8090ff36b" Title="CreditCardAddressRequest Properties " Url="html/Properties_T_Braintree_CreditCardAddressRequest.htm">
         <HelpTOCNode Title="Options Property " Url="html/P_Braintree_CreditCardAddressRequest_Options.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="824b2742-0fa6-419e-8c7f-fd890f14fb6a" Title="CreditCardCardType Class" Url="html/T_Braintree_CreditCardCardType.htm">
+    <HelpTOCNode Id="fd292b7e-9dd9-44a0-8cd8-3c6b2b6463a0" Title="CreditCardCardType Class" Url="html/T_Braintree_CreditCardCardType.htm">
       <HelpTOCNode Title="CreditCardCardType Members" Url="html/AllMembers_T_Braintree_CreditCardCardType.htm" />
-      <HelpTOCNode Id="a211f8b8-8452-4560-8c9c-9af82f5a45cf" Title="CreditCardCardType Fields" Url="html/Fields_T_Braintree_CreditCardCardType.htm">
+      <HelpTOCNode Id="fc2c2104-a155-4145-b8c3-347c74c05ff6" Title="CreditCardCardType Fields" Url="html/Fields_T_Braintree_CreditCardCardType.htm">
         <HelpTOCNode Title="ALL Field" Url="html/F_Braintree_CreditCardCardType_ALL.htm" />
         <HelpTOCNode Title="AMEX Field" Url="html/F_Braintree_CreditCardCardType_AMEX.htm" />
         <HelpTOCNode Title="CARTE_BLANCHE Field" Url="html/F_Braintree_CreditCardCardType_CARTE_BLANCHE.htm" />
@@ -158,18 +160,18 @@
         <HelpTOCNode Title="VISA Field" Url="html/F_Braintree_CreditCardCardType_VISA.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="b7150931-0642-4e5b-9fc7-d085a830c737" Title="CreditCardCustomerLocation Class" Url="html/T_Braintree_CreditCardCustomerLocation.htm">
+    <HelpTOCNode Id="d753bb19-3e90-45e6-97e8-35a4214830d7" Title="CreditCardCustomerLocation Class" Url="html/T_Braintree_CreditCardCustomerLocation.htm">
       <HelpTOCNode Title="CreditCardCustomerLocation Members" Url="html/AllMembers_T_Braintree_CreditCardCustomerLocation.htm" />
-      <HelpTOCNode Id="2f5fa850-9f8f-415b-8945-f2de0a44799a" Title="CreditCardCustomerLocation Fields" Url="html/Fields_T_Braintree_CreditCardCustomerLocation.htm">
+      <HelpTOCNode Id="7492ee87-ea5b-484f-a12c-b48e1c8da4f9" Title="CreditCardCustomerLocation Fields" Url="html/Fields_T_Braintree_CreditCardCustomerLocation.htm">
         <HelpTOCNode Title="ALL Field" Url="html/F_Braintree_CreditCardCustomerLocation_ALL.htm" />
         <HelpTOCNode Title="INTERNATIONAL Field" Url="html/F_Braintree_CreditCardCustomerLocation_INTERNATIONAL.htm" />
         <HelpTOCNode Title="US Field" Url="html/F_Braintree_CreditCardCustomerLocation_US.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="22969885-483f-47ad-9da5-816658ed8f70" Title="CreditCardGateway Class" Url="html/T_Braintree_CreditCardGateway.htm">
+    <HelpTOCNode Id="7c333b0d-1b43-4596-8993-4ecc01973e6a" Title="CreditCardGateway Class" Url="html/T_Braintree_CreditCardGateway.htm">
       <HelpTOCNode Title="CreditCardGateway Members" Url="html/AllMembers_T_Braintree_CreditCardGateway.htm" />
       <HelpTOCNode Title="CreditCardGateway Constructor " Url="html/M_Braintree_CreditCardGateway__ctor.htm" />
-      <HelpTOCNode Id="5a8cd301-126c-475e-9060-17506084aa4e" Title="CreditCardGateway Methods " Url="html/Methods_T_Braintree_CreditCardGateway.htm">
+      <HelpTOCNode Id="57d4d659-5019-4fcb-9f34-3e5f6cc86986" Title="CreditCardGateway Methods " Url="html/Methods_T_Braintree_CreditCardGateway.htm">
         <HelpTOCNode Title="ConfirmTransparentRedirect Method " Url="html/M_Braintree_CreditCardGateway_ConfirmTransparentRedirect.htm" />
         <HelpTOCNode Title="Create Method " Url="html/M_Braintree_CreditCardGateway_Create.htm" />
         <HelpTOCNode Title="Delete Method " Url="html/M_Braintree_CreditCardGateway_Delete.htm" />
@@ -179,38 +181,39 @@
         <HelpTOCNode Title="Update Method " Url="html/M_Braintree_CreditCardGateway_Update.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="ddeaacb0-a01c-4238-a219-ecd4e9ecd783" Title="CreditCardOptionsRequest Class" Url="html/T_Braintree_CreditCardOptionsRequest.htm">
+    <HelpTOCNode Id="d6e42fd2-ad0f-426d-845d-ea8907273fd7" Title="CreditCardOptionsRequest Class" Url="html/T_Braintree_CreditCardOptionsRequest.htm">
       <HelpTOCNode Title="CreditCardOptionsRequest Members" Url="html/AllMembers_T_Braintree_CreditCardOptionsRequest.htm" />
       <HelpTOCNode Title="CreditCardOptionsRequest Constructor " Url="html/M_Braintree_CreditCardOptionsRequest__ctor.htm" />
-      <HelpTOCNode Id="861d37a1-2e33-48b5-8ded-023acaf9fb9c" Title="CreditCardOptionsRequest Methods " Url="html/Methods_T_Braintree_CreditCardOptionsRequest.htm">
-        <HelpTOCNode Id="66b23cb4-b212-4bf3-9d5f-ebcdb5c44d9a" Title="ToQueryString Method " Url="html/Overload_Braintree_CreditCardOptionsRequest_ToQueryString.htm">
+      <HelpTOCNode Id="4b55788b-81ac-489f-83d0-e461970646a2" Title="CreditCardOptionsRequest Methods " Url="html/Methods_T_Braintree_CreditCardOptionsRequest.htm">
+        <HelpTOCNode Id="f0b1bfd8-6516-42e0-bccb-0e5de3fac75a" Title="ToQueryString Method " Url="html/Overload_Braintree_CreditCardOptionsRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_CreditCardOptionsRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_CreditCardOptionsRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="50c6db78-e495-48f8-b7da-0b2fd378875b" Title="ToXml Method " Url="html/Overload_Braintree_CreditCardOptionsRequest_ToXml.htm">
+        <HelpTOCNode Id="b5de32c9-17c1-4494-bb1f-3d5fbd83ba30" Title="ToXml Method " Url="html/Overload_Braintree_CreditCardOptionsRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_CreditCardOptionsRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_CreditCardOptionsRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="d99f72f8-c394-40c0-90cf-c7fc93a07bba" Title="CreditCardOptionsRequest Properties " Url="html/Properties_T_Braintree_CreditCardOptionsRequest.htm">
+      <HelpTOCNode Id="68f7f0f3-c7ae-4501-a3b6-015fabbf4fcc" Title="CreditCardOptionsRequest Properties " Url="html/Properties_T_Braintree_CreditCardOptionsRequest.htm">
         <HelpTOCNode Title="MakeDefault Property " Url="html/P_Braintree_CreditCardOptionsRequest_MakeDefault.htm" />
+        <HelpTOCNode Title="VerificationMerchantAccountId Property " Url="html/P_Braintree_CreditCardOptionsRequest_VerificationMerchantAccountId.htm" />
         <HelpTOCNode Title="VerifyCard Property " Url="html/P_Braintree_CreditCardOptionsRequest_VerifyCard.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="b9f6b438-e4a8-4c6f-a0f4-bed306ee6e45" Title="CreditCardRequest Class" Url="html/T_Braintree_CreditCardRequest.htm">
+    <HelpTOCNode Id="f1c29d06-da21-4dab-a0d3-6c4d2b8ed4e2" Title="CreditCardRequest Class" Url="html/T_Braintree_CreditCardRequest.htm">
       <HelpTOCNode Title="CreditCardRequest Members" Url="html/AllMembers_T_Braintree_CreditCardRequest.htm" />
       <HelpTOCNode Title="CreditCardRequest Constructor " Url="html/M_Braintree_CreditCardRequest__ctor.htm" />
-      <HelpTOCNode Id="d94b4adb-535b-4500-b194-65692e5d58c3" Title="CreditCardRequest Methods " Url="html/Methods_T_Braintree_CreditCardRequest.htm">
-        <HelpTOCNode Id="876606f5-9c71-47fd-a8c7-03892c127cef" Title="ToQueryString Method " Url="html/Overload_Braintree_CreditCardRequest_ToQueryString.htm">
+      <HelpTOCNode Id="4361fc34-f866-4e50-919c-bfdfbe77b21b" Title="CreditCardRequest Methods " Url="html/Methods_T_Braintree_CreditCardRequest.htm">
+        <HelpTOCNode Id="39587694-8d1d-49c3-93a0-4a68875384a4" Title="ToQueryString Method " Url="html/Overload_Braintree_CreditCardRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_CreditCardRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_CreditCardRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="c9e5a829-7b65-4654-a327-c26b28bf8f4c" Title="ToXml Method " Url="html/Overload_Braintree_CreditCardRequest_ToXml.htm">
+        <HelpTOCNode Id="a4b469a3-e23b-4fce-9822-ce5d0c79b3f5" Title="ToXml Method " Url="html/Overload_Braintree_CreditCardRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_CreditCardRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_CreditCardRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="bf610219-e86d-42f8-96e6-4e8c3d777a84" Title="CreditCardRequest Properties " Url="html/Properties_T_Braintree_CreditCardRequest.htm">
+      <HelpTOCNode Id="1c68471d-0ce1-4842-8325-da7d4c44fb27" Title="CreditCardRequest Properties " Url="html/Properties_T_Braintree_CreditCardRequest.htm">
         <HelpTOCNode Title="BillingAddress Property " Url="html/P_Braintree_CreditCardRequest_BillingAddress.htm" />
         <HelpTOCNode Title="CardholderName Property " Url="html/P_Braintree_CreditCardRequest_CardholderName.htm" />
         <HelpTOCNode Title="CustomerId Property " Url="html/P_Braintree_CreditCardRequest_CustomerId.htm" />
@@ -224,30 +227,31 @@
         <HelpTOCNode Title="Token Property " Url="html/P_Braintree_CreditCardRequest_Token.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="23fbcca1-0d5f-4f19-9693-3d8c2e5e52f9" Title="CreditCardVerification Class" Url="html/T_Braintree_CreditCardVerification.htm">
+    <HelpTOCNode Id="ad59f96a-1d00-4ae0-a6bc-0687c031be7f" Title="CreditCardVerification Class" Url="html/T_Braintree_CreditCardVerification.htm">
       <HelpTOCNode Title="CreditCardVerification Members" Url="html/AllMembers_T_Braintree_CreditCardVerification.htm" />
       <HelpTOCNode Title="CreditCardVerification Constructor " Url="html/M_Braintree_CreditCardVerification__ctor.htm" />
-      <HelpTOCNode Id="e68cd307-b258-42ac-bc33-b0782e2d4244" Title="CreditCardVerification Properties " Url="html/Properties_T_Braintree_CreditCardVerification.htm">
+      <HelpTOCNode Id="b491ab4e-eeee-4892-903d-4cc63f371dc4" Title="CreditCardVerification Properties " Url="html/Properties_T_Braintree_CreditCardVerification.htm">
         <HelpTOCNode Title="AvsErrorResponseCode Property " Url="html/P_Braintree_CreditCardVerification_AvsErrorResponseCode.htm" />
         <HelpTOCNode Title="AvsPostalCodeResponseCode Property " Url="html/P_Braintree_CreditCardVerification_AvsPostalCodeResponseCode.htm" />
         <HelpTOCNode Title="AvsStreetAddressResponseCode Property " Url="html/P_Braintree_CreditCardVerification_AvsStreetAddressResponseCode.htm" />
         <HelpTOCNode Title="CvvResponseCode Property " Url="html/P_Braintree_CreditCardVerification_CvvResponseCode.htm" />
+        <HelpTOCNode Title="MerchantAccountId Property " Url="html/P_Braintree_CreditCardVerification_MerchantAccountId.htm" />
         <HelpTOCNode Title="ProcessorResponseCode Property " Url="html/P_Braintree_CreditCardVerification_ProcessorResponseCode.htm" />
         <HelpTOCNode Title="ProcessorResponseText Property " Url="html/P_Braintree_CreditCardVerification_ProcessorResponseText.htm" />
         <HelpTOCNode Title="Status Property " Url="html/P_Braintree_CreditCardVerification_Status.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="af1a10e7-65ae-4f57-9345-69e02a9b2ff4" Title="Crypto Class" Url="html/T_Braintree_Crypto.htm">
+    <HelpTOCNode Id="73b05caf-3f96-4592-a3e5-ec0b6e375da4" Title="Crypto Class" Url="html/T_Braintree_Crypto.htm">
       <HelpTOCNode Title="Crypto Members" Url="html/AllMembers_T_Braintree_Crypto.htm" />
       <HelpTOCNode Title="Crypto Constructor " Url="html/M_Braintree_Crypto__ctor.htm" />
-      <HelpTOCNode Id="5453368b-39b1-4b43-a385-34972b832283" Title="Crypto Methods " Url="html/Methods_T_Braintree_Crypto.htm">
+      <HelpTOCNode Id="88b09536-4fe2-47a9-bb41-de3468debc88" Title="Crypto Methods " Url="html/Methods_T_Braintree_Crypto.htm">
         <HelpTOCNode Title="HmacHash Method " Url="html/M_Braintree_Crypto_HmacHash.htm" />
         <HelpTOCNode Title="Sha1Bytes Method " Url="html/M_Braintree_Crypto_Sha1Bytes.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="aecb03e1-5e69-4472-ad6f-e2e5d3f7a832" Title="Customer Class" Url="html/T_Braintree_Customer.htm">
+    <HelpTOCNode Id="911ce2f2-b371-4192-ac9f-be6f22df50fe" Title="Customer Class" Url="html/T_Braintree_Customer.htm">
       <HelpTOCNode Title="Customer Members" Url="html/AllMembers_T_Braintree_Customer.htm" />
-      <HelpTOCNode Id="e58a9630-67c2-4a29-9240-34a9b08dfff0" Title="Customer Properties " Url="html/Properties_T_Braintree_Customer.htm">
+      <HelpTOCNode Id="b9a8c8e2-e50d-4fc2-b49c-583dcef9001c" Title="Customer Properties " Url="html/Properties_T_Braintree_Customer.htm">
         <HelpTOCNode Title="Addresses Property " Url="html/P_Braintree_Customer_Addresses.htm" />
         <HelpTOCNode Title="Company Property " Url="html/P_Braintree_Customer_Company.htm" />
         <HelpTOCNode Title="CreatedAt Property " Url="html/P_Braintree_Customer_CreatedAt.htm" />
@@ -263,10 +267,10 @@
         <HelpTOCNode Title="Website Property " Url="html/P_Braintree_Customer_Website.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="715ef16e-5852-4ddc-9211-6905ebeffb56" Title="CustomerGateway Class" Url="html/T_Braintree_CustomerGateway.htm">
+    <HelpTOCNode Id="b20c5bf1-0787-4760-ac94-392b0126f83c" Title="CustomerGateway Class" Url="html/T_Braintree_CustomerGateway.htm">
       <HelpTOCNode Title="CustomerGateway Members" Url="html/AllMembers_T_Braintree_CustomerGateway.htm" />
       <HelpTOCNode Title="CustomerGateway Constructor " Url="html/M_Braintree_CustomerGateway__ctor.htm" />
-      <HelpTOCNode Id="7bac0f12-4e4c-4410-b2ea-4078975fe20e" Title="CustomerGateway Methods " Url="html/Methods_T_Braintree_CustomerGateway.htm">
+      <HelpTOCNode Id="56ce8722-62e4-4e27-a8d8-c87233746c7e" Title="CustomerGateway Methods " Url="html/Methods_T_Braintree_CustomerGateway.htm">
         <HelpTOCNode Title="All Method " Url="html/M_Braintree_CustomerGateway_All.htm" />
         <HelpTOCNode Title="ConfirmTransparentRedirect Method " Url="html/M_Braintree_CustomerGateway_ConfirmTransparentRedirect.htm" />
         <HelpTOCNode Title="Create Method " Url="html/M_Braintree_CustomerGateway_Create.htm" />
@@ -277,20 +281,20 @@
         <HelpTOCNode Title="Update Method " Url="html/M_Braintree_CustomerGateway_Update.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="5d80cc0a-305f-41ed-bd33-8255ebf4e240" Title="CustomerRequest Class" Url="html/T_Braintree_CustomerRequest.htm">
+    <HelpTOCNode Id="932092fc-7c97-472a-86fd-e291b6bdb0fa" Title="CustomerRequest Class" Url="html/T_Braintree_CustomerRequest.htm">
       <HelpTOCNode Title="CustomerRequest Members" Url="html/AllMembers_T_Braintree_CustomerRequest.htm" />
       <HelpTOCNode Title="CustomerRequest Constructor " Url="html/M_Braintree_CustomerRequest__ctor.htm" />
-      <HelpTOCNode Id="765f077d-313a-43dc-80d2-21f1c5eb5fd7" Title="CustomerRequest Methods " Url="html/Methods_T_Braintree_CustomerRequest.htm">
-        <HelpTOCNode Id="42a0b66b-589a-44c5-a3d9-832fa2e28ce7" Title="ToQueryString Method " Url="html/Overload_Braintree_CustomerRequest_ToQueryString.htm">
+      <HelpTOCNode Id="ebb3bf1f-e792-4ddb-86ed-cdbd2ad43292" Title="CustomerRequest Methods " Url="html/Methods_T_Braintree_CustomerRequest.htm">
+        <HelpTOCNode Id="9efe6126-0a4e-4bc7-98aa-f31c5cb013ef" Title="ToQueryString Method " Url="html/Overload_Braintree_CustomerRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_CustomerRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_CustomerRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="358e23b0-2849-4507-837b-7fdb63d4053e" Title="ToXml Method " Url="html/Overload_Braintree_CustomerRequest_ToXml.htm">
+        <HelpTOCNode Id="bfa1cd7b-a822-4089-a579-7982c8cbddaa" Title="ToXml Method " Url="html/Overload_Braintree_CustomerRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_CustomerRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_CustomerRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="1825b580-3579-4b6e-85be-62436cde4e53" Title="CustomerRequest Properties " Url="html/Properties_T_Braintree_CustomerRequest.htm">
+      <HelpTOCNode Id="3f2596ba-211b-4aab-8afa-a668a615848c" Title="CustomerRequest Properties " Url="html/Properties_T_Braintree_CustomerRequest.htm">
         <HelpTOCNode Title="Company Property " Url="html/P_Braintree_CustomerRequest_Company.htm" />
         <HelpTOCNode Title="CreditCard Property " Url="html/P_Braintree_CustomerRequest_CreditCard.htm" />
         <HelpTOCNode Title="CustomerId Property " Url="html/P_Braintree_CustomerRequest_CustomerId.htm" />
@@ -304,70 +308,70 @@
         <HelpTOCNode Title="Website Property " Url="html/P_Braintree_CustomerRequest_Website.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="4d18b6fa-4328-43b9-bfb2-c3267c237bf3" Title="CustomerSearchRequest Class" Url="html/T_Braintree_CustomerSearchRequest.htm">
+    <HelpTOCNode Id="955bd2f6-33cc-4f11-b083-2430ce0ea6f7" Title="CustomerSearchRequest Class" Url="html/T_Braintree_CustomerSearchRequest.htm">
       <HelpTOCNode Title="CustomerSearchRequest Members" Url="html/AllMembers_T_Braintree_CustomerSearchRequest.htm" />
       <HelpTOCNode Title="CustomerSearchRequest Constructor " Url="html/M_Braintree_CustomerSearchRequest__ctor.htm" />
-      <HelpTOCNode Id="b5b52e86-f2d2-4d35-9484-b68a7b67a40d" Title="CustomerSearchRequest Properties " Url="html/Properties_T_Braintree_CustomerSearchRequest.htm">
+      <HelpTOCNode Id="a70b8c72-c336-4cca-9b6d-6863166d4a3f" Title="CustomerSearchRequest Properties " Url="html/Properties_T_Braintree_CustomerSearchRequest.htm">
         <HelpTOCNode Title="Ids Property " Url="html/P_Braintree_CustomerSearchRequest_Ids.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="02d6b066-58dc-440b-8146-506e7a7cd92e" Title="DateRangeNode(T) Class" Url="html/T_Braintree_DateRangeNode_1.htm">
+    <HelpTOCNode Id="c30e2f8b-91c2-4597-b412-a91db0901c72" Title="DateRangeNode(T) Class" Url="html/T_Braintree_DateRangeNode_1.htm">
       <HelpTOCNode Title="DateRangeNode(T) Members" Url="html/AllMembers_T_Braintree_DateRangeNode_1.htm" />
       <HelpTOCNode Title="DateRangeNode(T) Constructor " Url="html/M_Braintree_DateRangeNode_1__ctor.htm" />
-      <HelpTOCNode Id="d8f19173-18dd-4198-b28d-9ad09f02b988" Title="DateRangeNode(T) Methods " Url="html/Methods_T_Braintree_DateRangeNode_1.htm">
+      <HelpTOCNode Id="faa4ac55-f208-488f-b251-74cdb5a9cd37" Title="DateRangeNode(T) Methods " Url="html/Methods_T_Braintree_DateRangeNode_1.htm">
         <HelpTOCNode Title="Between Method " Url="html/M_Braintree_DateRangeNode_1_Between.htm" />
         <HelpTOCNode Title="GreaterThanOrEqualTo Method " Url="html/M_Braintree_DateRangeNode_1_GreaterThanOrEqualTo.htm" />
         <HelpTOCNode Title="LessThanOrEqualTo Method " Url="html/M_Braintree_DateRangeNode_1_LessThanOrEqualTo.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="ccef1d82-17a9-4eec-a77d-8dcf33578a9b" Title="Enumeration Class" Url="html/T_Braintree_Enumeration.htm">
+    <HelpTOCNode Id="7f3f8daa-a872-4e1b-9011-d500b6ef5639" Title="Enumeration Class" Url="html/T_Braintree_Enumeration.htm">
       <HelpTOCNode Title="Enumeration Members" Url="html/AllMembers_T_Braintree_Enumeration.htm" />
-      <HelpTOCNode Id="48f7431c-12fb-40b4-89af-e36249cad4e9" Title="Enumeration Methods " Url="html/Methods_T_Braintree_Enumeration.htm">
+      <HelpTOCNode Id="deb5d7d3-ae54-402a-a5d6-ffa92d1f5a3c" Title="Enumeration Methods " Url="html/Methods_T_Braintree_Enumeration.htm">
         <HelpTOCNode Title="ToString Method " Url="html/M_Braintree_Enumeration_ToString.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="461f00f9-b2d7-4004-b153-d07f590ab978" Title="Environment Class" Url="html/T_Braintree_Environment.htm">
+    <HelpTOCNode Id="1de958a9-f308-4d33-aff6-28ff9550ce1d" Title="Environment Class" Url="html/T_Braintree_Environment.htm">
       <HelpTOCNode Title="Environment Members" Url="html/AllMembers_T_Braintree_Environment.htm" />
-      <HelpTOCNode Id="52005ce8-7a21-4829-a613-bc662cca92f9" Title="Environment Fields" Url="html/Fields_T_Braintree_Environment.htm">
+      <HelpTOCNode Id="e169563d-8bb8-497e-92ac-6b02fa6735f1" Title="Environment Fields" Url="html/Fields_T_Braintree_Environment.htm">
         <HelpTOCNode Title="DEVELOPMENT Field" Url="html/F_Braintree_Environment_DEVELOPMENT.htm" />
         <HelpTOCNode Title="PRODUCTION Field" Url="html/F_Braintree_Environment_PRODUCTION.htm" />
         <HelpTOCNode Title="QA Field" Url="html/F_Braintree_Environment_QA.htm" />
         <HelpTOCNode Title="SANDBOX Field" Url="html/F_Braintree_Environment_SANDBOX.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="6d5b2a83-a82d-401a-953a-e60ddf73708b" Title="Environment Properties " Url="html/Properties_T_Braintree_Environment.htm">
+      <HelpTOCNode Id="65076ee4-a4b1-43f8-8f43-d93a3b6ecc3f" Title="Environment Properties " Url="html/Properties_T_Braintree_Environment.htm">
         <HelpTOCNode Title="GatewayURL Property " Url="html/P_Braintree_Environment_GatewayURL.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="27d758e5-3139-471a-93ee-4b5beda0c396" Title="EqualityNode(T) Class" Url="html/T_Braintree_EqualityNode_1.htm">
+    <HelpTOCNode Id="770c25c7-748f-407d-9f3a-c66ca00660a0" Title="EqualityNode(T) Class" Url="html/T_Braintree_EqualityNode_1.htm">
       <HelpTOCNode Title="EqualityNode(T) Members" Url="html/AllMembers_T_Braintree_EqualityNode_1.htm" />
       <HelpTOCNode Title="EqualityNode(T) Constructor " Url="html/M_Braintree_EqualityNode_1__ctor.htm" />
-      <HelpTOCNode Id="37478604-6076-4641-b64d-d31cd45ff1fe" Title="EqualityNode(T) Methods " Url="html/Methods_T_Braintree_EqualityNode_1.htm">
+      <HelpTOCNode Id="1dfe4dfb-b19d-4c03-ae52-2f7af2b1bd02" Title="EqualityNode(T) Methods " Url="html/Methods_T_Braintree_EqualityNode_1.htm">
         <HelpTOCNode Title="Is Method " Url="html/M_Braintree_EqualityNode_1_Is.htm" />
         <HelpTOCNode Title="IsNot Method " Url="html/M_Braintree_EqualityNode_1_IsNot.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="35584371-9484-4bdd-ba24-0f55b463dc46" Title="KeyValueNode(T) Class" Url="html/T_Braintree_KeyValueNode_1.htm">
+    <HelpTOCNode Id="47c4e715-8c34-4f8c-9e98-111cfabbc75c" Title="KeyValueNode(T) Class" Url="html/T_Braintree_KeyValueNode_1.htm">
       <HelpTOCNode Title="KeyValueNode(T) Members" Url="html/AllMembers_T_Braintree_KeyValueNode_1.htm" />
       <HelpTOCNode Title="KeyValueNode(T) Constructor " Url="html/M_Braintree_KeyValueNode_1__ctor.htm" />
-      <HelpTOCNode Id="3017b30f-fc18-455d-9400-1b41db32dbbe" Title="KeyValueNode(T) Methods " Url="html/Methods_T_Braintree_KeyValueNode_1.htm">
+      <HelpTOCNode Id="4bf989ac-2b1a-41c8-ba77-19f69809cf22" Title="KeyValueNode(T) Methods " Url="html/Methods_T_Braintree_KeyValueNode_1.htm">
         <HelpTOCNode Title="Is Method " Url="html/M_Braintree_KeyValueNode_1_Is.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="1754e37e-c24c-4695-8491-ea53acdee0af" Title="MultipleValueNode(T) Class" Url="html/T_Braintree_MultipleValueNode_1.htm">
+    <HelpTOCNode Id="728da6ed-0966-4390-b330-065b7cf6701c" Title="MultipleValueNode(T) Class" Url="html/T_Braintree_MultipleValueNode_1.htm">
       <HelpTOCNode Title="MultipleValueNode(T) Members" Url="html/AllMembers_T_Braintree_MultipleValueNode_1.htm" />
-      <HelpTOCNode Id="afba1a54-2060-418d-9139-baa87ae1b683" Title="MultipleValueNode(T) Constructor " Url="html/Overload_Braintree_MultipleValueNode_1__ctor.htm">
+      <HelpTOCNode Id="f155abfb-a2f0-4996-a6f0-76def2021004" Title="MultipleValueNode(T) Constructor " Url="html/Overload_Braintree_MultipleValueNode_1__ctor.htm">
         <HelpTOCNode Title="MultipleValueNode(T) Constructor (String, T)" Url="html/M_Braintree_MultipleValueNode_1__ctor.htm" />
         <HelpTOCNode Title="MultipleValueNode(T) Constructor (String, T, Object[])" Url="html/M_Braintree_MultipleValueNode_1__ctor_1.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="26f3a7f2-f5d2-40e3-9954-7e71fc1be0e0" Title="MultipleValueNode(T) Methods " Url="html/Methods_T_Braintree_MultipleValueNode_1.htm">
+      <HelpTOCNode Id="bde70012-c9ac-4e34-b6dc-4d926ea44794" Title="MultipleValueNode(T) Methods " Url="html/Methods_T_Braintree_MultipleValueNode_1.htm">
         <HelpTOCNode Title="IncludedIn Method " Url="html/M_Braintree_MultipleValueNode_1_IncludedIn.htm" />
         <HelpTOCNode Title="Is Method " Url="html/M_Braintree_MultipleValueNode_1_Is.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="e4b9df82-6734-4fbb-aa7f-2ce95aa0bcbc" Title="NodeWrapper Class" Url="html/T_Braintree_NodeWrapper.htm">
+    <HelpTOCNode Id="cd09f687-ce28-43a6-84c9-75a9cbd9fecd" Title="NodeWrapper Class" Url="html/T_Braintree_NodeWrapper.htm">
       <HelpTOCNode Title="NodeWrapper Members" Url="html/AllMembers_T_Braintree_NodeWrapper.htm" />
       <HelpTOCNode Title="NodeWrapper Constructor " Url="html/M_Braintree_NodeWrapper__ctor.htm" />
-      <HelpTOCNode Id="30051f4f-c7c8-48c3-a0fb-463c4e5845e0" Title="NodeWrapper Methods " Url="html/Methods_T_Braintree_NodeWrapper.htm">
+      <HelpTOCNode Id="ec93dadd-3933-46a0-9c4f-cb6c04d110a5" Title="NodeWrapper Methods " Url="html/Methods_T_Braintree_NodeWrapper.htm">
         <HelpTOCNode Title="GetBoolean Method " Url="html/M_Braintree_NodeWrapper_GetBoolean.htm" />
         <HelpTOCNode Title="GetChildren Method " Url="html/M_Braintree_NodeWrapper_GetChildren.htm" />
         <HelpTOCNode Title="GetDateTime Method " Url="html/M_Braintree_NodeWrapper_GetDateTime.htm" />
@@ -385,63 +389,63 @@
         <HelpTOCNode Title="OuterXml Method " Url="html/M_Braintree_NodeWrapper_OuterXml.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="a77d8c50-1b00-475b-a6b6-098d020ba87a" Title="PartialMatchNode(T) Class" Url="html/T_Braintree_PartialMatchNode_1.htm">
+    <HelpTOCNode Id="e207f1bc-2d50-48eb-a1be-06777cdc226e" Title="PartialMatchNode(T) Class" Url="html/T_Braintree_PartialMatchNode_1.htm">
       <HelpTOCNode Title="PartialMatchNode(T) Members" Url="html/AllMembers_T_Braintree_PartialMatchNode_1.htm" />
       <HelpTOCNode Title="PartialMatchNode(T) Constructor " Url="html/M_Braintree_PartialMatchNode_1__ctor.htm" />
-      <HelpTOCNode Id="3ac967f4-9c67-48cc-ac5e-76eee90088fe" Title="PartialMatchNode(T) Methods " Url="html/Methods_T_Braintree_PartialMatchNode_1.htm">
+      <HelpTOCNode Id="831833be-5e4a-4381-b92b-ff8a9cefe007" Title="PartialMatchNode(T) Methods " Url="html/Methods_T_Braintree_PartialMatchNode_1.htm">
         <HelpTOCNode Title="EndsWith Method " Url="html/M_Braintree_PartialMatchNode_1_EndsWith.htm" />
         <HelpTOCNode Title="StartsWith Method " Url="html/M_Braintree_PartialMatchNode_1_StartsWith.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="c8b2ca5b-f6c9-45b9-a634-47bd1e46fd8f" Title="QueryString Class" Url="html/T_Braintree_QueryString.htm">
+    <HelpTOCNode Id="636857cd-0e77-46a9-a5bc-3a67922b8c33" Title="QueryString Class" Url="html/T_Braintree_QueryString.htm">
       <HelpTOCNode Title="QueryString Members" Url="html/AllMembers_T_Braintree_QueryString.htm" />
       <HelpTOCNode Title="QueryString Constructor " Url="html/M_Braintree_QueryString__ctor.htm" />
-      <HelpTOCNode Id="9af1d6bc-b423-45be-a101-8c5d5b3416c8" Title="QueryString Methods " Url="html/Methods_T_Braintree_QueryString.htm">
+      <HelpTOCNode Id="4826cf4f-f465-49ae-8f2f-a36651fa158a" Title="QueryString Methods " Url="html/Methods_T_Braintree_QueryString.htm">
         <HelpTOCNode Title="Append Method " Url="html/M_Braintree_QueryString_Append.htm" />
         <HelpTOCNode Title="ToString Method " Url="html/M_Braintree_QueryString_ToString.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="bc081ad7-9d50-4fe4-ac0c-6968ff77dded" Title="RangeNode(T) Class" Url="html/T_Braintree_RangeNode_1.htm">
+    <HelpTOCNode Id="2d022707-4997-4477-98d0-4f1f95aa4a66" Title="RangeNode(T) Class" Url="html/T_Braintree_RangeNode_1.htm">
       <HelpTOCNode Title="RangeNode(T) Members" Url="html/AllMembers_T_Braintree_RangeNode_1.htm" />
       <HelpTOCNode Title="RangeNode(T) Constructor " Url="html/M_Braintree_RangeNode_1__ctor.htm" />
-      <HelpTOCNode Id="edc7f161-9576-4cf0-8a19-a97769844d28" Title="RangeNode(T) Methods " Url="html/Methods_T_Braintree_RangeNode_1.htm">
+      <HelpTOCNode Id="bea174fb-4206-4758-b06c-92f2b9372dc0" Title="RangeNode(T) Methods " Url="html/Methods_T_Braintree_RangeNode_1.htm">
         <HelpTOCNode Title="Between Method " Url="html/M_Braintree_RangeNode_1_Between.htm" />
         <HelpTOCNode Title="GreaterThanOrEqualTo Method " Url="html/M_Braintree_RangeNode_1_GreaterThanOrEqualTo.htm" />
         <HelpTOCNode Title="LessThanOrEqualTo Method " Url="html/M_Braintree_RangeNode_1_LessThanOrEqualTo.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="135c1949-83e1-4035-9dbf-ad7be47b99d0" Title="Request Class" Url="html/T_Braintree_Request.htm">
+    <HelpTOCNode Id="78be0a62-426d-47d1-b284-25e574669cc3" Title="Request Class" Url="html/T_Braintree_Request.htm">
       <HelpTOCNode Title="Request Members" Url="html/AllMembers_T_Braintree_Request.htm" />
-      <HelpTOCNode Id="7683a81d-5b5f-4b63-b404-4356fa185f68" Title="Request Methods " Url="html/Methods_T_Braintree_Request.htm">
-        <HelpTOCNode Id="35a2b2e5-7c0b-4901-a9c5-d14ca08270db" Title="ToQueryString Method " Url="html/Overload_Braintree_Request_ToQueryString.htm">
+      <HelpTOCNode Id="525d1e20-b1ab-4506-ad23-3bf30158da0c" Title="Request Methods " Url="html/Methods_T_Braintree_Request.htm">
+        <HelpTOCNode Id="637b60f8-6789-484e-b828-9ed09060baa5" Title="ToQueryString Method " Url="html/Overload_Braintree_Request_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_Request_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_Request_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="c6eeafe6-b21c-4f20-9133-06ba358352d0" Title="ToXml Method " Url="html/Overload_Braintree_Request_ToXml.htm">
+        <HelpTOCNode Id="324bf879-5249-48d3-a669-9e0c7b731478" Title="ToXml Method " Url="html/Overload_Braintree_Request_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_Request_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_Request_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="80f31f8c-d6f9-4608-baff-b3c04e10c5d0" Title="ResourceCollection(T) Class" Url="html/T_Braintree_ResourceCollection_1.htm">
+    <HelpTOCNode Id="0231ada6-34a1-4a53-a881-3027283a45f5" Title="ResourceCollection(T) Class" Url="html/T_Braintree_ResourceCollection_1.htm">
       <HelpTOCNode Title="ResourceCollection(T) Members" Url="html/AllMembers_T_Braintree_ResourceCollection_1.htm" />
       <HelpTOCNode Title="ResourceCollection(T) Constructor " Url="html/M_Braintree_ResourceCollection_1__ctor.htm" />
-      <HelpTOCNode Id="39d0570b-6f46-4d0b-9450-e0795124b872" Title="ResourceCollection(T) Methods " Url="html/Methods_T_Braintree_ResourceCollection_1.htm">
+      <HelpTOCNode Id="d83f88a8-33a6-4818-b234-82ee271b4eda" Title="ResourceCollection(T) Methods " Url="html/Methods_T_Braintree_ResourceCollection_1.htm">
         <HelpTOCNode Title="GetEnumerator Method " Url="html/M_Braintree_ResourceCollection_1_GetEnumerator.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="4c481c5a-8c32-4897-90ca-ede312411dd6" Title="ResourceCollection(T) Properties " Url="html/Properties_T_Braintree_ResourceCollection_1.htm">
+      <HelpTOCNode Id="db2b6637-b5c3-4fe9-8221-0d55862a0604" Title="ResourceCollection(T) Properties " Url="html/Properties_T_Braintree_ResourceCollection_1.htm">
         <HelpTOCNode Title="FirstItem Property " Url="html/P_Braintree_ResourceCollection_1_FirstItem.htm" />
         <HelpTOCNode Title="MaximumCount Property " Url="html/P_Braintree_ResourceCollection_1_MaximumCount.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
     <HelpTOCNode Title="ResourceCollection(T).PagingDelegate Delegate" Url="html/T_Braintree_ResourceCollection_1_PagingDelegate.htm" />
-    <HelpTOCNode Id="0050675d-3320-4080-98e6-1eaeab80842c" Title="Result(T) Class" Url="html/T_Braintree_Result_1.htm">
+    <HelpTOCNode Id="fab2873c-465c-486f-bb9f-abfd2d1571ee" Title="Result(T) Class" Url="html/T_Braintree_Result_1.htm">
       <HelpTOCNode Title="Result(T) Members" Url="html/AllMembers_T_Braintree_Result_1.htm" />
       <HelpTOCNode Title="Result(T) Constructor " Url="html/M_Braintree_Result_1__ctor.htm" />
-      <HelpTOCNode Id="04131173-da70-4d7b-a207-d779d4ae987d" Title="Result(T) Methods " Url="html/Methods_T_Braintree_Result_1.htm">
+      <HelpTOCNode Id="a1ec35f8-23a5-447e-bcc1-48419d31407c" Title="Result(T) Methods " Url="html/Methods_T_Braintree_Result_1.htm">
         <HelpTOCNode Title="IsSuccess Method " Url="html/M_Braintree_Result_1_IsSuccess.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="dc52c763-74ab-455e-baca-eec82a762308" Title="Result(T) Properties " Url="html/Properties_T_Braintree_Result_1.htm">
+      <HelpTOCNode Id="6f81bb2b-f3fa-41cf-88ee-43d0a967a2ae" Title="Result(T) Properties " Url="html/Properties_T_Braintree_Result_1.htm">
         <HelpTOCNode Title="CreditCardVerification Property " Url="html/P_Braintree_Result_1_CreditCardVerification.htm" />
         <HelpTOCNode Title="Errors Property " Url="html/P_Braintree_Result_1_Errors.htm" />
         <HelpTOCNode Title="Parameters Property " Url="html/P_Braintree_Result_1_Parameters.htm" />
@@ -449,64 +453,64 @@
         <HelpTOCNode Title="Transaction Property " Url="html/P_Braintree_Result_1_Transaction.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="43fd1ac0-608e-4d73-a092-6658fd40d744" Title="SandboxValues Class" Url="html/T_Braintree_SandboxValues.htm">
+    <HelpTOCNode Id="eeb3f28c-209a-4c3e-a9a5-d347b073c887" Title="SandboxValues Class" Url="html/T_Braintree_SandboxValues.htm">
       <HelpTOCNode Title="SandboxValues Members" Url="html/AllMembers_T_Braintree_SandboxValues.htm" />
       <HelpTOCNode Title="SandboxValues Constructor " Url="html/M_Braintree_SandboxValues__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="cf61483e-e2d5-4798-9fc9-39809839d8cb" Title="SandboxValues.CreditCardNumber Class" Url="html/T_Braintree_SandboxValues_CreditCardNumber.htm">
+    <HelpTOCNode Id="78e782dd-9322-411e-9a40-3c41d2b63572" Title="SandboxValues.CreditCardNumber Class" Url="html/T_Braintree_SandboxValues_CreditCardNumber.htm">
       <HelpTOCNode Title="SandboxValues.CreditCardNumber Members" Url="html/AllMembers_T_Braintree_SandboxValues_CreditCardNumber.htm" />
       <HelpTOCNode Title="SandboxValues.CreditCardNumber Constructor " Url="html/M_Braintree_SandboxValues_CreditCardNumber__ctor.htm" />
-      <HelpTOCNode Id="c888aad9-0ea8-436d-8171-a7a28c3a7517" Title="SandboxValues.CreditCardNumber Fields" Url="html/Fields_T_Braintree_SandboxValues_CreditCardNumber.htm">
+      <HelpTOCNode Id="dbbc147e-1f9c-488f-b121-9576c178eec4" Title="SandboxValues.CreditCardNumber Fields" Url="html/Fields_T_Braintree_SandboxValues_CreditCardNumber.htm">
         <HelpTOCNode Title="VISA Field" Url="html/F_Braintree_SandboxValues_CreditCardNumber_VISA.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="2fa2cd9e-fc4c-446e-82cc-08d193e59994" Title="SandboxValues.TransactionAmount Class" Url="html/T_Braintree_SandboxValues_TransactionAmount.htm">
+    <HelpTOCNode Id="f1dd4bad-2f60-45a5-a1a2-1bfcbcab82c1" Title="SandboxValues.TransactionAmount Class" Url="html/T_Braintree_SandboxValues_TransactionAmount.htm">
       <HelpTOCNode Title="SandboxValues.TransactionAmount Members" Url="html/AllMembers_T_Braintree_SandboxValues_TransactionAmount.htm" />
       <HelpTOCNode Title="SandboxValues.TransactionAmount Constructor " Url="html/M_Braintree_SandboxValues_TransactionAmount__ctor.htm" />
-      <HelpTOCNode Id="26e53ad4-9b79-4e7c-b5ad-205d3d796fcf" Title="SandboxValues.TransactionAmount Fields" Url="html/Fields_T_Braintree_SandboxValues_TransactionAmount.htm">
+      <HelpTOCNode Id="318f7901-af1e-4708-a639-1c58867a72f9" Title="SandboxValues.TransactionAmount Fields" Url="html/Fields_T_Braintree_SandboxValues_TransactionAmount.htm">
         <HelpTOCNode Title="AUTHORIZE Field" Url="html/F_Braintree_SandboxValues_TransactionAmount_AUTHORIZE.htm" />
         <HelpTOCNode Title="DECLINE Field" Url="html/F_Braintree_SandboxValues_TransactionAmount_DECLINE.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="2a3ab310-5c30-458c-8170-0a31475b4428" Title="SearchCriteria Class" Url="html/T_Braintree_SearchCriteria.htm">
+    <HelpTOCNode Id="b9143c45-46e0-4bd0-b9e2-b954a8fab322" Title="SearchCriteria Class" Url="html/T_Braintree_SearchCriteria.htm">
       <HelpTOCNode Title="SearchCriteria Members" Url="html/AllMembers_T_Braintree_SearchCriteria.htm" />
-      <HelpTOCNode Id="f0c63327-9187-4969-a78a-a356c4a0830b" Title="SearchCriteria Constructor " Url="html/Overload_Braintree_SearchCriteria__ctor.htm">
+      <HelpTOCNode Id="d732899f-22a8-43b6-8d8e-6c25dee55e90" Title="SearchCriteria Constructor " Url="html/Overload_Braintree_SearchCriteria__ctor.htm">
         <HelpTOCNode Title="SearchCriteria Constructor (Object[])" Url="html/M_Braintree_SearchCriteria__ctor.htm" />
         <HelpTOCNode Title="SearchCriteria Constructor (String, DateTime)" Url="html/M_Braintree_SearchCriteria__ctor_1.htm" />
         <HelpTOCNode Title="SearchCriteria Constructor (String, String)" Url="html/M_Braintree_SearchCriteria__ctor_2.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="f0cf0076-c0ff-42fc-b7a0-7137101012f1" Title="SearchCriteria Methods " Url="html/Methods_T_Braintree_SearchCriteria.htm">
-        <HelpTOCNode Id="ffb94ef5-a82b-423a-a502-cd6d8fe3f653" Title="ToQueryString Method " Url="html/Overload_Braintree_SearchCriteria_ToQueryString.htm">
+      <HelpTOCNode Id="dc93d14a-1e73-4bfc-aae2-dbae6b170a7b" Title="SearchCriteria Methods " Url="html/Methods_T_Braintree_SearchCriteria.htm">
+        <HelpTOCNode Id="04a0aa90-d642-455a-8403-ea7dfcaa65cf" Title="ToQueryString Method " Url="html/Overload_Braintree_SearchCriteria_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_SearchCriteria_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_SearchCriteria_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="e383ee0a-2926-4470-879f-acce3da95e61" Title="ToXml Method " Url="html/Overload_Braintree_SearchCriteria_ToXml.htm">
+        <HelpTOCNode Id="bbeb7b8c-0726-49fa-a4cf-e2c53db06cb7" Title="ToXml Method " Url="html/Overload_Braintree_SearchCriteria_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_SearchCriteria_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_SearchCriteria_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="4d489f73-0658-4e8b-9205-75ee48cb68e1" Title="SearchNode(T) Class" Url="html/T_Braintree_SearchNode_1.htm">
+    <HelpTOCNode Id="f77b9c92-27e3-43ed-8130-b9f8cc35df77" Title="SearchNode(T) Class" Url="html/T_Braintree_SearchNode_1.htm">
       <HelpTOCNode Title="SearchNode(T) Members" Url="html/AllMembers_T_Braintree_SearchNode_1.htm" />
       <HelpTOCNode Title="SearchNode(T) Constructor " Url="html/M_Braintree_SearchNode_1__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="7864390c-e73a-478d-865d-8c0be7e36efc" Title="SearchRequest Class" Url="html/T_Braintree_SearchRequest.htm">
+    <HelpTOCNode Id="05f9766b-2a9f-49e3-85b0-4ed8029cd8f1" Title="SearchRequest Class" Url="html/T_Braintree_SearchRequest.htm">
       <HelpTOCNode Title="SearchRequest Members" Url="html/AllMembers_T_Braintree_SearchRequest.htm" />
-      <HelpTOCNode Id="251030c6-54b5-428f-91c2-9a0f235686e8" Title="SearchRequest Methods " Url="html/Methods_T_Braintree_SearchRequest.htm">
-        <HelpTOCNode Id="84050767-2a60-47b6-844c-959c374fe6ee" Title="ToQueryString Method " Url="html/Overload_Braintree_SearchRequest_ToQueryString.htm">
+      <HelpTOCNode Id="7aa70bfd-a452-4d74-828c-9a6cafc7c739" Title="SearchRequest Methods " Url="html/Methods_T_Braintree_SearchRequest.htm">
+        <HelpTOCNode Id="0eaad354-336e-41f1-a535-08212509b1dd" Title="ToQueryString Method " Url="html/Overload_Braintree_SearchRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_SearchRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_SearchRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="9dd6e000-c3ad-4531-b430-e8dd90ecae7f" Title="ToXml Method " Url="html/Overload_Braintree_SearchRequest_ToXml.htm">
+        <HelpTOCNode Id="71b50450-925c-43dc-88d5-5257e5f66b8e" Title="ToXml Method " Url="html/Overload_Braintree_SearchRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_SearchRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_SearchRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="e5af6580-577c-4614-8ca2-cb10ba84e9c7" Title="Subscription Class" Url="html/T_Braintree_Subscription.htm">
+    <HelpTOCNode Id="73b13a29-f621-479c-b81c-3907361b993d" Title="Subscription Class" Url="html/T_Braintree_Subscription.htm">
       <HelpTOCNode Title="Subscription Members" Url="html/AllMembers_T_Braintree_Subscription.htm" />
       <HelpTOCNode Title="Subscription Constructor " Url="html/M_Braintree_Subscription__ctor.htm" />
-      <HelpTOCNode Id="edc9a1d6-5ca3-4825-837b-b8735acc31e8" Title="Subscription Properties " Url="html/Properties_T_Braintree_Subscription.htm">
+      <HelpTOCNode Id="b286dc23-7a42-490e-b6e6-86f355de6fab" Title="Subscription Properties " Url="html/Properties_T_Braintree_Subscription.htm">
         <HelpTOCNode Title="BillingPeriodEndDate Property " Url="html/P_Braintree_Subscription_BillingPeriodEndDate.htm" />
         <HelpTOCNode Title="BillingPeriodStartDate Property " Url="html/P_Braintree_Subscription_BillingPeriodStartDate.htm" />
         <HelpTOCNode Title="FailureCount Property " Url="html/P_Braintree_Subscription_FailureCount.htm" />
@@ -524,27 +528,27 @@
         <HelpTOCNode Title="TrialDurationUnit Property " Url="html/P_Braintree_Subscription_TrialDurationUnit.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="b41869c0-31a6-42d6-bf81-2298db55bb88" Title="SubscriptionDurationUnit Class" Url="html/T_Braintree_SubscriptionDurationUnit.htm">
+    <HelpTOCNode Id="53ef8aa4-3727-43d6-a3ea-2b0f0572704f" Title="SubscriptionDurationUnit Class" Url="html/T_Braintree_SubscriptionDurationUnit.htm">
       <HelpTOCNode Title="SubscriptionDurationUnit Members" Url="html/AllMembers_T_Braintree_SubscriptionDurationUnit.htm" />
-      <HelpTOCNode Id="a3903ca2-2c7f-4087-9355-09a87965a3ca" Title="SubscriptionDurationUnit Fields" Url="html/Fields_T_Braintree_SubscriptionDurationUnit.htm">
+      <HelpTOCNode Id="5b9420c5-bca7-4f67-9d71-318f631795d1" Title="SubscriptionDurationUnit Fields" Url="html/Fields_T_Braintree_SubscriptionDurationUnit.htm">
         <HelpTOCNode Title="ALL Field" Url="html/F_Braintree_SubscriptionDurationUnit_ALL.htm" />
         <HelpTOCNode Title="DAY Field" Url="html/F_Braintree_SubscriptionDurationUnit_DAY.htm" />
         <HelpTOCNode Title="MONTH Field" Url="html/F_Braintree_SubscriptionDurationUnit_MONTH.htm" />
         <HelpTOCNode Title="UNRECOGNIZED Field" Url="html/F_Braintree_SubscriptionDurationUnit_UNRECOGNIZED.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="07376fda-48d4-4ead-bd2c-9f74269d7561" Title="SubscriptionGateway Class" Url="html/T_Braintree_SubscriptionGateway.htm">
+    <HelpTOCNode Id="60a1d3ae-41a6-4cfb-8c49-39d2b647061a" Title="SubscriptionGateway Class" Url="html/T_Braintree_SubscriptionGateway.htm">
       <HelpTOCNode Title="SubscriptionGateway Members" Url="html/AllMembers_T_Braintree_SubscriptionGateway.htm" />
       <HelpTOCNode Title="SubscriptionGateway Constructor " Url="html/M_Braintree_SubscriptionGateway__ctor.htm" />
-      <HelpTOCNode Id="d060c109-dce7-4ca2-8d33-baa33c9ed07e" Title="SubscriptionGateway Methods " Url="html/Methods_T_Braintree_SubscriptionGateway.htm">
+      <HelpTOCNode Id="d3e0dc40-c731-4459-891c-2a70c17b2efa" Title="SubscriptionGateway Methods " Url="html/Methods_T_Braintree_SubscriptionGateway.htm">
         <HelpTOCNode Title="Cancel Method " Url="html/M_Braintree_SubscriptionGateway_Cancel.htm" />
         <HelpTOCNode Title="Create Method " Url="html/M_Braintree_SubscriptionGateway_Create.htm" />
         <HelpTOCNode Title="Find Method " Url="html/M_Braintree_SubscriptionGateway_Find.htm" />
-        <HelpTOCNode Id="d3fb4f35-af37-41c9-9131-719fe38397ef" Title="RetryCharge Method " Url="html/Overload_Braintree_SubscriptionGateway_RetryCharge.htm">
+        <HelpTOCNode Id="6fe871fc-7e36-4814-9f0d-7a22863406ae" Title="RetryCharge Method " Url="html/Overload_Braintree_SubscriptionGateway_RetryCharge.htm">
           <HelpTOCNode Title="RetryCharge Method (String)" Url="html/M_Braintree_SubscriptionGateway_RetryCharge.htm" />
           <HelpTOCNode Title="RetryCharge Method (String, Decimal)" Url="html/M_Braintree_SubscriptionGateway_RetryCharge_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="8b19ef57-f301-475c-973b-dc73afa1ed0a" Title="Search Method " Url="html/Overload_Braintree_SubscriptionGateway_Search.htm">
+        <HelpTOCNode Id="9661ec00-15c2-4b20-a964-d4113b3dc447" Title="Search Method " Url="html/Overload_Braintree_SubscriptionGateway_Search.htm">
           <HelpTOCNode Title="Search Method (SubscriptionGateway.SearchDelegate)" Url="html/M_Braintree_SubscriptionGateway_Search.htm" />
           <HelpTOCNode Title="Search Method (SubscriptionSearchRequest)" Url="html/M_Braintree_SubscriptionGateway_Search_1.htm" />
         </HelpTOCNode>
@@ -552,20 +556,20 @@
       </HelpTOCNode>
     </HelpTOCNode>
     <HelpTOCNode Title="SubscriptionGateway.SearchDelegate Delegate" Url="html/T_Braintree_SubscriptionGateway_SearchDelegate.htm" />
-    <HelpTOCNode Id="f4454a64-5149-40dc-96d6-8a642df16dc0" Title="SubscriptionRequest Class" Url="html/T_Braintree_SubscriptionRequest.htm">
+    <HelpTOCNode Id="b633ddde-556f-4321-95f4-4c206c302436" Title="SubscriptionRequest Class" Url="html/T_Braintree_SubscriptionRequest.htm">
       <HelpTOCNode Title="SubscriptionRequest Members" Url="html/AllMembers_T_Braintree_SubscriptionRequest.htm" />
       <HelpTOCNode Title="SubscriptionRequest Constructor " Url="html/M_Braintree_SubscriptionRequest__ctor.htm" />
-      <HelpTOCNode Id="51889ffa-f88b-410a-a227-567cc2aab8ff" Title="SubscriptionRequest Methods " Url="html/Methods_T_Braintree_SubscriptionRequest.htm">
-        <HelpTOCNode Id="c1ed1d85-2845-4990-960d-f88cf12bc8f1" Title="ToQueryString Method " Url="html/Overload_Braintree_SubscriptionRequest_ToQueryString.htm">
+      <HelpTOCNode Id="3bd77341-43ba-4f68-91d3-2fe4624694ce" Title="SubscriptionRequest Methods " Url="html/Methods_T_Braintree_SubscriptionRequest.htm">
+        <HelpTOCNode Id="fb7759a9-788c-44ee-860d-592665e656de" Title="ToQueryString Method " Url="html/Overload_Braintree_SubscriptionRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_SubscriptionRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_SubscriptionRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="88208363-6821-43fd-88a0-1442d177ff46" Title="ToXml Method " Url="html/Overload_Braintree_SubscriptionRequest_ToXml.htm">
+        <HelpTOCNode Id="38ff569f-1173-4bda-9380-63243ca86600" Title="ToXml Method " Url="html/Overload_Braintree_SubscriptionRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_SubscriptionRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_SubscriptionRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="531e31d3-7b67-4091-b16c-25e3396d1051" Title="SubscriptionRequest Properties " Url="html/Properties_T_Braintree_SubscriptionRequest.htm">
+      <HelpTOCNode Id="4263fd4b-f62c-4176-821a-90fcf5dcf410" Title="SubscriptionRequest Properties " Url="html/Properties_T_Braintree_SubscriptionRequest.htm">
         <HelpTOCNode Title="HasTrialPeriod Property " Url="html/P_Braintree_SubscriptionRequest_HasTrialPeriod.htm" />
         <HelpTOCNode Title="Id Property " Url="html/P_Braintree_SubscriptionRequest_Id.htm" />
         <HelpTOCNode Title="MerchantAccountId Property " Url="html/P_Braintree_SubscriptionRequest_MerchantAccountId.htm" />
@@ -576,19 +580,19 @@
         <HelpTOCNode Title="TrialDurationUnit Property " Url="html/P_Braintree_SubscriptionRequest_TrialDurationUnit.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="7694c8be-3113-474f-af40-ce1d7938414c" Title="SubscriptionSearchRequest Class" Url="html/T_Braintree_SubscriptionSearchRequest.htm">
+    <HelpTOCNode Id="3388acfc-4d1c-4210-9b66-7040f4b5ae0c" Title="SubscriptionSearchRequest Class" Url="html/T_Braintree_SubscriptionSearchRequest.htm">
       <HelpTOCNode Title="SubscriptionSearchRequest Members" Url="html/AllMembers_T_Braintree_SubscriptionSearchRequest.htm" />
       <HelpTOCNode Title="SubscriptionSearchRequest Constructor " Url="html/M_Braintree_SubscriptionSearchRequest__ctor.htm" />
-      <HelpTOCNode Id="b1ecef30-78db-4b27-94b3-5db741df7a47" Title="SubscriptionSearchRequest Properties " Url="html/Properties_T_Braintree_SubscriptionSearchRequest.htm">
+      <HelpTOCNode Id="019d2f71-8d03-4d02-9dac-3de93650b2ff" Title="SubscriptionSearchRequest Properties " Url="html/Properties_T_Braintree_SubscriptionSearchRequest.htm">
         <HelpTOCNode Title="DaysPastDue Property " Url="html/P_Braintree_SubscriptionSearchRequest_DaysPastDue.htm" />
         <HelpTOCNode Title="Ids Property " Url="html/P_Braintree_SubscriptionSearchRequest_Ids.htm" />
         <HelpTOCNode Title="PlanId Property " Url="html/P_Braintree_SubscriptionSearchRequest_PlanId.htm" />
         <HelpTOCNode Title="Status Property " Url="html/P_Braintree_SubscriptionSearchRequest_Status.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="9e57d7a0-c69b-4fcc-9970-3ec5d761c9ac" Title="SubscriptionStatus Class" Url="html/T_Braintree_SubscriptionStatus.htm">
+    <HelpTOCNode Id="0eceff96-9f27-490f-826f-c4b1eff9dbf4" Title="SubscriptionStatus Class" Url="html/T_Braintree_SubscriptionStatus.htm">
       <HelpTOCNode Title="SubscriptionStatus Members" Url="html/AllMembers_T_Braintree_SubscriptionStatus.htm" />
-      <HelpTOCNode Id="d2185769-e49d-4b7c-b693-ae931fe9874b" Title="SubscriptionStatus Fields" Url="html/Fields_T_Braintree_SubscriptionStatus.htm">
+      <HelpTOCNode Id="6956c466-03d5-4594-9aa0-ff9c31e9a77d" Title="SubscriptionStatus Fields" Url="html/Fields_T_Braintree_SubscriptionStatus.htm">
         <HelpTOCNode Title="ACTIVE Field" Url="html/F_Braintree_SubscriptionStatus_ACTIVE.htm" />
         <HelpTOCNode Title="CANCELED Field" Url="html/F_Braintree_SubscriptionStatus_CANCELED.htm" />
         <HelpTOCNode Title="PAST_DUE Field" Url="html/F_Braintree_SubscriptionStatus_PAST_DUE.htm" />
@@ -596,46 +600,51 @@
         <HelpTOCNode Title="UNRECOGNIZED Field" Url="html/F_Braintree_SubscriptionStatus_UNRECOGNIZED.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="a3c0f59d-ac87-4636-b423-03848ec2b45c" Title="SubscriptionTransactionRequest Class" Url="html/T_Braintree_SubscriptionTransactionRequest.htm">
+    <HelpTOCNode Id="12ca7ec7-26d3-41a4-bf4e-5500bcea1d65" Title="SubscriptionTransactionRequest Class" Url="html/T_Braintree_SubscriptionTransactionRequest.htm">
       <HelpTOCNode Title="SubscriptionTransactionRequest Members" Url="html/AllMembers_T_Braintree_SubscriptionTransactionRequest.htm" />
       <HelpTOCNode Title="SubscriptionTransactionRequest Constructor " Url="html/M_Braintree_SubscriptionTransactionRequest__ctor.htm" />
-      <HelpTOCNode Id="e2a50f08-d434-4f93-a012-d5b90f0115b7" Title="SubscriptionTransactionRequest Methods " Url="html/Methods_T_Braintree_SubscriptionTransactionRequest.htm">
-        <HelpTOCNode Id="4c76d165-77de-45c2-ae4c-dc8c449afbda" Title="ToQueryString Method " Url="html/Overload_Braintree_SubscriptionTransactionRequest_ToQueryString.htm">
+      <HelpTOCNode Id="92c27c98-2372-4bfc-a463-772b36fea779" Title="SubscriptionTransactionRequest Methods " Url="html/Methods_T_Braintree_SubscriptionTransactionRequest.htm">
+        <HelpTOCNode Id="557e76ee-0637-466e-8d6c-fefc07190ee2" Title="ToQueryString Method " Url="html/Overload_Braintree_SubscriptionTransactionRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_SubscriptionTransactionRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_SubscriptionTransactionRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="6bfeb50f-49dc-440c-87df-af6fd5987f82" Title="ToXml Method " Url="html/Overload_Braintree_SubscriptionTransactionRequest_ToXml.htm">
+        <HelpTOCNode Id="43ee5b8a-e489-483b-b99b-81744610a23b" Title="ToXml Method " Url="html/Overload_Braintree_SubscriptionTransactionRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_SubscriptionTransactionRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_SubscriptionTransactionRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="4a3b4f93-a2b8-401c-92a5-42ecbe42a4df" Title="SubscriptionTransactionRequest Properties " Url="html/Properties_T_Braintree_SubscriptionTransactionRequest.htm">
+      <HelpTOCNode Id="5de42d0b-a585-495d-bc4b-5484eebce33f" Title="SubscriptionTransactionRequest Properties " Url="html/Properties_T_Braintree_SubscriptionTransactionRequest.htm">
         <HelpTOCNode Title="Amount Property " Url="html/P_Braintree_SubscriptionTransactionRequest_Amount.htm" />
         <HelpTOCNode Title="SubscriptionId Property " Url="html/P_Braintree_SubscriptionTransactionRequest_SubscriptionId.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="a7ccc8f3-ab92-45cc-848d-cd46bb113873" Title="TextNode(T) Class" Url="html/T_Braintree_TextNode_1.htm">
+    <HelpTOCNode Id="d70cfdb8-2063-4ef4-9900-ac139e16796e" Title="TextNode(T) Class" Url="html/T_Braintree_TextNode_1.htm">
       <HelpTOCNode Title="TextNode(T) Members" Url="html/AllMembers_T_Braintree_TextNode_1.htm" />
       <HelpTOCNode Title="TextNode(T) Constructor " Url="html/M_Braintree_TextNode_1__ctor.htm" />
-      <HelpTOCNode Id="bf8698a4-25ad-4129-9208-a3ec6fe05d76" Title="TextNode(T) Methods " Url="html/Methods_T_Braintree_TextNode_1.htm">
+      <HelpTOCNode Id="725d81f9-2393-4f84-bad7-d99cca76f8a1" Title="TextNode(T) Methods " Url="html/Methods_T_Braintree_TextNode_1.htm">
         <HelpTOCNode Title="Contains Method " Url="html/M_Braintree_TextNode_1_Contains.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="b1b6583e-661b-412f-9948-7676896fe664" Title="Transaction Class" Url="html/T_Braintree_Transaction.htm">
+    <HelpTOCNode Id="7cd61776-9869-4fd1-9f4c-99279355f7bb" Title="Transaction Class" Url="html/T_Braintree_Transaction.htm">
       <HelpTOCNode Title="Transaction Members" Url="html/AllMembers_T_Braintree_Transaction.htm" />
-      <HelpTOCNode Id="fb16ec66-b8b0-4cdb-a7a2-845e52cf5f33" Title="Transaction Methods " Url="html/Methods_T_Braintree_Transaction.htm">
+      <HelpTOCNode Id="6e2e2835-f51e-4351-aab4-a5cfee9e3fe6" Title="Transaction Methods " Url="html/Methods_T_Braintree_Transaction.htm">
         <HelpTOCNode Title="GetVaultBillingAddress Method " Url="html/M_Braintree_Transaction_GetVaultBillingAddress.htm" />
         <HelpTOCNode Title="GetVaultCreditCard Method " Url="html/M_Braintree_Transaction_GetVaultCreditCard.htm" />
         <HelpTOCNode Title="GetVaultCustomer Method " Url="html/M_Braintree_Transaction_GetVaultCustomer.htm" />
         <HelpTOCNode Title="GetVaultShippingAddress Method " Url="html/M_Braintree_Transaction_GetVaultShippingAddress.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="7db3cec0-96ef-4d94-8792-a9775807fdef" Title="Transaction Properties " Url="html/Properties_T_Braintree_Transaction.htm">
+      <HelpTOCNode Id="ec99ea36-ea53-4d8e-9daa-236c8acfa55f" Title="Transaction Properties " Url="html/Properties_T_Braintree_Transaction.htm">
         <HelpTOCNode Title="Amount Property " Url="html/P_Braintree_Transaction_Amount.htm" />
+        <HelpTOCNode Title="AvsErrorResponseCode Property " Url="html/P_Braintree_Transaction_AvsErrorResponseCode.htm" />
+        <HelpTOCNode Title="AvsPostalCodeResponseCode Property " Url="html/P_Braintree_Transaction_AvsPostalCodeResponseCode.htm" />
+        <HelpTOCNode Title="AvsStreetAddressResponseCode Property " Url="html/P_Braintree_Transaction_AvsStreetAddressResponseCode.htm" />
         <HelpTOCNode Title="BillingAddress Property " Url="html/P_Braintree_Transaction_BillingAddress.htm" />
         <HelpTOCNode Title="CreatedAt Property " Url="html/P_Braintree_Transaction_CreatedAt.htm" />
         <HelpTOCNode Title="CreditCard Property " Url="html/P_Braintree_Transaction_CreditCard.htm" />
+        <HelpTOCNode Title="CurrencyIsoCode Property " Url="html/P_Braintree_Transaction_CurrencyIsoCode.htm" />
         <HelpTOCNode Title="Customer Property " Url="html/P_Braintree_Transaction_Customer.htm" />
         <HelpTOCNode Title="CustomFields Property " Url="html/P_Braintree_Transaction_CustomFields.htm" />
+        <HelpTOCNode Title="CvvResponseCode Property " Url="html/P_Braintree_Transaction_CvvResponseCode.htm" />
         <HelpTOCNode Title="Id Property " Url="html/P_Braintree_Transaction_Id.htm" />
         <HelpTOCNode Title="MerchantAccountId Property " Url="html/P_Braintree_Transaction_MerchantAccountId.htm" />
         <HelpTOCNode Title="OrderId Property " Url="html/P_Braintree_Transaction_OrderId.htm" />
@@ -644,34 +653,35 @@
         <HelpTOCNode Title="ProcessorResponseText Property " Url="html/P_Braintree_Transaction_ProcessorResponseText.htm" />
         <HelpTOCNode Title="ShippingAddress Property " Url="html/P_Braintree_Transaction_ShippingAddress.htm" />
         <HelpTOCNode Title="Status Property " Url="html/P_Braintree_Transaction_Status.htm" />
+        <HelpTOCNode Title="SubscriptionId Property " Url="html/P_Braintree_Transaction_SubscriptionId.htm" />
         <HelpTOCNode Title="Type Property " Url="html/P_Braintree_Transaction_Type.htm" />
         <HelpTOCNode Title="UpdatedAt Property " Url="html/P_Braintree_Transaction_UpdatedAt.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="8ad2a032-4ec0-4eab-8b32-8443e63c209a" Title="TransactionCreatedUsing Class" Url="html/T_Braintree_TransactionCreatedUsing.htm">
+    <HelpTOCNode Id="25d2936a-6298-4e5c-aebd-be5b46e96728" Title="TransactionCreatedUsing Class" Url="html/T_Braintree_TransactionCreatedUsing.htm">
       <HelpTOCNode Title="TransactionCreatedUsing Members" Url="html/AllMembers_T_Braintree_TransactionCreatedUsing.htm" />
-      <HelpTOCNode Id="ab2086df-5727-44e8-bff0-21b32e4f4e2c" Title="TransactionCreatedUsing Fields" Url="html/Fields_T_Braintree_TransactionCreatedUsing.htm">
+      <HelpTOCNode Id="d982d8a4-8335-4c2a-80d6-0af348394a3d" Title="TransactionCreatedUsing Fields" Url="html/Fields_T_Braintree_TransactionCreatedUsing.htm">
         <HelpTOCNode Title="ALL Field" Url="html/F_Braintree_TransactionCreatedUsing_ALL.htm" />
         <HelpTOCNode Title="FULL_INFORMATION Field" Url="html/F_Braintree_TransactionCreatedUsing_FULL_INFORMATION.htm" />
         <HelpTOCNode Title="TOKEN Field" Url="html/F_Braintree_TransactionCreatedUsing_TOKEN.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="ca7dc603-93de-42fe-8dd3-9a4c56c703dc" Title="TransactionGateway Class" Url="html/T_Braintree_TransactionGateway.htm">
+    <HelpTOCNode Id="59351c85-b015-4263-9dfd-f89b328d17b5" Title="TransactionGateway Class" Url="html/T_Braintree_TransactionGateway.htm">
       <HelpTOCNode Title="TransactionGateway Members" Url="html/AllMembers_T_Braintree_TransactionGateway.htm" />
       <HelpTOCNode Title="TransactionGateway Constructor " Url="html/M_Braintree_TransactionGateway__ctor.htm" />
-      <HelpTOCNode Id="ab4bb397-c5a8-4f69-9c92-fa1092ba55ad" Title="TransactionGateway Methods " Url="html/Methods_T_Braintree_TransactionGateway.htm">
+      <HelpTOCNode Id="52c824b8-a5db-4036-ba04-2e125ff42726" Title="TransactionGateway Methods " Url="html/Methods_T_Braintree_TransactionGateway.htm">
         <HelpTOCNode Title="ConfirmTransparentRedirect Method " Url="html/M_Braintree_TransactionGateway_ConfirmTransparentRedirect.htm" />
         <HelpTOCNode Title="Credit Method " Url="html/M_Braintree_TransactionGateway_Credit.htm" />
         <HelpTOCNode Title="CreditTrData Method " Url="html/M_Braintree_TransactionGateway_CreditTrData.htm" />
         <HelpTOCNode Title="Find Method " Url="html/M_Braintree_TransactionGateway_Find.htm" />
-        <HelpTOCNode Id="28c8a5bc-30a9-49a5-9840-0198a98f41e1" Title="Refund Method " Url="html/Overload_Braintree_TransactionGateway_Refund.htm">
+        <HelpTOCNode Id="acf6d688-8176-40f6-84fa-8b76caee9a60" Title="Refund Method " Url="html/Overload_Braintree_TransactionGateway_Refund.htm">
           <HelpTOCNode Title="Refund Method (String)" Url="html/M_Braintree_TransactionGateway_Refund.htm" />
           <HelpTOCNode Title="Refund Method (String, Decimal)" Url="html/M_Braintree_TransactionGateway_Refund_1.htm" />
         </HelpTOCNode>
         <HelpTOCNode Title="Sale Method " Url="html/M_Braintree_TransactionGateway_Sale.htm" />
         <HelpTOCNode Title="SaleTrData Method " Url="html/M_Braintree_TransactionGateway_SaleTrData.htm" />
         <HelpTOCNode Title="Search Method " Url="html/M_Braintree_TransactionGateway_Search.htm" />
-        <HelpTOCNode Id="580c8448-0986-4011-934c-dd8fd393bfb6" Title="SubmitForSettlement Method " Url="html/Overload_Braintree_TransactionGateway_SubmitForSettlement.htm">
+        <HelpTOCNode Id="50b71d6c-691f-447b-a5b4-a647766802de" Title="SubmitForSettlement Method " Url="html/Overload_Braintree_TransactionGateway_SubmitForSettlement.htm">
           <HelpTOCNode Title="SubmitForSettlement Method (String)" Url="html/M_Braintree_TransactionGateway_SubmitForSettlement.htm" />
           <HelpTOCNode Title="SubmitForSettlement Method (String, Decimal)" Url="html/M_Braintree_TransactionGateway_SubmitForSettlement_1.htm" />
         </HelpTOCNode>
@@ -679,40 +689,40 @@
         <HelpTOCNode Title="Void Method " Url="html/M_Braintree_TransactionGateway_Void.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="b1d0841e-138a-4729-b38b-029c45687c80" Title="TransactionOptionsRequest Class" Url="html/T_Braintree_TransactionOptionsRequest.htm">
+    <HelpTOCNode Id="994d4b77-8b27-46d0-9dc6-93e9ef9bba95" Title="TransactionOptionsRequest Class" Url="html/T_Braintree_TransactionOptionsRequest.htm">
       <HelpTOCNode Title="TransactionOptionsRequest Members" Url="html/AllMembers_T_Braintree_TransactionOptionsRequest.htm" />
       <HelpTOCNode Title="TransactionOptionsRequest Constructor " Url="html/M_Braintree_TransactionOptionsRequest__ctor.htm" />
-      <HelpTOCNode Id="f7813521-37e8-45f2-8fc0-4792e7355a1a" Title="TransactionOptionsRequest Methods " Url="html/Methods_T_Braintree_TransactionOptionsRequest.htm">
-        <HelpTOCNode Id="ea0a74d4-c481-4047-9555-3f578e5d42d9" Title="ToQueryString Method " Url="html/Overload_Braintree_TransactionOptionsRequest_ToQueryString.htm">
+      <HelpTOCNode Id="d3f46f84-189e-4cb5-915e-83dc50d77a30" Title="TransactionOptionsRequest Methods " Url="html/Methods_T_Braintree_TransactionOptionsRequest.htm">
+        <HelpTOCNode Id="98fc985b-958e-488a-97dc-a44b1716e34a" Title="ToQueryString Method " Url="html/Overload_Braintree_TransactionOptionsRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_TransactionOptionsRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_TransactionOptionsRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="76819d1b-90d7-4ca8-812a-fe20016f4881" Title="ToXml Method " Url="html/Overload_Braintree_TransactionOptionsRequest_ToXml.htm">
+        <HelpTOCNode Id="ddcb597e-32f7-4d83-8a75-cc36f7b721ca" Title="ToXml Method " Url="html/Overload_Braintree_TransactionOptionsRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_TransactionOptionsRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_TransactionOptionsRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="b7586a1e-874f-47ee-8940-3d6695f1a370" Title="TransactionOptionsRequest Properties " Url="html/Properties_T_Braintree_TransactionOptionsRequest.htm">
+      <HelpTOCNode Id="17cd33af-1080-48b4-a738-6e0cf7470619" Title="TransactionOptionsRequest Properties " Url="html/Properties_T_Braintree_TransactionOptionsRequest.htm">
         <HelpTOCNode Title="AddBillingAddressToPaymentMethod Property " Url="html/P_Braintree_TransactionOptionsRequest_AddBillingAddressToPaymentMethod.htm" />
         <HelpTOCNode Title="StoreInVault Property " Url="html/P_Braintree_TransactionOptionsRequest_StoreInVault.htm" />
         <HelpTOCNode Title="StoreShippingAddressInVault Property " Url="html/P_Braintree_TransactionOptionsRequest_StoreShippingAddressInVault.htm" />
         <HelpTOCNode Title="SubmitForSettlement Property " Url="html/P_Braintree_TransactionOptionsRequest_SubmitForSettlement.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="cdc424f8-10a7-4631-98e6-de7fc6ed9014" Title="TransactionRequest Class" Url="html/T_Braintree_TransactionRequest.htm">
+    <HelpTOCNode Id="1ee8436e-fdcb-4c3e-bead-4a3b482fa50a" Title="TransactionRequest Class" Url="html/T_Braintree_TransactionRequest.htm">
       <HelpTOCNode Title="TransactionRequest Members" Url="html/AllMembers_T_Braintree_TransactionRequest.htm" />
       <HelpTOCNode Title="TransactionRequest Constructor " Url="html/M_Braintree_TransactionRequest__ctor.htm" />
-      <HelpTOCNode Id="5c3dec2e-ff59-4666-987d-55faf56b2452" Title="TransactionRequest Methods " Url="html/Methods_T_Braintree_TransactionRequest.htm">
-        <HelpTOCNode Id="4039aa96-b45a-426b-b8f7-dd584c476b08" Title="ToQueryString Method " Url="html/Overload_Braintree_TransactionRequest_ToQueryString.htm">
+      <HelpTOCNode Id="08eca687-e0b9-49c8-b038-5a46228175dd" Title="TransactionRequest Methods " Url="html/Methods_T_Braintree_TransactionRequest.htm">
+        <HelpTOCNode Id="b546df55-a1ad-4bfc-b455-ea40b3194306" Title="ToQueryString Method " Url="html/Overload_Braintree_TransactionRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_TransactionRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_TransactionRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="ef2c1329-ca7b-47c9-8260-8f84b1ec7887" Title="ToXml Method " Url="html/Overload_Braintree_TransactionRequest_ToXml.htm">
+        <HelpTOCNode Id="c6319533-f36b-4c48-a646-476c3190e95f" Title="ToXml Method " Url="html/Overload_Braintree_TransactionRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_TransactionRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_TransactionRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
-      <HelpTOCNode Id="37b42b1c-0fdf-4cfd-96ef-95a4ecb064ed" Title="TransactionRequest Properties " Url="html/Properties_T_Braintree_TransactionRequest.htm">
+      <HelpTOCNode Id="661c7f02-1b62-4928-b47d-77905da4ef62" Title="TransactionRequest Properties " Url="html/Properties_T_Braintree_TransactionRequest.htm">
         <HelpTOCNode Title="Amount Property " Url="html/P_Braintree_TransactionRequest_Amount.htm" />
         <HelpTOCNode Title="BillingAddress Property " Url="html/P_Braintree_TransactionRequest_BillingAddress.htm" />
         <HelpTOCNode Title="CreditCard Property " Url="html/P_Braintree_TransactionRequest_CreditCard.htm" />
@@ -728,10 +738,10 @@
         <HelpTOCNode Title="Type Property " Url="html/P_Braintree_TransactionRequest_Type.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="abb05cbb-c0c4-4d41-b66f-8fbf3d1af68a" Title="TransactionSearchRequest Class" Url="html/T_Braintree_TransactionSearchRequest.htm">
+    <HelpTOCNode Id="aaf0ce45-ca89-4c32-9f70-3505706fcc4d" Title="TransactionSearchRequest Class" Url="html/T_Braintree_TransactionSearchRequest.htm">
       <HelpTOCNode Title="TransactionSearchRequest Members" Url="html/AllMembers_T_Braintree_TransactionSearchRequest.htm" />
       <HelpTOCNode Title="TransactionSearchRequest Constructor " Url="html/M_Braintree_TransactionSearchRequest__ctor.htm" />
-      <HelpTOCNode Id="155cdd84-0bf2-4416-85b1-3cfad77a8db9" Title="TransactionSearchRequest Properties " Url="html/Properties_T_Braintree_TransactionSearchRequest.htm">
+      <HelpTOCNode Id="122849b5-c38c-403d-8258-ad1538bff926" Title="TransactionSearchRequest Properties " Url="html/Properties_T_Braintree_TransactionSearchRequest.htm">
         <HelpTOCNode Title="Amount Property " Url="html/P_Braintree_TransactionSearchRequest_Amount.htm" />
         <HelpTOCNode Title="BillingCompany Property " Url="html/P_Braintree_TransactionSearchRequest_BillingCompany.htm" />
         <HelpTOCNode Title="BillingCountryName Property " Url="html/P_Braintree_TransactionSearchRequest_BillingCountryName.htm" />
@@ -779,18 +789,18 @@
         <HelpTOCNode Title="Type Property " Url="html/P_Braintree_TransactionSearchRequest_Type.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="82aade53-3155-4654-8917-cafb0c0480dc" Title="TransactionSource Class" Url="html/T_Braintree_TransactionSource.htm">
+    <HelpTOCNode Id="bf7d147f-412d-4df4-ac36-13bd2133495d" Title="TransactionSource Class" Url="html/T_Braintree_TransactionSource.htm">
       <HelpTOCNode Title="TransactionSource Members" Url="html/AllMembers_T_Braintree_TransactionSource.htm" />
-      <HelpTOCNode Id="6b9b347c-9a9f-46ef-b8fa-3a5d36620049" Title="TransactionSource Fields" Url="html/Fields_T_Braintree_TransactionSource.htm">
+      <HelpTOCNode Id="45e149f3-e07f-4b22-a7e3-2b250a5877b2" Title="TransactionSource Fields" Url="html/Fields_T_Braintree_TransactionSource.htm">
         <HelpTOCNode Title="ALL Field" Url="html/F_Braintree_TransactionSource_ALL.htm" />
         <HelpTOCNode Title="API Field" Url="html/F_Braintree_TransactionSource_API.htm" />
         <HelpTOCNode Title="CONTROL_PANEL Field" Url="html/F_Braintree_TransactionSource_CONTROL_PANEL.htm" />
         <HelpTOCNode Title="RECURRING Field" Url="html/F_Braintree_TransactionSource_RECURRING.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="1d3ccb37-c12d-4e7f-a605-b0229815cdc3" Title="TransactionStatus Class" Url="html/T_Braintree_TransactionStatus.htm">
+    <HelpTOCNode Id="67e310e7-ebbe-4f10-9e4d-4fcfd4c259d8" Title="TransactionStatus Class" Url="html/T_Braintree_TransactionStatus.htm">
       <HelpTOCNode Title="TransactionStatus Members" Url="html/AllMembers_T_Braintree_TransactionStatus.htm" />
-      <HelpTOCNode Id="b8708d6a-cd0d-4485-b89f-67b67d8415e5" Title="TransactionStatus Fields" Url="html/Fields_T_Braintree_TransactionStatus.htm">
+      <HelpTOCNode Id="91f967d8-1d8d-4701-b923-cf05fae2713b" Title="TransactionStatus Fields" Url="html/Fields_T_Braintree_TransactionStatus.htm">
         <HelpTOCNode Title="ALL Field" Url="html/F_Braintree_TransactionStatus_ALL.htm" />
         <HelpTOCNode Title="AUTHORIZED Field" Url="html/F_Braintree_TransactionStatus_AUTHORIZED.htm" />
         <HelpTOCNode Title="AUTHORIZING Field" Url="html/F_Braintree_TransactionStatus_AUTHORIZING.htm" />
@@ -805,55 +815,55 @@
         <HelpTOCNode Title="VOIDED Field" Url="html/F_Braintree_TransactionStatus_VOIDED.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="24f83a1a-6dc3-4fdd-a13d-19d3796ca754" Title="TransactionType Class" Url="html/T_Braintree_TransactionType.htm">
+    <HelpTOCNode Id="523c6ade-aae3-4699-bdfb-5a914bf2f9c8" Title="TransactionType Class" Url="html/T_Braintree_TransactionType.htm">
       <HelpTOCNode Title="TransactionType Members" Url="html/AllMembers_T_Braintree_TransactionType.htm" />
-      <HelpTOCNode Id="340659cf-4a8c-440e-85f8-50bed5c2e9de" Title="TransactionType Fields" Url="html/Fields_T_Braintree_TransactionType.htm">
+      <HelpTOCNode Id="07e2f6ac-90fa-4050-8deb-a1d871532959" Title="TransactionType Fields" Url="html/Fields_T_Braintree_TransactionType.htm">
         <HelpTOCNode Title="ALL Field" Url="html/F_Braintree_TransactionType_ALL.htm" />
         <HelpTOCNode Title="CREDIT Field" Url="html/F_Braintree_TransactionType_CREDIT.htm" />
         <HelpTOCNode Title="SALE Field" Url="html/F_Braintree_TransactionType_SALE.htm" />
         <HelpTOCNode Title="UNRECOGNIZED Field" Url="html/F_Braintree_TransactionType_UNRECOGNIZED.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="542db5c5-4f40-46cd-b1ec-95cf31512835" Title="TransparentRedirectRequest Class" Url="html/T_Braintree_TransparentRedirectRequest.htm">
+    <HelpTOCNode Id="b59b8f69-4ed2-40ed-9dca-57da331b05e9" Title="TransparentRedirectRequest Class" Url="html/T_Braintree_TransparentRedirectRequest.htm">
       <HelpTOCNode Title="TransparentRedirectRequest Members" Url="html/AllMembers_T_Braintree_TransparentRedirectRequest.htm" />
       <HelpTOCNode Title="TransparentRedirectRequest Constructor " Url="html/M_Braintree_TransparentRedirectRequest__ctor.htm" />
-      <HelpTOCNode Id="37265231-0b2e-4248-891b-2a5d3773354d" Title="TransparentRedirectRequest Methods " Url="html/Methods_T_Braintree_TransparentRedirectRequest.htm">
-        <HelpTOCNode Id="4b12f445-4e17-4c60-adb8-9b45a81fa88b" Title="ToQueryString Method " Url="html/Overload_Braintree_TransparentRedirectRequest_ToQueryString.htm">
+      <HelpTOCNode Id="b5719317-21a4-40b2-9655-58b76251a224" Title="TransparentRedirectRequest Methods " Url="html/Methods_T_Braintree_TransparentRedirectRequest.htm">
+        <HelpTOCNode Id="342d8b5f-ed0a-4ee2-adaa-b86f2bccb693" Title="ToQueryString Method " Url="html/Overload_Braintree_TransparentRedirectRequest_ToQueryString.htm">
           <HelpTOCNode Title="ToQueryString Method " Url="html/M_Braintree_TransparentRedirectRequest_ToQueryString.htm" />
           <HelpTOCNode Title="ToQueryString Method (String)" Url="html/M_Braintree_TransparentRedirectRequest_ToQueryString_1.htm" />
         </HelpTOCNode>
-        <HelpTOCNode Id="a1610515-5a8a-4b48-9f47-8aa610d2814b" Title="ToXml Method " Url="html/Overload_Braintree_TransparentRedirectRequest_ToXml.htm">
+        <HelpTOCNode Id="ea41e4da-67b7-4730-912a-86310d797a5d" Title="ToXml Method " Url="html/Overload_Braintree_TransparentRedirectRequest_ToXml.htm">
           <HelpTOCNode Title="ToXml Method " Url="html/M_Braintree_TransparentRedirectRequest_ToXml.htm" />
           <HelpTOCNode Title="ToXml Method (String)" Url="html/M_Braintree_TransparentRedirectRequest_ToXml_1.htm" />
         </HelpTOCNode>
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="fe6a07c3-151a-4081-a88b-3beca4cfbb48" Title="TrUtil Class" Url="html/T_Braintree_TrUtil.htm">
+    <HelpTOCNode Id="38428297-902e-4e60-afd5-353b16182fea" Title="TrUtil Class" Url="html/T_Braintree_TrUtil.htm">
       <HelpTOCNode Title="TrUtil Members" Url="html/AllMembers_T_Braintree_TrUtil.htm" />
       <HelpTOCNode Title="TrUtil Constructor " Url="html/M_Braintree_TrUtil__ctor.htm" />
-      <HelpTOCNode Id="6c68297a-69ae-4442-a88d-db32d53f8154" Title="TrUtil Methods " Url="html/Methods_T_Braintree_TrUtil.htm">
+      <HelpTOCNode Id="702bd93e-45a1-493f-abf3-659e9c95b559" Title="TrUtil Methods " Url="html/Methods_T_Braintree_TrUtil.htm">
         <HelpTOCNode Title="BuildTrData Method " Url="html/M_Braintree_TrUtil_BuildTrData.htm" />
         <HelpTOCNode Title="IsTrDataValid Method " Url="html/M_Braintree_TrUtil_IsTrDataValid.htm" />
         <HelpTOCNode Title="IsValidTrQueryString Method " Url="html/M_Braintree_TrUtil_IsValidTrQueryString.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="5d59704a-e7fd-430f-848e-b8f3739997cc" Title="ValidationError Class" Url="html/T_Braintree_ValidationError.htm">
+    <HelpTOCNode Id="341611a5-d2dc-413d-b1ab-49b4497d5cb4" Title="ValidationError Class" Url="html/T_Braintree_ValidationError.htm">
       <HelpTOCNode Title="ValidationError Members" Url="html/AllMembers_T_Braintree_ValidationError.htm" />
       <HelpTOCNode Title="ValidationError Constructor " Url="html/M_Braintree_ValidationError__ctor.htm" />
-      <HelpTOCNode Id="e34ba976-15d2-40c9-afc5-851c279a0399" Title="ValidationError Properties " Url="html/Properties_T_Braintree_ValidationError.htm">
+      <HelpTOCNode Id="9b316288-33b3-4d96-9f5f-e04f9a581d57" Title="ValidationError Properties " Url="html/Properties_T_Braintree_ValidationError.htm">
         <HelpTOCNode Title="Attribute Property " Url="html/P_Braintree_ValidationError_Attribute.htm" />
         <HelpTOCNode Title="Code Property " Url="html/P_Braintree_ValidationError_Code.htm" />
         <HelpTOCNode Title="Message Property " Url="html/P_Braintree_ValidationError_Message.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
     <HelpTOCNode Title="ValidationErrorCode Enumeration" Url="html/T_Braintree_ValidationErrorCode.htm" />
-    <HelpTOCNode Id="8b1bfeae-779f-45b4-9d49-cdbb0717d250" Title="ValidationErrors Class" Url="html/T_Braintree_ValidationErrors.htm">
+    <HelpTOCNode Id="4dd26286-7c46-48f3-a111-8b2491de14d7" Title="ValidationErrors Class" Url="html/T_Braintree_ValidationErrors.htm">
       <HelpTOCNode Title="ValidationErrors Members" Url="html/AllMembers_T_Braintree_ValidationErrors.htm" />
-      <HelpTOCNode Id="4c5e680b-8962-4676-a7b1-9ee3cfc89197" Title="ValidationErrors Constructor " Url="html/Overload_Braintree_ValidationErrors__ctor.htm">
+      <HelpTOCNode Id="4125938e-9977-41a3-9f97-7b36e3c77344" Title="ValidationErrors Constructor " Url="html/Overload_Braintree_ValidationErrors__ctor.htm">
         <HelpTOCNode Title="ValidationErrors Constructor " Url="html/M_Braintree_ValidationErrors__ctor.htm" />
         <HelpTOCNode Title="ValidationErrors Constructor (NodeWrapper)" Url="html/M_Braintree_ValidationErrors__ctor_1.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="1e2f3265-ed03-4f65-9c15-b694d37c62b5" Title="ValidationErrors Methods " Url="html/Methods_T_Braintree_ValidationErrors.htm">
+      <HelpTOCNode Id="718f423d-df76-40cb-afb9-c37ca7b970ff" Title="ValidationErrors Methods " Url="html/Methods_T_Braintree_ValidationErrors.htm">
         <HelpTOCNode Title="AddError Method " Url="html/M_Braintree_ValidationErrors_AddError.htm" />
         <HelpTOCNode Title="AddErrors Method " Url="html/M_Braintree_ValidationErrors_AddErrors.htm" />
         <HelpTOCNode Title="All Method " Url="html/M_Braintree_ValidationErrors_All.htm" />
@@ -862,50 +872,50 @@
         <HelpTOCNode Title="ForObject Method " Url="html/M_Braintree_ValidationErrors_ForObject.htm" />
         <HelpTOCNode Title="OnField Method " Url="html/M_Braintree_ValidationErrors_OnField.htm" />
       </HelpTOCNode>
-      <HelpTOCNode Id="bde5e0c3-5d99-4869-a748-ba14acf72a00" Title="ValidationErrors Properties " Url="html/Properties_T_Braintree_ValidationErrors.htm">
+      <HelpTOCNode Id="1465d8d8-d666-4d0d-bad6-9ff8eb0c0239" Title="ValidationErrors Properties " Url="html/Properties_T_Braintree_ValidationErrors.htm">
         <HelpTOCNode Title="Count Property " Url="html/P_Braintree_ValidationErrors_Count.htm" />
         <HelpTOCNode Title="DeepCount Property " Url="html/P_Braintree_ValidationErrors_DeepCount.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
-    <HelpTOCNode Id="ba73f97a-da42-4e14-8005-1390f7b038df" Title="WebServiceGateway Class" Url="html/T_Braintree_WebServiceGateway.htm">
+    <HelpTOCNode Id="4408890b-cac3-46d3-a06f-181c6c5499a7" Title="WebServiceGateway Class" Url="html/T_Braintree_WebServiceGateway.htm">
       <HelpTOCNode Title="WebServiceGateway Members" Url="html/AllMembers_T_Braintree_WebServiceGateway.htm" />
-      <HelpTOCNode Id="abe38f11-7bc0-4d21-8f76-6526d561f7b5" Title="WebServiceGateway Methods " Url="html/Methods_T_Braintree_WebServiceGateway.htm">
+      <HelpTOCNode Id="e0136c93-4548-412a-9d3a-1648089d8098" Title="WebServiceGateway Methods " Url="html/Methods_T_Braintree_WebServiceGateway.htm">
         <HelpTOCNode Title="Get Method " Url="html/M_Braintree_WebServiceGateway_Get.htm" />
         <HelpTOCNode Title="Put Method " Url="html/M_Braintree_WebServiceGateway_Put.htm" />
         <HelpTOCNode Title="ThrowExceptionIfErrorStatusCode Method " Url="html/M_Braintree_WebServiceGateway_ThrowExceptionIfErrorStatusCode.htm" />
       </HelpTOCNode>
     </HelpTOCNode>
   </HelpTOCNode>
-  <HelpTOCNode Id="17d09c46-c6fe-43cd-923f-da2eb5f8d69a" Title="Braintree.Exceptions Namespace" Url="html/N_Braintree_Exceptions.htm">
-    <HelpTOCNode Id="684ebf22-2916-4424-8d86-730fc7e115d5" Title="AuthenticationException Class" Url="html/T_Braintree_Exceptions_AuthenticationException.htm">
+  <HelpTOCNode Id="39e1781a-8fab-4ff2-8c72-578adf9623e3" Title="Braintree.Exceptions Namespace" Url="html/N_Braintree_Exceptions.htm">
+    <HelpTOCNode Id="96c55db4-a117-4fd1-8979-f45526f34098" Title="AuthenticationException Class" Url="html/T_Braintree_Exceptions_AuthenticationException.htm">
       <HelpTOCNode Title="AuthenticationException Members" Url="html/AllMembers_T_Braintree_Exceptions_AuthenticationException.htm" />
       <HelpTOCNode Title="AuthenticationException Constructor " Url="html/M_Braintree_Exceptions_AuthenticationException__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="07b1efa4-26e2-4f58-a5d4-ba6526846a23" Title="AuthorizationException Class" Url="html/T_Braintree_Exceptions_AuthorizationException.htm">
+    <HelpTOCNode Id="9c93783d-6c50-436d-9b60-eb6c028f2d72" Title="AuthorizationException Class" Url="html/T_Braintree_Exceptions_AuthorizationException.htm">
       <HelpTOCNode Title="AuthorizationException Members" Url="html/AllMembers_T_Braintree_Exceptions_AuthorizationException.htm" />
       <HelpTOCNode Title="AuthorizationException Constructor " Url="html/M_Braintree_Exceptions_AuthorizationException__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="5c784472-39e9-4a1c-a38d-05538c95a918" Title="DownForMaintenanceException Class" Url="html/T_Braintree_Exceptions_DownForMaintenanceException.htm">
+    <HelpTOCNode Id="fa19a929-2a12-4055-a246-f04e0b03461f" Title="DownForMaintenanceException Class" Url="html/T_Braintree_Exceptions_DownForMaintenanceException.htm">
       <HelpTOCNode Title="DownForMaintenanceException Members" Url="html/AllMembers_T_Braintree_Exceptions_DownForMaintenanceException.htm" />
       <HelpTOCNode Title="DownForMaintenanceException Constructor " Url="html/M_Braintree_Exceptions_DownForMaintenanceException__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="596dd8f7-6967-4807-a21f-a7e3a9e9311e" Title="ForgedQueryStringException Class" Url="html/T_Braintree_Exceptions_ForgedQueryStringException.htm">
+    <HelpTOCNode Id="4686efd8-f16f-4424-b78d-c0405aaea517" Title="ForgedQueryStringException Class" Url="html/T_Braintree_Exceptions_ForgedQueryStringException.htm">
       <HelpTOCNode Title="ForgedQueryStringException Members" Url="html/AllMembers_T_Braintree_Exceptions_ForgedQueryStringException.htm" />
       <HelpTOCNode Title="ForgedQueryStringException Constructor " Url="html/M_Braintree_Exceptions_ForgedQueryStringException__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="5b8c4803-5359-41e4-8b65-a6167665cd68" Title="NotFoundException Class" Url="html/T_Braintree_Exceptions_NotFoundException.htm">
+    <HelpTOCNode Id="10d8e5d1-b262-4b38-a1a3-cdac1e1cd2ce" Title="NotFoundException Class" Url="html/T_Braintree_Exceptions_NotFoundException.htm">
       <HelpTOCNode Title="NotFoundException Members" Url="html/AllMembers_T_Braintree_Exceptions_NotFoundException.htm" />
       <HelpTOCNode Title="NotFoundException Constructor " Url="html/M_Braintree_Exceptions_NotFoundException__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="5b1ca397-6ca5-4de6-a175-26e1056c5c42" Title="ServerException Class" Url="html/T_Braintree_Exceptions_ServerException.htm">
+    <HelpTOCNode Id="971ee594-0443-43fd-bbf9-59b8f84436b5" Title="ServerException Class" Url="html/T_Braintree_Exceptions_ServerException.htm">
       <HelpTOCNode Title="ServerException Members" Url="html/AllMembers_T_Braintree_Exceptions_ServerException.htm" />
       <HelpTOCNode Title="ServerException Constructor " Url="html/M_Braintree_Exceptions_ServerException__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="438d641b-802d-468c-8ca4-45a303c76540" Title="UnexpectedException Class" Url="html/T_Braintree_Exceptions_UnexpectedException.htm">
+    <HelpTOCNode Id="aed2bbb7-907b-406e-8af8-bfadfd22a753" Title="UnexpectedException Class" Url="html/T_Braintree_Exceptions_UnexpectedException.htm">
       <HelpTOCNode Title="UnexpectedException Members" Url="html/AllMembers_T_Braintree_Exceptions_UnexpectedException.htm" />
       <HelpTOCNode Title="UnexpectedException Constructor " Url="html/M_Braintree_Exceptions_UnexpectedException__ctor.htm" />
     </HelpTOCNode>
-    <HelpTOCNode Id="91ae3d7b-83c2-4b92-8baf-a8d2984e74f1" Title="UpgradeRequiredException Class" Url="html/T_Braintree_Exceptions_UpgradeRequiredException.htm">
+    <HelpTOCNode Id="d6b5009c-22d9-4f55-8b90-4883cef61104" Title="UpgradeRequiredException Class" Url="html/T_Braintree_Exceptions_UpgradeRequiredException.htm">
       <HelpTOCNode Title="UpgradeRequiredException Members" Url="html/AllMembers_T_Braintree_Exceptions_UpgradeRequiredException.htm" />
       <HelpTOCNode Title="UpgradeRequiredException Constructor " Url="html/M_Braintree_Exceptions_UpgradeRequiredException__ctor.htm" />
     </HelpTOCNode>

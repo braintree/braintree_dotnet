@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\pair\braintree-dotnet\braintree.shfbproj" started="5/17/2010 12:26:29 PM">
+<shfbBuild product="Sandcastle Help File Builder Utilities" version="1.8.0.3" projectFile="C:\Users\pair\braintree-dotnet\braintree.shfbproj" started="6/11/2010 3:42:04 PM">
 <buildStep step="Initializing">
-</buildStep>
-<buildStep step="ClearWorkFolder">
-Clearing working folder...
 </buildStep>
 <buildStep step="FindingTools">
 Finding tools...
@@ -11,16 +8,16 @@ Found Sandcastle tools in 'C:\Program Files (x86)\Sandcastle\'
 </buildStep>
 <buildStep step="ValidatingDocumentationSources">
 Validating and copying documentation source information
-Source: C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.2.0.dll
-    Found assembly 'C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.2.0.dll'
-Source: C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.2.0.xml
+Source: C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.3.0.dll
+    Found assembly 'C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.3.0.dll'
+Source: C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.3.0.xml
 
 Copying XML comments files
-    C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.2.0.xml -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Braintree-2.2.0.xml
+    C:\Users\pair\braintree-dotnet\Braintree\bin\Debug\Braintree-2.3.0.xml -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Braintree-2.3.0.xml
 </buildStep>
 <buildStep step="GenerateSharedContent">
 Generating shared content files (en-US, English (United States))...
-    Last step completed in 00:00:00.0781
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="GenerateApiFilter">
 Generating API filter for MRefBuilder...
@@ -33,15 +30,15 @@ GenerateRefInfo:
   MrefBuilder (v2.4.10520.1)
   Copyright c Microsoft 2006
   Info: Loaded 1 assemblies for reflection and 0 dependency assemblies.
-  Info: Wrote information on 2 namespaces, 72 types, and 599 members
+  Info: Wrote information on 2 namespaces, 72 types, and 609 members
   XslTransform (v2.4.10520.1)
   Copyright c Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\MergeDuplicates.xsl'.
-    Last step completed in 00:00:02.2257
+    Last step completed in 00:00:02.5782
 </buildStep>
 <buildStep step="GenerateNamespaceSummaries">
 Generating namespace summary information...
-    Last step completed in 00:00:00.0157
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="ApplyVisibilityProperties">
 Applying visibility properties to reflection information file
@@ -52,7 +49,7 @@ Applying visibility properties to reflection information file
     28 protected members noted for removal
     0 protected inherited framework members noted for removal
     Removing previously noted unwanted APIs and elements
-    Last step completed in 00:00:00.0940
+    Last step completed in 00:00:00.1094
 </buildStep>
 <buildStep step="TransformReflectionInfo">
 Transforming reflection output...
@@ -65,7 +62,7 @@ TransformManifest:
   XslTransform (v2.4.10520.1)
   Copyright c Microsoft 2005-2006
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\ReflectionToManifest.xsl'.
-    Last step completed in 00:00:02.8371
+    Last step completed in 00:00:03.2970
 </buildStep>
 <buildStep step="ModifyHelpTopicFilenames">
 Modifying help topic filenames in reflection information file
@@ -103,7 +100,7 @@ Modifying help topic filenames in reflection information file
     Unique name M_Braintree_TransparentRedirectRequest_ToQueryString_1 generated for M:Braintree.TransparentRedirectRequest.ToQueryString(System.String)
     Unique name M_Braintree_TransparentRedirectRequest_ToXml_1 generated for M:Braintree.TransparentRedirectRequest.ToXml(System.String)
     Unique name M_Braintree_ValidationErrors__ctor_1 generated for M:Braintree.ValidationErrors.#ctor(Braintree.NodeWrapper)
-    Last step completed in 00:00:00.0784
+    Last step completed in 00:00:00.0938
 </buildStep>
 <buildStep step="CopyStandardContent">
 Copying standard help content...
@@ -213,27 +210,27 @@ C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\script_manifold.js
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\scripts\SplitScreen.js -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\SplitScreen.js
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\styles\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\presentation.css
 C:\Program Files (x86)\Sandcastle\Presentation\vs2005\styles\Whidbey\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Whidbey\presentation.css
-    Last step completed in 00:00:00.3919
+    Last step completed in 00:00:00.6406
 </buildStep>
 <buildStep step="CopyAdditionalContent">
 Copying additional content files...
 No additional content to copy
-    Last step completed in 00:00:00.0157
+    Last step completed in 00:00:00.0156
 </buildStep>
 <buildStep step="MergeTablesOfContents">
 Merging conceptual and additional tables of contents...
-    Last step completed in 00:00:00.0157
+    Last step completed in 00:00:00.0313
 </buildStep>
 <buildStep step="CreateBuildAssemblerConfigs">
 Creating Sandcastle configuration files...
     sandcastle.config
-    Last step completed in 00:00:00.0470
+    Last step completed in 00:00:00.0781
 </buildStep>
 <buildStep step="MergeCustomConfigs">
 Merging custom build component configurations
 C:\Users\pair\braintree-dotnet\Help\Working\sandcastle.config
     No additional help attributes defined.  The 'MS Help 2 Attributes' component was not added.
-    Last step completed in 00:00:00.0470
+    Last step completed in 00:00:00.0469
 </buildStep>
 <buildStep step="BuildReferenceTopics">
 Building reference help topics...
@@ -246,7 +243,7 @@ BuildReferenceTopics:
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Searching for files that match '*.xml'.
   Info: CopyFromIndexComponent: Searching for files that match 'reflection.xml'.
-  Info: CopyFromIndexComponent: Indexed 170914 elements in 107 files.
+  Info: CopyFromIndexComponent: Indexed 170924 elements in 107 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
@@ -290,7 +287,7 @@ BuildReferenceTopics:
   Info: SyntaxComponent: Loaded 3 syntax generators.
   Info: CopyFromIndexComponent: Instantiating component.
   Info: CopyFromIndexComponent: Searching for files that match 'C:\Windows\Microsoft.NET\Framework\v2.0.50727\en\*.xml'.
-  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\pair\braintree-dotnet\Help\Working\Braintree-2.2.0.xml'.
+  Info: CopyFromIndexComponent: Searching for files that match 'C:\Users\pair\braintree-dotnet\Help\Working\Braintree-2.3.0.xml'.
   Info: CopyFromIndexComponent: Indexed 81318 elements in 50 files.
   Info: CopyFromIndexComponent: Loaded 0 copy components.
   Info: ForEachComponent: Instantiating component.
@@ -366,7 +363,7 @@ BuildReferenceTopics:
   Info: ResolveReferenceLinksComponent2: Creating MSDN URL resolver.
   Info: ResolveReferenceLinksComponent2: Searching directory 'C:\Program Files (x86)\Sandcastle\Data\Reflection' for targets files of the form '*.xml'.
   Info: ResolveReferenceLinksComponent2: Searching directory 'C:\Users\pair\braintree-dotnet\Help\Working' for targets files of the form 'reflection.xml'.
-  Info: ResolveReferenceLinksComponent2: Loaded 170914 reference targets.
+  Info: ResolveReferenceLinksComponent2: Loaded 170924 reference targets.
   Info: SaveComponent: Instantiating component.
   Info: BuildAssembler: Building topic N:Braintree
   Info: BuildAssembler: Building topic T:Braintree.Address
@@ -374,6 +371,7 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic Properties.T:Braintree.Address
   Info: BuildAssembler: Building topic P:Braintree.Address.Company
   Info: BuildAssembler: Building topic P:Braintree.Address.CountryName
+  Info: BuildAssembler: Building topic P:Braintree.Address.CreatedAt
   Info: BuildAssembler: Building topic P:Braintree.Address.CustomerId
   Info: BuildAssembler: Building topic P:Braintree.Address.ExtendedAddress
   Info: BuildAssembler: Building topic P:Braintree.Address.FirstName
@@ -383,6 +381,7 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:Braintree.Address.PostalCode
   Info: BuildAssembler: Building topic P:Braintree.Address.Region
   Info: BuildAssembler: Building topic P:Braintree.Address.StreetAddress
+  Info: BuildAssembler: Building topic P:Braintree.Address.UpdatedAt
   Info: BuildAssembler: Building topic T:Braintree.AddressGateway
   Info: BuildAssembler: Building topic AllMembers.T:Braintree.AddressGateway
   Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.AddressGateway.#ctor
@@ -541,6 +540,7 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic M:Braintree.CreditCardOptionsRequest.ToQueryString(System.String)
   Info: BuildAssembler: Building topic M:Braintree.CreditCardOptionsRequest.ToXml
   Info: BuildAssembler: Building topic M:Braintree.CreditCardOptionsRequest.ToXml(System.String)
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardOptionsRequest.VerificationMerchantAccountId
   Info: BuildAssembler: Building topic P:Braintree.CreditCardOptionsRequest.VerifyCard
   Info: BuildAssembler: Building topic T:Braintree.CreditCardRequest
   Info: BuildAssembler: Building topic AllMembers.T:Braintree.CreditCardRequest
@@ -576,6 +576,7 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.AvsPostalCodeResponseCode
   Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.AvsStreetAddressResponseCode
   Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.CvvResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.MerchantAccountId
   Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.ProcessorResponseCode
   Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.ProcessorResponseText
   Info: BuildAssembler: Building topic P:Braintree.CreditCardVerification.Status
@@ -940,11 +941,16 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic Methods.T:Braintree.Transaction
   Info: BuildAssembler: Building topic Properties.T:Braintree.Transaction
   Info: BuildAssembler: Building topic P:Braintree.Transaction.Amount
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.AvsErrorResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.AvsPostalCodeResponseCode
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.AvsStreetAddressResponseCode
   Info: BuildAssembler: Building topic P:Braintree.Transaction.BillingAddress
   Info: BuildAssembler: Building topic P:Braintree.Transaction.CreatedAt
   Info: BuildAssembler: Building topic P:Braintree.Transaction.CreditCard
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.CurrencyIsoCode
   Info: BuildAssembler: Building topic P:Braintree.Transaction.Customer
   Info: BuildAssembler: Building topic P:Braintree.Transaction.CustomFields
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.CvvResponseCode
   Info: BuildAssembler: Building topic M:Braintree.Transaction.GetVaultBillingAddress
   Info: BuildAssembler: Building topic M:Braintree.Transaction.GetVaultCreditCard
   Info: BuildAssembler: Building topic M:Braintree.Transaction.GetVaultCustomer
@@ -957,6 +963,7 @@ BuildReferenceTopics:
   Info: BuildAssembler: Building topic P:Braintree.Transaction.ProcessorResponseText
   Info: BuildAssembler: Building topic P:Braintree.Transaction.ShippingAddress
   Info: BuildAssembler: Building topic P:Braintree.Transaction.Status
+  Info: BuildAssembler: Building topic P:Braintree.Transaction.SubscriptionId
   Info: BuildAssembler: Building topic P:Braintree.Transaction.Type
   Info: BuildAssembler: Building topic P:Braintree.Transaction.UpdatedAt
   Info: BuildAssembler: Building topic T:Braintree.TransactionCreatedUsing
@@ -1207,8 +1214,8 @@ BuildReferenceTopics:
   Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.UpgradeRequiredException.#ctor
   Info: BuildAssembler: Building topic M:Braintree.Exceptions.UpgradeRequiredException.#ctor
   Info: ShowMissingComponent: Auto-documenting constructor M:Braintree.Exceptions.UpgradeRequiredException.#ctor
-  Info: Processed 729 topics
-    Last step completed in 00:00:45.8174
+  Info: Processed 739 topics
+    Last step completed in 00:00:48.7203
 </buildStep>
 <buildStep step="GenerateIntermediateTableOfContents">
 Generating intermediate table of contents file...
@@ -1219,7 +1226,7 @@ GenerateIntermediateTOC:
   Info: Applying XSL transformation 'C:\Program Files (x86)\Sandcastle\ProductionTransforms\CreateVSToc.xsl'.
 
 Clearing any prior web output
-    Last step completed in 00:00:00.6897
+    Last step completed in 00:00:01.1563
 </buildStep>
 <buildStep step="ExtractingHtmlInfo">
 Extracting HTML info for HTML Help 1 and/or website...
@@ -1229,15 +1236,15 @@ Copyright c 2008-2010, Eric Woodruff, All Rights Reserved
 E-Mail: Eric@EWoodruff.us
 
 Using LCID '1033', code page '65001', encoding charset 'UTF-8'.
-Processed 729 HTML files
+Processed 739 HTML files
 Sorting keywords and generating See Also indices
 Saving website keyword index to C:\Users\pair\braintree-dotnet\Help\Working\WebKI.xml
 Saving website table of contents to C:\Users\pair\braintree-dotnet\Help\Working\WebTOC.xml
-    Last step completed in 00:00:01.2853
+    Last step completed in 00:00:01.2500
 </buildStep>
 <buildStep step="GenerateHelpFormatTableOfContents">
 Generating website table of contents file...
-    Last step completed in 00:00:00.0157
+    Last step completed in 00:00:00.0313
 </buildStep>
 <buildStep step="UpdateTableOfContents">
 Updating table of contents with additional content items and determining default topic...
@@ -1246,7 +1253,7 @@ Updating table of contents with additional content items and determining default
 <buildStep step="GenerateFullTextIndex">
 Generating full-text index for the website...
 
-    Last step completed in 00:00:02.6020
+    Last step completed in 00:00:02.9845
 </buildStep>
 <buildStep step="CopyingWebsiteFiles">
 Copying website files to output folder...
@@ -1728,6 +1735,7 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressReque
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_AddressRequest_StreetAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_AddressRequest_StreetAddress.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_Company.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_Company.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_CountryName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_CountryName.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_CreatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_CreatedAt.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_CustomerId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_CustomerId.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_ExtendedAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_ExtendedAddress.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_FirstName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_FirstName.htm
@@ -1737,6 +1745,7 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_Loca
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_PostalCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_PostalCode.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_Region.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_Region.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_StreetAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_StreetAddress.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Address_UpdatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Address_UpdatedAt.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_Address.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_Address.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_CreditCard.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_BraintreeGateway_Customer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_BraintreeGateway_Customer.htm
@@ -1753,6 +1762,7 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Configuratio
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardAddressOptionsRequest_UpdateExisting.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardAddressOptionsRequest_UpdateExisting.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardAddressRequest_Options.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardAddressRequest_Options.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardOptionsRequest_MakeDefault.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardOptionsRequest_MakeDefault.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardOptionsRequest_VerificationMerchantAccountId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardOptionsRequest_VerificationMerchantAccountId.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardOptionsRequest_VerifyCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardOptionsRequest_VerifyCard.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_BillingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_BillingAddress.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardRequest_CardholderName.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardRequest_CardholderName.htm
@@ -1769,6 +1779,7 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVe
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_AvsPostalCodeResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_AvsPostalCodeResponseCode.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_AvsStreetAddressResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_AvsStreetAddressResponseCode.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_CvvResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_CvvResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_MerchantAccountId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_MerchantAccountId.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_ProcessorResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_ProcessorResponseCode.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_ProcessorResponseText.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_ProcessorResponseText.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_CreditCardVerification_Status.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_CreditCardVerification_Status.htm
@@ -1913,11 +1924,16 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionS
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionSearchRequest_Status.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionSearchRequest_Status.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_TransactionSearchRequest_Type.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_TransactionSearchRequest_Type.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Amount.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Amount.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_AvsErrorResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_AvsErrorResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_AvsPostalCodeResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_AvsPostalCodeResponseCode.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_AvsStreetAddressResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_AvsStreetAddressResponseCode.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_BillingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_BillingAddress.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CreatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CreatedAt.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CreditCard.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CreditCard.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CurrencyIsoCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CurrencyIsoCode.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Customer.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Customer.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CustomFields.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CustomFields.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_CvvResponseCode.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_CvvResponseCode.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Id.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Id.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_MerchantAccountId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_MerchantAccountId.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_OrderId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_OrderId.htm
@@ -1926,6 +1942,7 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_ProcessorResponseText.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_ProcessorResponseText.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_ShippingAddress.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_ShippingAddress.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Status.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Status.htm
+C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_SubscriptionId.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_SubscriptionId.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_Type.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_Type.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_Transaction_UpdatedAt.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_Transaction_UpdatedAt.htm
 C:\Users\pair\braintree-dotnet\Help\Working\Output\html\P_Braintree_ValidationErrors_Count.htm -&gt; C:\Users\pair\braintree-dotnet\Help\html\P_Braintree_ValidationErrors_Count.htm
@@ -2114,15 +2131,15 @@ C:\Users\pair\braintree-dotnet\Help\Working\Output\scripts\SplitScreen.js -&gt; 
 C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\highlight.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\highlight.css
 C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\presentation.css
 C:\Users\pair\braintree-dotnet\Help\Working\Output\styles\Whidbey\presentation.css -&gt; C:\Users\pair\braintree-dotnet\Help\styles\Whidbey\presentation.css
-    Last step completed in 00:00:04.0905
+    Last step completed in 00:00:04.4845
 </buildStep>
 <buildStep step="CleanIntermediates">
 Removing intermediate files...
-    Last step completed in 00:00:00.2191
+    Last step completed in 00:00:00.2813
 </buildStep>
 <buildStep step="Completed">
 
-Build completed successfully at 05/17/2010 12:27 PM.  Total time: 00:01:00.8009
+Build completed successfully at 06/11/2010 03:43 PM.  Total time: 00:01:06.1115
 
 </buildStep>
 </shfbBuild>
