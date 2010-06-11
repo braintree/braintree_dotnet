@@ -1,7 +1,9 @@
-## 2.2.1
+## 2.3.0
 
-* Added AvsErrorResponseCode, AvsPostalCodeResponseCode, AvsStreetAddressResponseCode, CurrencyIsoCode, CvvResponseCode to Transaction
-* Added CreatedAt, UpdatedAt to Address
+* Return AvsErrorResponseCode, AvsPostalCodeResponseCode, AvsStreetAddressResponseCode, CurrencyIsoCode, CvvResponseCode with Transaction
+* Return CreatedAt, UpdatedAt with Address
+* Allow verification against a specified merchant account when creating or updating a CreditCard
+* Return SubscriptionId with Transaction
 
 ## 2.2.0
 
