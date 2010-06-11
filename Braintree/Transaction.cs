@@ -88,6 +88,7 @@ namespace Braintree
         public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
+        public String RefundId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
@@ -120,6 +121,7 @@ namespace Braintree
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            RefundId = node.GetString("refund-id");
             SubscriptionId = node.GetString("subscription-id");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"));

@@ -1504,6 +1504,9 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(transaction.Amount, result.Target.Amount);
+
+            Transaction firstTransaction = gateway.Transaction.Find(transaction.Id);
+            Assert.AreEqual(result.Target.Id, firstTransaction.RefundId);
         }
 
         [Test]
