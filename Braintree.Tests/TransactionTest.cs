@@ -164,7 +164,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void searchOnTextNodeOperators() {
+        public void Search_OnTextNodeOperators() {
             var request = new TransactionRequest
             {
                 Amount = 1000M,
@@ -176,36 +176,36 @@ namespace Braintree.Tests
                 }
             };
 
-        Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-        var searchRequest = new TransactionSearchRequest().
-            Id.Is(transaction.Id).
-            CreditCardCardholderName.StartsWith("Tom");
+            var searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardholderName.StartsWith("Tom");
 
-        ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(1, collection.MaximumCount);
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(1, collection.MaximumCount);
 
-        searchRequest = new TransactionSearchRequest().
-            Id.Is(transaction.Id).
-            CreditCardCardholderName.EndsWith("Smith");
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardholderName.EndsWith("Smith");
 
-        collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(1, collection.MaximumCount);
+            collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(1, collection.MaximumCount);
 
-        searchRequest = new TransactionSearchRequest().
-            Id.Is(transaction.Id).
-            CreditCardCardholderName.Contains("m Sm");
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardholderName.Contains("m Sm");
 
-        collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(1, collection.MaximumCount);
+            collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(1, collection.MaximumCount);
 
-        searchRequest = new TransactionSearchRequest().
-            Id.Is(transaction.Id).
-            CreditCardCardholderName.IsNot("Tom Smith");
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                CreditCardCardholderName.IsNot("Tom Smith");
 
-        collection = gateway.Transaction.Search(searchRequest);
-        Assert.AreEqual(0, collection.MaximumCount);
-    }
+            collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(0, collection.MaximumCount);
+        }
 
         [Test]
         public void Search_OnCreatedUsing()
@@ -677,6 +677,11 @@ namespace Braintree.Tests
             Assert.AreEqual("123", transaction.OrderId);
             Assert.IsNull(transaction.GetVaultCreditCard());
             Assert.IsNull(transaction.GetVaultCustomer());
+            Assert.IsNull(transaction.AvsErrorResponseCode);
+            Assert.AreEqual("M", transaction.AvsPostalCodeResponseCode);
+            Assert.AreEqual("M", transaction.AvsStreetAddressResponseCode);
+            Assert.AreEqual("M", transaction.CvvResponseCode);
+            Assert.AreEqual("USD", transaction.CurrencyIsoCode);
 
             Assert.IsNull(transaction.GetVaultCreditCard());
             CreditCard creditCard = transaction.CreditCard;
