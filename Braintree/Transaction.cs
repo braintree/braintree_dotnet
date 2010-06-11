@@ -71,10 +71,15 @@ namespace Braintree
     {
         public String Id { get; protected set; }
         public Decimal? Amount { get; protected set; }
+        public String AvsErrorResponseCode { get; protected set; }
+        public String AvsPostalCodeResponseCode { get; protected set; }
+        public String AvsStreetAddressResponseCode { get; protected set; }
         public Address BillingAddress { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public CreditCard CreditCard { get; protected set; }
+        public String CurrencyIsoCode { get; protected set; }
         public Customer Customer { get; protected set; }
+        public String CvvResponseCode { get; protected set; }
         public String MerchantAccountId { get; protected set; }
         public String OrderId { get; protected set; }
         public String ProcessorAuthorizationCode { get; protected set; }
@@ -82,6 +87,7 @@ namespace Braintree
         public String ProcessorResponseText { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionStatus Status { get; protected set; }
+        public String SubscriptionId { get; protected set; }
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
@@ -92,6 +98,9 @@ namespace Braintree
 
             Id = node.GetString("id");
             Amount = node.GetDecimal("amount");
+            AvsErrorResponseCode = node.GetString("avs-error-response-code");
+            AvsPostalCodeResponseCode = node.GetString("avs-postal-code-response-code");
+            AvsStreetAddressResponseCode = node.GetString("avs-street-address-response-code");
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
             Type = (TransactionType)CollectionUtil.Find(TransactionType.ALL, node.GetString("type"), TransactionType.UNRECOGNIZED);
@@ -99,9 +108,12 @@ namespace Braintree
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            SubscriptionId = node.GetString("subscription-id");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"));
             Customer = new Customer(node.GetNode("customer"));
+            CurrencyIsoCode = node.GetString("currency-iso-code");
+            CvvResponseCode = node.GetString("cvv-response-code");
 
             BillingAddress = new Address(node.GetNode("billing"));
             ShippingAddress = new Address(node.GetNode("shipping"));

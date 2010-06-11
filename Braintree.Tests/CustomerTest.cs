@@ -107,15 +107,13 @@ namespace Braintree.Tests
         {
             var customFields = new Dictionary<String, String>();
             customFields.Add("store_me", "a custom value");
-            var expectedCustomFields = new Dictionary<String, String>();
-            expectedCustomFields.Add("store-me", "a custom value");
             var createRequest = new CustomerRequest()
             {
                 CustomFields = customFields
             };
 
             Customer customer = gateway.Customer.Create(createRequest).Target;
-            Assert.AreEqual(expectedCustomFields, customer.CustomFields);
+            Assert.AreEqual("a custom value", customer.CustomFields["store_me"]);
         }
 
         [Test]
@@ -295,7 +293,7 @@ namespace Braintree.Tests
             Assert.AreEqual("John", customer.FirstName);
             Assert.AreEqual("Doe", customer.LastName);
             Assert.AreEqual("John Doe", customer.CreditCards[0].CardholderName);
-            Assert.AreEqual("a custom value", customer.CustomFields["store-me"]);
+            Assert.AreEqual("a custom value", customer.CustomFields["store_me"]);
         }
 
         [Test]

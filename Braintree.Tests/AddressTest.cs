@@ -53,6 +53,8 @@ namespace Braintree.Tests
             Assert.AreEqual("IL", address.Region);
             Assert.AreEqual("60622", address.PostalCode);
             Assert.AreEqual("United States of America", address.CountryName);
+            Assert.IsNotNull(address.CreatedAt);
+            Assert.IsNotNull(address.UpdatedAt);
         }
 
         [Test]

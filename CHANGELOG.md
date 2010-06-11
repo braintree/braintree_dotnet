@@ -1,3 +1,10 @@
+## 2.3.0
+
+* Return AvsErrorResponseCode, AvsPostalCodeResponseCode, AvsStreetAddressResponseCode, CurrencyIsoCode, CvvResponseCode with Transaction
+* Return CreatedAt, UpdatedAt with Address
+* Allow verification against a specified merchant account when creating or updating a CreditCard
+* Return SubscriptionId with Transaction
+
 ## 2.2.0
 
 * Prevent race condition when pulling back collection results -- search results represent the state of the data at the time the query was run

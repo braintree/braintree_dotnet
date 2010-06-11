@@ -70,7 +70,7 @@ namespace Braintree
 
             foreach (NodeWrapper node in GetNode(path).GetChildren())
             {
-                result.Add(node.GetName(), node.GetString());
+                result.Add(Underscore(node.GetName()), node.GetString());
             }
 
             return result;
@@ -145,6 +145,11 @@ namespace Braintree
             if (node.ParentNode == null) return null;
 
             return new NodeWrapper(node.ParentNode);
+        }
+
+        private String Underscore(String str)
+        {
+            return str.Replace("-", "_");
         }
 
         private String XPathToNode(NodeWrapper node)

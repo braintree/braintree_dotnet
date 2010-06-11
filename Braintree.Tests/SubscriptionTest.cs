@@ -210,10 +210,12 @@ namespace Braintree.Tests
             Result<Subscription> result = gateway.Subscription.Create(request);
             Assert.IsTrue(result.IsSuccess());
             Subscription subscription = result.Target;
+            Transaction transaction = subscription.Transactions[0];
 
             Assert.AreEqual(1, subscription.Transactions.Count);
-            Assert.AreEqual(482.48M, subscription.Transactions[0].Amount);
-            Assert.AreEqual(TransactionType.SALE, subscription.Transactions[0].Type);
+            Assert.AreEqual(482.48M, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(subscription.Id, transaction.SubscriptionId);
         }
 
         [Test]

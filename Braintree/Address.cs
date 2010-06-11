@@ -37,6 +37,8 @@ namespace Braintree
         public String Region { get; protected set; }
         public String PostalCode { get; protected set; }
         public String CountryName { get; protected set; }
+        public DateTime? CreatedAt { get; protected set; }
+        public DateTime? UpdatedAt { get; protected set; }
 
         internal Address(NodeWrapper node)
         {
@@ -53,6 +55,8 @@ namespace Braintree
             Region = node.GetString("region");
             PostalCode = node.GetString("postal-code");
             CountryName = node.GetString("country-name");
+            CreatedAt = node.GetDateTime("created-at");
+            UpdatedAt = node.GetDateTime("updated-at");
         }
     }
 }
