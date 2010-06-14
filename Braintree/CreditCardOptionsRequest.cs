@@ -11,6 +11,7 @@ namespace Braintree
         public Boolean VerifyCard { get; set; }
         public Boolean MakeDefault { get; set; }
         public String VerificationMerchantAccountId { get; set; }
+        public String UpdateExistingToken { get; set; }
 
         public override String ToXml()
         {
@@ -27,6 +28,7 @@ namespace Braintree
             }
             builder.Append(BuildXMLElement("verification-merchant-account-id", VerificationMerchantAccountId));
             builder.Append(BuildXMLElement("verify-card", VerifyCard));
+            builder.Append(BuildXMLElement("update-existing-token", UpdateExistingToken));
             builder.Append(String.Format("</{0}>", rootElement));
             
             return builder.ToString();
@@ -43,6 +45,7 @@ namespace Braintree
                 Append(ParentBracketChildString(root, "verification_merchant_account_id"), VerificationMerchantAccountId).
                 Append(ParentBracketChildString(root, "verify_card"), VerifyCard).
                 Append(ParentBracketChildString(root, "make_default"), MakeDefault).
+                Append(ParentBracketChildString(root, "update_existing_token"), UpdateExistingToken).
                 ToString();
         }
     }
