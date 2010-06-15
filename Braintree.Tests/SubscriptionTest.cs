@@ -613,15 +613,10 @@ namespace Braintree.Tests
                 PlanId = "noSuchPlanId"
             };
 
-            try
-            {
-                gateway.Subscription.Create(createRequest);
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            Result<Subscription> result = gateway.Subscription.Create(createRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PLAN_ID_IS_INVALID, result.Errors.ForObject("subscription").OnField("plan_id")[0].Code);
         }
 
         [Test]
@@ -633,15 +628,10 @@ namespace Braintree.Tests
                 PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
             };
 
-            try
-            {
-                gateway.Subscription.Create(createRequest);
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            Result<Subscription> result = gateway.Subscription.Create(createRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PAYMENT_METHOD_TOKEN_IS_INVALID, result.Errors.ForObject("subscription").OnField("payment_method_token")[0].Code);
         }
 
         [Test]
