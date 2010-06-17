@@ -536,6 +536,34 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_PaymentMethodToken()
+        {
+            Subscription subscription = gateway.Subscription.Create(new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+            }).Target;
+
+            CreditCard newCreditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = creditCard.CustomerId,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = creditCard.CardholderName
+
+            }).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest { PaymentMethodToken = newCreditCard.Token };
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(newCreditCard.Token, subscription.PaymentMethodToken);
+        }
+
+        [Test]
         public void UpdateMerchantAccountId()
         {
             Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
