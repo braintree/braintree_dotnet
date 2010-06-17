@@ -1501,12 +1501,16 @@ namespace Braintree.Tests
                 System.Console.WriteLine("Got exception! " + e.Source);
                 throw e;
             }
+
             Assert.IsTrue(result.IsSuccess());
-            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
-            Assert.AreEqual(transaction.Amount, result.Target.Amount);
+            var refund = result.Target;
+
+            Assert.AreEqual(TransactionType.CREDIT, refund.Type);
+            Assert.AreEqual(transaction.Amount, refund.Amount);
 
             Transaction firstTransaction = gateway.Transaction.Find(transaction.Id);
-            Assert.AreEqual(result.Target.Id, firstTransaction.RefundId);
+            Assert.AreEqual(refund.Id, firstTransaction.RefundId);
+            Assert.AreEqual(firstTransaction.Id, refund.RefundedTransactionId);
         }
 
         [Test]
