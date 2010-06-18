@@ -17,6 +17,7 @@ namespace Braintree
                 Append("public_key", Configuration.PublicKey).
                 Append("redirect_url", redirectURL).
                 Append("time", dateString).
+                Append("kind", request.Kind()).
                 ToString();
 
             String requestQueryString = request.ToQueryString();

@@ -44,6 +44,11 @@ namespace Braintree
             CustomFields = new Dictionary<String, String>();
         }
 
+        public override String Kind()
+        {
+            return "create_transaction";
+        }
+
         public override String ToXml()
         {
             return ToXml("transaction");
