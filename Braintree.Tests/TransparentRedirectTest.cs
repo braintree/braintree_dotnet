@@ -24,13 +24,17 @@ namespace Braintree.Tests
         [Test]
         public void Url_ReturnsCorrectUrl()
         {
-            Assert.AreEqual("http://localhost:3000/merchants/integration_merchant_id/transparent_redirect_requests", gateway.TransparentRedirect.Url);
+            var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
+            var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
+
+            var url = "http://" + host + ":" + port + "/merchants/integration_merchant_id/transparent_redirect_requests";
+            Assert.AreEqual(url, gateway.TransparentRedirect.Url);
         }
 
         [Test]
         public void CreateTransactionFromTransparentRedirect()
         {
-             TransactionRequest trParams = new TransactionRequest
+            TransactionRequest trParams = new TransactionRequest
             {
                 Type = TransactionType.SALE
             };
@@ -65,5 +69,57 @@ namespace Braintree.Tests
 
         }
 
+        [Test]
+        public void CreateCustomerFromTransparentRedirect()
+        {
+            CustomerRequest trParams = new CustomerRequest
+            {
+                FirstName = "John"
+            };
+
+            CustomerRequest request = new CustomerRequest
+            {
+                LastName = "Doe"
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
+            Assert.IsTrue(result.IsSuccess());
+            Customer customer = result.Target;
+
+            Assert.AreEqual("John", customer.FirstName);
+            Assert.AreEqual("Doe", customer.LastName);
+        }
+
+        [Test]
+        public void UpdateCustomerFromTransparentRedirect()
+        {
+            var createRequest = new CustomerRequest
+            {
+                FirstName = "Miranda",
+                LastName = "Higgenbottom"
+            };
+
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+
+            CustomerRequest trParams = new CustomerRequest
+            {
+                CustomerId = createdCustomer.Id,
+                FirstName = "Penelope"
+            };
+
+            CustomerRequest request = new CustomerRequest
+            {
+                LastName = "Lambert"
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
+            Assert.IsTrue(result.IsSuccess());
+            Customer updatedCustomer = gateway.Customer.Find(createdCustomer.Id);
+
+            Assert.AreEqual("Penelope", updatedCustomer.FirstName);
+            Assert.AreEqual("Lambert", updatedCustomer.LastName);
+        }
     }
 }

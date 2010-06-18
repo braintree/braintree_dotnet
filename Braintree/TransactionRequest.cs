@@ -46,7 +46,7 @@ namespace Braintree
 
         public override String Kind()
         {
-            return "create_transaction";
+            return TransparentRedirectGateway.CREATE_TRANSACTION;
         }
 
         public override String ToXml()

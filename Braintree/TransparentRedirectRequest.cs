@@ -11,6 +11,7 @@ namespace Braintree
 {
     public class TransparentRedirectRequest : Request
     {
+
         public String Id { get; protected set; }
 
         public TransparentRedirectRequest(String queryString)
