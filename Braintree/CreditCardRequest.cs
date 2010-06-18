@@ -42,6 +42,18 @@ namespace Braintree
         public String ExpirationDate { get; set; }
         public String PaymentMethodToken { get; set; }
 
+        public override String Kind()
+        {
+            if (PaymentMethodToken == null)
+            {
+                return TransparentRedirectGateway.CREATE_PAYMENT_METHOD;
+            }
+            else
+            {
+                return TransparentRedirectGateway.UPDATE_PAYMENT_METHOD;
+            }
+        }
+
         public override String ToXml()
         {
             return ToXml("credit-card");

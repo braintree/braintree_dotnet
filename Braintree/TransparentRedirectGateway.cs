@@ -37,5 +37,13 @@ namespace Braintree
 
             return new Result<Customer>(new NodeWrapper(node));
         }
+
+        public virtual Result<CreditCard> ConfirmCreditCard(String queryString)
+        {
+            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
+            XmlNode node = WebServiceGateway.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
+
+            return new Result<CreditCard>(new NodeWrapper(node));
+        }
     }
 }

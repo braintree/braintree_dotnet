@@ -121,5 +121,72 @@ namespace Braintree.Tests
             Assert.AreEqual("Penelope", updatedCustomer.FirstName);
             Assert.AreEqual("Lambert", updatedCustomer.LastName);
         }
+
+        [Test]
+        public void CreateCreditCardFromTransparentRedirect()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest trParams = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "4111111111111111",
+                ExpirationDate = "10/10"
+            };
+
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CardholderName = "John Doe"
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCard creditCard = result.Target;
+
+            Assert.AreEqual("John Doe", creditCard.CardholderName);
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("10/2010", creditCard.ExpirationDate);
+        }
+
+
+        [Test]
+        public void UpdateCreditCardFromTransparentRedirect()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CardholderName = "Beverly D'angelo"
+            };
+
+            CreditCard createdCreditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+
+            CreditCardRequest trParams = new CreditCardRequest
+            {
+                PaymentMethodToken = createdCreditCard.Token,
+                Number = "4111111111111111",
+                ExpirationDate = "10/10"
+            };
+
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CardholderName = "Sampsonite"
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCard creditCard = gateway.CreditCard.Find(createdCreditCard.Token);
+
+            Assert.AreEqual("Sampsonite", creditCard.CardholderName);
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("10/2010", creditCard.ExpirationDate);
+        }
     }
 }
