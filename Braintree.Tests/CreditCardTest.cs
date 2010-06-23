@@ -585,5 +585,25 @@ namespace Braintree.Tests
             HashSet<String> uniqueCards = new HashSet<String>(cards);
             Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
         }
+
+        [Test]
+        public void ExpiringBetween()
+        {
+            DateTime beginning = new DateTime(2010, 1, 1);
+            DateTime end = new DateTime(2010, 12, 31);
+
+            ResourceCollection<CreditCard> collection = gateway.CreditCard.ExpiringBetween(beginning, end);
+
+            Assert.IsTrue(collection.MaximumCount > 1);
+
+            List<String> cards = new List<String>();
+            foreach (CreditCard card in collection) {
+                Assert.AreEqual("2010", card.ExpirationYear);
+                cards.Add(card.Token);
+            }
+
+            HashSet<String> uniqueCards = new HashSet<String>(cards);
+            Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
+        }
     }
 }

@@ -56,6 +56,27 @@ namespace Braintree
             });
         }
 
+        public virtual ResourceCollection<CreditCard> ExpiringBetween(DateTime start, DateTime end)
+        {
+            String queryString = String.Format("start={0:MMyyyy}&end={1:MMyyyy}", start, end);
+
+            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/payment_methods/all/expiring_ids?" + queryString));
+
+            return new ResourceCollection<CreditCard>(response, delegate(String[] ids) {
+                CustomerSearchRequest query = new CustomerSearchRequest().
+                    Ids.IncludedIn(ids);
+
+                NodeWrapper fetchResponse = new NodeWrapper(WebServiceGateway.Post("/payment_methods/all/expiring?" + queryString, query));
+
+                List<CreditCard> creditCards = new List<CreditCard>();
+                foreach (NodeWrapper node in fetchResponse.GetList("credit-card"))
+                {
+                    creditCards.Add(new CreditCard(node));
+                }
+                return creditCards;
+            });
+        }
+
         public virtual CreditCard Find(String token)
         {
             XmlNode creditCardXML = WebServiceGateway.Get("/payment_methods/" + token);
