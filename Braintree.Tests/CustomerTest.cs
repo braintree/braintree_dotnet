@@ -508,8 +508,9 @@ namespace Braintree.Tests
             foreach (Customer item in collection) {
                 items.Add(item.Id);
             }
+            HashSet<String> uniqueItems = new HashSet<String>(items);
 
-            Assert.AreEqual(items.Count, collection.MaximumCount);
+            Assert.AreEqual(uniqueItems.Count, collection.MaximumCount);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -566,6 +567,23 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             CreditCardVerification verification = result.CreditCardVerification;
             Assert.AreEqual("processor_declined", verification.Status);
+        }
+
+        [Test]
+        public void Expired()
+        {
+            ResourceCollection<CreditCard> collection = gateway.CreditCard.Expired();
+
+            Assert.IsTrue(collection.MaximumCount > 1);
+
+            List<String> cards = new List<String>();
+            foreach (CreditCard card in collection) {
+                Assert.IsTrue(card.IsExpired.Value);
+                cards.Add(card.Token);
+            }
+
+            HashSet<String> uniqueCards = new HashSet<String>(cards);
+            Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
         }
     }
 }

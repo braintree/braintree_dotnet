@@ -64,6 +64,7 @@ namespace Braintree
         public DateTime? CreatedAt { get; protected set; }
         public String CustomerId { get; protected set; }
         public Boolean? Default { get; protected set; }
+        public Boolean? IsExpired { get; protected set; }
         public String CustomerLocation { get; protected set; }
         public String LastFour { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
@@ -104,6 +105,7 @@ namespace Braintree
             Default = node.GetBoolean("default");
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");
+            IsExpired = node.GetBoolean("expired");
             CustomerLocation = node.GetString("customer-location");
             LastFour = node.GetString("last-4");
             Token = node.GetString("token");
