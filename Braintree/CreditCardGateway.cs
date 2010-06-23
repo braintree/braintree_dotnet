@@ -42,7 +42,7 @@ namespace Braintree
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/payment_methods/all/expired_ids"));
 
             return new ResourceCollection<CreditCard>(response, delegate(String[] ids) {
-                CustomerSearchRequest query = new CustomerSearchRequest().
+                IdsSearchRequest query = new IdsSearchRequest().
                     Ids.IncludedIn(ids);
 
                 NodeWrapper fetchResponse = new NodeWrapper(WebServiceGateway.Post("/payment_methods/all/expired", query));
@@ -63,7 +63,7 @@ namespace Braintree
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/payment_methods/all/expiring_ids?" + queryString));
 
             return new ResourceCollection<CreditCard>(response, delegate(String[] ids) {
-                CustomerSearchRequest query = new CustomerSearchRequest().
+                IdsSearchRequest query = new IdsSearchRequest().
                     Ids.IncludedIn(ids);
 
                 NodeWrapper fetchResponse = new NodeWrapper(WebServiceGateway.Post("/payment_methods/all/expiring?" + queryString, query));

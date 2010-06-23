@@ -66,7 +66,7 @@ namespace Braintree
 
         private List<Customer> FetchCustomers(String[] ids)
         {
-            CustomerSearchRequest query = new CustomerSearchRequest().
+            IdsSearchRequest query = new IdsSearchRequest().
                 Ids.IncludedIn(ids);
 
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/customers/advanced_search", query));

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -10,7 +10,7 @@ namespace Braintree.Tests
     public class CryptoTest
     {
         [Test]
-        public void hmacHash_ReturnsCorrectHash()
+        public void HmacHash_ReturnsCorrectHash()
         {
             String actual = new Crypto().HmacHash("secretKey", "hello world");
             Assert.AreEqual("D503D7A1A6ADBA1E6474E9FF2C4167F9DFDF4247", actual);

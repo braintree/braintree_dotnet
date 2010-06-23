@@ -6,13 +6,13 @@ using System.Text;
 
 namespace Braintree
 {
-    public class CustomerSearchRequest : SearchRequest
+    public class IdsSearchRequest : SearchRequest
     {
-        public MultipleValueNode<CustomerSearchRequest> Ids
+        public MultipleValueNode<IdsSearchRequest> Ids
         {
             get
             {
-                return new MultipleValueNode<CustomerSearchRequest>("ids", this);
+                return new MultipleValueNode<IdsSearchRequest>("ids", this);
             }
         }
     }

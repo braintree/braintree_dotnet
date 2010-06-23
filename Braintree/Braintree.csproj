@@ -104,7 +104,7 @@
     <Compile Include="DateRangeNode.cs" />
     <Compile Include="CreditCardAddressRequest.cs" />
     <Compile Include="CreditCardAddressOptionsRequest.cs" />
-    <Compile Include="CustomerSearchRequest.cs" />
+    <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="Exceptions\UpgradeRequiredException.cs" />
     <Compile Include="StatusEvent.cs" />
     <Compile Include="TransparentRedirectGateway.cs" />

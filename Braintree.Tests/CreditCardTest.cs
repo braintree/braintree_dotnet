@@ -503,7 +503,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void verifyValidCreditCard()
+        public void VerifyValidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
@@ -524,7 +524,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void verifyValidCreditCardSpecifyingMerhantAccount()
+        public void VerifyValidCreditCardSpecifyingMerhantAccount()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
@@ -547,7 +547,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void verifyInvalidCreditCard()
+        public void VerifyInvalidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
