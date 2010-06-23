@@ -11,11 +11,13 @@ namespace Braintree
     /// </summary>
     public class TransactionGateway
     {
+        [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForCreate()
         {
             return Configuration.BaseMerchantURL() + "/transactions/all/create_via_transparent_redirect_request";
         }
 
+        [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<Transaction> ConfirmTransparentRedirect(String queryString)
         {
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);

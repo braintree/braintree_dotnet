@@ -12,11 +12,13 @@ namespace Braintree
     /// </summary>
     public class CreditCardGateway
     {
+        [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForCreate()
         {
             return Configuration.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request";
         }
 
+        [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForUpdate()
         {
             return Configuration.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request";
@@ -29,6 +31,7 @@ namespace Braintree
             return new Result<CreditCard>(new NodeWrapper(creditCardXML));
         }
 
+        [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<CreditCard> ConfirmTransparentRedirect(String queryString)
         {
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
