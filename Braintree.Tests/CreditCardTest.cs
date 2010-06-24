@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -66,7 +67,7 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
-            Assert.IsTrue(creditCard.Default.Value);
+            Assert.IsTrue(creditCard.IsDefault.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
         }
@@ -111,7 +112,7 @@ namespace Braintree.Tests
             };
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
-            Assert.IsTrue(creditCard.Default.Value);
+            Assert.IsTrue(creditCard.IsDefault.Value);
 
             CreditCardRequest trParams = new CreditCardRequest
             {
@@ -125,7 +126,7 @@ namespace Braintree.Tests
             String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
 
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
-            Assert.IsTrue(card.Default.Value);
+            Assert.IsTrue(card.IsDefault.Value);
         }
 
         [Test]
@@ -145,7 +146,7 @@ namespace Braintree.Tests
             };
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
-            Assert.IsTrue(creditCard.Default.Value);
+            Assert.IsTrue(creditCard.IsDefault.Value);
 
             CreditCardRequest trParams = new CreditCardRequest
             {
@@ -155,7 +156,7 @@ namespace Braintree.Tests
             String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
 
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
-            Assert.IsTrue(card.Default.Value);
+            Assert.IsTrue(card.IsDefault.Value);
         }
 
         [Test]
@@ -281,8 +282,8 @@ namespace Braintree.Tests
             CreditCard card1 = gateway.CreditCard.Create(request1).Target;
             CreditCard card2 = gateway.CreditCard.Create(request2).Target;
 
-            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).Default.Value);
-            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).Default.Value);
+            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).IsDefault.Value);
+            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).IsDefault.Value);
         }
 
         [Test]
@@ -302,8 +303,8 @@ namespace Braintree.Tests
             CreditCard card1 = gateway.CreditCard.Create(creditCardCreateRequest).Target;
             CreditCard card2 = gateway.CreditCard.Create(creditCardCreateRequest).Target;
 
-            Assert.IsTrue(card1.Default.Value);
-            Assert.IsFalse(card2.Default.Value);
+            Assert.IsTrue(card1.IsDefault.Value);
+            Assert.IsFalse(card2.IsDefault.Value);
 
 
             var creditCardUpdateRequest = new CreditCardRequest
@@ -316,8 +317,8 @@ namespace Braintree.Tests
 
             gateway.CreditCard.Update(card2.Token, creditCardUpdateRequest);
 
-            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).Default.Value);
-            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).Default.Value);
+            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).IsDefault.Value);
+            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).IsDefault.Value);
         }
 
         [Test]
@@ -502,7 +503,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void verifyValidCreditCard()
+        public void VerifyValidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
@@ -523,7 +524,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void verifyValidCreditCardSpecifyingMerhantAccount()
+        public void VerifyValidCreditCardSpecifyingMerhantAccount()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
@@ -546,7 +547,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void verifyInvalidCreditCard()
+        public void VerifyInvalidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
@@ -566,6 +567,43 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             CreditCardVerification verification = result.CreditCardVerification;
             Assert.AreEqual("processor_declined", verification.Status);
+        }
+
+        [Test]
+        public void Expired()
+        {
+            ResourceCollection<CreditCard> collection = gateway.CreditCard.Expired();
+
+            Assert.IsTrue(collection.MaximumCount > 1);
+
+            List<String> cards = new List<String>();
+            foreach (CreditCard card in collection) {
+                Assert.IsTrue(card.IsExpired.Value);
+                cards.Add(card.Token);
+            }
+
+            HashSet<String> uniqueCards = new HashSet<String>(cards);
+            Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
+        }
+
+        [Test]
+        public void ExpiringBetween()
+        {
+            DateTime beginning = new DateTime(2010, 1, 1);
+            DateTime end = new DateTime(2010, 12, 31);
+
+            ResourceCollection<CreditCard> collection = gateway.CreditCard.ExpiringBetween(beginning, end);
+
+            Assert.IsTrue(collection.MaximumCount > 1);
+
+            List<String> cards = new List<String>();
+            foreach (CreditCard card in collection) {
+                Assert.AreEqual("2010", card.ExpirationYear);
+                cards.Add(card.Token);
+            }
+
+            HashSet<String> uniqueCards = new HashSet<String>(cards);
+            Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
         }
     }
 }

@@ -58,6 +58,18 @@ namespace Braintree
         public Dictionary<String, String> CustomFields { get; set; }
         public CreditCardRequest CreditCard { get; set; }
 
+        public override String Kind()
+        {
+            if (CustomerId == null)
+            {
+                return TransparentRedirectGateway.CREATE_CUSTOMER;
+            }
+            else
+            {
+                return TransparentRedirectGateway.UPDATE_CUSTOMER;
+            }
+        }
+
         public override String ToXml()
         {
             return ToXml("customer");

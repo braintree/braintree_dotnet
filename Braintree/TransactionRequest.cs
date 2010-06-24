@@ -44,6 +44,11 @@ namespace Braintree
             CustomFields = new Dictionary<String, String>();
         }
 
+        public override String Kind()
+        {
+            return TransparentRedirectGateway.CREATE_TRANSACTION;
+        }
+
         public override String ToXml()
         {
             return ToXml("transaction");

@@ -27,6 +27,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void IncludesKind()
+        {
+            String tr_data = TrUtil.BuildTrData(new TransactionRequest(), "example.com");
+            TestHelper.AssertIncludes("kind=create_transaction", tr_data);
+        }
+
+        [Test]
         public void IsValidTrQueryString_ForValidString()
         {
             String queryString = "http_status=200&id=6kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9";

@@ -536,6 +536,34 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_PaymentMethodToken()
+        {
+            Subscription subscription = gateway.Subscription.Create(new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+            }).Target;
+
+            CreditCard newCreditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = creditCard.CustomerId,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = creditCard.CardholderName
+
+            }).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest { PaymentMethodToken = newCreditCard.Token };
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(newCreditCard.Token, subscription.PaymentMethodToken);
+        }
+
+        [Test]
         public void UpdateMerchantAccountId()
         {
             Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
@@ -613,15 +641,10 @@ namespace Braintree.Tests
                 PlanId = "noSuchPlanId"
             };
 
-            try
-            {
-                gateway.Subscription.Create(createRequest);
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            Result<Subscription> result = gateway.Subscription.Create(createRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PLAN_ID_IS_INVALID, result.Errors.ForObject("subscription").OnField("plan_id")[0].Code);
         }
 
         [Test]
@@ -633,15 +656,10 @@ namespace Braintree.Tests
                 PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
             };
 
-            try
-            {
-                gateway.Subscription.Create(createRequest);
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            Result<Subscription> result = gateway.Subscription.Create(createRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PAYMENT_METHOD_TOKEN_IS_INVALID, result.Errors.ForObject("subscription").OnField("payment_method_token")[0].Code);
         }
 
         [Test]

@@ -37,6 +37,7 @@ namespace Braintree
             return new Result<Customer>(new NodeWrapper(customerXML));
         }
 
+        [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<Customer> ConfirmTransparentRedirect(String queryString)
         {
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
@@ -45,11 +46,13 @@ namespace Braintree
             return new Result<Customer>(new NodeWrapper(node));
         }
 
+        [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForCreate()
         {
             return Configuration.BaseMerchantURL() + "/customers/all/create_via_transparent_redirect_request";
         }
 
+        [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForUpdate()
         {
             return Configuration.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
@@ -66,7 +69,7 @@ namespace Braintree
 
         private List<Customer> FetchCustomers(String[] ids)
         {
-            CustomerSearchRequest query = new CustomerSearchRequest().
+            IdsSearchRequest query = new IdsSearchRequest().
                 Ids.IncludedIn(ids);
 
             NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/customers/advanced_search", query));

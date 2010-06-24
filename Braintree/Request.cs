@@ -62,6 +62,11 @@ namespace Braintree
             return String.Format("<{0}>{1}</{0}>", SecurityElement.Escape(tagName), SecurityElement.Escape(value));
         }
 
+        public virtual String Kind()
+        {
+            return null;
+        }
+
         protected virtual String ParentBracketChildString(String parent, String child)
         {
             return String.Format("{0}[{1}]", parent, child);

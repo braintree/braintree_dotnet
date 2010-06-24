@@ -29,13 +29,16 @@ namespace Braintree
         protected TransactionStatus(String name) : base(name) {}
     }
 
-    public abstract class TransactionSource
+    public class TransactionSource : Enumeration
     {
-        public const String API = "api";
-        public const String CONTROL_PANEL = "control_panel";
-        public const String RECURRING = "recurring";
+        public static readonly TransactionSource API = new TransactionSource("api");
+        public static readonly TransactionSource CONTROL_PANEL = new TransactionSource("control_panel");
+        public static readonly TransactionSource RECURRING = new TransactionSource("recurring");
+        public static readonly TransactionSource UNRECOGNIZED = new TransactionSource("unrecognized");
 
-        public static readonly String[] ALL = { API, CONTROL_PANEL, RECURRING };
+        public static readonly TransactionSource[] ALL = { API, CONTROL_PANEL, RECURRING };
+
+        protected TransactionSource(String name) : base(name) {}
     }
 
     public class TransactionType : Enumeration
@@ -85,8 +88,11 @@ namespace Braintree
         public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
+        public String RefundedTransactionId { get; protected set; }
+        public String RefundId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionStatus Status { get; protected set; }
+        public StatusEvent[] StatusHistory { get; protected set; }
         public String SubscriptionId { get; protected set; }
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
@@ -103,11 +109,21 @@ namespace Braintree
             AvsStreetAddressResponseCode = node.GetString("avs-street-address-response-code");
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
+
+            List<NodeWrapper> statusNodes = node.GetList("status-history/status-event");
+            StatusHistory = new StatusEvent[statusNodes.Count];
+            for (int i = 0; i < statusNodes.Count; i++)
+            {
+                StatusHistory[i] = new StatusEvent(statusNodes[i]);
+            }
+
             Type = (TransactionType)CollectionUtil.Find(TransactionType.ALL, node.GetString("type"), TransactionType.UNRECOGNIZED);
             MerchantAccountId = node.GetString("merchant-account-id");
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            RefundedTransactionId = node.GetString("refunded-transaction-id");
+            RefundId = node.GetString("refund-id");
             SubscriptionId = node.GetString("subscription-id");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"));

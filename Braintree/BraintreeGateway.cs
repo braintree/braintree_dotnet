@@ -109,6 +109,11 @@ namespace Braintree
             get { return new TransactionGateway(); }
         }
 
+        public virtual TransparentRedirectGateway TransparentRedirect
+        {
+            get { return new TransparentRedirectGateway(); }
+        }
+
         public virtual String TrData(Request trData, String redirectURL)
         {
             return TrUtil.BuildTrData(trData, redirectURL);

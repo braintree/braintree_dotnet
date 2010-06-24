@@ -326,6 +326,62 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_UpdatesCustomerAndNestedValuesViaTr()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Old First",
+                LastName = "Old Last",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/10",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        PostalCode = "11111"
+                    }
+                }
+            };
+
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            CreditCard creditCard = customer.CreditCards[0];
+            Address address = creditCard.BillingAddress;
+
+            var trParams = new CustomerRequest()
+            {
+                CustomerId = customer.Id,
+                FirstName = "New First",
+                LastName = "New Last",
+                CreditCard = new CreditCardRequest()
+                {
+                    ExpirationDate = "12/12",
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        UpdateExistingToken = creditCard.Token
+                    },
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        PostalCode = "44444",
+                        Options = new CreditCardAddressOptionsRequest()
+                        {
+                            UpdateExisting = true
+                        }
+                    }
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate());
+            Customer updatedCustomer = gateway.Customer.ConfirmTransparentRedirect(queryString).Target;
+            CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
+            Address updatedAddress = gateway.Address.Find(customer.Id, address.Id);
+
+            Assert.AreEqual("New First", updatedCustomer.FirstName);
+            Assert.AreEqual("New Last", updatedCustomer.LastName);
+            Assert.AreEqual("12/2012", updatedCreditCard.ExpirationDate);
+            Assert.AreEqual("44444", updatedAddress.PostalCode);
+        }
+
+        [Test]
         public void Update_UpdatesCustomerWithNewValues()
         {
             string oldId = Guid.NewGuid().ToString();
@@ -370,6 +426,60 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_UpdatesCustomerAndNestedValues()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Old First",
+                LastName = "Old Last",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/10",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        PostalCode = "11111"
+                    }
+                }
+            };
+
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            CreditCard creditCard = customer.CreditCards[0];
+            Address address = creditCard.BillingAddress;
+
+            var updateRequest = new CustomerRequest()
+            {
+                FirstName = "New First",
+                LastName = "New Last",
+                CreditCard = new CreditCardRequest()
+                {
+                    ExpirationDate = "12/12",
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        UpdateExistingToken = creditCard.Token
+                    },
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        PostalCode = "44444",
+                        Options = new CreditCardAddressOptionsRequest()
+                        {
+                            UpdateExisting = true
+                        }
+                    }
+                }
+            };
+
+            Customer updatedCustomer = gateway.Customer.Update(customer.Id, updateRequest).Target;
+            CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
+            Address updatedAddress = gateway.Address.Find(customer.Id, address.Id);
+
+            Assert.AreEqual("New First", updatedCustomer.FirstName);
+            Assert.AreEqual("New Last", updatedCustomer.LastName);
+            Assert.AreEqual("12/2012", updatedCreditCard.ExpirationDate);
+            Assert.AreEqual("44444", updatedAddress.PostalCode);
+        }
+
+        [Test]
         public void Delete_DeletesTheCustomer()
         {
             String id = Guid.NewGuid().ToString();
@@ -398,8 +508,9 @@ namespace Braintree.Tests
             foreach (Customer item in collection) {
                 items.Add(item.Id);
             }
+            HashSet<String> uniqueItems = new HashSet<String>(items);
 
-            Assert.AreEqual(items.Count, collection.MaximumCount);
+            Assert.AreEqual(uniqueItems.Count, collection.MaximumCount);
         }
     }
 }
