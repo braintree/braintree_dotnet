@@ -1391,6 +1391,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
             Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, result.Target.Amount);
+            Assert.IsNull(result.Message);
         }
 
         [Test]
@@ -1455,6 +1456,7 @@ namespace Braintree.Tests
             result = gateway.Transaction.SubmitForSettlement(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_SETTLEMENT, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual("Cannot submit for settlement unless status is authorized.", result.Message);
         }
 
         [Test]
