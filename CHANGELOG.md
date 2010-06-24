@@ -1,3 +1,12 @@
+## 2.4.0
+
+* Added unified TransparentRedirect url and confirm methods and deprecated old methods
+* Renamed CreditCard.Default to IsDefault
+* Added methods to CreditCardGateway to allow searching on expiring and expired credit cards
+* Added ability to update a customer, credit card, and billing address in one request
+* Allow updating the payment method token on a subscription
+* Added methods to navigate between a Transaction and its refund (in both directions)
+
 ## 2.3.0
 
 * Return AvsErrorResponseCode, AvsPostalCodeResponseCode, AvsStreetAddressResponseCode, CurrencyIsoCode, CvvResponseCode with Transaction
