@@ -567,6 +567,39 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             CreditCardVerification verification = result.CreditCardVerification;
             Assert.AreEqual("processor_declined", verification.Status);
+            Assert.IsNull(verification.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void GatewayRejectionReason_ExposedOnVerification()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            Customer customer = processingRulesGateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "200",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            Result<CreditCard> result = processingRulesGateway.CreditCard.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            CreditCardVerification verification = result.CreditCardVerification;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.CVV, verification.GatewayRejectionReason);
         }
 
         [Test]
