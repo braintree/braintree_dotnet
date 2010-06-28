@@ -68,7 +68,24 @@ namespace Braintree.Tests
             Assert.IsTrue(subscription.NextBillingDate.HasValue);
             Assert.IsTrue(subscription.FirstBillingDate.HasValue);
         }
-        
+
+        [Test]
+        public void Create_ReturnsDeclinedTransaction()
+        {
+            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Price = SandboxValues.TransactionAmount.DECLINE
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
+        }
+
         [Test]
         public void Create_SubscriptionWithTrial()
         {
