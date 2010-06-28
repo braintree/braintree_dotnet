@@ -9,7 +9,7 @@ namespace Braintree
         public static object Find(object[] items, String name, object defaultValue)
         {
             foreach (object item in items) {
-                if (item.ToString().ToUpper().Equals(name.ToUpper())) {
+                if (name != null && item.ToString().ToUpper().Equals(name.ToUpper())) {
                     return item;
                 }
             }

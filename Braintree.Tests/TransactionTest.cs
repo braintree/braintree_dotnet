@@ -609,6 +609,7 @@ namespace Braintree.Tests
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.IsNull(transaction.GatewayRejectionReason);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
@@ -987,6 +988,100 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForAvs()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                BillingAddress = new AddressRequest
+                {
+                    StreetAddress = "200 Fake Street"
+                },
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                }
+            };
+
+            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.AVS, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForAvsAndCvv()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                BillingAddress = new AddressRequest
+                {
+                    PostalCode = "20000"
+                },
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    CVV = "200"
+                }
+            };
+
+            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.AVS_AND_CVV, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForCvv()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    CVV = "200"
+                }
+            };
+
+            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.CVV, transaction.GatewayRejectionReason);
         }
 
         [Test]
