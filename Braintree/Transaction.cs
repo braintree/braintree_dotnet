@@ -31,13 +31,12 @@ namespace Braintree
         public static readonly TransactionStatus SETTLED = new TransactionStatus("settled");
         public static readonly TransactionStatus SETTLEMENT_FAILED = new TransactionStatus("settlement_failed");
         public static readonly TransactionStatus SUBMITTED_FOR_SETTLEMENT = new TransactionStatus("submitted_for_settlement");
-        public static readonly TransactionStatus UNKNOWN = new TransactionStatus("unknown");
         public static readonly TransactionStatus UNRECOGNIZED = new TransactionStatus("unrecognized");
         public static readonly TransactionStatus VOIDED = new TransactionStatus("voided");
 
         public static readonly TransactionStatus[] ALL = {
             AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, SETTLED,
-            SETTLEMENT_FAILED, SUBMITTED_FOR_SETTLEMENT, UNKNOWN, VOIDED
+            SETTLEMENT_FAILED, SUBMITTED_FOR_SETTLEMENT, VOIDED
         };
 
         protected TransactionStatus(String name) : base(name) {}
