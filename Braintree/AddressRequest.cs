@@ -36,6 +36,9 @@ namespace Braintree
         public String Locality { get; set; }
         public String Region { get; set; }
         public String PostalCode { get; set; }
+        public String CountryCodeAlpha2 { get; set; }
+        public String CountryCodeAlpha3 { get; set; }
+        public String CountryCodeNumeric { get; set; }
         public String CountryName { get; set; }
 
         public override String ToXml()
@@ -64,6 +67,9 @@ namespace Braintree
             builder.Append(BuildXMLElement("locality", Locality));
             builder.Append(BuildXMLElement("region", Region));
             builder.Append(BuildXMLElement("postal-code", PostalCode));
+            builder.Append(BuildXMLElement("country-code-alpha2", CountryCodeAlpha2));
+            builder.Append(BuildXMLElement("country-code-alpha3", CountryCodeAlpha3));
+            builder.Append(BuildXMLElement("country-code-numeric", CountryCodeNumeric));
             builder.Append(BuildXMLElement("country-name", CountryName));
 
             return builder.ToString();

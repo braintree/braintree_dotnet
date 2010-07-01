@@ -39,6 +39,9 @@ namespace Braintree.Tests
                 Locality = "Chicago",
                 Region = "IL",
                 PostalCode = "60622",
+                CountryCodeAlpha2 = "US",
+                CountryCodeAlpha3 = "USA",
+                CountryCodeNumeric = "840",
                 CountryName = "United States of America"
             };
 
@@ -52,6 +55,9 @@ namespace Braintree.Tests
             Assert.AreEqual("Chicago", address.Locality);
             Assert.AreEqual("IL", address.Region);
             Assert.AreEqual("60622", address.PostalCode);
+            Assert.AreEqual("US", address.CountryCodeAlpha2);
+            Assert.AreEqual("USA", address.CountryCodeAlpha3);
+            Assert.AreEqual("840", address.CountryCodeNumeric);
             Assert.AreEqual("United States of America", address.CountryName);
             Assert.IsNotNull(address.CreatedAt);
             Assert.IsNotNull(address.UpdatedAt);
@@ -172,6 +178,24 @@ namespace Braintree.Tests
             Assert.AreEqual("integration_merchant_id", parameters["merchant_id"]);
             Assert.AreEqual(customer.Id, parameters["customer_id"]);
             Assert.AreEqual("United States of Hammer", parameters["address[country_name]"]);
+        }
+
+        [Test]
+        public void Create_ReturnsAnErrorResult_ForInconsistentCountry()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            AddressRequest request = new AddressRequest()
+            {
+                CountryName = "United States of America",
+                CountryCodeAlpha2 = "BZ"
+            };
+
+            Result<Address> createResult = gateway.Address.Create(customer.Id, request);
+            Assert.IsFalse(createResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
+                createResult.Errors.ForObject("address").OnField("base")[0].Code
+            );
         }
     }
 }

@@ -36,6 +36,9 @@ namespace Braintree
         public String Locality { get; protected set; }
         public String Region { get; protected set; }
         public String PostalCode { get; protected set; }
+        public String CountryCodeAlpha2 { get; protected set; }
+        public String CountryCodeAlpha3 { get; protected set; }
+        public String CountryCodeNumeric { get; protected set; }
         public String CountryName { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
@@ -54,6 +57,9 @@ namespace Braintree
             Locality = node.GetString("locality");
             Region = node.GetString("region");
             PostalCode = node.GetString("postal-code");
+            CountryCodeAlpha2 = node.GetString("country-code-alpha2");
+            CountryCodeAlpha3 = node.GetString("country-code-alpha3");
+            CountryCodeNumeric = node.GetString("country-code-numeric");
             CountryName = node.GetString("country-name");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
