@@ -649,6 +649,9 @@ namespace Braintree.Tests
                     Region = "IL",
                     PostalCode = "60622",
                     CountryName = "United States of America",
+                    CountryCodeAlpha2 = "US",
+                    CountryCodeAlpha3 = "USA",
+                    CountryCodeNumeric = "840"
                 },
                 ShippingAddress = new AddressRequest
                 {
@@ -661,6 +664,9 @@ namespace Braintree.Tests
                     Region = "MA",
                     PostalCode = "60103",
                     CountryName = "Mexico",
+                    CountryCodeAlpha2 = "MX",
+                    CountryCodeAlpha3 = "MEX",
+                    CountryCodeNumeric = "484"
                 }
             };
 
@@ -709,6 +715,9 @@ namespace Braintree.Tests
             Assert.AreEqual("IL", billingAddress.Region);
             Assert.AreEqual("60622", billingAddress.PostalCode);
             Assert.AreEqual("United States of America", billingAddress.CountryName);
+            Assert.AreEqual("US", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("USA", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("840", billingAddress.CountryCodeNumeric);
 
             Assert.IsNull(transaction.GetVaultShippingAddress());
             Address shippingAddress = transaction.ShippingAddress;
@@ -721,6 +730,9 @@ namespace Braintree.Tests
             Assert.AreEqual("MA", shippingAddress.Region);
             Assert.AreEqual("60103", shippingAddress.PostalCode);
             Assert.AreEqual("Mexico", shippingAddress.CountryName);
+            Assert.AreEqual("MX", shippingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("MEX", shippingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("484", shippingAddress.CountryCodeNumeric);
         }
 
         [Test]
@@ -1195,6 +1207,20 @@ namespace Braintree.Tests
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
+                },
+                BillingAddress = new AddressRequest
+                {
+                    CountryName = "zzzzzz",
+                    CountryCodeAlpha2 = "zz",
+                    CountryCodeAlpha3 = "zzz",
+                    CountryCodeNumeric = "000"
+                },
+                ShippingAddress = new AddressRequest
+                {
+                    CountryName = "zzzzz",
+                    CountryCodeAlpha2 = "zz",
+                    CountryCodeAlpha3 = "zzz",
+                    CountryCodeNumeric = "000"
                 }
             };
 
@@ -1205,6 +1231,23 @@ namespace Braintree.Tests
             Assert.IsNull(result.CreditCardVerification);
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha2")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha3")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_numeric")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_name")[0].Code
+            );
+
             Dictionary<String, String> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
@@ -1225,7 +1268,14 @@ namespace Braintree.Tests
                 CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
+                    ExpirationDate = "05/2009"
+                },
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    CountryName = "United States of America",
+                    CountryCodeAlpha2 = "US",
+                    CountryCodeAlpha3 = "USA",
+                    CountryCodeNumeric = "840"
                 }
             };
 
@@ -1246,6 +1296,12 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+
+            Address address = transaction.BillingAddress;
+            Assert.AreEqual("US", address.CountryCodeAlpha2);
+            Assert.AreEqual("USA", address.CountryCodeAlpha3);
+            Assert.AreEqual("840", address.CountryCodeNumeric);
+            Assert.AreEqual("United States of America", address.CountryName);
         }
 
         [Test]
