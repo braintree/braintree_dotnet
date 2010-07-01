@@ -96,7 +96,10 @@ namespace Braintree
                 Append(ParentBracketChildString(root, "locality"), Locality).
                 Append(ParentBracketChildString(root, "region"), Region).
                 Append(ParentBracketChildString(root, "postal_code"), PostalCode).
-                Append(ParentBracketChildString(root, "country_name"), CountryName);
+                Append(ParentBracketChildString(root, "country_name"), CountryName).
+                Append(ParentBracketChildString(root, "country_code_alpha2"), CountryCodeAlpha2).
+                Append(ParentBracketChildString(root, "country_code_alpha3"), CountryCodeAlpha3).
+                Append(ParentBracketChildString(root, "country_code_numeric"), CountryCodeNumeric);
         }
     }
 }
