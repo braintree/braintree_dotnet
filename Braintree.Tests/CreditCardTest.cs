@@ -209,7 +209,6 @@ namespace Braintree.Tests
             Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsFalse(result.IsSuccess());
 
-            Console.WriteLine(result.Errors.ForObject("credit-card").ForObject("billing").DeepCount);
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
                 result.Errors.ForObject("credit-card").ForObject("billing-address").OnField("base")[0].Code
