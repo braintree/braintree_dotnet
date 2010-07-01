@@ -127,7 +127,19 @@ namespace Braintree.Tests
                 Email = "hansolo64@compuserver.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com"
+                Website = "www.disney.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Macau",
+                        CountryCodeAlpha2 = "MO",
+                        CountryCodeAlpha3 = "MAC",
+                        CountryCodeNumeric = "446"
+                    }
+                }
             };
 
             Customer customer = gateway.Customer.Create(createRequest).Target;
@@ -140,6 +152,62 @@ namespace Braintree.Tests
             Assert.AreEqual("www.disney.com", customer.Website);
             Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
+
+            Address billingAddress = customer.CreditCards[0].BillingAddress;
+            Assert.AreEqual("Macau", billingAddress.CountryName);
+            Assert.AreEqual("MO", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("MAC", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("446", billingAddress.CountryCodeNumeric);
+        }
+
+
+
+        [Test]
+        public void Create_withErrorsOnCountry()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@compuserver.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.disney.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "zzzzzz",
+                        CountryCodeAlpha2 = "zz",
+                        CountryCodeAlpha3 = "zzz",
+                        CountryCodeNumeric = "000"
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_name")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_alpha2")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_alpha3")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_numeric")[0].Code
+            );
         }
 
         [Test]
@@ -278,7 +346,14 @@ namespace Braintree.Tests
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     CardholderName = "John Doe",
-                    ExpirationDate = "05/10"
+                    ExpirationDate = "05/10",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Mexico",
+                        CountryCodeAlpha2 = "MX",
+                        CountryCodeAlpha3 = "MEX",
+                        CountryCodeNumeric = "484"
+                    }
                 },
                 CustomFields = new Dictionary<String, String>
                 {
@@ -294,6 +369,12 @@ namespace Braintree.Tests
             Assert.AreEqual("Doe", customer.LastName);
             Assert.AreEqual("John Doe", customer.CreditCards[0].CardholderName);
             Assert.AreEqual("a custom value", customer.CustomFields["store_me"]);
+
+            Address address = customer.CreditCards[0].BillingAddress;
+            Assert.AreEqual("Mexico", address.CountryName);
+            Assert.AreEqual("MX", address.CountryCodeAlpha2);
+            Assert.AreEqual("MEX", address.CountryCodeAlpha3);
+            Assert.AreEqual("484", address.CountryCodeNumeric);
         }
 
         [Test]
@@ -362,6 +443,10 @@ namespace Braintree.Tests
                     BillingAddress = new CreditCardAddressRequest()
                     {
                         PostalCode = "44444",
+                        CountryName = "Chad",
+                        CountryCodeAlpha2 = "TD",
+                        CountryCodeAlpha3 = "TCD",
+                        CountryCodeNumeric = "148",
                         Options = new CreditCardAddressOptionsRequest()
                         {
                             UpdateExisting = true
@@ -373,12 +458,17 @@ namespace Braintree.Tests
             String queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate());
             Customer updatedCustomer = gateway.Customer.ConfirmTransparentRedirect(queryString).Target;
             CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
+
             Address updatedAddress = gateway.Address.Find(customer.Id, address.Id);
 
             Assert.AreEqual("New First", updatedCustomer.FirstName);
             Assert.AreEqual("New Last", updatedCustomer.LastName);
             Assert.AreEqual("12/2012", updatedCreditCard.ExpirationDate);
             Assert.AreEqual("44444", updatedAddress.PostalCode);
+            Assert.AreEqual("Chad", updatedAddress.CountryName);
+            Assert.AreEqual("TD", updatedAddress.CountryCodeAlpha2);
+            Assert.AreEqual("TCD", updatedAddress.CountryCodeAlpha3);
+            Assert.AreEqual("148", updatedAddress.CountryCodeNumeric);
         }
 
         [Test]
@@ -461,6 +551,10 @@ namespace Braintree.Tests
                     BillingAddress = new CreditCardAddressRequest()
                     {
                         PostalCode = "44444",
+                        CountryName = "Chad",
+                        CountryCodeAlpha2 = "TD",
+                        CountryCodeAlpha3 = "TCD",
+                        CountryCodeNumeric = "148",
                         Options = new CreditCardAddressOptionsRequest()
                         {
                             UpdateExisting = true
@@ -477,6 +571,10 @@ namespace Braintree.Tests
             Assert.AreEqual("New Last", updatedCustomer.LastName);
             Assert.AreEqual("12/2012", updatedCreditCard.ExpirationDate);
             Assert.AreEqual("44444", updatedAddress.PostalCode);
+            Assert.AreEqual("Chad", updatedAddress.CountryName);
+            Assert.AreEqual("TD", updatedAddress.CountryCodeAlpha2);
+            Assert.AreEqual("TCD", updatedAddress.CountryCodeAlpha3);
+            Assert.AreEqual("148", updatedAddress.CountryCodeNumeric);
         }
 
         [Test]
