@@ -110,7 +110,10 @@ namespace Braintree.Tests
                 Locality = "Boston",
                 Region = "MA",
                 PostalCode = "11111",
-                CountryName = "Canada"
+                CountryName = "Canada",
+                CountryCodeAlpha2 = "CA",
+                CountryCodeAlpha3 = "CAN",
+                CountryCodeNumeric = "124"
             };
 
             Address originalAddress = gateway.Address.Create(customer.Id, addressCreateRequest).Target;
@@ -125,7 +128,10 @@ namespace Braintree.Tests
                 Locality = "Chicago",
                 Region = "IL",
                 PostalCode = "60622",
-                CountryName = "United States of America"
+                CountryName = "United States of America",
+                CountryCodeAlpha2 = "US",
+                CountryCodeAlpha3 = "USA",
+                CountryCodeNumeric = "840"
             };
 
             Address address = gateway.Address.Update(customer.Id, originalAddress.Id, addressUpdateRequest).Target;
@@ -139,6 +145,54 @@ namespace Braintree.Tests
             Assert.AreEqual("IL", address.Region);
             Assert.AreEqual("60622", address.PostalCode);
             Assert.AreEqual("United States of America", address.CountryName);
+            Assert.AreEqual("US", address.CountryCodeAlpha2);
+            Assert.AreEqual("USA", address.CountryCodeAlpha3);
+            Assert.AreEqual("840", address.CountryCodeNumeric);
+        }
+
+        [Test]
+        public void Update_UpdatesAddress_WithInconsistenCounty()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var addressCreateRequest = new AddressRequest
+            {
+                FirstName = "Dave",
+                LastName = "Inchy",
+                Company = "Leon Ardo Co.",
+                StreetAddress = "1 E State St",
+                ExtendedAddress = "Apt 4",
+                Locality = "Boston",
+                Region = "MA",
+                PostalCode = "11111",
+                CountryName = "Canada",
+                CountryCodeAlpha2 = "CA",
+                CountryCodeAlpha3 = "CAN",
+                CountryCodeNumeric = "124"
+            };
+
+            Address originalAddress = gateway.Address.Create(customer.Id, addressCreateRequest).Target;
+
+            var addressUpdateRequest = new AddressRequest
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Angelo Co.",
+                StreetAddress = "1 E Main St",
+                ExtendedAddress = "Apt 3",
+                Locality = "Chicago",
+                Region = "IL",
+                PostalCode = "60622",
+                CountryName = "United States of America",
+                CountryCodeAlpha3 = "MEX"
+            };
+
+            Result<Address> result = gateway.Address.Update(customer.Id, originalAddress.Id, addressUpdateRequest);
+
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
+                result.Errors.ForObject("address").OnField("base")[0].Code
+            );
         }
 
         [Test]
@@ -195,6 +249,57 @@ namespace Braintree.Tests
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
                 createResult.Errors.ForObject("address").OnField("base")[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_ReturnsAnErrorResult_ForIncorrectAlpha2()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            AddressRequest request = new AddressRequest()
+            {
+                CountryCodeAlpha2 = "ZZ"
+            };
+
+            Result<Address> createResult = gateway.Address.Create(customer.Id, request);
+            Assert.IsFalse(createResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
+                createResult.Errors.ForObject("address").OnField("country_code_alpha2")[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_ReturnsAnErrorResult_ForIncorrectAlpha3()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            AddressRequest request = new AddressRequest()
+            {
+                CountryCodeAlpha3 = "ZZZ"
+            };
+
+            Result<Address> createResult = gateway.Address.Create(customer.Id, request);
+            Assert.IsFalse(createResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
+                createResult.Errors.ForObject("address").OnField("country_code_alpha3")[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_ReturnsAnErrorResult_ForIncorrectNumeric()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            AddressRequest request = new AddressRequest()
+            {
+                CountryCodeNumeric = "000"
+            };
+
+            Result<Address> createResult = gateway.Address.Create(customer.Id, request);
+            Assert.IsFalse(createResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
+                createResult.Errors.ForObject("address").OnField("country_code_numeric")[0].Code
             );
         }
     }

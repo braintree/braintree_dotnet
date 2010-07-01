@@ -44,16 +44,11 @@ namespace Braintree.Tests
         public void TrData_QueryStringParams()
         {
             String trData = gateway.Transaction.SaleTrData(new TransactionRequest {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
-                {
-                    CardholderName = "Bob the Builder",
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                },
                 Options = new TransactionOptionsRequest
                 {
-                    StoreInVault = true
+                    StoreInVault = true,
+                    AddBillingAddressToPaymentMethod = true,
+                    StoreShippingAddressInVault = true
                 }
             }, "http://example.com");
             Assert.IsTrue(trData.Contains("store_in_vault"));
