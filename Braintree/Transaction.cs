@@ -104,6 +104,7 @@ namespace Braintree
         public String ProcessorResponseText { get; protected set; }
         public String RefundedTransactionId { get; protected set; }
         public String RefundId { get; protected set; }
+        public String SettlementBatchId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
@@ -143,6 +144,7 @@ namespace Braintree
             ProcessorResponseText = node.GetString("processor-response-text");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
             RefundId = node.GetString("refund-id");
+            SettlementBatchId = node.GetString("settlement-batch-id");
             SubscriptionId = node.GetString("subscription-id");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"));

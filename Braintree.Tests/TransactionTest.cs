@@ -97,7 +97,8 @@ namespace Braintree.Tests
                 },
                 Options = new TransactionOptionsRequest
                 {
-                    StoreInVault = true
+                    StoreInVault = true,
+                    SubmitForSettlement = true
                 },
                 OrderId = "myorder",
                 ShippingAddress = new AddressRequest
@@ -115,6 +116,8 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Settle(transaction.Id);
+            transaction = gateway.Transaction.Find(transaction.Id);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
@@ -142,6 +145,7 @@ namespace Braintree.Tests
                 OrderId.Is("myorder").
                 PaymentMethodToken.Is(creditCardToken).
                 ProcessorAuthorizationCode.Is(transaction.ProcessorAuthorizationCode).
+                SettlementBatchId.Is(transaction.SettlementBatchId).
                 ShippingCompany.Is("Braintree P.S.").
                 ShippingCountryName.Is("Mexico").
                 ShippingExtendedAddress.Is("Apt 456").

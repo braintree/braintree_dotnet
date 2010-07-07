@@ -239,6 +239,13 @@ namespace Braintree
                 return new KeyValueNode<TransactionSearchRequest>("refund", this);
             }
         }
+        public TextNode<TransactionSearchRequest> SettlementBatchId
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("settlement-batch-id", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> ShippingCompany
         {
             get
