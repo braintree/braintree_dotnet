@@ -60,7 +60,7 @@ namespace Braintree
             builder.AddElement("payment-method-token", PaymentMethodToken);
             if (HasTrialPeriod.HasValue)
             {
-                builder.AddElement("trial-period", HasTrialPeriod.Value.ToString().ToLower());
+                builder.AddElement("trial-period", HasTrialPeriod.Value);
 
                 if (HasTrialPeriod.Value)
                 {

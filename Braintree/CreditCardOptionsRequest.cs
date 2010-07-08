@@ -39,11 +39,11 @@ namespace Braintree
 
             if (MakeDefault)
             {
-                builder.AddElement("make-default", MakeDefault.ToString().ToLower());
+                builder.AddElement("make-default", MakeDefault);
             }
 
             builder.AddElement("verification-merchant-account-id", VerificationMerchantAccountId);
-            builder.AddElement("verify-card", VerifyCard.ToString().ToLower());
+            builder.AddElement("verify-card", VerifyCard);
             builder.AddElement("update-existing-token", UpdateExistingToken);
 
             return builder;

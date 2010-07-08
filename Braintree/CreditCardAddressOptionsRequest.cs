@@ -31,7 +31,7 @@ namespace Braintree
 
         protected virtual RequestBuilder BuildRequest(String root)
         {
-            return new RequestBuilder(root).AddElement("update-existing", UpdateExisting.ToString().ToLower());
+            return new RequestBuilder(root).AddElement("update-existing", UpdateExisting);
         }
     }
 }
