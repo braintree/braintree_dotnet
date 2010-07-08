@@ -1305,6 +1305,33 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ConfirmTransparentRedirect_SpecifyingMerchantAccountId()
+        {
+            TransactionRequest trParams = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                Type = TransactionType.SALE,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+            };
+
+            TransactionRequest request = new TransactionRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate());
+            Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+        }
+
+        [Test]
         public void Credit_WithValidParams()
         {
             TransactionRequest request = new TransactionRequest
