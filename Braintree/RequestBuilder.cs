@@ -11,34 +11,18 @@ namespace Braintree
     {
         private String Parent;
         private Dictionary<string, string> TopLevelElements;
-        private Dictionary<string, string> StringElements;
-        private Dictionary<string, Request> RequestElements;
-        private Dictionary<string, Dictionary<string, string>> CustomElements;
+        private Dictionary<string, object> Elements;
 
         public RequestBuilder(String parent)
         {
             Parent = parent;
             TopLevelElements = new Dictionary<string, string>();
-            StringElements = new Dictionary<string, string>();
-            RequestElements = new Dictionary<string, Request>();
-            CustomElements = new Dictionary<string, Dictionary<string, string>>();
+            Elements = new Dictionary<string, object>();
         }
 
-        public RequestBuilder AddElement(String name, String value)
+        public RequestBuilder AddElement(String name, object value)
         {
-            StringElements.Add(name, value);
-            return this;
-        }
-
-        public RequestBuilder AddElement(String name, Request request)
-        {
-            RequestElements.Add(name, request);
-            return this;
-        }
-
-        public RequestBuilder AddElement(string name, Dictionary<string, string> value)
-        {
-            CustomElements.Add(name, value);
+            Elements.Add(name, value);
             return this;
         }
 
@@ -51,20 +35,14 @@ namespace Braintree
         public String ToXml()
         {
             var builder = new StringBuilder();
+
             builder.Append(String.Format("<{0}>", Parent));
-            foreach (KeyValuePair<String, String> pair in StringElements)
-            {
-                builder.Append(BuildXMLElement(pair.Key, pair.Value));
-            }
-            foreach (KeyValuePair<String, Request> pair in RequestElements)
-            {
-                builder.Append(BuildXMLElement(pair.Key, pair.Value));
-            }
-            foreach (KeyValuePair<String, Dictionary<string, string>> pair in CustomElements)
+            foreach (KeyValuePair<string, object> pair in Elements)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
             builder.Append(String.Format("</{0}>", Parent));
+
             return builder.ToString();
         }
 
@@ -73,22 +51,15 @@ namespace Braintree
             string underscoredParent = Parent.Replace("-", "_");
 
             QueryString qs = new QueryString();
-            foreach (KeyValuePair<String, String> pair in TopLevelElements)
+            foreach (KeyValuePair<string, string> pair in TopLevelElements)
             {
                 qs.Append(pair);
             }
-            foreach (KeyValuePair<String, String> pair in StringElements)
+            foreach (KeyValuePair<string, object> pair in Elements)
             {
                 qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
             }
-            foreach (KeyValuePair<String, Request> pair in RequestElements)
-            {
-                qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
-            }
-            foreach (KeyValuePair<String, Dictionary<string, string>> pair in CustomElements)
-            {
-                qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
-            }
+
             return qs.ToString();
         }
 
@@ -128,14 +99,14 @@ namespace Braintree
             return String.Format("<{0} type=\"datetime\">{1:u}</{0}>", SecurityElement.Escape(name), value.ToUniversalTime());
         }
 
-        private static String FormatAsXml(string root, Dictionary<String, String> elements)
+        private static string FormatAsXml(string root, Dictionary<string, string> elements)
         {
             if (elements == null) return "";
 
             var builder = new StringBuilder();
             builder.Append(String.Format("<{0}>", root));
 
-            foreach (KeyValuePair<String, String> element in elements)
+            foreach (KeyValuePair<string, string> element in elements)
             {
                 builder.Append(BuildXMLElement(element.Key, element.Value));
             }
@@ -145,7 +116,7 @@ namespace Braintree
             return builder.ToString();
         }
 
-        internal static String ParentBracketChildString(String parent, String child)
+        internal static string ParentBracketChildString(string parent, string child)
         {
             return String.Format("{0}[{1}]", parent, child);
         }
