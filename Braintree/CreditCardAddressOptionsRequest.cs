@@ -14,14 +14,9 @@ namespace Braintree
             return ToXml("options");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("update-existing", UpdateExisting));
-            builder.Append(String.Format("</{0}>", rootElement));
-            
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
@@ -31,10 +26,12 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return new QueryString().
-                Append(ParentBracketChildString(root, "update_existing"), UpdateExisting).
-                ToString();
+            return BuildRequest(root).ToQueryString();
         }
 
+        protected virtual RequestBuilder BuildRequest(String root)
+        {
+            return new RequestBuilder(root).AddElement("update-existing", UpdateExisting.ToString().ToLower());
+        }
     }
 }
