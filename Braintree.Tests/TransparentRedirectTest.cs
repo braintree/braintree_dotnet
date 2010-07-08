@@ -32,6 +32,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void BuildTrData_BuildsAQueryStringWithApiVersion()
+        {
+            String tr_data = gateway.TransparentRedirect.BuildTrData(new TransactionRequest(), "example.com");
+            TestHelper.AssertIncludes("api_version=2", tr_data);
+        }
+
+        [Test]
         public void CreateTransactionFromTransparentRedirect()
         {
             TransactionRequest trParams = new TransactionRequest

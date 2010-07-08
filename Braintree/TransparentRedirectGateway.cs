@@ -22,6 +22,11 @@ namespace Braintree
         {
         }
 
+        public String BuildTrData(Request request, String redirectURL)
+        {
+            return TrUtil.BuildTrData(request, redirectURL);
+        }
+
         public virtual Result<Transaction> ConfirmTransaction(String queryString)
         {
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);

@@ -75,23 +75,9 @@ namespace Braintree
             return ToXml("customer");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            var builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("id", Id));
-            builder.Append(BuildXMLElement("first-name", FirstName));
-            builder.Append(BuildXMLElement("last-name", LastName));
-            builder.Append(BuildXMLElement("company", Company));
-            builder.Append(BuildXMLElement("email", Email));
-            builder.Append(BuildXMLElement("phone", Phone));
-            builder.Append(BuildXMLElement("fax", Fax));
-            builder.Append(BuildXMLElement("website", Website));
-            builder.Append(BuildXMLElement(CreditCard));
-            builder.Append(BuildXMLElement("custom-fields", CustomFields));
-            builder.Append(String.Format("</{0}>", rootElement));
-
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
@@ -101,19 +87,24 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return new QueryString().
-                Append(ParentBracketChildString(root, "id"), Id).
-                Append(ParentBracketChildString(root, "first_name"), FirstName).
-                Append(ParentBracketChildString(root, "last_name"), LastName).
-                Append(ParentBracketChildString(root, "company"), Company).
-                Append(ParentBracketChildString(root, "email"), Email).
-                Append(ParentBracketChildString(root, "phone"), Phone).
-                Append(ParentBracketChildString(root, "fax"), Fax).
-                Append(ParentBracketChildString(root, "website"), Website).
-                Append(ParentBracketChildString(root, "credit_card"), CreditCard).
-                Append(ParentBracketChildString(root, "custom_fields"), CustomFields).
-                Append("customer_id", CustomerId).
-                ToString();
+            return BuildRequest(root).
+                AddTopLevelElement("customer_id", CustomerId).
+                ToQueryString();
+        }
+
+        protected virtual RequestBuilder BuildRequest(String root)
+        {
+            return new RequestBuilder(root).
+                AddElement("id", Id).
+                AddElement("first-name", FirstName).
+                AddElement("last-name", LastName).
+                AddElement("company", Company).
+                AddElement("email", Email).
+                AddElement("phone", Phone).
+                AddElement("fax", Fax).
+                AddElement("website", Website).
+                AddElement("credit-card", CreditCard).
+                AddElement("custom-fields", CustomFields);
         }
     }
 }

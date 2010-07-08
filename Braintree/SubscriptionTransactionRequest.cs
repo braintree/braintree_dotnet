@@ -29,16 +29,20 @@ namespace Braintree
             return ToXml("transaction");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            if (Amount != 0) builder.Append(BuildXMLElement("amount", Amount.ToString()));
-            builder.Append(BuildXMLElement("subscriptionId", SubscriptionId));
-            builder.Append(BuildXMLElement("type", TransactionType.SALE.ToString().ToLower()));
-            builder.Append(String.Format("</{0}>", rootElement));
+            return BuildRequest(root).ToXml();
+        }
 
-            return builder.ToString ();
+        protected virtual RequestBuilder BuildRequest(String root)
+        {
+            RequestBuilder builder = new RequestBuilder(root);
+
+            if (Amount != 0) builder.AddElement("amount", Amount.ToString());
+            builder.AddElement("subscription-id", SubscriptionId);
+            builder.AddElement("type", TransactionType.SALE.ToString().ToLower());
+
+            return builder;
         }
     }
 }

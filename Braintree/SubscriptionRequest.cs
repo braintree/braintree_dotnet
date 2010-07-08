@@ -38,27 +38,9 @@ namespace Braintree
             return ToXml("subscription");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            var builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("payment-method-token", PaymentMethodToken));
-            if (HasTrialPeriod.HasValue)
-            {
-                builder.Append(BuildXMLElement("trial-period", HasTrialPeriod.Value));
-
-                if (HasTrialPeriod.Value)
-                {
-                    if (TrialDuration != 0) builder.Append(BuildXMLElement("trial-duration", TrialDuration.ToString()));
-                    builder.Append(BuildXMLElement("trial-duration-unit", TrialDurationUnit.ToString().ToLower()));
-                }
-            }
-            builder.Append(BuildXMLElement("merchant-account-id", MerchantAccountId));
-            builder.Append(BuildXMLElement("id", Id));
-            builder.Append(BuildXMLElement("plan-id", PlanId));
-            if (Price != 0) builder.Append(BuildXMLElement("price", Price.ToString()));
-            builder.Append(String.Format("</{0}>", rootElement));
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
@@ -69,6 +51,29 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             throw new NotImplementedException();
+        }
+
+        public virtual RequestBuilder BuildRequest(String root)
+        {
+            var builder = new RequestBuilder(root);
+
+            builder.AddElement("payment-method-token", PaymentMethodToken);
+            if (HasTrialPeriod.HasValue)
+            {
+                builder.AddElement("trial-period", HasTrialPeriod.Value);
+
+                if (HasTrialPeriod.Value)
+                {
+                    if (TrialDuration != 0) builder.AddElement("trial-duration", TrialDuration.ToString());
+                    builder.AddElement("trial-duration-unit", TrialDurationUnit.ToString().ToLower());
+                }
+            }
+            builder.AddElement("merchant-account-id", MerchantAccountId);
+            builder.AddElement("id", Id);
+            builder.AddElement("plan-id", PlanId);
+            if (Price != 0) builder.AddElement("price", Price.ToString());
+
+            return builder;
         }
     }
 }

@@ -36,6 +36,9 @@ namespace Braintree
         public String Locality { get; set; }
         public String Region { get; set; }
         public String PostalCode { get; set; }
+        public String CountryCodeAlpha2 { get; set; }
+        public String CountryCodeAlpha3 { get; set; }
+        public String CountryCodeNumeric { get; set; }
         public String CountryName { get; set; }
 
         public override String ToXml()
@@ -43,30 +46,9 @@ namespace Braintree
             return ToXml("address");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            var builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(XmlBody());
-            builder.Append(String.Format("</{0}>", rootElement));
-
-            return builder.ToString();
-        }
-
-        protected virtual String XmlBody()
-        {
-            var builder = new StringBuilder();
-            builder.Append(BuildXMLElement("first-name", FirstName));
-            builder.Append(BuildXMLElement("last-name", LastName));
-            builder.Append(BuildXMLElement("company", Company));
-            builder.Append(BuildXMLElement("street-address", StreetAddress));
-            builder.Append(BuildXMLElement("extended-address", ExtendedAddress));
-            builder.Append(BuildXMLElement("locality", Locality));
-            builder.Append(BuildXMLElement("region", Region));
-            builder.Append(BuildXMLElement("postal-code", PostalCode));
-            builder.Append(BuildXMLElement("country-name", CountryName));
-
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
@@ -76,21 +58,24 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return QueryStringBody(root).ToString();
+            return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual QueryString QueryStringBody(String root)
+        protected virtual RequestBuilder BuildRequest(String root)
         {
-            return new QueryString().
-                Append(ParentBracketChildString(root, "first_name"), FirstName).
-                Append(ParentBracketChildString(root, "last_name"), LastName).
-                Append(ParentBracketChildString(root, "company"), Company).
-                Append(ParentBracketChildString(root, "street_address"), StreetAddress).
-                Append(ParentBracketChildString(root, "extended_address"), ExtendedAddress).
-                Append(ParentBracketChildString(root, "locality"), Locality).
-                Append(ParentBracketChildString(root, "region"), Region).
-                Append(ParentBracketChildString(root, "postal_code"), PostalCode).
-                Append(ParentBracketChildString(root, "country_name"), CountryName);
+            return new RequestBuilder(root).
+                AddElement("first-name", FirstName).
+                AddElement("last-name", LastName).
+                AddElement("company", Company).
+                AddElement("street-address", StreetAddress).
+                AddElement("extended-address", ExtendedAddress).
+                AddElement("locality", Locality).
+                AddElement("region", Region).
+                AddElement("postal-code", PostalCode).
+                AddElement("country-code-alpha2", CountryCodeAlpha2).
+                AddElement("country-code-alpha3", CountryCodeAlpha3).
+                AddElement("country-code-numeric", CountryCodeNumeric).
+                AddElement("country-name", CountryName);
         }
     }
 }

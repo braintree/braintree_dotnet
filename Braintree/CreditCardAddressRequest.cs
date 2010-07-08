@@ -8,15 +8,9 @@ namespace Braintree
     {
         public CreditCardAddressOptionsRequest Options { get; set; }
 
-        protected override String XmlBody()
+        protected override RequestBuilder BuildRequest(String root)
         {
-            return base.XmlBody() + BuildXMLElement("options", Options);
-        }
-
-        protected override QueryString QueryStringBody(String root)
-        {
-             return base.QueryStringBody(root)
-                .Append(ParentBracketChildString(root, "options"), Options);
+            return base.BuildRequest(root).AddElement("options", Options);
         }
     }
 }

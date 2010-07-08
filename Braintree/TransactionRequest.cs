@@ -54,29 +54,9 @@ namespace Braintree
             return ToXml("transaction");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            if (Amount != 0) builder.Append(BuildXMLElement("amount", Amount.ToString()));
-            builder.Append(BuildXMLElement("customer-id", CustomerId));
-            builder.Append(BuildXMLElement("order-id", OrderId));
-            builder.Append(BuildXMLElement("payment-method-token", PaymentMethodToken));
-            builder.Append(BuildXMLElement("shipping-address-id", ShippingAddressId));
-            builder.Append(BuildXMLElement("merchant-account-id", MerchantAccountId));
-
-            if (Type != null) builder.Append(BuildXMLElement("type", Type.ToString().ToLower()));
-
-            if (CustomFields.Count != 0) builder.Append(BuildXMLElement("custom-fields", CustomFields));
-
-            builder.Append(BuildXMLElement(CreditCard));
-            builder.Append(BuildXMLElement(Customer));
-            builder.Append(BuildXMLElement("billing", BillingAddress));
-            builder.Append(BuildXMLElement("shipping", ShippingAddress));
-            builder.Append(BuildXMLElement(Options));
-            builder.Append(String.Format("</{0}>", rootElement));
-
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
@@ -86,23 +66,33 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            QueryString qs = new QueryString().
-                Append(ParentBracketChildString(root, "customer_id"), CustomerId).
-                Append(ParentBracketChildString(root, "order_id"), OrderId).
-                Append(ParentBracketChildString(root, "payment_method_token"), PaymentMethodToken).
-                Append(ParentBracketChildString(root, "shipping_address_id"), ShippingAddressId).
-                Append(ParentBracketChildString(root, "credit_card"), CreditCard).
-                Append(ParentBracketChildString(root, "customer"), Customer).
-                Append(ParentBracketChildString(root, "billing"), BillingAddress).
-                Append(ParentBracketChildString(root, "shipping"), ShippingAddress).
-                Append(ParentBracketChildString(root, "options"), Options).
-                Append("payment_method_token", PaymentMethodToken);
+            return BuildRequest(root).
+                AddTopLevelElement("payment_method_token", PaymentMethodToken).
+                ToQueryString();
+        }
 
-            if (Type != null) qs.Append(ParentBracketChildString(root, "type"), Type.ToString().ToLower());
-            if (Amount != 0) qs.Append(ParentBracketChildString(root, "amount"), Amount.ToString());
-            if (CustomFields.Count != 0) qs.Append(ParentBracketChildString(root, "custom_fields"), CustomFields);
+        protected virtual RequestBuilder BuildRequest(String root)
+        {
+            RequestBuilder builder = new RequestBuilder(root);
 
-            return qs.ToString();
+            if (Amount != 0) builder.AddElement("amount", Amount.ToString());
+            builder.AddElement("customer-id", CustomerId);
+            builder.AddElement("order-id", OrderId);
+            builder.AddElement("payment-method-token", PaymentMethodToken);
+            builder.AddElement("shipping-address-id", ShippingAddressId);
+            builder.AddElement("merchant-account-id", MerchantAccountId);
+
+            if (Type != null) builder.AddElement("type", Type.ToString().ToLower());
+
+            if (CustomFields.Count != 0) builder.AddElement("custom-fields", CustomFields);
+
+            builder.AddElement("credit-card", CreditCard);
+            builder.AddElement("customer", Customer);
+            builder.AddElement("billing", BillingAddress);
+            builder.AddElement("shipping", ShippingAddress);
+            builder.AddElement("options", Options);
+
+            return builder;
         }
     }
 }

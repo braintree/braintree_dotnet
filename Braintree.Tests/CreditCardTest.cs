@@ -56,7 +56,15 @@ namespace Braintree.Tests
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
                 CVV = "123",
-                CardholderName = "Michael Angelo"
+                CardholderName = "Michael Angelo",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John",
+                    CountryName = "Chad",
+                    CountryCodeAlpha2 = "TD",
+                    CountryCodeAlpha3 = "TCD",
+                    CountryCodeNumeric = "148"
+                }
             };
 
             CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
@@ -70,6 +78,12 @@ namespace Braintree.Tests
             Assert.IsTrue(creditCard.IsDefault.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+
+            Address billingAddress = creditCard.BillingAddress;
+            Assert.AreEqual("Chad", billingAddress.CountryName);
+            Assert.AreEqual("TD", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("TCD", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
         }
 
         [Test]
@@ -83,7 +97,14 @@ namespace Braintree.Tests
             {
                 CardholderName = "John Doe",
                 Number = "5105105105105100",
-                ExpirationDate = "05/12"
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    CountryName = "Greece",
+                    CountryCodeAlpha2 = "GR",
+                    CountryCodeAlpha3 = "GRC",
+                    CountryCodeNumeric = "300"
+                }
             };
 
             String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
@@ -97,6 +118,12 @@ namespace Braintree.Tests
             Assert.AreEqual("05/2012", card.ExpirationDate);
             Assert.AreEqual("5100", card.LastFour);
             Assert.IsTrue(card.Token != null);
+
+            Address billingAddress = card.BillingAddress;
+            Assert.AreEqual("Greece", billingAddress.CountryName);
+            Assert.AreEqual("GR", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("GRC", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("300", billingAddress.CountryCodeNumeric);
         }
 
         [Test]
@@ -157,6 +184,35 @@ namespace Braintree.Tests
 
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
+        }
+
+        [Test]
+        public void ConfirmTransparentRedirectCreate_WithErrors()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            CreditCardRequest trParams = new CreditCardRequest { CustomerId = customer.Id };
+
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CardholderName = "John Doe",
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    CountryName = "Greece",
+                    CountryCodeAlpha2 = "MX"
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+            Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
+                result.Errors.ForObject("credit-card").ForObject("billing-address").OnField("base")[0].Code
+            );
         }
 
         [Test]
@@ -344,7 +400,11 @@ namespace Braintree.Tests
             {
                 BillingAddress = new CreditCardAddressRequest
                 {
-                    LastName = "Jones"
+                    LastName = "Jones",
+                    CountryName = "El Salvador",
+                    CountryCodeAlpha2 = "SV",
+                    CountryCodeAlpha3 = "SLV",
+                    CountryCodeNumeric = "222"
                 }
             };
 
@@ -353,6 +413,12 @@ namespace Braintree.Tests
             Assert.IsNull(updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
             Assert.AreNotEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
+
+            Address billingAddress = updatedCreditCard.BillingAddress;
+            Assert.AreEqual("El Salvador", billingAddress.CountryName);
+            Assert.AreEqual("SV", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("SLV", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("222", billingAddress.CountryCodeNumeric);
         }
 
         [Test]
@@ -567,6 +633,39 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             CreditCardVerification verification = result.CreditCardVerification;
             Assert.AreEqual("processor_declined", verification.Status);
+            Assert.IsNull(verification.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void GatewayRejectionReason_ExposedOnVerification()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            Customer customer = processingRulesGateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "200",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            Result<CreditCard> result = processingRulesGateway.CreditCard.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            CreditCardVerification verification = result.CreditCardVerification;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.CVV, verification.GatewayRejectionReason);
         }
 
         [Test]

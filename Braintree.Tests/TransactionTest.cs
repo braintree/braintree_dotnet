@@ -44,16 +44,11 @@ namespace Braintree.Tests
         public void TrData_QueryStringParams()
         {
             String trData = gateway.Transaction.SaleTrData(new TransactionRequest {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
-                {
-                    CardholderName = "Bob the Builder",
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                },
                 Options = new TransactionOptionsRequest
                 {
-                    StoreInVault = true
+                    StoreInVault = true,
+                    AddBillingAddressToPaymentMethod = true,
+                    StoreShippingAddressInVault = true
                 }
             }, "http://example.com");
             Assert.IsTrue(trData.Contains("store_in_vault"));
@@ -609,6 +604,7 @@ namespace Braintree.Tests
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.IsNull(transaction.GatewayRejectionReason);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
@@ -653,6 +649,9 @@ namespace Braintree.Tests
                     Region = "IL",
                     PostalCode = "60622",
                     CountryName = "United States of America",
+                    CountryCodeAlpha2 = "US",
+                    CountryCodeAlpha3 = "USA",
+                    CountryCodeNumeric = "840"
                 },
                 ShippingAddress = new AddressRequest
                 {
@@ -665,6 +664,9 @@ namespace Braintree.Tests
                     Region = "MA",
                     PostalCode = "60103",
                     CountryName = "Mexico",
+                    CountryCodeAlpha2 = "MX",
+                    CountryCodeAlpha3 = "MEX",
+                    CountryCodeNumeric = "484"
                 }
             };
 
@@ -713,6 +715,9 @@ namespace Braintree.Tests
             Assert.AreEqual("IL", billingAddress.Region);
             Assert.AreEqual("60622", billingAddress.PostalCode);
             Assert.AreEqual("United States of America", billingAddress.CountryName);
+            Assert.AreEqual("US", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("USA", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("840", billingAddress.CountryCodeNumeric);
 
             Assert.IsNull(transaction.GetVaultShippingAddress());
             Address shippingAddress = transaction.ShippingAddress;
@@ -725,6 +730,9 @@ namespace Braintree.Tests
             Assert.AreEqual("MA", shippingAddress.Region);
             Assert.AreEqual("60103", shippingAddress.PostalCode);
             Assert.AreEqual("Mexico", shippingAddress.CountryName);
+            Assert.AreEqual("MX", shippingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("MEX", shippingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("484", shippingAddress.CountryCodeNumeric);
         }
 
         [Test]
@@ -990,6 +998,100 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_GatewayRejectedForAvs()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                BillingAddress = new AddressRequest
+                {
+                    StreetAddress = "200 Fake Street"
+                },
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                }
+            };
+
+            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.AVS, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForAvsAndCvv()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                BillingAddress = new AddressRequest
+                {
+                    PostalCode = "20000"
+                },
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    CVV = "200"
+                }
+            };
+
+            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.AVS_AND_CVV, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForCvv()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    CVV = "200"
+                }
+            };
+
+            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.CVV, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
         public void Sale_WithCustomFields()
         {
             TransactionRequest request = new TransactionRequest
@@ -1105,6 +1207,20 @@ namespace Braintree.Tests
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
+                },
+                BillingAddress = new AddressRequest
+                {
+                    CountryName = "zzzzzz",
+                    CountryCodeAlpha2 = "zz",
+                    CountryCodeAlpha3 = "zzz",
+                    CountryCodeNumeric = "000"
+                },
+                ShippingAddress = new AddressRequest
+                {
+                    CountryName = "zzzzz",
+                    CountryCodeAlpha2 = "zz",
+                    CountryCodeAlpha3 = "zzz",
+                    CountryCodeNumeric = "000"
                 }
             };
 
@@ -1115,6 +1231,23 @@ namespace Braintree.Tests
             Assert.IsNull(result.CreditCardVerification);
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha2")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha3")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_numeric")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_name")[0].Code
+            );
+
             Dictionary<String, String> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
@@ -1135,7 +1268,14 @@ namespace Braintree.Tests
                 CreditCard = new CreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
+                    ExpirationDate = "05/2009"
+                },
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    CountryName = "United States of America",
+                    CountryCodeAlpha2 = "US",
+                    CountryCodeAlpha3 = "USA",
+                    CountryCodeNumeric = "840"
                 }
             };
 
@@ -1156,6 +1296,39 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+
+            Address address = transaction.BillingAddress;
+            Assert.AreEqual("US", address.CountryCodeAlpha2);
+            Assert.AreEqual("USA", address.CountryCodeAlpha3);
+            Assert.AreEqual("840", address.CountryCodeNumeric);
+            Assert.AreEqual("United States of America", address.CountryName);
+        }
+
+        [Test]
+        public void ConfirmTransparentRedirect_SpecifyingMerchantAccountId()
+        {
+            TransactionRequest trParams = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                Type = TransactionType.SALE,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+            };
+
+            TransactionRequest request = new TransactionRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate());
+            Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
 
         [Test]
@@ -1391,6 +1564,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
             Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, result.Target.Amount);
+            Assert.IsNull(result.Message);
         }
 
         [Test]
@@ -1455,6 +1629,7 @@ namespace Braintree.Tests
             result = gateway.Transaction.SubmitForSettlement(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_SETTLEMENT, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual("Cannot submit for settlement unless status is authorized.", result.Message);
         }
 
         [Test]

@@ -12,6 +12,7 @@ namespace Braintree
         public Transaction Transaction { get; protected set; }
         public ValidationErrors Errors { get; protected set; }
         public Dictionary<String, String> Parameters { get; protected set; }
+        public String Message { get; protected set; }
         public T Target { get; protected set; }
 
         public Result(NodeWrapper node)
@@ -34,6 +35,7 @@ namespace Braintree
                     Transaction = new Transaction(transactionNode);
                 }
                 Parameters = node.GetNode("params").GetFormParameters();
+                Message = node.GetString("message");
             }
         }
 

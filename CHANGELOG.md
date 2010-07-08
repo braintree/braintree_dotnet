@@ -1,3 +1,10 @@
+## 2.5.0
+
+* Added ability to specify Country using CountryName, CountryCodeAlpha2, CountryCodeAlpha3, or CountryCodeNumeric
+* Added GatewayRejectionReason to Transaction and Verification
+* Added Message to Result
+* Added BuildTrData method to TransparentRedirectGateway
+
 ## 2.4.0
 
 * Added unified TransparentRedirect url and confirm methods and deprecated old methods
