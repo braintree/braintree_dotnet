@@ -92,38 +92,60 @@ namespace Braintree
             return qs.ToString();
         }
 
-        private String BuildXMLElement(String tagName, String value)
+        internal static string BuildXMLElement(string name, object value)
         {
-            if (value == null) return "";
+            if (value == null)
+            {
+                return "";
+            }
+            if (value is Request)
+            {
+                return ((Request) value).ToXml(name);
+            }
+            if (value is DateTime)
+            {
+                return FormatAsXml(name, (DateTime) value);
+            }
+            if (value is bool)
+            {
+                return FormatAsXml(name, value.ToString().ToLower());
+            }
+            else if (value is Dictionary<string, string>)
+            {
+                return FormatAsXml(name, (Dictionary<string, string>) value);
+            }
 
-            return String.Format("<{0}>{1}</{0}>", SecurityElement.Escape(tagName), SecurityElement.Escape(value));
+            return FormatAsXml(name, value.ToString());
         }
 
-        private String BuildXMLElement(String tagName, Request request)
+        private static string FormatAsXml(string name, string value)
         {
-            if (request == null) return "";
-
-            return request.ToXml(tagName);
+            return String.Format("<{0}>{1}</{0}>", SecurityElement.Escape(name), SecurityElement.Escape(value));
         }
 
-        private String BuildXMLElement(String rootElement, Dictionary<String, String> elements)
+        private static string FormatAsXml(string name, DateTime value)
+        {
+            return String.Format("<{0} type=\"datetime\">{1:u}</{0}>", SecurityElement.Escape(name), value.ToUniversalTime());
+        }
+
+        private static String FormatAsXml(string root, Dictionary<String, String> elements)
         {
             if (elements == null) return "";
 
             var builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
+            builder.Append(String.Format("<{0}>", root));
 
             foreach (KeyValuePair<String, String> element in elements)
             {
                 builder.Append(BuildXMLElement(element.Key, element.Value));
             }
 
-            builder.Append(String.Format("</{0}>", rootElement));
+            builder.Append(String.Format("</{0}>", root));
 
             return builder.ToString();
         }
 
-        private String ParentBracketChildString(String parent, String child)
+        internal static String ParentBracketChildString(String parent, String child)
         {
             return String.Format("{0}[{1}]", parent, child);
         }
