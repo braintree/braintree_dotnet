@@ -59,44 +59,36 @@ namespace Braintree
             return ToXml("credit-card");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            var builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("billing-address", BillingAddress));
-            builder.Append(BuildXMLElement("cardholder-name", CardholderName));
-            builder.Append(BuildXMLElement("customer-id", CustomerId));
-            builder.Append(BuildXMLElement("cvv", CVV));
-            builder.Append(BuildXMLElement("expiration-date", ExpirationDate));
-            builder.Append(BuildXMLElement("expiration-month", ExpirationMonth));
-            builder.Append(BuildXMLElement("expiration-year", ExpirationYear));
-            builder.Append(BuildXMLElement("number", Number));
-            builder.Append(BuildXMLElement("options", Options));
-            builder.Append(BuildXMLElement("token", Token));
-            builder.Append(String.Format("</{0}>", rootElement));
-
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
         {
-            return ToQueryString("credit_card");
+            return ToQueryString("credit-card");
         }
 
         public override String ToQueryString(String root)
         {
-            return new QueryString().
-                Append(ParentBracketChildString(root, "billing_address"), BillingAddress).
-                Append(ParentBracketChildString(root, "customer_id"), CustomerId).
-                Append(ParentBracketChildString(root, "cardholder_name"), CardholderName).
-                Append(ParentBracketChildString(root, "cvv"), CVV).
-                Append(ParentBracketChildString(root, "number"), Number).
-                Append(ParentBracketChildString(root, "options"), Options).
-                Append(ParentBracketChildString(root, "expiration_date"), ExpirationDate).
-                Append(ParentBracketChildString(root, "token"), Token).
-                Append("payment_method_token", PaymentMethodToken).
-                ToString();
+            return BuildRequest(root).
+                AddTopLevelElement("payment-method-token", PaymentMethodToken).
+                ToQueryString();
         }
 
+        protected virtual RequestBuilder BuildRequest(String root)
+        {
+            return new RequestBuilder(root).
+                AddElement("billing-address", BillingAddress).
+                AddElement("cardholder-name", CardholderName).
+                AddElement("customer-id", CustomerId).
+                AddElement("cvv", CVV).
+                AddElement("expiration-date", ExpirationDate).
+                AddElement("expiration-month", ExpirationMonth).
+                AddElement("expiration-year", ExpirationYear).
+                AddElement("number", Number).
+                AddElement("options", Options).
+                AddElement("token", Token);
+        }
     }
 }

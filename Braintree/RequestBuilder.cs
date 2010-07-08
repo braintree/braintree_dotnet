@@ -10,12 +10,14 @@ namespace Braintree
     public class RequestBuilder
     {
         private String Parent;
+        private Dictionary<string, string> TopLevelElements;
         private Dictionary<string, string> StringElements;
         private Dictionary<string, Request> RequestElements;
 
         public RequestBuilder(String parent)
         {
             Parent = parent;
+            TopLevelElements = new Dictionary<string, string>();
             StringElements = new Dictionary<string, string>();
             RequestElements = new Dictionary<string, Request>();
         }
@@ -29,6 +31,12 @@ namespace Braintree
         public RequestBuilder AddElement(String name, Request request)
         {
             RequestElements.Add(name, request);
+            return this;
+        }
+
+        public RequestBuilder AddTopLevelElement(string name, string value)
+        {
+            TopLevelElements.Add(name, value);
             return this;
         }
 
@@ -50,14 +58,20 @@ namespace Braintree
 
         public String ToQueryString()
         {
+            string underscoredParent = Parent.Replace("-", "_");
+
             QueryString qs = new QueryString();
+            foreach (KeyValuePair<String, String> pair in TopLevelElements)
+            {
+                qs.Append(pair.Key.Replace("-", "_"), pair.Value);
+            }
             foreach (KeyValuePair<String, String> pair in StringElements)
             {
-                qs.Append(ParentBracketChildString(Parent, pair.Key.Replace("-", "_")), pair.Value);
+                qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
             }
             foreach (KeyValuePair<String, Request> pair in RequestElements)
             {
-                qs.Append(ParentBracketChildString(Parent, pair.Key.Replace("-", "_")), pair.Value);
+                qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
             }
             return qs.ToString();
         }
