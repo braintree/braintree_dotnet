@@ -13,6 +13,7 @@ namespace Braintree
         private Dictionary<string, string> TopLevelElements;
         private Dictionary<string, string> StringElements;
         private Dictionary<string, Request> RequestElements;
+        private Dictionary<string, Dictionary<string, string>> CustomElements;
 
         public RequestBuilder(String parent)
         {
@@ -20,6 +21,7 @@ namespace Braintree
             TopLevelElements = new Dictionary<string, string>();
             StringElements = new Dictionary<string, string>();
             RequestElements = new Dictionary<string, Request>();
+            CustomElements = new Dictionary<string, Dictionary<string, string>>();
         }
 
         public RequestBuilder AddElement(String name, String value)
@@ -31,6 +33,12 @@ namespace Braintree
         public RequestBuilder AddElement(String name, Request request)
         {
             RequestElements.Add(name, request);
+            return this;
+        }
+
+        public RequestBuilder AddElement(string name, Dictionary<string, string> value)
+        {
+            CustomElements.Add(name, value);
             return this;
         }
 
@@ -49,6 +57,10 @@ namespace Braintree
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
             foreach (KeyValuePair<String, Request> pair in RequestElements)
+            {
+                builder.Append(BuildXMLElement(pair.Key, pair.Value));
+            }
+            foreach (KeyValuePair<String, Dictionary<string, string>> pair in CustomElements)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
@@ -73,6 +85,10 @@ namespace Braintree
             {
                 qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
             }
+            foreach (KeyValuePair<String, Dictionary<string, string>> pair in CustomElements)
+            {
+                qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
+            }
             return qs.ToString();
         }
 
@@ -88,6 +104,23 @@ namespace Braintree
             if (request == null) return "";
 
             return request.ToXml(tagName);
+        }
+
+        private String BuildXMLElement(String rootElement, Dictionary<String, String> elements)
+        {
+            if (elements == null) return "";
+
+            var builder = new StringBuilder();
+            builder.Append(String.Format("<{0}>", rootElement));
+
+            foreach (KeyValuePair<String, String> element in elements)
+            {
+                builder.Append(BuildXMLElement(element.Key, element.Value));
+            }
+
+            builder.Append(String.Format("</{0}>", rootElement));
+
+            return builder.ToString();
         }
 
         private String ParentBracketChildString(String parent, String child)
