@@ -18,17 +18,9 @@ namespace Braintree
             return ToXml("options");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            builder.Append(BuildXMLElement("store-in-vault", StoreInVault));
-            builder.Append(BuildXMLElement("add-billing-address-to-payment-method", AddBillingAddressToPaymentMethod));
-            builder.Append(BuildXMLElement("store-shipping-address-in-vault", StoreShippingAddressInVault));
-            builder.Append(BuildXMLElement("submit-for-settlement", SubmitForSettlement));
-            builder.Append(String.Format("</{0}>", rootElement));
-
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
@@ -38,12 +30,16 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return new QueryString().
-                Append(ParentBracketChildString(root, "store_in_vault"), StoreInVault).
-                Append(ParentBracketChildString(root, "add_billing_address_to_payment_method"), AddBillingAddressToPaymentMethod).
-                Append(ParentBracketChildString(root, "store_shipping_address_in_vault"), StoreShippingAddressInVault).
-                Append(ParentBracketChildString(root, "submit_for_settlement"), SubmitForSettlement).
-                ToString();
+            return BuildRequest(root).ToQueryString();
+        }
+
+        protected virtual RequestBuilder BuildRequest(String root)
+        {
+            return new RequestBuilder(root).
+                AddElement("store-in-vault", StoreInVault).
+                AddElement("add-billing-address-to-payment-method", AddBillingAddressToPaymentMethod).
+                AddElement("store-shipping-address-in-vault", StoreShippingAddressInVault).
+                AddElement("submit-for-settlement", SubmitForSettlement);
         }
     }
 }
