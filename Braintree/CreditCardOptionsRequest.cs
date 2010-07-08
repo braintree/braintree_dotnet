@@ -18,20 +18,9 @@ namespace Braintree
             return ToXml("options");
         }
 
-        public override String ToXml(String rootElement)
+        public override String ToXml(String root)
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", rootElement));
-            if (MakeDefault)
-            {
-                builder.Append(BuildXMLElement("make-default", MakeDefault));
-            }
-            builder.Append(BuildXMLElement("verification-merchant-account-id", VerificationMerchantAccountId));
-            builder.Append(BuildXMLElement("verify-card", VerifyCard));
-            builder.Append(BuildXMLElement("update-existing-token", UpdateExistingToken));
-            builder.Append(String.Format("</{0}>", rootElement));
-            
-            return builder.ToString();
+            return BuildRequest(root).ToXml();
         }
 
         public override String ToQueryString()
@@ -41,12 +30,23 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return new QueryString().
-                Append(ParentBracketChildString(root, "verification_merchant_account_id"), VerificationMerchantAccountId).
-                Append(ParentBracketChildString(root, "verify_card"), VerifyCard).
-                Append(ParentBracketChildString(root, "make_default"), MakeDefault).
-                Append(ParentBracketChildString(root, "update_existing_token"), UpdateExistingToken).
-                ToString();
+            return BuildRequest(root).ToQueryString();
+        }
+
+        protected virtual RequestBuilder BuildRequest(String root)
+        {
+            RequestBuilder builder = new RequestBuilder(root);
+
+            if (MakeDefault)
+            {
+                builder.AddElement("make-default", MakeDefault);
+            }
+
+            builder.AddElement("verification-merchant-account-id", VerificationMerchantAccountId);
+            builder.AddElement("verify-card", VerifyCard);
+            builder.AddElement("update-existing-token", UpdateExistingToken);
+
+            return builder;
         }
     }
 }
