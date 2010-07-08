@@ -16,6 +16,11 @@ namespace Braintree
             builder = new StringBuilder();
         }
 
+        public virtual QueryString Append(KeyValuePair<string, string> pair)
+        {
+            return Append(pair.Key.Replace('-', '_'), pair.Value);
+        }
+
         public virtual QueryString Append(String key, Object value)
         {
             if (value == null)

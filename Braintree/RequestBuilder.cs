@@ -75,7 +75,7 @@ namespace Braintree
             QueryString qs = new QueryString();
             foreach (KeyValuePair<String, String> pair in TopLevelElements)
             {
-                qs.Append(pair.Key.Replace("-", "_"), pair.Value);
+                qs.Append(pair);
             }
             foreach (KeyValuePair<String, String> pair in StringElements)
             {
