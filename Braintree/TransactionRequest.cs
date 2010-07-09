@@ -66,9 +66,7 @@ namespace Braintree
 
         public override String ToQueryString(String root)
         {
-            return BuildRequest(root).
-                AddTopLevelElement("payment_method_token", PaymentMethodToken).
-                ToQueryString();
+            return BuildRequest(root).ToQueryString();
         }
 
         protected virtual RequestBuilder BuildRequest(String root)
