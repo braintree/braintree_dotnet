@@ -586,6 +586,372 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnAuthorizedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnFailedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.FAILED,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Transaction;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnGatewayRejectedAt()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010",
+                    CVV = "200"
+                }
+            };
+
+            Transaction transaction = processingRulesGateway.Transaction.Sale(request).Transaction;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnProcessorDeclinedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.DECLINE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Transaction;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnSettledAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Settle(transaction.Id);
+            transaction = gateway.Transaction.Find(transaction.Id);
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnSubmittedForSettlementAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnVoidedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            transaction = gateway.Transaction.Void(transaction.Id).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnMultipleStatuses()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(oneHourEarlier, oneHourLater).
+                SubmittedForSettlementAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier).
+                SubmittedForSettlementAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest

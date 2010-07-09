@@ -15,6 +15,13 @@ namespace Braintree
                 return new RangeNode<TransactionSearchRequest>("amount", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> AuthorizedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("authorized-at", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> BillingCompany
         {
             get
@@ -190,6 +197,20 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("customer-website", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> FailedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("failed-at", this);
+            }
+        }
+        public DateRangeNode<TransactionSearchRequest> GatewayRejectedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("gateway-rejected-at", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> Id
         {
             get
@@ -232,11 +253,25 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("processor-authorization-code", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> ProcessorDeclinedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("processor-declined-at", this);
+            }
+        }
         public KeyValueNode<TransactionSearchRequest> Refund
         {
             get
             {
                 return new KeyValueNode<TransactionSearchRequest>("refund", this);
+            }
+        }
+        public DateRangeNode<TransactionSearchRequest> SettledAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("settled-at", this);
             }
         }
         public TextNode<TransactionSearchRequest> SettlementBatchId
@@ -316,6 +351,13 @@ namespace Braintree
                 return new MultipleValueNode<TransactionSearchRequest>("status", this, TransactionStatus.ALL);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> SubmittedForSettlementAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("submitted-for-settlement-at", this);
+            }
+        }
         public MultipleValueNode<TransactionSearchRequest> Source
         {
             get
@@ -328,6 +370,13 @@ namespace Braintree
             get
             {
                 return new MultipleValueNode<TransactionSearchRequest>("type", this, TransactionType.ALL);
+            }
+        }
+        public DateRangeNode<TransactionSearchRequest> VoidedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("voided-at", this);
             }
         }
 
