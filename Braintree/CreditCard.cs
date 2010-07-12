@@ -94,7 +94,7 @@ namespace Braintree
             }
         }
 
-        internal CreditCard(NodeWrapper node)
+        internal CreditCard(NodeWrapper node, BraintreeService service)
         {
             if (node == null) return;
 
@@ -117,7 +117,7 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i]);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
             }
         }
     }

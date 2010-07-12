@@ -15,7 +15,7 @@ namespace Braintree
 
         public String GatewayURL { get; protected set; }
 
-        private Environment(String url)
+        public Environment(String url)
 		{
 			GatewayURL = url;
 		}

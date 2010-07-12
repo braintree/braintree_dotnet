@@ -12,14 +12,17 @@ namespace Braintree.Tests
     [TestFixture]
     public class TransparentRedirectRequestTest
     {
+        private BraintreeService service;
 
         [SetUp]
         public void Setup()
         {
-            Configuration.Environment = Environment.DEVELOPMENT;
-            Configuration.MerchantId = "integration_merchant_id";
-            Configuration.PublicKey = "integration_public_key";
-            Configuration.PrivateKey = "integration_private_key";
+            service = new BraintreeService(new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            ));
         }
 
         [Test]
@@ -27,7 +30,7 @@ namespace Braintree.Tests
         {
             try
             {
-                new TransparentRedirectRequest("http_status=200&id=7kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9" + "this makes it invalid");
+                new TransparentRedirectRequest("http_status=200&id=7kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9" + "this makes it invalid", service);
                 Assert.Fail("Expected ForgedQueryStringException.");
             }
             catch(ForgedQueryStringException)
@@ -42,7 +45,7 @@ namespace Braintree.Tests
         {
             try
             {
-                new TransparentRedirectRequest("http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc");
+                new TransparentRedirectRequest("http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
                 Assert.Fail("Expected ServerException.");
             }
             catch (ServerException)
@@ -56,7 +59,7 @@ namespace Braintree.Tests
         {
             try
             {
-                new TransparentRedirectRequest("?http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc");
+                new TransparentRedirectRequest("?http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
                 Assert.Fail("Expected ServerException.");
             }
             catch (ServerException)
@@ -70,7 +73,7 @@ namespace Braintree.Tests
         {
             try
             {
-                new TransparentRedirectRequest("http_status=403&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc");
+                new TransparentRedirectRequest("http_status=403&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
                 Assert.Fail("Expected ServerException.");
             }
             catch (AuthorizationException)
@@ -86,7 +89,7 @@ namespace Braintree.Tests
 
             try
             {
-                new TransparentRedirectRequest(String.Format("http_status=403&bt_message={0}&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", HttpUtility.UrlEncode(message)));
+                new TransparentRedirectRequest(String.Format("http_status=403&bt_message={0}&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", HttpUtility.UrlEncode(message)), service);
                 Assert.Fail("Expected ServerException.");
             }
             catch (AuthorizationException e)
@@ -105,6 +108,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+            BraintreeService service = new BraintreeService(gateway.Configuration);
 
             try {
                 CustomerRequest trParams = new CustomerRequest();
@@ -114,7 +118,7 @@ namespace Braintree.Tests
                     LastName = "Doe"
                 };
 
-                String queryString = TestHelper.QueryStringForTR(trParams, request, Configuration.BaseMerchantURL() + "/test/maintenance");
+                String queryString = TestHelper.QueryStringForTR(trParams, request, service.BaseMerchantURL() + "/test/maintenance", service);
                 gateway.Customer.ConfirmTransparentRedirect(queryString);
                 Assert.Fail("Expected DownForMaintenanceException");
             } catch (Braintree.Exceptions.DownForMaintenanceException) {
@@ -132,6 +136,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "bad_key"
             };
+            BraintreeService service = new BraintreeService(gateway.Configuration);
 
             try {
                 CustomerRequest trParams = new CustomerRequest();
@@ -141,7 +146,7 @@ namespace Braintree.Tests
                     LastName = "Doe"
                 };
 
-                String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate());
+                String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
                 gateway.Customer.ConfirmTransparentRedirect(queryString);
                 Assert.Fail("Expected AuthenticationException");
             } catch (Braintree.Exceptions.AuthenticationException) {

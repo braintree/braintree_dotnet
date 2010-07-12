@@ -11,6 +11,7 @@ namespace Braintree.Tests
     public class TransactionTest
     {
         private BraintreeGateway gateway;
+        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -22,6 +23,8 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+
+            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -29,7 +32,7 @@ namespace Braintree.Tests
         {
             String trData = gateway.Transaction.SaleTrData(new TransactionRequest(), "http://example.com");
             Assert.IsTrue(trData.Contains("sale"));
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData));
+            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
 
         [Test]
@@ -37,7 +40,7 @@ namespace Braintree.Tests
         {
             String trData = gateway.Transaction.CreditTrData(new TransactionRequest(), "http://example.com");
             Assert.IsTrue(trData.Contains("credit"));
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData));
+            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
 
         [Test]
@@ -1649,7 +1652,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
             Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -1693,7 +1696,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
             Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -2086,7 +2089,7 @@ namespace Braintree.Tests
 
         private void Settle(String transactionId)
         {
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Put("/transactions/" + transactionId + "/settle"));
+            NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
             Assert.IsTrue(response.IsSuccess());
         }
 

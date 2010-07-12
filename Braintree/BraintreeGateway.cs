@@ -84,39 +84,51 @@ namespace Braintree
             set { Configuration.PrivateKey = value; }
         }
 
+        public Configuration Configuration { get; set; }
+
+        public BraintreeGateway()
+        {
+            Configuration = new Configuration();
+        }
+
+        public BraintreeGateway(Environment environment, string merchantId, string publicKey, string privateKey)
+        {
+            Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
+        }
+
         public virtual CustomerGateway Customer
         {
-            get { return new CustomerGateway(); }
+            get { return new CustomerGateway(new BraintreeService(this.Configuration)); }
         }
 
         public virtual AddressGateway Address
         {
-            get { return new AddressGateway(); }
+            get { return new AddressGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual CreditCardGateway CreditCard
         {
-            get { return new CreditCardGateway(); }
+            get { return new CreditCardGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual SubscriptionGateway Subscription
         {
-            get { return new SubscriptionGateway(); }
+            get { return new SubscriptionGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual TransactionGateway Transaction
         {
-            get { return new TransactionGateway(); }
+            get { return new TransactionGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual TransparentRedirectGateway TransparentRedirect
         {
-            get { return new TransparentRedirectGateway(); }
+            get { return new TransparentRedirectGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual String TrData(Request trData, String redirectURL)
         {
-            return TrUtil.BuildTrData(trData, redirectURL);
+            return TrUtil.BuildTrData(trData, redirectURL, new BraintreeService(Configuration));
         }
     }
 }

@@ -84,7 +84,7 @@
     <Compile Include="ValidationError.cs" />
     <Compile Include="ValidationErrorCode.cs" />
     <Compile Include="ValidationErrors.cs" />
-    <Compile Include="WebServiceGateway.cs" />
+    <Compile Include="BraintreeService.cs" />
     <Compile Include="NodeWrapper.cs" />
     <Compile Include="SubscriptionSearchRequest.cs" />
     <Compile Include="TextNode.cs" />

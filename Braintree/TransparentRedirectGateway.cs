@@ -15,40 +15,43 @@ namespace Braintree
 
         public String Url
         {
-            get { return Configuration.BaseMerchantURL() + "/transparent_redirect_requests"; }
+            get { return Service.BaseMerchantURL() + "/transparent_redirect_requests"; }
         }
 
-        public TransparentRedirectGateway()
+        private BraintreeService Service;
+
+        internal TransparentRedirectGateway(BraintreeService service)
         {
+            Service = service;
         }
 
         public String BuildTrData(Request request, String redirectURL)
         {
-            return TrUtil.BuildTrData(request, redirectURL);
+            return TrUtil.BuildTrData(request, redirectURL, Service);
         }
 
         public virtual Result<Transaction> ConfirmTransaction(String queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
-            XmlNode node = WebServiceGateway.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
+            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
+            XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new Result<Transaction>(new NodeWrapper(node));
+            return new Result<Transaction>(new NodeWrapper(node), Service);
         }
 
         public virtual Result<Customer> ConfirmCustomer(String queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
-            XmlNode node = WebServiceGateway.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
+            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
+            XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new Result<Customer>(new NodeWrapper(node));
+            return new Result<Customer>(new NodeWrapper(node), Service);
         }
 
         public virtual Result<CreditCard> ConfirmCreditCard(String queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
-            XmlNode node = WebServiceGateway.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
+            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
+            XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new Result<CreditCard>(new NodeWrapper(node));
+            return new Result<CreditCard>(new NodeWrapper(node), Service);
         }
     }
 }

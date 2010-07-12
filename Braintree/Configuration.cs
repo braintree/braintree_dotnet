@@ -8,23 +8,19 @@ namespace Braintree
 {
     public class Configuration
     {
-        public static Environment Environment { get; set; }
-        public static String MerchantId { get; set; }
-        public static String PublicKey { get; set; }
-        public static String PrivateKey { get; set; }
-        public static String ApiVersion = "2";
+        public Environment Environment { get; set; }
+        public string MerchantId { get; set; }
+        public string PublicKey { get; set; }
+        public string PrivateKey { get; set; }
 
-        private Configuration() { }
+        public Configuration() {}
 
-        public static String BaseMerchantURL()
+        public Configuration(Environment environment, string merchantId, string publicKey, string privateKey)
         {
-            return Environment.GatewayURL + "/merchants/" + MerchantId;
-        }
-
-        public static String GetAuthorizationHeader()
-        {
-            return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(PublicKey + ":" + PrivateKey)).Trim();
-
+            Environment = environment;
+            MerchantId = merchantId;
+            PublicKey = publicKey;
+            PrivateKey = privateKey;
         }
     }
 }

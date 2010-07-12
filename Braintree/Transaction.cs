@@ -113,8 +113,12 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
 
-        internal Transaction(NodeWrapper node)
+        private BraintreeService Service;
+
+        internal Transaction(NodeWrapper node, BraintreeService service)
         {
+            Service = service;
+
             if (node == null) return;
 
             Id = node.GetString("id");
@@ -147,8 +151,8 @@ namespace Braintree
             SettlementBatchId = node.GetString("settlement-batch-id");
             SubscriptionId = node.GetString("subscription-id");
             CustomFields = node.GetDictionary("custom-fields");
-            CreditCard = new CreditCard(node.GetNode("credit-card"));
-            Customer = new Customer(node.GetNode("customer"));
+            CreditCard = new CreditCard(node.GetNode("credit-card"), service);
+            Customer = new Customer(node.GetNode("customer"), service);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
 
@@ -198,7 +202,7 @@ namespace Braintree
         {
             if (CreditCard.Token == null) return null;
 
-            return new CreditCardGateway().Find(CreditCard.Token);
+            return new CreditCardGateway(Service).Find(CreditCard.Token);
         }
 
         /// <summary>
@@ -223,7 +227,7 @@ namespace Braintree
         {
             if (Customer.Id == null) return null;
 
-            return new CustomerGateway().Find(Customer.Id);
+            return new CustomerGateway(Service).Find(Customer.Id);
         }
 
         /// <summary>
@@ -248,7 +252,7 @@ namespace Braintree
         {
             if (BillingAddress.Id == null) return null;
 
-            return new AddressGateway().Find(Customer.Id, BillingAddress.Id);
+            return new AddressGateway(Service).Find(Customer.Id, BillingAddress.Id);
         }
 
         /// <summary>
@@ -273,7 +277,7 @@ namespace Braintree
         {
             if (ShippingAddress.Id == null) return null;
 
-            return new AddressGateway().Find(Customer.Id, ShippingAddress.Id);
+            return new AddressGateway(Service).Find(Customer.Id, ShippingAddress.Id);
         }
     }
 }

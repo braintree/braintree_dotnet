@@ -8,6 +8,7 @@ namespace Braintree.Tests
     public class TransparentRedirectTest
     {
         private BraintreeGateway gateway;
+        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -19,6 +20,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -56,7 +58,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
             Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -89,7 +91,7 @@ namespace Braintree.Tests
                 LastName = "Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
             Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -120,7 +122,7 @@ namespace Braintree.Tests
                 LastName = "Lambert"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
             Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer updatedCustomer = gateway.Customer.Find(createdCustomer.Id);
@@ -145,7 +147,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
             Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard creditCard = result.Target;
@@ -185,7 +187,7 @@ namespace Braintree.Tests
                 CardholderName = "Sampsonite"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url);
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
             Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard creditCard = gateway.CreditCard.Find(createdCreditCard.Token);

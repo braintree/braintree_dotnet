@@ -15,11 +15,11 @@ namespace Braintree
         public String Message { get; protected set; }
         public T Target { get; protected set; }
 
-        public Result(NodeWrapper node)
+        public Result(NodeWrapper node, BraintreeService service)
         {
             if (node.IsSuccess())
             {
-                Target = newInstanceFromResponse(node);
+                Target = newInstanceFromResponse(node, service);
             }
             else
             {
@@ -32,7 +32,7 @@ namespace Braintree
                 NodeWrapper transactionNode = node.GetNode("transaction");
                 if (transactionNode != null)
                 {
-                    Transaction = new Transaction(transactionNode);
+                    Transaction = new Transaction(transactionNode, service);
                 }
                 Parameters = node.GetNode("params").GetFormParameters();
                 Message = node.GetString("message");
@@ -44,7 +44,7 @@ namespace Braintree
             return Errors == null;
         }
 
-        private T newInstanceFromResponse(NodeWrapper node)
+        private T newInstanceFromResponse(NodeWrapper node, BraintreeService service)
         {
             if (typeof(T) == typeof(Address))
             {
@@ -52,19 +52,19 @@ namespace Braintree
             }
             else if (typeof(T) == typeof(CreditCard))
             {
-                return new CreditCard(node) as T;
+                return new CreditCard(node, service) as T;
             }
             else if (typeof(T) == typeof(Customer))
             {
-                return new Customer(node) as T;
+                return new Customer(node, service) as T;
             }
             else if (typeof(T) == typeof(Transaction))
             {
-                return new Transaction(node) as T;
+                return new Transaction(node, service) as T;
             }
             else if (typeof(T) == typeof(Subscription))
             {
-                return new Subscription(node) as T;
+                return new Subscription(node, service) as T;
             }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());

@@ -11,56 +11,63 @@ namespace Braintree
     /// </summary>
     public class CustomerGateway
     {
+        private BraintreeService Service;
+
+        internal CustomerGateway(BraintreeService service)
+        {
+            Service = service;
+        }
+
         public virtual Customer Find(String Id)
         {
-            XmlNode customerXML = WebServiceGateway.Get("/customers/" + Id);
+            XmlNode customerXML = Service.Get("/customers/" + Id);
 
-            return new Customer(new NodeWrapper(customerXML));
+            return new Customer(new NodeWrapper(customerXML), Service);
         }
 
         public virtual Result<Customer> Create(CustomerRequest request)
         {
-            XmlNode customerXML = WebServiceGateway.Post("/customers", request);
+            XmlNode customerXML = Service.Post("/customers", request);
 
-            return new Result<Customer>(new NodeWrapper(customerXML));
+            return new Result<Customer>(new NodeWrapper(customerXML), Service);
         }
 
         public virtual void Delete(String Id)
         {
-            WebServiceGateway.Delete("/customers/" + Id);
+            Service.Delete("/customers/" + Id);
         }
 
         public virtual Result<Customer> Update(String Id, CustomerRequest request)
         {
-            XmlNode customerXML = WebServiceGateway.Put("/customers/" + Id, request);
+            XmlNode customerXML = Service.Put("/customers/" + Id, request);
 
-            return new Result<Customer>(new NodeWrapper(customerXML));
+            return new Result<Customer>(new NodeWrapper(customerXML), Service);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<Customer> ConfirmTransparentRedirect(String queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
-            XmlNode node = WebServiceGateway.Post("/customers/all/confirm_transparent_redirect_request", trRequest);
+            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
+            XmlNode node = Service.Post("/customers/all/confirm_transparent_redirect_request", trRequest);
 
-            return new Result<Customer>(new NodeWrapper(node));
+            return new Result<Customer>(new NodeWrapper(node), Service);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForCreate()
         {
-            return Configuration.BaseMerchantURL() + "/customers/all/create_via_transparent_redirect_request";
+            return Service.BaseMerchantURL() + "/customers/all/create_via_transparent_redirect_request";
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForUpdate()
         {
-            return Configuration.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
+            return Service.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
         }
 
         public virtual ResourceCollection<Customer> All()
         {
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/customers/advanced_search_ids"));
+            NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search_ids"));
 
             return new ResourceCollection<Customer>(response, delegate(String[] ids) {
                 return FetchCustomers(ids);
@@ -72,12 +79,12 @@ namespace Braintree
             IdsSearchRequest query = new IdsSearchRequest().
                 Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/customers/advanced_search", query));
+            NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search", query));
 
             List<Customer> customers = new List<Customer>();
             foreach (NodeWrapper node in response.GetList("customer"))
             {
-                customers.Add(new Customer(node));
+                customers.Add(new Customer(node, Service));
             }
             return customers;
         }
