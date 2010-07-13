@@ -634,7 +634,7 @@ namespace Braintree.Tests
             Result<CreditCard> result = gateway.CreditCard.Create(request);
             Assert.IsFalse(result.IsSuccess());
             CreditCardVerification verification = result.CreditCardVerification;
-            Assert.AreEqual("processor_declined", verification.Status);
+            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, verification.Status);
             Assert.IsNull(verification.GatewayRejectionReason);
         }
 
