@@ -6,6 +6,8 @@ using System.Text;
 
 namespace Braintree
 {
+    public class TransactionCreditCardRequest : BaseCreditCardRequest {}
+
     /// <summary>
     /// A class for building requests to manipulate <see cref="Transaction"/> records in the vault.
     /// </summary>
@@ -25,7 +27,7 @@ namespace Braintree
     /// </example>
     public class TransactionRequest : Request
     {
-        public CreditCardRequest CreditCard { get; set; }
+        public TransactionCreditCardRequest CreditCard { get; set; }
         public Decimal Amount { get; set; }
         public String OrderId { get; set; }
         public String MerchantAccountId { get; set; }

@@ -69,7 +69,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = 1000M,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = "4111111111111111",
                     ExpirationDate = "05/2012",
@@ -170,7 +170,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = 1000M,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = "4111111111111111",
                     ExpirationDate = "05/2012",
@@ -215,7 +215,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -255,7 +255,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -289,7 +289,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -323,7 +323,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -363,7 +363,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -397,7 +397,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -432,7 +432,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010",
@@ -484,7 +484,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = 1000M,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -524,7 +524,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -569,7 +569,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -594,7 +594,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -638,7 +638,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.FAILED,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -690,7 +690,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010",
@@ -735,7 +735,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.DECLINE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -779,7 +779,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -829,7 +829,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -877,7 +877,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -922,7 +922,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -960,7 +960,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -994,7 +994,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 OrderId = "123",
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     CVV = "321",
@@ -1115,7 +1115,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1135,7 +1135,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1158,7 +1158,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Token = paymentToken,
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -1205,7 +1205,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     CardholderName = "Bob the Builder",
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -1239,7 +1239,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     CardholderName = "Bob the Builder",
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -1266,7 +1266,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1300,7 +1300,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1346,7 +1346,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.DECLINE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1388,7 +1388,7 @@ namespace Braintree.Tests
                 {
                     StreetAddress = "200 Fake Street"
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1420,7 +1420,7 @@ namespace Braintree.Tests
                 {
                     PostalCode = "20000"
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1449,7 +1449,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1475,7 +1475,7 @@ namespace Braintree.Tests
                     { "store_me", "custom value" },
                     { "another_stored_field", "custom value2" }
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1500,7 +1500,7 @@ namespace Braintree.Tests
                 {
                     { "unkown_custom_field", "custom value" }
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1576,7 +1576,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
@@ -1638,7 +1638,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1689,7 +1689,7 @@ namespace Braintree.Tests
 
             TransactionRequest request = new TransactionRequest
             {
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1710,7 +1710,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1740,7 +1740,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1760,7 +1760,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1785,7 +1785,7 @@ namespace Braintree.Tests
                     { "store_me", "custom value"},
                     { "another_stored_field", "custom value2" }
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1805,7 +1805,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
@@ -1830,7 +1830,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1866,7 +1866,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1901,7 +1901,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1923,7 +1923,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1946,7 +1946,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1967,7 +1967,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1988,7 +1988,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -2025,7 +2025,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -2067,7 +2067,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -2099,7 +2099,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"

@@ -31,6 +31,11 @@ namespace Braintree
             return ToQueryString("credit-card");
         }
 
+        public override String ToQueryString(String root)
+        {
+            return BuildRequest(root).ToQueryString();
+        }
+
         protected virtual RequestBuilder BuildRequest(String root)
         {
             return new RequestBuilder(root).

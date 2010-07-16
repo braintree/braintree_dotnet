@@ -51,7 +51,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
