@@ -10,6 +10,7 @@ namespace Braintree.Tests
         public Int32 BillingFrequency { get; set; }
         public String Description { get; set; }
         public String Id { get; set; }
+        public Int32 NumberOfBillingCycles { get; set; }
         public Decimal Price { get; set; }
         public Boolean TrialPeriod { get; set; }
         public Int32 TrialDuration { get; set; }
@@ -19,6 +20,7 @@ namespace Braintree.Tests
         {
             Description = "Plan for integration tests -- without a trial",
             Id = "integration_trialless_plan",
+            NumberOfBillingCycles = 12,
             Price = 12.34M,
             BillingFrequency = 1,
             TrialPeriod = false
@@ -28,6 +30,7 @@ namespace Braintree.Tests
             {
             Description = "Plan for integration tests -- with a trial",
             Id = "integration_trial_plan",
+            NumberOfBillingCycles = 12,
             Price = 43.21M,
             BillingFrequency = 1,
             TrialPeriod = true,

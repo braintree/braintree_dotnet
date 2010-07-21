@@ -43,6 +43,10 @@ namespace Braintree
         /// </summary>
         public static readonly SubscriptionStatus CANCELED = new SubscriptionStatus("Canceled");
         /// <summary>
+        /// Indicates that the <see cref="Subscription"/> has reached the end of the specified billing cycles
+        /// </summary>
+        public static readonly SubscriptionStatus EXPIRED = new SubscriptionStatus("Expired");
+        /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active but past due
         /// </summary>
         public static readonly SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
@@ -51,7 +55,7 @@ namespace Braintree
         /// </summary>
         public static readonly SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
 
-        public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, PAST_DUE};
+        public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, EXPIRED, PAST_DUE};
 
         protected SubscriptionStatus(String name) : base(name) {}
     }
@@ -75,6 +79,7 @@ namespace Braintree
         public Boolean? HasTrialPeriod { get; protected set; }
         public String Id { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
+        public Int32? NumberOfBillingCycles { get; protected set; }
         public String PaymentMethodToken { get; protected set; }
         public String PlanId { get; protected set; }
         public Decimal? Price { get; protected set; }
@@ -92,6 +97,7 @@ namespace Braintree
             FirstBillingDate = node.GetDateTime("first-billing-date");
             Id = node.GetString("id");
             NextBillingDate = node.GetDateTime("next-billing-date");
+            NumberOfBillingCycles = node.GetInteger("number-of-billing-cycles");
             PaymentMethodToken = node.GetString("payment-method-token");
             PlanId = node.GetString("plan-id");
             Price = node.GetDecimal("price");

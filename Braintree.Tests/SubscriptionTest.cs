@@ -176,6 +176,47 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_OverrideNumberOfBillingCycles()
+        {
+            Plan plan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            Assert.AreEqual(12, subscription.NumberOfBillingCycles);
+
+            SubscriptionRequest overrideRequest = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                NumberOfBillingCycles = 10
+            };
+
+            Subscription overridenSubscription = gateway.Subscription.Create(overrideRequest).Target;
+            Assert.AreEqual(10, overridenSubscription.NumberOfBillingCycles);
+        }
+
+        [Test]
+        public void Create_OverrideNumberOfBillingCyclesToNeverExpire()
+        {
+            Plan plan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                NeverExpires = true
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            Assert.IsNull(subscription.NumberOfBillingCycles);
+        }
+
+        [Test]
         public void Create_SetId()
         {
             Plan plan = Plan.PLAN_WITH_TRIAL;
@@ -471,6 +512,19 @@ namespace Braintree.Tests
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
             Assert.IsFalse(TestHelper.IncludesSubscription(collection, canceledSubscription));
+        }
+
+        [Test]
+        public void Search_OnStatusExpired()
+        {
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
+                search.Status.IncludedIn(SubscriptionStatus.EXPIRED);
+            });
+
+            Assert.IsTrue(collection.MaximumCount > 0);
+            foreach(Subscription subscription in collection) {
+                Assert.AreEqual(SubscriptionStatus.EXPIRED, subscription.Status);
+            }
         }
 
         [Test]

@@ -26,6 +26,8 @@ namespace Braintree
     {
         public Boolean? HasTrialPeriod { get; set; }
         public String Id { get; set; }
+        public Int32? NumberOfBillingCycles { get; set; }
+        public Boolean? NeverExpires { get; set; }
         public String PaymentMethodToken { get; set; }
         public String PlanId { get; set; }
         public Decimal Price { get; set; }
@@ -69,6 +71,12 @@ namespace Braintree
                 }
             }
             builder.AddElement("merchant-account-id", MerchantAccountId);
+            if (NumberOfBillingCycles.HasValue) {
+                builder.AddElement("number-of-billing-cycles", NumberOfBillingCycles.Value);
+            }
+            if (NeverExpires.HasValue) {
+                builder.AddElement("never-expires", NeverExpires.Value);
+            }
             builder.AddElement("id", Id);
             builder.AddElement("plan-id", PlanId);
             if (Price != 0) builder.AddElement("price", Price.ToString());
