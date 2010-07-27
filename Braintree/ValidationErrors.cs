@@ -124,6 +124,11 @@ namespace Braintree
             return results;
         }
 
+        public virtual ValidationErrors ForIndex(Int32 index)
+        {
+            return ForObject("index-" + index);
+        }
+
         public virtual ValidationErrors ForObject(String objectName)
         {
             if (nestedErrors.ContainsKey(objectName)) return nestedErrors[objectName];

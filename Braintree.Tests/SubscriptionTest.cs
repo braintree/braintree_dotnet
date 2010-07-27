@@ -538,6 +538,42 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_WithBadAddOnParamsCorrectlyParsesValidationErrors()
+        {
+            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                AddOns = new AddOnsRequest
+                {
+                    Update = new UpdateAddOnRequest[]
+                    {
+                        new UpdateAddOnRequest
+                        {
+                            ExistingId = "increase_10",
+                            Amount = -200M
+                        },
+                        new UpdateAddOnRequest
+                        {
+                            ExistingId = "increase_20",
+                            Quantity = -9
+                        }
+                    }
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_MODIFICATION_AMOUNT_IS_INVALID,
+                result.Errors.ForObject("subscription").ForObject("add-ons").ForObject("update").ForIndex(0).OnField("amount")[0].Code);
+
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_MODIFICATION_QUANTITY_IS_INVALID,
+                result.Errors.ForObject("subscription").ForObject("add-ons").ForObject("update").ForIndex(1).OnField("quantity")[0].Code);
+        }
+
+        [Test]
         public void Find()
         {
             Plan plan = Plan.PLAN_WITHOUT_TRIAL;
