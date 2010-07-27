@@ -937,6 +937,151 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_UpdatesAddOnsAndDiscounts()
+        {
+            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            SubscriptionRequest createRequest = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Subscription subscription = gateway.Subscription.Create(createRequest).Target;
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                AddOns = new AddOnsRequest
+                {
+                    Add = new AddAddOnRequest[] {
+                        new AddAddOnRequest{
+                            InheritedFromId = "increase_30",
+                            Amount = 31M,
+                            NumberOfBillingCycles = 3,
+                            Quantity = 7
+                        }
+                    },
+                    Remove = new String[] { "increase_20" },
+                    Update = new UpdateAddOnRequest[] {
+                        new UpdateAddOnRequest
+                        {
+                            ExistingId = "increase_10",
+                            Amount = 30M,
+                            NeverExpires = true,
+                            Quantity = 9
+                        }
+                    }
+                },
+                Discounts = new DiscountsRequest
+                {
+                    Add = new AddDiscountRequest[] {
+                        new AddDiscountRequest{
+                            InheritedFromId = "discount_15",
+                            Amount = 23M,
+                            NumberOfBillingCycles = 2,
+                            Quantity = 9
+                        }
+                    },
+                    Remove = new String[] { "discount_11" },
+                    Update = new UpdateDiscountRequest[] {
+                        new UpdateDiscountRequest
+                        {
+                            ExistingId = "discount_7",
+                            Amount = 15M,
+                        }
+                    }
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, request);
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            List<AddOn> addOns = subscription.AddOns;
+            addOns.Sort(CompareModificationsById);
+
+            Assert.AreEqual(2, addOns.Count);
+
+            Assert.AreEqual("increase_10", addOns[0].Id);
+            Assert.AreEqual(30M, addOns[0].Amount);
+            Assert.AreEqual(9, addOns[0].Quantity);
+            Assert.IsTrue(addOns[0].NeverExpires.Value);
+            Assert.IsNull(addOns[0].NumberOfBillingCycles);
+
+            Assert.AreEqual("increase_30", addOns[1].Id);
+            Assert.AreEqual(31M, addOns[1].Amount);
+            Assert.AreEqual(7, addOns[1].Quantity);
+            Assert.IsFalse(addOns[1].NeverExpires.Value);
+            Assert.AreEqual(3, addOns[1].NumberOfBillingCycles);
+
+            List<Discount> discounts = subscription.Discounts;
+            discounts.Sort(CompareModificationsById);
+
+            Assert.AreEqual(2, discounts.Count);
+
+            Assert.AreEqual("discount_15", discounts[0].Id);
+            Assert.AreEqual(23M, discounts[0].Amount);
+            Assert.AreEqual(9, discounts[0].Quantity);
+            Assert.IsFalse(discounts[0].NeverExpires.Value);
+            Assert.AreEqual(2, discounts[0].NumberOfBillingCycles);
+
+            Assert.AreEqual("discount_7", discounts[1].Id);
+            Assert.AreEqual(15M, discounts[1].Amount);
+            Assert.AreEqual(1, discounts[1].Quantity);
+            Assert.IsTrue(discounts[1].NeverExpires.Value);
+            Assert.IsNull(discounts[1].NumberOfBillingCycles);
+        }
+
+        [Test]
+        public void Update_CanReplaceAllAddOnsAndDiscounts()
+        {
+            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            SubscriptionRequest createRequest = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Subscription subscription = gateway.Subscription.Create(createRequest).Target;
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                AddOns = new AddOnsRequest
+                {
+                    Add = new AddAddOnRequest[]
+                    {
+                        new AddAddOnRequest
+                        {
+                            InheritedFromId = "increase_30"
+                        }
+                    },
+                },
+                Discounts = new DiscountsRequest
+                {
+                    Add = new AddDiscountRequest[]
+                    {
+                        new AddDiscountRequest
+                        {
+                            InheritedFromId = "discount_15",
+                        }
+                    },
+                },
+                Options = new SubscriptionOptionsRequest
+                {
+                    ReplaceAllAddOnsAndDiscounts = true
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, request);
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(1, subscription.AddOns.Count);
+            Assert.AreEqual(1, subscription.Discounts.Count);
+        }
+
+        [Test]
         public void IncreasePriceAndTransaction()
         {
             Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
