@@ -5,11 +5,6 @@ namespace Braintree
     {
         public UpdateDiscountRequest[] Update { get; set; }
 
-        public override String ToXml()
-        {
-            return ToXml("discounts");
-        }
-
         public override String ToXml(String root)
         {
             return BuildRequest(root).ToXml();
@@ -22,4 +17,3 @@ namespace Braintree
         }
     }
 }
-
