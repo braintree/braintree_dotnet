@@ -14,6 +14,11 @@ namespace Braintree.Tests
         private Customer customer;
         private CreditCard creditCard;
 
+        private int CompareModificationsById(Modification left, Modification right)
+        {
+            return left.Id.CompareTo(right.Id);
+        }
+
         [SetUp]
         public void Setup()
         {
@@ -313,10 +318,55 @@ namespace Braintree.Tests
             Result<Subscription> result = gateway.Subscription.Create(request);
             Assert.IsTrue(result.IsSuccess());
             Subscription subscription = result.Target;
-    
+
             Assert.AreEqual(0, subscription.AddOns.Count);
             Assert.AreEqual(0, subscription.Discounts.Count);
         }
+
+        [Test]
+        public void Create_InheritsAddOnsAndDiscountsFromPlan() {
+            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            List<AddOn> addOns = subscription.AddOns;
+            addOns.Sort(CompareModificationsById);
+
+            Assert.AreEqual(2, addOns.Count);
+
+            Assert.AreEqual(10M, addOns[0].Amount);
+            Assert.AreEqual(1, addOns[0].Quantity);
+            Assert.IsTrue(addOns[0].NeverExpires.Value);
+            Assert.IsNull(addOns[0].NumberOfBillingCycles);
+
+            Assert.AreEqual(20.00M, addOns[1].Amount);
+            Assert.AreEqual(1, addOns[1].Quantity);
+            Assert.IsTrue(addOns[1].NeverExpires.Value);
+            Assert.IsNull(addOns[1].NumberOfBillingCycles);
+
+            List<Discount> discounts = subscription.Discounts;
+            discounts.Sort(CompareModificationsById);
+
+            Assert.AreEqual(2, discounts.Count);
+
+            Assert.AreEqual(11M, discounts[0].Amount);
+            Assert.AreEqual(1, discounts[0].Quantity);
+            Assert.IsTrue(discounts[0].NeverExpires.Value);
+            Assert.IsNull(discounts[0].NumberOfBillingCycles);
+
+            Assert.AreEqual(7M, discounts[1].Amount);
+            Assert.AreEqual(1, discounts[1].Quantity);
+            Assert.IsTrue(discounts[1].NeverExpires.Value);
+            Assert.IsNull(discounts[1].NumberOfBillingCycles);
+        }
+
 
        [Test]
         public void Find()

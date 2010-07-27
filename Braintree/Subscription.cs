@@ -20,7 +20,7 @@ namespace Braintree
         /// </summary>
         public static readonly SubscriptionDurationUnit MONTH = new SubscriptionDurationUnit("month");
         /// <summary>
-        /// A placeholder for unrecognized duration units, implemented for future compatibility  
+        /// A placeholder for unrecognized duration units, implemented for future compatibility
         /// </summary>
         public static readonly SubscriptionDurationUnit UNRECOGNIZED = new SubscriptionDurationUnit("unrecognized");
 
@@ -72,10 +72,10 @@ namespace Braintree
     /// </example>
     public class Subscription
     {
-        public List<Object> AddOns { get; protected set; }
+        public List<AddOn> AddOns { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
         public DateTime? BillingPeriodStartDate { get; protected set; }
-        public List<Object> Discounts { get; protected set; }
+        public List<Discount> Discounts { get; protected set; }
         public Int32? FailureCount { get; protected set; }
         public DateTime? FirstBillingDate { get; protected set; }
         public Boolean? HasTrialPeriod { get; protected set; }
@@ -94,10 +94,8 @@ namespace Braintree
 
         public Subscription(NodeWrapper node, BraintreeService service)
         {
-            AddOns = new List<Object> ();
             BillingPeriodEndDate = node.GetDateTime("billing-period-end-date");
             BillingPeriodStartDate = node.GetDateTime("billing-period-start-date");
-            Discounts = new List<Object> ();
             FailureCount = node.GetInteger("failure-count");
             FirstBillingDate = node.GetDateTime("first-billing-date");
             Id = node.GetString("id");
@@ -115,11 +113,19 @@ namespace Braintree
                 TrialDurationUnit = (SubscriptionDurationUnit)CollectionUtil.Find(SubscriptionDurationUnit.ALL, trialDurationUnitStr, SubscriptionDurationUnit.UNRECOGNIZED);
             }
             MerchantAccountId = node.GetString("merchant-account-id");
+
+            AddOns = new List<AddOn> ();
+            foreach (NodeWrapper addOnResponse in node.GetList("add-ons/add-on")) {
+                AddOns.Add(new AddOn(addOnResponse));
+            }
+            Discounts = new List<Discount> ();
+            foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
+                Discounts.Add(new Discount(discountResponse));
+            }
             Transactions = new List<Transaction> ();
             foreach (NodeWrapper transactionResponse in node.GetList("transactions/transaction")) {
                 Transactions.Add(new Transaction(transactionResponse, service));
             }
         }
-        
     }
 }
