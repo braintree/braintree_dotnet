@@ -15,6 +15,18 @@ namespace Braintree.Tests
         public Boolean TrialPeriod { get; set; }
         public Int32 TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
+
+        public static Plan ADD_ON_DISCOUNT_PLAN = new Plan
+        {
+            Description = "Plan for integration tests -- with add-ons and discounts",
+            Id = "integration_plan_with_add_ons_and_discounts",
+            NumberOfBillingCycles = 12,
+            Price = 9.99M,
+            BillingFrequency = 1,
+            TrialPeriod = true,
+            TrialDuration = 2,
+            TrialDurationUnit = SubscriptionDurationUnit.DAY
+        };
     
         public static Plan PLAN_WITHOUT_TRIAL = new Plan
         {

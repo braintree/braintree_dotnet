@@ -28,6 +28,7 @@ namespace Braintree
         public String Id { get; set; }
         public Int32? NumberOfBillingCycles { get; set; }
         public Boolean? NeverExpires { get; set; }
+        public SubscriptionOptionsRequest Options { get; set; }
         public String PaymentMethodToken { get; set; }
         public String PlanId { get; set; }
         public Decimal Price { get; set; }

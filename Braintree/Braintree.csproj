@@ -110,6 +110,7 @@
     <Compile Include="TransparentRedirectGateway.cs" />
     <Compile Include="RequestBuilder.cs" />
     <Compile Include="BaseCreditCardRequest.cs" />
+    <Compile Include="SubscriptionOptionsRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -297,6 +297,28 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_InheritsNoAddOnsAndDiscountsWhenOptionIsPassed()
+        {
+            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Options = new SubscriptionOptionsRequest
+                {
+                    DoNotInheritAddOnsOrDiscounts = true
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+    
+            Assert.AreEqual(0, subscription.AddOns.Count);
+            Assert.AreEqual(0, subscription.Discounts.Count);
+        }
+
+       [Test]
         public void Find()
         {
             Plan plan = Plan.PLAN_WITHOUT_TRIAL;
