@@ -367,8 +367,87 @@ namespace Braintree.Tests
             Assert.IsNull(discounts[1].NumberOfBillingCycles);
         }
 
+        [Test]
+        public void Create_CanOverrideInheritedAddOnsAndDiscountsFromPlan() {
+            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                AddOns = new AddOnsRequest
+                {
+                    Update = new UpdateAddOnRequest[] {
+                        new UpdateAddOnRequest
+                        {
+                            ExistingId = "increase_10",
+                            Amount = 30M,
+                            Quantity = 9,
+                            NeverExpires = true
+                        },
+                        new UpdateAddOnRequest
+                        {
+                            ExistingId = "increase_20",
+                            Amount = 40M,
+                            NumberOfBillingCycles = 20
+                        }
+                    }
+                },
+                Discounts = new DiscountsRequest
+                {
+                    Update = new UpdateDiscountRequest[] {
+                        new UpdateDiscountRequest
+                        {
+                            ExistingId = "discount_7",
+                            Amount = 15M,
+                            Quantity = 7,
+                            NeverExpires = true
+                        },
+                        new UpdateDiscountRequest
+                        {
+                            ExistingId = "discount_11",
+                            Amount = 23M,
+                            NumberOfBillingCycles = 11
+                        }
+                    }
+                }
+            };
 
-       [Test]
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            List<AddOn> addOns = subscription.AddOns;
+            addOns.Sort(CompareModificationsById);
+
+            Assert.AreEqual(2, addOns.Count);
+
+            Assert.AreEqual(30M, addOns[0].Amount);
+            Assert.AreEqual(9, addOns[0].Quantity);
+            Assert.IsTrue(addOns[0].NeverExpires.Value);
+            Assert.IsNull(addOns[0].NumberOfBillingCycles);
+
+            Assert.AreEqual(40.00M, addOns[1].Amount);
+            Assert.AreEqual(1, addOns[1].Quantity);
+            Assert.IsFalse(addOns[1].NeverExpires.Value);
+            Assert.AreEqual(20, addOns[1].NumberOfBillingCycles);
+
+            List<Discount> discounts = subscription.Discounts;
+            discounts.Sort(CompareModificationsById);
+
+            Assert.AreEqual(2, discounts.Count);
+
+            Assert.AreEqual(23M, discounts[0].Amount);
+            Assert.AreEqual(1, discounts[0].Quantity);
+            Assert.IsFalse(discounts[0].NeverExpires.Value);
+            Assert.AreEqual(11, discounts[0].NumberOfBillingCycles);
+
+            Assert.AreEqual(15M, discounts[1].Amount);
+            Assert.AreEqual(7, discounts[1].Quantity);
+            Assert.IsTrue(discounts[1].NeverExpires.Value);
+            Assert.IsNull(discounts[1].NumberOfBillingCycles);
+        }
+
+        [Test]
         public void Find()
         {
             Plan plan = Plan.PLAN_WITHOUT_TRIAL;

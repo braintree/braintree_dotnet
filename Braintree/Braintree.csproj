@@ -46,6 +46,7 @@
   -->
   <ItemGroup>
     <Compile Include="AddOn.cs" />
+    <Compile Include="AddOnsRequest.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="AddressGateway.cs" />
     <Compile Include="AddressRequest.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="DateRangeNode.cs" />
     <Compile Include="Discount.cs" />
+    <Compile Include="DiscountsRequest.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="EqualityNode.cs" />
@@ -111,6 +113,8 @@
     <Compile Include="TransactionSearchRequest.cs" />
     <Compile Include="TransparentRedirectGateway.cs" />
     <Compile Include="TransparentRedirectRequest.cs" />
+    <Compile Include="UpdateAddOnRequest.cs" />
+    <Compile Include="UpdateDiscountRequest.cs" />
     <Compile Include="ValidationError.cs" />
     <Compile Include="ValidationErrorCode.cs" />
     <Compile Include="ValidationErrors.cs" />

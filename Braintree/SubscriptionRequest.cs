@@ -24,6 +24,8 @@ namespace Braintree
     /// </example>
     public class SubscriptionRequest : Request
     {
+        public AddOnsRequest AddOns { get; set; }
+        public DiscountsRequest Discounts { get; set; }
         public Boolean? HasTrialPeriod { get; set; }
         public String Id { get; set; }
         public Int32? NumberOfBillingCycles { get; set; }
@@ -71,6 +73,9 @@ namespace Braintree
             builder.AddElement("id", Id);
             builder.AddElement("plan-id", PlanId);
             if (Price != 0) builder.AddElement("price", Price.ToString());
+
+            builder.AddElement("add-ons", AddOns);
+            builder.AddElement("discounts", Discounts);
             builder.AddElement("options", Options);
 
             return builder;
