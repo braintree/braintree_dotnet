@@ -15,16 +15,6 @@ namespace Braintree
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString()
-        {
-            return ToQueryString("options");
-        }
-
-        public override String ToQueryString(String root)
-        {
-            return BuildRequest(root).ToQueryString();
-        }
-
         protected virtual RequestBuilder BuildRequest(String root)
         {
             return new RequestBuilder(root).

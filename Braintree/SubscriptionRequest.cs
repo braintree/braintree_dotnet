@@ -46,16 +46,6 @@ namespace Braintree
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override String ToQueryString(String root)
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual RequestBuilder BuildRequest(String root)
         {
             var builder = new RequestBuilder(root);
