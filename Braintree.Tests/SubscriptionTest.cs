@@ -198,6 +198,7 @@ namespace Braintree.Tests
 
             Subscription overridenSubscription = gateway.Subscription.Create(overrideRequest).Target;
             Assert.AreEqual(10, overridenSubscription.NumberOfBillingCycles);
+            Assert.IsFalse(overridenSubscription.NeverExpires.Value);
         }
 
         [Test]
@@ -214,6 +215,7 @@ namespace Braintree.Tests
             Subscription subscription = gateway.Subscription.Create(request).Target;
 
             Assert.IsNull(subscription.NumberOfBillingCycles);
+            Assert.IsTrue(subscription.NeverExpires.Value);
         }
 
         [Test]
