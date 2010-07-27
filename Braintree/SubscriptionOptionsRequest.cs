@@ -5,11 +5,6 @@ namespace Braintree
     {
         public Boolean DoNotInheritAddOnsOrDiscounts { get; set; }
 
-        public override String ToXml()
-        {
-            return ToXml("options");
-        }
-
         public override String ToXml(String root)
         {
             return BuildRequest(root).ToXml();

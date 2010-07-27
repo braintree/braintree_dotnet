@@ -13,19 +13,9 @@ namespace Braintree
         public Boolean StoreShippingAddressInVault { get; set; }
         public Boolean SubmitForSettlement { get; set; }
 
-        public override String ToXml()
-        {
-            return ToXml("options");
-        }
-
         public override String ToXml(String root)
         {
             return BuildRequest(root).ToXml();
-        }
-
-        public override String ToQueryString()
-        {
-            return ToQueryString("options");
         }
 
         public override String ToQueryString(String root)

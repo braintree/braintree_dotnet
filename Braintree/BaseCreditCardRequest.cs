@@ -4,8 +4,6 @@ using System;
 
 namespace Braintree
 {
-
-
     public abstract class BaseCreditCardRequest : Request
     {
         public String CardholderName { get; set; }
