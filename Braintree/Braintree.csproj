@@ -45,6 +45,9 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="AddAddOnRequest.cs" />
+    <Compile Include="AddDiscountRequest.cs" />
+    <Compile Include="AddModificationRequest.cs" />
     <Compile Include="AddOn.cs" />
     <Compile Include="AddOnsRequest.cs" />
     <Compile Include="Address.cs" />
@@ -115,10 +118,10 @@
     <Compile Include="TransparentRedirectRequest.cs" />
     <Compile Include="UpdateAddOnRequest.cs" />
     <Compile Include="UpdateDiscountRequest.cs" />
+    <Compile Include="UpdateModificationRequest.cs" />
     <Compile Include="ValidationError.cs" />
     <Compile Include="ValidationErrorCode.cs" />
     <Compile Include="ValidationErrors.cs" />
-    <Compile Include="UpdateModificationRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
