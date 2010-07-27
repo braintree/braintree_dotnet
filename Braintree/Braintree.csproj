@@ -123,6 +123,7 @@
     <Compile Include="ValidationErrorCode.cs" />
     <Compile Include="ValidationErrors.cs" />
     <Compile Include="ModificationRequest.cs" />
+    <Compile Include="StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

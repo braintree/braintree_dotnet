@@ -76,6 +76,7 @@
     <Compile Include="MultipleValueNodeTest.cs" />
     <Compile Include="TransparentRedirectTest.cs" />
     <Compile Include="BraintreeServiceTest.cs" />
+    <Compile Include="StringUtilTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

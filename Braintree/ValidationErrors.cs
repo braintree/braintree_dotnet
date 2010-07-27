@@ -131,14 +131,16 @@ namespace Braintree
 
         public virtual ValidationErrors ForObject(String objectName)
         {
-            if (nestedErrors.ContainsKey(objectName)) return nestedErrors[objectName];
+            String key = StringUtil.Dasherize(objectName);
+            if (nestedErrors.ContainsKey(key)) return nestedErrors[key];
 
             return new ValidationErrors();
         }
 
         public virtual List<ValidationError> OnField(String fieldName)
         {
-            if (errors.ContainsKey(fieldName)) return errors[fieldName];
+            String key = StringUtil.Underscore(fieldName);
+            if (errors.ContainsKey(key)) return errors[key];
 
             return null;
         }
