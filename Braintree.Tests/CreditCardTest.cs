@@ -213,7 +213,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
-                result.Errors.ForObject("credit-card").ForObject("billing-address").OnField("base")[0].Code
+                result.Errors.ForObject("CreditCard").ForObject("BillingAddress").OnField("Base")[0].Code
             );
         }
 

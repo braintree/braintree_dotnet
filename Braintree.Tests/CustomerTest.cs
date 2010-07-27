@@ -196,19 +196,19 @@ namespace Braintree.Tests
 
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_name")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryName")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_alpha2")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryCodeAlpha2")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_alpha3")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryCodeAlpha3")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_numeric")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryCodeNumeric")[0].Code
             );
         }
 

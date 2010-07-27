@@ -1509,7 +1509,7 @@ namespace Braintree.Tests
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CUSTOM_FIELD_IS_INVALID, result.Errors.ForObject("transaction").OnField("custom_fields")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CUSTOM_FIELD_IS_INVALID, result.Errors.ForObject("Transaction").OnField("CustomFields")[0].Code);
         }
 
         [Test]
@@ -1603,22 +1603,22 @@ namespace Braintree.Tests
             Assert.IsNull(result.Transaction);
             Assert.IsNull(result.CreditCardVerification);
 
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("Transaction").OnField("Amount")[0].Code);
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha2")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryCodeAlpha2")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha3")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryCodeAlpha3")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_numeric")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryCodeNumeric")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_name")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryName")[0].Code
             );
 
             Dictionary<String, String> parameters = result.Parameters;
@@ -1816,7 +1816,7 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             Assert.IsNull(result.Target);
 
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("Transaction").OnField("Amount")[0].Code);
 
             Dictionary<String, String> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
@@ -1914,7 +1914,7 @@ namespace Braintree.Tests
 
             result = gateway.Transaction.Void(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_BE_VOIDED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_BE_VOIDED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
 
         [Test]
@@ -2001,7 +2001,7 @@ namespace Braintree.Tests
 
             result = gateway.Transaction.SubmitForSettlement(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_SETTLEMENT, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_SETTLEMENT, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
             Assert.AreEqual("Cannot submit for settlement unless status is authorized.", result.Message);
         }
 
@@ -2121,7 +2121,7 @@ namespace Braintree.Tests
             }
             Assert.IsFalse(result.IsSuccess());
 
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
     }
 }

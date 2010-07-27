@@ -567,10 +567,10 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_MODIFICATION_AMOUNT_IS_INVALID,
-                result.Errors.ForObject("subscription").ForObject("add-ons").ForObject("update").ForIndex(0).OnField("amount")[0].Code);
+                result.Errors.ForObject("Subscription").ForObject("AddOns").ForObject("Update").ForIndex(0).OnField("Amount")[0].Code);
 
             Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_MODIFICATION_QUANTITY_IS_INVALID,
-                result.Errors.ForObject("subscription").ForObject("add-ons").ForObject("update").ForIndex(1).OnField("quantity")[0].Code);
+                result.Errors.ForObject("Subscription").ForObject("AddOns").ForObject("Update").ForIndex(1).OnField("Quantity")[0].Code);
         }
 
         [Test]
@@ -1139,7 +1139,7 @@ namespace Braintree.Tests
             Result<Subscription> result = gateway.Subscription.Create(createRequest);
 
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PLAN_ID_IS_INVALID, result.Errors.ForObject("subscription").OnField("plan_id")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PLAN_ID_IS_INVALID, result.Errors.ForObject("Subscription").OnField("PlanId")[0].Code);
         }
 
         [Test]
@@ -1154,7 +1154,7 @@ namespace Braintree.Tests
             Result<Subscription> result = gateway.Subscription.Create(createRequest);
 
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PAYMENT_METHOD_TOKEN_IS_INVALID, result.Errors.ForObject("subscription").OnField("payment_method_token")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_PAYMENT_METHOD_TOKEN_IS_INVALID, result.Errors.ForObject("Subscription").OnField("PaymentMethodToken")[0].Code);
         }
 
         [Test]
@@ -1172,7 +1172,7 @@ namespace Braintree.Tests
             Assert.IsFalse(createResult.IsSuccess());
             Assert.IsNull(createResult.Target);
             ValidationErrors errors = createResult.Errors;
-            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_TOKEN_FORMAT_IS_INVALID, errors.ForObject("subscription").OnField("id")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_TOKEN_FORMAT_IS_INVALID, errors.ForObject("Subscription").OnField("Id")[0].Code);
         }
 
         [Test]
@@ -1194,7 +1194,7 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             Assert.IsNull(result.Target);
             ValidationErrors errors = result.Errors;
-            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_TOKEN_FORMAT_IS_INVALID, errors.ForObject("subscription").OnField("id")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_TOKEN_FORMAT_IS_INVALID, errors.ForObject("Subscription").OnField("Id")[0].Code);
         }
 
         [Test]

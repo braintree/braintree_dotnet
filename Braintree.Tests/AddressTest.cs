@@ -191,7 +191,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
-                result.Errors.ForObject("address").OnField("base")[0].Code
+                result.Errors.ForObject("Address").OnField("Base")[0].Code
             );
         }
 
@@ -248,7 +248,7 @@ namespace Braintree.Tests
             Assert.IsFalse(createResult.IsSuccess());
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
-                createResult.Errors.ForObject("address").OnField("base")[0].Code
+                createResult.Errors.ForObject("Address").OnField("Base")[0].Code
             );
         }
 
@@ -265,7 +265,7 @@ namespace Braintree.Tests
             Assert.IsFalse(createResult.IsSuccess());
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
-                createResult.Errors.ForObject("address").OnField("country_code_alpha2")[0].Code
+                createResult.Errors.ForObject("Address").OnField("CountryCodeAlpha2")[0].Code
             );
         }
 
@@ -282,7 +282,7 @@ namespace Braintree.Tests
             Assert.IsFalse(createResult.IsSuccess());
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
-                createResult.Errors.ForObject("address").OnField("country_code_alpha3")[0].Code
+                createResult.Errors.ForObject("Address").OnField("CountryCodeAlpha3")[0].Code
             );
         }
 
@@ -299,7 +299,7 @@ namespace Braintree.Tests
             Assert.IsFalse(createResult.IsSuccess());
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
-                createResult.Errors.ForObject("address").OnField("country_code_numeric")[0].Code
+                createResult.Errors.ForObject("Address").OnField("CountryCodeNumeric")[0].Code
             );
         }
     }
