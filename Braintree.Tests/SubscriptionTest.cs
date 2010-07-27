@@ -63,6 +63,7 @@ namespace Braintree.Tests
             Assert.AreEqual(plan.Id, subscription.PlanId);
             Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
             Assert.AreEqual(plan.Price, subscription.Price);
+            Assert.AreEqual(plan.Price, subscription.NextBillAmount);
             Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
