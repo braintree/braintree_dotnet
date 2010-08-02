@@ -1,3 +1,7 @@
+## 2.5.1
+
+* Updated the Environment class to lazily use environment variables -- this enables use when access to environment variables is restricted
+
 ## 2.5.0
 
 * Added ability to specify Country using CountryName, CountryCodeAlpha2, CountryCodeAlpha3, or CountryCodeNumeric
