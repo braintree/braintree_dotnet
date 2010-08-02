@@ -8,17 +8,37 @@ namespace Braintree
 {
     public class Environment
     {
-        public static Environment DEVELOPMENT = new Environment(DevelopmentUrl());
-        public static Environment QA = new Environment("https://qa-master.braintreegateway.com");
-        public static Environment SANDBOX = new Environment("https://sandbox.braintreegateway.com:443");
-        public static Environment PRODUCTION = new Environment("https://www.braintreegateway.com:443");
+        public static Environment DEVELOPMENT = new Environment("development");
+        public static Environment QA = new Environment("qa");
+        public static Environment SANDBOX = new Environment("sandbox");
+        public static Environment PRODUCTION = new Environment("production");
 
-        public String GatewayURL { get; protected set; }
+        private String environmentName;
 
-        private Environment(String url)
-		{
-			GatewayURL = url;
-		}
+        public String GatewayURL
+        {
+            get
+            {
+                switch (environmentName)
+                {
+                    case "development":
+                        return DevelopmentUrl();
+                    case "qa":
+                        return "https://qa-master.braintreegateway.com";
+                    case "sandbox":
+                        return "https://sandbox.braintreegateway.com:443";
+                    case "production":
+                        return "https://www.braintreegateway.com:443";
+                    default:
+                        throw new Exception("Unsupported environment.");
+                }
+            }
+        }
+
+        private Environment(String name)
+        {
+            environmentName = name;
+        }
 
         private static String DevelopmentUrl()
         {
