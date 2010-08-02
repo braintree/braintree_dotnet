@@ -42,6 +42,7 @@ namespace Braintree
 
         private static String DevelopmentUrl()
         {
+            // Access environment variables lazily to avoid issues on servers where access to environment variables is restricted
             var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
             var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
 
