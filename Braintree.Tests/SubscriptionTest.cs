@@ -1106,6 +1106,68 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_ProratesChargesWhenSpecified()
+        {
+            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = originalPlan.Id,
+                Price = 1.23M
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Price = 4.56M,
+                Options = new SubscriptionOptionsRequest
+                {
+                    ProrateCharges = true
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(4.56M, subscription.Price);
+            Assert.AreEqual(2, subscription.Transactions.Count);
+        }
+
+        [Test]
+        public void Update_DoesNotProrateChargesWhenSpecifiedToNotProrate()
+        {
+            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = originalPlan.Id,
+                Price = 1.23M
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Price = 4.56M,
+                Options = new SubscriptionOptionsRequest
+                {
+                    ProrateCharges = false
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(4.56M, subscription.Price);
+            Assert.AreEqual(1, subscription.Transactions.Count);
+        }
+
+        [Test]
         public void Update_DontIncreasePriceAndDontAddTransaction()
         {
             Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;

@@ -4,6 +4,7 @@ namespace Braintree
     public class SubscriptionOptionsRequest : Request
     {
         public Boolean DoNotInheritAddOnsOrDiscounts { get; set; }
+        public Boolean ProrateCharges { get; set; }
         public Boolean ReplaceAllAddOnsAndDiscounts { get; set; }
 
         public override String ToXml(String root)
@@ -15,6 +16,7 @@ namespace Braintree
         {
             return new RequestBuilder(root).
                 AddElement("replace-all-add-ons-and-discounts", ReplaceAllAddOnsAndDiscounts).
+                AddElement("prorate-charges", ProrateCharges).
                 AddElement("do-not-inherit-add-ons-or-discounts", DoNotInheritAddOnsOrDiscounts);
         }
     }
