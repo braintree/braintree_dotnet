@@ -593,6 +593,38 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnMerchantAccountIdIs()
+        {
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                MerchantAccountId = MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                Price = 2M
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                Price = 2M
+            };
+
+            Subscription defaultMerchantAccountSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription nonDefaultMerchantAccountSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                MerchantAccountId.Is(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID).
+                Price.Is(2M);
+
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, nonDefaultMerchantAccountSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, defaultMerchantAccountSubscription));
+        }
+
+        [Test]
         public void Search_OnPlanIdIs()
         {
             Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;

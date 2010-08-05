@@ -13,6 +13,13 @@ namespace Braintree
                 return new MultipleValueNode<SubscriptionSearchRequest, string>("ids", this);
             }
         }
+        public MultipleValueNode<SubscriptionSearchRequest, string> MerchantAccountId
+        {
+            get
+            {
+                return new MultipleValueNode<SubscriptionSearchRequest, string>("merchant-account-id", this);
+            }
+        }
         public TextNode<SubscriptionSearchRequest> PlanId
         {
             get

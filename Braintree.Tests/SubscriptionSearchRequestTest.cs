@@ -9,6 +9,30 @@ namespace Braintree.Tests
     public class SubscriptionSearchRequestTest
     {
         [Test]
+        public void ToXml_MerchantAccountIdIncludedIn()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().MerchantAccountId.IncludedIn("abc", "def");
+            var xml = "<search><merchant-account-id type=\"array\"><item>abc</item><item>def</item></merchant-account-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_MerchantAccountIdIncludedInWithExplicitArray()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().MerchantAccountId.IncludedIn(new string[] {"abc", "def"});
+            var xml = "<search><merchant-account-id type=\"array\"><item>abc</item><item>def</item></merchant-account-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_MerchantAccountIdIs()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().MerchantAccountId.Is("abc");
+            var xml = "<search><merchant-account-id type=\"array\"><item>abc</item></merchant-account-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
         public void ToXml_PlanIdIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.Is("abc");
