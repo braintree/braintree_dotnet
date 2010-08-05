@@ -20,6 +20,13 @@ namespace Braintree
                 return new TextNode<SubscriptionSearchRequest>("plan-id", this);
             }
         }
+        public RangeNode<SubscriptionSearchRequest> Price
+        {
+            get
+            {
+                return new RangeNode<SubscriptionSearchRequest>("price", this);
+            }
+        }
         public TextNode<SubscriptionSearchRequest> DaysPastDue
         {
             get

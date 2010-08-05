@@ -622,6 +622,45 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnPrice()
+        {
+            SubscriptionRequest request10 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                Price = 10M
+            };
+
+            SubscriptionRequest request20 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                Price = 20M
+            };
+
+            SubscriptionRequest request30 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                Price = 30M
+            };
+
+            Subscription subscription10 = gateway.Subscription.Create(request10).Target;
+            Subscription subscription20 = gateway.Subscription.Create(request20).Target;
+            Subscription subscription30 = gateway.Subscription.Create(request30).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                Price.Between(15M, 20M);
+
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, subscription10));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, subscription20));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, subscription30));
+        }
+
+
+        [Test]
         public void Search_OnPlanIdIsWithDelegate()
         {
             Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
