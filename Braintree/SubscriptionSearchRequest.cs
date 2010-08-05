@@ -6,6 +6,20 @@ namespace Braintree
 {
     public class SubscriptionSearchRequest : SearchRequest
     {
+        public RangeNode<SubscriptionSearchRequest> BillingCyclesRemaining
+        {
+            get
+            {
+                return new RangeNode<SubscriptionSearchRequest>("billing-cycles-remaining", this);
+            }
+        }
+        public TextNode<SubscriptionSearchRequest> Id
+        {
+            get
+            {
+                return new TextNode<SubscriptionSearchRequest>("id", this);
+            }
+        }
         public MultipleValueNode<SubscriptionSearchRequest, string> Ids
         {
             get

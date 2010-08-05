@@ -577,7 +577,7 @@ namespace Braintree.Tests
         [Test]
         public void Find()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan plan = Plan.PLAN_WITH_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -593,13 +593,77 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnBillingCyclesRemainingIs()
+        {
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                NumberOfBillingCycles = 5,
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                Price = 4M
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                NumberOfBillingCycles = 10,
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                Price = 4M
+            };
+
+            Subscription subscription1 = gateway.Subscription.Create(request1).Target;
+            Subscription subscription2 = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                BillingCyclesRemaining.Is(5).
+                Price.Is(4M);
+
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, subscription1));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, subscription2));
+        }
+
+        [Test]
+        public void Search_OnIdIs()
+        {
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                Id = String.Format("find_me{0}", new Random().Next(1000000)),
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                Price = 3M
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                Id = String.Format("do_not_find_me{0}", new Random().Next(1000000)),
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                Price = 3M
+            };
+
+            Subscription subscription1 = gateway.Subscription.Create(request1).Target;
+            Subscription subscription2 = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                Id.StartsWith("find_me").
+                Price.Is(3M);
+
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, subscription1));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, subscription2));
+        }
+
+        [Test]
         public void Search_OnMerchantAccountIdIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 MerchantAccountId = MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID,
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
                 Price = 2M
             };
 
@@ -607,7 +671,7 @@ namespace Braintree.Tests
             {
                 MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
                 Price = 2M
             };
 
@@ -659,21 +723,21 @@ namespace Braintree.Tests
             SubscriptionRequest request10 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
                 Price = 10M
             };
 
             SubscriptionRequest request20 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
                 Price = 20M
             };
 
             SubscriptionRequest request30 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
                 Price = 30M
             };
 
