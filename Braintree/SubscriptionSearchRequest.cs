@@ -34,11 +34,11 @@ namespace Braintree
                 return new MultipleValueNode<SubscriptionSearchRequest, string>("merchant-account-id", this);
             }
         }
-        public TextNode<SubscriptionSearchRequest> PlanId
+        public MultipleValueOrTextNode<SubscriptionSearchRequest, string> PlanId
         {
             get
             {
-                return new TextNode<SubscriptionSearchRequest>("plan-id", this);
+                return new MultipleValueOrTextNode<SubscriptionSearchRequest, string>("plan-id", this);
             }
         }
         public RangeNode<SubscriptionSearchRequest> Price

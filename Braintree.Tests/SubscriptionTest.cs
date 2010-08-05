@@ -901,6 +901,44 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnPlanIdIncludedIn()
+        {
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                Price = 5M
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                Price = 5M
+            };
+
+            SubscriptionRequest request3 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.ADD_ON_DISCOUNT_PLAN.Id,
+                Price = 5M
+            };
+
+            Subscription subscription1 = gateway.Subscription.Create(request1).Target;
+            Subscription subscription2 = gateway.Subscription.Create(request2).Target;
+            Subscription subscription3 = gateway.Subscription.Create(request3).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                PlanId.IncludedIn(Plan.ADD_ON_DISCOUNT_PLAN.Id, Plan.PLAN_WITH_TRIAL.Id);
+
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, subscription1));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, subscription2));
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, subscription3));
+        }
+
+        [Test]
         public void Search_OnStatusIn()
         {
             Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;

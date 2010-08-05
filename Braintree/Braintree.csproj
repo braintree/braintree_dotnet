@@ -124,6 +124,7 @@
     <Compile Include="ValidationErrors.cs" />
     <Compile Include="ModificationRequest.cs" />
     <Compile Include="StringUtil.cs" />
+    <Compile Include="MultipleValueOrTextNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

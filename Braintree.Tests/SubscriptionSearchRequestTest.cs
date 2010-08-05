@@ -113,6 +113,46 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ToXml_PlanIdIsNot()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.IsNot("30");
+            var xml = "<search><plan-id><is-not>30</is-not></plan-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_PlanIdStartsWith()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.StartsWith("30");
+            var xml = "<search><plan-id><starts-with>30</starts-with></plan-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_PlanIdEndsWith()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.EndsWith("30");
+            var xml = "<search><plan-id><ends-with>30</ends-with></plan-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_PlanIdContains()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.Contains("30");
+            var xml = "<search><plan-id><contains>30</contains></plan-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_PlanIdIncludedIn()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.IncludedIn("abc", "def");
+            var xml = "<search><plan-id type=\"array\"><item>abc</item><item>def</item></plan-id></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
         public void ToXml_DaysPastDueIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.Is("30");
