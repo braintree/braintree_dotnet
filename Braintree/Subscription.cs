@@ -75,6 +75,7 @@ namespace Braintree
         public List<AddOn> AddOns { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
         public DateTime? BillingPeriodStartDate { get; protected set; }
+        public Int32? DaysPastDue { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
         public Int32? FailureCount { get; protected set; }
         public DateTime? FirstBillingDate { get; protected set; }
@@ -97,6 +98,7 @@ namespace Braintree
         {
             BillingPeriodEndDate = node.GetDateTime("billing-period-end-date");
             BillingPeriodStartDate = node.GetDateTime("billing-period-start-date");
+            DaysPastDue = node.GetInteger("days-past-due");
             FailureCount = node.GetInteger("failure-count");
             FirstBillingDate = node.GetDateTime("first-billing-date");
             Id = node.GetString("id");

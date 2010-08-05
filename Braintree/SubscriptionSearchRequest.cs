@@ -48,11 +48,11 @@ namespace Braintree
                 return new RangeNode<SubscriptionSearchRequest>("price", this);
             }
         }
-        public TextNode<SubscriptionSearchRequest> DaysPastDue
+        public RangeNode<SubscriptionSearchRequest> DaysPastDue
         {
             get
             {
-                return new TextNode<SubscriptionSearchRequest>("days-past-due", this);
+                return new RangeNode<SubscriptionSearchRequest>("days-past-due", this);
             }
         }
         public MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus> Status

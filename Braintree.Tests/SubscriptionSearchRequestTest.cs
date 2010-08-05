@@ -161,34 +161,26 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ToXml_DaysPastDueIsNot()
+        public void ToXml_DaysPastDueBetween()
         {
-            SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.IsNot("30");
-            var xml = "<search><days-past-due><is-not>30</is-not></days-past-due></search>";
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.Between(2, 3);
+            var xml = "<search><days-past-due><min>2</min><max>3</max></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
         [Test]
-        public void ToXml_DaysPastDueStartsWith()
+        public void ToXml_DaysPastDueGreaterThanOrEqualTo()
         {
-            SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.StartsWith("30");
-            var xml = "<search><days-past-due><starts-with>30</starts-with></days-past-due></search>";
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.GreaterThanOrEqualTo(3);
+            var xml = "<search><days-past-due><min>3</min></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
         [Test]
-        public void ToXml_DaysPastDueEndsWith()
+        public void ToXml_DaysPastDueLessThanOrEqualTo()
         {
-            SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.EndsWith("30");
-            var xml = "<search><days-past-due><ends-with>30</ends-with></days-past-due></search>";
-            Assert.AreEqual(xml, request.ToXml());
-        }
-
-        [Test]
-        public void ToXml_DaysPastDueContains()
-        {
-            SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.Contains("30");
-            var xml = "<search><days-past-due><contains>30</contains></days-past-due></search>";
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.LessThanOrEqualTo(4);
+            var xml = "<search><days-past-due><max>4</max></days-past-due></search>";
             Assert.AreEqual(xml, request.ToXml());
         }
 
