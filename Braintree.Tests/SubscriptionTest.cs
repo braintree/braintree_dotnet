@@ -710,20 +710,23 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = trialPlan.Id
+                PlanId = trialPlan.Id,
+                Price = 5M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 5M
             };
 
             Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId.Is(trialPlan.Id);
+                PlanId.Is(trialPlan.Id).
+                Price.Is(5M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -778,13 +781,15 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = trialPlan.Id
+                PlanId = trialPlan.Id,
+                Price = 6M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 6M
             };
 
             Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
@@ -792,6 +797,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
                 search.PlanId.Is(trialPlan.Id);
+                search.Price.Is(6M);
             });
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, trialSubscription));
@@ -806,20 +812,23 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = trialPlan.Id
+                PlanId = trialPlan.Id,
+                Price = 7M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 7M
             };
 
             Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId.IsNot(triallessPlan.Id);
+                PlanId.IsNot(triallessPlan.Id).
+                Price.Is(7M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -835,20 +844,23 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = trialPlan.Id
+                PlanId = trialPlan.Id,
+                Price = 8M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 8M
             };
 
             Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId.StartsWith("integration_trial_p");
+                PlanId.StartsWith("integration_trial_p").
+                Price.Is(8M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -864,20 +876,23 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = trialPlan.Id
+                PlanId = trialPlan.Id,
+                Price = 9M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 9M
             };
 
             Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId.EndsWith("trial_plan");
+                PlanId.EndsWith("trial_plan").
+                Price.Is(9M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -893,20 +908,23 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = trialPlan.Id
+                PlanId = trialPlan.Id,
+                Price = 10M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 10M
             };
 
             Subscription trialSubscription = gateway.Subscription.Create(request1).Target;
             Subscription triallessSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId.Contains("ion_trial_pl");
+                PlanId.Contains("ion_trial_pl").
+                Price.Is(10M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -943,7 +961,8 @@ namespace Braintree.Tests
             Subscription subscription3 = gateway.Subscription.Create(request3).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId.IncludedIn(Plan.ADD_ON_DISCOUNT_PLAN.Id, Plan.PLAN_WITH_TRIAL.Id);
+                PlanId.IncludedIn(Plan.ADD_ON_DISCOUNT_PLAN.Id, Plan.PLAN_WITH_TRIAL.Id).
+                Price.Is(5M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
 
@@ -960,13 +979,15 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 11M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 11M
             };
 
             Subscription activeSubscription = gateway.Subscription.Create(request1).Target;
@@ -975,6 +996,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
                 search.Status.IncludedIn(SubscriptionStatus.ACTIVE);
+                search.Price.Is(11M);
             });
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
@@ -1002,13 +1024,15 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 12M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = triallessPlan.Id
+                PlanId = triallessPlan.Id,
+                Price = 12M
             };
 
             Subscription activeSubscription = gateway.Subscription.Create(request1).Target;
@@ -1017,6 +1041,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
                 search.Status.IncludedIn(SubscriptionStatus.ACTIVE, SubscriptionStatus.CANCELED);
+                search.Price.Is(12M);
             });
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, activeSubscription));
