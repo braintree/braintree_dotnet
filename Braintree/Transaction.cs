@@ -65,12 +65,14 @@ namespace Braintree
         protected TransactionType(String name) : base(name) {}
     }
 
-    public abstract class TransactionCreatedUsing
+    public class TransactionCreatedUsing : Enumeration
     {
-        public const String FULL_INFORMATION = "full_information";
-        public const String TOKEN = "token";
+        public static readonly TransactionCreatedUsing FULL_INFORMATION = new TransactionCreatedUsing("full_information");
+        public static readonly TransactionCreatedUsing TOKEN = new TransactionCreatedUsing("token");
 
-        public static readonly String[] ALL = {FULL_INFORMATION, TOKEN};
+        public static readonly TransactionCreatedUsing[] ALL = {FULL_INFORMATION, TOKEN};
+
+        protected TransactionCreatedUsing(String name) : base(name) {}
     }
 
     /// <summary>

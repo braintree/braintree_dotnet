@@ -6,11 +6,11 @@ namespace Braintree
 {
     public class SubscriptionSearchRequest : SearchRequest
     {
-        public MultipleValueNode<SubscriptionSearchRequest> Ids
+        public MultipleValueNode<SubscriptionSearchRequest, string> Ids
         {
             get
             {
-                return new MultipleValueNode<SubscriptionSearchRequest>("ids", this);
+                return new MultipleValueNode<SubscriptionSearchRequest, string>("ids", this);
             }
         }
         public TextNode<SubscriptionSearchRequest> PlanId
@@ -27,11 +27,11 @@ namespace Braintree
                 return new TextNode<SubscriptionSearchRequest>("days-past-due", this);
             }
         }
-        public MultipleValueNode<SubscriptionSearchRequest> Status
+        public MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus> Status
         {
             get
             {
-                return new MultipleValueNode<SubscriptionSearchRequest>("status", this);
+                return new MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus>("status", this);
             }
         }
 

@@ -8,34 +8,40 @@ using System.Security.Cryptography;
 
 namespace Braintree
 {
-    public abstract class CreditCardCustomerLocation
+    public class CreditCardCustomerLocation : Enumeration
     {
-        public const String US = "us";
-        public const String INTERNATIONAL = "international";
+        public static readonly CreditCardCustomerLocation US = new CreditCardCustomerLocation("us");
+        public static readonly CreditCardCustomerLocation INTERNATIONAL = new CreditCardCustomerLocation("international");
+        public static readonly CreditCardCustomerLocation UNRECOGNIZED = new CreditCardCustomerLocation("unrecognized");
 
-        public static readonly String[] ALL = {US, INTERNATIONAL};
+        public static readonly CreditCardCustomerLocation[] ALL = {US, INTERNATIONAL};
+
+        protected CreditCardCustomerLocation(String name) : base(name) {}
     }
 
-    public abstract class CreditCardCardType
+    public class CreditCardCardType : Enumeration
     {
-        public const String AMEX = "American Express";
-        public const String CARTE_BLANCHE = "Carte Blanche";
-        public const String CHINA_UNION_PAY = "China UnionPay";
-        public const String DINERS_CLUB_INTERNATIONAL = "Diners Club";
-        public const String DISCOVER = "Discover";
-        public const String JCB = "JCB";
-        public const String LASER = "Laser";
-        public const String MAESTRO = "Maestro";
-        public const String MASTER_CARD = "MasterCard";
-        public const String SOLO = "Solo";
-        public const String SWITCH = "Switch";
-        public const String VISA = "Visa";
-        public const String UNKNOWN = "Unknown";
+        public static readonly CreditCardCardType AMEX = new CreditCardCardType("American Express");
+        public static readonly CreditCardCardType CARTE_BLANCHE = new CreditCardCardType("Carte Blanche");
+        public static readonly CreditCardCardType CHINA_UNION_PAY = new CreditCardCardType("China UnionPay");
+        public static readonly CreditCardCardType DINERS_CLUB_INTERNATIONAL = new CreditCardCardType("Diners Club");
+        public static readonly CreditCardCardType DISCOVER = new CreditCardCardType("Discover");
+        public static readonly CreditCardCardType JCB = new CreditCardCardType("JCB");
+        public static readonly CreditCardCardType LASER = new CreditCardCardType("Laser");
+        public static readonly CreditCardCardType MAESTRO = new CreditCardCardType("Maestro");
+        public static readonly CreditCardCardType MASTER_CARD = new CreditCardCardType("MasterCard");
+        public static readonly CreditCardCardType SOLO = new CreditCardCardType("Solo");
+        public static readonly CreditCardCardType SWITCH = new CreditCardCardType("Switch");
+        public static readonly CreditCardCardType VISA = new CreditCardCardType("Visa");
+        public static readonly CreditCardCardType UNKNOWN = new CreditCardCardType("Unknown");
+        public static readonly CreditCardCardType UNRECOGNIZED = new CreditCardCardType("Unrecognized");
 
-        public static readonly String[] ALL = {
+        public static readonly CreditCardCardType[] ALL = {
             AMEX, CARTE_BLANCHE, CHINA_UNION_PAY, DINERS_CLUB_INTERNATIONAL, DISCOVER,
             JCB, LASER, MAESTRO, MASTER_CARD, SOLO, SWITCH, VISA, UNKNOWN
         };
+
+        protected CreditCardCardType(String name) : base(name) {}
     }
 
     /// <summary>
@@ -60,12 +66,12 @@ namespace Braintree
     {
         public String Bin { get; protected set; }
         public String CardholderName { get; protected set; }
-        public String CardType { get; protected set; }
+        public CreditCardCardType CardType { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public String CustomerId { get; protected set; }
         public Boolean? IsDefault { get; protected set; }
         public Boolean? IsExpired { get; protected set; }
-        public String CustomerLocation { get; protected set; }
+        public CreditCardCustomerLocation CustomerLocation { get; protected set; }
         public String LastFour { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
         public String Token { get; protected set; }
@@ -100,13 +106,13 @@ namespace Braintree
 
             Bin = node.GetString("bin");
             CardholderName = node.GetString("cardholder-name");
-            CardType = node.GetString("card-type");
+            CardType = (CreditCardCardType)CollectionUtil.Find(CreditCardCardType.ALL, node.GetString("card-type"), CreditCardCardType.UNRECOGNIZED);
             CustomerId = node.GetString("customer-id");
             IsDefault = node.GetBoolean("default");
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");
             IsExpired = node.GetBoolean("expired");
-            CustomerLocation = node.GetString("customer-location");
+            CustomerLocation = (CreditCardCustomerLocation)CollectionUtil.Find(CreditCardCustomerLocation.ALL, node.GetString("customer-location"), CreditCardCustomerLocation.UNRECOGNIZED);
             LastFour = node.GetString("last-4");
             Token = node.GetString("token");
             CreatedAt = node.GetDateTime("created-at");

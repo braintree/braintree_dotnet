@@ -8,11 +8,11 @@ namespace Braintree
 {
     public class IdsSearchRequest : SearchRequest
     {
-        public MultipleValueNode<IdsSearchRequest> Ids
+        public MultipleValueNode<IdsSearchRequest, string> Ids
         {
             get
             {
-                return new MultipleValueNode<IdsSearchRequest>("ids", this);
+                return new MultipleValueNode<IdsSearchRequest, string>("ids", this);
             }
         }
     }

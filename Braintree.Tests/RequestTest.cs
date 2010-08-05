@@ -38,9 +38,9 @@ namespace Braintree.Tests
         public void ToXML_EscapesGeneratedXMLForArrayElements()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                Status.IncludedIn("<active");
+                Ids.IncludedIn("<active");
 
-            TestHelper.AssertIncludes("<status type=\"array\"><item>&lt;active</item></status>", request.ToXml());
+            TestHelper.AssertIncludes("<ids type=\"array\"><item>&lt;active</item></ids>", request.ToXml());
         }
 
         [Test]
