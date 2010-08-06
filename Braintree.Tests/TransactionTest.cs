@@ -2123,5 +2123,88 @@ namespace Braintree.Tests
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
+
+        [Test]
+        public void SnapshotAddOnsAndDiscountsFromSubscription()
+        {
+            CustomerRequest customerRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Fred Jones",
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12"
+                }
+            };
+
+            CreditCard creditCard = gateway.Customer.Create(customerRequest).Target.CreditCards[0];
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                AddOns = new AddOnsRequest
+                {
+                    Add = new AddAddOnRequest[]
+                    {
+                        new AddAddOnRequest
+                        {
+                            InheritedFromId = "increase_10",
+                            Amount = 11M,
+                            NumberOfBillingCycles = 5,
+                            Quantity = 2,
+                        },
+                        new AddAddOnRequest
+                        {
+                            InheritedFromId = "increase_20",
+                            Amount = 21M,
+                            NumberOfBillingCycles = 6,
+                            Quantity = 3,
+                        }
+                    }
+                },
+                Discounts = new DiscountsRequest
+                {
+                    Add = new AddDiscountRequest[]
+                    {
+                        new AddDiscountRequest
+                        {
+                            InheritedFromId = "discount_7",
+                            Amount = 7.50M,
+                            Quantity = 2,
+                            NeverExpires = true
+                        },
+                    }
+                }
+            };
+
+            Transaction transaction = gateway.Subscription.Create(request).Target.Transactions[0];
+
+            List<AddOn> addOns = transaction.AddOns;
+            addOns.Sort(TestHelper.CompareModificationsById);
+
+            Assert.AreEqual(2, addOns.Count);
+
+            Assert.AreEqual("increase_10", addOns[0].Id);
+            Assert.AreEqual(11M, addOns[0].Amount);
+            Assert.AreEqual(2, addOns[0].Quantity);
+            Assert.IsFalse(addOns[0].NeverExpires.Value);
+            Assert.AreEqual(5, addOns[0].NumberOfBillingCycles);
+
+            Assert.AreEqual("increase_20", addOns[1].Id);
+            Assert.AreEqual(21M, addOns[1].Amount);
+            Assert.AreEqual(3, addOns[1].Quantity);
+            Assert.IsFalse(addOns[1].NeverExpires.Value);
+            Assert.AreEqual(6, addOns[1].NumberOfBillingCycles);
+
+            List<Discount> discounts = transaction.Discounts;
+            Assert.AreEqual(1, discounts.Count);
+
+            Assert.AreEqual("discount_7", discounts[0].Id);
+            Assert.AreEqual(7.50M, discounts[0].Amount);
+            Assert.AreEqual(2, discounts[0].Quantity);
+            Assert.IsTrue(discounts[0].NeverExpires.Value);
+            Assert.IsNull(discounts[0].NumberOfBillingCycles);
+        }
     }
 }

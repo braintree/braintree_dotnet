@@ -14,11 +14,6 @@ namespace Braintree.Tests
         private Customer customer;
         private CreditCard creditCard;
 
-        private int CompareModificationsById(Modification left, Modification right)
-        {
-            return left.Id.CompareTo(right.Id);
-        }
-
         [SetUp]
         public void Setup()
         {
@@ -338,7 +333,7 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             List<AddOn> addOns = subscription.AddOns;
-            addOns.Sort(CompareModificationsById);
+            addOns.Sort(TestHelper.CompareModificationsById);
 
             Assert.AreEqual(2, addOns.Count);
 
@@ -353,7 +348,7 @@ namespace Braintree.Tests
             Assert.IsNull(addOns[1].NumberOfBillingCycles);
 
             List<Discount> discounts = subscription.Discounts;
-            discounts.Sort(CompareModificationsById);
+            discounts.Sort(TestHelper.CompareModificationsById);
 
             Assert.AreEqual(2, discounts.Count);
 
@@ -421,7 +416,7 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
 
             List<AddOn> addOns = subscription.AddOns;
-            addOns.Sort(CompareModificationsById);
+            addOns.Sort(TestHelper.CompareModificationsById);
 
             Assert.AreEqual(2, addOns.Count);
 
@@ -436,7 +431,7 @@ namespace Braintree.Tests
             Assert.AreEqual(20, addOns[1].NumberOfBillingCycles);
 
             List<Discount> discounts = subscription.Discounts;
-            discounts.Sort(CompareModificationsById);
+            discounts.Sort(TestHelper.CompareModificationsById);
 
             Assert.AreEqual(2, discounts.Count);
 
@@ -1210,7 +1205,7 @@ namespace Braintree.Tests
             subscription = result.Target;
 
             List<AddOn> addOns = subscription.AddOns;
-            addOns.Sort(CompareModificationsById);
+            addOns.Sort(TestHelper.CompareModificationsById);
 
             Assert.AreEqual(2, addOns.Count);
 
@@ -1227,7 +1222,7 @@ namespace Braintree.Tests
             Assert.AreEqual(3, addOns[1].NumberOfBillingCycles);
 
             List<Discount> discounts = subscription.Discounts;
-            discounts.Sort(CompareModificationsById);
+            discounts.Sort(TestHelper.CompareModificationsById);
 
             Assert.AreEqual(2, discounts.Count);
 

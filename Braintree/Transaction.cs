@@ -88,6 +88,7 @@ namespace Braintree
     public class Transaction
     {
         public String Id { get; protected set; }
+        public List<AddOn> AddOns { get; protected set; }
         public Decimal? Amount { get; protected set; }
         public String AvsErrorResponseCode { get; protected set; }
         public String AvsPostalCodeResponseCode { get; protected set; }
@@ -98,6 +99,7 @@ namespace Braintree
         public String CurrencyIsoCode { get; protected set; }
         public Customer Customer { get; protected set; }
         public String CvvResponseCode { get; protected set; }
+        public List<Discount> Discounts { get; protected set; }
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public String MerchantAccountId { get; protected set; }
         public String OrderId { get; protected set; }
@@ -163,6 +165,16 @@ namespace Braintree
 
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
+
+            AddOns = new List<AddOn> ();
+            foreach (NodeWrapper addOnResponse in node.GetList("add-ons/add-on")) {
+                AddOns.Add(new AddOn(addOnResponse));
+            }
+            Discounts = new List<Discount> ();
+            foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
+                Discounts.Add(new Discount(discountResponse));
+            }
+
         }
 
         /// <summary>
