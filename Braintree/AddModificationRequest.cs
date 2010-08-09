@@ -11,7 +11,7 @@ namespace Braintree
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected override RequestBuilder BuildRequest(String root)
         {
             return base.BuildRequest(root).
                 AddElement("inherited-from-id", InheritedFromId);

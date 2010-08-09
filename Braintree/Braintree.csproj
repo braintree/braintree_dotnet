@@ -125,6 +125,7 @@
     <Compile Include="ModificationRequest.cs" />
     <Compile Include="StringUtil.cs" />
     <Compile Include="MultipleValueOrTextNode.cs" />
+    <Compile Include="Exceptions\BraintreeException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
