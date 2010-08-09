@@ -220,6 +220,94 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_InheritBillingDayOfMonth()
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            Assert.AreEqual(5, subscription.BillingDayOfMonth);
+        }
+
+        [Test]
+        public void Create_OverrideBillingDayOfMonth()
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                BillingDayOfMonth = 19
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            Assert.AreEqual(19, subscription.BillingDayOfMonth);
+        }
+
+        [Test]
+        public void Create_OverrideBillingDayOfMonthWithStartImmediately()
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                Options = new SubscriptionOptionsRequest
+                {
+                    StartImmediately = true
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            Assert.AreEqual(1, subscription.Transactions.Count);
+        }
+
+        [Test]
+        public void Create_SetFirstBillingDate()
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                FirstBillingDate = DateTime.Now.AddDays(3)
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            Assert.AreEqual(DateTime.Now.AddDays(3).ToShortDateString(), subscription.FirstBillingDate.Value.ToShortDateString());
+            Assert.AreEqual(SubscriptionStatus.PENDING, subscription.Status);
+        }
+
+        [Test]
+        public void Create_SetFirstBillingDateInThePast()
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                FirstBillingDate = DateTime.Now.AddDays(-3)
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.SUBSCRIPTION_FIRST_BILLING_DATE_CANNOT_BE_IN_THE_PAST,
+                result.Errors.ForObject("Subscription").OnField("FirstBillingDate")[0].Code);
+        }
+
+        [Test]
         public void Create_SetId()
         {
             Plan plan = Plan.PLAN_WITH_TRIAL;

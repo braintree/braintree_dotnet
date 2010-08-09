@@ -51,11 +51,15 @@ namespace Braintree
         /// </summary>
         public static readonly SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
         /// <summary>
+        /// Indicates that the <see cref="Subscription"/> is currently pending
+        /// </summary>
+        public static readonly SubscriptionStatus PENDING = new SubscriptionStatus("Pending");
+        /// <summary>
         /// A placeholder for unrecognized subscription statuses, implemented for future compatibility
         /// </summary>
         public static readonly SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
 
-        public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, EXPIRED, PAST_DUE};
+        public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, EXPIRED, PAST_DUE, PENDING};
 
         protected SubscriptionStatus(String name) : base(name) {}
     }
@@ -73,6 +77,7 @@ namespace Braintree
     public class Subscription
     {
         public List<AddOn> AddOns { get; protected set; }
+        public Int32? BillingDayOfMonth { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
         public DateTime? BillingPeriodStartDate { get; protected set; }
         public Int32? DaysPastDue { get; protected set; }
@@ -96,6 +101,7 @@ namespace Braintree
 
         public Subscription(NodeWrapper node, BraintreeService service)
         {
+            BillingDayOfMonth = node.GetInteger("billing-day-of-month");
             BillingPeriodEndDate = node.GetDateTime("billing-period-end-date");
             BillingPeriodStartDate = node.GetDateTime("billing-period-start-date");
             DaysPastDue = node.GetInteger("days-past-due");

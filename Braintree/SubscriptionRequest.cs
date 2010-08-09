@@ -25,7 +25,9 @@ namespace Braintree
     public class SubscriptionRequest : Request
     {
         public AddOnsRequest AddOns { get; set; }
+        public Int32? BillingDayOfMonth { get; set; }
         public DiscountsRequest Discounts { get; set; }
+        public DateTime? FirstBillingDate { get; set; }
         public Boolean? HasTrialPeriod { get; set; }
         public String Id { get; set; }
         public Int32? NumberOfBillingCycles { get; set; }
@@ -52,6 +54,8 @@ namespace Braintree
         {
             var builder = new RequestBuilder(root);
 
+            builder.AddElement("billing-day-of-month", BillingDayOfMonth);
+            builder.AddElement("first-billing-date", FirstBillingDate);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             if (HasTrialPeriod.HasValue)
             {

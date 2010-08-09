@@ -7,6 +7,7 @@ namespace Braintree.Tests
 {
     public class Plan
     {
+        public Int32 BillingDayOfMonth { get; set; }
         public Int32 BillingFrequency { get; set; }
         public String Description { get; set; }
         public String Id { get; set; }
@@ -26,6 +27,17 @@ namespace Braintree.Tests
             TrialPeriod = true,
             TrialDuration = 2,
             TrialDurationUnit = SubscriptionDurationUnit.DAY
+        };
+
+        public static Plan BILLING_DAY_OF_MONTH_PLAN = new Plan
+        {
+            Description = "Plan for integration tests -- with billing day of month",
+            Id = "integration_plan_with_billing_day_of_month",
+            NumberOfBillingCycles = 12,
+            Price = 8.88M,
+            BillingFrequency = 1,
+            TrialPeriod = false,
+            BillingDayOfMonth = 5
         };
     
         public static Plan PLAN_WITHOUT_TRIAL = new Plan
