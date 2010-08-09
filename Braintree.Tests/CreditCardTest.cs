@@ -25,19 +25,23 @@ namespace Braintree.Tests
             service = new BraintreeService(gateway.Configuration);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void TransparentRedirectURLForCreate_ReturnsCorrectValue()
         {
             Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request",
                     gateway.CreditCard.TransparentRedirectURLForCreate());
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void TransparentRedirectURLForUpdate_ReturnsCorrectValue()
         {
             Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request",
                     gateway.CreditCard.TransparentRedirectURLForUpdate());
         }
+        #pragma warning restore 0618
 
         [Test]
         public void TrData_ReturnsValidTrDataHash()
@@ -88,6 +92,7 @@ namespace Braintree.Tests
             Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCard()
         {
@@ -127,7 +132,9 @@ namespace Braintree.Tests
             Assert.AreEqual("GRC", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("300", billingAddress.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInTRParams()
         {
@@ -157,7 +164,9 @@ namespace Braintree.Tests
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInRequest()
         {
@@ -187,7 +196,9 @@ namespace Braintree.Tests
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_WithErrors()
         {
@@ -216,6 +227,7 @@ namespace Braintree.Tests
                 result.Errors.ForObject("CreditCard").ForObject("BillingAddress").OnField("Base")[0].Code
             );
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Find_FindsCreditCardByToken()
@@ -460,6 +472,7 @@ namespace Braintree.Tests
             Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrueViaTransparentRedirect()
         {
@@ -505,7 +518,9 @@ namespace Braintree.Tests
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
             Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void UpdateViaTransparentRedirect()
         {
@@ -540,6 +555,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Joe Cool", card.CardholderName);
             Assert.AreEqual("44444", card.BillingAddress.PostalCode);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Delete_DeletesTheCreditCard()

@@ -98,6 +98,7 @@ namespace Braintree.Tests
             }
         }
 
+        #pragma warning disable 0618
         [Test]
         public void Constructor_RaisesDownForMaintenanceExceptionIfDownForMaintenance()
         {
@@ -125,7 +126,9 @@ namespace Braintree.Tests
                 // expected
             }
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void Constructor_AuthenticationExceptionIfBadCredentials()
         {
@@ -153,6 +156,6 @@ namespace Braintree.Tests
                 // expected
             }
         }
-        
+        #pragma warning restore 0618
     }
 }

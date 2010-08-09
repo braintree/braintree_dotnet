@@ -1627,6 +1627,7 @@ namespace Braintree.Tests
             Assert.AreEqual("2010", parameters["transaction[credit_card][expiration_year]"]);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheTransaction()
         {
@@ -1676,7 +1677,9 @@ namespace Braintree.Tests
             Assert.AreEqual("840", address.CountryCodeNumeric);
             Assert.AreEqual("United States of America", address.CountryName);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_SpecifyingMerchantAccountId()
         {
@@ -1703,6 +1706,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Credit_WithValidParams()

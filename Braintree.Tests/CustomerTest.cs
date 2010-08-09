@@ -316,6 +316,7 @@ namespace Braintree.Tests
             Assert.AreEqual("United States of America", customer.Addresses[0].CountryName);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheCustomer()
         {
@@ -334,7 +335,9 @@ namespace Braintree.Tests
             Assert.AreEqual("John", customer.FirstName);
             Assert.AreEqual("Doe", customer.LastName);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesNestedElementsAndCustomFields()
         {
@@ -378,7 +381,9 @@ namespace Braintree.Tests
             Assert.AreEqual("MEX", address.CountryCodeAlpha3);
             Assert.AreEqual("484", address.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_UpdatesTheCustomer()
         {
@@ -407,7 +412,9 @@ namespace Braintree.Tests
             Assert.AreEqual("John", customer.FirstName);
             Assert.AreEqual("Doe", customer.LastName);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void Update_UpdatesCustomerAndNestedValuesViaTr()
         {
@@ -472,6 +479,7 @@ namespace Braintree.Tests
             Assert.AreEqual("TCD", updatedAddress.CountryCodeAlpha3);
             Assert.AreEqual("148", updatedAddress.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Update_UpdatesCustomerWithNewValues()
