@@ -1597,8 +1597,14 @@ namespace Braintree.Tests
         [Test]
         public void RetryCharge_WithoutAmount()
         {
-            SubscriptionSearchRequest search = new SubscriptionSearchRequest().Status.IncludedIn(SubscriptionStatus.PAST_DUE);
-            Subscription subscription = gateway.Subscription.Search(search).FirstItem;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+            MakePastDue(subscription, 1);
 
             Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id);
 
@@ -1614,8 +1620,14 @@ namespace Braintree.Tests
         [Test]
         public void RetryCharge_WithAmount()
         {
-            SubscriptionSearchRequest search = new SubscriptionSearchRequest().Status.IncludedIn(SubscriptionStatus.PAST_DUE);
-            Subscription subscription = gateway.Subscription.Search(search).FirstItem;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+            MakePastDue(subscription, 1);
 
             Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id, SandboxValues.TransactionAmount.AUTHORIZE);
 
@@ -1626,6 +1638,13 @@ namespace Braintree.Tests
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+
+        private void MakePastDue(Subscription subscription, int numberOfDays)
+        {
+            BraintreeService service = new BraintreeService(gateway.Configuration);
+            NodeWrapper response = new NodeWrapper(service.Put("/subscriptions/" + subscription.Id + "/make_past_due?days_past_due=" + numberOfDays));
+            Assert.IsTrue(response.IsSuccess());
         }
     }
 }
