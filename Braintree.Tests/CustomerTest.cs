@@ -9,6 +9,7 @@ namespace Braintree.Tests
     public class CustomerTest
     {
         private BraintreeGateway gateway;
+        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -20,6 +21,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -194,19 +196,19 @@ namespace Braintree.Tests
 
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_name")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryName")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_alpha2")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryCodeAlpha2")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_alpha3")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryCodeAlpha3")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("customer").ForObject("credit-card").ForObject("billing-address").OnField("country_code_numeric")[0].Code
+                result.Errors.ForObject("Customer").ForObject("CreditCard").ForObject("BillingAddress").OnField("CountryCodeNumeric")[0].Code
             );
         }
 
@@ -314,6 +316,7 @@ namespace Braintree.Tests
             Assert.AreEqual("United States of America", customer.Addresses[0].CountryName);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheCustomer()
         {
@@ -325,14 +328,16 @@ namespace Braintree.Tests
                 LastName = "Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
             Assert.AreEqual("Doe", customer.LastName);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesNestedElementsAndCustomFields()
         {
@@ -361,7 +366,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -376,7 +381,9 @@ namespace Braintree.Tests
             Assert.AreEqual("MEX", address.CountryCodeAlpha3);
             Assert.AreEqual("484", address.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_UpdatesTheCustomer()
         {
@@ -398,14 +405,16 @@ namespace Braintree.Tests
                 LastName = "Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
             Assert.AreEqual("Doe", customer.LastName);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void Update_UpdatesCustomerAndNestedValuesViaTr()
         {
@@ -455,7 +464,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate());
+            String queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate(), service);
             Customer updatedCustomer = gateway.Customer.ConfirmTransparentRedirect(queryString).Target;
             CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
 
@@ -470,6 +479,7 @@ namespace Braintree.Tests
             Assert.AreEqual("TCD", updatedAddress.CountryCodeAlpha3);
             Assert.AreEqual("148", updatedAddress.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Update_UpdatesCustomerWithNewValues()

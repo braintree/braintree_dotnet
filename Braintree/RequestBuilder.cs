@@ -81,12 +81,26 @@ namespace Braintree
             {
                 return FormatAsXml(name, value.ToString().ToLower());
             }
-            else if (value is Dictionary<string, string>)
+            if (value is Array)
+            {
+                String xml = "";
+                foreach (Object item in (Array)value)
+                {
+                    xml += BuildXMLElement("item", item);
+                }
+                return FormatAsArrayXML(name, xml);
+            }
+            if (value is Dictionary<string, string>)
             {
                 return FormatAsXml(name, (Dictionary<string, string>) value);
             }
 
             return FormatAsXml(name, value.ToString());
+        }
+
+        private static string FormatAsArrayXML(string name, string value)
+        {
+            return String.Format("<{0} type=\"array\">{1}</{0}>", SecurityElement.Escape(name), value);
         }
 
         private static string FormatAsXml(string name, string value)

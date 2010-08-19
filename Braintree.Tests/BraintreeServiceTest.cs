@@ -7,23 +7,13 @@ using NUnit.Framework;
 namespace Braintree.Tests
 {
     [TestFixture]
-    public class WebServiceGatewayTest
+    public class BraintreeServiceTest
     {
-
-        [SetUp]
-        public void Setup()
-        {
-            Configuration.MerchantId = "dummy";
-            Configuration.PublicKey = "dummy";
-            Configuration.PrivateKey = "dummy";
-        }
-
         [Test]
         public void QASSLCertificateSuccessful()
         {
             try {
-                Configuration.Environment = Environment.QA;
-                WebServiceGateway.Get("/");
+                new BraintreeService(new Configuration(Environment.QA, "dummy", "dummy", "dummy")).Get("/");
                 Assert.Fail ("Expected an AuthenticationException but none was thrown.");
             } catch (Braintree.Exceptions.AuthenticationException) {
                 // expected
@@ -34,8 +24,7 @@ namespace Braintree.Tests
         public void SandboxSSLCertificateSuccessful()
         {
             try {
-                Configuration.Environment = Environment.SANDBOX;
-                WebServiceGateway.Get("/");
+                new BraintreeService(new Configuration(Environment.SANDBOX, "dummy", "dummy", "dummy")).Get("/");
                 Assert.Fail ("Expected an AuthenticationException but none was thrown.");
             } catch (Braintree.Exceptions.AuthenticationException) {
                 // expected
@@ -46,8 +35,7 @@ namespace Braintree.Tests
         public void ProductionSSLCertificateSuccessful()
         {
             try {
-                Configuration.Environment = Environment.PRODUCTION;
-                WebServiceGateway.Get("/");
+                new BraintreeService(new Configuration(Environment.PRODUCTION, "dummy", "dummy", "dummy")).Get("/");
                 Assert.Fail ("Expected an AuthenticationException but none was thrown.");
             } catch (Braintree.Exceptions.AuthenticationException) {
                 // expected
@@ -58,7 +46,7 @@ namespace Braintree.Tests
         public void ThrowExceptionIfErrorStatusCodeIsUpgradeRequired()
         {
             try {
-                WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 426, null);
+                BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 426, null);
                 Assert.Fail ("Expected an AuthenticationException but none was thrown.");
             } catch (Braintree.Exceptions.UpgradeRequiredException) {
                 // expected

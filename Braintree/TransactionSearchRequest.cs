@@ -15,6 +15,13 @@ namespace Braintree
                 return new RangeNode<TransactionSearchRequest>("amount", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> AuthorizedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("authorized-at", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> BillingCompany
         {
             get
@@ -85,11 +92,11 @@ namespace Braintree
                 return new DateRangeNode<TransactionSearchRequest>("created-at", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> CreatedUsing
+        public MultipleValueNode<TransactionSearchRequest, TransactionCreatedUsing> CreatedUsing
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("created-using", this, TransactionCreatedUsing.ALL);
+                return new MultipleValueNode<TransactionSearchRequest, TransactionCreatedUsing>("created-using", this);
             }
         }
         public TextNode<TransactionSearchRequest> CreditCardCardholderName
@@ -113,18 +120,18 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("credit-card-number", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> CreditCardCardType
+        public MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCardType> CreditCardCardType
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("credit-card-card-type", this, Braintree.CreditCardCardType.ALL);
+                return new MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCardType>("credit-card-card-type", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> CreditCardCustomerLocation
+        public MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCustomerLocation> CreditCardCustomerLocation
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("credit-card-customer-location", this, Braintree.CreditCardCustomerLocation.ALL);
+                return new MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCustomerLocation>("credit-card-customer-location", this);
             }
         }
         public TextNode<TransactionSearchRequest> Currency
@@ -190,6 +197,20 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("customer-website", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> FailedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("failed-at", this);
+            }
+        }
+        public DateRangeNode<TransactionSearchRequest> GatewayRejectedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("gateway-rejected-at", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> Id
         {
             get
@@ -197,18 +218,18 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("id", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> Ids
+        public MultipleValueNode<TransactionSearchRequest, string> Ids
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("ids", this);
+                return new MultipleValueNode<TransactionSearchRequest, string>("ids", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> MerchantAccountId
+        public MultipleValueNode<TransactionSearchRequest, string> MerchantAccountId
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("merchant-account-id", this);
+                return new MultipleValueNode<TransactionSearchRequest, string>("merchant-account-id", this);
             }
         }
         public TextNode<TransactionSearchRequest> OrderId
@@ -232,11 +253,32 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("processor-authorization-code", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> ProcessorDeclinedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("processor-declined-at", this);
+            }
+        }
         public KeyValueNode<TransactionSearchRequest> Refund
         {
             get
             {
                 return new KeyValueNode<TransactionSearchRequest>("refund", this);
+            }
+        }
+        public DateRangeNode<TransactionSearchRequest> SettledAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("settled-at", this);
+            }
+        }
+        public TextNode<TransactionSearchRequest> SettlementBatchId
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("settlement-batch-id", this);
             }
         }
         public TextNode<TransactionSearchRequest> ShippingCompany
@@ -302,25 +344,39 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("shipping-street-address", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> Status
+        public MultipleValueNode<TransactionSearchRequest, TransactionStatus> Status
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("status", this, TransactionStatus.ALL);
+                return new MultipleValueNode<TransactionSearchRequest, TransactionStatus>("status", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> Source
+        public DateRangeNode<TransactionSearchRequest> SubmittedForSettlementAt
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("source", this, TransactionSource.ALL);
+                return new DateRangeNode<TransactionSearchRequest>("submitted-for-settlement-at", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest> Type
+        public MultipleValueNode<TransactionSearchRequest, TransactionSource> Source
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest>("type", this, TransactionType.ALL);
+                return new MultipleValueNode<TransactionSearchRequest, TransactionSource>("source", this);
+            }
+        }
+        public MultipleValueNode<TransactionSearchRequest, TransactionType> Type
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest, TransactionType>("type", this);
+            }
+        }
+        public DateRangeNode<TransactionSearchRequest> VoidedAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("voided-at", this);
             }
         }
 

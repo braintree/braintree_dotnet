@@ -1,0 +1,20 @@
+#pragma warning disable 1591
+
+using System;
+using System.Collections.Generic;
+
+namespace Braintree
+{
+    public class MultipleValueOrTextNode<T, S> : TextNode<T> where T : SearchRequest where S : class
+    {
+        public MultipleValueOrTextNode(String name, T parent) : base(name, parent)
+        {
+        }
+
+        public T IncludedIn(params S[] values)
+        {
+            Parent.AddMultipleValueCriteria(Name, new SearchCriteria(values));
+            return Parent;
+        }
+    }
+}

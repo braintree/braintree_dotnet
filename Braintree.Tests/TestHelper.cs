@@ -10,9 +10,15 @@ namespace Braintree.Tests
 {
     public class TestHelper
     {
-        public static String QueryStringForTR(Request trParams, Request req, String postURL)
+
+        public static int CompareModificationsById(Modification left, Modification right)
         {
-            String trData = TrUtil.BuildTrData(trParams, "http://example.com");
+            return left.Id.CompareTo(right.Id);
+        }
+
+        public static String QueryStringForTR(Request trParams, Request req, String postURL, BraintreeService service)
+        {
+            String trData = TrUtil.BuildTrData(trParams, "http://example.com", service);
             String postData = "tr_data=" + HttpUtility.UrlEncode(trData, Encoding.UTF8) + "&";
             postData += req.ToQueryString();
 

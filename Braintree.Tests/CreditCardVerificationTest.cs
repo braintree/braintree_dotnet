@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
@@ -36,7 +36,7 @@ namespace Braintree.Tests
             CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"));
             Assert.AreEqual(null, verification.AvsErrorResponseCode);
             Assert.AreEqual("I", verification.AvsPostalCodeResponseCode);
-            Assert.AreEqual("processor_declined", verification.Status);
+            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, verification.Status);
             Assert.AreEqual("2000", verification.ProcessorResponseCode);
             Assert.AreEqual("I", verification.AvsStreetAddressResponseCode);
             Assert.AreEqual("Do Not Honor", verification.ProcessorResponseText);

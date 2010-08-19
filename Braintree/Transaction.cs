@@ -65,12 +65,14 @@ namespace Braintree
         protected TransactionType(String name) : base(name) {}
     }
 
-    public abstract class TransactionCreatedUsing
+    public class TransactionCreatedUsing : Enumeration
     {
-        public const String FULL_INFORMATION = "full_information";
-        public const String TOKEN = "token";
+        public static readonly TransactionCreatedUsing FULL_INFORMATION = new TransactionCreatedUsing("full_information");
+        public static readonly TransactionCreatedUsing TOKEN = new TransactionCreatedUsing("token");
 
-        public static readonly String[] ALL = {FULL_INFORMATION, TOKEN};
+        public static readonly TransactionCreatedUsing[] ALL = {FULL_INFORMATION, TOKEN};
+
+        protected TransactionCreatedUsing(String name) : base(name) {}
     }
 
     /// <summary>
@@ -86,6 +88,7 @@ namespace Braintree
     public class Transaction
     {
         public String Id { get; protected set; }
+        public List<AddOn> AddOns { get; protected set; }
         public Decimal? Amount { get; protected set; }
         public String AvsErrorResponseCode { get; protected set; }
         public String AvsPostalCodeResponseCode { get; protected set; }
@@ -96,6 +99,7 @@ namespace Braintree
         public String CurrencyIsoCode { get; protected set; }
         public Customer Customer { get; protected set; }
         public String CvvResponseCode { get; protected set; }
+        public List<Discount> Discounts { get; protected set; }
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public String MerchantAccountId { get; protected set; }
         public String OrderId { get; protected set; }
@@ -104,6 +108,7 @@ namespace Braintree
         public String ProcessorResponseText { get; protected set; }
         public String RefundedTransactionId { get; protected set; }
         public String RefundId { get; protected set; }
+        public String SettlementBatchId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
@@ -112,8 +117,12 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
 
-        internal Transaction(NodeWrapper node)
+        private BraintreeService Service;
+
+        internal Transaction(NodeWrapper node, BraintreeService service)
         {
+            Service = service;
+
             if (node == null) return;
 
             Id = node.GetString("id");
@@ -143,10 +152,11 @@ namespace Braintree
             ProcessorResponseText = node.GetString("processor-response-text");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
             RefundId = node.GetString("refund-id");
+            SettlementBatchId = node.GetString("settlement-batch-id");
             SubscriptionId = node.GetString("subscription-id");
             CustomFields = node.GetDictionary("custom-fields");
-            CreditCard = new CreditCard(node.GetNode("credit-card"));
-            Customer = new Customer(node.GetNode("customer"));
+            CreditCard = new CreditCard(node.GetNode("credit-card"), service);
+            Customer = new Customer(node.GetNode("customer"), service);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
 
@@ -155,6 +165,16 @@ namespace Braintree
 
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
+
+            AddOns = new List<AddOn> ();
+            foreach (NodeWrapper addOnResponse in node.GetList("add-ons/add-on")) {
+                AddOns.Add(new AddOn(addOnResponse));
+            }
+            Discounts = new List<Discount> ();
+            foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
+                Discounts.Add(new Discount(discountResponse));
+            }
+
         }
 
         /// <summary>
@@ -196,7 +216,7 @@ namespace Braintree
         {
             if (CreditCard.Token == null) return null;
 
-            return new CreditCardGateway().Find(CreditCard.Token);
+            return new CreditCardGateway(Service).Find(CreditCard.Token);
         }
 
         /// <summary>
@@ -221,7 +241,7 @@ namespace Braintree
         {
             if (Customer.Id == null) return null;
 
-            return new CustomerGateway().Find(Customer.Id);
+            return new CustomerGateway(Service).Find(Customer.Id);
         }
 
         /// <summary>
@@ -246,7 +266,7 @@ namespace Braintree
         {
             if (BillingAddress.Id == null) return null;
 
-            return new AddressGateway().Find(Customer.Id, BillingAddress.Id);
+            return new AddressGateway(Service).Find(Customer.Id, BillingAddress.Id);
         }
 
         /// <summary>
@@ -271,7 +291,7 @@ namespace Braintree
         {
             if (ShippingAddress.Id == null) return null;
 
-            return new AddressGateway().Find(Customer.Id, ShippingAddress.Id);
+            return new AddressGateway(Service).Find(Customer.Id, ShippingAddress.Id);
         }
     }
 }

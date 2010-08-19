@@ -8,10 +8,25 @@ namespace Braintree
 {
     public abstract class Request
     {
-        public abstract String ToXml();
-        public abstract String ToXml(String rootElement);
-        public abstract String ToQueryString();
-        public abstract String ToQueryString(String root);
+        public virtual String ToXml()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual String ToXml(String rootElement)
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual String ToQueryString()
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual String ToQueryString(String root)
+        {
+            throw new NotImplementedException();
+        }
 
         internal virtual string BuildXMLElement(string name, object value)
         {

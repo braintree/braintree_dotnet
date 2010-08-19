@@ -68,14 +68,14 @@
     <Compile Include="TransparentRedirectRequestTest.cs" />
     <Compile Include="TrUtilTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
-    <Compile Include="WebServiceGatewayTest.cs" />
     <Compile Include="MerchantAccount.cs" />
     <Compile Include="SubscriptionSearchRequestTest.cs" />
     <Compile Include="CollectionUtilTest.cs" />
     <Compile Include="RequestTest.cs" />
     <Compile Include="ResourceCollectionTest.cs" />
-    <Compile Include="MultipleValueNodeTest.cs" />
     <Compile Include="TransparentRedirectTest.cs" />
+    <Compile Include="BraintreeServiceTest.cs" />
+    <Compile Include="StringUtilTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

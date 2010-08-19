@@ -11,54 +11,61 @@ namespace Braintree
     /// </summary>
     public class TransactionGateway
     {
+        private BraintreeService Service;
+
+        internal TransactionGateway(BraintreeService service)
+        {
+            Service = service;
+        }
+
         [Obsolete("Use gateway.TransparentRedirect.Url")]
         public virtual String TransparentRedirectURLForCreate()
         {
-            return Configuration.BaseMerchantURL() + "/transactions/all/create_via_transparent_redirect_request";
+            return Service.BaseMerchantURL() + "/transactions/all/create_via_transparent_redirect_request";
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<Transaction> ConfirmTransparentRedirect(String queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString);
-            XmlNode node = WebServiceGateway.Post("/transactions/all/confirm_transparent_redirect_request", trRequest);
+            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
+            XmlNode node = Service.Post("/transactions/all/confirm_transparent_redirect_request", trRequest);
 
-            return new Result<Transaction>(new NodeWrapper(node));
+            return new Result<Transaction>(new NodeWrapper(node), Service);
         }
 
         public virtual String SaleTrData(TransactionRequest trData, String redirectURL)
         {
             trData.Type = TransactionType.SALE;
 
-            return TrUtil.BuildTrData(trData, redirectURL);
+            return TrUtil.BuildTrData(trData, redirectURL, Service);
         }
 
         public virtual String CreditTrData(TransactionRequest trData, String redirectURL)
         {
             trData.Type = TransactionType.CREDIT;
 
-            return TrUtil.BuildTrData(trData, redirectURL);
+            return TrUtil.BuildTrData(trData, redirectURL, Service);
         }
 
         public virtual Result<Transaction> Credit(TransactionRequest request)
         {
             request.Type = TransactionType.CREDIT;
-            XmlNode response = WebServiceGateway.Post("/transactions", request);
+            XmlNode response = Service.Post("/transactions", request);
 
-            return new Result<Transaction>(new NodeWrapper(response));
+            return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
         public virtual Transaction Find(String id)
         {
-            XmlNode response = WebServiceGateway.Get("/transactions/" + id);
+            XmlNode response = Service.Get("/transactions/" + id);
 
-            return new Transaction(new NodeWrapper(response));
+            return new Transaction(new NodeWrapper(response), Service);
         }
 
         public virtual Result<Transaction> Refund(String id)
         {
-            XmlNode response = WebServiceGateway.Post("/transactions/" + id + "/refund");
-            return new Result<Transaction>(new NodeWrapper(response));
+            XmlNode response = Service.Post("/transactions/" + id + "/refund");
+            return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
         public virtual Result<Transaction> Refund(String id, Decimal amount)
@@ -67,16 +74,16 @@ namespace Braintree
             {
                 Amount = amount
             };
-            XmlNode response = WebServiceGateway.Post("/transactions/" + id + "/refund", request);
-            return new Result<Transaction>(new NodeWrapper(response));
+            XmlNode response = Service.Post("/transactions/" + id + "/refund", request);
+            return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
         public virtual Result<Transaction> Sale(TransactionRequest request)
         {
             request.Type = TransactionType.SALE;
-            XmlNode response = WebServiceGateway.Post("/transactions", request);
+            XmlNode response = Service.Post("/transactions", request);
 
-            return new Result<Transaction>(new NodeWrapper(response));
+            return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
         public virtual Result<Transaction> SubmitForSettlement(String id)
@@ -89,21 +96,21 @@ namespace Braintree
             TransactionRequest request = new TransactionRequest();
 			request.Amount = amount;
 			
-            XmlNode response = WebServiceGateway.Put("/transactions/" + id + "/submit_for_settlement", request);
+            XmlNode response = Service.Put("/transactions/" + id + "/submit_for_settlement", request);
 
-            return new Result<Transaction>(new NodeWrapper(response));
+            return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
         public virtual Result<Transaction> Void(String id)
         {
-            XmlNode response = WebServiceGateway.Put("/transactions/" + id + "/void");
+            XmlNode response = Service.Put("/transactions/" + id + "/void");
 
-            return new Result<Transaction>(new NodeWrapper(response));
+            return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
         public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/transactions/advanced_search_ids", query));
+            NodeWrapper response = new NodeWrapper(Service.Post("/transactions/advanced_search_ids", query));
 
             return new ResourceCollection<Transaction>(response, delegate(String[] ids) {
                 return FetchTransactions(query, ids);
@@ -114,12 +121,12 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/transactions/advanced_search", query));
+            NodeWrapper response = new NodeWrapper(Service.Post("/transactions/advanced_search", query));
 
             List<Transaction> transactions = new List<Transaction>();
             foreach (NodeWrapper node in response.GetList("transaction"))
             {
-                transactions.Add(new Transaction(node));
+                transactions.Add(new Transaction(node, Service));
             }
             return transactions;
         }

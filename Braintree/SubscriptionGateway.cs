@@ -12,34 +12,41 @@ namespace Braintree
     /// </summary>
     public class SubscriptionGateway
     {
+        private BraintreeService Service;
+
+        internal SubscriptionGateway(BraintreeService service)
+        {
+            Service = service;
+        }
+
         public delegate void SearchDelegate(SubscriptionSearchRequest search);
 
         public virtual Result<Subscription> Create(SubscriptionRequest request)
         {
-            XmlNode subscriptionXML = WebServiceGateway.Post("/subscriptions", request);
+            XmlNode subscriptionXML = Service.Post("/subscriptions", request);
 
-            return new Result<Subscription>(new NodeWrapper(subscriptionXML));
+            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
 
         public virtual Subscription Find(String id)
         {
-            XmlNode subscriptionXML = WebServiceGateway.Get("/subscriptions/" + id);
+            XmlNode subscriptionXML = Service.Get("/subscriptions/" + id);
 
-            return new Subscription(new NodeWrapper(subscriptionXML));
+            return new Subscription(new NodeWrapper(subscriptionXML), Service);
         }
 
         public virtual Result<Subscription> Update(String id, SubscriptionRequest request)
         {
-            XmlNode subscriptionXML = WebServiceGateway.Put("/subscriptions/" + id, request);
+            XmlNode subscriptionXML = Service.Put("/subscriptions/" + id, request);
 
-            return new Result<Subscription>(new NodeWrapper(subscriptionXML));
+            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
 
         public virtual Result<Subscription> Cancel(String id)
         {
-            XmlNode subscriptionXML = WebServiceGateway.Put("/subscriptions/" + id + "/cancel");
+            XmlNode subscriptionXML = Service.Put("/subscriptions/" + id + "/cancel");
 
-            return new Result<Subscription>(new NodeWrapper(subscriptionXML));
+            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
 
         /// <summary>
@@ -58,7 +65,7 @@ namespace Braintree
         /// </code>
         public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search_ids", query));
+            NodeWrapper response = new NodeWrapper(Service.Post("/subscriptions/advanced_search_ids", query));
 
             return new ResourceCollection<Subscription>(response, delegate(String[] ids) {
                 return FetchSubscriptions(query, ids);
@@ -69,12 +76,12 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Post("/subscriptions/advanced_search", query));
+            NodeWrapper response = new NodeWrapper(Service.Post("/subscriptions/advanced_search", query));
 
             List<Subscription> subscriptions = new List<Subscription>();
             foreach (NodeWrapper node in response.GetList("subscription"))
             {
-                subscriptions.Add(new Subscription(node));
+                subscriptions.Add(new Subscription(node, Service));
             }
             return subscriptions;
         }
@@ -87,8 +94,8 @@ namespace Braintree
         }
 
         private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest) {
-           XmlNode response = WebServiceGateway.Post("/transactions", txnRequest);
-           return new Result<Transaction>(new NodeWrapper(response));
+           XmlNode response = Service.Post("/transactions", txnRequest);
+           return new Result<Transaction>(new NodeWrapper(response), Service);
        }
 
        public Result<Transaction> RetryCharge(String subscriptionId) {

@@ -20,6 +20,18 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void OnField_WorksWithAllCommonCasing()
+        {
+            ValidationError fieldError = new ValidationError("", "1", "");
+            ValidationErrors errors = new ValidationErrors();
+            errors.AddError("country_name", fieldError);
+            Assert.AreEqual(fieldError, errors.OnField("country_name")[0]);
+            Assert.AreEqual(fieldError, errors.OnField("country-name")[0]);
+            Assert.AreEqual(fieldError, errors.OnField("countryName")[0]);
+            Assert.AreEqual(fieldError, errors.OnField("CountryName")[0]);
+        }
+
+        [Test]
         public void OnField_WithNonExistingField()
         {
             ValidationErrors errors = new ValidationErrors();
@@ -43,6 +55,18 @@ namespace Braintree.Tests
         {
             ValidationErrors errors = new ValidationErrors();
             Assert.AreEqual(0, errors.ForObject("address").Count);
+        }
+
+        [Test]
+        public void ForObject_WorksWithAllCommonCasing()
+        {
+            ValidationErrors nestedErrors = new ValidationErrors();
+            ValidationErrors errors = new ValidationErrors();
+            errors.AddErrors("credit-card", nestedErrors);
+            Assert.AreEqual(nestedErrors, errors.ForObject("credit-card"));
+            Assert.AreEqual(nestedErrors, errors.ForObject("credit_card"));
+            Assert.AreEqual(nestedErrors, errors.ForObject("creditCard"));
+            Assert.AreEqual(nestedErrors, errors.ForObject("CreditCard"));
         }
 
         [Test]

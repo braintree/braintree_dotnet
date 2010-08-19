@@ -11,6 +11,7 @@ namespace Braintree.Tests
     public class TransactionTest
     {
         private BraintreeGateway gateway;
+        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -22,6 +23,8 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+
+            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -29,7 +32,7 @@ namespace Braintree.Tests
         {
             String trData = gateway.Transaction.SaleTrData(new TransactionRequest(), "http://example.com");
             Assert.IsTrue(trData.Contains("sale"));
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData));
+            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
 
         [Test]
@@ -37,7 +40,7 @@ namespace Braintree.Tests
         {
             String trData = gateway.Transaction.CreditTrData(new TransactionRequest(), "http://example.com");
             Assert.IsTrue(trData.Contains("credit"));
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData));
+            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
 
         [Test]
@@ -66,7 +69,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = 1000M,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = "4111111111111111",
                     ExpirationDate = "05/2012",
@@ -97,7 +100,8 @@ namespace Braintree.Tests
                 },
                 Options = new TransactionOptionsRequest
                 {
-                    StoreInVault = true
+                    StoreInVault = true,
+                    SubmitForSettlement = true
                 },
                 OrderId = "myorder",
                 ShippingAddress = new AddressRequest
@@ -115,6 +119,8 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Settle(transaction.Id);
+            transaction = gateway.Transaction.Find(transaction.Id);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
@@ -142,6 +148,7 @@ namespace Braintree.Tests
                 OrderId.Is("myorder").
                 PaymentMethodToken.Is(creditCardToken).
                 ProcessorAuthorizationCode.Is(transaction.ProcessorAuthorizationCode).
+                SettlementBatchId.Is(transaction.SettlementBatchId).
                 ShippingCompany.Is("Braintree P.S.").
                 ShippingCountryName.Is("Mexico").
                 ShippingExtendedAddress.Is("Apt 456").
@@ -163,7 +170,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = 1000M,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = "4111111111111111",
                     ExpirationDate = "05/2012",
@@ -208,7 +215,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -248,7 +255,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -282,7 +289,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -316,7 +323,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -356,7 +363,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -390,7 +397,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -425,7 +432,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010",
@@ -477,7 +484,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = 1000M,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -517,7 +524,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -562,7 +569,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2010"
@@ -582,12 +589,378 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnAuthorizedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnFailedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.FAILED,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Transaction;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                FailedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnGatewayRejectedAt()
+        {
+            BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010",
+                    CVV = "200"
+                }
+            };
+
+            Transaction transaction = processingRulesGateway.Transaction.Sale(request).Transaction;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                GatewayRejectedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnProcessorDeclinedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.DECLINE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Transaction;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                ProcessorDeclinedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnSettledAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Settle(transaction.Id);
+            transaction = gateway.Transaction.Find(transaction.Id);
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SettledAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnSubmittedForSettlementAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                SubmittedForSettlementAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnVoidedAt()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            transaction = gateway.Transaction.Void(transaction.Id).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                VoidedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnMultipleStatuses()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(oneHourEarlier, oneHourLater).
+                SubmittedForSettlementAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier).
+                SubmittedForSettlementAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -621,7 +994,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 OrderId = "123",
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     CVV = "321",
@@ -742,7 +1115,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -762,7 +1135,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -785,7 +1158,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Token = paymentToken,
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -832,7 +1205,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     CardholderName = "Bob the Builder",
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -866,7 +1239,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     CardholderName = "Bob the Builder",
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -893,7 +1266,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -927,7 +1300,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -973,7 +1346,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.DECLINE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1015,7 +1388,7 @@ namespace Braintree.Tests
                 {
                     StreetAddress = "200 Fake Street"
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1047,7 +1420,7 @@ namespace Braintree.Tests
                 {
                     PostalCode = "20000"
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1076,7 +1449,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1102,7 +1475,7 @@ namespace Braintree.Tests
                     { "store_me", "custom value" },
                     { "another_stored_field", "custom value2" }
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1127,7 +1500,7 @@ namespace Braintree.Tests
                 {
                     { "unkown_custom_field", "custom value" }
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1136,7 +1509,7 @@ namespace Braintree.Tests
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CUSTOM_FIELD_IS_INVALID, result.Errors.ForObject("transaction").OnField("custom_fields")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CUSTOM_FIELD_IS_INVALID, result.Errors.ForObject("Transaction").OnField("CustomFields")[0].Code);
         }
 
         [Test]
@@ -1203,7 +1576,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
@@ -1230,22 +1603,22 @@ namespace Braintree.Tests
             Assert.IsNull(result.Transaction);
             Assert.IsNull(result.CreditCardVerification);
 
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("Transaction").OnField("Amount")[0].Code);
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha2")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryCodeAlpha2")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_alpha3")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryCodeAlpha3")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_code_numeric")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryCodeNumeric")[0].Code
             );
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
-                result.Errors.ForObject("transaction").ForObject("billing").OnField("country_name")[0].Code
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryName")[0].Code
             );
 
             Dictionary<String, String> parameters = result.Parameters;
@@ -1254,6 +1627,7 @@ namespace Braintree.Tests
             Assert.AreEqual("2010", parameters["transaction[credit_card][expiration_year]"]);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheTransaction()
         {
@@ -1265,7 +1639,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1279,7 +1653,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
             Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -1303,7 +1677,9 @@ namespace Braintree.Tests
             Assert.AreEqual("840", address.CountryCodeNumeric);
             Assert.AreEqual("United States of America", address.CountryName);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_SpecifyingMerchantAccountId()
         {
@@ -1316,20 +1692,21 @@ namespace Braintree.Tests
 
             TransactionRequest request = new TransactionRequest
             {
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
             Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
             Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Credit_WithValidParams()
@@ -1337,7 +1714,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1367,7 +1744,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1387,7 +1764,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
@@ -1412,7 +1789,7 @@ namespace Braintree.Tests
                     { "store_me", "custom value"},
                     { "another_stored_field", "custom value2" }
                 },
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009"
@@ -1432,7 +1809,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     ExpirationMonth = "05",
                     ExpirationYear = "2010"
@@ -1443,7 +1820,7 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
             Assert.IsNull(result.Target);
 
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("transaction").OnField("amount")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("Transaction").OnField("Amount")[0].Code);
 
             Dictionary<String, String> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
@@ -1457,7 +1834,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1493,7 +1870,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1528,7 +1905,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1541,7 +1918,7 @@ namespace Braintree.Tests
 
             result = gateway.Transaction.Void(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_BE_VOIDED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_BE_VOIDED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
 
         [Test]
@@ -1550,7 +1927,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1573,7 +1950,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1594,7 +1971,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1615,7 +1992,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1628,7 +2005,7 @@ namespace Braintree.Tests
 
             result = gateway.Transaction.SubmitForSettlement(transaction.Id);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_SETTLEMENT, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_SETTLEMENT, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
             Assert.AreEqual("Cannot submit for settlement unless status is authorized.", result.Message);
         }
 
@@ -1652,7 +2029,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1694,7 +2071,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1716,7 +2093,7 @@ namespace Braintree.Tests
 
         private void Settle(String transactionId)
         {
-            NodeWrapper response = new NodeWrapper(WebServiceGateway.Put("/transactions/" + transactionId + "/settle"));
+            NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
             Assert.IsTrue(response.IsSuccess());
         }
 
@@ -1726,7 +2103,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new CreditCardRequest
+                CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2008"
@@ -1748,7 +2125,90 @@ namespace Braintree.Tests
             }
             Assert.IsFalse(result.IsSuccess());
 
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("transaction").OnField("base")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_REFUND_UNLESS_SETTLED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+        public void SnapshotAddOnsAndDiscountsFromSubscription()
+        {
+            CustomerRequest customerRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Fred Jones",
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12"
+                }
+            };
+
+            CreditCard creditCard = gateway.Customer.Create(customerRequest).Target.CreditCards[0];
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                AddOns = new AddOnsRequest
+                {
+                    Add = new AddAddOnRequest[]
+                    {
+                        new AddAddOnRequest
+                        {
+                            InheritedFromId = "increase_10",
+                            Amount = 11M,
+                            NumberOfBillingCycles = 5,
+                            Quantity = 2,
+                        },
+                        new AddAddOnRequest
+                        {
+                            InheritedFromId = "increase_20",
+                            Amount = 21M,
+                            NumberOfBillingCycles = 6,
+                            Quantity = 3,
+                        }
+                    }
+                },
+                Discounts = new DiscountsRequest
+                {
+                    Add = new AddDiscountRequest[]
+                    {
+                        new AddDiscountRequest
+                        {
+                            InheritedFromId = "discount_7",
+                            Amount = 7.50M,
+                            Quantity = 2,
+                            NeverExpires = true
+                        },
+                    }
+                }
+            };
+
+            Transaction transaction = gateway.Subscription.Create(request).Target.Transactions[0];
+
+            List<AddOn> addOns = transaction.AddOns;
+            addOns.Sort(TestHelper.CompareModificationsById);
+
+            Assert.AreEqual(2, addOns.Count);
+
+            Assert.AreEqual("increase_10", addOns[0].Id);
+            Assert.AreEqual(11M, addOns[0].Amount);
+            Assert.AreEqual(2, addOns[0].Quantity);
+            Assert.IsFalse(addOns[0].NeverExpires.Value);
+            Assert.AreEqual(5, addOns[0].NumberOfBillingCycles);
+
+            Assert.AreEqual("increase_20", addOns[1].Id);
+            Assert.AreEqual(21M, addOns[1].Amount);
+            Assert.AreEqual(3, addOns[1].Quantity);
+            Assert.IsFalse(addOns[1].NeverExpires.Value);
+            Assert.AreEqual(6, addOns[1].NumberOfBillingCycles);
+
+            List<Discount> discounts = transaction.Discounts;
+            Assert.AreEqual(1, discounts.Count);
+
+            Assert.AreEqual("discount_7", discounts[0].Id);
+            Assert.AreEqual(7.50M, discounts[0].Amount);
+            Assert.AreEqual(2, discounts[0].Quantity);
+            Assert.IsTrue(discounts[0].NeverExpires.Value);
+            Assert.IsNull(discounts[0].NumberOfBillingCycles);
         }
     }
 }

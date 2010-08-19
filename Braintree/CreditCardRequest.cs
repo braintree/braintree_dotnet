@@ -28,18 +28,11 @@ namespace Braintree
     /// };
     /// </code>
     /// </example>
-    public class CreditCardRequest : Request
+    public class CreditCardRequest : BaseCreditCardRequest
     {
-        public String Token { get; set; }
         public String CustomerId { get; set; }
-        public String Number { get; set; }
-        public String CardholderName { get; set; }
-        public String CVV { get; set; }
         public CreditCardAddressRequest BillingAddress { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
-        public String ExpirationMonth { get; set; }
-        public String ExpirationYear { get; set; }
-        public String ExpirationDate { get; set; }
         public String PaymentMethodToken { get; set; }
 
         public override String Kind()
@@ -48,25 +41,8 @@ namespace Braintree
             {
                 return TransparentRedirectGateway.CREATE_PAYMENT_METHOD;
             }
-            else
-            {
-                return TransparentRedirectGateway.UPDATE_PAYMENT_METHOD;
-            }
-        }
 
-        public override String ToXml()
-        {
-            return ToXml("credit-card");
-        }
-
-        public override String ToXml(String root)
-        {
-            return BuildRequest(root).ToXml();
-        }
-
-        public override String ToQueryString()
-        {
-            return ToQueryString("credit-card");
+            return TransparentRedirectGateway.UPDATE_PAYMENT_METHOD;
         }
 
         public override String ToQueryString(String root)
@@ -76,19 +52,12 @@ namespace Braintree
                 ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected override RequestBuilder BuildRequest(String root)
         {
-            return new RequestBuilder(root).
+            return base.BuildRequest(root).
                 AddElement("billing-address", BillingAddress).
-                AddElement("cardholder-name", CardholderName).
                 AddElement("customer-id", CustomerId).
-                AddElement("cvv", CVV).
-                AddElement("expiration-date", ExpirationDate).
-                AddElement("expiration-month", ExpirationMonth).
-                AddElement("expiration-year", ExpirationYear).
-                AddElement("number", Number).
-                AddElement("options", Options).
-                AddElement("token", Token);
+                AddElement("options", Options);
         }
     }
 }

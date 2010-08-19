@@ -1,3 +1,21 @@
+## 2.6.0
+
+* Added AddOns/Discounts
+* Enhanced Subscription search
+* Enhanced Transaction search
+* Made gateway operations threadsafe when using multiple configurations
+* Added VerificationStatus Enumeration
+* Added EXPIRED and PENDING statuses to Subscription
+* Allowed ProrateCharges to be specified on Subscription update
+* Added AddOn/Discount details to Transactions that were created from a Subscription
+* All Braintree Exceptions now inherit from BraintreeException superclass
+* Added new properties to Subscription:
+  * BillingDayOfMonth
+  * DaysPastDue
+  * FirstBillingDate
+  * NeverExpires
+  * NumberOfBillingCycles
+
 ## 2.5.1
 
 * Updated the Environment class to lazily use environment variables -- this enables use when access to environment variables is restricted

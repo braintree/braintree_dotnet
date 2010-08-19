@@ -6,9 +6,24 @@ using System.Text;
 
 namespace Braintree
 {
+    public class VerificationStatus : Enumeration
+    {
+        public static readonly VerificationStatus FAILED = new VerificationStatus("failed");
+        public static readonly VerificationStatus GATEWAY_REJECTED = new VerificationStatus("gateway_rejected");
+        public static readonly VerificationStatus PROCESSOR_DECLINED = new VerificationStatus("processor_declined");
+        public static readonly VerificationStatus UNRECOGNIZED = new VerificationStatus("unrecognized");
+        public static readonly VerificationStatus VERIFIED = new VerificationStatus("verified");
+
+
+        public static readonly VerificationStatus[] ALL = {
+            FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, VERIFIED
+        };
+
+        protected VerificationStatus(String name) : base(name) {}
+    }
+
     public class CreditCardVerification
     {
-
         public String AvsErrorResponseCode { get; protected set; }
         public String AvsPostalCodeResponseCode { get; protected set; }
         public String AvsStreetAddressResponseCode { get; protected set; }
@@ -17,7 +32,7 @@ namespace Braintree
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
         public String MerchantAccountId { get; protected set; }
-        public String Status { get; protected set; }
+        public VerificationStatus Status { get; protected set; }
 
         public CreditCardVerification(NodeWrapper node)
         {
@@ -35,7 +50,7 @@ namespace Braintree
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             MerchantAccountId = node.GetString("merchant-account-id");
-            Status = node.GetString("status");
+            Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
         }
     }
 }

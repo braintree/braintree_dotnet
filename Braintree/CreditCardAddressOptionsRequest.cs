@@ -9,19 +9,9 @@ namespace Braintree
     {
         public Boolean UpdateExisting { get; set; }
 
-        public override String ToXml()
-        {
-            return ToXml("options");
-        }
-
         public override String ToXml(String root)
         {
             return BuildRequest(root).ToXml();
-        }
-
-        public override String ToQueryString()
-        {
-            return ToQueryString("options");
         }
 
         public override String ToQueryString(String root)

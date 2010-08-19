@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.5.1</AssemblyName>
+    <AssemblyName>Braintree-2.6.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.5.1.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.6.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.5.1.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.6.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -45,70 +45,87 @@
   </Target>
   -->
   <ItemGroup>
+    <Compile Include="AddAddOnRequest.cs" />
+    <Compile Include="AddDiscountRequest.cs" />
+    <Compile Include="AddModificationRequest.cs" />
+    <Compile Include="AddOn.cs" />
+    <Compile Include="AddOnsRequest.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="AddressGateway.cs" />
     <Compile Include="AddressRequest.cs" />
+    <Compile Include="BaseCreditCardRequest.cs" />
     <Compile Include="BraintreeGateway.cs" />
+    <Compile Include="BraintreeService.cs" />
+    <Compile Include="CollectionUtil.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CreditCard.cs" />
+    <Compile Include="CreditCardAddressOptionsRequest.cs" />
+    <Compile Include="CreditCardAddressRequest.cs" />
     <Compile Include="CreditCardGateway.cs" />
+    <Compile Include="CreditCardOptionsRequest.cs" />
     <Compile Include="CreditCardRequest.cs" />
     <Compile Include="CreditCardVerification.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerGateway.cs" />
     <Compile Include="CustomerRequest.cs" />
+    <Compile Include="DateRangeNode.cs" />
+    <Compile Include="Discount.cs" />
+    <Compile Include="DiscountsRequest.cs" />
+    <Compile Include="Enumeration.cs" />
     <Compile Include="Environment.cs" />
+    <Compile Include="EqualityNode.cs" />
     <Compile Include="Exceptions\AuthenticationException.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
     <Compile Include="Exceptions\DownForMaintenanceException.cs" />
     <Compile Include="Exceptions\ForgedQueryStringException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
-    <Compile Include="CreditCardOptionsRequest.cs" />
     <Compile Include="Exceptions\ServerException.cs" />
     <Compile Include="Exceptions\UnexpectedException.cs" />
+    <Compile Include="Exceptions\UpgradeRequiredException.cs" />
+    <Compile Include="IdsSearchRequest.cs" />
+    <Compile Include="KeyValueNode.cs" />
+    <Compile Include="Modification.cs" />
+    <Compile Include="MultipleValueNode.cs" />
+    <Compile Include="NodeWrapper.cs" />
+    <Compile Include="PartialMatchNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryString.cs" />
+    <Compile Include="RangeNode.cs" />
     <Compile Include="Request.cs" />
+    <Compile Include="RequestBuilder.cs" />
+    <Compile Include="ResourceCollection.cs" />
     <Compile Include="Result.cs" />
     <Compile Include="SandboxValues.cs" />
+    <Compile Include="SearchCriteria.cs" />
+    <Compile Include="SearchNode.cs" />
+    <Compile Include="SearchRequest.cs" />
+    <Compile Include="StatusEvent.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="SubscriptionGateway.cs" />
+    <Compile Include="SubscriptionOptionsRequest.cs" />
     <Compile Include="SubscriptionRequest.cs" />
+    <Compile Include="SubscriptionSearchRequest.cs" />
+    <Compile Include="SubscriptionTransactionRequest.cs" />
+    <Compile Include="TextNode.cs" />
+    <Compile Include="TrUtil.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="TransactionGateway.cs" />
     <Compile Include="TransactionOptionsRequest.cs" />
     <Compile Include="TransactionRequest.cs" />
+    <Compile Include="TransactionSearchRequest.cs" />
+    <Compile Include="TransparentRedirectGateway.cs" />
     <Compile Include="TransparentRedirectRequest.cs" />
-    <Compile Include="TrUtil.cs" />
+    <Compile Include="UpdateAddOnRequest.cs" />
+    <Compile Include="UpdateDiscountRequest.cs" />
+    <Compile Include="UpdateModificationRequest.cs" />
     <Compile Include="ValidationError.cs" />
     <Compile Include="ValidationErrorCode.cs" />
     <Compile Include="ValidationErrors.cs" />
-    <Compile Include="WebServiceGateway.cs" />
-    <Compile Include="NodeWrapper.cs" />
-    <Compile Include="SubscriptionSearchRequest.cs" />
-    <Compile Include="TextNode.cs" />
-    <Compile Include="SearchCriteria.cs" />
-    <Compile Include="MultipleValueNode.cs" />
-    <Compile Include="SearchNode.cs" />
-    <Compile Include="CollectionUtil.cs" />
-    <Compile Include="ResourceCollection.cs" />
-    <Compile Include="SubscriptionTransactionRequest.cs" />
-    <Compile Include="TransactionSearchRequest.cs" />
-    <Compile Include="SearchRequest.cs" />
-    <Compile Include="EqualityNode.cs" />
-    <Compile Include="PartialMatchNode.cs" />
-    <Compile Include="Enumeration.cs" />
-    <Compile Include="KeyValueNode.cs" />
-    <Compile Include="RangeNode.cs" />
-    <Compile Include="DateRangeNode.cs" />
-    <Compile Include="CreditCardAddressRequest.cs" />
-    <Compile Include="CreditCardAddressOptionsRequest.cs" />
-    <Compile Include="IdsSearchRequest.cs" />
-    <Compile Include="Exceptions\UpgradeRequiredException.cs" />
-    <Compile Include="StatusEvent.cs" />
-    <Compile Include="TransparentRedirectGateway.cs" />
-    <Compile Include="RequestBuilder.cs" />
+    <Compile Include="ModificationRequest.cs" />
+    <Compile Include="StringUtil.cs" />
+    <Compile Include="MultipleValueOrTextNode.cs" />
+    <Compile Include="Exceptions\BraintreeException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

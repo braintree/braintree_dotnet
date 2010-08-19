@@ -14,7 +14,7 @@ namespace Braintree
 
         public String Id { get; protected set; }
 
-        public TransparentRedirectRequest(String queryString)
+        public TransparentRedirectRequest(String queryString, BraintreeService service)
         {
             queryString = queryString.TrimStart('?');
 
@@ -33,19 +33,14 @@ namespace Braintree
                 message = HttpUtility.UrlDecode(paramMap["bt_message"]);
             }
 
-            WebServiceGateway.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]), message);
+            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]), message);
 
-            if (!TrUtil.IsValidTrQueryString(queryString))
+            if (!TrUtil.IsValidTrQueryString(queryString, service))
             {
                 throw new ForgedQueryStringException();
             }
 
             Id = paramMap["id"];
-        }
-
-        public override string ToXml(string rootElement)
-        {
-            throw new NotImplementedException();
         }
 
         public override String ToXml()
@@ -54,16 +49,6 @@ namespace Braintree
             builder.Append(BuildXMLElement("id", Id));
             
             return builder.ToString();
-        }
-
-        public override String ToQueryString(String parent)
-        {
-            return null;
-        }
-
-        public override String ToQueryString()
-        {
-            return null;
         }
     }
 }

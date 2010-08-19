@@ -78,20 +78,5 @@ namespace Braintree
             builder.Append("</search>");
             return builder.ToString();
         }
-
-        public override String ToXml(String rootElement)
-        {
-            return "";
-        }
-
-        public override String ToQueryString()
-        {
-            return "";
-        }
-
-        public override String ToQueryString(String root)
-        {
-            return "";
-        }
     }
 }

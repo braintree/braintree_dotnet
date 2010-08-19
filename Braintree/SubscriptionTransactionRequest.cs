@@ -10,20 +10,6 @@ namespace Braintree
         public Decimal Amount { get; set; }
         public String SubscriptionId { get; set; }
 
-        public SubscriptionTransactionRequest ()
-        {
-        }
-
-        public override String ToQueryString()
-        {
-            return null;
-        }
-
-        public override String ToQueryString(String root)
-        {
-            return null;
-        }
-
         public override String ToXml()
         {
             return ToXml("transaction");

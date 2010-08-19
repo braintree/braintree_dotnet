@@ -24,8 +24,15 @@ namespace Braintree
     /// </example>
     public class SubscriptionRequest : Request
     {
+        public AddOnsRequest AddOns { get; set; }
+        public Int32? BillingDayOfMonth { get; set; }
+        public DiscountsRequest Discounts { get; set; }
+        public DateTime? FirstBillingDate { get; set; }
         public Boolean? HasTrialPeriod { get; set; }
         public String Id { get; set; }
+        public Int32? NumberOfBillingCycles { get; set; }
+        public Boolean? NeverExpires { get; set; }
+        public SubscriptionOptionsRequest Options { get; set; }
         public String PaymentMethodToken { get; set; }
         public String PlanId { get; set; }
         public Decimal Price { get; set; }
@@ -43,20 +50,12 @@ namespace Braintree
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override String ToQueryString(String root)
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual RequestBuilder BuildRequest(String root)
         {
             var builder = new RequestBuilder(root);
 
+            builder.AddElement("billing-day-of-month", BillingDayOfMonth);
+            builder.AddElement("first-billing-date", FirstBillingDate);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             if (HasTrialPeriod.HasValue)
             {
@@ -69,9 +68,19 @@ namespace Braintree
                 }
             }
             builder.AddElement("merchant-account-id", MerchantAccountId);
+            if (NumberOfBillingCycles.HasValue) {
+                builder.AddElement("number-of-billing-cycles", NumberOfBillingCycles.Value);
+            }
+            if (NeverExpires.HasValue) {
+                builder.AddElement("never-expires", NeverExpires.Value);
+            }
             builder.AddElement("id", Id);
             builder.AddElement("plan-id", PlanId);
             if (Price != 0) builder.AddElement("price", Price.ToString());
+
+            builder.AddElement("add-ons", AddOns);
+            builder.AddElement("discounts", Discounts);
+            builder.AddElement("options", Options);
 
             return builder;
         }

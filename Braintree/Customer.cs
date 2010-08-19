@@ -35,7 +35,7 @@ namespace Braintree
         public Address[] Addresses { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
 
-        internal Customer(NodeWrapper node)
+        internal Customer(NodeWrapper node, BraintreeService service)
         {
             if (node == null) return;
 
@@ -54,7 +54,7 @@ namespace Braintree
             CreditCards = new CreditCard[creditCardXmlNodes.Count];
             for (int i = 0; i < creditCardXmlNodes.Count; i++)
             {
-                CreditCards[i] = new CreditCard(creditCardXmlNodes[i]);
+                CreditCards[i] = new CreditCard(creditCardXmlNodes[i], service);
             }
 
             var addressXmlNodes = node.GetList("addresses/address");

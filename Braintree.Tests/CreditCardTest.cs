@@ -10,6 +10,7 @@ namespace Braintree.Tests
     public class CreditCardTest
     {
         private BraintreeGateway gateway;
+        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -21,27 +22,32 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+            service = new BraintreeService(gateway.Configuration);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void TransparentRedirectURLForCreate_ReturnsCorrectValue()
         {
-            Assert.AreEqual(Configuration.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request",
+            Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request",
                     gateway.CreditCard.TransparentRedirectURLForCreate());
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void TransparentRedirectURLForUpdate_ReturnsCorrectValue()
         {
-            Assert.AreEqual(Configuration.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request",
+            Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request",
                     gateway.CreditCard.TransparentRedirectURLForUpdate());
         }
+        #pragma warning restore 0618
 
         [Test]
         public void TrData_ReturnsValidTrDataHash()
         {
             String trData = gateway.TrData(new CreditCardRequest(), "http://example.com");
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData));
+            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
 
 
@@ -86,6 +92,7 @@ namespace Braintree.Tests
             Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCard()
         {
@@ -107,7 +114,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
             Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
@@ -125,7 +132,9 @@ namespace Braintree.Tests
             Assert.AreEqual("GRC", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("300", billingAddress.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInTRParams()
         {
@@ -150,12 +159,14 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
 
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInRequest()
         {
@@ -180,12 +191,14 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
 
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_WithErrors()
         {
@@ -205,15 +218,16 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
             Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
-                result.Errors.ForObject("credit-card").ForObject("billing-address").OnField("base")[0].Code
+                result.Errors.ForObject("CreditCard").ForObject("BillingAddress").OnField("Base")[0].Code
             );
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Find_FindsCreditCardByToken()
@@ -458,6 +472,7 @@ namespace Braintree.Tests
             Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrueViaTransparentRedirect()
         {
@@ -496,14 +511,16 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate());
+            String queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
             CreditCard updatedCreditCard = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
 
             Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
             Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
         }
+        #pragma warning restore 0618
 
+        #pragma warning disable 0618
         [Test]
         public void UpdateViaTransparentRedirect()
         {
@@ -531,13 +548,14 @@ namespace Braintree.Tests
                 CardholderName = "Joe Cool"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForUpdate());
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
             Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
             Assert.AreEqual("Joe Cool", card.CardholderName);
             Assert.AreEqual("44444", card.BillingAddress.PostalCode);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Delete_DeletesTheCreditCard()
@@ -632,7 +650,7 @@ namespace Braintree.Tests
             Result<CreditCard> result = gateway.CreditCard.Create(request);
             Assert.IsFalse(result.IsSuccess());
             CreditCardVerification verification = result.CreditCardVerification;
-            Assert.AreEqual("processor_declined", verification.Status);
+            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, verification.Status);
             Assert.IsNull(verification.GatewayRejectionReason);
         }
 
