@@ -107,7 +107,9 @@ namespace Braintree
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
         public String RefundedTransactionId { get; protected set; }
+        [Obsolete("Use Transaction.RefundIds")]
         public String RefundId { get; protected set; }
+        public List<String> RefundIds { get; protected set; }
         public String SettlementBatchId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionStatus Status { get; protected set; }
@@ -151,7 +153,12 @@ namespace Braintree
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
+
+            #pragma warning disable 0618
             RefundId = node.GetString("refund-id");
+            #pragma warning able 0618
+
+            RefundIds = node.GetStrings("refund-ids/*");
             SettlementBatchId = node.GetString("settlement-batch-id");
             SubscriptionId = node.GetString("subscription-id");
             CustomFields = node.GetDictionary("custom-fields");
@@ -166,15 +173,14 @@ namespace Braintree
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
 
-            AddOns = new List<AddOn> ();
+            AddOns = new List<AddOn>();
             foreach (NodeWrapper addOnResponse in node.GetList("add-ons/add-on")) {
                 AddOns.Add(new AddOn(addOnResponse));
             }
-            Discounts = new List<Discount> ();
+            Discounts = new List<Discount>();
             foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
                 Discounts.Add(new Discount(discountResponse));
             }
-
         }
 
         /// <summary>
