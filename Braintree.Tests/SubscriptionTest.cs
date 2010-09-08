@@ -710,14 +710,23 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnDaysPastDueBetween()
         {
+            SubscriptionRequest subscriptionRequest = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+            };
+
+            Subscription subscription = gateway.Subscription.Create(subscriptionRequest).Target;
+            MakePastDue(subscription, 3);
+
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 DaysPastDue.Between(2, 10);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
             Assert.IsTrue(collection.MaximumCount > 0);
 
-            foreach (Subscription subscription in collection) {
-                Assert.IsTrue(subscription.DaysPastDue >= 2 && subscription.DaysPastDue <= 10);
+            foreach (Subscription foundSubscription in collection) {
+                Assert.IsTrue(foundSubscription.DaysPastDue >= 2 && foundSubscription.DaysPastDue <= 10);
             }
         }
 
