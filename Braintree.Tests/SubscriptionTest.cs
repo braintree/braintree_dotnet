@@ -59,6 +59,7 @@ namespace Braintree.Tests
             Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
             Assert.AreEqual(plan.Price, subscription.Price);
             Assert.AreEqual(plan.Price, subscription.NextBillAmount);
+            Assert.AreEqual(0.00M, subscription.Balance);
             Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
@@ -68,6 +69,7 @@ namespace Braintree.Tests
             Assert.IsTrue(subscription.BillingPeriodStartDate.HasValue);
             Assert.IsTrue(subscription.NextBillingDate.HasValue);
             Assert.IsTrue(subscription.FirstBillingDate.HasValue);
+            Assert.IsTrue(subscription.PaidThroughDate.HasValue);
         }
 
         [Test]

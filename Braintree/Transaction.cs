@@ -156,7 +156,7 @@ namespace Braintree
 
             #pragma warning disable 0618
             RefundId = node.GetString("refund-id");
-            #pragma warning able 0618
+            #pragma warning restore 0618
 
             RefundIds = node.GetStrings("refund-ids/*");
             SettlementBatchId = node.GetString("settlement-batch-id");
