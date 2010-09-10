@@ -1474,6 +1474,74 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_DoesNotUpdateWhenRevertTrue()
+        {
+            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = originalPlan.Id,
+                Price = 1.23M
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Price = 2100M,
+                Options = new SubscriptionOptionsRequest
+                {
+                    ProrateCharges = true,
+                    RevertSubscriptionOnProrationFailure = true
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+            subscription = result.Subscription;
+
+            Assert.AreEqual(1.23M, subscription.Price);
+            Assert.AreEqual(2, subscription.Transactions.Count);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, subscription.Transactions[0].Status);
+            Assert.AreEqual(0M, subscription.Balance);
+        }
+
+        [Test]
+        public void Update_DoesUpdateWhenRevertFalse()
+        {
+            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = originalPlan.Id,
+                Price = 1.23M
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Price = 2100.00M,
+                Options = new SubscriptionOptionsRequest
+                {
+                    ProrateCharges = true,
+                    RevertSubscriptionOnProrationFailure = false
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(2100.00M, subscription.Price);
+            Assert.AreEqual(2, subscription.Transactions.Count);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, subscription.Transactions[0].Status);
+            Assert.AreEqual(subscription.Transactions[0].Amount, subscription.Balance);
+        }
+
+        [Test]
         public void Update_DontIncreasePriceAndDontAddTransaction()
         {
             Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
