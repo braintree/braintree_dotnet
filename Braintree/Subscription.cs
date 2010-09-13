@@ -90,6 +90,7 @@ namespace Braintree
         public Boolean? NeverExpires { get; protected set; }
         public Decimal? NextBillAmount { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
+        public Decimal? NextBillingPeriodAmount { get; protected set; }
         public Int32? NumberOfBillingCycles { get; protected set; }
         public DateTime? PaidThroughDate { get; protected set; }
         public String PaymentMethodToken { get; protected set; }
@@ -113,6 +114,7 @@ namespace Braintree
             Id = node.GetString("id");
             NextBillAmount = node.GetDecimal("next-bill-amount");
             NextBillingDate = node.GetDateTime("next-billing-date");
+            NextBillingPeriodAmount = node.GetDecimal("next-billing-period-amount");
             NeverExpires = node.GetBoolean("never-expires");
             NumberOfBillingCycles = node.GetInteger("number-of-billing-cycles");
             PaymentMethodToken = node.GetString("payment-method-token");
