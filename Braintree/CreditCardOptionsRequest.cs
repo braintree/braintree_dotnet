@@ -8,8 +8,8 @@ namespace Braintree
 {
     public class CreditCardOptionsRequest : Request
     {
-        public Boolean VerifyCard { get; set; }
-        public Boolean MakeDefault { get; set; }
+        public Boolean? VerifyCard { get; set; }
+        public Boolean? MakeDefault { get; set; }
         public String VerificationMerchantAccountId { get; set; }
         public String UpdateExistingToken { get; set; }
 
@@ -27,11 +27,7 @@ namespace Braintree
         {
             RequestBuilder builder = new RequestBuilder(root);
 
-            if (MakeDefault)
-            {
-                builder.AddElement("make-default", MakeDefault);
-            }
-
+            builder.AddElement("make-default", MakeDefault);
             builder.AddElement("verification-merchant-account-id", VerificationMerchantAccountId);
             builder.AddElement("verify-card", VerifyCard);
             builder.AddElement("update-existing-token", UpdateExistingToken);

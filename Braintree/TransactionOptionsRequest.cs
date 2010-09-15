@@ -8,10 +8,10 @@ namespace Braintree
 {
     public class TransactionOptionsRequest : Request
     {
-        public Boolean StoreInVault { get; set; }
-        public Boolean AddBillingAddressToPaymentMethod { get; set; }
-        public Boolean StoreShippingAddressInVault { get; set; }
-        public Boolean SubmitForSettlement { get; set; }
+        public Boolean? StoreInVault { get; set; }
+        public Boolean? AddBillingAddressToPaymentMethod { get; set; }
+        public Boolean? StoreShippingAddressInVault { get; set; }
+        public Boolean? SubmitForSettlement { get; set; }
 
         public override String ToXml(String root)
         {
