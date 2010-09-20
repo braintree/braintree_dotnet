@@ -15,6 +15,12 @@ task :compile => :clean do
 end
 
 desc "run tests"
-task :test => :compile do
+task :test => [:ensure_boolean_type, :compile] do
   sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+end
+
+desc "ensure that Request objects use Boolean? type instead of Boolean"
+task :ensure_boolean_type do
+  output = `find . -iname '*Request.cs' | xargs grep 'Boolean '`
+  raise "\nUse Boolean? instead of Boolean in Request classes to prevent erroneous falses from being sent to the gateway:\n\n#{output}\n" unless output.empty?
 end

@@ -59,6 +59,8 @@ namespace Braintree.Tests
             Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
             Assert.AreEqual(plan.Price, subscription.Price);
             Assert.AreEqual(plan.Price, subscription.NextBillAmount);
+            Assert.AreEqual(plan.Price, subscription.NextBillingPeriodAmount);
+            Assert.AreEqual(0.00M, subscription.Balance);
             Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
@@ -68,6 +70,7 @@ namespace Braintree.Tests
             Assert.IsTrue(subscription.BillingPeriodStartDate.HasValue);
             Assert.IsTrue(subscription.NextBillingDate.HasValue);
             Assert.IsTrue(subscription.FirstBillingDate.HasValue);
+            Assert.IsTrue(subscription.PaidThroughDate.HasValue);
         }
 
         [Test]
@@ -710,14 +713,23 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnDaysPastDueBetween()
         {
+            SubscriptionRequest subscriptionRequest = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+            };
+
+            Subscription subscription = gateway.Subscription.Create(subscriptionRequest).Target;
+            MakePastDue(subscription, 3);
+
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
                 DaysPastDue.Between(2, 10);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
             Assert.IsTrue(collection.MaximumCount > 0);
 
-            foreach (Subscription subscription in collection) {
-                Assert.IsTrue(subscription.DaysPastDue >= 2 && subscription.DaysPastDue <= 10);
+            foreach (Subscription foundSubscription in collection) {
+                Assert.IsTrue(foundSubscription.DaysPastDue >= 2 && foundSubscription.DaysPastDue <= 10);
             }
         }
 
@@ -1460,6 +1472,74 @@ namespace Braintree.Tests
 
             Assert.AreEqual(4.56M, subscription.Price);
             Assert.AreEqual(1, subscription.Transactions.Count);
+        }
+
+        [Test]
+        public void Update_DoesNotUpdateWhenRevertTrue()
+        {
+            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = originalPlan.Id,
+                Price = 1.23M
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Price = 2100M,
+                Options = new SubscriptionOptionsRequest
+                {
+                    ProrateCharges = true,
+                    RevertSubscriptionOnProrationFailure = true
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+            subscription = result.Subscription;
+
+            Assert.AreEqual(1.23M, subscription.Price);
+            Assert.AreEqual(2, subscription.Transactions.Count);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, subscription.Transactions[0].Status);
+            Assert.AreEqual(0M, subscription.Balance);
+        }
+
+        [Test]
+        public void Update_DoesUpdateWhenRevertFalse()
+        {
+            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = originalPlan.Id,
+                Price = 1.23M
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Price = 2100.00M,
+                Options = new SubscriptionOptionsRequest
+                {
+                    ProrateCharges = true,
+                    RevertSubscriptionOnProrationFailure = false
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            subscription = result.Target;
+
+            Assert.AreEqual(2100.00M, subscription.Price);
+            Assert.AreEqual(2, subscription.Transactions.Count);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, subscription.Transactions[0].Status);
+            Assert.AreEqual(subscription.Transactions[0].Amount, subscription.Balance);
         }
 
         [Test]

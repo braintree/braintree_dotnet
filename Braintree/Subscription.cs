@@ -76,6 +76,7 @@ namespace Braintree
     /// </example>
     public class Subscription
     {
+        public Decimal? Balance { get; protected set; }
         public List<AddOn> AddOns { get; protected set; }
         public Int32? BillingDayOfMonth { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
@@ -89,7 +90,9 @@ namespace Braintree
         public Boolean? NeverExpires { get; protected set; }
         public Decimal? NextBillAmount { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
+        public Decimal? NextBillingPeriodAmount { get; protected set; }
         public Int32? NumberOfBillingCycles { get; protected set; }
+        public DateTime? PaidThroughDate { get; protected set; }
         public String PaymentMethodToken { get; protected set; }
         public String PlanId { get; protected set; }
         public Decimal? Price { get; protected set; }
@@ -101,6 +104,7 @@ namespace Braintree
 
         public Subscription(NodeWrapper node, BraintreeService service)
         {
+            Balance = node.GetDecimal("balance");
             BillingDayOfMonth = node.GetInteger("billing-day-of-month");
             BillingPeriodEndDate = node.GetDateTime("billing-period-end-date");
             BillingPeriodStartDate = node.GetDateTime("billing-period-start-date");
@@ -110,9 +114,11 @@ namespace Braintree
             Id = node.GetString("id");
             NextBillAmount = node.GetDecimal("next-bill-amount");
             NextBillingDate = node.GetDateTime("next-billing-date");
+            NextBillingPeriodAmount = node.GetDecimal("next-billing-period-amount");
             NeverExpires = node.GetBoolean("never-expires");
             NumberOfBillingCycles = node.GetInteger("number-of-billing-cycles");
             PaymentMethodToken = node.GetString("payment-method-token");
+            PaidThroughDate = node.GetDateTime("paid-through-date");
             PlanId = node.GetString("plan-id");
             Price = node.GetDecimal("price");
             Status = (SubscriptionStatus)CollectionUtil.Find(SubscriptionStatus.STATUSES, node.GetString("status"), SubscriptionStatus.UNRECOGNIZED);

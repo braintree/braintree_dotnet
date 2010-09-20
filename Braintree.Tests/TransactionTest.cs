@@ -51,14 +51,26 @@ namespace Braintree.Tests
                 {
                     StoreInVault = true,
                     AddBillingAddressToPaymentMethod = true,
-                    StoreShippingAddressInVault = true
+                    StoreShippingAddressInVault = true,
+                    SubmitForSettlement = true
                 }
             }, "http://example.com");
             Assert.IsTrue(trData.Contains("store_in_vault"));
             Assert.IsTrue(trData.Contains("add_billing_address_to_payment_method"));
             Assert.IsTrue(trData.Contains("store_shipping_address_in_vault"));
             Assert.IsTrue(trData.Contains("submit_for_settlement"));
-        }
+
+            trData = gateway.Transaction.SaleTrData(new TransactionRequest {
+                Options = new TransactionOptionsRequest
+                {
+                }
+            }, "http://example.com");
+            Assert.IsFalse(trData.Contains("store_in_vault"));
+            Assert.IsFalse(trData.Contains("add_billing_address_to_payment_method"));
+            Assert.IsFalse(trData.Contains("store_shipping_address_in_vault"));
+            Assert.IsFalse(trData.Contains("submit_for_settlement"));
+
+		}
 
         [Test]
         public void Search_OnAllTextFields()
@@ -2023,6 +2035,7 @@ namespace Braintree.Tests
             }
         }
 
+        #pragma warning disable 0618
         [Test]
         public void Refund_WithABasicTransaction()
         {
@@ -2064,6 +2077,7 @@ namespace Braintree.Tests
             Assert.AreEqual(refund.Id, firstTransaction.RefundId);
             Assert.AreEqual(firstTransaction.Id, refund.RefundedTransactionId);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Refund_WithAPartialAmount()
@@ -2089,6 +2103,40 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(Decimal.Parse("500.00"), result.Target.Amount);
+        }
+
+        [Test]
+        public void Refund_MultipleRefundsWithPartialAmounts()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Settle(transaction.Id);
+
+            Transaction refund1 = gateway.Transaction.Refund(transaction.Id, 500M).Target;
+            Assert.AreEqual(TransactionType.CREDIT, refund1.Type);
+            Assert.AreEqual(500M, refund1.Amount);
+
+            Transaction refund2 = gateway.Transaction.Refund(transaction.Id, 500M).Target;
+            Assert.AreEqual(TransactionType.CREDIT, refund2.Type);
+            Assert.AreEqual(500M, refund2.Amount);
+
+            Transaction refundedTransaction = gateway.Transaction.Find(transaction.Id);
+            Assert.AreEqual(2, refundedTransaction.RefundIds.Count);
+            Assert.Contains(refund1.Id, refundedTransaction.RefundIds);
+            Assert.Contains(refund2.Id, refundedTransaction.RefundIds);
         }
 
         private void Settle(String transactionId)

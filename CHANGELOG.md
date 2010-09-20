@@ -1,3 +1,14 @@
+## 2.7.0
+
+* Added ability to perform multiple partial refunds on Transactions
+* Added RevertSubscriptionOnProrationFailure flag to Subscription update that specifies how a Subscription should react to a failed proration charge
+* Deprecated Transaction RefundId in favor of RefundIds
+* Deprecated Subscription NextBillAmount in favor of NextBillingPeriodAmount
+* Added new properties to Subscription:
+  * Balance
+  * PaidThroughDate
+  * NextBillingPeriodAmount
+
 ## 2.6.0
 
 * Added AddOns/Discounts

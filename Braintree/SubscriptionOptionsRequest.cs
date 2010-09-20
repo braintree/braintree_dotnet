@@ -5,10 +5,11 @@ namespace Braintree
 {
     public class SubscriptionOptionsRequest : Request
     {
-        public Boolean DoNotInheritAddOnsOrDiscounts { get; set; }
-        public Boolean ProrateCharges { get; set; }
-        public Boolean ReplaceAllAddOnsAndDiscounts { get; set; }
-        public Boolean StartImmediately { get; set; }
+        public Boolean? DoNotInheritAddOnsOrDiscounts { get; set; }
+        public Boolean? ProrateCharges { get; set; }
+        public Boolean? ReplaceAllAddOnsAndDiscounts { get; set; }
+        public Boolean? RevertSubscriptionOnProrationFailure { get; set; }
+        public Boolean? StartImmediately { get; set; }
 
         public override String ToXml(String root)
         {
@@ -21,7 +22,9 @@ namespace Braintree
                 AddElement("replace-all-add-ons-and-discounts", ReplaceAllAddOnsAndDiscounts).
                 AddElement("prorate-charges", ProrateCharges).
                 AddElement("do-not-inherit-add-ons-or-discounts", DoNotInheritAddOnsOrDiscounts).
+                AddElement("revert-subscription-on-proration-failure", RevertSubscriptionOnProrationFailure).
                 AddElement("start-immediately", StartImmediately);
+
         }
     }
 }

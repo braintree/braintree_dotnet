@@ -10,6 +10,7 @@ namespace Braintree
     {
         public CreditCardVerification CreditCardVerification { get; protected set; }
         public Transaction Transaction { get; protected set; }
+        public Subscription Subscription { get; protected set; }
         public ValidationErrors Errors { get; protected set; }
         public Dictionary<String, String> Parameters { get; protected set; }
         public String Message { get; protected set; }
@@ -33,6 +34,12 @@ namespace Braintree
                 if (transactionNode != null)
                 {
                     Transaction = new Transaction(transactionNode, service);
+                }
+
+                NodeWrapper subscriptionNode = node.GetNode("subscription");
+                if (subscriptionNode != null)
+                {
+                    Subscription = new Subscription(subscriptionNode, service);
                 }
                 Parameters = node.GetNode("params").GetFormParameters();
                 Message = node.GetString("message");
