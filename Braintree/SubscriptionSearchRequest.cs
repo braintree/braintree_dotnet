@@ -27,7 +27,14 @@ namespace Braintree
                 return new MultipleValueNode<SubscriptionSearchRequest, string>("ids", this);
             }
         }
-        public MultipleValueNode<SubscriptionSearchRequest, string> MerchantAccountId
+        public BooleanMultipleValueNode<SubscriptionSearchRequest> InTrialPeriod
+        {
+            get
+            {
+                return new BooleanMultipleValueNode<SubscriptionSearchRequest>("in_trial_period", this);
+            }
+        }
+       public MultipleValueNode<SubscriptionSearchRequest, string> MerchantAccountId
         {
             get
             {

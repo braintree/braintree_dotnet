@@ -766,6 +766,41 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnInTrialPeriodIs()
+        {
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Subscription trial = gateway.Subscription.Create(request1).Target;
+            Subscription noTrial = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                InTrialPeriod.Is(true);
+
+            ResourceCollection<Subscription> trialResults = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(trialResults, trial));
+            Assert.IsFalse(TestHelper.IncludesSubscription(trialResults, noTrial));
+
+            request = new SubscriptionSearchRequest().
+            InTrialPeriod.Is(false);
+
+            ResourceCollection<Subscription> noTrialResults = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(noTrialResults, noTrial));
+            Assert.IsFalse(TestHelper.IncludesSubscription(noTrialResults, trial));
+        }
+
+        [Test]
         public void Search_OnMerchantAccountIdIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
