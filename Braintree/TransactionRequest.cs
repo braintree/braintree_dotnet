@@ -75,7 +75,7 @@ namespace Braintree
         {
             RequestBuilder builder = new RequestBuilder(root);
 
-            if (Amount != 0) builder.AddElement("amount", Amount.ToString());
+            if (Amount != 0) builder.AddElement("amount", Amount);
             builder.AddElement("customer-id", CustomerId);
             builder.AddElement("order-id", OrderId);
             builder.AddElement("payment-method-token", PaymentMethodToken);

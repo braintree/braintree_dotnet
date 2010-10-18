@@ -76,7 +76,7 @@ namespace Braintree
             }
             builder.AddElement("id", Id);
             builder.AddElement("plan-id", PlanId);
-            if (Price != 0) builder.AddElement("price", Price.ToString());
+            if (Price != 0) builder.AddElement("price", Price);
 
             builder.AddElement("add-ons", AddOns);
             builder.AddElement("discounts", Discounts);
