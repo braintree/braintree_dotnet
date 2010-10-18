@@ -94,6 +94,10 @@ namespace Braintree
             {
                 return FormatAsXml(name, (Dictionary<string, string>) value);
             }
+            if (value is Decimal)
+            {
+                return FormatAsXml(name, ((Decimal) value).ToString(System.Globalization.CultureInfo.InvariantCulture));
+            }
 
             return FormatAsXml(name, value.ToString());
         }

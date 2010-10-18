@@ -1755,6 +1755,25 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
         }
 
+        [Test]
+        [SetCulture("it-IT")]
+        public void ParsesUSCultureProperlyForAppsInOtherCultures()
+        {
+            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Price = 100.0M
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+            Assert.AreEqual(100.00, subscription.Price);
+            Assert.AreEqual("100,00", subscription.Price.ToString());
+        }
+
         private void MakePastDue(Subscription subscription, int numberOfDays)
         {
             BraintreeService service = new BraintreeService(gateway.Configuration);

@@ -24,7 +24,7 @@ namespace Braintree
         {
             RequestBuilder builder = new RequestBuilder(root);
 
-            if (Amount != 0) builder.AddElement("amount", Amount.ToString());
+            if (Amount != 0) builder.AddElement("amount", Amount);
             builder.AddElement("subscription-id", SubscriptionId);
             builder.AddElement("type", TransactionType.SALE.ToString().ToLower());
 
