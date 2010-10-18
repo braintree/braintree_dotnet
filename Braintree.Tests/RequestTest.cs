@@ -10,6 +10,36 @@ namespace Braintree.Tests
     public class RequestTest
     {
         [Test]
+        [SetCulture("it-IT")]
+        public void ToXML_EnsuresUSLocaleForDecimals()
+        {
+            TransactionRequest transactionRequest = new TransactionRequest
+            {
+                Amount = 100.0M
+            };
+
+            SubscriptionRequest subscriptionRequest = new SubscriptionRequest
+            {
+                Price = 200.0M,
+            };
+
+            SubscriptionTransactionRequest subscriptionTransactionRequest = new SubscriptionTransactionRequest
+            {
+                Amount = 300.0M
+            };
+
+            ModificationRequest modificationRequest = new ModificationRequest
+            {
+                Amount = 400.0M
+            };
+
+            TestHelper.AssertIncludes("<amount>100.0</amount>", transactionRequest.ToXml());
+            TestHelper.AssertIncludes("<price>200.0</price>", subscriptionRequest.ToXml());
+            TestHelper.AssertIncludes("<amount>300.0</amount>", subscriptionTransactionRequest.ToXml());
+            TestHelper.AssertIncludes("<amount>400.0</amount>", modificationRequest.ToXml("root"));
+        }
+
+        [Test]
         public void ToXML_EscapesGeneratedXMLForString()
         {
             TransactionRequest request = new TransactionRequest

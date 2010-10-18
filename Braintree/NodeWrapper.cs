@@ -41,7 +41,7 @@ namespace Braintree
         {
             if (GetString(path) == null) return null;
 
-            return Decimal.Parse(GetString(path));
+            return Decimal.Parse(GetString(path), System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public virtual String GetName()

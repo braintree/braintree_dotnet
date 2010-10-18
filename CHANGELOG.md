@@ -1,3 +1,6 @@
+## 2.7.1
+* Added support for non-US cultures.  Decimal values are now correctly formatted for the gateway and parsed for the client.
+
 ## 2.7.0
 
 * Added ability to perform multiple partial refunds on Transactions
