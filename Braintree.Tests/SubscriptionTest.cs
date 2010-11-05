@@ -766,6 +766,41 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnInTrialPeriodIs()
+        {
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITH_TRIAL.Id
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Subscription trial = gateway.Subscription.Create(request1).Target;
+            Subscription noTrial = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                InTrialPeriod.Is(true);
+
+            ResourceCollection<Subscription> trialResults = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(trialResults, trial));
+            Assert.IsFalse(TestHelper.IncludesSubscription(trialResults, noTrial));
+
+            request = new SubscriptionSearchRequest().
+            InTrialPeriod.Is(false);
+
+            ResourceCollection<Subscription> noTrialResults = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(noTrialResults, noTrial));
+            Assert.IsFalse(TestHelper.IncludesSubscription(noTrialResults, trial));
+        }
+
+        [Test]
         public void Search_OnMerchantAccountIdIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
@@ -1721,22 +1756,32 @@ namespace Braintree.Tests
         }
 
         [Test]
-        [SetCulture("it-IT")]
         public void ParsesUSCultureProperlyForAppsInOtherCultures()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
-            SubscriptionRequest request = new SubscriptionRequest
-            {
-                PaymentMethodToken = creditCard.Token,
-                PlanId = plan.Id,
-                Price = 100.0M
-            };
+            System.Globalization.CultureInfo existingCulture = System.Globalization.CultureInfo.CurrentCulture;
 
-            Result<Subscription> result = gateway.Subscription.Create(request);
-            Assert.IsTrue(result.IsSuccess());
-            Subscription subscription = result.Target;
-            Assert.AreEqual(100.00, subscription.Price);
-            Assert.AreEqual("100,00", subscription.Price.ToString());
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("it-IT");
+
+                Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+                SubscriptionRequest request = new SubscriptionRequest
+                {
+                    PaymentMethodToken = creditCard.Token,
+                    PlanId = plan.Id,
+                    Price = 100.0M
+                };
+
+                Result<Subscription> result = gateway.Subscription.Create(request);
+                Assert.IsTrue(result.IsSuccess());
+                Subscription subscription = result.Target;
+                Assert.AreEqual(100.00, subscription.Price);
+                Assert.AreEqual("100,00", subscription.Price.ToString());
+            }
+            finally
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = existingCulture;
+            }
         }
 
         private void MakePastDue(Subscription subscription, int numberOfDays)
