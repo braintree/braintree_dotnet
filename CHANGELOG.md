@@ -1,3 +1,7 @@
+## 2.7.2
+* Added BillingAddressId to CreditCardRequest
+* Allow searching on Subscriptions that are currently in a trial period using InTrialPeriod
+
 ## 2.7.1
 * Added support for non-US cultures.  Decimal values are now correctly formatted for the gateway and parsed for the client.
 
