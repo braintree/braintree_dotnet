@@ -1756,22 +1756,32 @@ namespace Braintree.Tests
         }
 
         [Test]
-        [SetCulture("it-IT")]
         public void ParsesUSCultureProperlyForAppsInOtherCultures()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
-            SubscriptionRequest request = new SubscriptionRequest
-            {
-                PaymentMethodToken = creditCard.Token,
-                PlanId = plan.Id,
-                Price = 100.0M
-            };
+            System.Globalization.CultureInfo existingCulture = System.Globalization.CultureInfo.CurrentCulture;
 
-            Result<Subscription> result = gateway.Subscription.Create(request);
-            Assert.IsTrue(result.IsSuccess());
-            Subscription subscription = result.Target;
-            Assert.AreEqual(100.00, subscription.Price);
-            Assert.AreEqual("100,00", subscription.Price.ToString());
+            try
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("it-IT");
+
+                Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+                SubscriptionRequest request = new SubscriptionRequest
+                {
+                    PaymentMethodToken = creditCard.Token,
+                    PlanId = plan.Id,
+                    Price = 100.0M
+                };
+
+                Result<Subscription> result = gateway.Subscription.Create(request);
+                Assert.IsTrue(result.IsSuccess());
+                Subscription subscription = result.Target;
+                Assert.AreEqual(100.00, subscription.Price);
+                Assert.AreEqual("100,00", subscription.Price.ToString());
+            }
+            finally
+            {
+                System.Threading.Thread.CurrentThread.CurrentCulture = existingCulture;
+            }
         }
 
         private void MakePastDue(Subscription subscription, int numberOfDays)
