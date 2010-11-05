@@ -92,6 +92,41 @@ namespace Braintree.Tests
             Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
         }
 
+        [Test]
+        public void Create_AcceptsBillingAddressId()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            AddressRequest addressRequest = new AddressRequest
+            {
+                FirstName = "John",
+                CountryName = "Chad",
+                CountryCodeAlpha2 = "TD",
+                CountryCodeAlpha3 = "TCD",
+                CountryCodeNumeric = "148"
+            };
+
+            Address address = gateway.Address.Create(customer.Id, addressRequest).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo",
+                BillingAddressId = address.Id
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+            Address billingAddress = creditCard.BillingAddress;
+            Assert.AreEqual(address.Id, billingAddress.Id);
+            Assert.AreEqual("Chad", billingAddress.CountryName);
+            Assert.AreEqual("TD", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("TCD", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCard()

@@ -588,6 +588,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_AcceptsNestedBillingAddressId()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            AddressRequest addressRequest = new AddressRequest
+            {
+                FirstName = "John",
+                LastName = "Doe"
+            };
+
+            Address address = gateway.Address.Create(customer.Id, addressRequest).Target;
+
+            var updateRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/10",
+                    BillingAddressId = address.Id
+                }
+            };
+
+            Customer updatedCustomer = gateway.Customer.Update(customer.Id, updateRequest).Target;
+            Address billingAddress = updatedCustomer.CreditCards[0].BillingAddress;
+            Assert.AreEqual(address.Id, billingAddress.Id);
+            Assert.AreEqual("John", billingAddress.FirstName);
+            Assert.AreEqual("Doe", billingAddress.LastName);
+        }
+
+        [Test]
         public void Delete_DeletesTheCustomer()
         {
             String id = Guid.NewGuid().ToString();

@@ -32,6 +32,7 @@ namespace Braintree
     {
         public String CustomerId { get; set; }
         public CreditCardAddressRequest BillingAddress { get; set; }
+        public String BillingAddressId { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
         public String PaymentMethodToken { get; set; }
 
@@ -56,6 +57,7 @@ namespace Braintree
         {
             return base.BuildRequest(root).
                 AddElement("billing-address", BillingAddress).
+                AddElement("billing-address-id", BillingAddressId).
                 AddElement("customer-id", CustomerId).
                 AddElement("options", Options);
         }
