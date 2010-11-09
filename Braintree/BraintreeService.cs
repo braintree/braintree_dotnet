@@ -81,6 +81,8 @@ namespace Braintree
                 request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
                 request.Method = method;
                 request.KeepAlive = false;
+                request.Timeout = 60000;
+                request.ReadWriteTimeout = 60000;
 
                 if (requestBody != null)
                 {
