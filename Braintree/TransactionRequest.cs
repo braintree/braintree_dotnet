@@ -32,6 +32,7 @@ namespace Braintree
         public String OrderId { get; set; }
         public String MerchantAccountId { get; set; }
         public CustomerRequest Customer { get; set; }
+        public DescriptorRequest Descriptor { get; set; }
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
         public TransactionType Type { get; set; }
@@ -88,6 +89,7 @@ namespace Braintree
 
             builder.AddElement("credit-card", CreditCard);
             builder.AddElement("customer", Customer);
+            builder.AddElement("descriptor", Descriptor);
             builder.AddElement("billing", BillingAddress);
             builder.AddElement("shipping", ShippingAddress);
             builder.AddElement("options", Options);

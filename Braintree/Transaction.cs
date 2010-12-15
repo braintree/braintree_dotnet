@@ -99,6 +99,7 @@ namespace Braintree
         public String CurrencyIsoCode { get; protected set; }
         public Customer Customer { get; protected set; }
         public String CvvResponseCode { get; protected set; }
+        public Descriptor Descriptor { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public String MerchantAccountId { get; protected set; }
@@ -166,6 +167,7 @@ namespace Braintree
             Customer = new Customer(node.GetNode("customer"), service);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
+            Descriptor = new Descriptor(node.GetNode("descriptor"));
 
             BillingAddress = new Address(node.GetNode("billing"));
             ShippingAddress = new Address(node.GetNode("shipping"));
