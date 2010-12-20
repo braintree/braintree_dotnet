@@ -1067,6 +1067,7 @@ namespace Braintree.Tests
             Assert.IsNull(transaction.AvsErrorResponseCode);
             Assert.AreEqual("M", transaction.AvsPostalCodeResponseCode);
             Assert.AreEqual("M", transaction.AvsStreetAddressResponseCode);
+            Assert.IsFalse(transaction.TaxExempt.Value);
             Assert.AreEqual("M", transaction.CvvResponseCode);
             Assert.AreEqual("USD", transaction.CurrencyIsoCode);
 
@@ -1637,6 +1638,56 @@ namespace Braintree.Tests
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
             Assert.AreEqual("2010", parameters["transaction[credit_card][expiration_year]"]);
+        }
+
+        [Test]
+        public void Sale_WithLevel2Attributes()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                TaxExempt = true,
+                TaxAmount = 10M,
+                PurchaseOrderNumber = "aaaaaaaaaaaaaaaaaa",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_PURCHASE_ORDER_NUMBER_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").OnField("PurchaseOrderNumber")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLevel2Validations()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                TaxExempt = true,
+                TaxAmount = 10M,
+                PurchaseOrderNumber = "12345",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsTrue(transaction.TaxExempt.Value);
+            Assert.AreEqual(10M, transaction.TaxAmount.Value);
+            Assert.AreEqual("12345", transaction.PurchaseOrderNumber);
         }
 
         [Test]

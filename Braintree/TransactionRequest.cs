@@ -31,10 +31,13 @@ namespace Braintree
         public Decimal Amount { get; set; }
         public String OrderId { get; set; }
         public String MerchantAccountId { get; set; }
+        public String PurchaseOrderNumber { get; set; }
         public CustomerRequest Customer { get; set; }
         public DescriptorRequest Descriptor { get; set; }
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
+        public Decimal TaxAmount { get; set; }
+        public Boolean? TaxExempt { get; set; }
         public TransactionType Type { get; set; }
         public Dictionary<String, String> CustomFields { get; set; }
         public TransactionOptionsRequest Options { get; set; }
@@ -80,7 +83,12 @@ namespace Braintree
             builder.AddElement("customer-id", CustomerId);
             builder.AddElement("order-id", OrderId);
             builder.AddElement("payment-method-token", PaymentMethodToken);
+            builder.AddElement("purchase-order-number", PurchaseOrderNumber);
             builder.AddElement("shipping-address-id", ShippingAddressId);
+            if (TaxAmount != 0) builder.AddElement("tax-amount", TaxAmount);
+            if (TaxExempt.HasValue) {
+                builder.AddElement("tax-exempt", TaxExempt);
+            }
             builder.AddElement("merchant-account-id", MerchantAccountId);
 
             if (Type != null) builder.AddElement("type", Type.ToString().ToLower());
