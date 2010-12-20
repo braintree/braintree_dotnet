@@ -1,0 +1,138 @@
+#pragma warning disable 1591
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Braintree
+{
+    public class CustomerSearchRequest : SearchRequest
+    {
+        public TextNode<CustomerSearchRequest> Id
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("id", this);
+            }
+        }
+        public DateRangeNode<CustomerSearchRequest> CreatedAt
+        {
+            get
+            {
+                return new DateRangeNode<CustomerSearchRequest>("created-at", this);
+            }
+        }
+        public MultipleValueNode<CustomerSearchRequest, string> Ids
+        {
+            get
+            {
+                return new MultipleValueNode<CustomerSearchRequest, string>("ids", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> Website
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("website", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> Email
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("email", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> Company
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("company", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> LastName
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("last-name", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> FirstName
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("first-name", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> Fax
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("fax", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> Phone
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("Phone", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> AddressFirstName
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("address-first-name", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> AddressLastName
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("address-last-name", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> AddressLocality
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("address-locality", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> AddressPostalCode
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("address-postal-code", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> AddressRegion
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("address-region", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> AddressStreetAddress
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("address-street-address", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> PaymentMethodToken
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("payment-method-token", this);
+            }
+        }
+        public TextNode<CustomerSearchRequest> CreditCardExpirationDate
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("credit-card-expiration-date", this);
+            }
+        }
+    }
+}

@@ -129,6 +129,7 @@
     <Compile Include="Exceptions\BraintreeException.cs" />
     <Compile Include="BooleanMultipleValueNode.cs" />
     <Compile Include="Descriptor.cs" />
+    <Compile Include="CustomerSearchRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
