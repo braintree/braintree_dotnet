@@ -704,6 +704,7 @@ namespace Braintree.Tests
                 AddressRegion.Is("IL").
                 AddressStreetAddress.Is("123 Main St").
                 PaymentMethodToken.Is(creditCardToken).
+                CreditCardNumber.Is("4111111111111111").
                 CreditCardExpirationDate.Is("05/2012");
 
             ResourceCollection<Customer> collection = gateway.Customer.Search(searchRequest);

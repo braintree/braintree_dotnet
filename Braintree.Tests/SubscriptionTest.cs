@@ -282,14 +282,14 @@ namespace Braintree.Tests
             {
                 PaymentMethodToken = creditCard.Token,
                 PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
-                FirstBillingDate = DateTime.Now.AddDays(3)
+                FirstBillingDate = DateTime.Now.ToUniversalTime().AddDays(3)
             };
 
             Result<Subscription> result = gateway.Subscription.Create(request);
             Assert.IsTrue(result.IsSuccess());
             Subscription subscription = result.Target;
 
-            Assert.AreEqual(DateTime.Now.AddDays(3).ToShortDateString(), subscription.FirstBillingDate.Value.ToShortDateString());
+            Assert.AreEqual(DateTime.Now.ToUniversalTime().AddDays(3).ToShortDateString(), subscription.FirstBillingDate.Value.ToShortDateString());
             Assert.AreEqual(SubscriptionStatus.PENDING, subscription.Status);
         }
 

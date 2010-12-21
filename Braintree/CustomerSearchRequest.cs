@@ -22,6 +22,13 @@ namespace Braintree
                 return new DateRangeNode<CustomerSearchRequest>("created-at", this);
             }
         }
+        public PartialMatchNode<CustomerSearchRequest> CreditCardNumber
+        {
+            get
+            {
+                return new PartialMatchNode<CustomerSearchRequest>("credit-card-number", this);
+            }
+        }
         public MultipleValueNode<CustomerSearchRequest, string> Ids
         {
             get
