@@ -110,7 +110,7 @@ namespace Braintree
         {
             get
             {
-                return new TextNode<TransactionSearchRequest>("credit-card-expiration-date", this);
+                return new EqualityNode<TransactionSearchRequest>("credit-card-expiration-date", this);
             }
         }
         public PartialMatchNode<TransactionSearchRequest> CreditCardNumber

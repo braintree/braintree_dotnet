@@ -15,6 +15,13 @@ namespace Braintree
                 return new TextNode<CustomerSearchRequest>("id", this);
             }
         }
+        public TextNode<CustomerSearchRequest> CardholderName
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("cardholder-name", this);
+            }
+        }
         public DateRangeNode<CustomerSearchRequest> CreatedAt
         {
             get
@@ -134,11 +141,11 @@ namespace Braintree
                 return new TextNode<CustomerSearchRequest>("payment-method-token", this);
             }
         }
-        public TextNode<CustomerSearchRequest> CreditCardExpirationDate
+        public EqualityNode<CustomerSearchRequest> CreditCardExpirationDate
         {
             get
             {
-                return new TextNode<CustomerSearchRequest>("credit-card-expiration-date", this);
+                return new EqualityNode<CustomerSearchRequest>("credit-card-expiration-date", this);
             }
         }
     }

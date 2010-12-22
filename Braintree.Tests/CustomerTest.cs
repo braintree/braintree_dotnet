@@ -667,6 +667,7 @@ namespace Braintree.Tests
                 Website = "http://example.com",
                 CreditCard = new CreditCardRequest
                 {
+                    CardholderName = "Tim Toole",
                     Number = "4111111111111111",
                     ExpirationDate = "05/2012",
                     Token = creditCardToken,
@@ -704,6 +705,7 @@ namespace Braintree.Tests
                 AddressRegion.Is("IL").
                 AddressStreetAddress.Is("123 Main St").
                 PaymentMethodToken.Is(creditCardToken).
+                CardholderName.Is("Tim Toole").
                 CreditCardNumber.Is("4111111111111111").
                 CreditCardExpirationDate.Is("05/2012");
 
