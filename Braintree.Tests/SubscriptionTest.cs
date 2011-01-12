@@ -1692,6 +1692,94 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_WithDescriptor()
+        {
+            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555"
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Subscription subscription = result.Target;
+            Assert.AreEqual("123*123456789012345678", subscription.Descriptor.Name);
+            Assert.AreEqual("3334445555", subscription.Descriptor.Phone);
+
+            Assert.AreEqual("123*123456789012345678", subscription.Transactions[0].Descriptor.Name);
+            Assert.AreEqual("3334445555", subscription.Transactions[0].Descriptor.Phone);
+        }
+
+        [Test]
+        public void Update_WithDescriptor()
+        {
+            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555"
+                }
+            };
+
+            Result<Subscription> createResult = gateway.Subscription.Create(request);
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "999*999",
+                  Phone = "9999999"
+                }
+            };
+            Result<Subscription> result = gateway.Subscription.Update(createResult.Target.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+            Assert.AreEqual("999*999", subscription.Descriptor.Name);
+            Assert.AreEqual("9999999", subscription.Descriptor.Phone);
+        }
+
+        [Test]
+        public void Create_WithDescriptorValidation()
+        {
+            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "badcompanyname12*badproduct12",
+                  Phone = "%bad4445555"
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.DESCRIPTOR_NAME_FORMAT_IS_INVALID,
+                result.Errors.ForObject("Subscription").ForObject("Descriptor").OnField("Name")[0].Code
+            );
+
+            Assert.AreEqual(
+                ValidationErrorCode.DESCRIPTOR_PHONE_FORMAT_IS_INVALID,
+                result.Errors.ForObject("Subscription").ForObject("Descriptor").OnField("Phone")[0].Code
+            );
+        }
+
+        [Test]
         public void Cancel()
         {
             Plan plan = Plan.PLAN_WITHOUT_TRIAL;

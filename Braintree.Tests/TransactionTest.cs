@@ -1770,12 +1770,12 @@ namespace Braintree.Tests
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_DESCRIPTOR_NAME_FORMAT_IS_INVALID,
+                ValidationErrorCode.DESCRIPTOR_NAME_FORMAT_IS_INVALID,
                 result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Name")[0].Code
             );
 
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_DESCRIPTOR_PHONE_FORMAT_IS_INVALID,
+                ValidationErrorCode.DESCRIPTOR_PHONE_FORMAT_IS_INVALID,
                 result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Phone")[0].Code
             );
         }
