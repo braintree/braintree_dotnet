@@ -134,6 +134,13 @@ namespace Braintree
                 return new TextNode<CustomerSearchRequest>("address-street-address", this);
             }
         }
+        public TextNode<CustomerSearchRequest> AddressExtendedAddress
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("address-extended-address", this);
+            }
+        }
         public TextNode<CustomerSearchRequest> PaymentMethodToken
         {
             get

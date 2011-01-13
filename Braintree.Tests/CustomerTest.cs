@@ -704,6 +704,7 @@ namespace Braintree.Tests
                 AddressPostalCode.Is("12345").
                 AddressRegion.Is("IL").
                 AddressStreetAddress.Is("123 Main St").
+                AddressExtendedAddress.Is("Suite 123").
                 PaymentMethodToken.Is(creditCardToken).
                 CardholderName.Is("Tim Toole").
                 CreditCardNumber.Is("4111111111111111").
