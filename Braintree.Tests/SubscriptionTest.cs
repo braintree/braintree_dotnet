@@ -967,6 +967,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnTransactionId()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id,
+                Price = 7M
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id,
+                Price = 7M
+            };
+
+            Subscription matchingSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription nonMatchingSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                TransactionId.Is(matchingSubscription.Transactions[0].Id);
+
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, matchingSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, nonMatchingSubscription));
+        }
+
+        [Test]
         public void Search_OnPlanIdStartsWith()
         {
             Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;

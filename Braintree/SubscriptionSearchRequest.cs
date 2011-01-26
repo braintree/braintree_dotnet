@@ -69,7 +69,13 @@ namespace Braintree
                 return new MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus>("status", this);
             }
         }
-
+        public TextNode<SubscriptionSearchRequest> TransactionId
+        {
+            get
+            {
+                return new TextNode<SubscriptionSearchRequest>("transaction-id", this);
+            }
+        }
         public SubscriptionSearchRequest() : base()
         {
         }
