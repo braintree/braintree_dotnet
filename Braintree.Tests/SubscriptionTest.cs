@@ -833,6 +833,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnNextBillingDate()
+        {
+            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = triallessPlan.Id,
+                Price = 7M
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = trialPlan.Id,
+                Price = 7M
+            };
+
+            Subscription triallessSubscription = gateway.Subscription.Create(request1).Target;
+            Subscription trialSubscription = gateway.Subscription.Create(request2).Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                NextBillingDate.GreaterThanOrEqualTo(DateTime.Now.AddDays(5));
+
+            ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, triallessSubscription));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, trialSubscription));
+        }
+        [Test]
         public void Search_OnPlanIdIs()
         {
             Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
