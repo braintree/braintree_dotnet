@@ -68,16 +68,25 @@ namespace Braintree
         public virtual ResourceCollection<Customer> All()
         {
             NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search_ids"));
+            CustomerSearchRequest query = new CustomerSearchRequest();
 
             return new ResourceCollection<Customer>(response, delegate(String[] ids) {
-                return FetchCustomers(ids);
+                return FetchCustomers(query, ids);
             });
         }
 
-        private List<Customer> FetchCustomers(String[] ids)
+        public virtual ResourceCollection<Customer> Search(CustomerSearchRequest query)
         {
-            IdsSearchRequest query = new IdsSearchRequest().
-                Ids.IncludedIn(ids);
+            NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search_ids", query));
+
+            return new ResourceCollection<Customer>(response, delegate(String[] ids) {
+                return FetchCustomers(query, ids);
+            });
+        }
+
+        private List<Customer> FetchCustomers(CustomerSearchRequest query, String[] ids)
+        {
+            query.Ids.IncludedIn(ids);
 
             NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search", query));
 

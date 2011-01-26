@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.7.2</AssemblyName>
+    <AssemblyName>Braintree-2.8.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.7.2.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.8.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.7.2.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.8.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -70,6 +70,7 @@
     <Compile Include="CustomerGateway.cs" />
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="DateRangeNode.cs" />
+    <Compile Include="DescriptorRequest.cs" />
     <Compile Include="Discount.cs" />
     <Compile Include="DiscountsRequest.cs" />
     <Compile Include="Enumeration.cs" />
@@ -127,6 +128,8 @@
     <Compile Include="MultipleValueOrTextNode.cs" />
     <Compile Include="Exceptions\BraintreeException.cs" />
     <Compile Include="BooleanMultipleValueNode.cs" />
+    <Compile Include="Descriptor.cs" />
+    <Compile Include="CustomerSearchRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

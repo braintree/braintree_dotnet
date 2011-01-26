@@ -99,6 +99,7 @@ namespace Braintree
         public String CurrencyIsoCode { get; protected set; }
         public Customer Customer { get; protected set; }
         public String CvvResponseCode { get; protected set; }
+        public Descriptor Descriptor { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public String MerchantAccountId { get; protected set; }
@@ -106,6 +107,7 @@ namespace Braintree
         public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
+        public String PurchaseOrderNumber { get; protected set; }
         public String RefundedTransactionId { get; protected set; }
         [Obsolete("Use Transaction.RefundIds")]
         public String RefundId { get; protected set; }
@@ -115,6 +117,8 @@ namespace Braintree
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
         public String SubscriptionId { get; protected set; }
+        public Decimal? TaxAmount { get; protected set; }
+        public Boolean? TaxExempt { get; protected set; }
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
@@ -152,6 +156,7 @@ namespace Braintree
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            PurchaseOrderNumber = node.GetString("purchase-order-number");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
 
             #pragma warning disable 0618
@@ -161,11 +166,14 @@ namespace Braintree
             RefundIds = node.GetStrings("refund-ids/*");
             SettlementBatchId = node.GetString("settlement-batch-id");
             SubscriptionId = node.GetString("subscription-id");
+            TaxAmount = node.GetDecimal("tax-amount");
+            TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"), service);
             Customer = new Customer(node.GetNode("customer"), service);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
+            Descriptor = new Descriptor(node.GetNode("descriptor"));
 
             BillingAddress = new Address(node.GetNode("billing"));
             ShippingAddress = new Address(node.GetNode("shipping"));

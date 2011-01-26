@@ -650,5 +650,107 @@ namespace Braintree.Tests
 
             Assert.AreEqual(uniqueItems.Count, collection.MaximumCount);
         }
+
+        [Test]
+        public void Search_OnAllTextFields()
+        {
+            String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());
+
+            CustomerRequest request = new CustomerRequest
+            {
+                Company = "Braintree",
+                Email = "smith@example.com",
+                Fax = "5551231234",
+                FirstName = "Tom",
+                LastName = "Smith",
+                Phone = "5551231235",
+                Website = "http://example.com",
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Tim Toole",
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/2012",
+                    Token = creditCardToken,
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        Company = "Braintree",
+                        CountryName = "United States of America",
+                        ExtendedAddress = "Suite 123",
+                        FirstName = "Drew",
+                        LastName = "Michaelson",
+                        Locality = "Chicago",
+                        PostalCode = "12345",
+                        Region = "IL",
+                        StreetAddress = "123 Main St"
+                    }
+                }
+            };
+
+            Customer customer = gateway.Customer.Create(request).Target;
+            customer = gateway.Customer.Find(customer.Id);
+
+            CustomerSearchRequest searchRequest = new CustomerSearchRequest().
+                Id.Is(customer.Id).
+                FirstName.Is("Tom").
+                LastName.Is("Smith").
+                Company.Is("Braintree").
+                Email.Is("smith@example.com").
+                Website.Is("http://example.com").
+                Fax.Is("5551231234").
+                Phone.Is("5551231235").
+                AddressFirstName.Is("Drew").
+                AddressLastName.Is("Michaelson").
+                AddressLocality.Is("Chicago").
+                AddressPostalCode.Is("12345").
+                AddressRegion.Is("IL").
+                AddressStreetAddress.Is("123 Main St").
+                AddressExtendedAddress.Is("Suite 123").
+                PaymentMethodToken.Is(creditCardToken).
+                CardholderName.Is("Tim Toole").
+                CreditCardNumber.Is("4111111111111111").
+                CreditCardExpirationDate.Is("05/2012");
+
+            ResourceCollection<Customer> collection = gateway.Customer.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.MaximumCount);
+            Assert.AreEqual(customer.Id, collection.FirstItem.Id);
+        }
+
+        [Test]
+        public void Search_OnCreatedAt()
+        {
+            CustomerRequest request = new CustomerRequest();
+
+            Customer customer = gateway.Customer.Create(request).Target;
+
+            DateTime createdAt = customer.CreatedAt.Value;
+            DateTime threeHoursEarlier = createdAt.AddHours(-3);
+            DateTime oneHourEarlier = createdAt.AddHours(-1);
+            DateTime oneHourLater = createdAt.AddHours(1);
+
+            CustomerSearchRequest searchRequest = new CustomerSearchRequest().
+                Id.Is(customer.Id).
+                CreatedAt.Between(oneHourEarlier, oneHourLater);
+
+            Assert.AreEqual(1, gateway.Customer.Search(searchRequest).MaximumCount);
+
+            searchRequest = new CustomerSearchRequest().
+                Id.Is(customer.Id).
+                CreatedAt.GreaterThanOrEqualTo(oneHourEarlier);
+
+            Assert.AreEqual(1, gateway.Customer.Search(searchRequest).MaximumCount);
+
+            searchRequest = new CustomerSearchRequest().
+                Id.Is(customer.Id).
+                CreatedAt.LessThanOrEqualTo(oneHourLater);
+
+            Assert.AreEqual(1, gateway.Customer.Search(searchRequest).MaximumCount);
+
+            searchRequest = new CustomerSearchRequest().
+                Id.Is(customer.Id).
+                CreatedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Customer.Search(searchRequest).MaximumCount);
+        }
     }
 }

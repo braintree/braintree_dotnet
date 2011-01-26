@@ -1,3 +1,12 @@
+## 2.8.0
+
+* Added Customer search
+* Added dynamic descriptors to Subscriptions and Transactions
+* Added level 2 fields to Transactions:
+  * TaxAmount
+  * TaxExempt
+  * PurchaseOrderNumber
+
 ## 2.7.2
 * Added BillingAddressId to CreditCardRequest
 * Allow searching on Subscriptions that are currently in a trial period using InTrialPeriod

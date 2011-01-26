@@ -1067,6 +1067,7 @@ namespace Braintree.Tests
             Assert.IsNull(transaction.AvsErrorResponseCode);
             Assert.AreEqual("M", transaction.AvsPostalCodeResponseCode);
             Assert.AreEqual("M", transaction.AvsStreetAddressResponseCode);
+            Assert.IsFalse(transaction.TaxExempt.Value);
             Assert.AreEqual("M", transaction.CvvResponseCode);
             Assert.AreEqual("USD", transaction.CurrencyIsoCode);
 
@@ -1637,6 +1638,146 @@ namespace Braintree.Tests
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
             Assert.AreEqual("2010", parameters["transaction[credit_card][expiration_year]"]);
+        }
+
+        [Test]
+        public void Sale_WithLevel2Attributes()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                TaxExempt = true,
+                TaxAmount = 10M,
+                PurchaseOrderNumber = "aaaaaaaaaaaaaaaaaa",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_PURCHASE_ORDER_NUMBER_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").OnField("PurchaseOrderNumber")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLevel2Validations()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                TaxExempt = true,
+                TaxAmount = 10M,
+                PurchaseOrderNumber = "12345",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsTrue(transaction.TaxExempt.Value);
+            Assert.AreEqual(10M, transaction.TaxAmount.Value);
+            Assert.AreEqual("12345", transaction.PurchaseOrderNumber);
+        }
+
+        [Test]
+        public void Sale_WithDescriptor()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("123*123456789012345678", transaction.Descriptor.Name);
+            Assert.AreEqual("3334445555", transaction.Descriptor.Phone);
+        }
+
+        [Test]
+        public void ConfirmTransparentRedirect_SpecifyingDescriptor()
+        {
+            TransactionRequest trParams = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                Type = TransactionType.SALE,
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555"
+                }
+            };
+
+            TransactionRequest request = new TransactionRequest
+            {
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                }
+            };
+
+            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("123*123456789012345678", transaction.Descriptor.Name);
+            Assert.AreEqual("3334445555", transaction.Descriptor.Phone);
+        }
+
+        [Test]
+        public void Sale_WithDescriptorValidation()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "badcompanyname12*badproduct12",
+                  Phone = "%bad4445555"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.DESCRIPTOR_NAME_FORMAT_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Name")[0].Code
+            );
+
+            Assert.AreEqual(
+                ValidationErrorCode.DESCRIPTOR_PHONE_FORMAT_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Phone")[0].Code
+            );
         }
 
         #pragma warning disable 0618
