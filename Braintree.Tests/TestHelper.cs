@@ -26,6 +26,7 @@ namespace Braintree.Tests
 
             request.Method = "POST";
             request.KeepAlive = false;
+            request.AllowAutoRedirect = false;
 
             byte[] buffer = Encoding.UTF8.GetBytes(postData);
             request.ContentType = "application/x-www-form-urlencoded";
@@ -35,7 +36,7 @@ namespace Braintree.Tests
             requestStream.Close();
 
             var response = request.GetResponse() as HttpWebResponse;
-            String query = response.ResponseUri.Query;
+            String query = new Uri(response.GetResponseHeader("Location")).Query;
 
             response.Close();
 
