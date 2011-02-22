@@ -703,6 +703,7 @@ namespace Braintree.Tests
                 AddressLocality.Is("Chicago").
                 AddressPostalCode.Is("12345").
                 AddressRegion.Is("IL").
+                AddressCountryName.Is("United States of America").
                 AddressStreetAddress.Is("123 Main St").
                 AddressExtendedAddress.Is("Suite 123").
                 PaymentMethodToken.Is(creditCardToken).

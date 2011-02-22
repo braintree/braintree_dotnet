@@ -41,6 +41,13 @@ namespace Braintree
                 return new MultipleValueNode<SubscriptionSearchRequest, string>("merchant-account-id", this);
             }
         }
+        public DateRangeNode<SubscriptionSearchRequest> NextBillingDate
+        {
+            get
+            {
+                return new DateRangeNode<SubscriptionSearchRequest>("next-billing-date", this);
+            }
+        }
         public MultipleValueOrTextNode<SubscriptionSearchRequest, string> PlanId
         {
             get
@@ -69,7 +76,13 @@ namespace Braintree
                 return new MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus>("status", this);
             }
         }
-
+        public TextNode<SubscriptionSearchRequest> TransactionId
+        {
+            get
+            {
+                return new TextNode<SubscriptionSearchRequest>("transaction-id", this);
+            }
+        }
         public SubscriptionSearchRequest() : base()
         {
         }
