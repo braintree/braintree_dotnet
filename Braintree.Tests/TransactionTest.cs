@@ -404,6 +404,18 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnAuthorizationExpiredStatus()
+        {
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Status.Is(TransactionStatus.AUTHORIZATION_EXPIRED);
+
+            ResourceCollection<Transaction> results = gateway.Transaction.Search(searchRequest);
+
+            Assert.IsTrue(results.MaximumCount > 0);
+            Assert.AreEqual(TransactionStatus.AUTHORIZATION_EXPIRED, results.FirstItem.Status);
+        }
+
+        [Test]
         public void Search_OnSource()
         {
             TransactionRequest request = new TransactionRequest
@@ -642,6 +654,26 @@ namespace Braintree.Tests
                 AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnAuthorizationExpiredAt()
+        {
+            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
+            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
+            DateTime oneHourLater = DateTime.Now.AddHours(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                AuthorizationExpiredAt.Between(oneHourEarlier, oneHourLater);
+
+            var results = gateway.Transaction.Search(searchRequest);
+            Assert.IsTrue(results.MaximumCount > 0);
+            Assert.AreEqual(TransactionStatus.AUTHORIZATION_EXPIRED, results.FirstItem.Status);
         }
 
         [Test]

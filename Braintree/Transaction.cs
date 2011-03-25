@@ -23,6 +23,7 @@ namespace Braintree
 
     public class TransactionStatus : Enumeration
     {
+        public static readonly TransactionStatus AUTHORIZATION_EXPIRED = new TransactionStatus("authorization_expired");
         public static readonly TransactionStatus AUTHORIZED = new TransactionStatus("authorized");
         public static readonly TransactionStatus AUTHORIZING = new TransactionStatus("authorizing");
         public static readonly TransactionStatus FAILED = new TransactionStatus("failed");
@@ -35,8 +36,8 @@ namespace Braintree
         public static readonly TransactionStatus VOIDED = new TransactionStatus("voided");
 
         public static readonly TransactionStatus[] ALL = {
-            AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, SETTLED,
-            SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED
+            AUTHORIZATION_EXPIRED, AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED,
+            SETTLED, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED
         };
 
         protected TransactionStatus(String name) : base(name) {}

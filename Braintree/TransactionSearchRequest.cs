@@ -15,6 +15,13 @@ namespace Braintree
                 return new RangeNode<TransactionSearchRequest>("amount", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> AuthorizationExpiredAt
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("authorization-expired-at", this);
+            }
+        }
         public DateRangeNode<TransactionSearchRequest> AuthorizedAt
         {
             get
