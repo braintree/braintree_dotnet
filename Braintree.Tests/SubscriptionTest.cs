@@ -74,6 +74,26 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_SubscriptionReturnsATransactionWithSubscriptionBillingPeriod()
+        {
+            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+            Transaction transaction = subscription.Transactions[0];
+
+            Assert.AreEqual(subscription.BillingPeriodStartDate, transaction.Subscription.BillingPeriodStartDate);
+            Assert.AreEqual(subscription.BillingPeriodEndDate, transaction.Subscription.BillingPeriodEndDate);
+        }
+
+        [Test]
         public void Create_ReturnsDeclinedTransaction()
         {
             Plan plan = Plan.PLAN_WITHOUT_TRIAL;

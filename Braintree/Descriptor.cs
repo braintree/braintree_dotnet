@@ -11,8 +11,10 @@ namespace Braintree
 
         internal Descriptor(NodeWrapper node)
         {
-            Name = node.GetString("name");
-            Phone = node.GetString("phone");
+            if (node != null) {
+                Name = node.GetString("name");
+                Phone = node.GetString("phone");
+            }
         }
     }
 }
