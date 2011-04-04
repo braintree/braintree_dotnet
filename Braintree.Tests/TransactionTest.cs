@@ -1340,6 +1340,76 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithStoreInVaultOnSuccessWhenTransactionSuccessful()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Jane"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVaultOnSuccess = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.IsNotNull(creditCard.Token);
+            Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
+
+            Customer customer = transaction.Customer;
+            Assert.IsNotNull(customer.Id);
+            Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
+        }
+
+
+
+        [Test]
+        public void Sale_WithStoreInVaultOnSuccessWhenTransactionFails()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.DECLINE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Jane"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVaultOnSuccess = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.IsNull(creditCard.Token);
+            Assert.IsNull(transaction.GetVaultCreditCard());
+
+            Customer customer = transaction.Customer;
+            Assert.IsNull(customer.Id);
+            Assert.IsNull(transaction.GetVaultCustomer());
+        }
+
+        [Test]
         public void Sale_WithStoreInVaultForBillingAndShipping()
         {
             TransactionRequest request = new TransactionRequest
