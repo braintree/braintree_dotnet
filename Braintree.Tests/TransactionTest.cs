@@ -1657,6 +1657,39 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithPaymentMethodTokenAndCvv()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodToken = creditCard.Token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    CVV = "301"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("S", transaction.CvvResponseCode);
+            Assert.AreEqual(creditCard.Token, transaction.CreditCard.Token);
+            Assert.AreEqual("510510", transaction.CreditCard.Bin);
+            Assert.AreEqual("05/2012", transaction.CreditCard.ExpirationDate);
+        }
+
+        [Test]
         public void Sale_UsesShippingAddressFromVault()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
