@@ -558,31 +558,31 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
             DateTime createdAt = transaction.CreatedAt.Value;
-            DateTime threeHoursEarlier = createdAt.AddHours(-3);
-            DateTime oneHourEarlier = createdAt.AddHours(-1);
-            DateTime oneHourLater = createdAt.AddHours(1);
+            DateTime threeDaysEarlier = createdAt.AddDays(-3);
+            DateTime oneDayEarlier = createdAt.AddDays(-1);
+            DateTime oneDayLater = createdAt.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                CreatedAt.Between(oneHourEarlier, oneHourLater);
+                CreatedAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                CreatedAt.GreaterThanOrEqualTo(oneHourEarlier);
+                CreatedAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                CreatedAt.LessThanOrEqualTo(oneHourLater);
+                CreatedAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                CreatedAt.Between(threeHoursEarlier, oneHourEarlier);
+                CreatedAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -602,12 +602,12 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                CreatedAt.Between(oneHourEarlier, oneHourLater);
+                CreatedAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -627,31 +627,31 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                AuthorizedAt.Between(oneHourEarlier, oneHourLater);
+                AuthorizedAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                AuthorizedAt.GreaterThanOrEqualTo(oneHourEarlier);
+                AuthorizedAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                AuthorizedAt.LessThanOrEqualTo(oneHourLater);
+                AuthorizedAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier);
+                AuthorizedAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -659,17 +659,17 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnAuthorizationExpiredAt()
         {
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
-                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier);
+                AuthorizedAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
-                AuthorizationExpiredAt.Between(oneHourEarlier, oneHourLater);
+                AuthorizationExpiredAt.Between(oneDayEarlier, oneDayLater);
 
             var results = gateway.Transaction.Search(searchRequest);
             Assert.IsTrue(results.MaximumCount > 0);
@@ -691,31 +691,31 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Transaction;
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                FailedAt.Between(oneHourEarlier, oneHourLater);
+                FailedAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                FailedAt.GreaterThanOrEqualTo(oneHourEarlier);
+                FailedAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                FailedAt.LessThanOrEqualTo(oneHourLater);
+                FailedAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                FailedAt.Between(threeHoursEarlier, oneHourEarlier);
+                FailedAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -744,31 +744,31 @@ namespace Braintree.Tests
 
             Transaction transaction = processingRulesGateway.Transaction.Sale(request).Transaction;
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                GatewayRejectedAt.Between(oneHourEarlier, oneHourLater);
+                GatewayRejectedAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                GatewayRejectedAt.GreaterThanOrEqualTo(oneHourEarlier);
+                GatewayRejectedAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                GatewayRejectedAt.LessThanOrEqualTo(oneHourLater);
+                GatewayRejectedAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                GatewayRejectedAt.Between(threeHoursEarlier, oneHourEarlier);
+                GatewayRejectedAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -788,31 +788,31 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Transaction;
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                ProcessorDeclinedAt.Between(oneHourEarlier, oneHourLater);
+                ProcessorDeclinedAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                ProcessorDeclinedAt.GreaterThanOrEqualTo(oneHourEarlier);
+                ProcessorDeclinedAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                ProcessorDeclinedAt.LessThanOrEqualTo(oneHourLater);
+                ProcessorDeclinedAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                ProcessorDeclinedAt.Between(threeHoursEarlier, oneHourEarlier);
+                ProcessorDeclinedAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -838,31 +838,31 @@ namespace Braintree.Tests
             Settle(transaction.Id);
             transaction = gateway.Transaction.Find(transaction.Id);
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SettledAt.Between(oneHourEarlier, oneHourLater);
+                SettledAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SettledAt.GreaterThanOrEqualTo(oneHourEarlier);
+                SettledAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SettledAt.LessThanOrEqualTo(oneHourLater);
+                SettledAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SettledAt.Between(threeHoursEarlier, oneHourEarlier);
+                SettledAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -886,31 +886,31 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SubmittedForSettlementAt.Between(oneHourEarlier, oneHourLater);
+                SubmittedForSettlementAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SubmittedForSettlementAt.GreaterThanOrEqualTo(oneHourEarlier);
+                SubmittedForSettlementAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SubmittedForSettlementAt.LessThanOrEqualTo(oneHourLater);
+                SubmittedForSettlementAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                SubmittedForSettlementAt.Between(threeHoursEarlier, oneHourEarlier);
+                SubmittedForSettlementAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -931,31 +931,31 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             transaction = gateway.Transaction.Void(transaction.Id).Target;
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                VoidedAt.Between(oneHourEarlier, oneHourLater);
+                VoidedAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                VoidedAt.GreaterThanOrEqualTo(oneHourEarlier);
+                VoidedAt.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                VoidedAt.LessThanOrEqualTo(oneHourLater);
+                VoidedAt.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                VoidedAt.Between(threeHoursEarlier, oneHourEarlier);
+                VoidedAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -979,21 +979,21 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-            DateTime threeHoursEarlier = DateTime.Now.AddHours(-3);
-            DateTime oneHourEarlier = DateTime.Now.AddHours(-1);
-            DateTime oneHourLater = DateTime.Now.AddHours(1);
+            DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                AuthorizedAt.Between(oneHourEarlier, oneHourLater).
-                SubmittedForSettlementAt.Between(oneHourEarlier, oneHourLater);
+                AuthorizedAt.Between(oneDayEarlier, oneDayLater).
+                SubmittedForSettlementAt.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
-                AuthorizedAt.Between(threeHoursEarlier, oneHourEarlier).
-                SubmittedForSettlementAt.Between(threeHoursEarlier, oneHourEarlier);
+                AuthorizedAt.Between(threeDaysEarlier, oneDayEarlier).
+                SubmittedForSettlementAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -1340,6 +1340,76 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithStoreInVaultOnSuccessWhenTransactionSuccessful()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Jane"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVaultOnSuccess = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.IsNotNull(creditCard.Token);
+            Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
+
+            Customer customer = transaction.Customer;
+            Assert.IsNotNull(customer.Id);
+            Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
+        }
+
+
+
+        [Test]
+        public void Sale_WithStoreInVaultOnSuccessWhenTransactionFails()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.DECLINE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Jane"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVaultOnSuccess = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.IsNull(creditCard.Token);
+            Assert.IsNull(transaction.GetVaultCreditCard());
+
+            Customer customer = transaction.Customer;
+            Assert.IsNull(customer.Id);
+            Assert.IsNull(transaction.GetVaultCustomer());
+        }
+
+        [Test]
         public void Sale_WithStoreInVaultForBillingAndShipping()
         {
             TransactionRequest request = new TransactionRequest
@@ -1581,6 +1651,39 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
+            Assert.AreEqual(creditCard.Token, transaction.CreditCard.Token);
+            Assert.AreEqual("510510", transaction.CreditCard.Bin);
+            Assert.AreEqual("05/2012", transaction.CreditCard.ExpirationDate);
+        }
+
+        [Test]
+        public void Sale_WithPaymentMethodTokenAndCvv()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodToken = creditCard.Token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    CVV = "301"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual("S", transaction.CvvResponseCode);
             Assert.AreEqual(creditCard.Token, transaction.CreditCard.Token);
             Assert.AreEqual("510510", transaction.CreditCard.Bin);
             Assert.AreEqual("05/2012", transaction.CreditCard.ExpirationDate);

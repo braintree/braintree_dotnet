@@ -118,6 +118,7 @@ namespace Braintree
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
         public String SubscriptionId { get; protected set; }
+        public Subscription Subscription { get; protected set; }
         public Decimal? TaxAmount { get; protected set; }
         public Boolean? TaxExempt { get; protected set; }
         public TransactionType Type { get; protected set; }
@@ -171,6 +172,7 @@ namespace Braintree
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"), service);
+            Subscription = new Subscription(node.GetNode("subscription"), service);
             Customer = new Customer(node.GetNode("customer"), service);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");

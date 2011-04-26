@@ -74,6 +74,26 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_SubscriptionReturnsATransactionWithSubscriptionBillingPeriod()
+        {
+            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+            Transaction transaction = subscription.Transactions[0];
+
+            Assert.AreEqual(subscription.BillingPeriodStartDate, transaction.Subscription.BillingPeriodStartDate);
+            Assert.AreEqual(subscription.BillingPeriodEndDate, transaction.Subscription.BillingPeriodEndDate);
+        }
+
+        [Test]
         public void Create_ReturnsDeclinedTransaction()
         {
             Plan plan = Plan.PLAN_WITHOUT_TRIAL;
@@ -1799,7 +1819,7 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "999*999",
-                  Phone = "9999999"
+                  Phone = "1234567890"
                 }
             };
             Result<Subscription> result = gateway.Subscription.Update(createResult.Target.Id, updateRequest);
@@ -1807,7 +1827,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Subscription subscription = result.Target;
             Assert.AreEqual("999*999", subscription.Descriptor.Name);
-            Assert.AreEqual("9999999", subscription.Descriptor.Phone);
+            Assert.AreEqual("1234567890", subscription.Descriptor.Phone);
         }
 
         [Test]
