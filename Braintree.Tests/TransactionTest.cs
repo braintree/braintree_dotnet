@@ -1053,7 +1053,7 @@ namespace Braintree.Tests
                     Email = "dan@example.com",
                     Phone = "419-555-1234",
                     Fax = "419-555-1235",
-                    Website = "http://braintreepaymentsolutions.com"
+                    Website = "http://braintreepayments.com"
                 },
                 BillingAddress = new AddressRequest
                 {
@@ -1120,7 +1120,7 @@ namespace Braintree.Tests
             Assert.AreEqual("dan@example.com", customer.Email);
             Assert.AreEqual("419-555-1234", customer.Phone);
             Assert.AreEqual("419-555-1235", customer.Fax);
-            Assert.AreEqual("http://braintreepaymentsolutions.com", customer.Website);
+            Assert.AreEqual("http://braintreepayments.com", customer.Website);
 
             Assert.IsNull(transaction.GetVaultBillingAddress());
             Address billingAddress = transaction.BillingAddress;
