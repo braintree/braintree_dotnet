@@ -664,7 +664,7 @@ namespace Braintree.Tests
             DateTime oneDayLater = DateTime.Now.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
-                AuthorizedAt.Between(threeDaysEarlier, oneDayEarlier);
+                AuthorizationExpiredAt.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
 
