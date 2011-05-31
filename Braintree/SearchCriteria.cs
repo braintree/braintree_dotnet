@@ -11,7 +11,7 @@ namespace Braintree
 
         public SearchCriteria(String type, String value)
         {
-            Xml = BuildXMLElement(type, value);
+            Xml = BuildXMLElement(type, DefaultToEmptyString(value));
         }
 
         public SearchCriteria(String type, DateTime value)
@@ -46,6 +46,15 @@ namespace Braintree
         public override String ToQueryString(String root)
         {
             throw new NotImplementedException();
+        }
+
+        private String DefaultToEmptyString(String value)
+        {
+            if (value == null) {
+                return "";
+            } else {
+                return value;
+            }
         }
     }
 }
