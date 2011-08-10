@@ -73,6 +73,10 @@ namespace Braintree
             {
                 return new Subscription(node, service) as T;
             }
+            else if (typeof(T) == typeof(SettlementBatchSummary))
+            {
+                return new SettlementBatchSummary(node) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }

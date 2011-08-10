@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <VisualState xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ShowCheckBoxes="false">
   <TopNode>[0-1000]C:\Users\pair\braintree-dotnet\Braintree.Tests\Braintree.Tests.csproj</TopNode>
-  <SelectedNode>[0-1008]Braintree.Tests.CustomerTest.Delete_DeletesTheCustomer</SelectedNode>
+  <SelectedNode>[0-1045]Braintree.Tests.SettlementBatchSummaryTest.Generate_ReturnsAnEmptyCollectionIfThereIsNoData</SelectedNode>
   <ExcludeCategories>false</ExcludeCategories>
   <Nodes>
     <Node UniqueName="[0-1000]C:\Users\pair\braintree-dotnet\Braintree.Tests\Braintree.Tests.csproj" Expanded="true" />
-    <Node UniqueName="[0-1009]C:\Users\pair\braintree-dotnet\Braintree.Tests\bin\Debug\Braintree.Tests.dll" Expanded="true" />
-    <Node UniqueName="[0-1010]Braintree" Expanded="true" />
-    <Node UniqueName="[0-1011]Braintree.Tests" Expanded="true" />
-    <Node UniqueName="[0-1001]Braintree.Tests.CustomerTest" Expanded="true" />
+    <Node UniqueName="[0-1314]C:\Users\pair\braintree-dotnet\Braintree.Tests\bin\Debug\Braintree.Tests.dll" Expanded="true" />
+    <Node UniqueName="[0-1315]Braintree" Expanded="true" />
+    <Node UniqueName="[0-1316]Braintree.Tests" Expanded="true" />
+    <Node UniqueName="[0-1044]Braintree.Tests.SettlementBatchSummaryTest" Expanded="true" />
   </Nodes>
 </VisualState>

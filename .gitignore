@@ -15,3 +15,4 @@
 .DS_Store
 /test-results
 /Braintree/TestResult.xml
+/Braintree.Tests/TestResult.xml
