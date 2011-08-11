@@ -15,22 +15,26 @@ namespace Braintree
 
         public Result<SettlementBatchSummary> Generate(DateTime settlementDate)
         {
-            var queryString = new QueryString();
-            queryString.Append("settlement_date", settlementDate.ToShortDateString());
-            return GetSummary(queryString);
+            SettlementBatchSummaryRequest request = new SettlementBatchSummaryRequest
+            {
+                SettlementDate = settlementDate
+            };
+            return GetSummary(request);
         }
 
         public Result<SettlementBatchSummary> Generate(DateTime settlementDate, string groupByCustomField)
         {
-            var queryString = new QueryString();
-            queryString.Append("settlement_date", settlementDate.ToShortDateString());
-            queryString.Append("group_by_custom_field", groupByCustomField);
-            return GetSummary(queryString);
+            SettlementBatchSummaryRequest request = new SettlementBatchSummaryRequest
+            {
+                SettlementDate = settlementDate,
+                GroupByCustomField = groupByCustomField
+            };
+            return GetSummary(request);
         }
 
-        private Result<SettlementBatchSummary> GetSummary(QueryString queryString)
+        private Result<SettlementBatchSummary> GetSummary(SettlementBatchSummaryRequest request)
         {
-            NodeWrapper response = new NodeWrapper(Service.Get(String.Format("/settlement_batch_summary?{0}", queryString.ToString())));
+            NodeWrapper response = new NodeWrapper(Service.Post("/settlement_batch_summary", request));
             return new Result<SettlementBatchSummary>(response, Service);
         }
     }
