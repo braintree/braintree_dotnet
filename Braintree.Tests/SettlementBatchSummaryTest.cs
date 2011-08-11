@@ -30,7 +30,7 @@ namespace Braintree.Tests
         public void Generate_ReturnsAnEmptyCollectionIfThereIsNoData()
         {
             Result<SettlementBatchSummary> result = gateway.SettlementBatchSummary.Generate(DateTime.Parse("1979-01-01"));
-            Assert.AreEqual(0, result.Target.Results.Count);
+            Assert.AreEqual(0, result.Target.Records.Count);
         }
 
         [Test]
@@ -57,7 +57,7 @@ namespace Braintree.Tests
 
             var result = gateway.SettlementBatchSummary.Generate(DateTime.Now);
             var visas = new List<IDictionary<String,String>>();
-            foreach (var row in result.Target.Results)
+            foreach (var row in result.Target.Records)
             {
                 if (Braintree.CreditCardCardType.VISA.ToString().Equals(row["card_type"]))
                 {
@@ -97,7 +97,7 @@ namespace Braintree.Tests
 
             var result = gateway.SettlementBatchSummary.Generate(DateTime.Now, "store_me");
             var customValues = new List<IDictionary<String, String>>();
-            foreach (var row in result.Target.Results)
+            foreach (var row in result.Target.Records)
             {
                 if ("custom value".Equals(row["store_me"]))
                 {

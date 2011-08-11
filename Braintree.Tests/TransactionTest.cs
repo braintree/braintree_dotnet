@@ -131,7 +131,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Settle(transaction.Id);
+            TestHelper.Settle(service, transaction.Id);
             transaction = gateway.Transaction.Find(transaction.Id);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
@@ -472,7 +472,7 @@ namespace Braintree.Tests
 
             Transaction saleTransaction = gateway.Transaction.Sale(request).Target;
 
-            Settle(saleTransaction.Id);
+            TestHelper.Settle(service, saleTransaction.Id);
             Transaction refundTransaction = gateway.Transaction.Refund(saleTransaction.Id).Target;
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
@@ -835,7 +835,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Settle(transaction.Id);
+            TestHelper.Settle(service, transaction.Id);
             transaction = gateway.Transaction.Find(transaction.Id);
 
             DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
@@ -2330,7 +2330,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Settle(transaction.Id);
+            TestHelper.Settle(service, transaction.Id);
 
             Result<Transaction> result;
             try
@@ -2373,7 +2373,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Settle(transaction.Id);
+            TestHelper.Settle(service, transaction.Id);
 
             Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, Decimal.Parse("500.00"));
             Assert.IsTrue(result.IsSuccess());
@@ -2399,7 +2399,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Settle(transaction.Id);
+            TestHelper.Settle(service, transaction.Id);
 
             Transaction refund1 = gateway.Transaction.Refund(transaction.Id, 500M).Target;
             Assert.AreEqual(TransactionType.CREDIT, refund1.Type);
@@ -2413,12 +2413,6 @@ namespace Braintree.Tests
             Assert.AreEqual(2, refundedTransaction.RefundIds.Count);
             Assert.Contains(refund1.Id, refundedTransaction.RefundIds);
             Assert.Contains(refund2.Id, refundedTransaction.RefundIds);
-        }
-
-        private void Settle(String transactionId)
-        {
-            NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
-            Assert.IsTrue(response.IsSuccess());
         }
 
         [Test]

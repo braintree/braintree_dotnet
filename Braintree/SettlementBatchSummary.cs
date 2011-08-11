@@ -5,21 +5,21 @@ namespace Braintree
 {
     public class SettlementBatchSummary
     {
-        private IList<IDictionary<String, String>> results;
+        private IList<IDictionary<String, String>> records;
 
         internal SettlementBatchSummary (NodeWrapper node)
         {
-            results = new List<IDictionary<String, String>>();
+            records = new List<IDictionary<String, String>>();
 
-            foreach (var result in node.GetList("records/record"))
+            foreach (var record in node.GetList("records/record"))
             {
-                results.Add(result.GetDictionary("."));
+                records.Add(record.GetDictionary("."));
             }
         }
 
-        public IList<IDictionary<String, String>> Results
+        public IList<IDictionary<String, String>> Records
         {
-            get { return results; }
+            get { return records; }
         }
     }
 }
