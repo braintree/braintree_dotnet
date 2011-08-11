@@ -13,14 +13,7 @@ namespace Braintree
 
             foreach (var result in node.GetList("records/record"))
             {
-                var row = new Dictionary<String, String>();
-
-                row["MerchantAccountId"] = result.GetString("merchant-account-id");
-                row["CardType"] = result.GetString("card-type");
-                row["Kind"] = result.GetString("kind");
-                row["AmountSettled"] = result.GetString("amount-settled");
-                row["Count"] = result.GetString("count");
-                results.Add(row);
+                results.Add(result.GetDictionary("."));
             }
         }
 
