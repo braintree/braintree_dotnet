@@ -2530,7 +2530,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Clone()
+        public void CloneTransaction()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2563,7 +2563,7 @@ namespace Braintree.Tests
                 Amount = 123.45M
             };
 
-            Result<Transaction> cloneResult = gateway.Transaction.Clone(transaction.Id, cloneRequest);
+            Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
             Assert.IsTrue(cloneResult.IsSuccess());
             Transaction cloneTransaction = cloneResult.Target;
 
@@ -2586,7 +2586,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Clone_WithValidationErrors()
+        public void CloneTransaction_WithValidationErrors()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2607,7 +2607,7 @@ namespace Braintree.Tests
                 Amount = 123.45M
             };
 
-            Result<Transaction> cloneResult = gateway.Transaction.Clone(transaction.Id, cloneRequest);
+            Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
             Assert.IsFalse(cloneResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_CLONE_CREDIT, cloneResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }

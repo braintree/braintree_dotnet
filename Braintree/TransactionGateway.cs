@@ -94,8 +94,8 @@ namespace Braintree
         public virtual Result<Transaction> SubmitForSettlement(String id, Decimal amount)
         {
             TransactionRequest request = new TransactionRequest();
-			request.Amount = amount;
-			
+            request.Amount = amount;
+
             XmlNode response = Service.Put("/transactions/" + id + "/submit_for_settlement", request);
 
             return new Result<Transaction>(new NodeWrapper(response), Service);
@@ -117,7 +117,7 @@ namespace Braintree
             });
         }
 
-        public virtual Result<Transaction> Clone (String id, TransactionCloneRequest cloneRequest)
+        public virtual Result<Transaction> CloneTransaction(String id, TransactionCloneRequest cloneRequest)
         {
             XmlNode response = Service.Post("/transactions/" + id + "/clone", cloneRequest);
 
