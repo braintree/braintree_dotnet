@@ -65,6 +65,7 @@ namespace Braintree.Tests
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
             Assert.IsFalse((Boolean)subscription.HasTrialPeriod);
+            Assert.AreEqual(1, subscription.CurrentBillingCycle);
 
             Assert.IsTrue(subscription.BillingPeriodEndDate.HasValue);
             Assert.IsTrue(subscription.BillingPeriodStartDate.HasValue);
@@ -133,11 +134,13 @@ namespace Braintree.Tests
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
             Assert.IsTrue(subscription.HasTrialPeriod.Value);
+            Assert.AreEqual(0, subscription.CurrentBillingCycle.Value);
 
             Assert.IsFalse(subscription.BillingPeriodEndDate.HasValue);
             Assert.IsFalse(subscription.BillingPeriodStartDate.HasValue);
             Assert.IsTrue(subscription.NextBillingDate.HasValue);
             Assert.IsTrue(subscription.FirstBillingDate.HasValue);
+            Assert.IsTrue(subscription.CurrentBillingCycle.HasValue);
         }
 
         [Test]

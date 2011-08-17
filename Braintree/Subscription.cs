@@ -81,6 +81,7 @@ namespace Braintree
         public Int32? BillingDayOfMonth { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
         public DateTime? BillingPeriodStartDate { get; protected set; }
+        public Int32? CurrentBillingCycle { get; protected set; }
         public Int32? DaysPastDue { get; protected set; }
         public Descriptor Descriptor { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
@@ -109,6 +110,7 @@ namespace Braintree
             BillingDayOfMonth = node.GetInteger("billing-day-of-month");
             BillingPeriodEndDate = node.GetDateTime("billing-period-end-date");
             BillingPeriodStartDate = node.GetDateTime("billing-period-start-date");
+            CurrentBillingCycle = node.GetInteger("current-billing-cycle");
             DaysPastDue = node.GetInteger("days-past-due");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
             FailureCount = node.GetInteger("failure-count");
