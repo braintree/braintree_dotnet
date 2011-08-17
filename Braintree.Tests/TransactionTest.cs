@@ -2530,7 +2530,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Clone_WithAllAttributes()
+        public void Clone()
         {
             TransactionRequest request = new TransactionRequest
             {
