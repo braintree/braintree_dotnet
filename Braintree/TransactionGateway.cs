@@ -117,6 +117,13 @@ namespace Braintree
             });
         }
 
+        public virtual Result<Transaction> Clone (String id, TransactionCloneRequest cloneRequest)
+        {
+            XmlNode response = Service.Post("/transactions/" + id + "/clone", cloneRequest);
+
+            return new Result<Transaction>(new NodeWrapper(response), Service);
+        }
+
         private List<Transaction> FetchTransactions(TransactionSearchRequest query, String[] ids)
         {
             query.Ids.IncludedIn(ids);
