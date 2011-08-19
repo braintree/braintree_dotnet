@@ -134,6 +134,7 @@
     <Compile Include="SettlementBatchSummaryGateway.cs" />
     <Compile Include="SettlementBatchSummary.cs" />
     <Compile Include="TransactionCloneRequest.cs" />
+    <Compile Include="TransactionOptionsCloneRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

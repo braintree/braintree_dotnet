@@ -2583,6 +2583,41 @@ namespace Braintree.Tests
             Assert.AreEqual("Dan", cloneTransaction.Customer.FirstName);
             Assert.AreEqual("Carl", cloneTransaction.BillingAddress.FirstName);
             Assert.AreEqual("Andrew", cloneTransaction.ShippingAddress.FirstName);
+
+        }
+
+        [Test]
+        public void CloneTransactionAndSubmitForSettlement()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            TransactionCloneRequest cloneRequest = new TransactionCloneRequest
+            {
+                Amount = 123.45M,
+                Options = new TransactionOptionsCloneRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
+            Assert.IsTrue(cloneResult.IsSuccess());
+            Transaction cloneTransaction = cloneResult.Target;
+
+            Assert.AreEqual(123.45, cloneTransaction.Amount);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, cloneTransaction.Status);
         }
 
         [Test]
