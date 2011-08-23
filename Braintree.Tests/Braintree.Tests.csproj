@@ -60,7 +60,6 @@
     <Compile Include="CreditCardVerificationTest.cs" />
     <Compile Include="CryptoTest.cs" />
     <Compile Include="CustomerTest.cs" />
-    <Compile Include="Plan.cs" />
     <Compile Include="QueryStringTest.cs" />
     <Compile Include="SubscriptionTest.cs" />
     <Compile Include="TestHelper.cs" />
@@ -77,6 +76,12 @@
     <Compile Include="BraintreeServiceTest.cs" />
     <Compile Include="StringUtilTest.cs" />
     <Compile Include="SettlementBatchSummaryTest.cs" />
+    <Compile Include="PlanFixture.cs" />
+    <Compile Include="PlanTest.cs" />
+    <Compile Include="PlanRequestForTests.cs" />
+    <Compile Include="ModificationRequestForTests.cs" />
+    <Compile Include="AddOnTest.cs" />
+    <Compile Include="DiscountTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

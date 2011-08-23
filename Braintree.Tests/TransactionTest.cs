@@ -2464,7 +2464,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id,
                 AddOns = new AddOnsRequest
                 {
                     Add = new AddAddOnRequest[]

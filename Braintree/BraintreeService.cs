@@ -51,7 +51,7 @@ namespace Braintree
             GetXmlResponse(URL, "DELETE", null);
         }
 
-        internal XmlNode Post(string URL, Request requestBody)
+        public XmlNode Post(string URL, Request requestBody)
         {
             return GetXmlResponse(URL, "POST", requestBody);
         }

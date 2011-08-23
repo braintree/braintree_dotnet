@@ -106,9 +106,24 @@ namespace Braintree
             get { return new AddressGateway(new BraintreeService(Configuration)); }
         }
 
+        public virtual AddOnGateway AddOn
+        {
+            get { return new AddOnGateway(new BraintreeService(Configuration)); }
+        }
+
         public virtual CreditCardGateway CreditCard
         {
             get { return new CreditCardGateway(new BraintreeService(Configuration)); }
+        }
+
+        public virtual DiscountGateway Discount
+        {
+            get { return new DiscountGateway(new BraintreeService(Configuration)); }
+        }
+
+        public virtual PlanGateway Plan
+        {
+            get { return new PlanGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual SettlementBatchSummaryGateway SettlementBatchSummary
