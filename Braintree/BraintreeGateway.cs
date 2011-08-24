@@ -111,6 +111,11 @@ namespace Braintree
             get { return new CreditCardGateway(new BraintreeService(Configuration)); }
         }
 
+        public virtual SettlementBatchSummaryGateway SettlementBatchSummary
+        {
+            get { return new SettlementBatchSummaryGateway(new BraintreeService(Configuration)); }
+        }
+
         public virtual SubscriptionGateway Subscription
         {
             get { return new SubscriptionGateway(new BraintreeService(Configuration)); }

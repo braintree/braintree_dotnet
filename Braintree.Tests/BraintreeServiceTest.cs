@@ -10,17 +10,6 @@ namespace Braintree.Tests
     public class BraintreeServiceTest
     {
         [Test]
-        public void QASSLCertificateSuccessful()
-        {
-            try {
-                new BraintreeService(new Configuration(Environment.QA, "dummy", "dummy", "dummy")).Get("/");
-                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
-            } catch (Braintree.Exceptions.AuthenticationException) {
-                // expected
-            }
-        }
-
-        [Test]
         public void SandboxSSLCertificateSuccessful()
         {
             try {

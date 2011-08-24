@@ -93,6 +93,15 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ToXML_DefaultsNullCriteriaToEmptyString()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                PlanId.Is(null);
+
+            TestHelper.AssertIncludes("<plan-id><is></is></plan-id>", request.ToXml());
+        }
+
+        [Test]
         public void ToXML_EscapesGeneratedXMLForCustomFields()
         {
             TransactionRequest request = new TransactionRequest

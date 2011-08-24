@@ -2,6 +2,7 @@
 
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Net;
 using System.Xml;
 using System.Text;
@@ -77,6 +78,7 @@ namespace Braintree
                 var request = WebRequest.Create(BaseMerchantURL() + URL) as HttpWebRequest;
                 request.Headers.Add("Authorization", GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", ApiVersion);
+                request.Headers.Add("Accept-Encoding", "gzip");
                 request.Accept = "application/xml";
                 request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
                 request.Method = method;
@@ -97,7 +99,8 @@ namespace Braintree
 
                 var response = request.GetResponse() as HttpWebResponse;
 
-                XmlNode doc = ParseResponseStream(response.GetResponseStream());
+
+                XmlNode doc = ParseResponseStream(GetResponseStream(response));
                 response.Close();
 
                 return doc;
@@ -109,7 +112,7 @@ namespace Braintree
 
                 if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
                 {
-                    XmlNode doc = ParseResponseStream(((HttpWebResponse)e.Response).GetResponseStream());
+                    XmlNode doc = ParseResponseStream(GetResponseStream((HttpWebResponse) e.Response));
                     e.Response.Close();
                     return doc;
                 }
@@ -118,6 +121,16 @@ namespace Braintree
 
                 throw e;
             }
+        }
+
+        private Stream GetResponseStream(HttpWebResponse response)
+        {
+            var stream = response.GetResponseStream();
+            if (response.ContentEncoding.Equals("gzip", StringComparison.CurrentCultureIgnoreCase))
+            {
+                stream = new GZipStream(response.GetResponseStream(), CompressionMode.Decompress);
+            }
+            return stream;
         }
 
         private XmlNode ParseResponseStream(Stream stream)

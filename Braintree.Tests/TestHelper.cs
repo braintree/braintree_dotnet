@@ -65,5 +65,11 @@ namespace Braintree.Tests
             }
             return false;
         }
+
+        public static void Settle(BraintreeService service, String transactionId)
+        {
+            NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
+            Assert.IsTrue(response.IsSuccess());
+        }
     }
 }
