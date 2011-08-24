@@ -27,14 +27,17 @@ namespace Braintree.Tests
         [Test]
         public void All_ReturnsAllPlans()
         {
+            String planToken = String.Format("plan{0}", new Random().Next(1000000).ToString());
+
             service.Post("/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,
                 BillingFrequency = 1,
                 CurrencyIsoCode = "USD",
                 Description = "a_test_plan",
+                Id = planToken,
                 Name = "dotnet_plan",
                 NumberOfBillingCycles = 1,
-                Price = 1,
+                Price = 100.00M,
                 TrialPeriod = false,
                 TrialDuration = 1,
                 TrialDurationUnit = PlanDurationUnit.DAY
@@ -47,7 +50,7 @@ namespace Braintree.Tests
             (
                 delegate(Plan p)
                 {
-                    return p.Name == "dotnet_plan";
+                    return p.Id == planToken;
                 }
             );
 
@@ -57,7 +60,7 @@ namespace Braintree.Tests
             Assert.AreEqual("USD", plan.CurrencyIsoCode);
             Assert.AreEqual("a_test_plan", plan.Description);
             Assert.AreEqual(1, plan.NumberOfBillingCycles);
-            Assert.AreEqual(100M, plan.Price);
+            Assert.AreEqual(100.00M, plan.Price);
             Assert.AreEqual(false, plan.TrialPeriod);
             Assert.AreEqual(1, plan.TrialDuration);
             Assert.AreEqual(PlanDurationUnit.DAY, plan.TrialDurationUnit);
@@ -76,7 +79,7 @@ namespace Braintree.Tests
                 Id = planToken,
                 Name = "dotnet_plan",
                 NumberOfBillingCycles = 1,
-                Price = 1,
+                Price = 100.00M,
                 TrialPeriod = false,
                 TrialDuration = 1,
                 TrialDurationUnit = PlanDurationUnit.DAY
@@ -103,14 +106,12 @@ namespace Braintree.Tests
             (
                 delegate(Plan p)
                 {
-                    return p.Name == "dotnet_plan";
+                    return p.Id == planToken;
                 }
             );
 
             Assert.AreEqual("dotnet_plan", plan.Name);
-            Assert.AreEqual(1, plan.AddOns.Count);
             Assert.AreEqual("dotnet_test_modification_add_on", plan.AddOns[0].Name);
-            Assert.AreEqual(1, plan.Discounts.Count);
             Assert.AreEqual("dotnet_test_modification_discount", plan.Discounts[0].Name);
         }
     }

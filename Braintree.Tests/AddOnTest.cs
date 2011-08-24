@@ -29,7 +29,7 @@ namespace Braintree.Tests
             String addOnId = String.Format("dotnet_add_on{0}", new Random().Next(1000000).ToString());
 
             service.Post("/modifications/create_modification_for_tests", new ModificationRequestForTests {
-                Amount = 100,
+                Amount = 100.00M,
                 Description = "a test add-on",
                 Id = addOnId,
                 Kind = "add_on",
@@ -49,7 +49,7 @@ namespace Braintree.Tests
                 }
             );
 
-            Assert.AreEqual(1M, addOn.Amount);
+            Assert.AreEqual(100.00M, addOn.Amount);
             Assert.AreEqual("a test add-on", addOn.Description);
             Assert.AreEqual(addOnId, addOn.Id);
             Assert.AreEqual("add_on", addOn.Kind);

@@ -29,7 +29,7 @@ namespace Braintree.Tests
             String discountId = String.Format("dotnet_discount{0}", new Random().Next(1000000).ToString());
 
             service.Post("/modifications/create_modification_for_tests", new ModificationRequestForTests {
-                Amount = 100,
+                Amount = 100M,
                 Description = "a test discount",
                 Id = discountId,
                 Kind = "discount",
@@ -49,7 +49,7 @@ namespace Braintree.Tests
                 }
             );
 
-            Assert.AreEqual(1M, discount.Amount);
+            Assert.AreEqual(100M, discount.Amount);
             Assert.AreEqual("a test discount", discount.Description);
             Assert.AreEqual(discountId, discount.Id);
             Assert.AreEqual("discount", discount.Kind);
