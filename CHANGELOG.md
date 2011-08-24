@@ -1,3 +1,7 @@
+## 2.12.0
+
+* Added SettlementBatchSummary
+
 ## 2.11.0
 
 * Added Subscription to Transaction
