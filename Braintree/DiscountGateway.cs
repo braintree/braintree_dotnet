@@ -18,7 +18,7 @@ namespace Braintree
             NodeWrapper response = new NodeWrapper(Service.Get("/discounts"));
 
             List<Discount> discounts = new List<Discount>();
-            foreach (NodeWrapper node in response.GetList("modification"))
+            foreach (NodeWrapper node in response.GetList("discount"))
             {
                 discounts.Add(new Discount(node));
             }

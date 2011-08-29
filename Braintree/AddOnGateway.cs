@@ -18,7 +18,7 @@ namespace Braintree
             NodeWrapper response = new NodeWrapper(Service.Get("/add_ons"));
 
             List<AddOn> addOns = new List<AddOn>();
-            foreach (NodeWrapper node in response.GetList("modification"))
+            foreach (NodeWrapper node in response.GetList("add-on"))
             {
                 addOns.Add(new AddOn(node));
             }
