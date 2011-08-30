@@ -71,5 +71,11 @@ namespace Braintree.Tests
             NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
             Assert.IsTrue(response.IsSuccess());
         }
+
+        public static DateTime NowInEastern()
+        {
+            TimeZoneInfo eastern = TimeZoneInfo.FindSystemTimeZoneById("US/Eastern");
+            return TimeZoneInfo.ConvertTime(DateTime.Now, eastern);
+        }
     }
 }

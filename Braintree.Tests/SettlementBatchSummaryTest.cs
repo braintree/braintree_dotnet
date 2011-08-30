@@ -55,7 +55,7 @@ namespace Braintree.Tests
             TestHelper.Settle(service, transaction.Id);
             transaction = gateway.Transaction.Find(transaction.Id);
 
-            var result = gateway.SettlementBatchSummary.Generate(DateTime.Now);
+            var result = gateway.SettlementBatchSummary.Generate(TestHelper.NowInEastern());
             var visas = new List<IDictionary<String,String>>();
             foreach (var row in result.Target.Records)
             {
@@ -95,7 +95,7 @@ namespace Braintree.Tests
             TestHelper.Settle(service, transaction.Id);
             transaction = gateway.Transaction.Find(transaction.Id);
 
-            var result = gateway.SettlementBatchSummary.Generate(DateTime.Now, "store_me");
+            var result = gateway.SettlementBatchSummary.Generate(TestHelper.NowInEastern(), "store_me");
             var customValues = new List<IDictionary<String, String>>();
             foreach (var row in result.Target.Records)
             {
