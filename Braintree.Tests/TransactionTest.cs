@@ -2560,7 +2560,11 @@ namespace Braintree.Tests
 
             TransactionCloneRequest cloneRequest = new TransactionCloneRequest
             {
-                Amount = 123.45M
+                Amount = 123.45M,
+                Options = new TransactionOptionsCloneRequest
+                {
+                    SubmitForSettlement = false
+                }
             };
 
             Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
@@ -2639,12 +2643,13 @@ namespace Braintree.Tests
 
             TransactionCloneRequest cloneRequest = new TransactionCloneRequest
             {
-                Amount = 123.45M
+                Amount = 123.45M,
             };
 
             Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
             Assert.IsFalse(cloneResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_CLONE_CREDIT, cloneResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_OPTIONS_SUBMIT_FOR_SETTLEMENT_IS_REQUIRED_FOR_CLONING, cloneResult.Errors.ForObject("Transaction").OnField("SubmitForSettlement")[0].Code);
         }
     }
 }
