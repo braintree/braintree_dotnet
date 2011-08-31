@@ -74,16 +74,8 @@ namespace Braintree.Tests
 
         public static DateTime NowInEastern()
         {
-            return TimeZoneInfo.ConvertTime(DateTime.Now, Eastern());
+            return DateTime.UtcNow - new TimeSpan(-05, 00, 00);
         }
 
-        public static TimeZoneInfo Eastern()
-        {
-            string displayName = "(GMT-05:00) US/Eastern Time";
-            string standardName = "Eastern Standard Time";
-            TimeSpan offset = new TimeSpan(-05, 00, 00);
-
-            return TimeZoneInfo.CreateCustomTimeZone(standardName, offset, displayName, standardName);
-        }
     }
 }
