@@ -74,7 +74,7 @@ namespace Braintree.Tests
 
         public static DateTime NowInEastern()
         {
-            return DateTime.UtcNow - new TimeSpan(-05, 00, 00);
+            return DateTime.UtcNow - new TimeSpan(05, 00, 00);
         }
 
     }
