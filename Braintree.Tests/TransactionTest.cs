@@ -2153,6 +2153,16 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_FindsErrorsOutOnWhitespaceIds()
+        {
+            try {
+                gateway.Transaction.Find(" ");
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException ok) {}
+        }
+
+
+        [Test]
         public void Void_VoidsTheTransaction()
         {
             TransactionRequest request = new TransactionRequest

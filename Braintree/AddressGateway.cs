@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using Braintree.Exceptions;
 
 namespace Braintree
 {
@@ -33,6 +34,9 @@ namespace Braintree
 
         public virtual Address Find(String customerId, String id)
         {
+            if(customerId == null || customerId.Trim().Equals("") || id == null || id.Trim().Equals(""))
+                throw new NotFoundException();
+
             XmlNode addressXML = Service.Get("/customers/" + customerId + "/addresses/" + id);
 
             return new Address(new NodeWrapper(addressXML));

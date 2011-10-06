@@ -702,6 +702,15 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_FindsErrorsOutOnWhitespaceIds()
+        {
+            try {
+                gateway.Subscription.Find(" ");
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException ok) {}
+        }
+
+        [Test]
         public void Search_OnBillingCyclesRemainingIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest

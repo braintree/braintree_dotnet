@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Braintree.Exceptions;
 
 namespace Braintree
 {
@@ -57,6 +58,9 @@ namespace Braintree
 
         public virtual Transaction Find(String id)
         {
+            if(id == null || id.Trim().Equals(""))
+                throw new NotFoundException();
+
             XmlNode response = Service.Get("/transactions/" + id);
 
             return new Transaction(new NodeWrapper(response), Service);

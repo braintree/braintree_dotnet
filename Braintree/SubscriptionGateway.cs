@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using Braintree.Exceptions;
 
 namespace Braintree
 {
@@ -30,6 +31,9 @@ namespace Braintree
 
         public virtual Subscription Find(String id)
         {
+            if(id == null || id.Trim().Equals(""))
+                throw new NotFoundException();
+
             XmlNode subscriptionXML = Service.Get("/subscriptions/" + id);
 
             return new Subscription(new NodeWrapper(subscriptionXML), Service);
