@@ -2464,7 +2464,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id,
                 AddOns = new AddOnsRequest
                 {
                     Add = new AddAddOnRequest[]
@@ -2527,6 +2527,128 @@ namespace Braintree.Tests
             Assert.AreEqual(2, discounts[0].Quantity);
             Assert.IsTrue(discounts[0].NeverExpires.Value);
             Assert.IsNull(discounts[0].NumberOfBillingCycles);
+        }
+
+        [Test]
+        public void CloneTransaction()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Dan",
+                },
+                BillingAddress = new AddressRequest
+                {
+                    FirstName = "Carl",
+                },
+                ShippingAddress = new AddressRequest
+                {
+                    FirstName = "Andrew",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            TransactionCloneRequest cloneRequest = new TransactionCloneRequest
+            {
+                Amount = 123.45M,
+                Options = new TransactionOptionsCloneRequest
+                {
+                    SubmitForSettlement = false
+                }
+            };
+
+            Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
+            Assert.IsTrue(cloneResult.IsSuccess());
+            Transaction cloneTransaction = cloneResult.Target;
+
+            Assert.AreEqual(123.45, cloneTransaction.Amount);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, cloneTransaction.Status);
+            Assert.IsNull(cloneTransaction.GetVaultCreditCard());
+            Assert.IsNull(cloneTransaction.GetVaultCustomer());
+            Assert.IsNull(cloneTransaction.GetVaultCreditCard());
+            Assert.IsNull(cloneTransaction.GetVaultBillingAddress());
+            Assert.IsNull(cloneTransaction.GetVaultShippingAddress());
+
+            CreditCard creditCard = cloneTransaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+
+            Assert.AreEqual("Dan", cloneTransaction.Customer.FirstName);
+            Assert.AreEqual("Carl", cloneTransaction.BillingAddress.FirstName);
+            Assert.AreEqual("Andrew", cloneTransaction.ShippingAddress.FirstName);
+
+        }
+
+        [Test]
+        public void CloneTransactionAndSubmitForSettlement()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            TransactionCloneRequest cloneRequest = new TransactionCloneRequest
+            {
+                Amount = 123.45M,
+                Options = new TransactionOptionsCloneRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
+            Assert.IsTrue(cloneResult.IsSuccess());
+            Transaction cloneTransaction = cloneResult.Target;
+
+            Assert.AreEqual(123.45, cloneTransaction.Amount);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, cloneTransaction.Status);
+        }
+
+        [Test]
+        public void CloneTransaction_WithValidationErrors()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Credit(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            TransactionCloneRequest cloneRequest = new TransactionCloneRequest
+            {
+                Amount = 123.45M,
+            };
+
+            Result<Transaction> cloneResult = gateway.Transaction.CloneTransaction(transaction.Id, cloneRequest);
+            Assert.IsFalse(cloneResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_CLONE_CREDIT, cloneResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_SubscriptionWithoutTrial()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
 
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -65,6 +65,7 @@ namespace Braintree.Tests
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
             Assert.IsFalse((Boolean)subscription.HasTrialPeriod);
+            Assert.AreEqual(1, subscription.CurrentBillingCycle);
 
             Assert.IsTrue(subscription.BillingPeriodEndDate.HasValue);
             Assert.IsTrue(subscription.BillingPeriodStartDate.HasValue);
@@ -76,7 +77,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_SubscriptionReturnsATransactionWithSubscriptionBillingPeriod()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
 
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -96,7 +97,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_ReturnsDeclinedTransaction()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
 
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -113,7 +114,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_SubscriptionWithTrial()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
 
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -133,17 +134,19 @@ namespace Braintree.Tests
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
             Assert.IsTrue(subscription.HasTrialPeriod.Value);
+            Assert.AreEqual(0, subscription.CurrentBillingCycle.Value);
 
             Assert.IsFalse(subscription.BillingPeriodEndDate.HasValue);
             Assert.IsFalse(subscription.BillingPeriodStartDate.HasValue);
             Assert.IsTrue(subscription.NextBillingDate.HasValue);
             Assert.IsTrue(subscription.FirstBillingDate.HasValue);
+            Assert.IsTrue(subscription.CurrentBillingCycle.HasValue);
         }
 
         [Test]
         public void Create_OverridePlanAddTrial()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
 
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -166,7 +169,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_OverridePlanRemoveTrial()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -184,7 +187,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_OverridePlanPrice()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -202,7 +205,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_OverrideNumberOfBillingCycles()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -228,7 +231,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_OverrideNumberOfBillingCyclesToNeverExpire()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -248,7 +251,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id
+                PlanId = PlanFixture.BILLING_DAY_OF_MONTH_PLAN.Id
             };
 
             Result<Subscription> result = gateway.Subscription.Create(request);
@@ -264,7 +267,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                PlanId = PlanFixture.BILLING_DAY_OF_MONTH_PLAN.Id,
                 BillingDayOfMonth = 19
             };
 
@@ -281,7 +284,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                PlanId = PlanFixture.BILLING_DAY_OF_MONTH_PLAN.Id,
                 Options = new SubscriptionOptionsRequest
                 {
                     StartImmediately = true
@@ -301,7 +304,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                PlanId = PlanFixture.BILLING_DAY_OF_MONTH_PLAN.Id,
                 FirstBillingDate = DateTime.Now.ToUniversalTime().AddDays(3)
             };
 
@@ -319,7 +322,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.BILLING_DAY_OF_MONTH_PLAN.Id,
+                PlanId = PlanFixture.BILLING_DAY_OF_MONTH_PLAN.Id,
                 FirstBillingDate = DateTime.Now.AddDays(-3)
             };
 
@@ -333,7 +336,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_SetId()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
             String newId = "new-id-" + new Random().Next(1000000);
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -353,7 +356,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_SetMerchantAccountId()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -371,7 +374,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_HasTransactionOnCreateWithNoTrial()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -393,7 +396,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_HasNoTransactionOnCreateWithATrial()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
 
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -411,7 +414,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_InheritsNoAddOnsAndDiscountsWhenOptionIsPassed()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -432,7 +435,7 @@ namespace Braintree.Tests
 
         [Test]
         public void Create_InheritsAddOnsAndDiscountsFromPlan() {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -477,7 +480,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CanOverrideInheritedAddOnsAndDiscountsFromPlan()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -560,7 +563,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CanRemoveInheritedAddOnsAndDiscounts()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -588,7 +591,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CanAddAddOnsAndDiscounts()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -647,7 +650,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithBadAddOnParamsCorrectlyParsesValidationErrors()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -683,7 +686,7 @@ namespace Braintree.Tests
         [Test]
         public void Find()
         {
-            Plan plan = Plan.PLAN_WITH_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -705,7 +708,7 @@ namespace Braintree.Tests
             {
                 NumberOfBillingCycles = 5,
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 4M
             };
 
@@ -713,7 +716,7 @@ namespace Braintree.Tests
             {
                 NumberOfBillingCycles = 10,
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 4M
             };
 
@@ -736,7 +739,7 @@ namespace Braintree.Tests
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
             };
 
             Subscription subscription = gateway.Subscription.Create(subscriptionRequest).Target;
@@ -760,7 +763,7 @@ namespace Braintree.Tests
             {
                 Id = String.Format("find_me{0}", new Random().Next(1000000)),
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 3M
             };
 
@@ -768,7 +771,7 @@ namespace Braintree.Tests
             {
                 Id = String.Format("do_not_find_me{0}", new Random().Next(1000000)),
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 3M
             };
 
@@ -791,13 +794,13 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
             };
 
             Subscription trial = gateway.Subscription.Create(request1).Target;
@@ -827,7 +830,7 @@ namespace Braintree.Tests
             {
                 MerchantAccountId = MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID,
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 2M
             };
 
@@ -835,7 +838,7 @@ namespace Braintree.Tests
             {
                 MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 2M
             };
 
@@ -855,8 +858,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnNextBillingDate()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
-            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            TestPlan trialPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -885,8 +888,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnPlanIdIs()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
-            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            TestPlan trialPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -920,21 +923,21 @@ namespace Braintree.Tests
             SubscriptionRequest request10 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 10M
             };
 
             SubscriptionRequest request20 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 20M
             };
 
             SubscriptionRequest request30 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 30M
             };
 
@@ -956,8 +959,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnPlanIdIsWithDelegate()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
-            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            TestPlan trialPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -987,8 +990,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnPlanIdIsNot()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
-            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            TestPlan trialPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1019,7 +1022,7 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnTransactionId()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1049,8 +1052,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnPlanIdStartsWith()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
-            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            TestPlan trialPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1081,8 +1084,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnPlanIdEndsWith()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
-            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            TestPlan trialPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1113,8 +1116,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnPlanIdContains()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
-            Plan trialPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            TestPlan trialPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1148,21 +1151,21 @@ namespace Braintree.Tests
             SubscriptionRequest request1 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITH_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 5M
             };
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id,
                 Price = 5M
             };
 
             SubscriptionRequest request3 = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.ADD_ON_DISCOUNT_PLAN.Id,
+                PlanId = PlanFixture.ADD_ON_DISCOUNT_PLAN.Id,
                 Price = 5M
             };
 
@@ -1171,7 +1174,7 @@ namespace Braintree.Tests
             Subscription subscription3 = gateway.Subscription.Create(request3).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                PlanId.IncludedIn(Plan.ADD_ON_DISCOUNT_PLAN.Id, Plan.PLAN_WITH_TRIAL.Id).
+                PlanId.IncludedIn(PlanFixture.ADD_ON_DISCOUNT_PLAN.Id, PlanFixture.PLAN_WITH_TRIAL.Id).
                 Price.Is(5M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
@@ -1184,7 +1187,7 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnStatusIn()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
 
             SubscriptionRequest request1 = new SubscriptionRequest
             {
@@ -1229,7 +1232,7 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnStatusInMultipleValues()
         {
-            Plan triallessPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
 
             SubscriptionRequest request1 = new SubscriptionRequest
             {
@@ -1262,7 +1265,7 @@ namespace Braintree.Tests
         public void Update_Id()
         {
             String oldId = "old-id-" + new Random().Next(1000000);
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1289,7 +1292,7 @@ namespace Braintree.Tests
         [Test]
         public void UpdatePlan()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1298,7 +1301,7 @@ namespace Braintree.Tests
 
             Subscription subscription = gateway.Subscription.Create(request).Target;
 
-            Plan newPlan = Plan.PLAN_WITH_TRIAL;
+            TestPlan newPlan = PlanFixture.PLAN_WITH_TRIAL;
             SubscriptionRequest updateRequest = new SubscriptionRequest { PlanId = newPlan.Id };
             Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
 
@@ -1314,7 +1317,7 @@ namespace Braintree.Tests
             Subscription subscription = gateway.Subscription.Create(new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id,
             }).Target;
 
             CreditCard newCreditCard = gateway.CreditCard.Create(new CreditCardRequest
@@ -1339,7 +1342,7 @@ namespace Braintree.Tests
         [Test]
         public void UpdateMerchantAccountId()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1362,7 +1365,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_UpdatesAddOnsAndDiscounts()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest createRequest = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1457,7 +1460,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_CanReplaceAllAddOnsAndDiscounts()
         {
-            Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+            TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest createRequest = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1507,7 +1510,7 @@ namespace Braintree.Tests
         [Test]
         public void IncreasePriceAndTransaction()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1530,7 +1533,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_ProratesChargesWhenSpecified()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1561,7 +1564,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_DoesNotProrateChargesWhenSpecifiedToNotProrate()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1592,7 +1595,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_DoesNotUpdateWhenRevertTrue()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1626,7 +1629,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_DoesUpdateWhenRevertFalse()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1660,7 +1663,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_DontIncreasePriceAndDontAddTransaction()
         {
-            Plan originalPlan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest createRequest = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1701,7 +1704,7 @@ namespace Braintree.Tests
             SubscriptionRequest createRequest = new SubscriptionRequest
             {
                 PaymentMethodToken = "invalidToken",
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
             };
 
             Result<Subscription> result = gateway.Subscription.Create(createRequest);
@@ -1713,7 +1716,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithValidationErrors()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1730,7 +1733,7 @@ namespace Braintree.Tests
 
         [Test]
         public void Update_WithValidationErrors() {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1753,7 +1756,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_GetParamsOnError()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1774,7 +1777,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithDescriptor()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1800,7 +1803,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_WithDescriptor()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1833,7 +1836,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithDescriptorValidation()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1862,7 +1865,7 @@ namespace Braintree.Tests
         [Test]
         public void Cancel()
         {
-            Plan plan = Plan.PLAN_WITHOUT_TRIAL;
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -1883,7 +1886,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
             };
 
             Subscription subscription = gateway.Subscription.Create(request).Target;
@@ -1906,7 +1909,7 @@ namespace Braintree.Tests
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
-                PlanId = Plan.PLAN_WITHOUT_TRIAL.Id
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
             };
 
             Subscription subscription = gateway.Subscription.Create(request).Target;
@@ -1932,7 +1935,7 @@ namespace Braintree.Tests
             {
                 System.Threading.Thread.CurrentThread.CurrentCulture = System.Globalization.CultureInfo.GetCultureInfo("it-IT");
 
-                Plan plan = Plan.ADD_ON_DISCOUNT_PLAN;
+                TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
                 SubscriptionRequest request = new SubscriptionRequest
                 {
                     PaymentMethodToken = creditCard.Token,
