@@ -105,6 +105,20 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_RaisesIfIdIsBlank()
+        {
+            try
+            {
+                gateway.Customer.Find("  ");
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (NotFoundException)
+            {
+                // expected
+            }
+        }
+
+        [Test]
         public void Create_CanSetCustomFields()
         {
             var customFields = new Dictionary<String, String>();

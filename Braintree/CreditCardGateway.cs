@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
+using Braintree.Exceptions;
+
 
 namespace Braintree
 {
@@ -89,6 +91,9 @@ namespace Braintree
 
         public virtual CreditCard Find(String token)
         {
+            if(token == null || token.Trim().Equals(""))
+                throw new NotFoundException();
+
             XmlNode creditCardXML = Service.Get("/payment_methods/" + token);
 
             return new CreditCard(new NodeWrapper(creditCardXML), Service);

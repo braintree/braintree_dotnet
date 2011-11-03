@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Braintree.Exceptions;
 
 namespace Braintree
 {
@@ -20,6 +21,9 @@ namespace Braintree
 
         public virtual Customer Find(String Id)
         {
+            if(Id == null || Id.Trim().Equals(""))
+                throw new NotFoundException();
+
             XmlNode customerXML = Service.Get("/customers/" + Id);
 
             return new Customer(new NodeWrapper(customerXML), Service);

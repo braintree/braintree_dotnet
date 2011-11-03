@@ -322,6 +322,15 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_FindsErrorsOutOnWhitespaceIds()
+        {
+            try {
+                gateway.CreditCard.Find(" ");
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException ok) {}
+        }
+
+        [Test]
         public void Update_UpdatesCreditCardByToken()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
