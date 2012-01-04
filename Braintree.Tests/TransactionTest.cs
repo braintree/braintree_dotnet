@@ -1776,7 +1776,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Sale_WithLevel2Attributes()
+        public void Sale_WithTooLongPurchaseOrderNumberAttributes()
         {
             var request = new TransactionRequest
             {
@@ -1800,6 +1800,30 @@ namespace Braintree.Tests
             );
         }
 
+        [Test]
+        public void Sale_WithInvalidPurchaseOrderNumberAttributes()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                TaxExempt = true,
+                TaxAmount = 10M,
+                PurchaseOrderNumber = "\u00c3\u009f\u00c3\u00a5\u00e2\u0088\u0082",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_PURCHASE_ORDER_NUMBER_IS_INVALID,
+                result.Errors.ForObject("Transaction").OnField("PurchaseOrderNumber")[0].Code
+            );
+        }
         [Test]
         public void Sale_WithLevel2Validations()
         {
