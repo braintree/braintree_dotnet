@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using System.Globalization;
 
 namespace Braintree
 {
@@ -127,7 +128,7 @@ namespace Braintree
             var value = GetString(path);
             if (value == null) return null;
 
-            return DateTime.Parse(GetString(path)).ToUniversalTime();
+            return DateTime.Parse(value, null, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
         }
 
         public virtual Boolean IsSuccess()
