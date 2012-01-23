@@ -1,3 +1,7 @@
+## 2.13.3
+
+* Fixed Date parsing for hosts ahead of UTC (thanks to Jasmin Muharemovic)
+
 ## 2.13.2
 
 * Added error code for invalid purchase order number
