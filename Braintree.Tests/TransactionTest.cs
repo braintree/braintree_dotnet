@@ -2481,7 +2481,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SnapshotAddOnsAndDiscountsFromSubscription()
+        public void SnapshotPlanIdAddOnsAndDiscountsFromSubscription()
         {
             CustomerRequest customerRequest = new CustomerRequest
             {
@@ -2535,6 +2535,8 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Subscription.Create(request).Target.Transactions[0];
+
+            Assert.AreEqual(PlanFixture.PLAN_WITHOUT_TRIAL.Id, transaction.PlanId);
 
             List<AddOn> addOns = transaction.AddOns;
             addOns.Sort(TestHelper.CompareModificationsById);
