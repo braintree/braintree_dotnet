@@ -105,6 +105,7 @@ namespace Braintree
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public String MerchantAccountId { get; protected set; }
         public String OrderId { get; protected set; }
+        public String PlanId { get; protected set; }
         public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
@@ -167,6 +168,7 @@ namespace Braintree
 
             RefundIds = node.GetStrings("refund-ids/*");
             SettlementBatchId = node.GetString("settlement-batch-id");
+            PlanId = node.GetString("plan-id");
             SubscriptionId = node.GetString("subscription-id");
             TaxAmount = node.GetDecimal("tax-amount");
             TaxExempt = node.GetBoolean("tax-exempt");
