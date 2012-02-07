@@ -4,7 +4,7 @@ namespace Braintree
 {
     public class Discount : Modification
     {
-        internal Discount(NodeWrapper node) : base(node) {
+        protected internal Discount(NodeWrapper node) : base(node) {
         }
     }
 }

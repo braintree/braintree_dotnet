@@ -8,7 +8,7 @@ namespace Braintree
 
         private BraintreeService Service;
 
-        internal SettlementBatchSummaryGateway(BraintreeService service)
+        protected internal SettlementBatchSummaryGateway(BraintreeService service)
         {
             Service = service;
         }

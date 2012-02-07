@@ -128,7 +128,7 @@ namespace Braintree
 
         private BraintreeService Service;
 
-        internal Transaction(NodeWrapper node, BraintreeService service)
+        protected internal Transaction(NodeWrapper node, BraintreeService service)
         {
             Service = service;
 

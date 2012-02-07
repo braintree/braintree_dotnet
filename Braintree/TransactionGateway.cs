@@ -14,7 +14,7 @@ namespace Braintree
     {
         private BraintreeService Service;
 
-        internal TransactionGateway(BraintreeService service)
+        protected internal TransactionGateway(BraintreeService service)
         {
             Service = service;
         }

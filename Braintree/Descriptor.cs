@@ -9,7 +9,7 @@ namespace Braintree
         public string Name { get; protected set; }
         public string Phone { get; protected set; }
 
-        internal Descriptor(NodeWrapper node)
+        protected internal Descriptor(NodeWrapper node)
         {
             if (node != null) {
                 Name = node.GetString("name");

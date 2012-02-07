@@ -100,7 +100,7 @@ namespace Braintree
             }
         }
 
-        internal CreditCard(NodeWrapper node, BraintreeService service)
+        protected internal CreditCard(NodeWrapper node, BraintreeService service)
         {
             if (node == null) return;
 
