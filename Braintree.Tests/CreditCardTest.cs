@@ -631,6 +631,32 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void CheckDuplicateCreditCard()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    FailOnDuplicatePaymentMethod = true
+                }
+            };
+
+            gateway.CreditCard.Create(request);
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS,
+                result.Errors.ForObject("CreditCard").OnField("Number")[0].Code
+            );
+        }
+
+        [Test]
         public void VerifyValidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
