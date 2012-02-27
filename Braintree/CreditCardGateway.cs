@@ -49,6 +49,25 @@ namespace Braintree
             return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
         }
 
+        public virtual ResourceCollection<CreditCard> Duplicates(String token)
+        {
+            NodeWrapper response = new NodeWrapper(Service.Post("/payment_methods/" + token + "/duplicate_ids"));
+
+            return new ResourceCollection<CreditCard>(response, delegate(String[] ids) {
+                IdsSearchRequest query = new IdsSearchRequest().
+                    Ids.IncludedIn(ids);
+
+                NodeWrapper fetchResponse = new NodeWrapper(Service.Post("/payment_methods/" + token + "/duplicates", query));
+
+                List<CreditCard> creditCards = new List<CreditCard>();
+                foreach (NodeWrapper node in fetchResponse.GetList("credit-card"))
+                {
+                    creditCards.Add(new CreditCard(node, Service));
+                }
+                return creditCards;
+            });
+        }
+
         public virtual ResourceCollection<CreditCard> Expired()
         {
             NodeWrapper response = new NodeWrapper(Service.Post("/payment_methods/all/expired_ids"));

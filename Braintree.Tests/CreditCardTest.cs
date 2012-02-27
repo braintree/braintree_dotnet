@@ -757,6 +757,35 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Duplicates()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "200",
+                Number = "4012000033330026",
+                ExpirationDate = "05/12"
+            };
+
+            CreditCard card1 = gateway.CreditCard.Create(request).Target;
+            CreditCard card2 = gateway.CreditCard.Create(request).Target;
+
+            ResourceCollection<CreditCard> collection = gateway.CreditCard.Duplicates(card1.Token);
+
+            Assert.IsTrue(collection.MaximumCount > 1);
+
+            List<String> cards = new List<String>();
+            foreach (CreditCard card in collection) {
+                cards.Add(card.Token);
+            }
+
+            Assert.IsTrue(cards.Contains(card1.Token));
+            Assert.IsTrue(cards.Contains(card2.Token));
+        }
+
+        [Test]
         public void Expired()
         {
             ResourceCollection<CreditCard> collection = gateway.CreditCard.Expired();
