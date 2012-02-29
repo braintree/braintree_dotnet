@@ -139,6 +139,7 @@
     <Compile Include="PlanGateway.cs" />
     <Compile Include="AddOnGateway.cs" />
     <Compile Include="DiscountGateway.cs" />
+    <Compile Include="IsNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -155,6 +155,13 @@ namespace Braintree
                 return new TextNode<CustomerSearchRequest>("payment-method-token", this);
             }
         }
+        public IsNode<CustomerSearchRequest> PaymentMethodTokenWithDuplicates
+        {
+            get
+            {
+                return new IsNode<CustomerSearchRequest>("payment-method-token-with-duplicates", this);
+            }
+        }
         public EqualityNode<CustomerSearchRequest> CreditCardExpirationDate
         {
             get
