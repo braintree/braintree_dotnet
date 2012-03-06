@@ -20,7 +20,7 @@ namespace Braintree
     /// For more information about Customers, see <a href="http://www.braintreepayments.com/gateway/customer-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/customer-api</a>
     /// </example>
     public class Customer
-    {   
+    {
         public String Id { get; protected set; }
         public String FirstName { get; protected set; }
         public String LastName { get; protected set; }
@@ -35,7 +35,7 @@ namespace Braintree
         public Address[] Addresses { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
 
-        internal Customer(NodeWrapper node, BraintreeService service)
+        protected internal Customer(NodeWrapper node, BraintreeService service)
         {
             if (node == null) return;
 

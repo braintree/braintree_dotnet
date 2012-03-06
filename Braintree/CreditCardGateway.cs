@@ -16,7 +16,7 @@ namespace Braintree
     {
         private BraintreeService Service;
 
-        internal CreditCardGateway(BraintreeService service)
+        protected internal CreditCardGateway(BraintreeService service)
         {
             Service = service;
         }

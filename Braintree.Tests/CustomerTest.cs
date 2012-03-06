@@ -666,6 +666,44 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_FindDuplicateCardsGivenPaymentMethodToken()
+        {
+            CreditCardRequest creditCard = new CreditCardRequest
+            {
+                Number = "4111111111111111",
+                ExpirationDate = "05/2012"
+            };
+
+            CustomerRequest jimRequest = new CustomerRequest
+            {
+                FirstName = "Jim",
+                CreditCard = creditCard
+            };
+
+            CustomerRequest joeRequest = new CustomerRequest
+            {
+                FirstName = "Jim",
+                CreditCard = creditCard
+            };
+
+            Customer jim = gateway.Customer.Create(jimRequest).Target;
+            Customer joe = gateway.Customer.Create(joeRequest).Target;
+
+            CustomerSearchRequest searchRequest = new CustomerSearchRequest().
+                PaymentMethodTokenWithDuplicates.Is(jim.CreditCards[0].Token);
+
+            ResourceCollection<Customer> collection = gateway.Customer.Search(searchRequest);
+
+            List<String> customerIds = new List<String>();
+            foreach (Customer customer in collection) {
+                customerIds.Add(customer.Id);
+            }
+
+            Assert.IsTrue(customerIds.Contains(jim.Id));
+            Assert.IsTrue(customerIds.Contains(joe.Id));
+        }
+
+        [Test]
         public void Search_OnAllTextFields()
         {
             String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());

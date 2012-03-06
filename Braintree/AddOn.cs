@@ -4,7 +4,7 @@ namespace Braintree
 {
     public class AddOn : Modification
     {
-        internal AddOn(NodeWrapper node) : base(node) {
+        protected internal AddOn(NodeWrapper node) : base(node) {
         }
     }
 }

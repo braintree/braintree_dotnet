@@ -7,7 +7,7 @@ namespace Braintree
     {
         private IList<IDictionary<String, String>> records;
 
-        internal SettlementBatchSummary (NodeWrapper node)
+        protected internal SettlementBatchSummary (NodeWrapper node)
         {
             records = new List<IDictionary<String, String>>();
 

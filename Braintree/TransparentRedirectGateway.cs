@@ -20,7 +20,7 @@ namespace Braintree
 
         private BraintreeService Service;
 
-        internal TransparentRedirectGateway(BraintreeService service)
+        protected internal TransparentRedirectGateway(BraintreeService service)
         {
             Service = service;
         }
