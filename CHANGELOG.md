@@ -2,6 +2,7 @@
 
 * Adds search for duplicate credit cards given a payment method token
 * Adds flag to fail saving credit card to vault if card is duplicate
+* Changes `internal` functions to `protected internal` functions for easier unit testing
 
 ## 2.13.4
 
