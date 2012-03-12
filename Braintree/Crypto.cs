@@ -20,8 +20,7 @@ namespace Braintree
         public virtual byte[] Sha1Bytes(String s)
         {
             byte[] data = Encoding.UTF8.GetBytes(s);
-            return new SHA1CryptoServiceProvider().ComputeHash(data);
+            return SHA1.Create().ComputeHash(data);
         }
-
     }
 }
