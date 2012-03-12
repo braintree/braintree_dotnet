@@ -25,7 +25,8 @@ namespace Braintree
 
         private string BuildPayload(WebhookKind kind, string id)
         {
-            string payload = String.Format("<notification><timestamp></timestamp><kind>{0}</kind><subject>{1}</subject></notification>", kind, SubscriptionXml(id));
+            string currentTime = DateTime.Now.ToUniversalTime().ToString("u");
+            string payload = String.Format("<notification><timestamp>{0}</timestamp><kind>{1}</kind><subject>{2}</subject></notification>", currentTime, kind, SubscriptionXml(id));
             return Convert.ToBase64String(Encoding.Default.GetBytes(payload)).Trim();
         }
 

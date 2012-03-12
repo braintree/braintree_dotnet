@@ -40,6 +40,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(WebhookKind.SUBSCRIPTION_PAST_DUE, notification.Kind);
             Assert.AreEqual("my_id", notification.Subscription.Id);
+            Assert.IsInstanceOfType(typeof(DateTime), notification.Timestamp);
         }
 
         [Test]

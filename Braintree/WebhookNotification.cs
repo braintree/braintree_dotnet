@@ -18,9 +18,11 @@ namespace Braintree
     {
         public WebhookKind Kind { get; protected set; }
         public Subscription Subscription { get; protected set; }
+        public DateTime? Timestamp { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
         {
+            Timestamp = node.GetDateTime("timestamp");
             Kind = (WebhookKind)CollectionUtil.Find(WebhookKind.ALL, node.GetString("kind"), WebhookKind.UNRECOGNIZED);
             Subscription = new Subscription(node.GetNode("subject/subscription"), service);
         }
