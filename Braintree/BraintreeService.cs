@@ -136,14 +136,19 @@ namespace Braintree
         private XmlNode ParseResponseStream(Stream stream)
         {
             var body = new StreamReader(stream).ReadToEnd();
-            if (body.Trim() == "")
+            return StringToXmlNode(body);
+        }
+
+        internal XmlNode StringToXmlNode(string xml)
+        {
+            if (xml.Trim() == "")
             {
                 return new XmlDocument();
             }
             else
             {
                 XmlDocument doc = new XmlDocument();
-                doc.LoadXml(body);
+                doc.LoadXml(xml);
                 if (doc.ChildNodes.Count == 1) return doc.ChildNodes[0];
                 return doc.ChildNodes[1];
             }
