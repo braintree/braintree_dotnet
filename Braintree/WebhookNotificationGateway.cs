@@ -8,11 +8,11 @@ using Braintree.Exceptions;
 
 namespace Braintree
 {
-    public class WebhookGateway
+    public class WebhookNotificationGateway
     {
         private BraintreeService Service;
 
-        protected internal WebhookGateway(BraintreeService service)
+        protected internal WebhookNotificationGateway(BraintreeService service)
         {
             Service = service;
         }

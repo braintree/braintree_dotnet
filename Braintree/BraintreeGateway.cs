@@ -151,9 +151,9 @@ namespace Braintree
             return TrUtil.BuildTrData(trData, redirectURL, new BraintreeService(Configuration));
         }
 
-        public virtual WebhookGateway Webhook
+        public virtual WebhookNotificationGateway WebhookNotification
         {
-            get { return new WebhookGateway(new BraintreeService(Configuration)); }
+            get { return new WebhookNotificationGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual WebhookTestingGateway WebhookTesting

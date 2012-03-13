@@ -8,7 +8,7 @@ using Braintree.Exceptions;
 namespace Braintree.Tests
 {
     [TestFixture]
-    public class WebhookTest
+    public class WebhookNotificationTest
     {
         private BraintreeGateway gateway;
 
@@ -27,7 +27,7 @@ namespace Braintree.Tests
         [Test]
         public void Verify_CreatesVerificationString()
         {
-            string verification = gateway.Webhook.Verify("verification_token");
+            string verification = gateway.WebhookNotification.Verify("verification_token");
             Assert.AreEqual("integration_public_key|c9f15b74b0d98635cd182c51e2703cffa83388c3", verification);
         }
 
@@ -36,7 +36,7 @@ namespace Braintree.Tests
         {
             Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_PAST_DUE, "my_id");
 
-            WebhookNotification notification = gateway.Webhook.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
 
             Assert.AreEqual(WebhookKind.SUBSCRIPTION_PAST_DUE, notification.Kind);
             Assert.AreEqual("my_id", notification.Subscription.Id);
@@ -48,7 +48,7 @@ namespace Braintree.Tests
         public void Parse_WithInvalidSignature()
         {
             Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_PAST_DUE, "my_id");
-            gateway.Webhook.Parse(sampleNotification["signature"] + "bad_stuff", sampleNotification["payload"]);
+            gateway.WebhookNotification.Parse(sampleNotification["signature"] + "bad_stuff", sampleNotification["payload"]);
         }
 
 
@@ -57,7 +57,7 @@ namespace Braintree.Tests
         public void Parse_WithInvalidPublicId()
         {
             Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_PAST_DUE, "my_id");
-            gateway.Webhook.Parse("bad" + sampleNotification["signature"], sampleNotification["payload"]);
+            gateway.WebhookNotification.Parse("bad" + sampleNotification["signature"], sampleNotification["payload"]);
         }
     }
 }
