@@ -49,8 +49,9 @@ namespace Braintree
                 }
             }
 
-            string computedSignature = new Crypto().HmacHash(Service.PrivateKey, payload).ToLower();
-            if (!computedSignature.Equals(matchingSignature))
+            Crypto crypto = new Crypto();
+            string computedSignature = crypto.HmacHash(Service.PrivateKey, payload).ToLower();
+            if (!crypto.SecureCompare(computedSignature, matchingSignature))
             {
                 throw new InvalidSignatureException();
             }
