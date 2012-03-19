@@ -34,11 +34,11 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsAParsableNotification()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_PAST_DUE, "my_id");
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
 
             WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
 
-            Assert.AreEqual(WebhookKind.SUBSCRIPTION_PAST_DUE, notification.Kind);
+            Assert.AreEqual(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, notification.Kind);
             Assert.AreEqual("my_id", notification.Subscription.Id);
             TestHelper.AreDatesEqual(DateTime.Now.ToUniversalTime(), notification.Timestamp.Value);
         }
@@ -47,7 +47,7 @@ namespace Braintree.Tests
         [ExpectedException(typeof(InvalidSignatureException))]
         public void Parse_WithInvalidSignature()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_PAST_DUE, "my_id");
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse(sampleNotification["signature"] + "bad_stuff", sampleNotification["payload"]);
         }
 
@@ -56,7 +56,7 @@ namespace Braintree.Tests
         [ExpectedException(typeof(InvalidSignatureException))]
         public void Parse_WithInvalidPublicId()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_PAST_DUE, "my_id");
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse("bad" + sampleNotification["signature"], sampleNotification["payload"]);
         }
     }
