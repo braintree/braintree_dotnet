@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -90,6 +91,7 @@ namespace Braintree.Tests
             Assert.AreEqual("TD", billingAddress.CountryCodeAlpha2);
             Assert.AreEqual("TCD", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
+            Assert.IsTrue(Regex.IsMatch(creditCard.NumberUniqueIdentifier, "\\A\\w{32}\\z"));
         }
 
         [Test]

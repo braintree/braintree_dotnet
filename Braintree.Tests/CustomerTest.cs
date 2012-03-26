@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Braintree.Exceptions;
 
@@ -77,6 +78,7 @@ namespace Braintree.Tests
             Assert.AreEqual("05", customer.CreditCards[0].ExpirationMonth);
             Assert.AreEqual("2012", customer.CreditCards[0].ExpirationYear);
             Assert.AreEqual("Michael Angelo", customer.CreditCards[0].CardholderName);
+            Assert.IsTrue(Regex.IsMatch(customer.CreditCards[0].NumberUniqueIdentifier, "\\A\\w{32}\\z"));
             Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Value.Year);
             Assert.AreEqual("Mike", customer.Addresses[0].FirstName);
