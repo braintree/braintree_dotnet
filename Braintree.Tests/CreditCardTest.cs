@@ -91,7 +91,7 @@ namespace Braintree.Tests
             Assert.AreEqual("TD", billingAddress.CountryCodeAlpha2);
             Assert.AreEqual("TCD", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
-            Assert.IsTrue(Regex.IsMatch(creditCard.NumberUniqueIdentifier, "\\A\\w{32}\\z"));
+            Assert.IsTrue(Regex.IsMatch(creditCard.UniqueNumberIdentifier, "\\A\\w{32}\\z"));
         }
 
         [Test]

@@ -73,7 +73,7 @@ namespace Braintree
         public Boolean? IsExpired { get; protected set; }
         public CreditCardCustomerLocation CustomerLocation { get; protected set; }
         public String LastFour { get; protected set; }
-        public String NumberUniqueIdentifier { get; protected set; }
+        public String UniqueNumberIdentifier { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
         public String Token { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
@@ -115,7 +115,7 @@ namespace Braintree
             IsExpired = node.GetBoolean("expired");
             CustomerLocation = (CreditCardCustomerLocation)CollectionUtil.Find(CreditCardCustomerLocation.ALL, node.GetString("customer-location"), CreditCardCustomerLocation.UNRECOGNIZED);
             LastFour = node.GetString("last-4");
-            NumberUniqueIdentifier = node.GetString("number-unique-identifier");
+            UniqueNumberIdentifier = node.GetString("unique-number-identifier");
             Token = node.GetString("token");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
