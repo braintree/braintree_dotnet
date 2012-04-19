@@ -1,3 +1,7 @@
+## 2.15.1
+
+* Fix warnings for Visual Studio
+
 ## 2.15.0
 
 * Adds webhook gateways for parsing, verifying, and testing incoming notifications
