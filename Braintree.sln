@@ -5,11 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree", "Braintree\Brai
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree.Tests", "Braintree.Tests\Braintree.Tests.csproj", "{60234E7B-1181-4EFF-96EE-624B4524D788}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22542F78-C5F5-4181-BFE2-3DD919103504}"
-	ProjectSection(SolutionItems) = preProject
-		Braintree\TransactionCloneRequest.cs = Braintree\TransactionCloneRequest.cs
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
