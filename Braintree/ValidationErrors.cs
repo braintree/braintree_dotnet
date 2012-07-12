@@ -13,6 +13,7 @@ namespace Braintree
     /// <example>
     /// For more information about Validation Errors, see <a href="http://www.braintreepayments.com/gateway/validation-errors" target="_blank">http://www.braintreepaymentsolutions.com/gateway/validation-errors</a>
     /// </example>
+    [Serializable]
     public class ValidationErrors
     {
         private Dictionary<String, List<ValidationError>> errors;

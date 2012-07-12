@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class TransactionOptionsCloneRequest : Request
     {
         public Boolean? SubmitForSettlement { get; set; }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
+    [Serializable]
     public class PlanDurationUnit : Enumeration
     {
         public static readonly PlanDurationUnit DAY = new PlanDurationUnit("day");
@@ -12,6 +13,7 @@ namespace Braintree
         protected PlanDurationUnit(String name) : base(name) {}
     }
 
+    [Serializable]
     public class Plan
     {
         public List<AddOn> AddOns { get; protected set; }

@@ -9,6 +9,7 @@ namespace Braintree
     /// <summary>
     /// The available duration units for <see cref="Subscription"/>
     /// </summary>
+    [Serializable]
     public class SubscriptionDurationUnit : Enumeration
     {
         /// <summary>
@@ -32,6 +33,7 @@ namespace Braintree
     /// <summary>
     /// The possible statuses for <see cref="Subscription"/>
     /// </summary>
+    [Serializable]
     public class SubscriptionStatus : Enumeration
     {
         /// <summary>
@@ -74,6 +76,7 @@ namespace Braintree
     /// </code>
     /// For more information about Subscriptions, see <a href="http://www.braintreepayments.com/gateway/subscription-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/subscription-api</a>
     /// </example>
+    [Serializable]
     public class Subscription
     {
         public Decimal? Balance { get; protected set; }

@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public enum ValidationErrorCode
     {
         ADDRESS_CANNOT_BE_BLANK = 81801,

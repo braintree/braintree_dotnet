@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public class WebhookKind : Enumeration
     {
         public static readonly WebhookKind SUBSCRIPTION_CANCELED = new WebhookKind("subscription_canceled");
@@ -28,6 +29,7 @@ namespace Braintree
         protected WebhookKind(String name) : base(name) {}
     }
 
+    [Serializable]
     public class WebhookNotification
     {
         public WebhookKind Kind { get; protected set; }

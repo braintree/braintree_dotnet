@@ -24,6 +24,7 @@ namespace Braintree
     ///     Address address = gateway.Address.Find("customerId", "addressId");
     /// </code>
     /// </example>
+    [Serializable]
     public class Address
     {
         public String Id { get; protected set; }

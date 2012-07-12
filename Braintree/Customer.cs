@@ -19,6 +19,7 @@ namespace Braintree
     /// </code>
     /// For more information about Customers, see <a href="http://www.braintreepayments.com/gateway/customer-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/customer-api</a>
     /// </example>
+    [Serializable]
     public class Customer
     {
         public String Id { get; protected set; }

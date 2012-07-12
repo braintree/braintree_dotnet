@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class CreditCardAddressOptionsRequest : Request
     {
         public Boolean? UpdateExisting { get; set; }

@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public class CreditCardAddressRequest : AddressRequest
     {
         public CreditCardAddressOptionsRequest Options { get; set; }

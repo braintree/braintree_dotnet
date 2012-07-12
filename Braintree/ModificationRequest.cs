@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public class ModificationRequest : Request
     {
         public Decimal? Amount { get; set; }

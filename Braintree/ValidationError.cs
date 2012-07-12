@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class ValidationError
     {
         public String Attribute { get; protected set; }

@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public class AddModificationRequest : ModificationRequest
     {
         public String InheritedFromId { get; set; }

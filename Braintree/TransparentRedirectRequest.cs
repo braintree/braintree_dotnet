@@ -9,6 +9,7 @@ using System.Net;
 
 namespace Braintree
 {
+    [Serializable]
     public class TransparentRedirectRequest : Request
     {
 

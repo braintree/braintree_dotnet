@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
+    [Serializable]
     public class SettlementBatchSummary
     {
         private IList<IDictionary<String, String>> records;

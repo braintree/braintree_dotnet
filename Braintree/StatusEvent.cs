@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public class StatusEvent
     {
         public Decimal? Amount { get; protected set; }
