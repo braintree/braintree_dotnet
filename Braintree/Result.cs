@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class Result<T> where T : class
     {
         public CreditCardVerification CreditCardVerification { get; protected set; }

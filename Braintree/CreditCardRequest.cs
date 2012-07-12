@@ -28,6 +28,7 @@ namespace Braintree
     /// };
     /// </code>
     /// </example>
+    [Serializable]
     public class CreditCardRequest : BaseCreditCardRequest
     {
         public String CustomerId { get; set; }

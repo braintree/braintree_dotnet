@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class TransactionCreditCardRequest : BaseCreditCardRequest {}
 
     /// <summary>
@@ -25,6 +26,7 @@ namespace Braintree
     /// };
     /// </code>
     /// </example>
+    [Serializable]
     public class TransactionRequest : Request
     {
         public TransactionCreditCardRequest CreditCard { get; set; }

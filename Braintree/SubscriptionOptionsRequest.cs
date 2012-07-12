@@ -3,6 +3,7 @@
 using System;
 namespace Braintree
 {
+    [Serializable]
     public class SubscriptionOptionsRequest : Request
     {
         public Boolean? DoNotInheritAddOnsOrDiscounts { get; set; }

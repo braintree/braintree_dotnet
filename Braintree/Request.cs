@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public abstract class Request
     {
         public virtual String ToXml()

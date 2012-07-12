@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public class Modification
     {
         public Decimal? Amount { get; protected set; }

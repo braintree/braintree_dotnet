@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class CreditCardOptionsRequest : Request
     {
         public Boolean? VerifyCard { get; set; }

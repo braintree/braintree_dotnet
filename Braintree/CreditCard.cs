@@ -8,6 +8,7 @@ using System.Security.Cryptography;
 
 namespace Braintree
 {
+    [Serializable]
     public class CreditCardCustomerLocation : Enumeration
     {
         public static readonly CreditCardCustomerLocation US = new CreditCardCustomerLocation("us");
@@ -19,6 +20,7 @@ namespace Braintree
         protected CreditCardCustomerLocation(String name) : base(name) {}
     }
 
+    [Serializable]
     public class CreditCardCardType : Enumeration
     {
         public static readonly CreditCardCardType AMEX = new CreditCardCardType("American Express");
@@ -62,6 +64,7 @@ namespace Braintree
     /// For more information about Credit Cards, see <a href="http://www.braintreepayments.com/gateway/credit-card-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/credit-card-api</a><br />
     /// For more information about Credit Card Verifications, see <a href="http://www.braintreepayments.com/gateway/credit-card-verification-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/credit-card-verification-api</a>
     /// </example>
+    [Serializable]
     public class CreditCard
     {
         public String Bin { get; protected set; }

@@ -22,6 +22,7 @@ namespace Braintree
     /// };
     /// </code>
     /// </example>
+    [Serializable]
     public class SubscriptionRequest : Request
     {
         public AddOnsRequest AddOns { get; set; }

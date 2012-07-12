@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class VerificationStatus : Enumeration
     {
         public static readonly VerificationStatus FAILED = new VerificationStatus("failed");
@@ -22,6 +23,7 @@ namespace Braintree
         protected VerificationStatus(String name) : base(name) {}
     }
 
+    [Serializable]
     public class CreditCardVerification
     {
         public String AvsErrorResponseCode { get; protected set; }

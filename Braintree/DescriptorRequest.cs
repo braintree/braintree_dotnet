@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public class DescriptorRequest : Request
     {
         public String Name { get; set; }

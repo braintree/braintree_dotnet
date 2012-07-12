@@ -44,6 +44,7 @@ namespace Braintree
     /// };
     /// </code>
     /// </example>
+    [Serializable]
     public class CustomerRequest : Request
     {
         public String Id { get; set; }

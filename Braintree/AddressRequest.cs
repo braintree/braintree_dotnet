@@ -26,6 +26,7 @@ namespace Braintree
     /// };
     /// </code>
     /// </example>
+    [Serializable]
     public class AddressRequest : Request
     {
         public String FirstName { get; set; }

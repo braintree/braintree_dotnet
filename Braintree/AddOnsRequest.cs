@@ -3,6 +3,7 @@
 using System;
 namespace Braintree
 {
+    [Serializable]
     public class AddOnsRequest : Request
     {
         public AddAddOnRequest[] Add { get; set; }

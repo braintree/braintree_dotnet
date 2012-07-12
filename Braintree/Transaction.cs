@@ -7,6 +7,7 @@ using System.Xml;
 
 namespace Braintree
 {
+    [Serializable]
     public class TransactionGatewayRejectionReason : Enumeration
     {
         public static readonly TransactionGatewayRejectionReason AVS = new TransactionGatewayRejectionReason("avs");
@@ -21,6 +22,7 @@ namespace Braintree
         protected TransactionGatewayRejectionReason(String name) : base(name) {}
     }
 
+    [Serializable]
     public class TransactionStatus : Enumeration
     {
         public static readonly TransactionStatus AUTHORIZATION_EXPIRED = new TransactionStatus("authorization_expired");
@@ -43,6 +45,7 @@ namespace Braintree
         protected TransactionStatus(String name) : base(name) {}
     }
 
+    [Serializable]
     public class TransactionSource : Enumeration
     {
         public static readonly TransactionSource API = new TransactionSource("api");
@@ -55,6 +58,7 @@ namespace Braintree
         protected TransactionSource(String name) : base(name) {}
     }
 
+    [Serializable]
     public class TransactionType : Enumeration
     {
         public static readonly TransactionType CREDIT = new TransactionType("credit");
@@ -66,6 +70,7 @@ namespace Braintree
         protected TransactionType(String name) : base(name) {}
     }
 
+    [Serializable]
     public class TransactionCreatedUsing : Enumeration
     {
         public static readonly TransactionCreatedUsing FULL_INFORMATION = new TransactionCreatedUsing("full_information");
@@ -86,6 +91,7 @@ namespace Braintree
     /// </code>
     /// For more information about Transactions, see <a href="http://www.braintreepayments.com/gateway/transaction-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/transaction-api</a>
     /// </example>
+    [Serializable]
     public class Transaction
     {
         public String Id { get; protected set; }
@@ -126,6 +132,7 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
 
+        [NonSerialized]
         private BraintreeService Service;
 
         protected internal Transaction(NodeWrapper node, BraintreeService service)

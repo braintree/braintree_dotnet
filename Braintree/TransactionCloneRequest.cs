@@ -6,7 +6,8 @@ using System.Text;
 
 namespace Braintree
 {
- 
+
+    [Serializable]
     public class TransactionCloneRequest : Request
     {
         public Decimal Amount { get; set; }

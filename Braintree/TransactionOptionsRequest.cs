@@ -6,6 +6,7 @@ using System.Text;
 
 namespace Braintree
 {
+    [Serializable]
     public class TransactionOptionsRequest : Request
     {
         public Boolean? StoreInVault { get; set; }

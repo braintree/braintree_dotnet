@@ -4,6 +4,7 @@ using System;
 
 namespace Braintree
 {
+    [Serializable]
     public abstract class Enumeration
     {
         protected String Name;
