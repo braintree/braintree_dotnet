@@ -19,6 +19,17 @@ namespace Braintree
         protected CreditCardCustomerLocation(String name) : base(name) {}
     }
 
+    public class CreditCardPrepaid : Enumeration
+    {
+        public static readonly CreditCardPrepaid YES = new CreditCardPrepaid("Yes");
+        public static readonly CreditCardPrepaid NO = new CreditCardPrepaid("No");
+        public static readonly CreditCardPrepaid UNKNOWN = new CreditCardPrepaid("Unknown");
+
+        public static readonly CreditCardPrepaid[] ALL = {YES, NO, UNKNOWN};
+
+        protected CreditCardPrepaid(String name) : base(name) {}
+    }
+
     public class CreditCardCardType : Enumeration
     {
         public static readonly CreditCardCardType AMEX = new CreditCardCardType("American Express");
@@ -80,6 +91,7 @@ namespace Braintree
         public Address BillingAddress { get; protected set; }
         public String ExpirationMonth { get; protected set; }
         public String ExpirationYear { get; protected set; }
+        public CreditCardPrepaid Prepaid { get; protected set; }
         public String ExpirationDate
         {
             get
@@ -120,6 +132,7 @@ namespace Braintree
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
             BillingAddress = new Address(node.GetNode("billing-address"));
+            Prepaid = (CreditCardPrepaid)CollectionUtil.Find(CreditCardPrepaid.ALL, node.GetString("prepaid"), CreditCardPrepaid.UNKNOWN);
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
