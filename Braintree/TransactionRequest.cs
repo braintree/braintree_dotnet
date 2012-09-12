@@ -30,6 +30,7 @@ namespace Braintree
         public TransactionCreditCardRequest CreditCard { get; set; }
         public Decimal Amount { get; set; }
         public String OrderId { get; set; }
+        public Boolean? Recurring { get; set; }
         public String MerchantAccountId { get; set; }
         public String PurchaseOrderNumber { get; set; }
         public CustomerRequest Customer { get; set; }
@@ -82,6 +83,7 @@ namespace Braintree
             if (Amount != 0) builder.AddElement("amount", Amount);
             builder.AddElement("customer-id", CustomerId);
             builder.AddElement("order-id", OrderId);
+            if (Recurring.HasValue) builder.AddElement("recurring", Recurring);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("purchase-order-number", PurchaseOrderNumber);
             builder.AddElement("shipping-address-id", ShippingAddressId);

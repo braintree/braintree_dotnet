@@ -110,6 +110,7 @@ namespace Braintree
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
         public String PurchaseOrderNumber { get; protected set; }
+        public Boolean? Recurring { get; protected set; }
         public String RefundedTransactionId { get; protected set; }
         [Obsolete("Use Transaction.RefundIds")]
         public String RefundId { get; protected set; }
@@ -160,6 +161,7 @@ namespace Braintree
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             PurchaseOrderNumber = node.GetString("purchase-order-number");
+            Recurring = node.GetBoolean("recurring");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
 
             #pragma warning disable 0618
