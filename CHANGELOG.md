@@ -1,3 +1,7 @@
+## 2.16.0
+
+* Add prepaid attribute to credit card (possible values include Yes, No, Unknown)
+
 ## 2.15.1
 
 * Fix warnings for Visual Studio
