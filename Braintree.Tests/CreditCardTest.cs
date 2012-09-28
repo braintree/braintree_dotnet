@@ -804,7 +804,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = "4500600000000061",
+                Number = Braintree.Tests.CreditCardNumbers.Prepaid,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -814,6 +814,111 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
             Assert.AreEqual(Braintree.CreditCardPrepaid.YES, creditCard.Prepaid);
+        }
+
+        [Test]
+        public void Commercial()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = Braintree.Tests.CreditCardNumbers.Commercial,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(Braintree.CreditCardCommercial.YES, creditCard.Commercial);
+        }
+
+        [Test]
+        public void Debit()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = Braintree.Tests.CreditCardNumbers.Debit,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(Braintree.CreditCardDebit.YES, creditCard.Debit);
+        }
+
+        [Test]
+        public void Healthcare()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = Braintree.Tests.CreditCardNumbers.Healthcare,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(Braintree.CreditCardHealthcare.YES, creditCard.Healthcare);
+        }
+
+        [Test]
+        public void Payroll()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = Braintree.Tests.CreditCardNumbers.Payroll,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(Braintree.CreditCardPayroll.YES, creditCard.Payroll);
+        }
+
+        [Test]
+        public void DurbinRegulated()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = Braintree.Tests.CreditCardNumbers.DurbinRegulated,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(Braintree.CreditCardDurbinRegulated.YES, creditCard.DurbinRegulated);
         }
 
 
@@ -826,7 +931,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = "4111111111111111",
+                Number = Braintree.Tests.CreditCardNumbers.No,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -836,6 +941,11 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
             Assert.AreEqual(Braintree.CreditCardPrepaid.NO, creditCard.Prepaid);
+            Assert.AreEqual(Braintree.CreditCardCommercial.NO, creditCard.Commercial);
+            Assert.AreEqual(Braintree.CreditCardHealthcare.NO, creditCard.Healthcare);
+            Assert.AreEqual(Braintree.CreditCardDurbinRegulated.NO, creditCard.DurbinRegulated);
+            Assert.AreEqual(Braintree.CreditCardPayroll.NO, creditCard.Payroll);
+            Assert.AreEqual(Braintree.CreditCardDebit.NO, creditCard.Debit);
         }
 
         [Test]
@@ -847,7 +957,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = "5555555555554444",
+                Number = Braintree.Tests.CreditCardNumbers.Unknown,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -857,6 +967,11 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
             Assert.AreEqual(Braintree.CreditCardPrepaid.UNKNOWN, creditCard.Prepaid);
+            Assert.AreEqual(Braintree.CreditCardCommercial.UNKNOWN, creditCard.Commercial);
+            Assert.AreEqual(Braintree.CreditCardHealthcare.UNKNOWN, creditCard.Healthcare);
+            Assert.AreEqual(Braintree.CreditCardDurbinRegulated.UNKNOWN, creditCard.DurbinRegulated);
+            Assert.AreEqual(Braintree.CreditCardPayroll.UNKNOWN, creditCard.Payroll);
+            Assert.AreEqual(Braintree.CreditCardDebit.UNKNOWN, creditCard.Debit);
         }
 
     }
