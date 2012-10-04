@@ -1038,6 +1038,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 OrderId = "123",
+                Recurring = true,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -1094,6 +1095,7 @@ namespace Braintree.Tests
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
             Assert.AreEqual("123", transaction.OrderId);
+            Assert.IsTrue(transaction.Recurring.Value);
             Assert.IsNull(transaction.GetVaultCreditCard());
             Assert.IsNull(transaction.GetVaultCustomer());
             Assert.IsNull(transaction.AvsErrorResponseCode);

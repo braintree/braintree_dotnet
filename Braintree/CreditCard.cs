@@ -30,6 +30,61 @@ namespace Braintree
         protected CreditCardPrepaid(String name) : base(name) {}
     }
 
+    public class CreditCardPayroll : Enumeration
+    {
+        public static readonly CreditCardPayroll YES = new CreditCardPayroll("Yes");
+        public static readonly CreditCardPayroll NO = new CreditCardPayroll("No");
+        public static readonly CreditCardPayroll UNKNOWN = new CreditCardPayroll("Unknown");
+
+        public static readonly CreditCardPayroll[] ALL = {YES, NO, UNKNOWN};
+
+        protected CreditCardPayroll(String name) : base(name) {}
+    }
+
+    public class CreditCardDebit : Enumeration
+    {
+        public static readonly CreditCardDebit YES = new CreditCardDebit("Yes");
+        public static readonly CreditCardDebit NO = new CreditCardDebit("No");
+        public static readonly CreditCardDebit UNKNOWN = new CreditCardDebit("Unknown");
+
+        public static readonly CreditCardDebit[] ALL = {YES, NO, UNKNOWN};
+
+        protected CreditCardDebit(String name) : base(name) {}
+    }
+
+    public class CreditCardCommercial : Enumeration
+    {
+        public static readonly CreditCardCommercial YES = new CreditCardCommercial("Yes");
+        public static readonly CreditCardCommercial NO = new CreditCardCommercial("No");
+        public static readonly CreditCardCommercial UNKNOWN = new CreditCardCommercial("Unknown");
+
+        public static readonly CreditCardCommercial[] ALL = {YES, NO, UNKNOWN};
+
+        protected CreditCardCommercial(String name) : base(name) {}
+    }
+
+    public class CreditCardHealthcare : Enumeration
+    {
+        public static readonly CreditCardHealthcare YES = new CreditCardHealthcare("Yes");
+        public static readonly CreditCardHealthcare NO = new CreditCardHealthcare("No");
+        public static readonly CreditCardHealthcare UNKNOWN = new CreditCardHealthcare("Unknown");
+
+        public static readonly CreditCardHealthcare[] ALL = {YES, NO, UNKNOWN};
+
+        protected CreditCardHealthcare(String name) : base(name) {}
+    }
+
+    public class CreditCardDurbinRegulated : Enumeration
+    {
+        public static readonly CreditCardDurbinRegulated YES = new CreditCardDurbinRegulated("Yes");
+        public static readonly CreditCardDurbinRegulated NO = new CreditCardDurbinRegulated("No");
+        public static readonly CreditCardDurbinRegulated UNKNOWN = new CreditCardDurbinRegulated("Unknown");
+
+        public static readonly CreditCardDurbinRegulated[] ALL = {YES, NO, UNKNOWN};
+
+        protected CreditCardDurbinRegulated(String name) : base(name) {}
+    }
+
     public class CreditCardCardType : Enumeration
     {
         public static readonly CreditCardCardType AMEX = new CreditCardCardType("American Express");
@@ -92,6 +147,11 @@ namespace Braintree
         public String ExpirationMonth { get; protected set; }
         public String ExpirationYear { get; protected set; }
         public CreditCardPrepaid Prepaid { get; protected set; }
+        public CreditCardPayroll Payroll { get; protected set; }
+        public CreditCardDebit Debit { get; protected set; }
+        public CreditCardCommercial Commercial { get; protected set; }
+        public CreditCardHealthcare Healthcare { get; protected set; }
+        public CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
         public String ExpirationDate
         {
             get
@@ -133,6 +193,11 @@ namespace Braintree
             UpdatedAt = node.GetDateTime("updated-at");
             BillingAddress = new Address(node.GetNode("billing-address"));
             Prepaid = (CreditCardPrepaid)CollectionUtil.Find(CreditCardPrepaid.ALL, node.GetString("prepaid"), CreditCardPrepaid.UNKNOWN);
+            Payroll = (CreditCardPayroll)CollectionUtil.Find(CreditCardPayroll.ALL, node.GetString("payroll"), CreditCardPayroll.UNKNOWN);
+            DurbinRegulated = (CreditCardDurbinRegulated)CollectionUtil.Find(CreditCardDurbinRegulated.ALL, node.GetString("durbin-regulated"), CreditCardDurbinRegulated.UNKNOWN);
+            Debit = (CreditCardDebit)CollectionUtil.Find(CreditCardDebit.ALL, node.GetString("debit"), CreditCardDebit.UNKNOWN);
+            Commercial = (CreditCardCommercial)CollectionUtil.Find(CreditCardCommercial.ALL, node.GetString("commercial"), CreditCardCommercial.UNKNOWN);
+            Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, node.GetString("healthcare"), CreditCardHealthcare.UNKNOWN);
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
