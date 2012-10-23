@@ -37,7 +37,7 @@ namespace Braintree.Tests
         public void BuildTrData_BuildsAQueryStringWithApiVersion()
         {
             String tr_data = gateway.TransparentRedirect.BuildTrData(new TransactionRequest(), "example.com");
-            TestHelper.AssertIncludes("api_version=2", tr_data);
+            TestHelper.AssertIncludes("api_version=3", tr_data);
         }
 
         [Test]

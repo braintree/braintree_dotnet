@@ -10,62 +10,63 @@ namespace Braintree.Tests
     [TestFixture]
     public class CreditCardVerificationTest
     {
-        [Test]
-        public void ConstructFromResponse()
+        private BraintreeGateway gateway;
+
+        [SetUp]
+        public void Setup()
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            builder.Append("<api-error-response>");
-            builder.Append("  <verification>");
-            builder.Append("    <avs-error-response-code nil=\"true\"></avs-error-response-code>");
-            builder.Append("    <avs-postal-code-response-code>I</avs-postal-code-response-code>");
-            builder.Append("    <status>processor_declined</status>");
-            builder.Append("    <processor-response-code>2000</processor-response-code>");
-            builder.Append("    <avs-street-address-response-code>I</avs-street-address-response-code>");
-            builder.Append("    <processor-response-text>Do Not Honor</processor-response-text>");
-            builder.Append("    <cvv-response-code>M</cvv-response-code>");
-            builder.Append("  </verification>");
-            builder.Append("  <errors>");
-            builder.Append("    <errors type=\"array\"/>");
-            builder.Append("  </errors>");
-            builder.Append("</api-error-response>");
-
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(builder.ToString());
-
-            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"));
-            Assert.AreEqual(null, verification.AvsErrorResponseCode);
-            Assert.AreEqual("I", verification.AvsPostalCodeResponseCode);
-            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, verification.Status);
-            Assert.AreEqual("2000", verification.ProcessorResponseCode);
-            Assert.AreEqual("I", verification.AvsStreetAddressResponseCode);
-            Assert.AreEqual("Do Not Honor", verification.ProcessorResponseText);
-            Assert.AreEqual("M", verification.CvvResponseCode);
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
         }
 
         [Test]
-        public void ConstructFromResponseWithNoVerification()
+        public void Search_OnMultipleValueFields()
         {
-            StringBuilder builder = new StringBuilder();
-            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-            builder.Append("<api-error-response>");
-            builder.Append("  <errors>");
-            builder.Append("    <errors type=\"array\"/>");
-            builder.Append("  </errors>");
-            builder.Append("</api-error-response>");
+            var createRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = CreditCardNumbers.FailsSandboxVerification.Visa,
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                      VerifyCard = true
+                    }
+                }
+            };
 
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(builder.ToString());
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+            CreditCardVerification verification1 = gateway.CreditCardVerification.Find(result.CreditCardVerification.Id);
 
-            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"));
-            Assert.AreEqual(null, verification.AvsErrorResponseCode);
-            Assert.AreEqual(null, verification.AvsPostalCodeResponseCode);
-            Assert.AreEqual(null, verification.Status);
-            Assert.AreEqual(null, verification.ProcessorResponseCode);
-            Assert.AreEqual(null, verification.AvsStreetAddressResponseCode);
-            Assert.AreEqual(null, verification.ProcessorResponseText);
-            Assert.AreEqual(null, verification.CvvResponseCode);
+            createRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = CreditCardNumbers.FailsSandboxVerification.MasterCard,
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                      VerifyCard = true
+                    }
+                }
+            };
+
+            result = gateway.Customer.Create(createRequest);
+            CreditCardVerification verification2 = gateway.CreditCardVerification.Find(result.CreditCardVerification.Id);
+
+            CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
+                CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD).
+                Ids.IncludedIn(verification1.Id, verification2.Id);
+
+            ResourceCollection<CreditCardVerification> collection = gateway.CreditCardVerification.Search(searchRequest);
+
+            Assert.AreEqual(2, collection.MaximumCount);
         }
-
     }
+
 }
