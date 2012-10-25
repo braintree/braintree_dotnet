@@ -804,7 +804,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.Prepaid,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Prepaid,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -825,7 +825,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.Commercial,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Commercial,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -846,7 +846,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.Debit,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Debit,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -867,7 +867,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.Healthcare,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Healthcare,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -888,7 +888,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.Payroll,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Payroll,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -909,7 +909,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.DurbinRegulated,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.DurbinRegulated,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -931,7 +931,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.No,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.No,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {
@@ -957,7 +957,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = Braintree.Tests.CreditCardNumbers.Unknown,
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Unknown,
                 ExpirationDate = "05/12",
                 Options = new CreditCardOptionsRequest
                 {

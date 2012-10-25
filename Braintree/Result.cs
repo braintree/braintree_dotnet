@@ -27,7 +27,7 @@ namespace Braintree
                 Errors = new ValidationErrors(node);
                 NodeWrapper verificationNode = node.GetNode("verification");
                 if (verificationNode != null) {
-                    CreditCardVerification = new CreditCardVerification(verificationNode);
+                    CreditCardVerification = new CreditCardVerification(verificationNode, service);
                 }
 
                 NodeWrapper transactionNode = node.GetNode("transaction");

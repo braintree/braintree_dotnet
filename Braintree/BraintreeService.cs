@@ -12,7 +12,7 @@ namespace Braintree
 {
     public class BraintreeService
     {
-        public String ApiVersion = "2";
+        public String ApiVersion = "3";
 
         protected Configuration Configuration;
 

@@ -65,6 +65,8 @@
     <Compile Include="CreditCardOptionsRequest.cs" />
     <Compile Include="CreditCardRequest.cs" />
     <Compile Include="CreditCardVerification.cs" />
+    <Compile Include="CreditCardVerificationGateway.cs" />
+    <Compile Include="CreditCardVerificationSearchRequest.cs" />
     <Compile Include="Crypto.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerGateway.cs" />

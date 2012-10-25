@@ -33,8 +33,12 @@ namespace Braintree
         public String ProcessorResponseText { get; protected set; }
         public String MerchantAccountId { get; protected set; }
         public VerificationStatus Status { get; protected set; }
+        public String Id { get; protected set; }
+        public Address BillingAddress { get; protected set; }
+        public CreditCard CreditCard { get; protected set; }
+        public DateTime? CreatedAt { get; protected set; }
 
-        public CreditCardVerification(NodeWrapper node)
+        public CreditCardVerification(NodeWrapper node, BraintreeService service)
         {
             if (node == null) return;
 
@@ -51,6 +55,10 @@ namespace Braintree
             ProcessorResponseText = node.GetString("processor-response-text");
             MerchantAccountId = node.GetString("merchant-account-id");
             Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
+            Id = node.GetString("id");
+            BillingAddress = new Address(node.GetNode("billing"));
+            CreditCard = new CreditCard(node.GetNode("credit-card"), service);
+            CreatedAt = node.GetDateTime("created-at");
         }
     }
 }

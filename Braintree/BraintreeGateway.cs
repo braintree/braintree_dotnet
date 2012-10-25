@@ -116,6 +116,11 @@ namespace Braintree
             get { return new CreditCardGateway(new BraintreeService(Configuration)); }
         }
 
+        public virtual CreditCardVerificationGateway CreditCardVerification
+        {
+            get { return new CreditCardVerificationGateway(new BraintreeService(Configuration)); }
+        }
+
         public virtual DiscountGateway Discount
         {
             get { return new DiscountGateway(new BraintreeService(Configuration)); }
