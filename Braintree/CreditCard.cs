@@ -130,6 +130,9 @@ namespace Braintree
     /// </example>
     public class CreditCard
     {
+        public static readonly String CountryOfIssuanceUnknown = "Unknown";
+        public static readonly String IssuingBankUnknown = "Unknown";
+
         public String Bin { get; protected set; }
         public String CardholderName { get; protected set; }
         public CreditCardCardType CardType { get; protected set; }
@@ -152,6 +155,41 @@ namespace Braintree
         public CreditCardCommercial Commercial { get; protected set; }
         public CreditCardHealthcare Healthcare { get; protected set; }
         public CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
+
+        private String _CountryOfIssuance;
+
+        public String CountryOfIssuance
+        {
+            get
+            {
+                if (_CountryOfIssuance == "")
+                {
+                    return CountryOfIssuanceUnknown;
+                }
+                else
+                {
+                    return _CountryOfIssuance;
+                }
+            }
+        }
+
+        private String _IssuingBank;
+
+        public String IssuingBank
+        {
+            get
+            {
+                if (_IssuingBank == "")
+                {
+                    return IssuingBankUnknown;
+                }
+                else
+                {
+                    return _IssuingBank;
+                }
+            }
+        }
+
         public String ExpirationDate
         {
             get
@@ -198,6 +236,8 @@ namespace Braintree
             Debit = (CreditCardDebit)CollectionUtil.Find(CreditCardDebit.ALL, node.GetString("debit"), CreditCardDebit.UNKNOWN);
             Commercial = (CreditCardCommercial)CollectionUtil.Find(CreditCardCommercial.ALL, node.GetString("commercial"), CreditCardCommercial.UNKNOWN);
             Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, node.GetString("healthcare"), CreditCardHealthcare.UNKNOWN);
+            _CountryOfIssuance = node.GetString("country-of-issuance");
+            _IssuingBank = node.GetString("issuing-bank");
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];

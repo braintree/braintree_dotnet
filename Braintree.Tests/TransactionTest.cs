@@ -2184,7 +2184,7 @@ namespace Braintree.Tests
             try {
                 gateway.Transaction.Find(" ");
                 Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException ok) {}
+            } catch (NotFoundException) {}
         }
 
 

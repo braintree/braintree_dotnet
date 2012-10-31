@@ -707,7 +707,7 @@ namespace Braintree.Tests
             try {
                 gateway.Subscription.Find(" ");
                 Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException ok) {}
+            } catch (NotFoundException) {}
         }
 
         [Test]

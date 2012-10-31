@@ -101,12 +101,12 @@ namespace Braintree.Tests
             try {
                 gateway.Address.Find(" ", "address_id");
                 Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException ok) {}
+            } catch (NotFoundException) {}
 
             try {
                 gateway.Address.Find("customer_id", " ");
                 Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException ok) {}
+            } catch (NotFoundException) {}
         }
 
         [Test]
