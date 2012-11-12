@@ -1,3 +1,7 @@
+## 2.19.0
+
+* Adds country of issuance and issuing bank
+
 ## 2.18.0
 
 * Add verification search

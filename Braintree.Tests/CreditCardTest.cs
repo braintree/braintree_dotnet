@@ -329,7 +329,7 @@ namespace Braintree.Tests
             try {
                 gateway.CreditCard.Find(" ");
                 Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException ok) {}
+            } catch (NotFoundException) {}
         }
 
         [Test]
@@ -921,6 +921,47 @@ namespace Braintree.Tests
             Assert.AreEqual(Braintree.CreditCardDurbinRegulated.YES, creditCard.DurbinRegulated);
         }
 
+        [Test]
+        public void CountryOfIssuance()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.CountryOfIssuance,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(Braintree.Tests.CreditCardDefaults.CountryOfIssuance, creditCard.CountryOfIssuance);
+        }
+
+        [Test]
+        public void IssuingBank()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.IssuingBank,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(Braintree.Tests.CreditCardDefaults.IssuingBank, creditCard.IssuingBank);
+        }
 
         [Test]
         public void NegativeCardTypeIndicators()
@@ -972,6 +1013,8 @@ namespace Braintree.Tests
             Assert.AreEqual(Braintree.CreditCardDurbinRegulated.UNKNOWN, creditCard.DurbinRegulated);
             Assert.AreEqual(Braintree.CreditCardPayroll.UNKNOWN, creditCard.Payroll);
             Assert.AreEqual(Braintree.CreditCardDebit.UNKNOWN, creditCard.Debit);
+            Assert.AreEqual(Braintree.CreditCard.CountryOfIssuanceUnknown, creditCard.CountryOfIssuance);
+            Assert.AreEqual(Braintree.CreditCard.IssuingBankUnknown, creditCard.IssuingBank);
         }
 
     }
