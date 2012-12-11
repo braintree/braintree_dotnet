@@ -95,6 +95,7 @@ namespace Braintree
         public String AvsPostalCodeResponseCode { get; protected set; }
         public String AvsStreetAddressResponseCode { get; protected set; }
         public Address BillingAddress { get; protected set; }
+        public String Channel { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public CreditCard CreditCard { get; protected set; }
         public String CurrencyIsoCode { get; protected set; }
@@ -145,6 +146,7 @@ namespace Braintree
                 node.GetString("gateway-rejection-reason"),
                 null
             );
+            Channel = node.GetString("channel");
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
 

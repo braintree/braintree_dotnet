@@ -1037,6 +1037,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                Channel = "MyShoppingCartProvider",
                 OrderId = "123",
                 Recurring = true,
                 CreditCard = new TransactionCreditCardRequest
@@ -1094,6 +1095,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual("MyShoppingCartProvider", transaction.Channel);
             Assert.AreEqual("123", transaction.OrderId);
             Assert.IsTrue(transaction.Recurring.Value);
             Assert.IsNull(transaction.GetVaultCreditCard());
@@ -2599,6 +2601,7 @@ namespace Braintree.Tests
             TransactionCloneRequest cloneRequest = new TransactionCloneRequest
             {
                 Amount = 123.45M,
+                Channel = "MyShoppingCartProvider",
                 Options = new TransactionOptionsCloneRequest
                 {
                     SubmitForSettlement = false
@@ -2610,6 +2613,7 @@ namespace Braintree.Tests
             Transaction cloneTransaction = cloneResult.Target;
 
             Assert.AreEqual(123.45, cloneTransaction.Amount);
+            Assert.AreEqual("MyShoppingCartProvider", cloneTransaction.Channel);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, cloneTransaction.Status);
             Assert.IsNull(cloneTransaction.GetVaultCreditCard());
             Assert.IsNull(cloneTransaction.GetVaultCustomer());
