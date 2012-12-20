@@ -29,6 +29,7 @@ namespace Braintree
     {
         public TransactionCreditCardRequest CreditCard { get; set; }
         public Decimal Amount { get; set; }
+        public String Channel { get; set; }
         public String OrderId { get; set; }
         public Boolean? Recurring { get; set; }
         public String MerchantAccountId { get; set; }
@@ -83,6 +84,7 @@ namespace Braintree
             if (Amount != 0) builder.AddElement("amount", Amount);
             builder.AddElement("customer-id", CustomerId);
             builder.AddElement("order-id", OrderId);
+            builder.AddElement("channel", Channel);
             if (Recurring.HasValue) builder.AddElement("recurring", Recurring);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("purchase-order-number", PurchaseOrderNumber);

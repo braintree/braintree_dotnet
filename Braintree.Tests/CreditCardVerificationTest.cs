@@ -127,6 +127,42 @@ namespace Braintree.Tests
 
             Assert.AreEqual(2, collection.MaximumCount);
         }
+
+        [Test]
+        public void CardTypeIndicators()
+        {
+            String name = Guid.NewGuid().ToString("n");
+            var createRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = name,
+                    Number = CreditCardNumbers.CardTypeIndicators.Unknown,
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                      VerifyCard = true
+                    }
+                }
+            };
+
+            gateway.Customer.Create(createRequest);
+
+            CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
+                CreditCardCardholderName.Is(name);
+
+            ResourceCollection<CreditCardVerification> collection = gateway.CreditCardVerification.Search(searchRequest);
+
+            CreditCardVerification verification = collection.FirstItem;
+
+            Assert.AreEqual(verification.CreditCard.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Debit, Braintree.CreditCardDebit.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.DurbinRegulated, Braintree.CreditCardDurbinRegulated.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
+
+        }
     }
 
 }
