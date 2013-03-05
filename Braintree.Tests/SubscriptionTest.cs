@@ -75,6 +75,27 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_SubscriptionWithZeroDollarPrice()
+        {
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Price = 0.00M
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
+            Assert.AreEqual(plan.Id, subscription.PlanId);
+            Assert.AreEqual(0.00M, subscription.Price);
+        }
+
+        [Test]
         public void Create_SubscriptionReturnsATransactionWithSubscriptionBillingPeriod()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;

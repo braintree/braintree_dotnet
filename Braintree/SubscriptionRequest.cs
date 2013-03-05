@@ -36,7 +36,7 @@ namespace Braintree
         public SubscriptionOptionsRequest Options { get; set; }
         public String PaymentMethodToken { get; set; }
         public String PlanId { get; set; }
-        public Decimal Price { get; set; }
+        public Decimal? Price { get; set; }
         public Int32 TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
         public String MerchantAccountId { get; set; }
@@ -78,7 +78,9 @@ namespace Braintree
             }
             builder.AddElement("id", Id);
             builder.AddElement("plan-id", PlanId);
-            if (Price != 0) builder.AddElement("price", Price);
+            if (Price.HasValue) {
+              builder.AddElement("price", Price.Value);
+            }
 
             builder.AddElement("add-ons", AddOns);
             builder.AddElement("discounts", Discounts);
