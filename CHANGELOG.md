@@ -1,3 +1,7 @@
+## 2.21.0
+
+* Fixes bug with zero dollar subscriptions.
+
 ## 2.20.0
 
 * Adds channel field to transactions.
