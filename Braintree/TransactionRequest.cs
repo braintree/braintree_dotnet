@@ -46,6 +46,7 @@ namespace Braintree
         public String PaymentMethodToken { get; set; }
         public String CustomerId { get; set; }
         public String ShippingAddressId { get; set; }
+        public String VenmoSdkPaymentMethodCode { get; set; }
 
         public TransactionRequest()
         {
@@ -105,6 +106,7 @@ namespace Braintree
             builder.AddElement("billing", BillingAddress);
             builder.AddElement("shipping", ShippingAddress);
             builder.AddElement("options", Options);
+            builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
 
             return builder;
         }
