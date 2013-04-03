@@ -35,6 +35,7 @@ namespace Braintree
         public String BillingAddressId { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
         public String PaymentMethodToken { get; set; }
+        public String VenmoSdkPaymentMethodCode { get; set; }
 
         public override String Kind()
         {
@@ -59,7 +60,8 @@ namespace Braintree
                 AddElement("billing-address", BillingAddress).
                 AddElement("billing-address-id", BillingAddressId).
                 AddElement("customer-id", CustomerId).
-                AddElement("options", Options);
+                AddElement("options", Options).
+                AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
         }
     }
 }

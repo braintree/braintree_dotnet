@@ -13,6 +13,7 @@ namespace Braintree
         public Boolean? AddBillingAddressToPaymentMethod { get; set; }
         public Boolean? StoreShippingAddressInVault { get; set; }
         public Boolean? SubmitForSettlement { get; set; }
+        public String VenmoSdkSession { get; set; }
 
         public override String ToXml(String root)
         {
@@ -31,7 +32,8 @@ namespace Braintree
                 AddElement("store-in-vault-on-success", StoreInVaultOnSuccess).
                 AddElement("add-billing-address-to-payment-method", AddBillingAddressToPaymentMethod).
                 AddElement("store-shipping-address-in-vault", StoreShippingAddressInVault).
-                AddElement("submit-for-settlement", SubmitForSettlement);
+                AddElement("submit-for-settlement", SubmitForSettlement).
+                AddElement("venmo-sdk-session", VenmoSdkSession);
         }
     }
 }

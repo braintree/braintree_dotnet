@@ -13,6 +13,7 @@ namespace Braintree
         public Boolean? FailOnDuplicatePaymentMethod { get; set; }
         public String VerificationMerchantAccountId { get; set; }
         public String UpdateExistingToken { get; set; }
+        public String VenmoSdkSession { get; set; }
 
         public override String ToXml(String root)
         {
@@ -33,6 +34,7 @@ namespace Braintree
             builder.AddElement("verify-card", VerifyCard);
             builder.AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod);
             builder.AddElement("update-existing-token", UpdateExistingToken);
+            builder.AddElement("venmo-sdk-session", VenmoSdkSession);
 
             return builder;
         }

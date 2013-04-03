@@ -1,3 +1,7 @@
+## 2.22.0
+
+* Adds Venmo Touch support.
+
 ## 2.21.0
 
 * Fixes bug with zero dollar subscriptions.
