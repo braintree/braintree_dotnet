@@ -19,5 +19,16 @@ namespace Braintree
             public const Decimal DECLINE = 2000;
             public const Decimal FAILED = 3000;
         }
+
+        public class VenmoSdk
+        {
+            // public const String VISA_PAYMENT_METHOD_CODE = GenerateStubPaymentMethodCode("4111111111111111");
+            public const String VISA_PAYMENT_METHOD_CODE = "stub-4111111111111111";
+
+            public static String GenerateStubPaymentMethodCode(String creditCardNumber)
+            {
+                return "stub-" + creditCardNumber;
+            }
+        }
     }
 }

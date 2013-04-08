@@ -1995,6 +1995,22 @@ namespace Braintree.Tests
             );
         }
 
+        [Test]
+        public void Sale_WithVenmoSdkPaymentMethodCode()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.VISA_PAYMENT_METHOD_CODE
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual("1111", transaction.CreditCard.LastFour);
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheTransaction()

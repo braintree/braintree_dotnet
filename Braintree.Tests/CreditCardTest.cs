@@ -95,6 +95,24 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CreatesCreditCardWithAVenmoSdkPaymentMethodCode()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.VISA_PAYMENT_METHOD_CODE,
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCard creditCard = result.Target;
+            Assert.AreEqual("1111", creditCard.LastFour);
+        }
+
+        [Test]
         public void Create_AcceptsBillingAddressId()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
