@@ -11,8 +11,6 @@ namespace Braintree
 
         protected internal ServiceFee(NodeWrapper node)
         {
-            if (node == null) return;
-
             Amount = node.GetDecimal("amount");
             MerchantAccountId = node.GetString("merchant-account-id");
         }

@@ -1902,7 +1902,7 @@ namespace Braintree.Tests
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_SERVICE_FEE_AMOUNT_IS_TOO_LARGE, result.Errors.ForObject("Transaction").ForObject("ServiceFee").OnField("Amount")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.SERVICE_FEE_AMOUNT_IS_TOO_LARGE, result.Errors.ForObject("Transaction").ForObject("ServiceFee").OnField("Amount")[0].Code);
         }
 
         [Test]
