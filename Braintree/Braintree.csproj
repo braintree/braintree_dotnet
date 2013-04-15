@@ -72,6 +72,7 @@
     <Compile Include="CustomerGateway.cs" />
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="DateRangeNode.cs" />
+    <Compile Include="DepositDetails.cs" />
     <Compile Include="DescriptorRequest.cs" />
     <Compile Include="Discount.cs" />
     <Compile Include="DiscountsRequest.cs" />

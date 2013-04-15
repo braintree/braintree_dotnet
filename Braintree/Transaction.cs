@@ -128,6 +128,7 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
         public ServiceFee ServiceFee { get; protected set; }
+        public DepositDetails DepositDetails { get; protected set; }
 
         private BraintreeService Service;
 
@@ -185,6 +186,7 @@ namespace Braintree
             CvvResponseCode = node.GetString("cvv-response-code");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
             ServiceFee = new ServiceFee(node.GetNode("service-fee"));
+            DepositDetails = new DepositDetails(node.GetNode("deposit-details"));
 
             BillingAddress = new Address(node.GetNode("billing"));
             ShippingAddress = new Address(node.GetNode("shipping"));
@@ -317,6 +319,11 @@ namespace Braintree
             if (ShippingAddress.Id == null) return null;
 
             return new AddressGateway(Service).Find(Customer.Id, ShippingAddress.Id);
+        }
+
+        public Boolean IsDeposited()
+        {
+          return DepositDetails.IsValid();
         }
     }
 }

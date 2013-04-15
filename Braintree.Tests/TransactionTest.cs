@@ -2276,6 +2276,40 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_ExposesDepositDetails()
+        {
+            Transaction transaction = gateway.Transaction.Find("deposittransaction");
+
+            Assert.AreEqual(transaction.IsDeposited(), true);
+
+            DepositDetails details = transaction.DepositDetails;
+            Assert.AreEqual(details.DepositDate, DateTime.Parse("2013-04-10"));
+            Assert.AreEqual(details.DisbursedAt, DateTime.Parse("2013-04-09 00:00:00"));
+            Assert.AreEqual(details.SettlementAmount, Decimal.Parse("100.00"));
+            Assert.AreEqual(details.SettlementCurrencyIsoCode, "USD");
+            Assert.AreEqual(details.SettlementCurrencyExchangeRate, "1");
+            Assert.AreEqual(details.FundsHeld, false);
+        }
+
+        [Test]
+        public void Find_IsDepositedFalse()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            Assert.AreEqual(false, transaction.IsDeposited());
+        }
+
+        [Test]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             try {
