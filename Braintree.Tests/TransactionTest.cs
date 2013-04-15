@@ -613,6 +613,40 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnDepositDate()
+        {
+            DateTime depositDate = DateTime.Parse("2013-04-10");
+            DateTime threeDaysEarlier = depositDate.AddDays(-3);
+            DateTime oneDayEarlier = depositDate.AddDays(-1);
+            DateTime oneDayLater = depositDate.AddDays(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DepositDate.Between(oneDayEarlier, oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DepositDate.GreaterThanOrEqualTo(oneDayEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DepositDate.LessThanOrEqualTo(oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DepositDate.Between(threeDaysEarlier, oneDayEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+
+        [Test]
         public void Search_OnAuthorizedAt()
         {
             TransactionRequest request = new TransactionRequest
