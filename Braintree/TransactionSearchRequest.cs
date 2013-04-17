@@ -204,11 +204,11 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("customer-website", this);
             }
         }
-        public DateRangeNode<TransactionSearchRequest> DepositDate
+        public DateRangeNode<TransactionSearchRequest> DisbursementDate
         {
             get
             {
-                return new DateRangeNode<TransactionSearchRequest>("deposit-date", this);
+                return new DateRangeNode<TransactionSearchRequest>("disbursement-date", this);
             }
         }
         public DateRangeNode<TransactionSearchRequest> FailedAt

@@ -613,34 +613,34 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Search_OnDepositDate()
+        public void Search_OnDisbursementDate()
         {
-            DateTime depositDate = DateTime.Parse("2013-04-10");
-            DateTime threeDaysEarlier = depositDate.AddDays(-3);
-            DateTime oneDayEarlier = depositDate.AddDays(-1);
-            DateTime oneDayLater = depositDate.AddDays(1);
+            DateTime disbursementDate = DateTime.Parse("2013-04-10");
+            DateTime threeDaysEarlier = disbursementDate.AddDays(-3);
+            DateTime oneDayEarlier = disbursementDate.AddDays(-1);
+            DateTime oneDayLater = disbursementDate.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is("deposittransaction").
-                DepositDate.Between(oneDayEarlier, oneDayLater);
+                DisbursementDate.Between(oneDayEarlier, oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is("deposittransaction").
-                DepositDate.GreaterThanOrEqualTo(oneDayEarlier);
+                DisbursementDate.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is("deposittransaction").
-                DepositDate.LessThanOrEqualTo(oneDayLater);
+                DisbursementDate.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 Id.Is("deposittransaction").
-                DepositDate.Between(threeDaysEarlier, oneDayEarlier);
+                DisbursementDate.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
@@ -2310,15 +2310,14 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Find_ExposesDepositDetails()
+        public void Find_ExposesDisbursementDetails()
         {
             Transaction transaction = gateway.Transaction.Find("deposittransaction");
 
-            Assert.AreEqual(transaction.IsDeposited(), true);
+            Assert.AreEqual(transaction.IsDisbursed(), true);
 
-            DepositDetails details = transaction.DepositDetails;
-            Assert.AreEqual(details.DepositDate, DateTime.Parse("2013-04-10"));
-            Assert.AreEqual(details.DisbursedAt, DateTime.Parse("2013-04-09 00:00:00"));
+            DisbursementDetails details = transaction.DisbursementDetails;
+            Assert.AreEqual(details.DisbursementDate, DateTime.Parse("2013-04-10"));
             Assert.AreEqual(details.SettlementAmount, Decimal.Parse("100.00"));
             Assert.AreEqual(details.SettlementCurrencyIsoCode, "USD");
             Assert.AreEqual(details.SettlementCurrencyExchangeRate, "1");
@@ -2326,7 +2325,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Find_IsDepositedFalse()
+        public void Find_IsDisbursedFalse()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2340,7 +2339,7 @@ namespace Braintree.Tests
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
 
-            Assert.AreEqual(false, transaction.IsDeposited());
+            Assert.AreEqual(false, transaction.IsDisbursed());
         }
 
         [Test]
