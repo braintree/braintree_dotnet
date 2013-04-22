@@ -886,6 +886,50 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnMerchantAccountIdWithBogusMerchantId()
+        {
+            Random random = new Random();
+            String subscriptionId = random.Next(0, 100000).ToString();
+            var subscriptionRequest = new SubscriptionRequest
+            {
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
+                Price = 2M,
+                Id = subscriptionId
+            };
+
+            var nonDefaultMerchantAccountSubscription = gateway.Subscription.Create(subscriptionRequest).Target;
+
+            var searchRequest = new SubscriptionSearchRequest().
+                MerchantAccountId.Is(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID).
+                Id.Is(subscriptionId).
+                Price.Is(2M);
+
+            var collection = gateway.Subscription.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.MaximumCount);
+
+            searchRequest = new SubscriptionSearchRequest().
+                MerchantAccountId.IncludedIn(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, "bogus_merchant_account_id").
+                Id.Is(subscriptionId).
+                Price.Is(2M);
+
+            collection = gateway.Subscription.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.MaximumCount);
+
+            searchRequest = new SubscriptionSearchRequest().
+                MerchantAccountId.Is("bogus_merchant_account_id").
+                Id.Is(subscriptionId).
+                Price.Is(2M);
+
+            collection = gateway.Subscription.Search(searchRequest);
+
+            Assert.AreEqual(0, collection.MaximumCount);
+        }
+
+        [Test]
         public void Search_OnNextBillingDate()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
