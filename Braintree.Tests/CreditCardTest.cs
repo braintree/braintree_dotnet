@@ -127,6 +127,11 @@ namespace Braintree.Tests
 
             Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
             Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual("Invalid VenmoSDK payment method code", result.Message);
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_INVALID_VENMO_SDK_PAYMENT_METHOD_CODE,
+                result.Errors.ForObject("CreditCard").OnField("VenmoSdkPaymentMethodCode")[0].Code
+            );
         }
 
         [Test]
