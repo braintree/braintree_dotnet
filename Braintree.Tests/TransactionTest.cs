@@ -1893,6 +1893,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -1922,6 +1923,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = 1M,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -2459,6 +2461,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = 100M,
+                MerchantAccountId = MerchantAccount.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
