@@ -47,6 +47,7 @@ namespace Braintree
         public String CustomerId { get; set; }
         public String ShippingAddressId { get; set; }
         public String VenmoSdkPaymentMethodCode { get; set; }
+        public ServiceFeeRequest ServiceFee { get; set; }
 
         public TransactionRequest()
         {
@@ -95,6 +96,7 @@ namespace Braintree
                 builder.AddElement("tax-exempt", TaxExempt);
             }
             builder.AddElement("merchant-account-id", MerchantAccountId);
+            if (ServiceFee != null) builder.AddElement("service-fee", ServiceFee);
 
             if (Type != null) builder.AddElement("type", Type.ToString().ToLower());
 

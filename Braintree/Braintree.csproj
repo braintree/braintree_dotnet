@@ -104,6 +104,8 @@
     <Compile Include="SearchCriteria.cs" />
     <Compile Include="SearchNode.cs" />
     <Compile Include="SearchRequest.cs" />
+    <Compile Include="ServiceFee.cs" />
+    <Compile Include="ServiceFeeRequest.cs" />
     <Compile Include="SettlementBatchSummaryRequest.cs" />
     <Compile Include="StatusEvent.cs" />
     <Compile Include="Subscription.cs" />
