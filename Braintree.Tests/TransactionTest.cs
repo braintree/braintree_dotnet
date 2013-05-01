@@ -613,6 +613,40 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnDisbursementDate()
+        {
+            DateTime disbursementDate = DateTime.Parse("2013-04-10");
+            DateTime threeDaysEarlier = disbursementDate.AddDays(-3);
+            DateTime oneDayEarlier = disbursementDate.AddDays(-1);
+            DateTime oneDayLater = disbursementDate.AddDays(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DisbursementDate.Between(oneDayEarlier, oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DisbursementDate.GreaterThanOrEqualTo(oneDayEarlier);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DisbursementDate.LessThanOrEqualTo(oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("deposittransaction").
+                DisbursementDate.Between(threeDaysEarlier, oneDayEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+
+        [Test]
         public void Search_OnAuthorizedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1943,6 +1977,22 @@ namespace Braintree.Tests
             );
         }
 
+        [Test]
+        public void Sale_WithVenmoSdkPaymentMethodCode()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.VISA_PAYMENT_METHOD_CODE
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual("1111", transaction.CreditCard.LastFour);
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheTransaction()
@@ -2178,6 +2228,39 @@ namespace Braintree.Tests
             {
                 // expected
             }
+        }
+
+        [Test]
+        public void Find_ExposesDisbursementDetails()
+        {
+            Transaction transaction = gateway.Transaction.Find("deposittransaction");
+
+            Assert.AreEqual(transaction.IsDisbursed(), true);
+
+            DisbursementDetails details = transaction.DisbursementDetails;
+            Assert.AreEqual(details.DisbursementDate, DateTime.Parse("2013-04-10"));
+            Assert.AreEqual(details.SettlementAmount, Decimal.Parse("100.00"));
+            Assert.AreEqual(details.SettlementCurrencyIsoCode, "USD");
+            Assert.AreEqual(details.SettlementCurrencyExchangeRate, "1");
+            Assert.AreEqual(details.FundsHeld, false);
+        }
+
+        [Test]
+        public void Find_IsDisbursedFalse()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            Assert.AreEqual(false, transaction.IsDisbursed());
         }
 
         [Test]

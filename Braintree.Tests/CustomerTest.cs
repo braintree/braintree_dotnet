@@ -332,6 +332,26 @@ namespace Braintree.Tests
             Assert.AreEqual("United States of America", customer.Addresses[0].CountryName);
         }
 
+        [Test]
+        public void Create_WithVenmoSdkPaymentMethodCode()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                CreditCard = new CreditCardRequest()
+                {
+                    VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.VISA_PAYMENT_METHOD_CODE
+                }
+            };
+
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            Assert.AreEqual("Michael", customer.FirstName);
+            Assert.AreEqual("Angelo", customer.LastName);
+            Assert.AreEqual("411111", customer.CreditCards[0].Bin);
+            Assert.AreEqual("1111", customer.CreditCards[0].LastFour);
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheCustomer()

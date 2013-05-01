@@ -139,6 +139,7 @@ namespace Braintree
         public DateTime? CreatedAt { get; protected set; }
         public String CustomerId { get; protected set; }
         public Boolean? IsDefault { get; protected set; }
+        public Boolean? IsVenmoSdk { get; protected set; }
         public Boolean? IsExpired { get; protected set; }
         public CreditCardCustomerLocation CustomerLocation { get; protected set; }
         public String LastFour { get; protected set; }
@@ -220,6 +221,7 @@ namespace Braintree
             CardType = (CreditCardCardType)CollectionUtil.Find(CreditCardCardType.ALL, node.GetString("card-type"), CreditCardCardType.UNRECOGNIZED);
             CustomerId = node.GetString("customer-id");
             IsDefault = node.GetBoolean("default");
+            IsVenmoSdk = node.GetBoolean("venmo-sdk");
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");
             IsExpired = node.GetBoolean("expired");

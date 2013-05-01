@@ -1,3 +1,8 @@
+## 2.23.0
+
+* Adds disbursement details to transactions.
+* Adds image url to transactions.
+
 ## 2.22.0
 
 * Adds Venmo Touch support.

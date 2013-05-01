@@ -204,6 +204,13 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("customer-website", this);
             }
         }
+        public DateRangeNode<TransactionSearchRequest> DisbursementDate
+        {
+            get
+            {
+                return new DateRangeNode<TransactionSearchRequest>("disbursement-date", this);
+            }
+        }
         public DateRangeNode<TransactionSearchRequest> FailedAt
         {
             get
