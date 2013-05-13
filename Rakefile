@@ -16,6 +16,10 @@ task :test => [:ensure_boolean_type, :compile] do
   sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe Braintree.Tests/bin/Debug/Braintree.Tests.dll"
 end
 
+task :test_focus, [:test_name] => [:ensure_boolean_type, :compile] do |t, args|
+  sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -run=#{args[:test_name]} Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+end
+
 desc "ensure that Request objects use Boolean? type instead of Boolean"
 task :ensure_boolean_type do
   output = `find . -iname '*Request.cs' | xargs grep 'Boolean '`
