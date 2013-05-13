@@ -60,6 +60,7 @@
     <Compile Include="CreditCardDefaults.cs" />
     <Compile Include="CreditCardVerificationTest.cs" />
     <Compile Include="CryptoTest.cs" />
+    <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
     <Compile Include="QueryStringTest.cs" />
     <Compile Include="SubscriptionTest.cs" />
