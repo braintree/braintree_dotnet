@@ -183,14 +183,19 @@ namespace Braintree.Tests
         {
             var createRequest = new CustomerRequest()
             {
-                DeviceSessionId = "my_dsid"
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    DeviceSessionId = "my_dsid"
+                }
             };
 
             Result<Customer> result = gateway.Customer.Create(createRequest);
 
             Assert.IsTrue(result.IsSuccess());
         }
-
 
         [Test]
         public void Create_withErrorsOnCountry()

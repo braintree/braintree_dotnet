@@ -13,8 +13,13 @@ namespace Braintree.Tests
         [Test]
         public void ToXml_Includes_DeviceSessionId()
         {
-            CustomerRequest request = new CustomerRequest();
-            request.DeviceSessionId = "my_dsid";
+            var request = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    DeviceSessionId = "my_dsid"
+                }
+            };
 
             Assert.IsTrue(request.ToXml().Contains("my_dsid"));
         }
