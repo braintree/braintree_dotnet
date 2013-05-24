@@ -1,3 +1,12 @@
+## 2.23.1
+
+* Set .NET Framework compatibility back to 2.0+
+
+## 2.23.0
+
+* Adds disbursement details to transactions.
+* Adds image url to transactions.
+
 ## 2.22.0
 
 * Adds Venmo Touch support.

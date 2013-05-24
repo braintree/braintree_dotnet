@@ -177,8 +177,25 @@ namespace Braintree.Tests
             Assert.AreEqual("MAC", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("446", billingAddress.CountryCodeNumeric);
         }
+        
+        [Test]
+        public void Create_withSecurityParams()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    DeviceSessionId = "my_dsid"
+                }
+            };
 
+            Result<Customer> result = gateway.Customer.Create(createRequest);
 
+            Assert.IsTrue(result.IsSuccess());
+        }
 
         [Test]
         public void Create_withErrorsOnCountry()
