@@ -127,7 +127,7 @@ namespace Braintree
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
-        public ServiceFee ServiceFee { get; protected set; }
+        public Decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
 
         private BraintreeService Service;
@@ -185,7 +185,7 @@ namespace Braintree
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
-            ServiceFee = new ServiceFee(node.GetNode("service-fee"));
+            ServiceFeeAmount = node.GetDecimal("service-fee-amount");
             DisbursementDetails = new DisbursementDetails(node.GetNode("disbursement-details"));
 
             BillingAddress = new Address(node.GetNode("billing"));
