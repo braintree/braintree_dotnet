@@ -71,7 +71,8 @@
     <Compile Include="TransparentRedirectRequestTest.cs" />
     <Compile Include="TrUtilTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
-    <Compile Include="MerchantAccount.cs" />
+    <Compile Include="MerchantAccountIDs.cs" />
+    <Compile Include="MerchantAccountTest.cs" />
     <Compile Include="SubscriptionSearchRequestTest.cs" />
     <Compile Include="CollectionUtilTest.cs" />
     <Compile Include="RequestTest.cs" />
