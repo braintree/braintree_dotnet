@@ -1215,7 +1215,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -1227,7 +1227,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
 
         [Test]
@@ -1247,7 +1247,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
 
         [Test]
@@ -1906,6 +1906,86 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithServiceFee()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 1M
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(1M, transaction.ServiceFeeAmount);
+        }
+
+        [Test]
+        public void Sale_WithServiceFeeWithTooLargeAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 2M
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_SERVICE_FEE_AMOUNT_IS_TOO_LARGE, result.Errors.ForObject("Transaction").OnField("ServiceFeeAmount")[0].Code);
+        }
+
+        [Test]
+        public void Sale_WithMerchantAccountIdAndWithoutServiceFeeAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_SUB_MERCHANT_ACCOUNT_REQUIRES_SERVICE_FEE_AMOUNT, result.Errors.ForObject("Transaction").OnField("MerchantAccountId")[0].Code);
+        }
+
+        [Test]
+        public void Sale_WithServiceFeeAmountOnMasterMerchantAccount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 2M
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_SERVICE_FEE_AMOUNT_NOT_ALLOWED_ON_MASTER_MERCHANT_ACCOUNT , result.Errors.ForObject("Transaction").OnField("ServiceFeeAmount")[0].Code);
+        }
+
+        [Test]
         public void Sale_WithDescriptor()
         {
             var request = new TransactionRequest
@@ -2071,7 +2151,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 Type = TransactionType.SALE,
-                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
             };
 
             TransactionRequest request = new TransactionRequest
@@ -2088,7 +2168,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
         #pragma warning restore 0618
 
@@ -2127,7 +2207,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -2139,7 +2219,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
 
         [Test]
@@ -2159,7 +2239,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
         }
 
         [Test]
@@ -2210,6 +2290,29 @@ namespace Braintree.Tests
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
             Assert.AreEqual("2010", parameters["transaction[credit_card][expiration_year]"]);
+        }
+
+        [Test]
+        public void Credit_WithServiceFeeIsDisallowed()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 1M
+            };
+
+            Result<Transaction> result = gateway.Transaction.Credit(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_SERVICE_FEE_IS_NOT_ALLOWED_ON_CREDITS,
+                result.Errors.ForObject("Transaction").OnField("Base")[0].Code
+            );
         }
 
         [Test]
@@ -2390,6 +2493,31 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
             Assert.AreEqual(50.00, result.Target.Amount);
+        }
+
+        [Test]
+        public void SubmitForSettlement_TransactionAmountLessThanServiceFeeAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 100M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "06/2008"
+                },
+                ServiceFeeAmount = 50M
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, 25M);
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_SETTLEMENT_AMOUNT_IS_LESS_THAN_SERVICE_FEE_AMOUNT,
+                result.Errors.ForObject("Transaction").OnField("Amount")[0].Code
+            );
         }
 
         [Test]

@@ -77,6 +77,10 @@ namespace Braintree
             {
                 return new SettlementBatchSummary(node) as T;
             }
+            else if (typeof(T) == typeof(MerchantAccount))
+            {
+                return new MerchantAccount(node) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }

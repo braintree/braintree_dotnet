@@ -805,13 +805,13 @@ namespace Braintree.Tests
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true,
-                    VerificationMerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
                 }
             };
 
             Result<CreditCard> result = gateway.CreditCard.Create(request);
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.CreditCardVerification.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.CreditCardVerification.MerchantAccountId);
         }
 
         [Test]

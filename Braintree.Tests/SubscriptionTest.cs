@@ -56,7 +56,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
             Assert.AreEqual(plan.Id, subscription.PlanId);
-            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
             Assert.AreEqual(plan.Price, subscription.Price);
             Assert.AreEqual(plan.Price, subscription.NextBillAmount);
             Assert.AreEqual(plan.Price, subscription.NextBillingPeriodAmount);
@@ -149,7 +149,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
             Assert.AreEqual(plan.Id, subscription.PlanId);
-            Assert.AreEqual(MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
             Assert.AreEqual(plan.Price, subscription.Price);
             Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
@@ -382,14 +382,14 @@ namespace Braintree.Tests
             {
                 PaymentMethodToken = creditCard.Token,
                 PlanId = plan.Id,
-                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
             };
 
             Result<Subscription> result = gateway.Subscription.Create(request);
             Assert.IsTrue(result.IsSuccess());
             Subscription subscription = result.Target;
 
-            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
         }
 
         [Test]
@@ -858,7 +858,7 @@ namespace Braintree.Tests
         {
             SubscriptionRequest request1 = new SubscriptionRequest
             {
-                MerchantAccountId = MerchantAccount.DEFAULT_MERCHANT_ACCOUNT_ID,
+                MerchantAccountId = MerchantAccountIDs.DEFAULT_MERCHANT_ACCOUNT_ID,
                 PaymentMethodToken = creditCard.Token,
                 PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 2M
@@ -866,7 +866,7 @@ namespace Braintree.Tests
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
-                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
                 PaymentMethodToken = creditCard.Token,
                 PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 2M
@@ -876,7 +876,7 @@ namespace Braintree.Tests
             Subscription nonDefaultMerchantAccountSubscription = gateway.Subscription.Create(request2).Target;
 
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
-                MerchantAccountId.Is(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID).
+                MerchantAccountId.Is(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID).
                 Price.Is(2M);
 
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(request);
@@ -892,17 +892,15 @@ namespace Braintree.Tests
             String subscriptionId = random.Next(0, 100000).ToString();
             var subscriptionRequest = new SubscriptionRequest
             {
-                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
                 PaymentMethodToken = creditCard.Token,
                 PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 2M,
                 Id = subscriptionId
             };
 
-            var nonDefaultMerchantAccountSubscription = gateway.Subscription.Create(subscriptionRequest).Target;
-
             var searchRequest = new SubscriptionSearchRequest().
-                MerchantAccountId.Is(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID).
+                MerchantAccountId.Is(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID).
                 Id.Is(subscriptionId).
                 Price.Is(2M);
 
@@ -911,7 +909,7 @@ namespace Braintree.Tests
             Assert.AreEqual(1, collection.MaximumCount);
 
             searchRequest = new SubscriptionSearchRequest().
-                MerchantAccountId.IncludedIn(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, "bogus_merchant_account_id").
+                MerchantAccountId.IncludedIn(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, "bogus_merchant_account_id").
                 Id.Is(subscriptionId).
                 Price.Is(2M);
 
@@ -1426,14 +1424,14 @@ namespace Braintree.Tests
             Subscription subscription = gateway.Subscription.Create(request).Target;
 
             SubscriptionRequest updateRequest = new SubscriptionRequest {
-                MerchantAccountId = MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
             };
             Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
 
             Assert.IsTrue(result.IsSuccess());
             subscription = result.Target;
 
-            Assert.AreEqual(MerchantAccount.NON_DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
         }
 
         [Test]

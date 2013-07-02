@@ -126,6 +126,11 @@ namespace Braintree
             get { return new DiscountGateway(new BraintreeService(Configuration)); }
         }
 
+        public virtual MerchantAccountGateway MerchantAccount
+        {
+            get { return new MerchantAccountGateway(new BraintreeService(Configuration)); }
+        }
+
         public virtual PlanGateway Plan
         {
             get { return new PlanGateway(new BraintreeService(Configuration)); }
