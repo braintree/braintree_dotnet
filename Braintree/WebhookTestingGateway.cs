@@ -38,7 +38,7 @@ namespace Braintree
         private String SubjectSampleXml(WebhookKind kind, String id)
         {
             if (kind == WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED) {
-                return MerchantAccountSampleXml(id);
+                return MerchantAccountApprovedSampleXml(id);
             } else if (kind == WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED) {
                 return MerchantAccountDeclinedSampleXml(id); 
             } else {
@@ -56,7 +56,7 @@ namespace Braintree
             return String.Format("<subscription><id>{0}</id><transactions type=\"array\"></transactions><add-ons type=\"array\"></add-ons><discounts type=\"array\"></discounts></subscription>", id);
         }
 
-        private String MerchantAccountSampleXml(String id)
+        private String MerchantAccountApprovedSampleXml(String id)
         {
             return String.Format("<merchant-account><id>{0}</id><master-merchant-account><id>master_ma_for_{0}</id><status>active</status></master-merchant-account><status>active</status></merchant-account>", id);
         }
