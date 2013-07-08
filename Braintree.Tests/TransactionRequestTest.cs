@@ -18,5 +18,15 @@ namespace Braintree.Tests
 
             Assert.IsTrue(request.ToXml().Contains("my_dsid"));
         }
+
+        [Test]
+        public void ToXml_Includes_BundledParams()
+        {
+            TransactionRequest request = new TransactionRequest();
+            request.BundledParams = "{\"device_session_id\":\"my_dsid\"}";
+
+            Assert.IsTrue(request.ToXml().Contains("device_session_id"));
+            Assert.IsTrue(request.ToXml().Contains("my_dsid"));
+        }
     }
 }
