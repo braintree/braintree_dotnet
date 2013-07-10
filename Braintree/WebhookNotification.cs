@@ -16,6 +16,7 @@ namespace Braintree
         public static readonly WebhookKind SUB_MERCHANT_ACCOUNT_APPROVED = new WebhookKind("sub_merchant_account_approved");
         public static readonly WebhookKind SUB_MERCHANT_ACCOUNT_DECLINED = new WebhookKind("sub_merchant_account_declined");
         public static readonly WebhookKind UNRECOGNIZED = new WebhookKind("unrecognized");
+        public static readonly WebhookKind TRANSACTION_DISBURSED = new WebhookKind("transaction_disbursed");
 
         public static readonly WebhookKind[] ALL = {
           SUBSCRIPTION_CANCELED,
@@ -26,7 +27,8 @@ namespace Braintree
           SUBSCRIPTION_WENT_ACTIVE,
           SUBSCRIPTION_WENT_PAST_DUE,
           SUB_MERCHANT_ACCOUNT_APPROVED,
-          SUB_MERCHANT_ACCOUNT_DECLINED
+          SUB_MERCHANT_ACCOUNT_DECLINED,
+          TRANSACTION_DISBURSED
         };
 
         protected WebhookKind(String name) : base(name) {}
@@ -40,6 +42,7 @@ namespace Braintree
         public ValidationErrors Errors { get; protected set; }
         public String Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
+        public Transaction Transaction { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
         {
@@ -60,12 +63,17 @@ namespace Braintree
               MerchantAccount = new MerchantAccount(WrapperNode.GetNode("merchant-account"));
             }
 
+            if (WrapperNode.GetNode("transaction") != null) {
+              Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
+            }
+
             if (WrapperNode.GetNode("errors") != null) {
               Errors = new ValidationErrors(WrapperNode.GetNode("errors"));
             }
             if (WrapperNode.GetNode("message") != null) {
               Message = WrapperNode.GetString("message");
             }
+
         }
     }
 }

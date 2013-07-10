@@ -87,5 +87,18 @@ namespace Braintree.Tests
           Assert.AreEqual(ValidationErrorCode.MERCHANT_ACCOUNT_APPLICANT_DETAILS_DECLINED_OFAC, notification.Errors.ForObject("merchant-account").OnField("base")[0].Code);
           Assert.AreEqual("Applicant declined due to OFAC.", notification.Message);
         }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForATransactionDisbursedWebhook()
+        {
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_DISBURSED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+          Assert.AreEqual(WebhookKind.TRANSACTION_DISBURSED, notification.Kind);
+          Assert.AreEqual(100, notification.Transaction.Amount);
+          Assert.AreEqual("my_id", notification.Transaction.Id);
+          Assert.IsTrue(notification.Transaction.DisbursementDetails.IsValid());
+        }
     }
 }
