@@ -20,10 +20,10 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ToXml_Includes_BundledParams()
+        public void ToXml_Includes_DeviceData()
         {
             TransactionRequest request = new TransactionRequest();
-            request.BundledParams = "{\"device_session_id\":\"my_dsid\"}";
+            request.DeviceData = "{\"device_session_id\":\"my_dsid\"}";
 
             Assert.IsTrue(request.ToXml().Contains("device_session_id"));
             Assert.IsTrue(request.ToXml().Contains("my_dsid"));

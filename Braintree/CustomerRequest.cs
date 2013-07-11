@@ -47,7 +47,7 @@ namespace Braintree
     public class CustomerRequest : Request
     {
         public String Id { get; set; }
-        public String BundledParams { get; set; }
+        public String DeviceData { get; set; }
         public String CustomerId { get; set; }
         public String FirstName { get; set; }
         public String LastName { get; set; }

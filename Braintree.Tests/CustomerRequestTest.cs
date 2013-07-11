@@ -25,13 +25,13 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ToXml_Includes_BundledParams()
+        public void ToXml_Includes_DeviceData()
         {
             var request = new CustomerRequest()
             {
                 CreditCard = new CreditCardRequest()
                 {
-                    BundledParams = "{\"device_session_id\":\"my_dsid\"}"
+                    DeviceData = "{\"device_session_id\":\"my_dsid\"}"
                 }
             };
 
