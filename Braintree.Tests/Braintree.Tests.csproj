@@ -58,13 +58,16 @@
     <Compile Include="CreditCardTest.cs" />
     <Compile Include="CreditCardNumbers.cs" />
     <Compile Include="CreditCardDefaults.cs" />
+    <Compile Include="CreditCardRequestTest.cs" />
     <Compile Include="CreditCardVerificationTest.cs" />
     <Compile Include="CryptoTest.cs" />
+    <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
     <Compile Include="QueryStringTest.cs" />
     <Compile Include="SubscriptionTest.cs" />
     <Compile Include="TestHelper.cs" />
     <Compile Include="TransactionTest.cs" />
+    <Compile Include="TransactionRequestTest.cs" />
     <Compile Include="TransparentRedirectRequestTest.cs" />
     <Compile Include="TrUtilTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
