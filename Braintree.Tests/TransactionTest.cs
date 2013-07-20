@@ -1192,6 +1192,24 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithSecurityParams()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                DeviceSessionId = "abc123",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
         public void Sale_SpecifyingMerchantAccountId()
         {
             var request = new TransactionRequest
