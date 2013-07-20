@@ -1,3 +1,7 @@
+## 2.24.0
+
+* Adds device data to transactions, customers, and credit cards.
+
 ## 2.23.1
 
 * Set .NET Framework compatibility back to 2.0+
