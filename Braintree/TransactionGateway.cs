@@ -25,6 +25,15 @@ namespace Braintree
             return Service.BaseMerchantURL() + "/transactions/all/create_via_transparent_redirect_request";
         }
 
+        public virtual Result<Transaction> CancelRelease(String id)
+        {
+            TransactionRequest request = new TransactionRequest();
+
+            XmlNode response = Service.Put("/transactions/" + id + "/cancel_release", request);
+
+            return new Result<Transaction>(new NodeWrapper(response), Service);
+        }
+
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<Transaction> ConfirmTransparentRedirect(String queryString)
         {
@@ -32,6 +41,15 @@ namespace Braintree
             XmlNode node = Service.Post("/transactions/all/confirm_transparent_redirect_request", trRequest);
 
             return new Result<Transaction>(new NodeWrapper(node), Service);
+        }
+
+        public virtual Result<Transaction> HoldForEscrow(String id)
+        {
+            TransactionRequest request = new TransactionRequest();
+
+            XmlNode response = Service.Put("/transactions/" + id + "/hold_for_escrow", request);
+
+            return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
         public virtual String SaleTrData(TransactionRequest trData, String redirectURL)
@@ -86,6 +104,15 @@ namespace Braintree
         {
             request.Type = TransactionType.SALE;
             XmlNode response = Service.Post("/transactions", request);
+
+            return new Result<Transaction>(new NodeWrapper(response), Service);
+        }
+
+        public virtual Result<Transaction> SubmitForRelease(String id)
+        {
+            TransactionRequest request = new TransactionRequest();
+
+            XmlNode response = Service.Put("/transactions/" + id + "/submit_for_release", request);
 
             return new Result<Transaction>(new NodeWrapper(response), Service);
         }

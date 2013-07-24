@@ -72,6 +72,12 @@ namespace Braintree.Tests
             Assert.IsTrue(response.IsSuccess());
         }
 
+        public static void Escrow(BraintreeService service, String transactionId)
+        {
+            NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/escrow"));
+            Assert.IsTrue(response.IsSuccess());
+        }
+
         public static DateTime NowInEastern()
         {
             return DateTime.UtcNow - new TimeSpan(05, 00, 00);

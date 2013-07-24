@@ -21,6 +21,21 @@ namespace Braintree
         protected TransactionGatewayRejectionReason(String name) : base(name) {}
     }
 
+    public class TransactionEscrowStatus : Enumeration
+    {
+        public static readonly TransactionEscrowStatus SUBMITTED_FOR_ESCROW = new TransactionEscrowStatus("submitted_for_escrow");
+        public static readonly TransactionEscrowStatus HELD_IN_ESCROW = new TransactionEscrowStatus("held_in_escrow");
+        public static readonly TransactionEscrowStatus SUBMITTED_FOR_RELEASE = new TransactionEscrowStatus("submitted_for_release");
+        public static readonly TransactionEscrowStatus RELEASED = new TransactionEscrowStatus("released");
+        public static readonly TransactionEscrowStatus UNRECOGNIZED = new TransactionEscrowStatus("unrecognized");
+
+        public static readonly TransactionEscrowStatus[] ALL = {
+            HELD_IN_ESCROW, SUBMITTED_FOR_ESCROW, SUBMITTED_FOR_RELEASE, RELEASED
+        };
+
+        protected TransactionEscrowStatus(String name) : base(name) {}
+    }
+
     public class TransactionStatus : Enumeration
     {
         public static readonly TransactionStatus AUTHORIZATION_EXPIRED = new TransactionStatus("authorization_expired");
@@ -118,6 +133,7 @@ namespace Braintree
         public List<String> RefundIds { get; protected set; }
         public String SettlementBatchId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
+        public TransactionEscrowStatus EscrowStatus { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
         public String SubscriptionId { get; protected set; }
@@ -151,6 +167,11 @@ namespace Braintree
             Channel = node.GetString("channel");
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
+            EscrowStatus = (TransactionEscrowStatus)CollectionUtil.Find(
+                    TransactionEscrowStatus.ALL,
+                    node.GetString("escrow-status"),
+                    TransactionEscrowStatus.UNRECOGNIZED
+            );
 
             List<NodeWrapper> statusNodes = node.GetList("status-history/status-event");
             StatusHistory = new StatusEvent[statusNodes.Count];

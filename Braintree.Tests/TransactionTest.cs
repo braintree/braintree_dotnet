@@ -1986,6 +1986,227 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithHoldForEscrow()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 2M,
+                Options = new TransactionOptionsRequest
+                {
+                    HoldForEscrow = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual(TransactionEscrowStatus.SUBMITTED_FOR_ESCROW, transaction.EscrowStatus);
+        }
+
+        [Test]
+        public void Sale_WithHoldForEscrowFailsForMasterMerchantAccount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    HoldForEscrow = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_ESCROW,
+                result.Errors.ForObject("Transaction").OnField("Base")[0].Code
+            );
+        }
+
+        [Test]
+        public void HoldForEscrow_AfterSale()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 1M
+            };
+            Result<Transaction> saleResult = gateway.Transaction.Sale(request);
+            Transaction saleTransaction = saleResult.Target;
+            Result<Transaction> result = gateway.Transaction.HoldForEscrow(saleTransaction.Id);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual(
+                TransactionEscrowStatus.SUBMITTED_FOR_ESCROW,
+                transaction.EscrowStatus
+            );
+        }
+
+        [Test]
+        public void HoldForEscrow_AfterSaleFailsForMasterMerchantAccount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+            };
+            Result<Transaction> saleResult = gateway.Transaction.Sale(request);
+            Transaction saleTransaction = saleResult.Target;
+            Result<Transaction> result = gateway.Transaction.HoldForEscrow(saleTransaction.Id);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_ESCROW,
+                result.Errors.ForObject("Transaction").OnField("Base")[0].Code
+            );
+        }
+
+        [Test]
+        public void SubmitForRelease()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    HoldForEscrow = true
+                },
+                ServiceFeeAmount = 1M
+            };
+            Result<Transaction> saleResult = gateway.Transaction.Sale(request);
+            Transaction saleTransaction = saleResult.Target;
+            Assert.IsTrue(saleResult.IsSuccess());
+            TestHelper.Escrow(service, saleTransaction.Id);
+            Result<Transaction> result = gateway.Transaction.SubmitForRelease(saleTransaction.Id);
+
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual(
+                TransactionEscrowStatus.SUBMITTED_FOR_RELEASE,
+                transaction.EscrowStatus
+            );
+        }
+
+        [Test]
+        public void SubmitForRelease_FailsForNonSubmittableTransaction()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+            Result<Transaction> saleResult = gateway.Transaction.Sale(request);
+            Transaction saleTransaction = saleResult.Target;
+
+            Result<Transaction> result = gateway.Transaction.SubmitForRelease(saleTransaction.Id);
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_RELEASE,
+                result.Errors.ForObject("Transaction").OnField("Base")[0].Code
+            );
+        }
+
+        [Test]
+        public void CancelRelease()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    HoldForEscrow = true
+                },
+                ServiceFeeAmount = 1M
+            };
+            Result<Transaction> saleResult = gateway.Transaction.Sale(request);
+            Transaction saleTransaction = saleResult.Target;
+            Assert.IsTrue(saleResult.IsSuccess());
+            TestHelper.Escrow(service, saleTransaction.Id);
+            Result<Transaction> result = gateway.Transaction.SubmitForRelease(saleTransaction.Id);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction releasedTransaction = result.Target;
+
+            Result<Transaction> cancelResult = gateway.Transaction.CancelRelease(releasedTransaction.Id);
+            Assert.IsTrue(cancelResult.IsSuccess());
+            Transaction transaction = cancelResult.Target;
+            Assert.AreEqual(
+                TransactionEscrowStatus.HELD_IN_ESCROW,
+                transaction.EscrowStatus
+            );
+        }
+
+        [Test]
+        public void CancelRelease_FailsForTransactionsNotPendingRelease()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    HoldForEscrow = true
+                },
+                ServiceFeeAmount = 1M
+            };
+            Result<Transaction> saleResult = gateway.Transaction.Sale(request);
+            Transaction saleTransaction = saleResult.Target;
+            Assert.IsTrue(saleResult.IsSuccess());
+            TestHelper.Escrow(service, saleTransaction.Id);
+
+            Result<Transaction> cancelResult = gateway.Transaction.CancelRelease(saleTransaction.Id);
+            Assert.IsFalse(cancelResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_CANNOT_CANCEL_RELEASE,
+                cancelResult.Errors.ForObject("Transaction").OnField("Base")[0].Code
+            );
+        }
+
+        [Test]
         public void Sale_WithDescriptor()
         {
             var request = new TransactionRequest
