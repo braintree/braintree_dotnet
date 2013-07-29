@@ -1,3 +1,7 @@
+## 2.24.1
+
+* Expose image_url attribute on credit cards
+
 ## 2.24.0
 
 * Adds device data to transactions, customers, and credit cards.
