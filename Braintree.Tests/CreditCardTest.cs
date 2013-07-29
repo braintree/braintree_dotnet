@@ -86,6 +86,7 @@ namespace Braintree.Tests
             Assert.IsFalse(creditCard.IsVenmoSdk.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+            Assert.IsNotNull(creditCard.ImageUrl);
 
             Address billingAddress = creditCard.BillingAddress;
             Assert.AreEqual("Chad", billingAddress.CountryName);

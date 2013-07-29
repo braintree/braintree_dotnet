@@ -1,3 +1,11 @@
+## 2.24.1
+
+* Expose image_url attribute on credit cards
+
+## 2.24.0
+
+* Enable device data
+
 ## 2.23.1
 
 * Set .NET Framework compatibility back to 2.0+

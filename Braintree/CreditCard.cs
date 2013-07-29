@@ -156,6 +156,7 @@ namespace Braintree
         public CreditCardCommercial Commercial { get; protected set; }
         public CreditCardHealthcare Healthcare { get; protected set; }
         public CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
+        public String ImageUrl { get; protected set; }
 
         private String _CountryOfIssuance;
 
@@ -240,6 +241,7 @@ namespace Braintree
             Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, node.GetString("healthcare"), CreditCardHealthcare.UNKNOWN);
             _CountryOfIssuance = node.GetString("country-of-issuance");
             _IssuingBank = node.GetString("issuing-bank");
+            ImageUrl = node.GetString("image-url");
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
