@@ -75,6 +75,7 @@ namespace Braintree.Tests
             {
                 ApplicantDetails = new ApplicantDetailsRequest
                 {
+                    CompanyName = "coattree.com",
                     FirstName = "Joe",
                     LastName = "Bloggs",
                     Email = "joe@bloggs.com",
@@ -87,7 +88,8 @@ namespace Braintree.Tests
                     },
                     DateOfBirth = "10/9/1980",
                     Ssn = "123-000-1234",
-                    RoutingNumber = "1234567890",
+                    TaxId = "123456789",
+                    RoutingNumber = "122100024",
                     AccountNumber = "43759348798"
               },
               TosAccepted = true,
