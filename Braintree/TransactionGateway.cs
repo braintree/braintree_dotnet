@@ -108,11 +108,11 @@ namespace Braintree
             return new Result<Transaction>(new NodeWrapper(response), Service);
         }
 
-        public virtual Result<Transaction> SubmitForRelease(String id)
+        public virtual Result<Transaction> ReleaseFromEscrow(String id)
         {
             TransactionRequest request = new TransactionRequest();
 
-            XmlNode response = Service.Put("/transactions/" + id + "/submit_for_release", request);
+            XmlNode response = Service.Put("/transactions/" + id + "/release_from_escrow", request);
 
             return new Result<Transaction>(new NodeWrapper(response), Service);
         }

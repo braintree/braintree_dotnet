@@ -2083,7 +2083,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SubmitForRelease()
+        public void ReleaseFromEscrow()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2104,7 +2104,7 @@ namespace Braintree.Tests
             Transaction saleTransaction = saleResult.Target;
             Assert.IsTrue(saleResult.IsSuccess());
             TestHelper.Escrow(service, saleTransaction.Id);
-            Result<Transaction> result = gateway.Transaction.SubmitForRelease(saleTransaction.Id);
+            Result<Transaction> result = gateway.Transaction.ReleaseFromEscrow(saleTransaction.Id);
 
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -2115,7 +2115,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SubmitForRelease_FailsForNonSubmittableTransaction()
+        public void ReleaseFromEscrow_FailsForNonSubmittableTransaction()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2130,11 +2130,11 @@ namespace Braintree.Tests
             Result<Transaction> saleResult = gateway.Transaction.Sale(request);
             Transaction saleTransaction = saleResult.Target;
 
-            Result<Transaction> result = gateway.Transaction.SubmitForRelease(saleTransaction.Id);
+            Result<Transaction> result = gateway.Transaction.ReleaseFromEscrow(saleTransaction.Id);
 
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_RELEASE,
+                ValidationErrorCode.TRANSACTION_CANNOT_RELEASE_FROM_ESCROW,
                 result.Errors.ForObject("Transaction").OnField("Base")[0].Code
             );
         }
@@ -2161,7 +2161,7 @@ namespace Braintree.Tests
             Transaction saleTransaction = saleResult.Target;
             Assert.IsTrue(saleResult.IsSuccess());
             TestHelper.Escrow(service, saleTransaction.Id);
-            Result<Transaction> result = gateway.Transaction.SubmitForRelease(saleTransaction.Id);
+            Result<Transaction> result = gateway.Transaction.ReleaseFromEscrow(saleTransaction.Id);
             Assert.IsTrue(result.IsSuccess());
 
             Transaction releasedTransaction = result.Target;
