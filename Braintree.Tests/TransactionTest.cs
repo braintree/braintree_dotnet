@@ -2029,7 +2029,7 @@ namespace Braintree.Tests
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_CANNOT_HOLD_FOR_ESCROW,
+                ValidationErrorCode.TRANSACTION_CANNOT_HOLD_IN_ESCROW,
                 result.Errors.ForObject("Transaction").OnField("Base")[0].Code
             );
         }
@@ -2077,7 +2077,7 @@ namespace Braintree.Tests
             Result<Transaction> result = gateway.Transaction.HoldInEscrow(saleTransaction.Id);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_CANNOT_HOLD_FOR_ESCROW,
+                ValidationErrorCode.TRANSACTION_CANNOT_HOLD_IN_ESCROW,
                 result.Errors.ForObject("Transaction").OnField("Base")[0].Code
             );
         }
