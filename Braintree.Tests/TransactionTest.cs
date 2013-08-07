@@ -1986,7 +1986,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Sale_WithHoldForEscrow()
+        public void Sale_WithHoldInEscrow()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2000,17 +2000,17 @@ namespace Braintree.Tests
                 ServiceFeeAmount = 2M,
                 Options = new TransactionOptionsRequest
                 {
-                    HoldForEscrow = true
+                    HoldInEscrow = true
                 }
             };
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
-            Assert.AreEqual(TransactionEscrowStatus.SUBMITTED_FOR_ESCROW, transaction.EscrowStatus);
+            Assert.AreEqual(TransactionEscrowStatus.HOLD_PENDING, transaction.EscrowStatus);
         }
 
         [Test]
-        public void Sale_WithHoldForEscrowFailsForMasterMerchantAccount()
+        public void Sale_WithHoldInEscrowFailsForMasterMerchantAccount()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2023,7 +2023,7 @@ namespace Braintree.Tests
                 },
                 Options = new TransactionOptionsRequest
                 {
-                    HoldForEscrow = true
+                    HoldInEscrow = true
                 }
             };
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -2035,7 +2035,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void HoldForEscrow_AfterSale()
+        public void HoldInEscrow_AfterSale()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2050,17 +2050,17 @@ namespace Braintree.Tests
             };
             Result<Transaction> saleResult = gateway.Transaction.Sale(request);
             Transaction saleTransaction = saleResult.Target;
-            Result<Transaction> result = gateway.Transaction.HoldForEscrow(saleTransaction.Id);
+            Result<Transaction> result = gateway.Transaction.HoldInEscrow(saleTransaction.Id);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
             Assert.AreEqual(
-                TransactionEscrowStatus.SUBMITTED_FOR_ESCROW,
+                TransactionEscrowStatus.HOLD_PENDING,
                 transaction.EscrowStatus
             );
         }
 
         [Test]
-        public void HoldForEscrow_AfterSaleFailsForMasterMerchantAccount()
+        public void HoldInEscrow_AfterSaleFailsForMasterMerchantAccount()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2074,7 +2074,7 @@ namespace Braintree.Tests
             };
             Result<Transaction> saleResult = gateway.Transaction.Sale(request);
             Transaction saleTransaction = saleResult.Target;
-            Result<Transaction> result = gateway.Transaction.HoldForEscrow(saleTransaction.Id);
+            Result<Transaction> result = gateway.Transaction.HoldInEscrow(saleTransaction.Id);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(
                 ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_ESCROW,
@@ -2096,7 +2096,7 @@ namespace Braintree.Tests
                 },
                 Options = new TransactionOptionsRequest
                 {
-                    HoldForEscrow = true
+                    HoldInEscrow = true
                 },
                 ServiceFeeAmount = 1M
             };
@@ -2109,7 +2109,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
             Assert.AreEqual(
-                TransactionEscrowStatus.SUBMITTED_FOR_RELEASE,
+                TransactionEscrowStatus.RELEASE_PENDING,
                 transaction.EscrowStatus
             );
         }
@@ -2153,7 +2153,7 @@ namespace Braintree.Tests
                 },
                 Options = new TransactionOptionsRequest
                 {
-                    HoldForEscrow = true
+                    HoldInEscrow = true
                 },
                 ServiceFeeAmount = 1M
             };
@@ -2170,7 +2170,7 @@ namespace Braintree.Tests
             Assert.IsTrue(cancelResult.IsSuccess());
             Transaction transaction = cancelResult.Target;
             Assert.AreEqual(
-                TransactionEscrowStatus.HELD_IN_ESCROW,
+                TransactionEscrowStatus.HELD,
                 transaction.EscrowStatus
             );
         }
@@ -2189,7 +2189,7 @@ namespace Braintree.Tests
                 },
                 Options = new TransactionOptionsRequest
                 {
-                    HoldForEscrow = true
+                    HoldInEscrow = true
                 },
                 ServiceFeeAmount = 1M
             };

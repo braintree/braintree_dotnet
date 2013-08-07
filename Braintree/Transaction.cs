@@ -23,14 +23,15 @@ namespace Braintree
 
     public class TransactionEscrowStatus : Enumeration
     {
-        public static readonly TransactionEscrowStatus SUBMITTED_FOR_ESCROW = new TransactionEscrowStatus("submitted_for_escrow");
-        public static readonly TransactionEscrowStatus HELD_IN_ESCROW = new TransactionEscrowStatus("held_in_escrow");
-        public static readonly TransactionEscrowStatus SUBMITTED_FOR_RELEASE = new TransactionEscrowStatus("submitted_for_release");
+        public static readonly TransactionEscrowStatus HOLD_PENDING = new TransactionEscrowStatus("hold_pending");
+        public static readonly TransactionEscrowStatus HELD = new TransactionEscrowStatus("held");
+        public static readonly TransactionEscrowStatus RELEASE_PENDING = new TransactionEscrowStatus("release_pending");
         public static readonly TransactionEscrowStatus RELEASED = new TransactionEscrowStatus("released");
+        public static readonly TransactionEscrowStatus REFUNDED = new TransactionEscrowStatus("refunded");
         public static readonly TransactionEscrowStatus UNRECOGNIZED = new TransactionEscrowStatus("unrecognized");
 
         public static readonly TransactionEscrowStatus[] ALL = {
-            HELD_IN_ESCROW, SUBMITTED_FOR_ESCROW, SUBMITTED_FOR_RELEASE, RELEASED
+            HELD, HOLD_PENDING, RELEASE_PENDING, RELEASED, REFUNDED
         };
 
         protected TransactionEscrowStatus(String name) : base(name) {}

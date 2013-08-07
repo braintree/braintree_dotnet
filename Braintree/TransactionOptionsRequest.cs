@@ -8,7 +8,7 @@ namespace Braintree
 {
     public class TransactionOptionsRequest : Request
     {
-        public Boolean? HoldForEscrow { get; set; }
+        public Boolean? HoldInEscrow { get; set; }
         public Boolean? StoreInVault { get; set; }
         public Boolean? StoreInVaultOnSuccess { get; set; }
         public Boolean? AddBillingAddressToPaymentMethod { get; set; }
@@ -29,7 +29,7 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(String root)
         {
             return new RequestBuilder(root).
-                AddElement("hold-for-escrow", HoldForEscrow).
+                AddElement("hold-in-escrow", HoldInEscrow).
                 AddElement("store-in-vault", StoreInVault).
                 AddElement("store-in-vault-on-success", StoreInVaultOnSuccess).
                 AddElement("add-billing-address-to-payment-method", AddBillingAddressToPaymentMethod).

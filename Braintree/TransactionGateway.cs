@@ -43,11 +43,11 @@ namespace Braintree
             return new Result<Transaction>(new NodeWrapper(node), Service);
         }
 
-        public virtual Result<Transaction> HoldForEscrow(String id)
+        public virtual Result<Transaction> HoldInEscrow(String id)
         {
             TransactionRequest request = new TransactionRequest();
 
-            XmlNode response = Service.Put("/transactions/" + id + "/hold_for_escrow", request);
+            XmlNode response = Service.Put("/transactions/" + id + "/hold_in_escrow", request);
 
             return new Result<Transaction>(new NodeWrapper(response), Service);
         }
