@@ -79,6 +79,7 @@ namespace Braintree.Tests
                     FirstName = "Joe",
                     LastName = "Bloggs",
                     Email = "joe@bloggs.com",
+                    Phone = "555-555-5555",
                     Address = new AddressRequest
                     {
                         StreetAddress = "123 Credibility St.",

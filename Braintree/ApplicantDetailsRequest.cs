@@ -10,6 +10,7 @@ namespace Braintree
       public String FirstName { get; set; }
       public String LastName { get; set; }
       public String Email { get; set; }
+      public String Phone { get; set; }
       public AddressRequest Address { get; set; }
       public String DateOfBirth { get; set; }
       public String Ssn { get; set; }
@@ -45,6 +46,7 @@ namespace Braintree
         builder.AddElement("first-name", FirstName);
         builder.AddElement("last-name", LastName);
         builder.AddElement("email", Email);
+        builder.AddElement("phone", Phone);
         builder.AddElement("address", Address);
         builder.AddElement("date-of-birth", DateOfBirth);
         builder.AddElement("ssn", Ssn);
