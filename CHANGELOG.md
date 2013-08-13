@@ -1,3 +1,13 @@
+## 2.25.0
+
+* Adds HoldInEscrow method
+* Add error codes for verification not supported error
+* Add CompanyName and TaxId to merchant account create
+* Adds CancelRelease method
+* Adds ReleaseFromEscrow functionality
+* Adds Phone to applicant details.
+* Adds merchant account phone error code.
+
 ## 2.24.1
 
 * Expose image_url attribute on credit cards
