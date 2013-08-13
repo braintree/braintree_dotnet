@@ -13,7 +13,10 @@ namespace Braintree
         public static readonly WebhookKind SUBSCRIPTION_TRIAL_ENDED = new WebhookKind("subscription_trial_ended");
         public static readonly WebhookKind SUBSCRIPTION_WENT_ACTIVE = new WebhookKind("subscription_went_active");
         public static readonly WebhookKind SUBSCRIPTION_WENT_PAST_DUE = new WebhookKind("subscription_went_past_due");
+        public static readonly WebhookKind SUB_MERCHANT_ACCOUNT_APPROVED = new WebhookKind("sub_merchant_account_approved");
+        public static readonly WebhookKind SUB_MERCHANT_ACCOUNT_DECLINED = new WebhookKind("sub_merchant_account_declined");
         public static readonly WebhookKind UNRECOGNIZED = new WebhookKind("unrecognized");
+        public static readonly WebhookKind TRANSACTION_DISBURSED = new WebhookKind("transaction_disbursed");
 
         public static readonly WebhookKind[] ALL = {
           SUBSCRIPTION_CANCELED,
@@ -22,7 +25,10 @@ namespace Braintree
           SUBSCRIPTION_EXPIRED,
           SUBSCRIPTION_TRIAL_ENDED,
           SUBSCRIPTION_WENT_ACTIVE,
-          SUBSCRIPTION_WENT_PAST_DUE
+          SUBSCRIPTION_WENT_PAST_DUE,
+          SUB_MERCHANT_ACCOUNT_APPROVED,
+          SUB_MERCHANT_ACCOUNT_DECLINED,
+          TRANSACTION_DISBURSED
         };
 
         protected WebhookKind(String name) : base(name) {}
@@ -32,13 +38,42 @@ namespace Braintree
     {
         public WebhookKind Kind { get; protected set; }
         public Subscription Subscription { get; protected set; }
+        public MerchantAccount MerchantAccount { get; protected set; }
+        public ValidationErrors Errors { get; protected set; }
+        public String Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
+        public Transaction Transaction { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
         {
             Timestamp = node.GetDateTime("timestamp");
             Kind = (WebhookKind)CollectionUtil.Find(WebhookKind.ALL, node.GetString("kind"), WebhookKind.UNRECOGNIZED);
-            Subscription = new Subscription(node.GetNode("subject/subscription"), service);
+
+            NodeWrapper WrapperNode = node.GetNode("subject");
+
+            if (WrapperNode.GetNode("api-error-response") != null) {
+              WrapperNode = WrapperNode.GetNode("api-error-response");
+            }
+
+            if (WrapperNode.GetNode("subscription") != null) {
+              Subscription = new Subscription(WrapperNode.GetNode("subscription"), service);
+            }
+
+            if (WrapperNode.GetNode("merchant-account") != null) {
+              MerchantAccount = new MerchantAccount(WrapperNode.GetNode("merchant-account"));
+            }
+
+            if (WrapperNode.GetNode("transaction") != null) {
+              Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
+            }
+
+            if (WrapperNode.GetNode("errors") != null) {
+              Errors = new ValidationErrors(WrapperNode.GetNode("errors"));
+            }
+            if (WrapperNode.GetNode("message") != null) {
+              Message = WrapperNode.GetString("message");
+            }
+
         }
     }
 }

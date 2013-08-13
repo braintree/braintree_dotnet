@@ -14,6 +14,7 @@ namespace Braintree
 
         public ValidationError(String attribute, String code, String message)
         {
+
             Attribute = attribute;
             Code = (ValidationErrorCode)Int32.Parse(code);
             Message = message;

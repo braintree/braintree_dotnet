@@ -21,6 +21,22 @@ namespace Braintree
         protected TransactionGatewayRejectionReason(String name) : base(name) {}
     }
 
+    public class TransactionEscrowStatus : Enumeration
+    {
+        public static readonly TransactionEscrowStatus HOLD_PENDING = new TransactionEscrowStatus("hold_pending");
+        public static readonly TransactionEscrowStatus HELD = new TransactionEscrowStatus("held");
+        public static readonly TransactionEscrowStatus RELEASE_PENDING = new TransactionEscrowStatus("release_pending");
+        public static readonly TransactionEscrowStatus RELEASED = new TransactionEscrowStatus("released");
+        public static readonly TransactionEscrowStatus REFUNDED = new TransactionEscrowStatus("refunded");
+        public static readonly TransactionEscrowStatus UNRECOGNIZED = new TransactionEscrowStatus("unrecognized");
+
+        public static readonly TransactionEscrowStatus[] ALL = {
+            HELD, HOLD_PENDING, RELEASE_PENDING, RELEASED, REFUNDED
+        };
+
+        protected TransactionEscrowStatus(String name) : base(name) {}
+    }
+
     public class TransactionStatus : Enumeration
     {
         public static readonly TransactionStatus AUTHORIZATION_EXPIRED = new TransactionStatus("authorization_expired");
@@ -118,6 +134,7 @@ namespace Braintree
         public List<String> RefundIds { get; protected set; }
         public String SettlementBatchId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
+        public TransactionEscrowStatus EscrowStatus { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
         public String SubscriptionId { get; protected set; }
@@ -127,6 +144,7 @@ namespace Braintree
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
+        public Decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
 
         private BraintreeService Service;
@@ -150,6 +168,11 @@ namespace Braintree
             Channel = node.GetString("channel");
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
+            EscrowStatus = (TransactionEscrowStatus)CollectionUtil.Find(
+                    TransactionEscrowStatus.ALL,
+                    node.GetString("escrow-status"),
+                    TransactionEscrowStatus.UNRECOGNIZED
+            );
 
             List<NodeWrapper> statusNodes = node.GetList("status-history/status-event");
             StatusHistory = new StatusEvent[statusNodes.Count];
@@ -184,6 +207,7 @@ namespace Braintree
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
+            ServiceFeeAmount = node.GetDecimal("service-fee-amount");
             DisbursementDetails = new DisbursementDetails(node.GetNode("disbursement-details"));
 
             BillingAddress = new Address(node.GetNode("billing"));
