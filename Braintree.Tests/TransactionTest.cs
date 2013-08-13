@@ -2312,6 +2312,30 @@ namespace Braintree.Tests
             Assert.AreEqual("1111", transaction.CreditCard.LastFour);
         }
 
+        [Test]
+        public void Sale_WithVenmoSdkSession()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    VenmoSdkSession = SandboxValues.VenmoSdk.SESSION
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.IsTrue(transaction.CreditCard.IsVenmoSdk.Value);
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheTransaction()
