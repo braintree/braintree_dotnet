@@ -100,5 +100,33 @@ namespace Braintree.Tests
           Assert.AreEqual("my_id", notification.Transaction.Id);
           Assert.IsTrue(notification.Transaction.DisbursementDetails.IsValid());
         }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForAPartnerUserCreated()
+        {
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_USER_CREATED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+          Assert.AreEqual(WebhookKind.PARTNER_USER_CREATED, notification.Kind);
+          Assert.AreEqual("public_id", notification.PartnerCredentials.MerchantPublicId);
+          Assert.AreEqual("public_key", notification.PartnerCredentials.PublicKey);
+          Assert.AreEqual("private_key", notification.PartnerCredentials.PrivateKey);
+          Assert.AreEqual("abc123", notification.PartnerCredentials.PartnerUserId);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForAPartnerUserDeleted()
+        {
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_USER_DELETED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+          Assert.AreEqual(WebhookKind.PARTNER_USER_DELETED, notification.Kind);
+          Assert.AreEqual(null, notification.PartnerCredentials.MerchantPublicId);
+          Assert.AreEqual(null, notification.PartnerCredentials.PublicKey);
+          Assert.AreEqual(null, notification.PartnerCredentials.PrivateKey);
+          Assert.AreEqual("abc123", notification.PartnerCredentials.PartnerUserId);
+        }
     }
 }
