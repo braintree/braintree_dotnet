@@ -4,7 +4,7 @@ namespace Braintree
     {
         public class MerchantAccount
         {
-            public static String Appove = "approve_me";
+            public static String Approve = "approve_me";
         }
     }
 }
