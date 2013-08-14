@@ -1,3 +1,7 @@
+## 2.25.2
+
+* Fixed typo in MerchantAccount.
+
 ## 2.25.0
 
 * Adds HoldInEscrow method
