@@ -47,7 +47,7 @@ namespace Braintree
         public String Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public Transaction Transaction { get; protected set; }
-        public PartnerCredentials PartnerCredentials { get; protected set; }
+        public PartnerUser PartnerUser { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
         {
@@ -72,8 +72,8 @@ namespace Braintree
               Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
             }
 
-            if (WrapperNode.GetNode("partner-credentials") != null) {
-              PartnerCredentials = new PartnerCredentials(WrapperNode.GetNode("partner-credentials"));
+            if (WrapperNode.GetNode("partner-user") != null) {
+              PartnerUser = new PartnerUser(WrapperNode.GetNode("partner-user"));
             }
 
             if (WrapperNode.GetNode("errors") != null) {
