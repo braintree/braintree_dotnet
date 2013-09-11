@@ -128,5 +128,16 @@ namespace Braintree.Tests
           Assert.AreEqual(null, notification.PartnerUser.PrivateKey);
           Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
         }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForAPartnerMerchantDeclined()
+        {
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DECLINED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+          Assert.AreEqual(WebhookKind.PARTNER_MERCHANT_DECLINED, notification.Kind);
+          Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
+        }
     }
 }
