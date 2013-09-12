@@ -86,7 +86,7 @@ namespace Braintree
             RequestBuilder builder = new RequestBuilder(root);
 
             if (Amount != 0) builder.AddElement("amount", Amount);
-            builder.AddElement("bundled-params", DeviceData);
+            builder.AddElement("device-data", DeviceData);
             builder.AddElement("customer-id", CustomerId);
             builder.AddElement("order-id", OrderId);
             builder.AddElement("channel", Channel);

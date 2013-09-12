@@ -25,6 +25,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest();
             request.DeviceData = "{\"device_session_id\":\"my_dsid\"}";
 
+            Assert.IsTrue(request.ToXml().Contains("device-data"));
             Assert.IsTrue(request.ToXml().Contains("device_session_id"));
             Assert.IsTrue(request.ToXml().Contains("my_dsid"));
         }

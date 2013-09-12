@@ -1,3 +1,7 @@
+## 2.25.3
+
+* Fixed typo with DeviceData.
+
 ## 2.25.2
 
 * Fixed typo in MerchantAccount.

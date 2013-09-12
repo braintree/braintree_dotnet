@@ -1066,6 +1066,40 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithDeviceData()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                DeviceData = "{\"device_session_id\":\"my_dsid\"}"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.IsNull(transaction.GatewayRejectionReason);
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+        }
+
+        [Test]
         public void Sale_WithAllAttributes()
         {
             TransactionRequest request = new TransactionRequest

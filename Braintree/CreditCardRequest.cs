@@ -61,7 +61,7 @@ namespace Braintree
             return base.BuildRequest(root).
                 AddElement("billing-address", BillingAddress).
                 AddElement("billing-address-id", BillingAddressId).
-                AddElement("bundled-params", DeviceData).
+                AddElement("device-data", DeviceData).
                 AddElement("customer-id", CustomerId).
                 AddElement("device-session-id", DeviceSessionId).
                 AddElement("options", Options).
