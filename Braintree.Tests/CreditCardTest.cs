@@ -141,6 +141,31 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CreatesCreditCardWithDeviceData()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                DeviceData = "{\"device_session_id\":\"my_dsid\"}",
+                CardholderName = "John Doe",
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    CountryName = "Greece",
+                    CountryCodeAlpha2 = "GR",
+                    CountryCodeAlpha3 = "GRC",
+                    CountryCodeNumeric = "300"
+                }
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
         public void Create_FailsToCreateCreditCardWithInvalidVenmoSdkPaymentMethodCode()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
