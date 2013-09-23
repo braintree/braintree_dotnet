@@ -1055,7 +1055,7 @@ namespace Braintree.Tests
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
-            Assert.IsNull(transaction.GatewayRejectionReason);
+            Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
@@ -1089,7 +1089,7 @@ namespace Braintree.Tests
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
-            Assert.IsNull(transaction.GatewayRejectionReason);
+            Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
@@ -1667,6 +1667,45 @@ namespace Braintree.Tests
             Transaction transaction = result.Transaction;
 
             Assert.AreEqual(TransactionGatewayRejectionReason.CVV, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForFraud()
+        {
+           BraintreeGateway processingRulesGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "processing_rules_merchant_id",
+                PublicKey = "processing_rules_public_key",
+                PrivateKey = "processing_rules_private_key"
+            };
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.FRAUD,
+                    ExpirationDate = "05/2017",
+                    CVV = "333"
+                }
+            };
+
+            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.FRAUD, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void UnrecognizedValuesAreCategorizedAsSuch()
+        {
+          Transaction transaction = gateway.Transaction.Find("unrecognized_transaction_id");
+
+          Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
+          Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
+          Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
         }
 
         [Test]

@@ -13,9 +13,11 @@ namespace Braintree
         public static readonly TransactionGatewayRejectionReason AVS_AND_CVV = new TransactionGatewayRejectionReason("avs_and_cvv");
         public static readonly TransactionGatewayRejectionReason CVV = new TransactionGatewayRejectionReason("cvv");
         public static readonly TransactionGatewayRejectionReason DUPLICATE = new TransactionGatewayRejectionReason("duplicate");
+        public static readonly TransactionGatewayRejectionReason FRAUD = new TransactionGatewayRejectionReason("fraud");
+        public static readonly TransactionGatewayRejectionReason UNRECOGNIZED = new TransactionGatewayRejectionReason("unrecognized");
 
         public static readonly TransactionGatewayRejectionReason[] ALL = {
-            AVS, AVS_AND_CVV, CVV, DUPLICATE
+            AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, UNRECOGNIZED
         };
 
         protected TransactionGatewayRejectionReason(String name) : base(name) {}
@@ -31,7 +33,7 @@ namespace Braintree
         public static readonly TransactionEscrowStatus UNRECOGNIZED = new TransactionEscrowStatus("unrecognized");
 
         public static readonly TransactionEscrowStatus[] ALL = {
-            HELD, HOLD_PENDING, RELEASE_PENDING, RELEASED, REFUNDED
+            HELD, HOLD_PENDING, RELEASE_PENDING, RELEASED, REFUNDED, UNRECOGNIZED
         };
 
         protected TransactionEscrowStatus(String name) : base(name) {}
@@ -48,12 +50,12 @@ namespace Braintree
         public static readonly TransactionStatus SETTLED = new TransactionStatus("settled");
         public static readonly TransactionStatus SETTLING = new TransactionStatus("settling");
         public static readonly TransactionStatus SUBMITTED_FOR_SETTLEMENT = new TransactionStatus("submitted_for_settlement");
-        public static readonly TransactionStatus UNRECOGNIZED = new TransactionStatus("unrecognized");
         public static readonly TransactionStatus VOIDED = new TransactionStatus("voided");
+        public static readonly TransactionStatus UNRECOGNIZED = new TransactionStatus("unrecognized");
 
         public static readonly TransactionStatus[] ALL = {
             AUTHORIZATION_EXPIRED, AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED,
-            SETTLED, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED
+            SETTLED, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED, UNRECOGNIZED
         };
 
         protected TransactionStatus(String name) : base(name) {}
@@ -66,7 +68,7 @@ namespace Braintree
         public static readonly TransactionSource RECURRING = new TransactionSource("recurring");
         public static readonly TransactionSource UNRECOGNIZED = new TransactionSource("unrecognized");
 
-        public static readonly TransactionSource[] ALL = { API, CONTROL_PANEL, RECURRING };
+        public static readonly TransactionSource[] ALL = { API, CONTROL_PANEL, RECURRING, UNRECOGNIZED };
 
         protected TransactionSource(String name) : base(name) {}
     }
@@ -77,7 +79,7 @@ namespace Braintree
         public static readonly TransactionType SALE = new TransactionType("sale");
         public static readonly TransactionType UNRECOGNIZED = new TransactionType("unrecognized");
 
-        public static readonly TransactionType[] ALL = { CREDIT, SALE };
+        public static readonly TransactionType[] ALL = { CREDIT, SALE, UNRECOGNIZED };
 
         protected TransactionType(String name) : base(name) {}
     }
@@ -86,8 +88,9 @@ namespace Braintree
     {
         public static readonly TransactionCreatedUsing FULL_INFORMATION = new TransactionCreatedUsing("full_information");
         public static readonly TransactionCreatedUsing TOKEN = new TransactionCreatedUsing("token");
+        public static readonly TransactionCreatedUsing UNRECOGNIZED = new TransactionCreatedUsing("unrecognized");
 
-        public static readonly TransactionCreatedUsing[] ALL = {FULL_INFORMATION, TOKEN};
+        public static readonly TransactionCreatedUsing[] ALL = { FULL_INFORMATION, TOKEN, UNRECOGNIZED };
 
         protected TransactionCreatedUsing(String name) : base(name) {}
     }
@@ -163,7 +166,7 @@ namespace Braintree
             GatewayRejectionReason = (TransactionGatewayRejectionReason)CollectionUtil.Find(
                 TransactionGatewayRejectionReason.ALL,
                 node.GetString("gateway-rejection-reason"),
-                null
+                TransactionGatewayRejectionReason.UNRECOGNIZED
             );
             Channel = node.GetString("channel");
             OrderId = node.GetString("order-id");
