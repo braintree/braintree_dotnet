@@ -8,6 +8,7 @@ namespace Braintree
     {
         public static readonly WebhookKind PARTNER_USER_CREATED = new WebhookKind("partner_user_created");
         public static readonly WebhookKind PARTNER_USER_DELETED = new WebhookKind("partner_user_deleted");
+        public static readonly WebhookKind PARTNER_MERCHANT_DECLINED = new WebhookKind("partner_merchant_declined");
         public static readonly WebhookKind SUBSCRIPTION_CANCELED = new WebhookKind("subscription_canceled");
         public static readonly WebhookKind SUBSCRIPTION_CHARGED_SUCCESSFULLY = new WebhookKind("subscription_charged_successfully");
         public static readonly WebhookKind SUBSCRIPTION_CHARGED_UNSUCCESSFULLY = new WebhookKind("subscription_charged_unsuccessfully");
@@ -23,6 +24,7 @@ namespace Braintree
         public static readonly WebhookKind[] ALL = {
           PARTNER_USER_CREATED,
           PARTNER_USER_DELETED,
+          PARTNER_MERCHANT_DECLINED,
           SUBSCRIPTION_CANCELED,
           SUBSCRIPTION_CHARGED_SUCCESSFULLY,
           SUBSCRIPTION_CHARGED_UNSUCCESSFULLY,
@@ -47,7 +49,7 @@ namespace Braintree
         public String Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public Transaction Transaction { get; protected set; }
-        public PartnerCredentials PartnerCredentials { get; protected set; }
+        public PartnerUser PartnerUser { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
         {
@@ -72,8 +74,8 @@ namespace Braintree
               Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
             }
 
-            if (WrapperNode.GetNode("partner-credentials") != null) {
-              PartnerCredentials = new PartnerCredentials(WrapperNode.GetNode("partner-credentials"));
+            if (WrapperNode.GetNode("partner-user") != null) {
+              PartnerUser = new PartnerUser(WrapperNode.GetNode("partner-user"));
             }
 
             if (WrapperNode.GetNode("errors") != null) {

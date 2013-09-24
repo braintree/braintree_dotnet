@@ -47,6 +47,8 @@ namespace Braintree
                 return PartnerUserCreatedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_USER_DELETED) {
                 return PartnerUserDeletedSampleXml(id);
+            } else if (kind == WebhookKind.PARTNER_MERCHANT_DECLINED) {
+                return PartnerMerchantDeclinedSampleXml(id);
             } else {
                 return SubscriptionXml(id);
             }
@@ -122,7 +124,7 @@ namespace Braintree
         }
 
         private String PartnerUserCreatedSampleXml(String id) {
-            return node("partner-credentials",
+            return node("partner-user",
                     node("partner-user-id", "abc123"),
                     node("merchant-public-id", "public_id"),
                     node("public-key", "public_key"),
@@ -131,7 +133,13 @@ namespace Braintree
         }
 
         private String PartnerUserDeletedSampleXml(String id) {
-            return node("partner-credentials",
+            return node("partner-user",
+                    node("partner-user-id", "abc123")
+            );
+        }
+
+        private String PartnerMerchantDeclinedSampleXml(String id) {
+            return node("partner-user",
                     node("partner-user-id", "abc123")
             );
         }

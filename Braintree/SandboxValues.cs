@@ -11,6 +11,7 @@ namespace Braintree
         public class CreditCardNumber
         {
             public const String VISA = "4111111111111111";
+            public const String FRAUD = "4000111111111511";
         }
 
         public class TransactionAmount

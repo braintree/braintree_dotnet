@@ -109,10 +109,10 @@ namespace Braintree.Tests
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
 
           Assert.AreEqual(WebhookKind.PARTNER_USER_CREATED, notification.Kind);
-          Assert.AreEqual("public_id", notification.PartnerCredentials.MerchantPublicId);
-          Assert.AreEqual("public_key", notification.PartnerCredentials.PublicKey);
-          Assert.AreEqual("private_key", notification.PartnerCredentials.PrivateKey);
-          Assert.AreEqual("abc123", notification.PartnerCredentials.PartnerUserId);
+          Assert.AreEqual("public_id", notification.PartnerUser.MerchantPublicId);
+          Assert.AreEqual("public_key", notification.PartnerUser.PublicKey);
+          Assert.AreEqual("private_key", notification.PartnerUser.PrivateKey);
+          Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
         }
 
         [Test]
@@ -123,10 +123,21 @@ namespace Braintree.Tests
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
 
           Assert.AreEqual(WebhookKind.PARTNER_USER_DELETED, notification.Kind);
-          Assert.AreEqual(null, notification.PartnerCredentials.MerchantPublicId);
-          Assert.AreEqual(null, notification.PartnerCredentials.PublicKey);
-          Assert.AreEqual(null, notification.PartnerCredentials.PrivateKey);
-          Assert.AreEqual("abc123", notification.PartnerCredentials.PartnerUserId);
+          Assert.AreEqual(null, notification.PartnerUser.MerchantPublicId);
+          Assert.AreEqual(null, notification.PartnerUser.PublicKey);
+          Assert.AreEqual(null, notification.PartnerUser.PrivateKey);
+          Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForAPartnerMerchantDeclined()
+        {
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DECLINED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+          Assert.AreEqual(WebhookKind.PARTNER_MERCHANT_DECLINED, notification.Kind);
+          Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
         }
     }
 }
