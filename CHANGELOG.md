@@ -1,3 +1,7 @@
+## 2.25.4
+
+* Add unrecognized to enumerables, fraud to GatewayRejectionReason
+
 ## 2.25.3
 
 * Fixed typo with DeviceData.
