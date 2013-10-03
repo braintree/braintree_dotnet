@@ -1566,6 +1566,7 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
             Assert.AreEqual("2000", transaction.ProcessorResponseCode);
             Assert.IsNotNull(transaction.ProcessorResponseText);
+            Assert.IsNull(transaction.VoiceReferralNumber);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);
