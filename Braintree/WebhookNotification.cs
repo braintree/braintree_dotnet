@@ -6,8 +6,8 @@ namespace Braintree
 {
     public class WebhookKind : Enumeration
     {
-        public static readonly WebhookKind PARTNER_USER_CREATED = new WebhookKind("partner_user_created");
-        public static readonly WebhookKind PARTNER_USER_DELETED = new WebhookKind("partner_user_deleted");
+        public static readonly WebhookKind PARTNER_MERCHANT_CONNECTED = new WebhookKind("partner_merchant_connected");
+        public static readonly WebhookKind PARTNER_MERCHANT_DISCONNECTED = new WebhookKind("partner_merchant_disconnected");
         public static readonly WebhookKind PARTNER_MERCHANT_DECLINED = new WebhookKind("partner_merchant_declined");
         public static readonly WebhookKind SUBSCRIPTION_CANCELED = new WebhookKind("subscription_canceled");
         public static readonly WebhookKind SUBSCRIPTION_CHARGED_SUCCESSFULLY = new WebhookKind("subscription_charged_successfully");
@@ -22,19 +22,19 @@ namespace Braintree
         public static readonly WebhookKind TRANSACTION_DISBURSED = new WebhookKind("transaction_disbursed");
 
         public static readonly WebhookKind[] ALL = {
-          PARTNER_USER_CREATED,
-          PARTNER_USER_DELETED,
-          PARTNER_MERCHANT_DECLINED,
-          SUBSCRIPTION_CANCELED,
-          SUBSCRIPTION_CHARGED_SUCCESSFULLY,
-          SUBSCRIPTION_CHARGED_UNSUCCESSFULLY,
-          SUBSCRIPTION_EXPIRED,
-          SUBSCRIPTION_TRIAL_ENDED,
-          SUBSCRIPTION_WENT_ACTIVE,
-          SUBSCRIPTION_WENT_PAST_DUE,
-          SUB_MERCHANT_ACCOUNT_APPROVED,
-          SUB_MERCHANT_ACCOUNT_DECLINED,
-          TRANSACTION_DISBURSED
+            PARTNER_MERCHANT_CONNECTED,
+            PARTNER_MERCHANT_DISCONNECTED,
+            PARTNER_MERCHANT_DECLINED,
+            SUBSCRIPTION_CANCELED,
+            SUBSCRIPTION_CHARGED_SUCCESSFULLY,
+            SUBSCRIPTION_CHARGED_UNSUCCESSFULLY,
+            SUBSCRIPTION_EXPIRED,
+            SUBSCRIPTION_TRIAL_ENDED,
+            SUBSCRIPTION_WENT_ACTIVE,
+            SUBSCRIPTION_WENT_PAST_DUE,
+            SUB_MERCHANT_ACCOUNT_APPROVED,
+            SUB_MERCHANT_ACCOUNT_DECLINED,
+            TRANSACTION_DISBURSED
         };
 
         protected WebhookKind(String name) : base(name) {}
@@ -49,7 +49,7 @@ namespace Braintree
         public String Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public Transaction Transaction { get; protected set; }
-        public PartnerUser PartnerUser { get; protected set; }
+        public PartnerMerchant PartnerMerchant { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
         {
@@ -59,31 +59,31 @@ namespace Braintree
             NodeWrapper WrapperNode = node.GetNode("subject");
 
             if (WrapperNode.GetNode("api-error-response") != null) {
-              WrapperNode = WrapperNode.GetNode("api-error-response");
+                WrapperNode = WrapperNode.GetNode("api-error-response");
             }
 
             if (WrapperNode.GetNode("subscription") != null) {
-              Subscription = new Subscription(WrapperNode.GetNode("subscription"), service);
+                Subscription = new Subscription(WrapperNode.GetNode("subscription"), service);
             }
 
             if (WrapperNode.GetNode("merchant-account") != null) {
-              MerchantAccount = new MerchantAccount(WrapperNode.GetNode("merchant-account"));
+                MerchantAccount = new MerchantAccount(WrapperNode.GetNode("merchant-account"));
             }
 
             if (WrapperNode.GetNode("transaction") != null) {
-              Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
+                Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
             }
 
-            if (WrapperNode.GetNode("partner-user") != null) {
-              PartnerUser = new PartnerUser(WrapperNode.GetNode("partner-user"));
+            if (WrapperNode.GetNode("partner-merchant") != null) {
+                PartnerMerchant = new PartnerMerchant(WrapperNode.GetNode("partner-merchant"));
             }
 
             if (WrapperNode.GetNode("errors") != null) {
-              Errors = new ValidationErrors(WrapperNode.GetNode("errors"));
+                Errors = new ValidationErrors(WrapperNode.GetNode("errors"));
             }
 
             if (WrapperNode.GetNode("message") != null) {
-              Message = WrapperNode.GetString("message");
+                Message = WrapperNode.GetString("message");
             }
         }
     }

@@ -1,0 +1,26 @@
+using System;
+using System.Collections.Generic;
+using System.Text;
+using NUnit.Framework;
+using Braintree;
+
+namespace Braintree.Tests
+{
+    [TestFixture]
+    public class PartnerConfigurationTest
+    {
+        [Test]
+        public void MerchantId_SetProperly()
+        {
+            Configuration config = new PartnerConfiguration
+            {
+                Environment = Environment.DEVELOPMENT,
+                PartnerId = "partnerid",
+                PublicKey = "publickey",
+                PrivateKey = "privatekey"
+            };
+
+            Assert.AreEqual("partnerid", config.MerchantId);
+        }
+    }
+}
