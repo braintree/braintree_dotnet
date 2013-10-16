@@ -20,14 +20,25 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ToXml_Includes_FraudMerchantId()
+        {
+            CreditCardRequest request = new CreditCardRequest();
+            request.FraudMerchantId = "my_fmid";
+
+            Assert.IsTrue(request.ToXml().Contains("my_fmid"));
+        }
+
+        [Test]
         public void ToXml_Includes_DeviceData()
         {
             CreditCardRequest request = new CreditCardRequest();
-            request.DeviceData = "{\"device_session_id\":\"my_dsid\"}";
+            request.DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"my_fmid\"}";
 
             Assert.IsTrue(request.ToXml().Contains("device-data"));
             Assert.IsTrue(request.ToXml().Contains("device_session_id"));
             Assert.IsTrue(request.ToXml().Contains("my_dsid"));
+            Assert.IsTrue(request.ToXml().Contains("fraud_merchant_id"));
+            Assert.IsTrue(request.ToXml().Contains("my_fmid"));
         }
     }
 }

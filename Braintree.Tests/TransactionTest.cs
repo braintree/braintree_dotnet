@@ -1076,7 +1076,7 @@ namespace Braintree.Tests
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                DeviceData = "{\"device_session_id\":\"my_dsid\"}"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -1232,6 +1232,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 DeviceSessionId = "abc123",
+                FraudMerchantId = "456",
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
