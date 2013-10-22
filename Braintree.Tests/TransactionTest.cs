@@ -1033,6 +1033,15 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [ExpectedException(typeof(Braintree.Exceptions.DownForMaintenanceException))]
+        public void Search_ReturnsErrorOnTimeout()
+        {
+          TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+              Amount.Is(-5);
+          gateway.Transaction.Search(searchRequest);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
