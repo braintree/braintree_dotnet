@@ -124,6 +124,7 @@ namespace Braintree.Tests
             {
                 CustomerId = customer.Id,
                 DeviceSessionId = "abc123",
+                FraudMerchantId = "7",
                 CardholderName = "John Doe",
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",
@@ -148,7 +149,7 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                DeviceData = "{\"device_session_id\":\"my_dsid\"}",
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}",
                 CardholderName = "John Doe",
                 Number = "5105105105105100",
                 ExpirationDate = "05/12",

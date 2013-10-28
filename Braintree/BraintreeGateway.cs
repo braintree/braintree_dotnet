@@ -96,6 +96,11 @@ namespace Braintree
             Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
         }
 
+        public BraintreeGateway(Configuration configuration)
+        {
+            Configuration = configuration;
+        }
+
         public virtual CustomerGateway Customer
         {
             get { return new CustomerGateway(new BraintreeService(this.Configuration)); }

@@ -17,11 +17,13 @@ namespace Braintree.Tests
             {
                 CreditCard = new CreditCardRequest()
                 {
-                    DeviceSessionId = "my_dsid"
+                    DeviceSessionId = "my_dsid",
+                    FraudMerchantId = "my_fmid"
                 }
             };
 
             Assert.IsTrue(request.ToXml().Contains("my_dsid"));
+            Assert.IsTrue(request.ToXml().Contains("my_fmid"));
         }
 
         [Test]
@@ -31,12 +33,14 @@ namespace Braintree.Tests
             {
                 CreditCard = new CreditCardRequest()
                 {
-                    DeviceData = "{\"device_session_id\":\"my_dsid\"}"
+                    DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"my_fmid\"}"
                 }
             };
 
             Assert.IsTrue(request.ToXml().Contains("device_session_id"));
             Assert.IsTrue(request.ToXml().Contains("my_dsid"));
+            Assert.IsTrue(request.ToXml().Contains("fraud_merchant_id"));
+            Assert.IsTrue(request.ToXml().Contains("my_fmid"));
         }
     }
 }
