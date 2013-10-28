@@ -35,6 +35,7 @@ namespace Braintree
         public String BillingAddressId { get; set; }
         public String DeviceData { get; set; }
         public String DeviceSessionId { get; set; }
+        public String FraudMerchantId { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
         public String PaymentMethodToken { get; set; }
         public String VenmoSdkPaymentMethodCode { get; set; }
@@ -64,6 +65,7 @@ namespace Braintree
                 AddElement("device-data", DeviceData).
                 AddElement("customer-id", CustomerId).
                 AddElement("device-session-id", DeviceSessionId).
+                AddElement("fraud-merchant-id", FraudMerchantId).
                 AddElement("options", Options).
                 AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
         }

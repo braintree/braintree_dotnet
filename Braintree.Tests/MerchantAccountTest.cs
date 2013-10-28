@@ -88,7 +88,7 @@ namespace Braintree.Tests
                         Region = "IL",
                     },
                     DateOfBirth = "10/9/1980",
-                    Ssn = "123-000-1234",
+                    Ssn = "123-00-1234",
                     TaxId = "123456789",
                     RoutingNumber = "122100024",
                     AccountNumber = "43759348798"

@@ -1033,6 +1033,15 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [ExpectedException(typeof(Braintree.Exceptions.DownForMaintenanceException))]
+        public void Search_ReturnsErrorOnTimeout()
+        {
+          TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+              Amount.Is(-5);
+          gateway.Transaction.Search(searchRequest);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
@@ -1076,7 +1085,7 @@ namespace Braintree.Tests
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                DeviceData = "{\"device_session_id\":\"my_dsid\"}"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -1232,6 +1241,7 @@ namespace Braintree.Tests
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 DeviceSessionId = "abc123",
+                FraudMerchantId = "456",
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -1566,6 +1576,7 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
             Assert.AreEqual("2000", transaction.ProcessorResponseCode);
             Assert.IsNotNull(transaction.ProcessorResponseText);
+            Assert.IsNull(transaction.VoiceReferralNumber);
 
             CreditCard creditCard = transaction.CreditCard;
             Assert.AreEqual("411111", creditCard.Bin);

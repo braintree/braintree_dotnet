@@ -129,6 +129,7 @@ namespace Braintree
         public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
+        public String VoiceReferralNumber { get; protected set; }
         public String PurchaseOrderNumber { get; protected set; }
         public Boolean? Recurring { get; protected set; }
         public String RefundedTransactionId { get; protected set; }
@@ -189,6 +190,7 @@ namespace Braintree
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            VoiceReferralNumber = node.GetString("voice-referral-number");
             PurchaseOrderNumber = node.GetString("purchase-order-number");
             Recurring = node.GetBoolean("recurring");
             RefundedTransactionId = node.GetString("refunded-transaction-id");

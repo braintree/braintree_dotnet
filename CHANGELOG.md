@@ -1,3 +1,6 @@
+## 2.26.0
+* Adds support for Partnerships
+
 ## 2.25.4
 
 * Add unrecognized to enumerables, fraud to GatewayRejectionReason

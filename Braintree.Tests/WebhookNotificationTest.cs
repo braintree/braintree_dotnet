@@ -102,31 +102,32 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SampleNotification_ReturnsANotificationForAPartnerUserCreated()
+        public void SampleNotification_ReturnsANotificationForAPartnerMerchantConnected()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_USER_CREATED, "my_id");
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_CONNECTED, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
 
-          Assert.AreEqual(WebhookKind.PARTNER_USER_CREATED, notification.Kind);
-          Assert.AreEqual("public_id", notification.PartnerUser.MerchantPublicId);
-          Assert.AreEqual("public_key", notification.PartnerUser.PublicKey);
-          Assert.AreEqual("private_key", notification.PartnerUser.PrivateKey);
-          Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
+          Assert.AreEqual(WebhookKind.PARTNER_MERCHANT_CONNECTED, notification.Kind);
+          Assert.AreEqual("public_id", notification.PartnerMerchant.MerchantPublicId);
+          Assert.AreEqual("public_key", notification.PartnerMerchant.PublicKey);
+          Assert.AreEqual("private_key", notification.PartnerMerchant.PrivateKey);
+          Assert.AreEqual("cse_key", notification.PartnerMerchant.ClientSideEncryptionKey);
+          Assert.AreEqual("abc123", notification.PartnerMerchant.PartnerMerchantId);
         }
 
         [Test]
-        public void SampleNotification_ReturnsANotificationForAPartnerUserDeleted()
+        public void SampleNotification_ReturnsANotificationForAPartnerMerchantDisconnected()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_USER_DELETED, "my_id");
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DISCONNECTED, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
 
-          Assert.AreEqual(WebhookKind.PARTNER_USER_DELETED, notification.Kind);
-          Assert.AreEqual(null, notification.PartnerUser.MerchantPublicId);
-          Assert.AreEqual(null, notification.PartnerUser.PublicKey);
-          Assert.AreEqual(null, notification.PartnerUser.PrivateKey);
-          Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
+          Assert.AreEqual(WebhookKind.PARTNER_MERCHANT_DISCONNECTED, notification.Kind);
+          Assert.AreEqual(null, notification.PartnerMerchant.MerchantPublicId);
+          Assert.AreEqual(null, notification.PartnerMerchant.PublicKey);
+          Assert.AreEqual(null, notification.PartnerMerchant.PrivateKey);
+          Assert.AreEqual("abc123", notification.PartnerMerchant.PartnerMerchantId);
         }
 
         [Test]
@@ -137,7 +138,7 @@ namespace Braintree.Tests
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
 
           Assert.AreEqual(WebhookKind.PARTNER_MERCHANT_DECLINED, notification.Kind);
-          Assert.AreEqual("abc123", notification.PartnerUser.PartnerUserId);
+          Assert.AreEqual("abc123", notification.PartnerMerchant.PartnerMerchantId);
         }
     }
 }

@@ -143,9 +143,13 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(Service.Post("/transactions/advanced_search_ids", query));
 
-            return new ResourceCollection<Transaction>(response, delegate(String[] ids) {
-                return FetchTransactions(query, ids);
-            });
+            if (response.GetName() == "search-results") {
+                return new ResourceCollection<Transaction>(response, delegate(String[] ids) {
+                    return FetchTransactions(query, ids);
+                });
+            } else {
+                throw new DownForMaintenanceException();
+            }
         }
 
         public virtual Result<Transaction> CloneTransaction(String id, TransactionCloneRequest cloneRequest)

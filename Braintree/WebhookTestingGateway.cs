@@ -43,10 +43,10 @@ namespace Braintree
                 return MerchantAccountDeclinedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_DISBURSED) {
                 return TransactionDisbursedSampleXml(id);
-            } else if (kind == WebhookKind.PARTNER_USER_CREATED) {
-                return PartnerUserCreatedSampleXml(id);
-            } else if (kind == WebhookKind.PARTNER_USER_DELETED) {
-                return PartnerUserDeletedSampleXml(id);
+            } else if (kind == WebhookKind.PARTNER_MERCHANT_CONNECTED) {
+                return PartnerMerchantConnectedSampleXml(id);
+            } else if (kind == WebhookKind.PARTNER_MERCHANT_DISCONNECTED) {
+                return PartnerMerchantDisconnectedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_DECLINED) {
                 return PartnerMerchantDeclinedSampleXml(id);
             } else {
@@ -123,24 +123,25 @@ namespace Braintree
             );
         }
 
-        private String PartnerUserCreatedSampleXml(String id) {
-            return node("partner-user",
-                    node("partner-user-id", "abc123"),
+        private String PartnerMerchantConnectedSampleXml(String id) {
+            return node("partner-merchant",
+                    node("partner-merchant-id", "abc123"),
                     node("merchant-public-id", "public_id"),
                     node("public-key", "public_key"),
-                    node("private-key", "private_key")
+                    node("private-key", "private_key"),
+                    node("client-side-encryption-key", "cse_key")
             );
         }
 
-        private String PartnerUserDeletedSampleXml(String id) {
-            return node("partner-user",
-                    node("partner-user-id", "abc123")
+        private String PartnerMerchantDisconnectedSampleXml(String id) {
+            return node("partner-merchant",
+                    node("partner-merchant-id", "abc123")
             );
         }
 
         private String PartnerMerchantDeclinedSampleXml(String id) {
-            return node("partner-user",
-                    node("partner-user-id", "abc123")
+            return node("partner-merchant",
+                    node("partner-merchant-id", "abc123")
             );
         }
 
