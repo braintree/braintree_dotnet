@@ -26,9 +26,9 @@ namespace Braintree
                     case "qa":
                         return "https://qa-master.braintreegateway.com";
                     case "sandbox":
-                        return "https://sandbox.braintreegateway.com:443";
+                        return "https://api.sandbox.braintreegateway.com:443";
                     case "production":
-                        return "https://www.braintreegateway.com:443";
+                        return "https://api.braintreegateway.com:443";
                     default:
                         throw new Exception("Unsupported environment.");
                 }
