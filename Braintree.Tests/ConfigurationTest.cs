@@ -36,7 +36,7 @@ namespace Braintree.Tests
                 "integration_private_key"
             ));
 
-            Assert.AreEqual("https://sandbox.braintreegateway.com:443/merchants/integration_merchant_id", service.BaseMerchantURL());
+            Assert.AreEqual("https://api.sandbox.braintreegateway.com:443/merchants/integration_merchant_id", service.BaseMerchantURL());
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Braintree.Tests
                 "integration_private_key"
             ));
 
-            Assert.AreEqual("https://www.braintreegateway.com:443/merchants/integration_merchant_id", service.BaseMerchantURL());
+            Assert.AreEqual("https://api.braintreegateway.com:443/merchants/integration_merchant_id", service.BaseMerchantURL());
         }
 
         [Test]

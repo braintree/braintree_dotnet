@@ -1,3 +1,6 @@
+## 2.26.1
+* Use new Braintree Gateway API endpoints
+
 ## 2.26.0
 * Adds support for Partnerships
 
