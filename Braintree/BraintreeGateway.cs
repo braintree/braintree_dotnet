@@ -17,7 +17,7 @@ namespace Braintree
     /// <li><see cref="CustomerGateway">Customers</see></li>
     /// <li><see cref="SubscriptionGateway">Subscriptions</see></li>
     /// <li><see cref="TransactionGateway">Transactions</see></li>
-    /// </ul>  
+    /// </ul>
     /// </remarks>
     /// <example>
     /// Quick Start Example:
@@ -99,6 +99,16 @@ namespace Braintree
         public BraintreeGateway(Configuration configuration)
         {
             Configuration = configuration;
+        }
+
+        public string GenerateAuthorizationFingerprint(AuthorizationFingerprintOptions options = null)
+        {
+            return new AuthorizationFingerprint {
+              MerchantId = Configuration.MerchantId,
+              PublicKey = Configuration.PublicKey,
+              PrivateKey = Configuration.PrivateKey,
+              Options = options
+            }.generate();
         }
 
         public virtual CustomerGateway Customer

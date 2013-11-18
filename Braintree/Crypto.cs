@@ -39,5 +39,19 @@ namespace Braintree
             byte[] data = Encoding.UTF8.GetBytes(s);
             return SHA1.Create().ComputeHash(data);
         }
+
+        public virtual String HmacHashSha256(String key, String message)
+        {
+            var hmac = new HMACSHA256(Sha256Bytes(key));
+            byte[] hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
+
+            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+        }
+
+        public virtual byte[] Sha256Bytes(String s)
+        {
+            byte[] data = Encoding.UTF8.GetBytes(s);
+            return SHA256.Create().ComputeHash(data);
+        }
     }
 }
