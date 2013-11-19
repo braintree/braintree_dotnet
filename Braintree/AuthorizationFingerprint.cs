@@ -12,7 +12,7 @@ namespace Braintree
 
         public string generate()
         {
-            String dateString = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmss");
+            String dateString = DateTime.Now.ToUniversalTime().ToString("s");
 
             List<String> queryParams = new List<String>();
             queryParams.Add("public_key=" + PublicKey);
