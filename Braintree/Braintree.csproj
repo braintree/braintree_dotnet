@@ -56,6 +56,7 @@
     <Compile Include="ApplicantDetails.cs" />
     <Compile Include="ApplicantDetailsRequest.cs" />
     <Compile Include="AuthorizationFingerprint.cs" />
+    <Compile Include="AuthorizationFingerprintOptions.cs" />
     <Compile Include="BaseCreditCardRequest.cs" />
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Exceptions\UnexpectedException.cs" />
     <Compile Include="Exceptions\UpgradeRequiredException.cs" />
     <Compile Include="FundingRequest.cs" />
+    <Compile Include="Hasher.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IndividualRequest.cs" />
     <Compile Include="KeyValueNode.cs" />
@@ -119,6 +121,9 @@
     <Compile Include="SearchNode.cs" />
     <Compile Include="SearchRequest.cs" />
     <Compile Include="SettlementBatchSummaryRequest.cs" />
+    <Compile Include="Sha1Hasher.cs" />
+    <Compile Include="Sha256Hasher.cs" />
+    <Compile Include="SignatureService.cs" />
     <Compile Include="StatusEvent.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="SubscriptionGateway.cs" />

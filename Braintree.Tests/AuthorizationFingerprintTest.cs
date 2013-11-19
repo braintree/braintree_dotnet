@@ -136,7 +136,11 @@ namespace Braintree.Tests
             Assert.IsTrue(payload.Contains("credit_card[options][fail_on_duplicate_payment_method]=true"));
             Assert.IsTrue(payload.Contains("credit_card[options][verify_card]=true"));
         }
+    }
 
+    [TestFixture]
+    public class AuthorizationFingerprintTestIT
+    {
         [Test]
         public void Generate_GeneratedFingerprintIsAcceptedByGateway()
         {

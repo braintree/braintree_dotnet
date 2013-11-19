@@ -4,13 +4,6 @@ using System.Text;
 
 namespace Braintree
 {
-    public class AuthorizationFingerprintOptions {
-        public String CustomerId { get; set; }
-        public Boolean MakeDefault { get; set; }
-        public Boolean FailOnDuplicatePaymentMethod { get; set; }
-        public Boolean VerifyCard { get; set; }
-    }
-
     public class AuthorizationFingerprint
     {
         public String MerchantId { get; set; }
@@ -41,8 +34,8 @@ namespace Braintree
             }
 
             String payload = String.Join("&", queryParams.ToArray());
-            String signature = new Crypto().HmacHashSha256(PrivateKey, payload);
-            return signature + "|" + payload;
+            SignatureService signatureService = new SignatureService { Key = PrivateKey, Hasher = new Sha256Hasher() };
+            return signatureService.Sign(payload);
         }
     }
 }

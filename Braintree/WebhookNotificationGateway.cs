@@ -27,7 +27,7 @@ namespace Braintree
 
         public virtual string Verify(string challenge)
         {
-            string digest = new Crypto().HmacHash(Service.PrivateKey, challenge);
+            string digest = new Sha1Hasher().HmacHash(Service.PrivateKey, challenge);
             return String.Format("{0}|{1}", Service.PublicKey, digest.ToLower());
         }
 
@@ -49,8 +49,9 @@ namespace Braintree
                 }
             }
 
+            Sha1Hasher sha1Hasher = new Sha1Hasher();
+            string computedSignature = sha1Hasher.HmacHash(Service.PrivateKey, payload).ToLower();
             Crypto crypto = new Crypto();
-            string computedSignature = crypto.HmacHash(Service.PrivateKey, payload).ToLower();
             if (!crypto.SecureCompare(computedSignature, matchingSignature))
             {
                 throw new InvalidSignatureException();
