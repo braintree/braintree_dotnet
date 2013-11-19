@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
-using System.Net;
+using System;
 using NUnit.Framework;
-using Braintree;
-using Braintree.Exceptions;
-using System.Text.RegularExpressions;
-using System.Web;
-using System.Text;
 
 namespace Braintree.Tests
 {
