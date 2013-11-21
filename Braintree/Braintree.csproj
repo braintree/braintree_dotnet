@@ -58,6 +58,7 @@
     <Compile Include="BaseCreditCardRequest.cs" />
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
+    <Compile Include="BusinessRequest.cs" />
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CreditCard.cs" />
@@ -89,10 +90,15 @@
     <Compile Include="Exceptions\ServerException.cs" />
     <Compile Include="Exceptions\UnexpectedException.cs" />
     <Compile Include="Exceptions\UpgradeRequiredException.cs" />
+    <Compile Include="FundingRequest.cs" />
     <Compile Include="IdsSearchRequest.cs" />
+    <Compile Include="IndividualRequest.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="MerchantAccount.cs" />
+    <Compile Include="MerchantAccountBusinessDetails.cs" />
+    <Compile Include="MerchantAccountFundingDetails.cs" />
     <Compile Include="MerchantAccountGateway.cs" />
+    <Compile Include="MerchantAccountIndividualDetails.cs" />
     <Compile Include="MerchantAccountRequest.cs" />
     <Compile Include="Modification.cs" />
     <Compile Include="MultipleValueNode.cs" />
