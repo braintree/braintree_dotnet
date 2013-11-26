@@ -134,12 +134,12 @@ namespace Braintree.Tests
             var request = deprecatedCreateRequest(null);
             Result<MerchantAccount> result = gateway.MerchantAccount.Create(request);
             Assert.IsTrue(result.IsSuccess());
-            var update_request = createRequest(null);
-            update_request.TosAccepted = null;
-            update_request.MasterMerchantAccountId = null;
-            Result<MerchantAccount> update_result = gateway.MerchantAccount.Update(result.Target.Id, update_request);
-            Assert.IsTrue(update_result.IsSuccess());
-            MerchantAccount merchantAccount = update_result.Target;
+            var updateRequest = createRequest(null);
+            updateRequest.TosAccepted = null;
+            updateRequest.MasterMerchantAccountId = null;
+            Result<MerchantAccount> updateResult = gateway.MerchantAccount.Update(result.Target.Id, updateRequest);
+            Assert.IsTrue(updateResult.IsSuccess());
+            MerchantAccount merchantAccount = updateResult.Target;
             Assert.AreEqual("Job", merchantAccount.IndividualDetails.FirstName);
             Assert.AreEqual("Leoggs", merchantAccount.IndividualDetails.LastName);
             Assert.AreEqual("job@leoggs.com", merchantAccount.IndividualDetails.Email);
