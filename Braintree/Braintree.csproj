@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.26.1</AssemblyName>
+    <AssemblyName>Braintree-2.27.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.26.1.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.27.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.26.1.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.27.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -58,6 +58,7 @@
     <Compile Include="BaseCreditCardRequest.cs" />
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
+    <Compile Include="BusinessRequest.cs" />
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CreditCard.cs" />
@@ -89,10 +90,15 @@
     <Compile Include="Exceptions\ServerException.cs" />
     <Compile Include="Exceptions\UnexpectedException.cs" />
     <Compile Include="Exceptions\UpgradeRequiredException.cs" />
+    <Compile Include="FundingRequest.cs" />
     <Compile Include="IdsSearchRequest.cs" />
+    <Compile Include="IndividualRequest.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="MerchantAccount.cs" />
+    <Compile Include="MerchantAccountBusinessDetails.cs" />
+    <Compile Include="MerchantAccountFundingDetails.cs" />
     <Compile Include="MerchantAccountGateway.cs" />
+    <Compile Include="MerchantAccountIndividualDetails.cs" />
     <Compile Include="MerchantAccountRequest.cs" />
     <Compile Include="Modification.cs" />
     <Compile Include="MultipleValueNode.cs" />
