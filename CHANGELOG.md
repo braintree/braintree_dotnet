@@ -1,3 +1,7 @@
+## 2.27.0
+* Merchant account update API
+* Merchant account create API v2
+
 ## 2.26.1
 * Use new Braintree Gateway API endpoints
 
