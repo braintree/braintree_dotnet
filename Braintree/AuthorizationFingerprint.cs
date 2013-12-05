@@ -12,6 +12,7 @@ namespace Braintree
 
         public string generate()
         {
+            verifyOptions();
             String dateString = DateTime.Now.ToUniversalTime().ToString("s");
 
             List<String> queryParams = new List<String>();
@@ -35,6 +36,31 @@ namespace Braintree
             String payload = String.Join("&", queryParams.ToArray());
             SignatureService signatureService = new SignatureService { Key = PrivateKey, Hasher = new Sha256Hasher() };
             return signatureService.Sign(payload);
+        }
+
+        private void verifyOptions()
+        {
+            if (Options != null && Options.CustomerId == null) {
+                List<String> invalidOptions = new List<String>{};
+
+                if (Options.VerifyCard != null) {
+                    invalidOptions.Add("VerifyCard");
+                }
+                if (Options.MakeDefault != null) {
+                    invalidOptions.Add("MakeDefault");
+                }
+                if (Options.FailOnDuplicatePaymentMethod != null) {
+                    invalidOptions.Add("FailOnDuplicatePaymentMethod");
+                }
+
+                if (invalidOptions.Count != 0) {
+                    string message = "Following arguments are invalid without CustomerId: ";
+                    foreach(string invalidOption in invalidOptions) {
+                        message += " " + invalidOption;
+                    }
+                    throw new ArgumentException(message);
+                }
+            }
         }
     }
 }

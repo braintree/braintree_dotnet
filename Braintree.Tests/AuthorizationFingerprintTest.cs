@@ -72,6 +72,64 @@ namespace Braintree.Tests
     [TestFixture]
     public class AuthorizationFingerprintTest
     {
+
+        [Test]
+        public void Generate_RaisesExceptionIfVerifyCardIsIncludedWithoutCustomerId()
+        {
+          var fingerprint = new AuthorizationFingerprint
+          {
+              MerchantId = "my-merchant-id",
+              PublicKey = "my-public-key",
+              PrivateKey = "my-private-key",
+              Options = new AuthorizationFingerprintOptions{ VerifyCard = true }
+          };
+          try {
+              fingerprint.generate();
+              Assert.Fail("Should raise ArgumentException");
+          } catch (ArgumentException e) {
+              Match match = Regex.Match(e.Message, @"VerifyCard");
+              Assert.IsTrue(match.Success);
+          }
+
+        }
+        [Test]
+        public void Generate_RaisesExceptionIfMakeDefaultIsIncludedWithoutCustomerId()
+        {
+          var fingerprint = new AuthorizationFingerprint
+          {
+              MerchantId = "my-merchant-id",
+              PublicKey = "my-public-key",
+              PrivateKey = "my-private-key",
+              Options = new AuthorizationFingerprintOptions{ MakeDefault = true }
+          };
+          try {
+              fingerprint.generate();
+              Assert.Fail("Should raise ArgumentException");
+          } catch (ArgumentException e) {
+              Match match = Regex.Match(e.Message, @"MakeDefault");
+              Assert.IsTrue(match.Success);
+          }
+
+        }
+        [Test]
+        public void Generate_RaisesExceptionIfFailOnDuplicatePaymentMethodIsIncludedWithoutCustomerId()
+        {
+          var fingerprint = new AuthorizationFingerprint
+          {
+              MerchantId = "my-merchant-id",
+              PublicKey = "my-public-key",
+              PrivateKey = "my-private-key",
+              Options = new AuthorizationFingerprintOptions{ FailOnDuplicatePaymentMethod = true }
+          };
+          try {
+              fingerprint.generate();
+              Assert.Fail("Should raise ArgumentException");
+          } catch (ArgumentException e) {
+              Match match = Regex.Match(e.Message, @"FailOnDuplicatePaymentMethod");
+              Assert.IsTrue(match.Success);
+          }
+
+        }
         [Test]
         public void Generate_IncludesMerchantIdCreatedAtPublicKey()
         {
@@ -120,6 +178,7 @@ namespace Braintree.Tests
                 PublicKey = "my-public-key",
                 PrivateKey = "my-private-key",
                 Options = new AuthorizationFingerprintOptions {
+                  CustomerId = "my-customer-id",
                   VerifyCard = true,
                   MakeDefault = true,
                   FailOnDuplicatePaymentMethod = true
