@@ -275,7 +275,7 @@ namespace Braintree.Tests
               AddTopLevelElement("credit_card[expiration_year]", "2099");
 
             HttpWebResponse Response = new BraintreeTestHttpService().Post("credit_cards.json", builder.ToQueryString());
-            Assert.AreEqual(HttpStatusCode.OK, Response.StatusCode);
+            Assert.AreEqual(HttpStatusCode.Created, Response.StatusCode);
 
             Customer customer = gateway.Customer.Find(customerId);
             Assert.AreEqual(2, customer.CreditCards.Length);
