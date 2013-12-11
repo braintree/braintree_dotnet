@@ -1,74 +1,13 @@
 using System;
-using System.IO;
-using System.IO.Compression;
 using System.Net;
+using System.Web;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using NUnit.Framework;
+using Braintree;
 
 namespace Braintree.Tests
 {
-    public class BraintreeTestHttpService
-    {
-        public String ApiVersion = "3";
-
-        public HttpWebResponse Get(string URL)
-        {
-            return GetXmlResponse(URL, "GET", null);
-        }
-
-        public HttpWebResponse Post(string URL, String requestBody)
-        {
-            return GetXmlResponse(URL, "POST", requestBody);
-        }
-
-        private HttpWebResponse GetXmlResponse(String Path, String method, String requestBody)
-        {
-            try
-            {
-                var request = WebRequest.Create(Environment.DEVELOPMENT.GatewayURL + "/client_api/" + Path) as HttpWebRequest;
-                request.Headers.Add("X-ApiVersion", ApiVersion);
-                request.Headers.Add("Accept-Encoding", "gzip");
-                request.Accept = "application/json";
-                request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
-                request.Method = method;
-                request.KeepAlive = false;
-                request.Timeout = 60000;
-                request.ReadWriteTimeout = 60000;
-
-                if (requestBody != null)
-                {
-                    byte[] buffer = Encoding.UTF8.GetBytes(requestBody);
-                    request.ContentLength = buffer.Length;
-                    Stream requestStream = request.GetRequestStream();
-                    requestStream.Write(buffer, 0, buffer.Length);
-                    requestStream.Close();
-                }
-
-                var response = request.GetResponse() as HttpWebResponse;
-                response.Close();
-                return response;
-            }
-            catch (WebException e)
-            {
-                var response = (HttpWebResponse)e.Response;
-                if (response == null) throw e;
-                return response;
-            }
-        }
-
-        private Stream GetResponseStream(HttpWebResponse response)
-        {
-            var stream = response.GetResponseStream();
-            if (response.ContentEncoding.Equals("gzip", StringComparison.CurrentCultureIgnoreCase))
-            {
-                stream = new GZipStream(response.GetResponseStream(), CompressionMode.Decompress);
-            }
-            return stream;
-        }
-    }
-
     [TestFixture]
     public class AuthorizationFingerprintTest
     {
