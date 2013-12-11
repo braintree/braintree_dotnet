@@ -388,6 +388,18 @@ namespace Braintree.Tests
             Assert.IsTrue(customer.CreditCards[0].IsVenmoSdk.Value);
         }
 
+        [Test]
+        public void Create_WithPaymentMethodNonce()
+        {
+          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+          Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+              CreditCard = new CreditCardRequest{
+                    PaymentMethodNonce = nonce
+              }
+          });
+          Assert.IsTrue(result.IsSuccess());
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheCustomer()
