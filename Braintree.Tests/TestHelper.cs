@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Net;
 using System.IO;
@@ -85,6 +86,40 @@ namespace Braintree.Tests
       return DateTime.UtcNow - new TimeSpan(05, 00, 00);
     }
 
+    public static String GenerateUnlockedNonce(BraintreeGateway gateway)
+    {
+      String id = Guid.NewGuid().ToString();
+      var createRequest = new CustomerRequest
+      {
+        Id = id,
+           CreditCard = new CreditCardRequest
+           {
+             Number = "5105105105105100",
+             ExpirationDate = "05/2099",
+             CVV = "123"
+           }
+      };
+
+      gateway.Customer.Create(createRequest);
+
+      var fingerprint = gateway.GenerateAuthorizationFingerprint(new AuthorizationFingerprintOptions {
+          CustomerId = id
+      });
+      var encodedFingerprint = HttpUtility.UrlEncode(fingerprint, Encoding.UTF8);
+      var url = "credit_cards.json";
+      url += "?authorizationFingerprint=" + encodedFingerprint;
+      url += "&sessionIdentifierType=testing";
+      url += "&sessionIdentifier=test-identifier";
+
+      HttpWebResponse response = new BraintreeTestHttpService().Get(url);
+      StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+      String responseBody = reader.ReadToEnd();
+
+      Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9]+)\"");
+      Match match = regex.Match(responseBody);
+      return match.Groups["nonce"].Value;
+    }
+
   }
 
   public class BraintreeTestHttpService
@@ -93,21 +128,20 @@ namespace Braintree.Tests
 
     public HttpWebResponse Get(string URL)
     {
-      return GetXmlResponse(URL, "GET", null);
+      return GetJsonResponse(URL, "GET", null);
     }
 
     public HttpWebResponse Post(string URL, String requestBody)
     {
-      return GetXmlResponse(URL, "POST", requestBody);
+      return GetJsonResponse(URL, "POST", requestBody);
     }
 
-    private HttpWebResponse GetXmlResponse(String Path, String method, String requestBody)
+    private HttpWebResponse GetJsonResponse(String Path, String method, String requestBody)
     {
       try
       {
         var request = WebRequest.Create(Environment.DEVELOPMENT.GatewayURL + "/client_api/" + Path) as HttpWebRequest;
         request.Headers.Add("X-ApiVersion", ApiVersion);
-        request.Headers.Add("Accept-Encoding", "gzip");
         request.Accept = "application/json";
         request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
         request.Method = method;
@@ -125,7 +159,6 @@ namespace Braintree.Tests
         }
 
         var response = request.GetResponse() as HttpWebResponse;
-        response.Close();
         return response;
       }
       catch (WebException e)
@@ -134,16 +167,6 @@ namespace Braintree.Tests
         if (response == null) throw e;
         return response;
       }
-    }
-
-    private Stream GetResponseStream(HttpWebResponse response)
-    {
-      var stream = response.GetResponseStream();
-      if (response.ContentEncoding.Equals("gzip", StringComparison.CurrentCultureIgnoreCase))
-      {
-        stream = new GZipStream(response.GetResponseStream(), CompressionMode.Decompress);
-      }
-      return stream;
     }
   }
 }
