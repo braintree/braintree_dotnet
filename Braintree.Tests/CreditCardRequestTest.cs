@@ -40,5 +40,14 @@ namespace Braintree.Tests
             Assert.IsTrue(request.ToXml().Contains("fraud_merchant_id"));
             Assert.IsTrue(request.ToXml().Contains("my_fmid"));
         }
+
+        [Test]
+        public void ToXml_Includes_PaymentMethodNonce()
+        {
+            CreditCardRequest request = new CreditCardRequest();
+            request.PaymentMethodNonce = "my-payment-method-nonce";
+
+            Assert.IsTrue(request.ToXml().Contains("my-payment-method-nonce"));
+        }
     }
 }

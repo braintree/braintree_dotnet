@@ -1156,5 +1156,19 @@ namespace Braintree.Tests
             Assert.AreEqual(Braintree.CreditCard.IssuingBankUnknown, creditCard.IssuingBank);
         }
 
+        [Test]
+        public void CreateWithPaymentMethodNonce()
+        {
+          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+          Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+          CreditCardRequest request = new CreditCardRequest
+          {
+            CustomerId = customer.Id,
+            CardholderName = "John Doe",
+            PaymentMethodNonce = nonce
+          };
+          Result<CreditCard> result = gateway.CreditCard.Create(request);
+          Assert.IsTrue(result.IsSuccess());
+        }
     }
 }

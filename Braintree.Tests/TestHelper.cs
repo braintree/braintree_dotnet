@@ -88,30 +88,17 @@ namespace Braintree.Tests
 
     public static String GenerateUnlockedNonce(BraintreeGateway gateway)
     {
-      String id = Guid.NewGuid().ToString();
-      var createRequest = new CustomerRequest
-      {
-        Id = id,
-           CreditCard = new CreditCardRequest
-           {
-             Number = "5105105105105100",
-             ExpirationDate = "05/2099",
-             CVV = "123"
-           }
-      };
+      var fingerprint = gateway.GenerateAuthorizationFingerprint();
+      RequestBuilder builder = new RequestBuilder("");
+      builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
+        AddTopLevelElement("session_identifier_type", "testing").
+        AddTopLevelElement("session_identifier", "test-identifier").
+        AddTopLevelElement("credit_card[number]", "4111111111111111").
+        AddTopLevelElement("share", "true").
+        AddTopLevelElement("credit_card[expiration_month]", "11").
+        AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-      gateway.Customer.Create(createRequest);
-
-      var fingerprint = gateway.GenerateAuthorizationFingerprint(new AuthorizationFingerprintOptions {
-          CustomerId = id
-      });
-      var encodedFingerprint = HttpUtility.UrlEncode(fingerprint, Encoding.UTF8);
-      var url = "credit_cards.json";
-      url += "?authorizationFingerprint=" + encodedFingerprint;
-      url += "&sessionIdentifierType=testing";
-      url += "&sessionIdentifier=test-identifier";
-
-      HttpWebResponse response = new BraintreeTestHttpService().Get(url);
+      HttpWebResponse response = new BraintreeTestHttpService().Post("credit_cards.json", builder.ToQueryString());
       StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
       String responseBody = reader.ReadToEnd();
 
