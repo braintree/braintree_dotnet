@@ -152,7 +152,7 @@ namespace Braintree.Tests
             url += "&sessionIdentifierType=testing";
             url += "&sessionIdentifier=test-identifier";
 
-            HttpWebResponse Response = new BraintreeTestHttpService().Get(url);
+            HttpWebResponse Response = new BraintreeTestHttpService().Get(gateway.MerchantId, url);
             Assert.AreEqual(HttpStatusCode.OK, Response.StatusCode);
         }
 
@@ -183,7 +183,7 @@ namespace Braintree.Tests
               AddTopLevelElement("credit_card[expiration_month]", "11").
               AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            HttpWebResponse Response = new BraintreeTestHttpService().Post("credit_cards.json", builder.ToQueryString());
+            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
             Assert.AreEqual(422, (int)Response.StatusCode);
 
             Customer customer = gateway.Customer.Find(customerId);
@@ -227,8 +227,8 @@ namespace Braintree.Tests
               AddTopLevelElement("credit_card[expiration_month]", "11").
               AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            HttpWebResponse Response = new BraintreeTestHttpService().Post("credit_cards.json", builder.ToQueryString());
-            Response = new BraintreeTestHttpService().Post("credit_cards.json", builder.ToQueryString());
+            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
+            Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
 
             Assert.AreEqual(422, (int)Response.StatusCode);
 
@@ -272,7 +272,7 @@ namespace Braintree.Tests
               AddTopLevelElement("credit_card[expiration_month]", "11").
               AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            HttpWebResponse Response = new BraintreeTestHttpService().Post("credit_cards.json", builder.ToQueryString());
+            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
             Assert.AreEqual(HttpStatusCode.Created, Response.StatusCode);
 
             Customer customer = gateway.Customer.Find(customerId);

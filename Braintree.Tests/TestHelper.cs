@@ -98,7 +98,7 @@ namespace Braintree.Tests
         AddTopLevelElement("credit_card[expiration_month]", "11").
         AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-      HttpWebResponse response = new BraintreeTestHttpService().Post("credit_cards.json", builder.ToQueryString());
+      HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
       StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
       String responseBody = reader.ReadToEnd();
 
@@ -113,21 +113,21 @@ namespace Braintree.Tests
   {
     public String ApiVersion = "3";
 
-    public HttpWebResponse Get(string URL)
+    public HttpWebResponse Get(String MerchantId, String URL)
     {
-      return GetJsonResponse(URL, "GET", null);
+      return GetJsonResponse(MerchantId, URL, "GET", null);
     }
 
-    public HttpWebResponse Post(string URL, String requestBody)
+    public HttpWebResponse Post(String MerchantId, String URL, String requestBody)
     {
-      return GetJsonResponse(URL, "POST", requestBody);
+      return GetJsonResponse(MerchantId, URL, "POST", requestBody);
     }
 
-    private HttpWebResponse GetJsonResponse(String Path, String method, String requestBody)
+    private HttpWebResponse GetJsonResponse(String MerchantId, String Path, String method, String requestBody)
     {
       try
       {
-        var request = WebRequest.Create(Environment.DEVELOPMENT.GatewayURL + "/client_api/" + Path) as HttpWebRequest;
+        var request = WebRequest.Create(Environment.DEVELOPMENT.GatewayURL + "/merchants/" + MerchantId + "/client_api/" + Path) as HttpWebRequest;
         request.Headers.Add("X-ApiVersion", ApiVersion);
         request.Accept = "application/json";
         request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
