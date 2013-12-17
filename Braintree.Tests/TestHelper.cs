@@ -102,7 +102,7 @@ namespace Braintree.Tests
       StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
       String responseBody = reader.ReadToEnd();
 
-      Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9]+)\"");
+      Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
       Match match = regex.Match(responseBody);
       return match.Groups["nonce"].Value;
     }
