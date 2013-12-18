@@ -70,13 +70,15 @@ namespace Braintree.Tests
 
         }
         [Test]
-        public void Generate_IncludesMerchantIdCreatedAtPublicKey()
+        public void Generate_IncludesMerchantIdCreatedAtPublicKeyBaseUrl()
         {
             var fingerprint = new AuthorizationFingerprint
             {
                 MerchantId = "my-merchant-id",
                 PublicKey = "my-public-key",
-                PrivateKey = "my-private-key"
+                PrivateKey = "my-private-key",
+                BaseUrl = "http://localhost:3000/merchants/my-merchant-id"
+
             }.generate();
             string[] fingerprintArray = fingerprint.Split('|');
             var signature = fingerprintArray[0];
@@ -86,6 +88,7 @@ namespace Braintree.Tests
 
             Assert.IsTrue(payload.Contains("merchant_id=my-merchant-id"));
             Assert.IsTrue(payload.Contains("public_key=my-public-key"));
+            Assert.IsTrue(payload.Contains("base_url=http://localhost:3000/merchants/my-merchant-id"));
 
             var regex = new Regex(@"created_at=\d+");
             Assert.IsTrue(regex.IsMatch(payload));
@@ -129,6 +132,29 @@ namespace Braintree.Tests
             Assert.IsTrue(payload.Contains("credit_card[options][make_default]=true"));
             Assert.IsTrue(payload.Contains("credit_card[options][fail_on_duplicate_payment_method]=true"));
             Assert.IsTrue(payload.Contains("credit_card[options][verify_card]=true"));
+        }
+
+        [Test]
+        public void Generate_ThroughBraintreeGateway()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+            var fingerprint = gateway.GenerateAuthorizationFingerprint();
+
+            string[] fingerprintArray = fingerprint.Split('|');
+            var payload = fingerprintArray[1];
+
+            Assert.IsTrue(payload.Contains("merchant_id=integration_merchant_id"));
+            Assert.IsTrue(payload.Contains("public_key=integration_public_key"));
+            Assert.IsTrue(payload.Contains("base_url=http://localhost:3000/merchants/integration_merchant_id"));
+
+            var regex = new Regex(@"created_at=\d+");
+            Assert.IsTrue(regex.IsMatch(payload));
         }
     }
 

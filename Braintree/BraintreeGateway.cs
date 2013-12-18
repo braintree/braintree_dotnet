@@ -107,6 +107,7 @@ namespace Braintree
               MerchantId = Configuration.MerchantId,
               PublicKey = Configuration.PublicKey,
               PrivateKey = Configuration.PrivateKey,
+              BaseUrl = new BraintreeService(Configuration).BaseMerchantURL(),
               Options = options
             }.generate();
         }
