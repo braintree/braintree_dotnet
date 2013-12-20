@@ -35,6 +35,26 @@ namespace Braintree
             }
         }
 
+        public String AuthURL
+        {
+            get
+            {
+                switch (environmentName)
+                {
+                    case "development":
+                        return "http://auth.venmo.dev:4567";
+                    case "qa":
+                        return "https://auth.qa.venmo.com";
+                    case "sandbox":
+                        return "https://auth.sandbox.venmo.com";
+                    case "production":
+                        return "https://auth.venmo.com";
+                    default:
+                        throw new Exception("Unsupported environment.");
+                }
+            }
+        }
+
         private Environment(String name)
         {
             environmentName = name;

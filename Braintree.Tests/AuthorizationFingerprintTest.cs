@@ -70,15 +70,15 @@ namespace Braintree.Tests
 
         }
         [Test]
-        public void Generate_IncludesMerchantIdCreatedAtPublicKeyBaseUrl()
+        public void Generate_IncludesMerchantIdCreatedAtPublicKeyClientApiUrl()
         {
             var fingerprint = new AuthorizationFingerprint
             {
                 MerchantId = "my-merchant-id",
                 PublicKey = "my-public-key",
                 PrivateKey = "my-private-key",
-                BaseUrl = "http://localhost:3000/merchants/my-merchant-id"
-
+                ClientApiUrl = "http://localhost:3000/merchants/my-merchant-id",
+                AuthUrl = "http://auth.venmo.dev:4567"
             }.generate();
             string[] fingerprintArray = fingerprint.Split('|');
             var signature = fingerprintArray[0];
@@ -88,7 +88,8 @@ namespace Braintree.Tests
 
             Assert.IsTrue(payload.Contains("merchant_id=my-merchant-id"));
             Assert.IsTrue(payload.Contains("public_key=my-public-key"));
-            Assert.IsTrue(payload.Contains("base_url=http://localhost:3000/merchants/my-merchant-id"));
+            Assert.IsTrue(payload.Contains("client_api_url=http://localhost:3000/merchants/my-merchant-id"));
+            Assert.IsTrue(payload.Contains("auth_url=http://auth.venmo.dev:4567"));
 
             var regex = new Regex(@"created_at=\d+");
             Assert.IsTrue(regex.IsMatch(payload));
@@ -153,7 +154,8 @@ namespace Braintree.Tests
             Assert.IsTrue(payload.Contains("public_key=integration_public_key"));
 
             var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
-            Assert.IsTrue(payload.Contains("base_url=http://localhost:" + port + "/merchants/integration_merchant_id"));
+            Assert.IsTrue(payload.Contains("client_api_url=http://localhost:" + port + "/merchants/integration_merchant_id"));
+            Assert.IsTrue(payload.Contains("auth_url=http://auth.venmo.dev:4567"));
 
             var regex = new Regex(@"created_at=\d+");
             Assert.IsTrue(regex.IsMatch(payload));

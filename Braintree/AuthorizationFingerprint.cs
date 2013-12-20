@@ -8,7 +8,8 @@ namespace Braintree
         public String MerchantId { get; set; }
         public String PublicKey { get; set; }
         public String PrivateKey { get; set; }
-        public String BaseUrl { get; set; }
+        public String ClientApiUrl { get; set; }
+        public String AuthUrl { get; set; }
         public AuthorizationFingerprintOptions Options { get; set; }
 
         public string generate()
@@ -20,7 +21,8 @@ namespace Braintree
             queryParams.Add("public_key=" + PublicKey);
             queryParams.Add("created_at=" + dateString);
             queryParams.Add("merchant_id=" + MerchantId);
-            queryParams.Add("base_url=" + BaseUrl);
+            queryParams.Add("client_api_url=" + ClientApiUrl);
+            queryParams.Add("auth_url=" + AuthUrl);
 
             if (Options != null && Options.CustomerId != null) {
               queryParams.Add("customer_id=" + Options.CustomerId);
