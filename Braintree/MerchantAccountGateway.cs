@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
+using Braintree.Exceptions;
 
 namespace Braintree
 {
@@ -26,6 +27,16 @@ namespace Braintree
             XmlNode merchantAccountXML = Service.Put("/merchant_accounts/" + id + "/update_via_api", request);
 
             return new Result<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
+        }
+
+        public virtual MerchantAccount Find(String id)
+        {
+            if(id == null || id.Trim().Equals(""))
+                throw new NotFoundException();
+
+            XmlNode merchantAccountXML = Service.Get("/merchant_accounts/" + id);
+
+            return new MerchantAccount(new NodeWrapper(merchantAccountXML));
         }
     }
 }

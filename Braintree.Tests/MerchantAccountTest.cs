@@ -282,6 +282,23 @@ namespace Braintree.Tests
                 errors.ForObject("funding").OnField("mobile-phone")[0].Code);
         }
 
+        [Test]
+        public void Find()
+        {
+            MerchantAccount merchantAccount = gateway.MerchantAccount.Create(createRequest(null)).Target;
+            MerchantAccount foundMerchantAccount = gateway.MerchantAccount.Find(merchantAccount.Id);
+            Assert.AreEqual(merchantAccount.Id, foundMerchantAccount.Id);
+        }
+
+        [Test]
+        public void Find_FindsErrorsOutOnWhitespaceIds()
+        {
+            try {
+                gateway.MerchantAccount.Find(" ");
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException) {}
+        }
+
         private MerchantAccountRequest deprecatedCreateRequest(String id)
         {
             return new MerchantAccountRequest
