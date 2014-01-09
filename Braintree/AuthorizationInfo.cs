@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class AuthorizationFingerprint
+    public class AuthorizationInfo
     {
         public String MerchantId { get; set; }
         public String PublicKey { get; set; }
         public String PrivateKey { get; set; }
         public String ClientApiUrl { get; set; }
         public String AuthUrl { get; set; }
-        public AuthorizationFingerprintOptions Options { get; set; }
+        public AuthorizationInfoOptions Options { get; set; }
 
         public string generate()
         {
@@ -20,9 +20,6 @@ namespace Braintree
             List<String> queryParams = new List<String>();
             queryParams.Add("public_key=" + PublicKey);
             queryParams.Add("created_at=" + dateString);
-            queryParams.Add("merchant_id=" + MerchantId);
-            queryParams.Add("client_api_url=" + ClientApiUrl);
-            queryParams.Add("auth_url=" + AuthUrl);
 
             if (Options != null && Options.CustomerId != null) {
               queryParams.Add("customer_id=" + Options.CustomerId);
@@ -39,7 +36,13 @@ namespace Braintree
 
             String payload = String.Join("&", queryParams.ToArray());
             SignatureService signatureService = new SignatureService { Key = PrivateKey, Hasher = new Sha256Hasher() };
-            return signatureService.Sign(payload);
+            String fingerprint = signatureService.Sign(payload);
+            return String.Format(
+                "{{\"fingerprint\": \"{0}\", \"client_api_url\": \"{1}\", \"auth_url\": \"{2}\"}}",
+                fingerprint,
+                ClientApiUrl,
+                AuthUrl
+            );
         }
 
         private void verifyOptions()

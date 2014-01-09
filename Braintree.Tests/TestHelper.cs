@@ -86,9 +86,19 @@ namespace Braintree.Tests
       return DateTime.UtcNow - new TimeSpan(05, 00, 00);
     }
 
+    public static string extractParamFromJson(String keyName, String json)
+    {
+        String regex = string.Format("\"{0}\": \"([^\"]+)\"", keyName);
+        Match match = Regex.Match(json, regex);
+        string keyValue = match.Groups[1].Value;
+
+        return keyValue;
+    }
+
     public static String GenerateUnlockedNonce(BraintreeGateway gateway)
     {
-      var fingerprint = gateway.GenerateAuthorizationFingerprint();
+      var authorizationInfo = gateway.GenerateAuthorizationInfo();
+      var fingerprint = extractParamFromJson("fingerprint", authorizationInfo);
       RequestBuilder builder = new RequestBuilder("");
       builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
         AddTopLevelElement("session_identifier_type", "testing").

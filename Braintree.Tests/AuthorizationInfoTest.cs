@@ -9,21 +9,20 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    public class AuthorizationFingerprintTest
+    public class AuthorizationInfoTest
     {
-
         [Test]
         public void Generate_RaisesExceptionIfVerifyCardIsIncludedWithoutCustomerId()
         {
-          var fingerprint = new AuthorizationFingerprint
+          var authorizationInfo = new AuthorizationInfo
           {
               MerchantId = "my-merchant-id",
               PublicKey = "my-public-key",
               PrivateKey = "my-private-key",
-              Options = new AuthorizationFingerprintOptions{ VerifyCard = true }
+              Options = new AuthorizationInfoOptions{ VerifyCard = true }
           };
           try {
-              fingerprint.generate();
+              authorizationInfo.generate();
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"VerifyCard");
@@ -31,18 +30,19 @@ namespace Braintree.Tests
           }
 
         }
+
         [Test]
         public void Generate_RaisesExceptionIfMakeDefaultIsIncludedWithoutCustomerId()
         {
-          var fingerprint = new AuthorizationFingerprint
+          var authorizationInfo = new AuthorizationInfo
           {
               MerchantId = "my-merchant-id",
               PublicKey = "my-public-key",
               PrivateKey = "my-private-key",
-              Options = new AuthorizationFingerprintOptions{ MakeDefault = true }
+              Options = new AuthorizationInfoOptions{ MakeDefault = true }
           };
           try {
-              fingerprint.generate();
+              authorizationInfo.generate();
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"MakeDefault");
@@ -50,18 +50,19 @@ namespace Braintree.Tests
           }
 
         }
+
         [Test]
         public void Generate_RaisesExceptionIfFailOnDuplicatePaymentMethodIsIncludedWithoutCustomerId()
         {
-          var fingerprint = new AuthorizationFingerprint
+          var authorizationInfo = new AuthorizationInfo
           {
               MerchantId = "my-merchant-id",
               PublicKey = "my-public-key",
               PrivateKey = "my-private-key",
-              Options = new AuthorizationFingerprintOptions{ FailOnDuplicatePaymentMethod = true }
+              Options = new AuthorizationInfoOptions{ FailOnDuplicatePaymentMethod = true }
           };
           try {
-              fingerprint.generate();
+              authorizationInfo.generate();
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"FailOnDuplicatePaymentMethod");
@@ -69,43 +70,49 @@ namespace Braintree.Tests
           }
 
         }
+
         [Test]
-        public void Generate_IncludesMerchantIdCreatedAtPublicKeyClientApiUrl()
+        public void Generate_IncludesCreatedAtPublicKeyClientApiUrl()
         {
-            var fingerprint = new AuthorizationFingerprint
+            var authorizationInfo = new AuthorizationInfo
             {
                 MerchantId = "my-merchant-id",
                 PublicKey = "my-public-key",
                 PrivateKey = "my-private-key",
-                ClientApiUrl = "http://localhost:3000/merchants/my-merchant-id",
-                AuthUrl = "http://auth.venmo.dev:4567"
+                ClientApiUrl = "http://client.api.url",
+                AuthUrl = "http://auth.url"
             }.generate();
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+
             string[] fingerprintArray = fingerprint.Split('|');
             var signature = fingerprintArray[0];
             var payload = fingerprintArray[1];
 
             Assert.IsTrue(signature.Length > 1);
 
-            Assert.IsTrue(payload.Contains("merchant_id=my-merchant-id"));
-            Assert.IsTrue(payload.Contains("public_key=my-public-key"));
-            Assert.IsTrue(payload.Contains("client_api_url=http://localhost:3000/merchants/my-merchant-id"));
-            Assert.IsTrue(payload.Contains("auth_url=http://auth.venmo.dev:4567"));
-
             var regex = new Regex(@"created_at=\d+");
             Assert.IsTrue(regex.IsMatch(payload));
+            Assert.IsTrue(payload.Contains("public_key=my-public-key"));
+
+            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", authorizationInfo);
+            Assert.AreEqual("http://client.api.url", clientApiUrl);
+
+            var authUrl = TestHelper.extractParamFromJson("auth_url", authorizationInfo);
+            Assert.AreEqual("http://auth.url", authUrl);
         }
 
         [Test]
         public void Generate_CanIncludeCustomerId()
         {
 
-            var fingerprint = new AuthorizationFingerprint
+            var authorizationInfo = new AuthorizationInfo
             {
                 MerchantId = "integration_merchant_id",
                 PublicKey = "my-public-key",
                 PrivateKey = "my-private-key",
-                Options = new AuthorizationFingerprintOptions{ CustomerId = "my-customer-id" }
+                Options = new AuthorizationInfoOptions{ CustomerId = "my-customer-id" }
             }.generate();
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
             string[] fingerprintArray = fingerprint.Split('|');
             var payload = fingerprintArray[1];
 
@@ -115,18 +122,19 @@ namespace Braintree.Tests
         [Test]
         public void Generate_CanIncludeCreditCardOptions()
         {
-            var fingerprint = new AuthorizationFingerprint
+            var authorizationInfo = new AuthorizationInfo
             {
                 MerchantId = "integration_merchant_id",
                 PublicKey = "my-public-key",
                 PrivateKey = "my-private-key",
-                Options = new AuthorizationFingerprintOptions {
+                Options = new AuthorizationInfoOptions {
                   CustomerId = "my-customer-id",
                   VerifyCard = true,
                   MakeDefault = true,
                   FailOnDuplicatePaymentMethod = true
                 }
             }.generate();
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
             string[] fingerprintArray = fingerprint.Split('|');
             var payload = fingerprintArray[1];
 
@@ -145,17 +153,20 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var fingerprint = gateway.GenerateAuthorizationFingerprint();
+            var authorizationInfo = gateway.GenerateAuthorizationInfo();
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
 
             string[] fingerprintArray = fingerprint.Split('|');
             var payload = fingerprintArray[1];
 
-            Assert.IsTrue(payload.Contains("merchant_id=integration_merchant_id"));
             Assert.IsTrue(payload.Contains("public_key=integration_public_key"));
 
-            var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
-            Assert.IsTrue(payload.Contains("client_api_url=http://localhost:" + port + "/merchants/integration_merchant_id"));
-            Assert.IsTrue(payload.Contains("auth_url=http://auth.venmo.dev:4567"));
+            var expectedClientApiUrl = new BraintreeService(gateway.Configuration).BaseMerchantURL() + "/client_api";
+            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", authorizationInfo);
+            Assert.AreEqual(expectedClientApiUrl, clientApiUrl);
+
+            var authUrl = TestHelper.extractParamFromJson("auth_url", authorizationInfo);
+            Assert.AreEqual("http://auth.venmo.dev:4567", authUrl);
 
             var regex = new Regex(@"created_at=\d+");
             Assert.IsTrue(regex.IsMatch(payload));
@@ -163,7 +174,7 @@ namespace Braintree.Tests
     }
 
     [TestFixture]
-    public class AuthorizationFingerprintTestIT
+    public class AuthorizationInfoTestIT
     {
         [Test]
         public void Generate_GeneratedFingerprintIsAcceptedByGateway()
@@ -175,7 +186,9 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var fingerprint = gateway.GenerateAuthorizationFingerprint();
+            var authorizationInfo = gateway.GenerateAuthorizationInfo();
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+
             var encodedFingerprint = HttpUtility.UrlEncode(fingerprint, Encoding.UTF8);
             var url = "credit_cards.json";
             url += "?authorizationFingerprint=" + encodedFingerprint;
@@ -200,10 +213,11 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
 
             string customerId = result.Target.Id;
-            var fingerprint = gateway.GenerateAuthorizationFingerprint(new AuthorizationFingerprintOptions {
+            var authorizationInfo = gateway.GenerateAuthorizationInfo(new AuthorizationInfoOptions {
               CustomerId = customerId,
               VerifyCard = true
             });
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
@@ -244,10 +258,11 @@ namespace Braintree.Tests
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var fingerprint = gateway.GenerateAuthorizationFingerprint(new AuthorizationFingerprintOptions {
+            var authorizationInfo = gateway.GenerateAuthorizationInfo(new AuthorizationInfoOptions {
               CustomerId = customerId,
               FailOnDuplicatePaymentMethod = true
             });
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
@@ -289,10 +304,11 @@ namespace Braintree.Tests
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var fingerprint = gateway.GenerateAuthorizationFingerprint(new AuthorizationFingerprintOptions {
+            var authorizationInfo = gateway.GenerateAuthorizationInfo(new AuthorizationInfoOptions {
               CustomerId = customerId,
               MakeDefault = true
             });
+            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
@@ -314,6 +330,5 @@ namespace Braintree.Tests
               }
             }
         }
-
     }
 }

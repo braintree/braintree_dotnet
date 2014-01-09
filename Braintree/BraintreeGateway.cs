@@ -101,13 +101,13 @@ namespace Braintree
             Configuration = configuration;
         }
 
-        public string GenerateAuthorizationFingerprint(AuthorizationFingerprintOptions options = null)
+        public string GenerateAuthorizationInfo(AuthorizationInfoOptions options = null)
         {
-            return new AuthorizationFingerprint {
+            return new AuthorizationInfo {
               MerchantId = Configuration.MerchantId,
               PublicKey = Configuration.PublicKey,
               PrivateKey = Configuration.PrivateKey,
-              ClientApiUrl = new BraintreeService(Configuration).BaseMerchantURL(),
+              ClientApiUrl = new BraintreeService(Configuration).BaseMerchantURL() + "/client_api",
               AuthUrl = Environment.AuthURL,
               Options = options
             }.generate();
