@@ -49,6 +49,7 @@ namespace Braintree
         public String PaymentMethodToken { get; set; }
         public String CustomerId { get; set; }
         public String ShippingAddressId { get; set; }
+        public String BillingAddressId { get; set; }
         public String VenmoSdkPaymentMethodCode { get; set; }
         public Decimal ServiceFeeAmount { get; set; }
 
@@ -97,6 +98,7 @@ namespace Braintree
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("purchase-order-number", PurchaseOrderNumber);
             builder.AddElement("shipping-address-id", ShippingAddressId);
+            builder.AddElement("billing-address-id", BillingAddressId);
             if (TaxAmount != 0) builder.AddElement("tax-amount", TaxAmount);
             if (TaxExempt.HasValue) {
                 builder.AddElement("tax-exempt", TaxExempt);
