@@ -476,11 +476,13 @@ namespace Braintree.Tests
             Assert.AreEqual(1, addOns[0].Quantity);
             Assert.IsTrue(addOns[0].NeverExpires.Value);
             Assert.IsNull(addOns[0].NumberOfBillingCycles);
+            Assert.AreEqual(0, addOns[0].CurrentBillingCycle);
 
             Assert.AreEqual(20.00M, addOns[1].Amount);
             Assert.AreEqual(1, addOns[1].Quantity);
             Assert.IsTrue(addOns[1].NeverExpires.Value);
             Assert.IsNull(addOns[1].NumberOfBillingCycles);
+            Assert.AreEqual(0, addOns[1].CurrentBillingCycle);
 
             List<Discount> discounts = subscription.Discounts;
             discounts.Sort(TestHelper.CompareModificationsById);
@@ -491,11 +493,13 @@ namespace Braintree.Tests
             Assert.AreEqual(1, discounts[0].Quantity);
             Assert.IsTrue(discounts[0].NeverExpires.Value);
             Assert.IsNull(discounts[0].NumberOfBillingCycles);
+            Assert.AreEqual(0, discounts[0].CurrentBillingCycle);
 
             Assert.AreEqual(7M, discounts[1].Amount);
             Assert.AreEqual(1, discounts[1].Quantity);
             Assert.IsTrue(discounts[1].NeverExpires.Value);
             Assert.IsNull(discounts[1].NumberOfBillingCycles);
+            Assert.AreEqual(0, discounts[1].CurrentBillingCycle);
         }
 
         [Test]
@@ -559,11 +563,13 @@ namespace Braintree.Tests
             Assert.AreEqual(9, addOns[0].Quantity);
             Assert.IsTrue(addOns[0].NeverExpires.Value);
             Assert.IsNull(addOns[0].NumberOfBillingCycles);
+            Assert.AreEqual(0, addOns[0].CurrentBillingCycle);
 
             Assert.AreEqual(40.00M, addOns[1].Amount);
             Assert.AreEqual(1, addOns[1].Quantity);
             Assert.IsFalse(addOns[1].NeverExpires.Value);
             Assert.AreEqual(20, addOns[1].NumberOfBillingCycles);
+            Assert.AreEqual(0, addOns[1].CurrentBillingCycle);
 
             List<Discount> discounts = subscription.Discounts;
             discounts.Sort(TestHelper.CompareModificationsById);
@@ -574,11 +580,13 @@ namespace Braintree.Tests
             Assert.AreEqual(1, discounts[0].Quantity);
             Assert.IsFalse(discounts[0].NeverExpires.Value);
             Assert.AreEqual(11, discounts[0].NumberOfBillingCycles);
+            Assert.AreEqual(0, discounts[0].CurrentBillingCycle);
 
             Assert.AreEqual(15M, discounts[1].Amount);
             Assert.AreEqual(7, discounts[1].Quantity);
             Assert.IsTrue(discounts[1].NeverExpires.Value);
             Assert.IsNull(discounts[1].NumberOfBillingCycles);
+            Assert.AreEqual(0, discounts[1].CurrentBillingCycle);
         }
 
         [Test]
@@ -658,6 +666,7 @@ namespace Braintree.Tests
             Assert.AreEqual(8, subscription.AddOns[0].Quantity);
             Assert.IsFalse(subscription.AddOns[0].NeverExpires.Value);
             Assert.AreEqual(3, subscription.AddOns[0].NumberOfBillingCycles);
+            Assert.AreEqual(0, subscription.AddOns[0].CurrentBillingCycle);
 
             Assert.AreEqual(1, subscription.Discounts.Count);
 
@@ -666,6 +675,7 @@ namespace Braintree.Tests
             Assert.AreEqual(9, subscription.Discounts[0].Quantity);
             Assert.IsTrue(subscription.Discounts[0].NeverExpires.Value);
             Assert.IsNull(subscription.Discounts[0].NumberOfBillingCycles);
+            Assert.AreEqual(0, subscription.Discounts[0].CurrentBillingCycle);
         }
 
         [Test]
