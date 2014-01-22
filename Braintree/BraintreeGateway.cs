@@ -101,9 +101,9 @@ namespace Braintree
             Configuration = configuration;
         }
 
-        public string GenerateAuthorizationInfo(AuthorizationInfoOptions options = null)
+        public string GenerateClientToken(ClientTokenOptions options = null)
         {
-            return new AuthorizationInfo {
+            return new ClientToken {
               MerchantId = Configuration.MerchantId,
               PublicKey = Configuration.PublicKey,
               PrivateKey = Configuration.PrivateKey,

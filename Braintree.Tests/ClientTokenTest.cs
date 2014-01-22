@@ -9,20 +9,20 @@ using Braintree;
 namespace Braintree.Tests
 {
     [TestFixture]
-    public class AuthorizationInfoTest
+    public class ClientTokenTest
     {
         [Test]
         public void Generate_RaisesExceptionIfVerifyCardIsIncludedWithoutCustomerId()
         {
-          var authorizationInfo = new AuthorizationInfo
+          var clientToken = new ClientToken
           {
               MerchantId = "my-merchant-id",
               PublicKey = "my-public-key",
               PrivateKey = "my-private-key",
-              Options = new AuthorizationInfoOptions{ VerifyCard = true }
+              Options = new ClientTokenOptions{ VerifyCard = true }
           };
           try {
-              authorizationInfo.generate();
+              clientToken.generate();
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"VerifyCard");
@@ -34,15 +34,15 @@ namespace Braintree.Tests
         [Test]
         public void Generate_RaisesExceptionIfMakeDefaultIsIncludedWithoutCustomerId()
         {
-          var authorizationInfo = new AuthorizationInfo
+          var clientToken = new ClientToken
           {
               MerchantId = "my-merchant-id",
               PublicKey = "my-public-key",
               PrivateKey = "my-private-key",
-              Options = new AuthorizationInfoOptions{ MakeDefault = true }
+              Options = new ClientTokenOptions{ MakeDefault = true }
           };
           try {
-              authorizationInfo.generate();
+              clientToken.generate();
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"MakeDefault");
@@ -54,15 +54,15 @@ namespace Braintree.Tests
         [Test]
         public void Generate_RaisesExceptionIfFailOnDuplicatePaymentMethodIsIncludedWithoutCustomerId()
         {
-          var authorizationInfo = new AuthorizationInfo
+          var clientToken = new ClientToken
           {
               MerchantId = "my-merchant-id",
               PublicKey = "my-public-key",
               PrivateKey = "my-private-key",
-              Options = new AuthorizationInfoOptions{ FailOnDuplicatePaymentMethod = true }
+              Options = new ClientTokenOptions{ FailOnDuplicatePaymentMethod = true }
           };
           try {
-              authorizationInfo.generate();
+              clientToken.generate();
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"FailOnDuplicatePaymentMethod");
@@ -74,7 +74,7 @@ namespace Braintree.Tests
         [Test]
         public void Generate_IncludesCreatedAtPublicKeyClientApiUrl()
         {
-            var authorizationInfo = new AuthorizationInfo
+            var clientToken = new ClientToken
             {
                 MerchantId = "my-merchant-id",
                 PublicKey = "my-public-key",
@@ -82,9 +82,9 @@ namespace Braintree.Tests
                 ClientApiUrl = "http://client.api.url",
                 AuthUrl = "http://auth.url"
             }.generate();
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
 
-            string[] fingerprintArray = fingerprint.Split('|');
+            string[] fingerprintArray = authorizationFingerprint.Split('|');
             var signature = fingerprintArray[0];
             var payload = fingerprintArray[1];
 
@@ -94,10 +94,10 @@ namespace Braintree.Tests
             Assert.IsTrue(regex.IsMatch(payload));
             Assert.IsTrue(payload.Contains("public_key=my-public-key"));
 
-            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", authorizationInfo);
+            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", clientToken);
             Assert.AreEqual("http://client.api.url", clientApiUrl);
 
-            var authUrl = TestHelper.extractParamFromJson("auth_url", authorizationInfo);
+            var authUrl = TestHelper.extractParamFromJson("auth_url", clientToken);
             Assert.AreEqual("http://auth.url", authUrl);
         }
 
@@ -105,15 +105,15 @@ namespace Braintree.Tests
         public void Generate_CanIncludeCustomerId()
         {
 
-            var authorizationInfo = new AuthorizationInfo
+            var clientToken = new ClientToken
             {
                 MerchantId = "integration_merchant_id",
                 PublicKey = "my-public-key",
                 PrivateKey = "my-private-key",
-                Options = new AuthorizationInfoOptions{ CustomerId = "my-customer-id" }
+                Options = new ClientTokenOptions{ CustomerId = "my-customer-id" }
             }.generate();
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
-            string[] fingerprintArray = fingerprint.Split('|');
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            string[] fingerprintArray = authorizationFingerprint.Split('|');
             var payload = fingerprintArray[1];
 
             Assert.IsTrue(payload.Contains("customer_id=my-customer-id"));
@@ -122,20 +122,20 @@ namespace Braintree.Tests
         [Test]
         public void Generate_CanIncludeCreditCardOptions()
         {
-            var authorizationInfo = new AuthorizationInfo
+            var clientToken = new ClientToken
             {
                 MerchantId = "integration_merchant_id",
                 PublicKey = "my-public-key",
                 PrivateKey = "my-private-key",
-                Options = new AuthorizationInfoOptions {
+                Options = new ClientTokenOptions {
                   CustomerId = "my-customer-id",
                   VerifyCard = true,
                   MakeDefault = true,
                   FailOnDuplicatePaymentMethod = true
                 }
             }.generate();
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
-            string[] fingerprintArray = fingerprint.Split('|');
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            string[] fingerprintArray = authorizationFingerprint.Split('|');
             var payload = fingerprintArray[1];
 
             Assert.IsTrue(payload.Contains("credit_card[options][make_default]=true"));
@@ -153,19 +153,19 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var authorizationInfo = gateway.GenerateAuthorizationInfo();
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+            var clientToken = gateway.GenerateClientToken();
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
 
-            string[] fingerprintArray = fingerprint.Split('|');
+            string[] fingerprintArray = authorizationFingerprint.Split('|');
             var payload = fingerprintArray[1];
 
             Assert.IsTrue(payload.Contains("public_key=integration_public_key"));
 
             var expectedClientApiUrl = new BraintreeService(gateway.Configuration).BaseMerchantURL() + "/client_api";
-            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", authorizationInfo);
+            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", clientToken);
             Assert.AreEqual(expectedClientApiUrl, clientApiUrl);
 
-            var authUrl = TestHelper.extractParamFromJson("auth_url", authorizationInfo);
+            var authUrl = TestHelper.extractParamFromJson("auth_url", clientToken);
             Assert.AreEqual("http://auth.venmo.dev:4567", authUrl);
 
             var regex = new Regex(@"created_at=\d+");
@@ -174,7 +174,7 @@ namespace Braintree.Tests
     }
 
     [TestFixture]
-    public class AuthorizationInfoTestIT
+    public class ClientTokenTestIT
     {
         [Test]
         public void Generate_GeneratedFingerprintIsAcceptedByGateway()
@@ -186,10 +186,10 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var authorizationInfo = gateway.GenerateAuthorizationInfo();
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+            var clientToken = gateway.GenerateClientToken();
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
 
-            var encodedFingerprint = HttpUtility.UrlEncode(fingerprint, Encoding.UTF8);
+            var encodedFingerprint = HttpUtility.UrlEncode(authorizationFingerprint, Encoding.UTF8);
             var url = "credit_cards.json";
             url += "?authorizationFingerprint=" + encodedFingerprint;
             url += "&sessionIdentifierType=testing";
@@ -213,14 +213,14 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
 
             string customerId = result.Target.Id;
-            var authorizationInfo = gateway.GenerateAuthorizationInfo(new AuthorizationInfoOptions {
+            var clientToken = gateway.GenerateClientToken(new ClientTokenOptions {
               CustomerId = customerId,
               VerifyCard = true
             });
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
-            builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
+            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
               AddTopLevelElement("session_identifier_type", "testing").
               AddTopLevelElement("session_identifier", "test-identifier").
               AddTopLevelElement("credit_card[number]", "4000111111111115").
@@ -258,14 +258,14 @@ namespace Braintree.Tests
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var authorizationInfo = gateway.GenerateAuthorizationInfo(new AuthorizationInfoOptions {
+            var clientToken = gateway.GenerateClientToken(new ClientTokenOptions {
               CustomerId = customerId,
               FailOnDuplicatePaymentMethod = true
             });
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
-            builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
+            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
               AddTopLevelElement("session_identifier_type", "testing").
               AddTopLevelElement("session_identifier", "test-identifier").
               AddTopLevelElement("credit_card[number]", "4111111111111111").
@@ -304,14 +304,14 @@ namespace Braintree.Tests
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var authorizationInfo = gateway.GenerateAuthorizationInfo(new AuthorizationInfoOptions {
+            var clientToken = gateway.GenerateClientToken(new ClientTokenOptions {
               CustomerId = customerId,
               MakeDefault = true
             });
-            var fingerprint = TestHelper.extractParamFromJson("fingerprint", authorizationInfo);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
-            builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
+            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
               AddTopLevelElement("session_identifier_type", "testing").
               AddTopLevelElement("session_identifier", "test-identifier").
               AddTopLevelElement("credit_card[number]", "4111111111111111").

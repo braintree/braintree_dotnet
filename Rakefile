@@ -16,7 +16,7 @@ task :test => [:ensure_boolean_type, :compile] do
   sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe Braintree.Tests/bin/Debug/Braintree.Tests.dll"
 end
 
-desc "run single test file (rake test_focus[Braintree.Tests.AuthorizationInfoTestIT.Generate_GatewayRespectsMakeDefault], for example"
+desc "run single test file (rake test_focus[Braintree.Tests.ClientTokenTestIT.Generate_GatewayRespectsMakeDefault], for example"
 task :test_focus, [:test_name] => [:ensure_boolean_type, :compile] do |t, args|
   sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -run=#{args[:test_name]} Braintree.Tests/bin/Debug/Braintree.Tests.dll"
 end

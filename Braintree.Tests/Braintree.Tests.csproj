@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressTest.cs" />
-    <Compile Include="AuthorizationInfoTest.cs" />
+    <Compile Include="ClientTokenTest.cs" />
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CreditCardTest.cs" />
     <Compile Include="CreditCardNumbers.cs" />

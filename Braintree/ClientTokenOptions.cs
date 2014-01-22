@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Braintree
 {
-    public class AuthorizationInfoOptions {
+    public class ClientTokenOptions {
         public String CustomerId { get; set; }
         public Boolean? MakeDefault { get; set; }
         public Boolean? FailOnDuplicatePaymentMethod { get; set; }

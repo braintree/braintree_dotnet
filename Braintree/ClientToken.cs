@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class AuthorizationInfo
+    public class ClientToken
     {
         public String MerchantId { get; set; }
         public String PublicKey { get; set; }
         public String PrivateKey { get; set; }
         public String ClientApiUrl { get; set; }
         public String AuthUrl { get; set; }
-        public AuthorizationInfoOptions Options { get; set; }
+        public ClientTokenOptions Options { get; set; }
 
         public string generate()
         {
@@ -36,10 +36,10 @@ namespace Braintree
 
             String payload = String.Join("&", queryParams.ToArray());
             SignatureService signatureService = new SignatureService { Key = PrivateKey, Hasher = new Sha256Hasher() };
-            String fingerprint = signatureService.Sign(payload);
+            String authorizationFingerprint = signatureService.Sign(payload);
             return String.Format(
-                "{{\"fingerprint\": \"{0}\", \"client_api_url\": \"{1}\", \"auth_url\": \"{2}\"}}",
-                fingerprint,
+                "{{\"authorization_fingerprint\": \"{0}\", \"client_api_url\": \"{1}\", \"auth_url\": \"{2}\"}}",
+                authorizationFingerprint,
                 ClientApiUrl,
                 AuthUrl
             );

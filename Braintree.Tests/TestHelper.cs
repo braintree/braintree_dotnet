@@ -97,10 +97,10 @@ namespace Braintree.Tests
 
     public static String GenerateUnlockedNonce(BraintreeGateway gateway)
     {
-      var authorizationInfo = gateway.GenerateAuthorizationInfo();
-      var fingerprint = extractParamFromJson("fingerprint", authorizationInfo);
+      var clientToken = gateway.GenerateClientToken();
+      var authorizationFingerprint = extractParamFromJson("authorization_fingerprint", clientToken);
       RequestBuilder builder = new RequestBuilder("");
-      builder.AddTopLevelElement("authorization_fingerprint", fingerprint).
+      builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
         AddTopLevelElement("session_identifier_type", "testing").
         AddTopLevelElement("session_identifier", "test-identifier").
         AddTopLevelElement("credit_card[number]", "4111111111111111").

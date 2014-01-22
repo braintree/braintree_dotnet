@@ -55,8 +55,8 @@
     <Compile Include="AddressRequest.cs" />
     <Compile Include="ApplicantDetails.cs" />
     <Compile Include="ApplicantDetailsRequest.cs" />
-    <Compile Include="AuthorizationInfo.cs" />
-    <Compile Include="AuthorizationInfoOptions.cs" />
+    <Compile Include="ClientToken.cs" />
+    <Compile Include="ClientTokenOptions.cs" />
     <Compile Include="BaseCreditCardRequest.cs" />
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
