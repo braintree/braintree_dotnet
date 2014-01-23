@@ -166,7 +166,7 @@ namespace Braintree.Tests
             Assert.AreEqual(expectedClientApiUrl, clientApiUrl);
 
             var authUrl = TestHelper.extractParamFromJson("auth_url", clientToken);
-            Assert.AreEqual("http://auth.venmo.dev:4567", authUrl);
+            Assert.AreEqual("http://auth.venmo.dev:9292", authUrl);
 
             var regex = new Regex(@"created_at=\d+");
             Assert.IsTrue(regex.IsMatch(payload));

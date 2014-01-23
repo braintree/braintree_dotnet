@@ -42,7 +42,7 @@ namespace Braintree
                 switch (environmentName)
                 {
                     case "development":
-                        return "http://auth.venmo.dev:4567";
+                        return "http://auth.venmo.dev:9292";
                     case "qa":
                         return "https://auth.qa.venmo.com";
                     case "sandbox":
