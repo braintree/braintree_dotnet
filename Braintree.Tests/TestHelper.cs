@@ -95,15 +95,20 @@ namespace Braintree.Tests
         return keyValue;
     }
 
-    public static String GenerateUnlockedNonce(BraintreeGateway gateway)
+    public static String GenerateUnlockedNonce(BraintreeGateway gateway, String creditCardNumber, String customerId)
     {
-      var clientToken = gateway.GenerateClientToken();
-      var authorizationFingerprint = extractParamFromJson("authorization_fingerprint", clientToken);
+      var clientToken = "";
+      if (customerId ==  null) {
+        clientToken = gateway.GenerateClientToken();
+      } else {
+        clientToken = gateway.GenerateClientToken(new ClientTokenOptions { CustomerId = customerId } );
+      }
+      var authorizationFingerprint  = extractParamFromJson("authorization_fingerprint", clientToken);
       RequestBuilder builder = new RequestBuilder("");
       builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
         AddTopLevelElement("session_identifier_type", "testing").
         AddTopLevelElement("session_identifier", "test-identifier").
-        AddTopLevelElement("credit_card[number]", "4111111111111111").
+        AddTopLevelElement("credit_card[number]", creditCardNumber).
         AddTopLevelElement("share", "true").
         AddTopLevelElement("credit_card[expiration_month]", "11").
         AddTopLevelElement("credit_card[expiration_year]", "2099");
@@ -115,6 +120,11 @@ namespace Braintree.Tests
       Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
       Match match = regex.Match(responseBody);
       return match.Groups["nonce"].Value;
+    }
+
+    public static String GenerateUnlockedNonce(BraintreeGateway gateway)
+    {
+      return GenerateUnlockedNonce(gateway, "4111111111111111", null);
     }
 
   }
