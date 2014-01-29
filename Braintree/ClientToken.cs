@@ -38,7 +38,7 @@ namespace Braintree
             SignatureService signatureService = new SignatureService { Key = PrivateKey, Hasher = new Sha256Hasher() };
             String authorizationFingerprint = signatureService.Sign(payload);
             return String.Format(
-                "{{\"authorization_fingerprint\": \"{0}\", \"client_api_url\": \"{1}\", \"auth_url\": \"{2}\"}}",
+                "{{\"authorizationFingerprint\": \"{0}\", \"clientApiUrl\": \"{1}\", \"authUrl\": \"{2}\"}}",
                 authorizationFingerprint,
                 ClientApiUrl,
                 AuthUrl

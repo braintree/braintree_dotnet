@@ -82,7 +82,7 @@ namespace Braintree.Tests
                 ClientApiUrl = "http://client.api.url",
                 AuthUrl = "http://auth.url"
             }.generate();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             string[] fingerprintArray = authorizationFingerprint.Split('|');
             var signature = fingerprintArray[0];
@@ -94,10 +94,10 @@ namespace Braintree.Tests
             Assert.IsTrue(regex.IsMatch(payload));
             Assert.IsTrue(payload.Contains("public_key=my-public-key"));
 
-            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", clientToken);
+            var clientApiUrl = TestHelper.extractParamFromJson("clientApiUrl", clientToken);
             Assert.AreEqual("http://client.api.url", clientApiUrl);
 
-            var authUrl = TestHelper.extractParamFromJson("auth_url", clientToken);
+            var authUrl = TestHelper.extractParamFromJson("authUrl", clientToken);
             Assert.AreEqual("http://auth.url", authUrl);
         }
 
@@ -112,7 +112,7 @@ namespace Braintree.Tests
                 PrivateKey = "my-private-key",
                 Options = new ClientTokenOptions{ CustomerId = "my-customer-id" }
             }.generate();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
             string[] fingerprintArray = authorizationFingerprint.Split('|');
             var payload = fingerprintArray[1];
 
@@ -134,7 +134,7 @@ namespace Braintree.Tests
                   FailOnDuplicatePaymentMethod = true
                 }
             }.generate();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
             string[] fingerprintArray = authorizationFingerprint.Split('|');
             var payload = fingerprintArray[1];
 
@@ -154,7 +154,7 @@ namespace Braintree.Tests
                 PrivateKey = "integration_private_key"
             };
             var clientToken = gateway.GenerateClientToken();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             string[] fingerprintArray = authorizationFingerprint.Split('|');
             var payload = fingerprintArray[1];
@@ -162,10 +162,10 @@ namespace Braintree.Tests
             Assert.IsTrue(payload.Contains("public_key=integration_public_key"));
 
             var expectedClientApiUrl = new BraintreeService(gateway.Configuration).BaseMerchantURL() + "/client_api";
-            var clientApiUrl = TestHelper.extractParamFromJson("client_api_url", clientToken);
+            var clientApiUrl = TestHelper.extractParamFromJson("clientApiUrl", clientToken);
             Assert.AreEqual(expectedClientApiUrl, clientApiUrl);
 
-            var authUrl = TestHelper.extractParamFromJson("auth_url", clientToken);
+            var authUrl = TestHelper.extractParamFromJson("authUrl", clientToken);
             Assert.AreEqual("http://auth.venmo.dev:9292", authUrl);
 
             var regex = new Regex(@"created_at=\d+");
@@ -187,7 +187,7 @@ namespace Braintree.Tests
                 PrivateKey = "integration_private_key"
             };
             var clientToken = gateway.GenerateClientToken();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             var encodedFingerprint = HttpUtility.UrlEncode(authorizationFingerprint, Encoding.UTF8);
             var url = "credit_cards.json";
@@ -217,7 +217,7 @@ namespace Braintree.Tests
               CustomerId = customerId,
               VerifyCard = true
             });
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
@@ -262,7 +262,7 @@ namespace Braintree.Tests
               CustomerId = customerId,
               FailOnDuplicatePaymentMethod = true
             });
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
@@ -308,7 +308,7 @@ namespace Braintree.Tests
               CustomerId = customerId,
               MakeDefault = true
             });
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorization_fingerprint", clientToken);
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).

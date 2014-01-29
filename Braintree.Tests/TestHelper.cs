@@ -103,7 +103,7 @@ namespace Braintree.Tests
       } else {
         clientToken = gateway.GenerateClientToken(new ClientTokenOptions { CustomerId = customerId } );
       }
-      var authorizationFingerprint  = extractParamFromJson("authorization_fingerprint", clientToken);
+      var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
       RequestBuilder builder = new RequestBuilder("");
       builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
         AddTopLevelElement("shared_customer_identifier_type", "testing").
