@@ -106,8 +106,8 @@ namespace Braintree.Tests
       var authorizationFingerprint  = extractParamFromJson("authorization_fingerprint", clientToken);
       RequestBuilder builder = new RequestBuilder("");
       builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-        AddTopLevelElement("session_identifier_type", "testing").
-        AddTopLevelElement("session_identifier", "test-identifier").
+        AddTopLevelElement("shared_customer_identifier_type", "testing").
+        AddTopLevelElement("shared_customer_identifier", "test-identifier").
         AddTopLevelElement("credit_card[number]", creditCardNumber).
         AddTopLevelElement("share", "true").
         AddTopLevelElement("credit_card[expiration_month]", "11").

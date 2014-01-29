@@ -192,8 +192,8 @@ namespace Braintree.Tests
             var encodedFingerprint = HttpUtility.UrlEncode(authorizationFingerprint, Encoding.UTF8);
             var url = "credit_cards.json";
             url += "?authorizationFingerprint=" + encodedFingerprint;
-            url += "&sessionIdentifierType=testing";
-            url += "&sessionIdentifier=test-identifier";
+            url += "&sharedCustomerIdentifierType=testing";
+            url += "&sharedCustomerIdentifier=test-identifier";
 
             HttpWebResponse Response = new BraintreeTestHttpService().Get(gateway.MerchantId, url);
             Assert.AreEqual(HttpStatusCode.OK, Response.StatusCode);
@@ -221,8 +221,8 @@ namespace Braintree.Tests
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-              AddTopLevelElement("session_identifier_type", "testing").
-              AddTopLevelElement("session_identifier", "test-identifier").
+              AddTopLevelElement("shared_customer_identifier_type", "testing").
+              AddTopLevelElement("shared_customer_identifier", "test-identifier").
               AddTopLevelElement("credit_card[number]", "4000111111111115").
               AddTopLevelElement("credit_card[expiration_month]", "11").
               AddTopLevelElement("credit_card[expiration_year]", "2099");
@@ -266,8 +266,8 @@ namespace Braintree.Tests
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-              AddTopLevelElement("session_identifier_type", "testing").
-              AddTopLevelElement("session_identifier", "test-identifier").
+              AddTopLevelElement("shared_customer_identifier_type", "testing").
+              AddTopLevelElement("shared_customer_identifier", "test-identifier").
               AddTopLevelElement("credit_card[number]", "4111111111111111").
               AddTopLevelElement("credit_card[expiration_month]", "11").
               AddTopLevelElement("credit_card[expiration_year]", "2099");
@@ -312,8 +312,8 @@ namespace Braintree.Tests
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-              AddTopLevelElement("session_identifier_type", "testing").
-              AddTopLevelElement("session_identifier", "test-identifier").
+              AddTopLevelElement("shared_customer_identifier_type", "testing").
+              AddTopLevelElement("shared_customer_identifier", "test-identifier").
               AddTopLevelElement("credit_card[number]", "4111111111111111").
               AddTopLevelElement("credit_card[expiration_month]", "11").
               AddTopLevelElement("credit_card[expiration_year]", "2099");
