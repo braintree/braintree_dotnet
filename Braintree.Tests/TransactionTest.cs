@@ -2042,6 +2042,28 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithZeroServiceFee()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 0M
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(0M, transaction.ServiceFeeAmount);
+        }
+
+        [Test]
         public void Sale_WithServiceFeeWithTooLargeAmount()
         {
             TransactionRequest request = new TransactionRequest
