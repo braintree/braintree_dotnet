@@ -1860,6 +1860,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_UsesBillingAddressFromVault()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            });
+
+            Address billingAddress = gateway.Address.Create(customer.Id, new AddressRequest { FirstName = "Carl" }).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CustomerId = customer.Id,
+                BillingAddressId = billingAddress.Id
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(billingAddress.Id, transaction.BillingAddress.Id);
+            Assert.AreEqual("Carl", transaction.BillingAddress.FirstName);
+        }
+
+        [Test]
         public void Sale_WithValidationError()
         {
             TransactionRequest request = new TransactionRequest
@@ -2009,6 +2039,28 @@ namespace Braintree.Tests
 
             Transaction transaction = result.Target;
             Assert.AreEqual(1M, transaction.ServiceFeeAmount);
+        }
+
+        [Test]
+        public void Sale_WithZeroServiceFee()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 0M
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(0M, transaction.ServiceFeeAmount);
         }
 
         [Test]

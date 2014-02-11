@@ -8,6 +8,7 @@ namespace Braintree
     {
         public Decimal? Amount { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
+        public Int32? CurrentBillingCycle { get; protected set; }
         public String Description { get; protected set; }
         public String Id { get; protected set; }
         public String Kind { get; protected set; }
@@ -22,6 +23,7 @@ namespace Braintree
         {
             Amount = node.GetDecimal("amount");
             CreatedAt = node.GetDateTime("created-at");
+            CurrentBillingCycle = node.GetInteger("current-billing-cycle");
             Description = node.GetString("description");
             Id = node.GetString("id");
             Kind = node.GetString("kind");

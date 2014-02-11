@@ -21,8 +21,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            service = new BraintreeService(gateway.Configuration);
-        }
+            service = new BraintreeService(gateway.Configuration); }
 
         [Test]
         public void All_ReturnsAllPlans()
@@ -39,8 +38,6 @@ namespace Braintree.Tests
                 NumberOfBillingCycles = 1,
                 Price = 100.00M,
                 TrialPeriod = false,
-                TrialDuration = 1,
-                TrialDurationUnit = PlanDurationUnit.DAY
             });
 
             List<Plan> collection = gateway.Plan.All();
@@ -62,8 +59,6 @@ namespace Braintree.Tests
             Assert.AreEqual(1, plan.NumberOfBillingCycles);
             Assert.AreEqual(100.00M, plan.Price);
             Assert.AreEqual(false, plan.TrialPeriod);
-            Assert.AreEqual(1, plan.TrialDuration);
-            Assert.AreEqual(PlanDurationUnit.DAY, plan.TrialDurationUnit);
         }
 
         [Test]
@@ -81,8 +76,6 @@ namespace Braintree.Tests
                 NumberOfBillingCycles = 1,
                 Price = 100.00M,
                 TrialPeriod = false,
-                TrialDuration = 1,
-                TrialDurationUnit = PlanDurationUnit.DAY
             });
 
             service.Post("/modifications/create_modification_for_tests", new ModificationRequestForTests {

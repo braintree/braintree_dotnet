@@ -1,3 +1,8 @@
+## 2.28.1
+* Allow a service fee of 0 in transaction create.
+* Expose current billing cycle on add ons and discounts.
+* Accept billing address id in transaction create.
+
 ## 2.28.0
 * Merchant account find API
 
