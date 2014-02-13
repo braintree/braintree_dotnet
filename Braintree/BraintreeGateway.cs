@@ -101,21 +101,14 @@ namespace Braintree
             Configuration = configuration;
         }
 
-        public string GenerateClientToken(ClientTokenOptions options = null)
+        public virtual ClientTokenGateway ClientToken
         {
-            return new ClientToken {
-              MerchantId = Configuration.MerchantId,
-              PublicKey = Configuration.PublicKey,
-              PrivateKey = Configuration.PrivateKey,
-              ClientApiUrl = new BraintreeService(Configuration).BaseMerchantURL() + "/client_api",
-              AuthUrl = Environment.AuthURL,
-              Options = options
-            }.generate();
+            get { return new ClientTokenGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual CustomerGateway Customer
         {
-            get { return new CustomerGateway(new BraintreeService(this.Configuration)); }
+            get { return new CustomerGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual AddressGateway Address

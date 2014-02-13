@@ -14,137 +14,59 @@ namespace Braintree.Tests
         [Test]
         public void Generate_RaisesExceptionIfVerifyCardIsIncludedWithoutCustomerId()
         {
-          var clientToken = new ClientToken
+          BraintreeGateway gateway = new BraintreeGateway
           {
-              MerchantId = "my-merchant-id",
-              PublicKey = "my-public-key",
-              PrivateKey = "my-private-key",
-              Options = new ClientTokenOptions{ VerifyCard = true }
+              Environment = Environment.DEVELOPMENT,
+              MerchantId = "integration_merchant_id",
+              PublicKey = "integration_public_key",
+              PrivateKey = "integration_private_key"
           };
           try {
-              clientToken.generate();
+              gateway.ClientToken.generate(
+                  new ClientTokenRequest
+                  {
+                      Options = new ClientTokenOptionsRequest
+                      {
+                          VerifyCard = true
+                      }
+                  }
+              );
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"VerifyCard");
               Assert.IsTrue(match.Success);
           }
-
         }
 
         [Test]
         public void Generate_RaisesExceptionIfMakeDefaultIsIncludedWithoutCustomerId()
         {
-          var clientToken = new ClientToken
+          BraintreeGateway gateway = new BraintreeGateway
           {
-              MerchantId = "my-merchant-id",
-              PublicKey = "my-public-key",
-              PrivateKey = "my-private-key",
-              Options = new ClientTokenOptions{ MakeDefault = true }
+              Environment = Environment.DEVELOPMENT,
+              MerchantId = "integration_merchant_id",
+              PublicKey = "integration_public_key",
+              PrivateKey = "integration_private_key"
           };
           try {
-              clientToken.generate();
+              gateway.ClientToken.generate(
+                  new ClientTokenRequest
+                  {
+                      Options = new ClientTokenOptionsRequest
+                      {
+                          MakeDefault = true
+                      }
+                  }
+              );
               Assert.Fail("Should raise ArgumentException");
           } catch (ArgumentException e) {
               Match match = Regex.Match(e.Message, @"MakeDefault");
               Assert.IsTrue(match.Success);
           }
-
         }
 
         [Test]
         public void Generate_RaisesExceptionIfFailOnDuplicatePaymentMethodIsIncludedWithoutCustomerId()
-        {
-          var clientToken = new ClientToken
-          {
-              MerchantId = "my-merchant-id",
-              PublicKey = "my-public-key",
-              PrivateKey = "my-private-key",
-              Options = new ClientTokenOptions{ FailOnDuplicatePaymentMethod = true }
-          };
-          try {
-              clientToken.generate();
-              Assert.Fail("Should raise ArgumentException");
-          } catch (ArgumentException e) {
-              Match match = Regex.Match(e.Message, @"FailOnDuplicatePaymentMethod");
-              Assert.IsTrue(match.Success);
-          }
-
-        }
-
-        [Test]
-        public void Generate_IncludesCreatedAtPublicKeyClientApiUrl()
-        {
-            var clientToken = new ClientToken
-            {
-                MerchantId = "my-merchant-id",
-                PublicKey = "my-public-key",
-                PrivateKey = "my-private-key",
-                ClientApiUrl = "http://client.api.url",
-                AuthUrl = "http://auth.url"
-            }.generate();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
-
-            string[] fingerprintArray = authorizationFingerprint.Split('|');
-            var signature = fingerprintArray[0];
-            var payload = fingerprintArray[1];
-
-            Assert.IsTrue(signature.Length > 1);
-
-            var regex = new Regex(@"created_at=\d+");
-            Assert.IsTrue(regex.IsMatch(payload));
-            Assert.IsTrue(payload.Contains("public_key=my-public-key"));
-
-            var clientApiUrl = TestHelper.extractParamFromJson("clientApiUrl", clientToken);
-            Assert.AreEqual("http://client.api.url", clientApiUrl);
-
-            var authUrl = TestHelper.extractParamFromJson("authUrl", clientToken);
-            Assert.AreEqual("http://auth.url", authUrl);
-        }
-
-        [Test]
-        public void Generate_CanIncludeCustomerId()
-        {
-
-            var clientToken = new ClientToken
-            {
-                MerchantId = "integration_merchant_id",
-                PublicKey = "my-public-key",
-                PrivateKey = "my-private-key",
-                Options = new ClientTokenOptions{ CustomerId = "my-customer-id" }
-            }.generate();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
-            string[] fingerprintArray = authorizationFingerprint.Split('|');
-            var payload = fingerprintArray[1];
-
-            Assert.IsTrue(payload.Contains("customer_id=my-customer-id"));
-        }
-
-        [Test]
-        public void Generate_CanIncludeCreditCardOptions()
-        {
-            var clientToken = new ClientToken
-            {
-                MerchantId = "integration_merchant_id",
-                PublicKey = "my-public-key",
-                PrivateKey = "my-private-key",
-                Options = new ClientTokenOptions {
-                  CustomerId = "my-customer-id",
-                  VerifyCard = true,
-                  MakeDefault = true,
-                  FailOnDuplicatePaymentMethod = true
-                }
-            }.generate();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
-            string[] fingerprintArray = authorizationFingerprint.Split('|');
-            var payload = fingerprintArray[1];
-
-            Assert.IsTrue(payload.Contains("credit_card[options][make_default]=true"));
-            Assert.IsTrue(payload.Contains("credit_card[options][fail_on_duplicate_payment_method]=true"));
-            Assert.IsTrue(payload.Contains("credit_card[options][verify_card]=true"));
-        }
-
-        [Test]
-        public void Generate_ThroughBraintreeGateway()
         {
             BraintreeGateway gateway = new BraintreeGateway
             {
@@ -153,23 +75,21 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var clientToken = gateway.GenerateClientToken();
-            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
-
-            string[] fingerprintArray = authorizationFingerprint.Split('|');
-            var payload = fingerprintArray[1];
-
-            Assert.IsTrue(payload.Contains("public_key=integration_public_key"));
-
-            var expectedClientApiUrl = new BraintreeService(gateway.Configuration).BaseMerchantURL() + "/client_api";
-            var clientApiUrl = TestHelper.extractParamFromJson("clientApiUrl", clientToken);
-            Assert.AreEqual(expectedClientApiUrl, clientApiUrl);
-
-            var authUrl = TestHelper.extractParamFromJson("authUrl", clientToken);
-            Assert.AreEqual("http://auth.venmo.dev:9292", authUrl);
-
-            var regex = new Regex(@"created_at=\d+");
-            Assert.IsTrue(regex.IsMatch(payload));
+            try {
+                gateway.ClientToken.generate(
+                    new ClientTokenRequest
+                    {
+                        Options = new ClientTokenOptionsRequest
+                        {
+                            FailOnDuplicatePaymentMethod = true
+                        }
+                    }
+                );
+                Assert.Fail("Should raise ArgumentException");
+            } catch (ArgumentException e) {
+                Match match = Regex.Match(e.Message, @"FailOnDuplicatePaymentMethod");
+                Assert.IsTrue(match.Success);
+            }
         }
     }
 
@@ -186,7 +106,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var clientToken = gateway.GenerateClientToken();
+            var clientToken = gateway.ClientToken.generate();
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             var encodedFingerprint = HttpUtility.UrlEncode(authorizationFingerprint, Encoding.UTF8);
@@ -213,19 +133,25 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
 
             string customerId = result.Target.Id;
-            var clientToken = gateway.GenerateClientToken(new ClientTokenOptions {
-              CustomerId = customerId,
-              VerifyCard = true
-            });
+            var clientToken = gateway.ClientToken.generate(
+                new ClientTokenRequest
+                {
+                    CustomerId = customerId,
+                    Options = new ClientTokenOptionsRequest
+                    {
+                        VerifyCard = true
+                    }
+                }
+            );
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-              AddTopLevelElement("shared_customer_identifier_type", "testing").
-              AddTopLevelElement("shared_customer_identifier", "test-identifier").
-              AddTopLevelElement("credit_card[number]", "4000111111111115").
-              AddTopLevelElement("credit_card[expiration_month]", "11").
-              AddTopLevelElement("credit_card[expiration_year]", "2099");
+                AddTopLevelElement("shared_customer_identifier_type", "testing").
+                AddTopLevelElement("shared_customer_identifier", "test-identifier").
+                AddTopLevelElement("credit_card[number]", "4000111111111115").
+                AddTopLevelElement("credit_card[expiration_month]", "11").
+                AddTopLevelElement("credit_card[expiration_year]", "2099");
 
             HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
             Assert.AreEqual(422, (int)Response.StatusCode);
@@ -250,27 +176,33 @@ namespace Braintree.Tests
 
             var request = new CreditCardRequest
             {
-              CustomerId = customerId,
-              Number = "4111111111111111",
-              ExpirationDate = "05/2099"
+                CustomerId = customerId,
+                Number = "4111111111111111",
+                ExpirationDate = "05/2099"
             };
 
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var clientToken = gateway.GenerateClientToken(new ClientTokenOptions {
-              CustomerId = customerId,
-              FailOnDuplicatePaymentMethod = true
-            });
+            var clientToken = gateway.ClientToken.generate(
+                new ClientTokenRequest
+                {
+                    CustomerId = customerId,
+                    Options = new ClientTokenOptionsRequest
+                    {
+                        FailOnDuplicatePaymentMethod = true
+                    }
+                }
+            );
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-              AddTopLevelElement("shared_customer_identifier_type", "testing").
-              AddTopLevelElement("shared_customer_identifier", "test-identifier").
-              AddTopLevelElement("credit_card[number]", "4111111111111111").
-              AddTopLevelElement("credit_card[expiration_month]", "11").
-              AddTopLevelElement("credit_card[expiration_year]", "2099");
+                AddTopLevelElement("shared_customer_identifier_type", "testing").
+                AddTopLevelElement("shared_customer_identifier", "test-identifier").
+                AddTopLevelElement("credit_card[number]", "4111111111111111").
+                AddTopLevelElement("credit_card[expiration_month]", "11").
+                AddTopLevelElement("credit_card[expiration_year]", "2099");
 
             HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
             Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
@@ -297,26 +229,32 @@ namespace Braintree.Tests
 
             var request = new CreditCardRequest
             {
-              CustomerId = customerId,
-              Number = "5105105105105100",
-              ExpirationDate = "05/2099"
+                CustomerId = customerId,
+                Number = "5105105105105100",
+                ExpirationDate = "05/2099"
             };
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var clientToken = gateway.GenerateClientToken(new ClientTokenOptions {
-              CustomerId = customerId,
-              MakeDefault = true
-            });
+            var clientToken = gateway.ClientToken.generate(
+                new ClientTokenRequest
+                {
+                    CustomerId = customerId,
+                    Options = new ClientTokenOptionsRequest
+                    {
+                        MakeDefault = true
+                    }
+                }
+            );
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-              AddTopLevelElement("shared_customer_identifier_type", "testing").
-              AddTopLevelElement("shared_customer_identifier", "test-identifier").
-              AddTopLevelElement("credit_card[number]", "4111111111111111").
-              AddTopLevelElement("credit_card[expiration_month]", "11").
-              AddTopLevelElement("credit_card[expiration_year]", "2099");
+                AddTopLevelElement("shared_customer_identifier_type", "testing").
+                AddTopLevelElement("shared_customer_identifier", "test-identifier").
+                AddTopLevelElement("credit_card[number]", "4111111111111111").
+                AddTopLevelElement("credit_card[expiration_month]", "11").
+                AddTopLevelElement("credit_card[expiration_year]", "2099");
 
             HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
             Assert.AreEqual(HttpStatusCode.Created, Response.StatusCode);
@@ -325,9 +263,9 @@ namespace Braintree.Tests
             Assert.AreEqual(2, customer.CreditCards.Length);
             foreach (CreditCard creditCard in customer.CreditCards)
             {
-              if (creditCard.LastFour == "1111") {
-                Assert.IsTrue(creditCard.IsDefault.Value);
-              }
+                if (creditCard.LastFour == "1111") {
+                    Assert.IsTrue(creditCard.IsDefault.Value);
+                }
             }
         }
     }

@@ -88,7 +88,7 @@ namespace Braintree.Tests
 
     public static string extractParamFromJson(String keyName, String json)
     {
-        String regex = string.Format("\"{0}\": \"([^\"]+)\"", keyName);
+        String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
         Match match = Regex.Match(json, regex);
         string keyValue = match.Groups[1].Value;
 
@@ -99,9 +99,13 @@ namespace Braintree.Tests
     {
       var clientToken = "";
       if (customerId ==  null) {
-        clientToken = gateway.GenerateClientToken();
+        clientToken = gateway.ClientToken.generate();
       } else {
-        clientToken = gateway.GenerateClientToken(new ClientTokenOptions { CustomerId = customerId } );
+        clientToken = gateway.ClientToken.generate(new ClientTokenRequest
+            {
+                CustomerId = customerId
+            }
+        );
       }
       var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
       RequestBuilder builder = new RequestBuilder("");
