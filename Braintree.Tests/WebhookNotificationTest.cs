@@ -102,6 +102,21 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForATransferExceptionWebhook()
+        {
+          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSFER_EXCEPTION, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+          Assert.AreEqual(WebhookKind.TRANSFER_EXCEPTION, notification.Kind);
+          Assert.AreEqual(100, notification.Transfer.Amount);
+          Assert.AreEqual("invalid_account_number", notification.Transfer.Message);
+          Assert.AreEqual(DateTime.Parse("2014-02-10"), notification.Transfer.DisbursementDate);
+          Assert.AreEqual("update", notification.Transfer.FollowUpAction);
+          Assert.AreEqual("my_id", notification.Transfer.Id);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantConnected()
         {
           Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_CONNECTED, "my_id");

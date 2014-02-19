@@ -20,6 +20,7 @@ namespace Braintree
         public static readonly WebhookKind SUB_MERCHANT_ACCOUNT_DECLINED = new WebhookKind("sub_merchant_account_declined");
         public static readonly WebhookKind UNRECOGNIZED = new WebhookKind("unrecognized");
         public static readonly WebhookKind TRANSACTION_DISBURSED = new WebhookKind("transaction_disbursed");
+        public static readonly WebhookKind TRANSFER_EXCEPTION = new WebhookKind("transfer_exception");
 
         public static readonly WebhookKind[] ALL = {
             PARTNER_MERCHANT_CONNECTED,
@@ -34,7 +35,8 @@ namespace Braintree
             SUBSCRIPTION_WENT_PAST_DUE,
             SUB_MERCHANT_ACCOUNT_APPROVED,
             SUB_MERCHANT_ACCOUNT_DECLINED,
-            TRANSACTION_DISBURSED
+            TRANSACTION_DISBURSED,
+            TRANSFER_EXCEPTION
         };
 
         protected WebhookKind(String name) : base(name) {}
@@ -49,6 +51,7 @@ namespace Braintree
         public String Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public Transaction Transaction { get; protected set; }
+        public Transfer Transfer { get; protected set; }
         public PartnerMerchant PartnerMerchant { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
@@ -72,6 +75,10 @@ namespace Braintree
 
             if (WrapperNode.GetNode("transaction") != null) {
                 Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
+            }
+
+            if (WrapperNode.GetNode("transfer") != null) {
+                Transfer = new Transfer(WrapperNode.GetNode("transfer"), service);
             }
 
             if (WrapperNode.GetNode("partner-merchant") != null) {

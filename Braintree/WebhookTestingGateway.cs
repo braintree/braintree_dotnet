@@ -43,6 +43,8 @@ namespace Braintree
                 return MerchantAccountDeclinedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_DISBURSED) {
                 return TransactionDisbursedSampleXml(id);
+            } else if (kind == WebhookKind.TRANSFER_EXCEPTION) {
+                return TransferExceptionXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_CONNECTED) {
                 return PartnerMerchantConnectedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_DISCONNECTED) {
@@ -98,6 +100,18 @@ namespace Braintree
                     node("descriptor"),
                     node("shipping"),
                     node("subscription")
+            );
+        }
+
+        private String TransferExceptionXml(String id)
+        {
+            return node("transfer",
+                    node("id", id),
+                    node("amount", "100"),
+                    node("merchant-account-id", "abcdef"),
+                    node("message", "invalid_account_number"),
+                    node_attr("disbursement-date", TYPE_DATETIME, "2014-02-10T00:00:00Z"),
+                    node("follow-up-action", "update")
             );
         }
 

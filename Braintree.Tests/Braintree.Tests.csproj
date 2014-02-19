@@ -68,6 +68,7 @@
     <Compile Include="TestHelper.cs" />
     <Compile Include="TransactionTest.cs" />
     <Compile Include="TransactionRequestTest.cs" />
+    <Compile Include="TransferTest.cs" />
     <Compile Include="TransparentRedirectRequestTest.cs" />
     <Compile Include="TrUtilTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
