@@ -909,7 +909,7 @@ namespace Braintree.Tests
                 Id = subscriptionId
             };
 
-            var nonDefaultMerchantAccountSubscription = gateway.Subscription.Create(subscriptionRequest).Target;
+            gateway.Subscription.Create(subscriptionRequest);
 
             var searchRequest = new SubscriptionSearchRequest().
                 MerchantAccountId.Is(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID).
