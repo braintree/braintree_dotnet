@@ -53,17 +53,17 @@ namespace Braintree.Tests
         public void MerchantAccount()
         {
           Transfer transfer = new Transfer(attributes, service);
-          Assert.IsNotNull(transfer.MerchantAccount());
-          Assert.AreEqual("sandbox_sub_merchant_account", transfer.MerchantAccount().Id);
+          Assert.IsNotNull(transfer.MerchantAccount);
+          Assert.AreEqual("sandbox_sub_merchant_account", transfer.MerchantAccount.Id);
         }
 
         [Test]
         public void Transactions()
         {
           Transfer transfer = new Transfer(attributes, service);
-          Assert.IsNotNull(transfer.Transactions());
-          Assert.AreEqual(1, transfer.Transactions().MaximumCount);
-          Assert.AreEqual("sub_merchant_transaction", transfer.Transactions().FirstItem.Id);
+          Assert.IsNotNull(transfer.Transactions);
+          Assert.AreEqual(1, transfer.Transactions.MaximumCount);
+          Assert.AreEqual("sub_merchant_transaction", transfer.Transactions.FirstItem.Id);
         }
     }
 }

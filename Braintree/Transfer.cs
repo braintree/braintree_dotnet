@@ -25,19 +25,26 @@ namespace Braintree
           service = braintreeService;
         }
 
-        public MerchantAccount MerchantAccount(){
-          MerchantAccountGateway gateway = new MerchantAccountGateway(service);
-          return gateway.Find(merchantAccountId);
+        public MerchantAccount MerchantAccount
+        {
+          get
+          {
+            MerchantAccountGateway gateway = new MerchantAccountGateway(service);
+            return gateway.Find(merchantAccountId);
+          }
         }
 
-        public ResourceCollection<Transaction> Transactions(){
-          TransactionGateway gateway = new TransactionGateway(service);
+        public ResourceCollection<Transaction> Transactions{
+          get
+          {
+            TransactionGateway gateway = new TransactionGateway(service);
 
-          TransactionSearchRequest searchRequest = new TransactionSearchRequest().
-            MerchantAccountId.Is(merchantAccountId).
-            DisbursementDate.Between(DisbursementDate.Value, DisbursementDate.Value);
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+              MerchantAccountId.Is(merchantAccountId).
+              DisbursementDate.Between(DisbursementDate.Value, DisbursementDate.Value);
 
-          return gateway.Search(searchRequest);
+            return gateway.Search(searchRequest);
+          }
         }
     }
 }
