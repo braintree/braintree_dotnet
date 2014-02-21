@@ -12,6 +12,7 @@ namespace Braintree
 
         private BraintreeService service;
         private String merchantAccountId;
+        private MerchantAccount merchantAccount;
 
         public Transfer(NodeWrapper node, BraintreeService braintreeService)
         {
@@ -29,8 +30,12 @@ namespace Braintree
         {
           get
           {
-            MerchantAccountGateway gateway = new MerchantAccountGateway(service);
-            return gateway.Find(merchantAccountId);
+            if (merchantAccount == null) {
+              MerchantAccountGateway gateway = new MerchantAccountGateway(service);
+              merchantAccount = gateway.Find(merchantAccountId);
+            }
+
+            return merchantAccount;
           }
         }
 

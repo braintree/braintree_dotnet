@@ -1,6 +1,8 @@
 using System;
+using System.Reflection;
 using System.Text;
 using System.Xml;
+
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -55,6 +57,16 @@ namespace Braintree.Tests
           Transfer transfer = new Transfer(attributes, service);
           Assert.IsNotNull(transfer.MerchantAccount);
           Assert.AreEqual("sandbox_sub_merchant_account", transfer.MerchantAccount.Id);
+        }
+
+        [Test]
+        public void MerchantAccountIsMemoized()
+        {
+          Transfer transfer = new Transfer(attributes, service);
+          MerchantAccount merchantAccount = transfer.MerchantAccount;
+          typeof(Transfer).GetField("merchantAccountId",BindingFlags.Instance|BindingFlags.NonPublic).SetValue(transfer, "non existent");
+
+          Assert.AreEqual(merchantAccount, transfer.MerchantAccount);
         }
 
         [Test]
