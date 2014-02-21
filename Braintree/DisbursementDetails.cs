@@ -10,6 +10,7 @@ namespace Braintree
         public String SettlementCurrencyIsoCode { get; protected set; }
         public String SettlementCurrencyExchangeRate { get; protected set; }
         public Boolean? FundsHeld { get; protected set; }
+        public Boolean? Success { get; protected set; }
         public DateTime? DisbursementDate { get; protected set; }
 
         protected internal DisbursementDetails(NodeWrapper node)
@@ -18,6 +19,7 @@ namespace Braintree
             SettlementCurrencyIsoCode = node.GetString("settlement-currency-iso-code");
             SettlementCurrencyExchangeRate = node.GetString("settlement-currency-exchange-rate");
             FundsHeld = node.GetBoolean("funds-held");
+            Success = node.GetBoolean("success");
             DisbursementDate = node.GetDateTime("disbursement-date");
         }
 
