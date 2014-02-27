@@ -75,8 +75,9 @@
     <Compile Include="CustomerGateway.cs" />
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="DateRangeNode.cs" />
-    <Compile Include="DisbursementDetails.cs" />
     <Compile Include="DescriptorRequest.cs" />
+    <Compile Include="Disbursement.cs" />
+    <Compile Include="DisbursementDetails.cs" />
     <Compile Include="Discount.cs" />
     <Compile Include="DiscountsRequest.cs" />
     <Compile Include="Enumeration.cs" />
@@ -128,7 +129,6 @@
     <Compile Include="TextNode.cs" />
     <Compile Include="TrUtil.cs" />
     <Compile Include="Transaction.cs" />
-    <Compile Include="Transfer.cs" />
     <Compile Include="TransactionGateway.cs" />
     <Compile Include="TransactionOptionsRequest.cs" />
     <Compile Include="TransactionRequest.cs" />

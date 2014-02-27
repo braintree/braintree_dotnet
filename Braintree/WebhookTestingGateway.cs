@@ -43,8 +43,10 @@ namespace Braintree
                 return MerchantAccountDeclinedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_DISBURSED) {
                 return TransactionDisbursedSampleXml(id);
-            } else if (kind == WebhookKind.TRANSFER_EXCEPTION) {
-                return TransferExceptionXml(id);
+            } else if (kind == WebhookKind.DISBURSEMENT_EXCEPTION) {
+                return DisbursementExceptionSampleXml(id);
+            } else if (kind == WebhookKind.DISBURSEMENT) {
+                return DisbursementSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_CONNECTED) {
                 return PartnerMerchantConnectedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_DISCONNECTED) {
@@ -56,9 +58,11 @@ namespace Braintree
             }
         }
 
-        private static readonly string TYPE_DATETIME = "type=\"datetime\"";
+        private static readonly string TYPE_DATE = "type=\"date\"";
         private static readonly string TYPE_ARRAY = "type=\"array\"";
         private static readonly string TYPE_SYMBOL = "type=\"symbol\"";
+        private static readonly string NIL_TRUE = "nil=\"true\"";
+        private static readonly string TYPE_BOOLEAN = "type=\"boolean\"";
 
         private String MerchantAccountDeclinedSampleXml(String id)
         {
@@ -90,9 +94,9 @@ namespace Braintree
         {
             return node("transaction",
                     node("id", id),
-                    node("amount", "100"),
+                    node("amount", "100.00"),
                     node("disbursement-details",
-                        node_attr("disbursement-date", TYPE_DATETIME, "2013-07-09T18:23:29Z")
+                        node_attr("disbursement-date", TYPE_DATE, "2013-07-09")
                     ),
                     node("billing"),
                     node("credit-card"),
@@ -103,15 +107,53 @@ namespace Braintree
             );
         }
 
-        private String TransferExceptionXml(String id)
+        private String DisbursementExceptionSampleXml(String id)
         {
-            return node("transfer",
+            return node("disbursement",
                     node("id", id),
-                    node("amount", "100"),
-                    node("merchant-account-id", "abcdef"),
-                    node("message", "invalid_account_number"),
-                    node_attr("disbursement-date", TYPE_DATETIME, "2014-02-10T00:00:00Z"),
-                    node("follow-up-action", "update")
+                    node("amount", "100.00"),
+                    node("exception-message", "bank_rejected"),
+                    node_attr("disbursement-date", TYPE_DATE, "2014-02-10"),
+                    node("follow-up-action", "update_funding_information"),
+                    node_attr("success", TYPE_BOOLEAN, "false"),
+                    node_attr("retry", TYPE_BOOLEAN, "false"),
+                    node("merchant-account",
+                        node("id", "merchant_account_id"),
+                        node("master-merchant-account",
+                            node("id", "master_ma"),
+                            node("status", "active")
+                        ),
+                        node("status", "active")
+                    ),
+                    node_attr("transaction-ids", TYPE_ARRAY,
+                        node("item", "asdf"),
+                        node("item", "qwer")
+                    )
+            );
+        }
+
+        private String DisbursementSampleXml(String id)
+        {
+            return node("disbursement",
+                    node("id", id),
+                    node("amount", "100.00"),
+                    node_attr("exception-message", NIL_TRUE, ""),
+                    node_attr("disbursement-date", TYPE_DATE, "2014-02-10"),
+                    node_attr("follow-up-action", NIL_TRUE, ""),
+                    node_attr("success", TYPE_BOOLEAN, "true"),
+                    node("retry", TYPE_BOOLEAN, "false"),
+                    node("merchant-account",
+                        node("id", "merchant_account_id"),
+                        node("master-merchant-account",
+                            node("id", "master_ma"),
+                            node("status", "active")
+                        ),
+                        node("status", "active")
+                    ),
+                    node_attr("transaction-ids", TYPE_ARRAY,
+                        node("item", "asdf"),
+                        node("item", "qwer")
+                    )
             );
         }
 
