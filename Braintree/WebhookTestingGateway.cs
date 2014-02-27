@@ -141,7 +141,7 @@ namespace Braintree
                     node_attr("disbursement-date", TYPE_DATE, "2014-02-10"),
                     node_attr("follow-up-action", NIL_TRUE, ""),
                     node_attr("success", TYPE_BOOLEAN, "true"),
-                    node("retry", TYPE_BOOLEAN, "false"),
+                    node_attr("retry", TYPE_BOOLEAN, "false"),
                     node("merchant-account",
                         node("id", "merchant_account_id"),
                         node("master-merchant-account",
