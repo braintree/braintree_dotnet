@@ -3,12 +3,69 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using Braintree;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
     [TestFixture]
     public class ConfigurationTest
     {
+        [Test]
+        public void ConfigurationMissingEnvironment_ThrowsConfigurationException()
+        {
+            try {
+                new Configuration(
+                    null,
+                    "integration_merchant_id",
+                    "integration_public_key",
+                    "integration_private_key"
+                );
+                Assert.Fail("Should throw ConfigurationException");
+            } catch (ConfigurationException) {}
+        }
+
+        [Test]
+        public void ConfigurationMissingMerchantId_ThrowsConfigurationException()
+        {
+            try {
+                new Configuration(
+                    Environment.DEVELOPMENT,
+                    null,
+                    "integration_public_key",
+                    "integration_private_key"
+                );
+                Assert.Fail("Should throw ConfigurationException");
+            } catch (ConfigurationException) {}
+        }
+
+        [Test]
+        public void ConfigurationMissingPublicKey_ThrowsConfigurationException()
+        {
+            try {
+                new Configuration(
+                    Environment.DEVELOPMENT,
+                    "integration_merchant_id",
+                    null,
+                    "integration_private_key"
+                );
+                Assert.Fail("Should throw ConfigurationException");
+            } catch (ConfigurationException) {}
+        }
+
+        [Test]
+        public void ConfigurationMissingPrivateKey_ThrowsConfigurationException()
+        {
+            try {
+                new Configuration(
+                    Environment.DEVELOPMENT,
+                    "integration_merchant_id",
+                    "integration_public_key",
+                    null
+                );
+                Assert.Fail("Should throw ConfigurationException");
+            } catch (ConfigurationException) {}
+        }
+
         [Test]
         public void BaseMerchantURL_ReturnsDevelopmentURL()
         {

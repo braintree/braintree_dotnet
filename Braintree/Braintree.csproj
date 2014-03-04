@@ -85,6 +85,7 @@
     <Compile Include="EqualityNode.cs" />
     <Compile Include="Exceptions\AuthenticationException.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
+    <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="Exceptions\DownForMaintenanceException.cs" />
     <Compile Include="Exceptions\ForgedQueryStringException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
