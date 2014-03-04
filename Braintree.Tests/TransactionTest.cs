@@ -2745,6 +2745,7 @@ namespace Braintree.Tests
             Assert.AreEqual(details.SettlementCurrencyIsoCode, "USD");
             Assert.AreEqual(details.SettlementCurrencyExchangeRate, "1");
             Assert.AreEqual(details.FundsHeld, false);
+            Assert.AreEqual(details.Success, true);
         }
 
         [Test]
