@@ -144,6 +144,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Leoggs", merchantAccount.IndividualDetails.LastName);
             Assert.AreEqual("job@leoggs.com", merchantAccount.IndividualDetails.Email);
             Assert.AreEqual("5555551212", merchantAccount.IndividualDetails.Phone);
+            Assert.AreEqual("1235", merchantAccount.IndividualDetails.SsnLastFour);
             Assert.AreEqual("193 Credibility St.", merchantAccount.IndividualDetails.Address.StreetAddress);
             Assert.AreEqual("60611", merchantAccount.IndividualDetails.Address.PostalCode);
             Assert.AreEqual("Avondale", merchantAccount.IndividualDetails.Address.Locality);
