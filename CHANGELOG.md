@@ -1,3 +1,7 @@
+## 2.29.1
+
+* Properly expose SsnLastFour for merchant accounts
+
 ## 2.29.0
 
 * Disbursement Webhooks
