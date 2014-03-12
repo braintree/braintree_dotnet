@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Braintree;
@@ -467,6 +470,72 @@ namespace Braintree.Tests
         {
             try {
                 gateway.CreditCard.Find(" ");
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException) {}
+        }
+
+        [Test]
+        public void FromNonce_ExchangesANonceForACreditCard()
+        {
+          Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+          String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
+          CreditCard card = gateway.CreditCard.FromNonce(nonce);
+          Assert.AreEqual("401288******1881", card.MaskedNumber);
+        }
+
+        [Test]
+        public void FromNonce_ReturnsErrorWhenProvidedNoncePointingToUnlockedSharedCard()
+        {
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            try {
+                gateway.CreditCard.FromNonce(nonce);
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException) {}
+        }
+
+        [Test]
+        public void FromNonce_ReturnsErrorWhenProvidedConsumedNonce()
+        {
+          Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+          String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
+          gateway.CreditCard.FromNonce(nonce);
+          try {
+              gateway.CreditCard.FromNonce(nonce);
+              Assert.Fail("Should throw NotFoundException");
+          } catch (NotFoundException) {}
+        }
+
+        [Test]
+        public void FromNonce_ReturnsErrorWhenProvidedLockedNonce()
+        {
+            var httpService = new BraintreeTestHttpService();
+            var clientToken = gateway.ClientToken.generate();
+            var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
+            RequestBuilder builder = new RequestBuilder("");
+            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+                AddTopLevelElement("shared_customer_identifier_type", "testing").
+                AddTopLevelElement("shared_customer_identifier", "test-identifier").
+                AddTopLevelElement("credit_card[number]", "4012888888881881").
+                AddTopLevelElement("share", "true").
+                AddTopLevelElement("credit_card[expiration_month]", "11").
+                AddTopLevelElement("credit_card[expiration_year]", "2099");
+
+            httpService.Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
+
+            builder = new RequestBuilder("");
+            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+                AddTopLevelElement("shared_customer_identifier_type", "testing").
+                AddTopLevelElement("shared_customer_identifier", "test-identifier");
+
+            HttpWebResponse response = httpService.Get(gateway.MerchantId, "credit_cards.json?" + builder.ToQueryString());
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+            String responseBody = reader.ReadToEnd();
+
+            Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
+            Match match = regex.Match(responseBody);
+            var nonce = match.Groups["nonce"].Value;
+            try {
+                gateway.CreditCard.FromNonce(nonce);
                 Assert.Fail("Should throw NotFoundException");
             } catch (NotFoundException) {}
         }
