@@ -490,19 +490,23 @@ namespace Braintree.Tests
             try {
                 gateway.CreditCard.FromNonce(nonce);
                 Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            } catch (NotFoundException e) {
+                StringAssert.Contains("not found", e.Message);
+            }
         }
 
         [Test]
         public void FromNonce_ReturnsErrorWhenProvidedConsumedNonce()
         {
-          Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-          String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
-          gateway.CreditCard.FromNonce(nonce);
-          try {
-              gateway.CreditCard.FromNonce(nonce);
-              Assert.Fail("Should throw NotFoundException");
-          } catch (NotFoundException) {}
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
+            gateway.CreditCard.FromNonce(nonce);
+            try {
+                gateway.CreditCard.FromNonce(nonce);
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException e) {
+                StringAssert.Contains("consumed", e.Message);
+            }
         }
 
         [Test]
@@ -537,7 +541,9 @@ namespace Braintree.Tests
             try {
                 gateway.CreditCard.FromNonce(nonce);
                 Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            } catch (NotFoundException e) {
+                StringAssert.Contains("locked", e.Message);
+            }
         }
 
         [Test]
