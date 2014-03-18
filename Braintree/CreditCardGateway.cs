@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using Braintree.Exceptions;
 
@@ -40,6 +41,13 @@ namespace Braintree
             return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
         }
 
+        public virtual async Task<Result<CreditCard>> CreateAsync(CreditCardRequest request)
+        {
+            XmlNode creditCardXML = await Service.PostAsync("/payment_methods", request);
+
+            return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
+        }
+
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<CreditCard> ConfirmTransparentRedirect(String queryString)
         {
@@ -53,7 +61,8 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(Service.Post("/payment_methods/all/expired_ids"));
 
-            return new ResourceCollection<CreditCard>(response, delegate(String[] ids) {
+            return new ResourceCollection<CreditCard>(response, delegate(String[] ids)
+            {
                 IdsSearchRequest query = new IdsSearchRequest().
                     Ids.IncludedIn(ids);
 
@@ -74,7 +83,8 @@ namespace Braintree
 
             NodeWrapper response = new NodeWrapper(Service.Post("/payment_methods/all/expiring_ids?" + queryString));
 
-            return new ResourceCollection<CreditCard>(response, delegate(String[] ids) {
+            return new ResourceCollection<CreditCard>(response, delegate(String[] ids)
+            {
                 IdsSearchRequest query = new IdsSearchRequest().
                     Ids.IncludedIn(ids);
 
@@ -91,7 +101,7 @@ namespace Braintree
 
         public virtual CreditCard Find(String token)
         {
-            if(token == null || token.Trim().Equals(""))
+            if (token == null || token.Trim().Equals(""))
                 throw new NotFoundException();
 
             XmlNode creditCardXML = Service.Get("/payment_methods/" + token);
@@ -107,6 +117,13 @@ namespace Braintree
         public virtual Result<CreditCard> Update(String token, CreditCardRequest request)
         {
             XmlNode creditCardXML = Service.Put("/payment_methods/" + token, request);
+
+            return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
+        }
+
+        public virtual async Task<Result<CreditCard>> UpdateAsync(String token, CreditCardRequest request)
+        {
+            XmlNode creditCardXML = await Service.PutAsync("/payment_methods/" + token, request);
 
             return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
         }

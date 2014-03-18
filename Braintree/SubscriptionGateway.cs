@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using Braintree.Exceptions;
 
@@ -29,9 +30,16 @@ namespace Braintree
             return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
 
+        public virtual async Task<Result<Subscription>> CreateAsync(SubscriptionRequest request)
+        {
+            XmlNode subscriptionXML = await Service.PostAsync("/subscriptions", request);
+
+            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
+        }
+
         public virtual Subscription Find(String id)
         {
-            if(id == null || id.Trim().Equals(""))
+            if (id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
             XmlNode subscriptionXML = Service.Get("/subscriptions/" + id);
@@ -49,6 +57,13 @@ namespace Braintree
         public virtual Result<Subscription> Cancel(String id)
         {
             XmlNode subscriptionXML = Service.Put("/subscriptions/" + id + "/cancel");
+
+            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
+        }
+
+        public virtual async Task<Result<Subscription>> CancelAsync(String id)
+        {
+            XmlNode subscriptionXML = await Service.PutAsync("/subscriptions/" + id + "/cancel");
 
             return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
@@ -71,7 +86,8 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(Service.Post("/subscriptions/advanced_search_ids", query));
 
-            return new ResourceCollection<Subscription>(response, delegate(String[] ids) {
+            return new ResourceCollection<Subscription>(response, delegate(String[] ids)
+            {
                 return FetchSubscriptions(query, ids);
             });
         }
@@ -97,24 +113,27 @@ namespace Braintree
             return Search(query);
         }
 
-        private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest) {
-           XmlNode response = Service.Post("/transactions", txnRequest);
-           return new Result<Transaction>(new NodeWrapper(response), Service);
-       }
+        private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest)
+        {
+            XmlNode response = Service.Post("/transactions", txnRequest);
+            return new Result<Transaction>(new NodeWrapper(response), Service);
+        }
 
-       public Result<Transaction> RetryCharge(String subscriptionId) {
-          return RetryCharge(new SubscriptionTransactionRequest
+        public Result<Transaction> RetryCharge(String subscriptionId)
+        {
+            return RetryCharge(new SubscriptionTransactionRequest
+              {
+                  SubscriptionId = subscriptionId
+              });
+        }
+
+        public Result<Transaction> RetryCharge(String subscriptionId, Decimal amount)
+        {
+            return RetryCharge(new SubscriptionTransactionRequest
             {
-                SubscriptionId = subscriptionId
+                SubscriptionId = subscriptionId,
+                Amount = amount
             });
-       }
-
-       public Result<Transaction> RetryCharge(String subscriptionId, Decimal amount) {
-           return RetryCharge(new SubscriptionTransactionRequest
-           {
-               SubscriptionId = subscriptionId,
-               Amount = amount
-           });
-       }
+        }
     }
 }
