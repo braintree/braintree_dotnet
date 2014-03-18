@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml;
 using Braintree.Exceptions;
 
@@ -21,7 +22,7 @@ namespace Braintree
 
         public virtual Customer Find(String Id)
         {
-            if(Id == null || Id.Trim().Equals(""))
+            if (Id == null || Id.Trim().Equals(""))
                 throw new NotFoundException();
 
             XmlNode customerXML = Service.Get("/customers/" + Id);
@@ -29,9 +30,26 @@ namespace Braintree
             return new Customer(new NodeWrapper(customerXML), Service);
         }
 
+        public virtual async Task<Customer> FindAsync(String Id)
+        {
+            if (Id == null || Id.Trim().Equals(""))
+                throw new NotFoundException();
+
+            XmlNode customerXML = await Service.GetAsync("/customers/" + Id);
+
+            return new Customer(new NodeWrapper(customerXML), Service);
+        }
+
         public virtual Result<Customer> Create(CustomerRequest request)
         {
             XmlNode customerXML = Service.Post("/customers", request);
+
+            return new Result<Customer>(new NodeWrapper(customerXML), Service);
+        }
+
+        public virtual async Task<Result<Customer>> CreateAsync(CustomerRequest request)
+        {
+            XmlNode customerXML = await Service.PostAsync("/customers", request);
 
             return new Result<Customer>(new NodeWrapper(customerXML), Service);
         }
@@ -44,6 +62,13 @@ namespace Braintree
         public virtual Result<Customer> Update(String Id, CustomerRequest request)
         {
             XmlNode customerXML = Service.Put("/customers/" + Id, request);
+
+            return new Result<Customer>(new NodeWrapper(customerXML), Service);
+        }
+
+        public virtual async Task<Result<Customer>> UpdateAsync(String Id, CustomerRequest request)
+        {
+            XmlNode customerXML = await Service.PutAsync("/customers/" + Id, request);
 
             return new Result<Customer>(new NodeWrapper(customerXML), Service);
         }
@@ -74,7 +99,8 @@ namespace Braintree
             NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search_ids"));
             CustomerSearchRequest query = new CustomerSearchRequest();
 
-            return new ResourceCollection<Customer>(response, delegate(String[] ids) {
+            return new ResourceCollection<Customer>(response, delegate(String[] ids)
+            {
                 return FetchCustomers(query, ids);
             });
         }
@@ -83,7 +109,8 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search_ids", query));
 
-            return new ResourceCollection<Customer>(response, delegate(String[] ids) {
+            return new ResourceCollection<Customer>(response, delegate(String[] ids)
+            {
                 return FetchCustomers(query, ids);
             });
         }
