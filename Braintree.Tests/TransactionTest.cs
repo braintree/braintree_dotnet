@@ -1601,7 +1601,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Sale_RejectedWithThreeDSecureToken()
+        public void Sale_RejectedWithUnauthorizedThreeDSecureToken()
         {
             Random random = new Random();
             int randomNumber = random.Next(0, 10000);
@@ -1632,6 +1632,27 @@ namespace Braintree.Tests
 
             Assert.AreEqual(TransactionStatus.GATEWAY_REJECTED, transaction.Status);
             Assert.AreEqual(TransactionGatewayRejectionReason.THREE_D_SECURE, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_ErrorWithNullThreeDSecureToken()
+        {
+            String three_d_secure_token = null;
+
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureToken = three_d_secure_token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = three_d_secure_gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TOKEN_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
         }
 
         [Test]
