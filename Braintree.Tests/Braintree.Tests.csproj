@@ -85,6 +85,7 @@
     <Compile Include="PlanTest.cs" />
     <Compile Include="PlanRequestForTests.cs" />
     <Compile Include="ModificationRequestForTests.cs" />
+    <Compile Include="ThreeDSecureRequestForTests.cs" />
     <Compile Include="AddOnTest.cs" />
     <Compile Include="DiscountTest.cs" />
     <Compile Include="DisbursementTest.cs" />

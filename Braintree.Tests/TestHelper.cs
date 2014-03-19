@@ -83,5 +83,12 @@ namespace Braintree.Tests
             return DateTime.UtcNow - new TimeSpan(05, 00, 00);
         }
 
+        public static void CreateTest3DS(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
+        {
+            String url = "/three_d_secure/create_test_3ds/" + merchantAccountId;
+            NodeWrapper response = new NodeWrapper(service.Post(url, request));
+            Assert.IsTrue(response.IsSuccess());
+        }
+
     }
 }
