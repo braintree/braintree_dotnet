@@ -32,7 +32,7 @@ namespace Braintree
 
         private string BuildSignature(string payload)
         {
-            return String.Format("{0}|{1}", Service.PublicKey, new Crypto().HmacHash(Service.PrivateKey, payload).Trim().ToLower());
+            return String.Format("{0}|{1}", Service.PublicKey, new Sha1Hasher().HmacHash(Service.PrivateKey, payload).Trim().ToLower());
         }
 
         private String SubjectSampleXml(WebhookKind kind, String id)

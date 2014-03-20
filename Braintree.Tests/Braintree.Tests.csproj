@@ -54,13 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressTest.cs" />
+    <Compile Include="ClientTokenTest.cs" />
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CreditCardTest.cs" />
     <Compile Include="CreditCardNumbers.cs" />
     <Compile Include="CreditCardDefaults.cs" />
     <Compile Include="CreditCardRequestTest.cs" />
     <Compile Include="CreditCardVerificationTest.cs" />
-    <Compile Include="CryptoTest.cs" />
     <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
     <Compile Include="QueryStringTest.cs" />
@@ -81,6 +81,9 @@
     <Compile Include="BraintreeServiceTest.cs" />
     <Compile Include="StringUtilTest.cs" />
     <Compile Include="SettlementBatchSummaryTest.cs" />
+    <Compile Include="Sha1HasherTest.cs" />
+    <Compile Include="Sha256HasherTest.cs" />
+    <Compile Include="SignatureServiceTest.cs" />
     <Compile Include="PlanFixture.cs" />
     <Compile Include="PlanTest.cs" />
     <Compile Include="PlanRequestForTests.cs" />

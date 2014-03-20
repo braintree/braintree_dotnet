@@ -17,7 +17,7 @@ namespace Braintree
     /// <li><see cref="CustomerGateway">Customers</see></li>
     /// <li><see cref="SubscriptionGateway">Subscriptions</see></li>
     /// <li><see cref="TransactionGateway">Transactions</see></li>
-    /// </ul>  
+    /// </ul>
     /// </remarks>
     /// <example>
     /// Quick Start Example:
@@ -101,9 +101,14 @@ namespace Braintree
             Configuration = configuration;
         }
 
+        public virtual ClientTokenGateway ClientToken
+        {
+            get { return new ClientTokenGateway(new BraintreeService(Configuration)); }
+        }
+
         public virtual CustomerGateway Customer
         {
-            get { return new CustomerGateway(new BraintreeService(this.Configuration)); }
+            get { return new CustomerGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual AddressGateway Address

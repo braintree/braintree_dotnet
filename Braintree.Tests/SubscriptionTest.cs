@@ -75,6 +75,24 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_SubscriptionWithPaymentMethodNonce()
+        {
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4242424242424242", creditCard.CustomerId);
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodNonce = nonce,
+                PlanId = plan.Id
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+            Transaction transaction = subscription.Transactions[0];
+            Assert.AreEqual("424242", transaction.CreditCard.Bin);
+        }
+
+        [Test]
         public void Create_SubscriptionWithZeroDollarPrice()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1421,6 +1439,27 @@ namespace Braintree.Tests
             subscription = result.Target;
 
             Assert.AreEqual(newCreditCard.Token, subscription.PaymentMethodToken);
+        }
+
+        [Test]
+        public void Update_PaymentMethodWithPaymentMethodNonce()
+        {
+            Subscription subscription = gateway.Subscription.Create(new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id,
+            }).Target;
+
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4242424242424242", creditCard.CustomerId);
+            SubscriptionRequest updateRequest = new SubscriptionRequest { PaymentMethodNonce = nonce };
+
+            Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            subscription = result.Target;
+            CreditCard newCreditCard = gateway.CreditCard.Find(subscription.PaymentMethodToken);
+            Assert.AreEqual("424242", newCreditCard.Bin);
         }
 
         [Test]

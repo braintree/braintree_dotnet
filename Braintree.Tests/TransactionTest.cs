@@ -3459,5 +3459,19 @@ namespace Braintree.Tests
             Assert.AreEqual(transaction.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
         }
+
+        [Test]
+        public void CreateTransaction_WithPaymentMethodNonce()
+        {
+          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+          TransactionRequest request = new TransactionRequest
+          {
+            Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+            PaymentMethodNonce = nonce
+          };
+          Result<Transaction> result = gateway.Transaction.Credit(request);
+          Assert.IsTrue(result.IsSuccess());
+        }
     }
+
 }
