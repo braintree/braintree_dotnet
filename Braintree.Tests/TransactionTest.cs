@@ -2749,6 +2749,21 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_ExposesDisputes()
+        {
+            Transaction transaction = gateway.Transaction.Find("disputedtransaction");
+
+            List<Dispute> disputes = transaction.Disputes;
+            Dispute dispute = disputes[0];
+
+            Assert.AreEqual(dispute.ReceivedDate, DateTime.Parse("2014-03-01"));
+            Assert.AreEqual(dispute.Amount, Decimal.Parse("250.00"));
+            Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
+            Assert.AreEqual(dispute.Reason, DisputeReason.FRAUD);
+            Assert.AreEqual(dispute.Status, DisputeStatus.WON);
+        }
+
+        [Test]
         public void Find_IsDisbursedFalse()
         {
             TransactionRequest request = new TransactionRequest

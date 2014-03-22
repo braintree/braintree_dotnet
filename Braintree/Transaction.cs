@@ -122,6 +122,7 @@ namespace Braintree
         public String CvvResponseCode { get; protected set; }
         public Descriptor Descriptor { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
+        public List<Dispute> Disputes { get; protected set; }
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public String MerchantAccountId { get; protected set; }
         public String OrderId { get; protected set; }
@@ -228,6 +229,11 @@ namespace Braintree
             Discounts = new List<Discount>();
             foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
                 Discounts.Add(new Discount(discountResponse));
+            }
+
+            Disputes = new List<Dispute>();
+            foreach (NodeWrapper dispute in node.GetList("disputes/dispute")) {
+                Disputes.Add(new Dispute(dispute));
             }
         }
 

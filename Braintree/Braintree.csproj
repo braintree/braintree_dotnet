@@ -78,6 +78,7 @@
     <Compile Include="DescriptorRequest.cs" />
     <Compile Include="Disbursement.cs" />
     <Compile Include="DisbursementDetails.cs" />
+    <Compile Include="Dispute.cs" />
     <Compile Include="Discount.cs" />
     <Compile Include="DiscountsRequest.cs" />
     <Compile Include="Enumeration.cs" />
