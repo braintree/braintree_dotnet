@@ -6,6 +6,7 @@ namespace Braintree
 {
     public class DisputeStatus : Enumeration
     {
+        public static readonly DisputeStatus OPEN = new DisputeStatus("open");
         public static readonly DisputeStatus LOST = new DisputeStatus("lost");
         public static readonly DisputeStatus WON = new DisputeStatus("won");
         public static readonly DisputeStatus UNRECOGNIZED = new DisputeStatus("unrecognized");
