@@ -645,6 +645,38 @@ namespace Braintree.Tests
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
+        [Test]
+        public void Search_OnDisputeDate()
+        {
+            DateTime disputeDate = DateTime.Parse("2014-03-01");
+            DateTime threeDaysEarlier = disputeDate.AddDays(-3);
+            DateTime oneDayEarlier = disputeDate.AddDays(-1);
+            DateTime oneDayLater = disputeDate.AddDays(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is("disputedtransaction").
+                DisputeDate.Between(oneDayEarlier, oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("disputedtransaction").
+                DisputeDate.GreaterThanOrEqualTo(oneDayEarlier);
+
+            Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("disputedtransaction").
+                DisputeDate.LessThanOrEqualTo(oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("disputedtransaction").
+                DisputeDate.Between(threeDaysEarlier, oneDayEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
 
         [Test]
         public void Search_OnAuthorizedAt()
