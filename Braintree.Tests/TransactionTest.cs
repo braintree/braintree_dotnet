@@ -2789,6 +2789,7 @@ namespace Braintree.Tests
             Dispute dispute = disputes[0];
 
             Assert.AreEqual(dispute.ReceivedDate, DateTime.Parse("2014-03-01"));
+            Assert.AreEqual(dispute.ReplyByDate, DateTime.Parse("2014-03-21"));
             Assert.AreEqual(dispute.Amount, Decimal.Parse("250.00"));
             Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
             Assert.AreEqual(dispute.Reason, DisputeReason.FRAUD);
