@@ -1601,40 +1601,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Sale_RejectedWithUnauthenticatedThreeDSecureToken()
-        {
-            Random random = new Random();
-            int randomNumber = random.Next(0, 10000);
-            var three_d_secure_token = "3ds_token" + randomNumber;
-
-            TestHelper.CreateTest3DS(three_d_secure_service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
-                PublicId = three_d_secure_token,
-                Number = SandboxValues.CreditCardNumber.VISA,
-                ExpirationMonth = "05",
-                ExpirationYear = "2009",
-                Status = "authenticate_failed"
-            });
-
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                ThreeDSecureToken = three_d_secure_token,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
-                }
-            };
-
-            Result<Transaction> result = three_d_secure_gateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-            Transaction transaction = result.Transaction;
-
-            Assert.AreEqual(TransactionStatus.GATEWAY_REJECTED, transaction.Status);
-            Assert.AreEqual(TransactionGatewayRejectionReason.THREE_D_SECURE, transaction.GatewayRejectionReason);
-        }
-
-        [Test]
         public void Sale_ErrorThreeDSecureTransactionDataDoesNotMatch()
         {
             Random random = new Random();
