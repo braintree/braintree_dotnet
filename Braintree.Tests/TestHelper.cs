@@ -117,7 +117,7 @@ namespace Braintree.Tests
         AddTopLevelElement("credit_card[expiration_month]", "11").
         AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-      HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
+      HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "nonces.json", builder.ToQueryString());
       StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
       String responseBody = reader.ReadToEnd();
 
