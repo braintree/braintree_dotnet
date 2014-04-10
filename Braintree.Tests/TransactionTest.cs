@@ -660,7 +660,7 @@ namespace Braintree.Tests
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
-                Id.Is("disputedtransaction").
+                Id.Is("2disputetransaction").
                 DisputeDate.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).MaximumCount);
