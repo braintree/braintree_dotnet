@@ -1,3 +1,21 @@
+## 2.30.0
+
+* Include Dispute information on Transaction
+* Search for Transactions disputed on a certain date
+
+## 2.29.1
+
+* Properly expose SsnLastFour for merchant accounts
+
+## 2.29.0
+
+* Disbursement Webhooks
+
+## 2.28.1
+* Allow a service fee of 0 in transaction create.
+* Expose current billing cycle on add ons and discounts.
+* Accept billing address id in transaction create.
+
 ## 2.28.0
 * Merchant account find API
 

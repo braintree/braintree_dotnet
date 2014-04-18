@@ -52,7 +52,7 @@ namespace Braintree
         public String BillingAddressId { get; set; }
         public String VenmoSdkPaymentMethodCode { get; set; }
         public String PaymentMethodNonce { get; set; }
-        public Decimal ServiceFeeAmount { get; set; }
+        public Decimal? ServiceFeeAmount { get; set; }
 
         public TransactionRequest()
         {
@@ -106,7 +106,7 @@ namespace Braintree
                 builder.AddElement("tax-exempt", TaxExempt);
             }
             builder.AddElement("merchant-account-id", MerchantAccountId);
-            if (ServiceFeeAmount != 0) builder.AddElement("service-fee-amount", ServiceFeeAmount);
+            if (ServiceFeeAmount.HasValue) builder.AddElement("service-fee-amount", ServiceFeeAmount);
 
             if (Type != null) builder.AddElement("type", Type.ToString().ToLower());
 

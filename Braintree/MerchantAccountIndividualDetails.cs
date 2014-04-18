@@ -11,6 +11,7 @@ namespace Braintree
         public String Email { get; protected set; }
         public String Phone { get; protected set; }
         public String DateOfBirth { get; protected set; }
+        public String SsnLastFour { get; protected set; }
         public Address Address { get; protected set; }
 
         protected internal MerchantAccountIndividualDetails(NodeWrapper node)
@@ -20,6 +21,7 @@ namespace Braintree
             Email = node.GetString("email");
             Phone = node.GetString("phone");
             DateOfBirth = node.GetString("date-of-birth");
+            SsnLastFour = node.GetString("ssn-last-4");
             Address = new Address(node.GetNode("address"));
         }
     }

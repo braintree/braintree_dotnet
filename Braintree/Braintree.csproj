@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.28.0</AssemblyName>
+    <AssemblyName>Braintree-2.30.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.28.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.30.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.28.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.30.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -78,8 +78,10 @@
     <Compile Include="CustomerGateway.cs" />
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="DateRangeNode.cs" />
-    <Compile Include="DisbursementDetails.cs" />
     <Compile Include="DescriptorRequest.cs" />
+    <Compile Include="Disbursement.cs" />
+    <Compile Include="DisbursementDetails.cs" />
+    <Compile Include="Dispute.cs" />
     <Compile Include="Discount.cs" />
     <Compile Include="DiscountsRequest.cs" />
     <Compile Include="Enumeration.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="EqualityNode.cs" />
     <Compile Include="Exceptions\AuthenticationException.cs" />
     <Compile Include="Exceptions\AuthorizationException.cs" />
+    <Compile Include="Exceptions\ConfigurationException.cs" />
     <Compile Include="Exceptions\DownForMaintenanceException.cs" />
     <Compile Include="Exceptions\ForgedQueryStringException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
