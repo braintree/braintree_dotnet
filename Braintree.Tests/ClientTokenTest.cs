@@ -110,7 +110,7 @@ namespace Braintree.Tests
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             var encodedFingerprint = HttpUtility.UrlEncode(authorizationFingerprint, Encoding.UTF8);
-            var url = "credit_cards.json";
+            var url = "nonces.json";
             url += "?authorizationFingerprint=" + encodedFingerprint;
             url += "&sharedCustomerIdentifierType=testing";
             url += "&sharedCustomerIdentifier=test-identifier";
@@ -153,7 +153,7 @@ namespace Braintree.Tests
                 AddTopLevelElement("credit_card[expiration_month]", "11").
                 AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
+            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "nonces.json", builder.ToQueryString());
             Assert.AreEqual(422, (int)Response.StatusCode);
 
             Customer customer = gateway.Customer.Find(customerId);
@@ -204,8 +204,8 @@ namespace Braintree.Tests
                 AddTopLevelElement("credit_card[expiration_month]", "11").
                 AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
-            Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
+            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "nonces.json", builder.ToQueryString());
+            Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "nonces.json", builder.ToQueryString());
 
             Assert.AreEqual(422, (int)Response.StatusCode);
 
@@ -256,7 +256,7 @@ namespace Braintree.Tests
                 AddTopLevelElement("credit_card[expiration_month]", "11").
                 AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
+            HttpWebResponse Response = new BraintreeTestHttpService().Post(gateway.MerchantId, "nonces.json", builder.ToQueryString());
             Assert.AreEqual(HttpStatusCode.Created, Response.StatusCode);
 
             Customer customer = gateway.Customer.Find(customerId);

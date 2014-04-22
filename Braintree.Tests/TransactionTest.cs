@@ -658,6 +658,38 @@ namespace Braintree.Tests
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
+        [Test]
+        public void Search_OnDisputeDate()
+        {
+            DateTime disputeDate = DateTime.Parse("2014-03-01");
+            DateTime threeDaysEarlier = disputeDate.AddDays(-3);
+            DateTime oneDayEarlier = disputeDate.AddDays(-1);
+            DateTime oneDayLater = disputeDate.AddDays(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is("disputedtransaction").
+                DisputeDate.Between(oneDayEarlier, oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("2disputetransaction").
+                DisputeDate.GreaterThanOrEqualTo(oneDayEarlier);
+
+            Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("disputedtransaction").
+                DisputeDate.LessThanOrEqualTo(oneDayLater);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is("disputedtransaction").
+                DisputeDate.Between(threeDaysEarlier, oneDayEarlier);
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
 
         [Test]
         public void Search_OnAuthorizedAt()
@@ -2843,6 +2875,22 @@ namespace Braintree.Tests
             Assert.AreEqual(details.SettlementCurrencyExchangeRate, "1");
             Assert.AreEqual(details.FundsHeld, false);
             Assert.AreEqual(details.Success, true);
+        }
+
+        [Test]
+        public void Find_ExposesDisputes()
+        {
+            Transaction transaction = gateway.Transaction.Find("disputedtransaction");
+
+            List<Dispute> disputes = transaction.Disputes;
+            Dispute dispute = disputes[0];
+
+            Assert.AreEqual(dispute.ReceivedDate, DateTime.Parse("2014-03-01"));
+            Assert.AreEqual(dispute.ReplyByDate, DateTime.Parse("2014-03-21"));
+            Assert.AreEqual(dispute.Amount, Decimal.Parse("250.00"));
+            Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
+            Assert.AreEqual(dispute.Reason, DisputeReason.FRAUD);
+            Assert.AreEqual(dispute.Status, DisputeStatus.WON);
         }
 
         [Test]

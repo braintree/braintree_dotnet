@@ -1,3 +1,8 @@
+## 2.30.0
+
+* Include Dispute information on Transaction
+* Search for Transactions disputed on a certain date
+
 ## 2.29.1
 
 * Properly expose SsnLastFour for merchant accounts

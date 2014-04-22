@@ -53,7 +53,6 @@ namespace Braintree
         public String VenmoSdkPaymentMethodCode { get; set; }
         public String PaymentMethodNonce { get; set; }
         public Decimal? ServiceFeeAmount { get; set; }
-
         private bool _threeDSecureTransaction;
         private String _threeDSecureToken;
         public String ThreeDSecureToken {

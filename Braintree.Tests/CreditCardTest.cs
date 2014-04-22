@@ -524,14 +524,14 @@ namespace Braintree.Tests
                 AddTopLevelElement("credit_card[expiration_month]", "11").
                 AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            httpService.Post(gateway.MerchantId, "credit_cards.json", builder.ToQueryString());
+            httpService.Post(gateway.MerchantId, "nonces.json", builder.ToQueryString());
 
             builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
                 AddTopLevelElement("shared_customer_identifier_type", "testing").
                 AddTopLevelElement("shared_customer_identifier", "test-identifier");
 
-            HttpWebResponse response = httpService.Get(gateway.MerchantId, "credit_cards.json?" + builder.ToQueryString());
+            HttpWebResponse response = httpService.Get(gateway.MerchantId, "nonces.json?" + builder.ToQueryString());
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
             String responseBody = reader.ReadToEnd();
 
