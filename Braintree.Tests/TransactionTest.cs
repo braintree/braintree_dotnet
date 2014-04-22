@@ -12,8 +12,6 @@ namespace Braintree.Tests
     {
         private BraintreeGateway gateway;
         private BraintreeService service;
-        private BraintreeGateway three_d_secure_gateway;
-        private BraintreeService three_d_secure_service;
 
         [SetUp]
         public void Setup()
@@ -27,17 +25,6 @@ namespace Braintree.Tests
             };
 
             service = new BraintreeService(gateway.Configuration);
-
-            three_d_secure_gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "cardinal_integration_merchant_id",
-                PublicKey = "cardinal_integration_public_key",
-                PrivateKey = "cardinal_integration_private_key"
-            };
-
-            three_d_secure_service = new BraintreeService(three_d_secure_gateway.Configuration);
-
         }
 
         [Test]
@@ -1603,12 +1590,7 @@ namespace Braintree.Tests
         [Test]
         public void Sale_WithThreeDSecureToken()
         {
-            Random random = new Random();
-            int randomNumber = random.Next(0, 10000);
-            var three_d_secure_token = "3ds_token" + randomNumber;
-
-            TestHelper.CreateTest3DS(three_d_secure_service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
-                PublicId = three_d_secure_token,
+            var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
                 Number = SandboxValues.CreditCardNumber.VISA,
                 ExpirationMonth = "05",
                 ExpirationYear = "2009"
@@ -1616,6 +1598,7 @@ namespace Braintree.Tests
 
             var request = new TransactionRequest
             {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 ThreeDSecureToken = three_d_secure_token,
                 CreditCard = new TransactionCreditCardRequest
@@ -1625,7 +1608,7 @@ namespace Braintree.Tests
                 }
             };
 
-            Result<Transaction> result = three_d_secure_gateway.Transaction.Sale(request);
+            Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
@@ -1635,20 +1618,15 @@ namespace Braintree.Tests
         [Test]
         public void Sale_ErrorThreeDSecureTransactionDataDoesNotMatch()
         {
-            Random random = new Random();
-            int randomNumber = random.Next(0, 10000);
-            var three_d_secure_token = "3ds_token" + randomNumber;
-
-            TestHelper.CreateTest3DS(three_d_secure_service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
-                PublicId = three_d_secure_token,
+            var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
                 Number = SandboxValues.CreditCardNumber.VISA,
                 ExpirationMonth = "05",
                 ExpirationYear = "2009",
-                Status = "authenticate_successful"
             });
 
             var request = new TransactionRequest
             {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 ThreeDSecureToken = three_d_secure_token,
                 CreditCard = new TransactionCreditCardRequest
@@ -1658,7 +1636,7 @@ namespace Braintree.Tests
                 }
             };
 
-            Result<Transaction> result = three_d_secure_gateway.Transaction.Sale(request);
+            Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TRANSACTION_DATA_DOESNT_MATCH_VERIFY, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
         }
@@ -1670,6 +1648,7 @@ namespace Braintree.Tests
 
             var request = new TransactionRequest
             {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 ThreeDSecureToken = three_d_secure_token,
                 CreditCard = new TransactionCreditCardRequest
@@ -1679,7 +1658,7 @@ namespace Braintree.Tests
                 }
             };
 
-            Result<Transaction> result = three_d_secure_gateway.Transaction.Sale(request);
+            Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TOKEN_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
         }

@@ -131,11 +131,12 @@ namespace Braintree.Tests
       return GenerateUnlockedNonce(gateway, "4111111111111111", null);
     }
 
-    public static void CreateTest3DS(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
+    public static String Create3DSVerification(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
     {
-      String url = "/three_d_secure/create_test_3ds/" + merchantAccountId;
+      String url = "/three_d_secure/create_verification/" + merchantAccountId;
       NodeWrapper response = new NodeWrapper(service.Post(url, request));
       Assert.IsTrue(response.IsSuccess());
+      return response.GetString("three-d-secure-token");
     }
   }
 
