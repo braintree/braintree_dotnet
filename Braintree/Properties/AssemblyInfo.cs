@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Braintree Payment Gateway Client API")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Braintree Payment Solutions")]
+[assembly: AssemblyCompany("Braintree")]
 [assembly: AssemblyProduct("Braintree Payment Gateway Client API")]
-[assembly: AssemblyCopyright("Copyright © Braintree Payment Solutions 2013")]
+[assembly: AssemblyCopyright("Copyright © Braintree, a division of PayPal, Inc. 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

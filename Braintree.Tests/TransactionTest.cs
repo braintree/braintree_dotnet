@@ -1160,7 +1160,7 @@ namespace Braintree.Tests
                 {
                     FirstName = "Dan",
                     LastName = "Smith",
-                    Company = "Braintree Payment Solutions",
+                    Company = "Braintree",
                     Email = "dan@example.com",
                     Phone = "419-555-1234",
                     Fax = "419-555-1235",
@@ -1229,7 +1229,7 @@ namespace Braintree.Tests
             Customer customer = transaction.Customer;
             Assert.AreEqual("Dan", customer.FirstName);
             Assert.AreEqual("Smith", customer.LastName);
-            Assert.AreEqual("Braintree Payment Solutions", customer.Company);
+            Assert.AreEqual("Braintree", customer.Company);
             Assert.AreEqual("dan@example.com", customer.Email);
             Assert.AreEqual("419-555-1234", customer.Phone);
             Assert.AreEqual("419-555-1235", customer.Fax);
