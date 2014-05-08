@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 using Braintree.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace Braintree
 {
@@ -31,8 +32,22 @@ namespace Braintree
             return String.Format("{0}|{1}", Service.PublicKey, digest.ToLower());
         }
 
+        private bool PayloadMatches(string signature, string payload)
+        {
+            Sha1Hasher sha1Hasher = new Sha1Hasher();
+            string computedSignature = sha1Hasher.HmacHash(Service.PrivateKey, payload).ToLower();
+            Crypto crypto = new Crypto();
+            return crypto.SecureCompare (computedSignature, signature);
+        }
+
         private void ValidateSignature(string signature, string payload)
         {
+            Match match = Regex.Match (payload, @"[^A-Za-z0-9+=/\n]");
+            if (match.Success)
+            {
+                throw new InvalidSignatureException ("payload contains illegal characters");
+            }
+
             string matchingSignature = null;
             string[] signaturePairs = signature.Split('&');
 
@@ -49,12 +64,14 @@ namespace Braintree
                 }
             }
 
-            Sha1Hasher sha1Hasher = new Sha1Hasher();
-            string computedSignature = sha1Hasher.HmacHash(Service.PrivateKey, payload).ToLower();
-            Crypto crypto = new Crypto();
-            if (!crypto.SecureCompare(computedSignature, matchingSignature))
+            if (matchingSignature == null)
             {
-                throw new InvalidSignatureException();
+                throw new InvalidSignatureException ("no matching public key");
+            }
+
+            if (!(PayloadMatches(matchingSignature, payload) || PayloadMatches(matchingSignature, payload + "\n")))
+            {
+                throw new InvalidSignatureException ("signature does not match payload - one has been modified");
             }
         }
     }

@@ -44,20 +44,42 @@ namespace Braintree.Tests
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidSignatureException))]
-        public void Parse_WithInvalidSignature()
-        {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
-            gateway.WebhookNotification.Parse(sampleNotification["signature"] + "bad_stuff", sampleNotification["payload"]);
-        }
-
-
-        [Test]
-        [ExpectedException(typeof(InvalidSignatureException))]
-        public void Parse_WithInvalidPublicId()
+        [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="no matching public key")]
+        public void Parse_WithInvalidPublicKey()
         {
             Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse("bad" + sampleNotification["signature"], sampleNotification["payload"]);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="signature does not match payload - one has been modified")]
+        public void Parse_WithChangedPayload()
+        {
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            gateway.WebhookNotification.Parse(sampleNotification["signature"], "bad" + sampleNotification["payload"]);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="payload contains illegal characters")]
+        public void Parse_WithInvalidCharactersInPayload()
+        {
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            gateway.WebhookNotification.Parse(sampleNotification["signature"], "^& bad ,* chars @!" + sampleNotification["payload"]);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="signature does not match payload - one has been modified")]
+        public void Parse_AllowsAllValidChars()
+        {
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            gateway.WebhookNotification.Parse(sampleNotification["signature"], "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+=/\n");
+        }
+
+        [Test]
+        public void Retries()
+        {
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"].Trim());
         }
 
         [Test]
