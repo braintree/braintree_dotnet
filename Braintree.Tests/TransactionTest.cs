@@ -660,7 +660,7 @@ namespace Braintree.Tests
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
-                Id.Is("disputedtransaction").
+                Id.Is("2disputetransaction").
                 DisputeDate.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(2, gateway.Transaction.Search(searchRequest).MaximumCount);
@@ -1160,7 +1160,7 @@ namespace Braintree.Tests
                 {
                     FirstName = "Dan",
                     LastName = "Smith",
-                    Company = "Braintree Payment Solutions",
+                    Company = "Braintree",
                     Email = "dan@example.com",
                     Phone = "419-555-1234",
                     Fax = "419-555-1235",
@@ -1229,7 +1229,7 @@ namespace Braintree.Tests
             Customer customer = transaction.Customer;
             Assert.AreEqual("Dan", customer.FirstName);
             Assert.AreEqual("Smith", customer.LastName);
-            Assert.AreEqual("Braintree Payment Solutions", customer.Company);
+            Assert.AreEqual("Braintree", customer.Company);
             Assert.AreEqual("dan@example.com", customer.Email);
             Assert.AreEqual("419-555-1234", customer.Phone);
             Assert.AreEqual("419-555-1235", customer.Fax);
@@ -3376,5 +3376,19 @@ namespace Braintree.Tests
             Assert.AreEqual(transaction.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
         }
+
+        [Test]
+        public void CreateTransaction_WithPaymentMethodNonce()
+        {
+          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+          TransactionRequest request = new TransactionRequest
+          {
+            Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+            PaymentMethodNonce = nonce
+          };
+          Result<Transaction> result = gateway.Transaction.Credit(request);
+          Assert.IsTrue(result.IsSuccess());
+        }
     }
+
 }

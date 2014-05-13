@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{60234E7B-1181-4EFF-96EE-624B4524D788}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -54,13 +54,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressTest.cs" />
+    <Compile Include="ClientTokenTest.cs" />
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CreditCardTest.cs" />
     <Compile Include="CreditCardNumbers.cs" />
     <Compile Include="CreditCardDefaults.cs" />
     <Compile Include="CreditCardRequestTest.cs" />
     <Compile Include="CreditCardVerificationTest.cs" />
-    <Compile Include="CryptoTest.cs" />
     <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
     <Compile Include="QueryStringTest.cs" />
@@ -81,6 +81,9 @@
     <Compile Include="BraintreeServiceTest.cs" />
     <Compile Include="StringUtilTest.cs" />
     <Compile Include="SettlementBatchSummaryTest.cs" />
+    <Compile Include="Sha1HasherTest.cs" />
+    <Compile Include="Sha256HasherTest.cs" />
+    <Compile Include="SignatureServiceTest.cs" />
     <Compile Include="PlanFixture.cs" />
     <Compile Include="PlanTest.cs" />
     <Compile Include="PlanRequestForTests.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="DiscountTest.cs" />
     <Compile Include="DisbursementTest.cs" />
     <Compile Include="WebhookNotificationTest.cs" />
+    <Compile Include="CryptoTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

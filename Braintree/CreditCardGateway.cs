@@ -99,6 +99,19 @@ namespace Braintree
             return new CreditCard(new NodeWrapper(creditCardXML), Service);
         }
 
+        public virtual CreditCard FromNonce(String nonce)
+        {
+            if(nonce == null || nonce.Trim().Equals(""))
+                throw new NotFoundException();
+
+            try {
+                XmlNode creditCardXML = Service.Get("/payment_methods/from_nonce/" + nonce);
+                return new CreditCard(new NodeWrapper(creditCardXML), Service);
+            } catch (NotFoundException) {
+                throw new NotFoundException("Payment method with nonce " + nonce + " locked, consumed or not found");
+            }
+        }
+
         public virtual void Delete(String token)
         {
             Service.Delete("/payment_methods/" + token);

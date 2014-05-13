@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using NUnit.Framework;
-using Braintree;
 
 namespace Braintree.Tests
 {
@@ -10,19 +7,21 @@ namespace Braintree.Tests
     public class CryptoTest
     {
         [Test]
-        public void HmacHash_ReturnsCorrectHash()
+        public void SecureCompare_ReturnsTrueForEqualStrings()
         {
-            String actual = new Crypto().HmacHash("secretKey", "hello world");
-            Assert.AreEqual("D503D7A1A6ADBA1E6474E9FF2C4167F9DFDF4247", actual);
+            Assert.IsTrue(new Crypto().SecureCompare("a_string", "a_string"));
         }
 
         [Test]
-        public void Sha1Bytes_ReturnsCorrectHash()
+        public void SecureCompare_ReturnsFalseForDifferentLengthStrings()
         {
-            byte[] bytes = new Crypto().Sha1Bytes("hello world");
-            String hex = BitConverter.ToString(bytes);
-            String actual = hex.Replace("-", "");
-            Assert.AreEqual("2AAE6C35C94FCFB415DBE95F408B9CE91EE846ED", actual);
+            Assert.IsFalse (new Crypto ().SecureCompare ("a_string", "a_long_string"));
+        }
+
+        [Test]
+        public void SecureCompare_ReturnsFalseForDifferentStringsOfSameLength()
+        {
+            Assert.IsFalse (new Crypto ().SecureCompare ("a_string", "a_strong"));
         }
     }
 }

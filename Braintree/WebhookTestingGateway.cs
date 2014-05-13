@@ -27,12 +27,12 @@ namespace Braintree
         {
             string currentTime = DateTime.Now.ToUniversalTime().ToString("u");
             string payload = String.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind><subject>{2}</subject></notification>", currentTime, kind, SubjectSampleXml(kind, id));
-            return Convert.ToBase64String(Encoding.Default.GetBytes(payload)).Trim();
+            return Convert.ToBase64String(Encoding.Default.GetBytes(payload)) + '\n';
         }
 
         private string BuildSignature(string payload)
         {
-            return String.Format("{0}|{1}", Service.PublicKey, new Crypto().HmacHash(Service.PrivateKey, payload).Trim().ToLower());
+            return String.Format("{0}|{1}", Service.PublicKey, new Sha1Hasher().HmacHash(Service.PrivateKey, payload).Trim().ToLower());
         }
 
         private String SubjectSampleXml(WebhookKind kind, String id)

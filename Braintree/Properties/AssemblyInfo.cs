@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Braintree Payment Gateway Client API")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Braintree Payment Solutions")]
+[assembly: AssemblyCompany("Braintree")]
 [assembly: AssemblyProduct("Braintree Payment Gateway Client API")]
-[assembly: AssemblyCopyright("Copyright © Braintree Payment Solutions 2013")]
+[assembly: AssemblyCopyright("Copyright © Braintree, a division of PayPal, Inc. 2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -29,5 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("2.30.0.0")]
-[assembly: AssemblyFileVersion("2.30.0.0")]
+[assembly: AssemblyVersion("2.30.1.0")]
+[assembly: AssemblyFileVersion("2.30.1.0")]

@@ -27,8 +27,11 @@ namespace Braintree
                 trContent += "&" + requestQueryString;
             }
 
-            String trHash = new Crypto().HmacHash(service.PrivateKey, trContent);
-            return trHash + "|" + trContent;
+            SignatureService signatureService = new SignatureService {
+              Key = service.PrivateKey,
+              Hasher = new Sha1Hasher()
+            };
+            return signatureService.Sign(trContent);
         }
 
         public static Boolean IsValidTrQueryString(String queryString, BraintreeService service)
@@ -36,7 +39,7 @@ namespace Braintree
             string[] delimeters = new string[1];
             delimeters[0] = "&hash=";
             String[] dataSections = queryString.TrimStart('?').Split(delimeters, StringSplitOptions.None);
-            return dataSections[1] == new Crypto().HmacHash(service.PrivateKey, dataSections[0]).ToLower();
+            return dataSections[1] == new Sha1Hasher().HmacHash(service.PrivateKey, dataSections[0]).ToLower();
         }
 
         public static Boolean IsTrDataValid(String trData, BraintreeService service)
@@ -45,7 +48,7 @@ namespace Braintree
             String trHash = dataSections[0];
             String trContent = dataSections[1];
 
-            return trHash  == new Crypto().HmacHash(service.PrivateKey, trContent);
+            return trHash  == new Sha1Hasher().HmacHash(service.PrivateKey, trContent);
         }
     }
 }

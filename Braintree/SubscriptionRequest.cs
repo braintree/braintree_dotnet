@@ -35,6 +35,7 @@ namespace Braintree
         public Boolean? NeverExpires { get; set; }
         public SubscriptionOptionsRequest Options { get; set; }
         public String PaymentMethodToken { get; set; }
+        public String PaymentMethodNonce { get; set; }
         public String PlanId { get; set; }
         public Decimal? Price { get; set; }
         public Int32 TrialDuration { get; set; }
@@ -59,6 +60,7 @@ namespace Braintree
             builder.AddElement("descriptor", Descriptor);
             builder.AddElement("first-billing-date", FirstBillingDate);
             builder.AddElement("payment-method-token", PaymentMethodToken);
+            builder.AddElement("payment-method-nonce", PaymentMethodNonce);
             if (HasTrialPeriod.HasValue)
             {
                 builder.AddElement("trial-period", HasTrialPeriod.Value);
