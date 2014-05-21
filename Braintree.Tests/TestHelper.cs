@@ -88,11 +88,11 @@ namespace Braintree.Tests
 
     public static string extractParamFromJson(String keyName, String json)
     {
-        String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
-        Match match = Regex.Match(json, regex);
-        string keyValue = match.Groups[1].Value;
+      String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
+      Match match = Regex.Match(json, regex);
+      string keyValue = match.Groups[1].Value;
 
-        return keyValue;
+      return keyValue;
     }
 
     public static String GenerateUnlockedNonce(BraintreeGateway gateway, String creditCardNumber, String customerId)
@@ -102,9 +102,9 @@ namespace Braintree.Tests
         clientToken = gateway.ClientToken.generate();
       } else {
         clientToken = gateway.ClientToken.generate(new ClientTokenRequest
-            {
-                CustomerId = customerId
-            }
+          {
+            CustomerId = customerId
+          }
         );
       }
       var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
@@ -131,6 +131,13 @@ namespace Braintree.Tests
       return GenerateUnlockedNonce(gateway, "4111111111111111", null);
     }
 
+    public static String Create3DSVerification(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
+    {
+      String url = "/three_d_secure/create_verification/" + merchantAccountId;
+      NodeWrapper response = new NodeWrapper(service.Post(url, request));
+      Assert.IsTrue(response.IsSuccess());
+      return response.GetString("three-d-secure-token");
+    }
   }
 
   public class BraintreeTestHttpService

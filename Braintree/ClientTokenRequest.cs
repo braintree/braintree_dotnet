@@ -14,6 +14,7 @@ namespace Braintree
     {
         public String CustomerId { get; set; }
         public ClientTokenOptionsRequest Options { get; set; }
+        public String MerchantAccountId { get; set; }
 
         public override String ToXml()
         {
@@ -30,6 +31,7 @@ namespace Braintree
             RequestBuilder builder = new RequestBuilder(root);
 
             if (CustomerId != null) builder.AddElement("customer-id", CustomerId);
+            if (MerchantAccountId != null) builder.AddElement("merchant-account-id", MerchantAccountId);
             if (Options != null) builder.AddElement("options", Options);
 
             return builder;
