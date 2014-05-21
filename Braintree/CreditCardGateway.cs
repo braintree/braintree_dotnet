@@ -94,7 +94,7 @@ namespace Braintree
             if(token == null || token.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode creditCardXML = Service.Get("/payment_methods/" + token);
+            XmlNode creditCardXML = Service.Get("/payment_methods/credit_card/" + token);
 
             return new CreditCard(new NodeWrapper(creditCardXML), Service);
         }
@@ -114,12 +114,12 @@ namespace Braintree
 
         public virtual void Delete(String token)
         {
-            Service.Delete("/payment_methods/" + token);
+            Service.Delete("/payment_methods/credit_card/" + token);
         }
 
         public virtual Result<CreditCard> Update(String token, CreditCardRequest request)
         {
-            XmlNode creditCardXML = Service.Put("/payment_methods/" + token, request);
+            XmlNode creditCardXML = Service.Put("/payment_methods/credit_card/" + token, request);
 
             return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Service);
         }
