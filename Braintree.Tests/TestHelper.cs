@@ -126,6 +126,11 @@ namespace Braintree.Tests
       return match.Groups["nonce"].Value;
     }
 
+    public static String GenerateUnlockedNonce(BraintreeGateway gateway)
+    {
+      return GenerateUnlockedNonce(gateway, "4111111111111111", null);
+    }
+
     public static String GenerateOneTimePayPalNonce(BraintreeGateway gateway)
     {
         var clientToken = gateway.ClientToken.generate();
@@ -167,12 +172,6 @@ namespace Braintree.Tests
         Match match = regex.Match(responseBody);
         return match.Groups["nonce"].Value;
     }
-
-    public static String GenerateUnlockedNonce(BraintreeGateway gateway)
-    {
-      return GenerateUnlockedNonce(gateway, "4111111111111111", null);
-    }
-
   }
 
   public class BraintreeTestHttpService

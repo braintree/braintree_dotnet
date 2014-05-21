@@ -40,6 +40,26 @@ namespace Braintree.Tests
 
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsInstanceOfType(typeof(PayPalAccount), paymentMethodResult.Target);
+        }
+
+        [Test]
+        public void Create_CreatesCreditCardWithNonce()
+        {
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsInstanceOfType(typeof(CreditCard), paymentMethodResult.Target);
         }
     }
 }
