@@ -3396,15 +3396,112 @@ namespace Braintree.Tests
             String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
-              Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-              PaymentMethodNonce = nonce
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
             };
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
             Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+        }
+
+        [Test]
+        public void CreateTransaction_WithOneTimePayPalNonceAndAttemptToVault()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+        }
+
+        [Test]
+        public void CreateTransaction_WithFuturePayPalNonceAndAttemptToVault()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.Token);
+        }
+
+        [Test]
+        public void Void_PayPalTransaction()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Result<Transaction> voidResult = gateway.Transaction.Void(result.Target.Id);
+            Assert.IsTrue(voidResult.IsSuccess());
+        }
+
+        [Test]
+        public void SubmitForSettlement_PayPalTransaction()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Result<Transaction> settlementResult = gateway.Transaction.SubmitForSettlement(result.Target.Id);
+            Assert.IsTrue(settlementResult.IsSuccess());
+        }
+
+        [Test]
+        public void Refund_PayPalTransaction()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            var id = result.Target.Id;
+
+            TestHelper.Settle(service, id);
+
+            Result<Transaction> refundResult = gateway.Transaction.Refund(id);
+            Assert.IsTrue(refundResult.IsSuccess());
         }
     }
-
 }
