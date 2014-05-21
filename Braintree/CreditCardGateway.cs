@@ -37,7 +37,7 @@ namespace Braintree
         {
             XmlNode creditCardXML = Service.Post("/payment_methods", request);
 
-            return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Service);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
@@ -46,7 +46,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode creditCardXML = Service.Post("/payment_methods/all/confirm_transparent_redirect_request", trRequest);
 
-            return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Service);
         }
 
         public virtual ResourceCollection<CreditCard> Expired()
@@ -121,7 +121,7 @@ namespace Braintree
         {
             XmlNode creditCardXML = Service.Put("/payment_methods/" + token, request);
 
-            return new Result<CreditCard>(new NodeWrapper(creditCardXML), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Service);
         }
     }
 }

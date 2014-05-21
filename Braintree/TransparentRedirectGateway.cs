@@ -35,7 +35,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new Result<Transaction>(new NodeWrapper(node), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(node), Service);
         }
 
         public virtual Result<Customer> ConfirmCustomer(String queryString)
@@ -43,7 +43,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new Result<Customer>(new NodeWrapper(node), Service);
+            return new ResultImpl<Customer>(new NodeWrapper(node), Service);
         }
 
         public virtual Result<CreditCard> ConfirmCreditCard(String queryString)
@@ -51,7 +51,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new Result<CreditCard>(new NodeWrapper(node), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(node), Service);
         }
     }
 }

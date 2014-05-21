@@ -35,7 +35,7 @@ namespace Braintree
         private Result<SettlementBatchSummary> GetSummary(SettlementBatchSummaryRequest request)
         {
             NodeWrapper response = new NodeWrapper(Service.Post("/settlement_batch_summary", request));
-            return new Result<SettlementBatchSummary>(response, Service);
+            return new ResultImpl<SettlementBatchSummary>(response, Service);
         }
     }
 }

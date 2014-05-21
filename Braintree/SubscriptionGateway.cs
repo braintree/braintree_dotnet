@@ -26,7 +26,7 @@ namespace Braintree
         {
             XmlNode subscriptionXML = Service.Post("/subscriptions", request);
 
-            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
 
         public virtual Subscription Find(String id)
@@ -43,14 +43,14 @@ namespace Braintree
         {
             XmlNode subscriptionXML = Service.Put("/subscriptions/" + id, request);
 
-            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
 
         public virtual Result<Subscription> Cancel(String id)
         {
             XmlNode subscriptionXML = Service.Put("/subscriptions/" + id + "/cancel");
 
-            return new Result<Subscription>(new NodeWrapper(subscriptionXML), Service);
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Service);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Braintree
 
         private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest) {
            XmlNode response = Service.Post("/transactions", txnRequest);
-           return new Result<Transaction>(new NodeWrapper(response), Service);
+           return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
        }
 
        public Result<Transaction> RetryCharge(String subscriptionId) {
