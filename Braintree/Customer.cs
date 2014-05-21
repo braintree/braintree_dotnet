@@ -32,6 +32,7 @@ namespace Braintree
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public CreditCard[] CreditCards { get; protected set; }
+        public PayPalAccount[] PayPalAccounts { get; protected set; }
         public Address[] Addresses { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
 
@@ -55,6 +56,13 @@ namespace Braintree
             for (int i = 0; i < creditCardXmlNodes.Count; i++)
             {
                 CreditCards[i] = new CreditCard(creditCardXmlNodes[i], service);
+            }
+
+            var paypalXmlNodes = node.GetList("paypal-accounts/paypal-account");
+            PayPalAccounts = new PayPalAccount[paypalXmlNodes.Count];
+            for (int i = 0; i < paypalXmlNodes.Count; i++)
+            {
+                PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i]);
             }
 
             var addressXmlNodes = node.GetList("addresses/address");

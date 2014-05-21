@@ -391,13 +391,24 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithPaymentMethodNonce()
         {
-          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
-          Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
-              CreditCard = new CreditCardRequest{
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+                CreditCard = new CreditCardRequest{
                     PaymentMethodNonce = nonce
-              }
+                }
+            });
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Create_WithPayPalPaymentMethodNonce()
+        {
+          String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+          Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+              PaymentMethodNonce = nonce
           });
           Assert.IsTrue(result.IsSuccess());
+          Assert.AreEqual(1, result.Target.PayPalAccounts.Length);
         }
 
         #pragma warning disable 0618
