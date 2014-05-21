@@ -151,6 +151,7 @@ namespace Braintree
         public Dictionary<String, String> CustomFields { get; protected set; }
         public Decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
+        public PayPalDetails PayPalDetails { get; protected set; }
 
         private BraintreeService Service;
 
@@ -215,6 +216,11 @@ namespace Braintree
             Descriptor = new Descriptor(node.GetNode("descriptor"));
             ServiceFeeAmount = node.GetDecimal("service-fee-amount");
             DisbursementDetails = new DisbursementDetails(node.GetNode("disbursement-details"));
+            var paypalNode = node.GetNode("paypal");
+            if (paypalNode != null)
+            {
+                PayPalDetails = new PayPalDetails(paypalNode);
+            }
 
             BillingAddress = new Address(node.GetNode("billing"));
             ShippingAddress = new Address(node.GetNode("shipping"));

@@ -126,6 +126,27 @@ namespace Braintree.Tests
       return match.Groups["nonce"].Value;
     }
 
+    public static String GenerateOneTimePayPalNonce(BraintreeGateway gateway)
+    {
+        var clientToken = gateway.ClientToken.generate();
+        var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
+        RequestBuilder builder = new RequestBuilder("");
+        builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+            AddTopLevelElement("shared_customer_identifier_type", "testing").
+            AddTopLevelElement("shared_customer_identifier", "test-identifier").
+            AddTopLevelElement("paypal_account[access_token]", "access_token").
+            AddTopLevelElement("paypal_account[correlation_id]", System.Guid.NewGuid().ToString()).
+            AddTopLevelElement("paypal_account[options][validate]", "false");
+
+        HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+        StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+        String responseBody = reader.ReadToEnd();
+
+        Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
+        Match match = regex.Match(responseBody);
+        return match.Groups["nonce"].Value;
+    }
+
     public static String GenerateUnlockedNonce(BraintreeGateway gateway)
     {
       return GenerateUnlockedNonce(gateway, "4111111111111111", null);
@@ -172,6 +193,7 @@ namespace Braintree.Tests
         var response = request.GetResponse() as HttpWebResponse;
         return response;
       }
+
       catch (WebException e)
       {
         var response = (HttpWebResponse)e.Response;

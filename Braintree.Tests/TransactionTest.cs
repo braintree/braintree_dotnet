@@ -3380,14 +3380,30 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithPaymentMethodNonce()
         {
-          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
-          TransactionRequest request = new TransactionRequest
-          {
-            Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-            PaymentMethodNonce = nonce
-          };
-          Result<Transaction> result = gateway.Transaction.Credit(request);
-          Assert.IsTrue(result.IsSuccess());
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Credit(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void CreateTransaction_WithOneTimePayPalNonce()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+              Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+              PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
         }
     }
 
