@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
+using Braintree.Test;
 
 namespace Braintree.Tests
 {
@@ -1071,6 +1072,26 @@ namespace Braintree.Tests
           TransactionSearchRequest searchRequest = new TransactionSearchRequest().
               Amount.Is(-5);
           gateway.Transaction.Search(searchRequest);
+        }
+
+        [Test]
+        public void Search_OnPayPalFields()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment
+            };
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+
+            var searchRequest = new TransactionSearchRequest().
+                Id.Is(transactionResult.Target.Id).
+                PayPalPaymentId.StartsWith("PAY").
+                PayPalAuthorizationId.StartsWith("SALE").
+                PayPalPayerEmail.Is("payer@example.com");
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
