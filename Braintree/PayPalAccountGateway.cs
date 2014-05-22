@@ -15,11 +15,20 @@ namespace Braintree
 
         public PayPalAccount Find(String token)
         {
-
             XmlNode xml = Service.Get("/payment_methods/paypal_account/" + token);
 
             return new PayPalAccount(new NodeWrapper(xml));
-            //throw new NotFoundException();
+        }
+
+        public void Delete(String token)
+        {
+            Service.Delete("/payment_methods/paypal_account/" + token);
+        }
+
+        public Result<PayPalAccount> Update(String token, PayPalAccountRequest request)
+        {
+            XmlNode xml = Service.Put("/payment_methods/paypal_account/" + token, request);
+            return new ResultImpl<PayPalAccount>(new NodeWrapper(xml), Service);
         }
     }
 }

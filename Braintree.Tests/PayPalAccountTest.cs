@@ -10,7 +10,6 @@ namespace Braintree.Tests
     public class PayPalAccountTest
     {
         private BraintreeGateway gateway;
-        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -22,7 +21,6 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -74,6 +72,59 @@ namespace Braintree.Tests
                 gateway.PayPalAccount.Find(customer.CreditCards[0].Token);
                 Assert.Fail("Should throw NotFoundException");
             } catch (NotFoundException) {}
+        }
+
+        [Test]
+        public void Delete_ReturnsPayPalAccountByToken()
+        {
+            Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customerResult.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customerResult.Target.Id,
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            gateway.PayPalAccount.Delete(result.Target.Token);
+        }
+
+        [Test]
+        public void Delete_RaisesNotFoundErrorForUnknownToken()
+        {
+            try {
+                gateway.PayPalAccount.Delete(" ");
+                Assert.Fail("Should throw NotFoundException");
+            } catch (NotFoundException) {}
+        }
+
+        [Test]
+        public void Update_CanUpdateToken()
+        {
+            Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customerResult.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customerResult.Target.Id,
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            String newToken = Guid.NewGuid().ToString();
+            var updateRequest = new PayPalAccountRequest
+            {
+                Token = newToken
+            };
+            var updateResult = gateway.PayPalAccount.Update(result.Target.Token, updateRequest);
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.AreEqual(newToken, updateResult.Target.Token);
         }
     }
 }

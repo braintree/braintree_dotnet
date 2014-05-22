@@ -118,6 +118,7 @@
     <Compile Include="PaymentMethodRequest.cs" />
     <Compile Include="PayPalAccount.cs" />
     <Compile Include="PayPalAccountGateway.cs" />
+    <Compile Include="PayPalAccountRequest.cs" />
     <Compile Include="PayPalDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryString.cs" />
