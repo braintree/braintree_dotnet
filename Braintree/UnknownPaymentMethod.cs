@@ -10,5 +10,9 @@ namespace Braintree
         {
             Token = node.GetString("token");
         }
+
+        public UnknownPaymentMethod()
+        {
+        }
     }
 }
