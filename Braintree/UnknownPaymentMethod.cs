@@ -10,6 +10,7 @@ namespace Braintree
         public UnknownPaymentMethod(NodeWrapper node)
         {
             Token = node.GetString("token");
+            IsDefault = node.GetBoolean("default");
         }
 
         public UnknownPaymentMethod()
