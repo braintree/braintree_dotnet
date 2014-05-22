@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Braintree.Exceptions;
+using Braintree.Test;
 
 namespace Braintree.Tests
 {
@@ -408,7 +409,9 @@ namespace Braintree.Tests
                 PaymentMethodNonce = nonce
             });
             Assert.IsTrue(result.IsSuccess());
-            Assert.AreEqual(1, result.Target.PayPalAccounts.Length);
+            var customer = result.Target;
+            Assert.AreEqual(1, customer.PayPalAccounts.Length);
+            Assert.AreEqual(customer.PayPalAccounts[0].Token, customer.DefaultPaymentMethod.Token);
         }
 
         #pragma warning disable 0618
@@ -713,6 +716,30 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Update_AcceptsPaymentMethodNonce()
+        {
+            var create = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/18",
+                }
+            };
+            var customer = gateway.Customer.Create(create).Target;
+
+            var update = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            var updatedCustomer = gateway.Customer.Update(customer.Id, update).Target;
+
+            Assert.AreEqual(1, updatedCustomer.PayPalAccounts.Length);
+            Assert.AreEqual(1, updatedCustomer.CreditCards.Length);
+            Assert.AreEqual(2, updatedCustomer.PaymentMethods.Length);
+        }
+
+        [Test]
         public void Delete_DeletesTheCustomer()
         {
             String id = Guid.NewGuid().ToString();
@@ -885,6 +912,23 @@ namespace Braintree.Tests
                 CreatedAt.Between(threeHoursEarlier, oneHourEarlier);
 
             Assert.AreEqual(0, gateway.Customer.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnPayPalAccountEmail()
+        {
+            var request = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+
+            var customer = gateway.Customer.Create(request).Target;
+
+            var search = new CustomerSearchRequest().
+                Id.Is(customer.Id).
+                PayPalAccountEmail.Is(customer.PayPalAccounts[0].Email);
+
+            Assert.AreEqual(1, gateway.Customer.Search(search).MaximumCount);
         }
     }
 }

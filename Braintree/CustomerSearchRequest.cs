@@ -162,6 +162,13 @@ namespace Braintree
                 return new IsNode<CustomerSearchRequest>("payment-method-token-with-duplicates", this);
             }
         }
+        public TextNode<CustomerSearchRequest> PayPalAccountEmail
+        {
+            get
+            {
+                return new TextNode<CustomerSearchRequest>("paypal-account-email", this);
+            }
+        }
         public EqualityNode<CustomerSearchRequest> CreditCardExpirationDate
         {
             get

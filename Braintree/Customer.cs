@@ -33,8 +33,23 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public CreditCard[] CreditCards { get; protected set; }
         public PayPalAccount[] PayPalAccounts { get; protected set; }
+        public PaymentMethod[] PaymentMethods { get; protected set; }
         public Address[] Addresses { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
+        public PaymentMethod DefaultPaymentMethod
+        {
+            get
+            {
+                foreach (PaymentMethod paymentMethod in PaymentMethods)
+                {
+                    if (paymentMethod.IsDefault.Value)
+                    {
+                        return paymentMethod;
+                    }
+                }
+                return null;
+            }
+        }
 
         protected internal Customer(NodeWrapper node, BraintreeService service)
         {
@@ -64,6 +79,10 @@ namespace Braintree
             {
                 PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i]);
             }
+
+            PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length];
+            CreditCards.CopyTo(PaymentMethods, 0);
+            PayPalAccounts.CopyTo(PaymentMethods, CreditCards.Length);
 
             var addressXmlNodes = node.GetList("addresses/address");
             Addresses = new Address[addressXmlNodes.Count];
