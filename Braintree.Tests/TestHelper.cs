@@ -95,6 +95,15 @@ namespace Braintree.Tests
       return keyValue;
     }
 
+    public static int extractIntParamFromJson(String keyName, String json)
+    {
+      String regex = string.Format("\"{0}\":\\s?(\\d+)", keyName);
+      Match match = Regex.Match(json, regex);
+      int keyValue = Convert.ToInt32(match.Groups[1].Value);
+
+      return keyValue;
+    }
+
     public static String GenerateUnlockedNonce(BraintreeGateway gateway, String creditCardNumber, String customerId)
     {
       var clientToken = "";
