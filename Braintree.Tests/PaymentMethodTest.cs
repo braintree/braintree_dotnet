@@ -84,6 +84,41 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CanMakeDefaultAndSetToken()
+        {
+            Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customerResult.IsSuccess());
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customerResult.Target.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+            Assert.IsTrue(creditCard.IsDefault.Value);
+
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Random random = new Random();
+            int randomNumber = random.Next(0, 10000);
+            var token = "token_" + randomNumber;
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customerResult.Target.Id,
+                PaymentMethodNonce = nonce,
+                Token = token,
+                Options = new PaymentMethodOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsTrue(paymentMethodResult.Target.IsDefault.Value);
+            Assert.AreEqual(token, paymentMethodResult.Target.Token);
+        }
+
+        [Test]
         public void Delete_DeletesCreditCard()
         {
             var request = new PaymentMethodRequest

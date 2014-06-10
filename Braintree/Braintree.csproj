@@ -115,6 +115,7 @@
     <Compile Include="PartialMatchNode.cs" />
     <Compile Include="PaymentMethod.cs" />
     <Compile Include="PaymentMethodGateway.cs" />
+    <Compile Include="PaymentMethodOptionsRequest.cs" />
     <Compile Include="PaymentMethodRequest.cs" />
     <Compile Include="PayPalAccount.cs" />
     <Compile Include="PayPalAccountGateway.cs" />

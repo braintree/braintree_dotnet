@@ -5,7 +5,9 @@ namespace Braintree
     public class PaymentMethodRequest : Request
     {
         public String CustomerId { get; set; }
+        public String Token { get; set; }
         public String PaymentMethodNonce { get; set; }
+        public PaymentMethodOptionsRequest Options { get; set; }
 
         public override String ToXml()
         {
@@ -21,7 +23,9 @@ namespace Braintree
         {
             return new RequestBuilder(root).
                 AddElement("customer-id", CustomerId).
-                AddElement("payment-method-nonce", PaymentMethodNonce);
+                AddElement("payment-method-nonce", PaymentMethodNonce).
+                AddElement("token", Token).
+                AddElement("options", Options);
         }
     }
 }
