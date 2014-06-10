@@ -88,11 +88,20 @@ namespace Braintree.Tests
 
     public static string extractParamFromJson(String keyName, String json)
     {
-        String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
-        Match match = Regex.Match(json, regex);
-        string keyValue = match.Groups[1].Value;
+      String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
+      Match match = Regex.Match(json, regex);
+      string keyValue = match.Groups[1].Value;
 
-        return keyValue;
+      return keyValue;
+    }
+
+    public static int extractIntParamFromJson(String keyName, String json)
+    {
+      String regex = string.Format("\"{0}\":\\s?(\\d+)", keyName);
+      Match match = Regex.Match(json, regex);
+      int keyValue = Convert.ToInt32(match.Groups[1].Value);
+
+      return keyValue;
     }
 
     public static String GenerateUnlockedNonce(BraintreeGateway gateway, String creditCardNumber, String customerId)
@@ -102,9 +111,9 @@ namespace Braintree.Tests
         clientToken = gateway.ClientToken.generate();
       } else {
         clientToken = gateway.ClientToken.generate(new ClientTokenRequest
-            {
-                CustomerId = customerId
-            }
+          {
+            CustomerId = customerId
+          }
         );
       }
       var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
@@ -171,6 +180,14 @@ namespace Braintree.Tests
         Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
         Match match = regex.Match(responseBody);
         return match.Groups["nonce"].Value;
+    }
+
+    public static String Create3DSVerification(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
+    {
+      String url = "/three_d_secure/create_verification/" + merchantAccountId;
+      NodeWrapper response = new NodeWrapper(service.Post(url, request));
+      Assert.IsTrue(response.IsSuccess());
+      return response.GetString("three-d-secure-token");
     }
   }
 

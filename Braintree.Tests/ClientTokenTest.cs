@@ -120,6 +120,26 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Generate_SupportsVersionOption()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+            var clientToken = gateway.ClientToken.generate(
+                new ClientTokenRequest
+                {
+                    Version = 1
+                }
+            );
+            int version = TestHelper.extractIntParamFromJson("version", clientToken);
+            Assert.AreEqual(1, version);
+        }
+
+        [Test]
         public void Generate_GatewayRespectsVerifyCard()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -267,6 +287,28 @@ namespace Braintree.Tests
                     Assert.IsTrue(creditCard.IsDefault.Value);
                 }
             }
+        }
+
+        [Test]
+        public void Generate_GatewayAcceptsMerchantAccountId()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+
+            var clientToken = gateway.ClientToken.generate(
+                new ClientTokenRequest
+                {
+                    MerchantAccountId = "my_merchant_account"
+                }
+            );
+            var merchantAccountId = TestHelper.extractParamFromJson("merchantAccountId", clientToken);
+
+            Assert.AreEqual(merchantAccountId, "my_merchant_account");
         }
     }
 }

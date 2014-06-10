@@ -71,7 +71,7 @@ namespace Braintree.Tests
             Assert.IsFalse(trData.Contains("store_shipping_address_in_vault"));
             Assert.IsFalse(trData.Contains("submit_for_settlement"));
 
-		}
+        }
 
         [Test]
         public void Search_OnAllTextFields()
@@ -1606,6 +1606,82 @@ namespace Braintree.Tests
 
             Assert.IsNotNull(transaction.BillingAddress.Id);
             Assert.IsNotNull(transaction.ShippingAddress.Id);
+        }
+
+        [Test]
+        public void Sale_WithThreeDSecureToken()
+        {
+            var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009"
+            });
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureToken = three_d_secure_token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+
+        [Test]
+        public void Sale_ErrorThreeDSecureTransactionDataDoesNotMatch()
+        {
+            var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009",
+            });
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureToken = three_d_secure_token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TRANSACTION_DATA_DOESNT_MATCH_VERIFY, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithNullThreeDSecureToken()
+        {
+            String three_d_secure_token = null;
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureToken = three_d_secure_token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TOKEN_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
         }
 
         [Test]
