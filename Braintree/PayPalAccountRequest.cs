@@ -5,6 +5,7 @@ namespace Braintree
     public class PayPalAccountRequest : Request
     {
         public String Token { get; set; }
+        public PayPalOptionsRequest Options { get; set; }
 
         public override String ToXml()
         {
@@ -19,6 +20,7 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(String root)
         {
             return new RequestBuilder(root).
+                AddElement("options", Options).
                 AddElement("token", Token);
         }
     }

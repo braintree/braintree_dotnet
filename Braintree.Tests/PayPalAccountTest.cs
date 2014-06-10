@@ -126,5 +126,42 @@ namespace Braintree.Tests
             Assert.IsTrue(updateResult.IsSuccess());
             Assert.AreEqual(newToken, updateResult.Target.Token);
         }
+
+        [Test]
+        public void Update_CanMakeDefault()
+        {
+            Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customerResult.IsSuccess());
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customerResult.Target.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+            Assert.IsTrue(creditCard.IsDefault.Value);
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customerResult.Target.Id,
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            var updateRequest = new PayPalAccountRequest
+            {
+                Options = new PayPalOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            };
+            var updateResult = gateway.PayPalAccount.Update(result.Target.Token, updateRequest);
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.IsTrue(updateResult.Target.IsDefault.Value);
+        }
     }
 }
