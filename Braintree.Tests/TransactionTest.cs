@@ -3501,6 +3501,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
             Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
             Assert.IsNull(result.Target.PayPalDetails.Token);
         }
 

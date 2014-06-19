@@ -6,5 +6,6 @@ namespace Braintree
     {
         String Token { get; }
         Boolean? IsDefault { get; }
+        String ImageUrl { get; }
     }
 }

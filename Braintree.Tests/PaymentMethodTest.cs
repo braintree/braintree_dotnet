@@ -40,6 +40,7 @@ namespace Braintree.Tests
 
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
             Assert.IsInstanceOfType(typeof(PayPalAccount), paymentMethodResult.Target);
         }
 

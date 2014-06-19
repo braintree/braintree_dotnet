@@ -37,10 +37,12 @@ namespace Braintree.Tests
             Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
 
             Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.ImageUrl);
 
             PayPalAccount found = gateway.PayPalAccount.Find(result.Target.Token);
             Assert.IsNotNull(found);
             Assert.IsNotNull(found.Email);
+            Assert.IsNotNull(found.ImageUrl);
             Assert.AreEqual(found.Email, ((PayPalAccount) result.Target).Email);
         }
 

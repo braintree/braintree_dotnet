@@ -8,6 +8,7 @@ namespace Braintree
         public String PaymentId { get; protected set; }
         public String AuthorizationId { get; protected set; }
         public String Token { get; protected set; }
+        public String ImageUrl { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -15,6 +16,7 @@ namespace Braintree
             PaymentId = node.GetString("payment-id");
             AuthorizationId = node.GetString("authorization-id");
             Token = node.GetString("token");
+            ImageUrl = node.GetString("image-url");
         }
     }
 }
