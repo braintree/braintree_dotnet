@@ -12,6 +12,8 @@ namespace Braintree
     /// </summary>
     public class ClientTokenRequest : Request
     {
+        private readonly int DEFAULT_VERSION = 2;
+
         public String CustomerId { get; set; }
         public int Version { get; set; }
         public ClientTokenOptionsRequest Options { get; set; }
@@ -19,7 +21,7 @@ namespace Braintree
 
         public ClientTokenRequest()
         {
-            Version = 2;
+            Version = DEFAULT_VERSION;
         }
 
         public override String ToXml()
