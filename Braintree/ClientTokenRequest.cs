@@ -17,6 +17,11 @@ namespace Braintree
         public ClientTokenOptionsRequest Options { get; set; }
         public String MerchantAccountId { get; set; }
 
+        public ClientTokenRequest()
+        {
+            Version = 2;
+        }
+
         public override String ToXml()
         {
             return ToXml("client-token");

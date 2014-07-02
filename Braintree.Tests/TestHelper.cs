@@ -14,6 +14,14 @@ namespace Braintree.Tests
   public class TestHelper
   {
 
+    public static String GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
+    {
+      var encodedClientToken = gateway.ClientToken.generate(request);
+      var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
+      var unescapedClientToken = System.Text.RegularExpressions.Regex.Unescape(decodedClientToken);
+      return unescapedClientToken;
+    }
+
     public static int CompareModificationsById(Modification left, Modification right)
     {
       return left.Id.CompareTo(right.Id);
@@ -108,9 +116,9 @@ namespace Braintree.Tests
     {
       var clientToken = "";
       if (customerId ==  null) {
-        clientToken = gateway.ClientToken.generate();
+        clientToken = TestHelper.GenerateDecodedClientToken(gateway);
       } else {
-        clientToken = gateway.ClientToken.generate(new ClientTokenRequest
+        clientToken = TestHelper.GenerateDecodedClientToken(gateway, new ClientTokenRequest
           {
             CustomerId = customerId
           }
@@ -142,7 +150,7 @@ namespace Braintree.Tests
 
     public static String GenerateOneTimePayPalNonce(BraintreeGateway gateway)
     {
-        var clientToken = gateway.ClientToken.generate();
+        var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
         var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
         RequestBuilder builder = new RequestBuilder("");
         builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
@@ -163,7 +171,7 @@ namespace Braintree.Tests
 
     public static String GenerateFuturePaymentPayPalNonce(BraintreeGateway gateway)
     {
-        var clientToken = gateway.ClientToken.generate();
+        var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
         var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
         RequestBuilder builder = new RequestBuilder("");
         builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).

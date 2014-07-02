@@ -513,7 +513,7 @@ namespace Braintree.Tests
         public void FromNonce_ReturnsErrorWhenProvidedLockedNonce()
         {
             var httpService = new BraintreeTestHttpService();
-            var clientToken = gateway.ClientToken.generate();
+            var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
