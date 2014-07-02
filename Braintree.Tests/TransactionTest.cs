@@ -1162,6 +1162,42 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_ReturnsPaymentInstrumentType()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(PaymentInstrumentType.CREDIT_CARD, transaction.PaymentInstrumentType);
+        }
+
+        [Test]
+        public void Sale_ReturnsPaymentInstrumentTypeForPayPal()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(PaymentInstrumentType.PAYPAL_ACCOUNT, transaction.PaymentInstrumentType);
+        }
+
+        [Test]
         public void Sale_WithAllAttributes()
         {
             TransactionRequest request = new TransactionRequest
