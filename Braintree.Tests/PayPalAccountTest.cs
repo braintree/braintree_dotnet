@@ -43,6 +43,8 @@ namespace Braintree.Tests
             Assert.IsNotNull(found);
             Assert.IsNotNull(found.Email);
             Assert.IsNotNull(found.ImageUrl);
+            Assert.IsNotNull(found.CreatedAt);
+            Assert.IsNotNull(found.UpdatedAt);
             Assert.AreEqual(found.Email, ((PayPalAccount) result.Target).Email);
         }
 
