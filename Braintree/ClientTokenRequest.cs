@@ -12,8 +12,17 @@ namespace Braintree
     /// </summary>
     public class ClientTokenRequest : Request
     {
+        private readonly int DEFAULT_VERSION = 2;
+
         public String CustomerId { get; set; }
+        public int Version { get; set; }
         public ClientTokenOptionsRequest Options { get; set; }
+        public String MerchantAccountId { get; set; }
+
+        public ClientTokenRequest()
+        {
+            Version = DEFAULT_VERSION;
+        }
 
         public override String ToXml()
         {
@@ -30,6 +39,8 @@ namespace Braintree
             RequestBuilder builder = new RequestBuilder(root);
 
             if (CustomerId != null) builder.AddElement("customer-id", CustomerId);
+            if (Version != 0) builder.AddElement("version", Version);
+            if (MerchantAccountId != null) builder.AddElement("merchant-account-id", MerchantAccountId);
             if (Options != null) builder.AddElement("options", Options);
 
             return builder;

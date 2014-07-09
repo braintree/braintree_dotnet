@@ -14,6 +14,14 @@ namespace Braintree.Tests
   public class TestHelper
   {
 
+    public static String GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
+    {
+      var encodedClientToken = gateway.ClientToken.generate(request);
+      var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
+      var unescapedClientToken = System.Text.RegularExpressions.Regex.Unescape(decodedClientToken);
+      return unescapedClientToken;
+    }
+
     public static int CompareModificationsById(Modification left, Modification right)
     {
       return left.Id.CompareTo(right.Id);
@@ -88,23 +96,32 @@ namespace Braintree.Tests
 
     public static string extractParamFromJson(String keyName, String json)
     {
-        String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
-        Match match = Regex.Match(json, regex);
-        string keyValue = match.Groups[1].Value;
+      String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
+      Match match = Regex.Match(json, regex);
+      string keyValue = match.Groups[1].Value;
 
-        return keyValue;
+      return keyValue;
+    }
+
+    public static int extractIntParamFromJson(String keyName, String json)
+    {
+      String regex = string.Format("\"{0}\":\\s?(\\d+)", keyName);
+      Match match = Regex.Match(json, regex);
+      int keyValue = Convert.ToInt32(match.Groups[1].Value);
+
+      return keyValue;
     }
 
     public static String GenerateUnlockedNonce(BraintreeGateway gateway, String creditCardNumber, String customerId)
     {
       var clientToken = "";
       if (customerId ==  null) {
-        clientToken = gateway.ClientToken.generate();
+        clientToken = TestHelper.GenerateDecodedClientToken(gateway);
       } else {
-        clientToken = gateway.ClientToken.generate(new ClientTokenRequest
-            {
-                CustomerId = customerId
-            }
+        clientToken = TestHelper.GenerateDecodedClientToken(gateway, new ClientTokenRequest
+          {
+            CustomerId = customerId
+          }
         );
       }
       var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
@@ -131,6 +148,55 @@ namespace Braintree.Tests
       return GenerateUnlockedNonce(gateway, "4111111111111111", null);
     }
 
+    public static String GenerateOneTimePayPalNonce(BraintreeGateway gateway)
+    {
+        var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
+        var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
+        RequestBuilder builder = new RequestBuilder("");
+        builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+            AddTopLevelElement("shared_customer_identifier_type", "testing").
+            AddTopLevelElement("shared_customer_identifier", "test-identifier").
+            AddTopLevelElement("paypal_account[access_token]", "access_token").
+            AddTopLevelElement("paypal_account[correlation_id]", System.Guid.NewGuid().ToString()).
+            AddTopLevelElement("paypal_account[options][validate]", "false");
+
+        HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+        StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+        String responseBody = reader.ReadToEnd();
+
+        Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
+        Match match = regex.Match(responseBody);
+        return match.Groups["nonce"].Value;
+    }
+
+    public static String GenerateFuturePaymentPayPalNonce(BraintreeGateway gateway)
+    {
+        var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
+        var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
+        RequestBuilder builder = new RequestBuilder("");
+        builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+            AddTopLevelElement("shared_customer_identifier_type", "testing").
+            AddTopLevelElement("shared_customer_identifier", "test-identifier").
+            AddTopLevelElement("paypal_account[consent_code]", "consent").
+            AddTopLevelElement("paypal_account[correlation_id]", System.Guid.NewGuid().ToString()).
+            AddTopLevelElement("paypal_account[options][validate]", "false");
+
+        HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+        StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+        String responseBody = reader.ReadToEnd();
+
+        Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
+        Match match = regex.Match(responseBody);
+        return match.Groups["nonce"].Value;
+    }
+
+    public static String Create3DSVerification(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
+    {
+      String url = "/three_d_secure/create_verification/" + merchantAccountId;
+      NodeWrapper response = new NodeWrapper(service.Post(url, request));
+      Assert.IsTrue(response.IsSuccess());
+      return response.GetString("three-d-secure-token");
+    }
   }
 
   public class BraintreeTestHttpService
@@ -172,6 +238,7 @@ namespace Braintree.Tests
         var response = request.GetResponse() as HttpWebResponse;
         return response;
       }
+
       catch (WebException e)
       {
         var response = (HttpWebResponse)e.Response;

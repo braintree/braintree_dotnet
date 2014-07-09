@@ -53,6 +53,16 @@ namespace Braintree
         public String VenmoSdkPaymentMethodCode { get; set; }
         public String PaymentMethodNonce { get; set; }
         public Decimal? ServiceFeeAmount { get; set; }
+        private bool _threeDSecureTransaction;
+        private String _threeDSecureToken;
+        public String ThreeDSecureToken {
+            get { return _threeDSecureToken; }
+            set
+            {
+                _threeDSecureTransaction = true;
+                _threeDSecureToken = value;
+            }
+        }
 
         public TransactionRequest()
         {
@@ -119,7 +129,9 @@ namespace Braintree
             builder.AddElement("shipping", ShippingAddress);
             builder.AddElement("options", Options);
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
-
+            if (_threeDSecureTransaction) {
+                builder.AddElement("three-d-secure-token", ThreeDSecureToken ?? "");
+            }
             return builder;
         }
     }

@@ -95,6 +95,20 @@ namespace Braintree
         protected TransactionCreatedUsing(String name) : base(name) {}
     }
 
+
+    public class PaymentInstrumentType : Enumeration
+    {
+        public static readonly PaymentInstrumentType PAYPAL_ACCOUNT = new PaymentInstrumentType("paypal_account");
+        public static readonly PaymentInstrumentType SEPA_BANK_ACCOUNT= new PaymentInstrumentType("sepa_bank_account");
+        public static readonly PaymentInstrumentType CREDIT_CARD = new PaymentInstrumentType("credit_card");
+        public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
+        public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
+
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, SEPA_BANK_ACCOUNT, CREDIT_CARD, ANY, UNKNOWN };
+
+        protected PaymentInstrumentType(String name) : base(name) {}
+    }
+
     /// <summary>
     /// A transaction returned by the Braintree Gateway
     /// </summary>
@@ -151,6 +165,8 @@ namespace Braintree
         public Dictionary<String, String> CustomFields { get; protected set; }
         public Decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
+        public PayPalDetails PayPalDetails { get; protected set; }
+        public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
 
         private BraintreeService Service;
 
@@ -169,6 +185,11 @@ namespace Braintree
                 TransactionGatewayRejectionReason.ALL,
                 node.GetString("gateway-rejection-reason"),
                 TransactionGatewayRejectionReason.UNRECOGNIZED
+            );
+            PaymentInstrumentType = (PaymentInstrumentType)CollectionUtil.Find(
+                PaymentInstrumentType.ALL,
+                node.GetString("payment-instrument-type"),
+                PaymentInstrumentType.UNKNOWN
             );
             Channel = node.GetString("channel");
             OrderId = node.GetString("order-id");
@@ -215,6 +236,11 @@ namespace Braintree
             Descriptor = new Descriptor(node.GetNode("descriptor"));
             ServiceFeeAmount = node.GetDecimal("service-fee-amount");
             DisbursementDetails = new DisbursementDetails(node.GetNode("disbursement-details"));
+            var paypalNode = node.GetNode("paypal");
+            if (paypalNode != null)
+            {
+                PayPalDetails = new PayPalDetails(paypalNode);
+            }
 
             BillingAddress = new Address(node.GetNode("billing"));
             ShippingAddress = new Address(node.GetNode("shipping"));

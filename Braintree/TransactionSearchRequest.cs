@@ -260,6 +260,27 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("order-id", this);
             }
         }
+        public TextNode<TransactionSearchRequest> PayPalAuthorizationId
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("paypal-authorization-id", this);
+            }
+        }
+        public TextNode<TransactionSearchRequest> PayPalPayerEmail
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("paypal-payer-email", this);
+            }
+        }
+        public TextNode<TransactionSearchRequest> PayPalPaymentId
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("paypal-payment-id", this);
+            }
+        }
         public TextNode<TransactionSearchRequest> PaymentMethodToken
         {
             get

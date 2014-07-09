@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
+using Braintree.Test;
 
 namespace Braintree.Tests
 {
@@ -70,7 +71,7 @@ namespace Braintree.Tests
             Assert.IsFalse(trData.Contains("store_shipping_address_in_vault"));
             Assert.IsFalse(trData.Contains("submit_for_settlement"));
 
-		}
+        }
 
         [Test]
         public void Search_OnAllTextFields()
@@ -1074,6 +1075,26 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Search_OnPayPalFields()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment
+            };
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+
+            var searchRequest = new TransactionSearchRequest().
+                Id.Is(transactionResult.Target.Id).
+                PayPalPaymentId.StartsWith("PAY").
+                PayPalAuthorizationId.StartsWith("SALE").
+                PayPalPayerEmail.Is("payer@example.com");
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
@@ -1138,6 +1159,42 @@ namespace Braintree.Tests
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+        }
+
+        [Test]
+        public void Sale_ReturnsPaymentInstrumentType()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(PaymentInstrumentType.CREDIT_CARD, transaction.PaymentInstrumentType);
+        }
+
+        [Test]
+        public void Sale_ReturnsPaymentInstrumentTypeForPayPal()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(PaymentInstrumentType.PAYPAL_ACCOUNT, transaction.PaymentInstrumentType);
         }
 
         [Test]
@@ -1585,6 +1642,82 @@ namespace Braintree.Tests
 
             Assert.IsNotNull(transaction.BillingAddress.Id);
             Assert.IsNotNull(transaction.ShippingAddress.Id);
+        }
+
+        [Test]
+        public void Sale_WithThreeDSecureToken()
+        {
+            var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009"
+            });
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureToken = three_d_secure_token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+
+        [Test]
+        public void Sale_ErrorThreeDSecureTransactionDataDoesNotMatch()
+        {
+            var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009",
+            });
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureToken = three_d_secure_token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TRANSACTION_DATA_DOESNT_MATCH_VERIFY, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithNullThreeDSecureToken()
+        {
+            String three_d_secure_token = null;
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureToken = three_d_secure_token,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TOKEN_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
         }
 
         [Test]
@@ -3380,15 +3513,129 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithPaymentMethodNonce()
         {
-          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
-          TransactionRequest request = new TransactionRequest
-          {
-            Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-            PaymentMethodNonce = nonce
-          };
-          Result<Transaction> result = gateway.Transaction.Credit(request);
-          Assert.IsTrue(result.IsSuccess());
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Credit(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void CreateTransaction_WithOneTimePayPalNonce()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+        }
+
+        [Test]
+        public void CreateTransaction_WithOneTimePayPalNonceAndAttemptToVault()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+        }
+
+        [Test]
+        public void CreateTransaction_WithFuturePayPalNonceAndAttemptToVault()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.Token);
+        }
+
+        [Test]
+        public void Void_PayPalTransaction()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Result<Transaction> voidResult = gateway.Transaction.Void(result.Target.Id);
+            Assert.IsTrue(voidResult.IsSuccess());
+        }
+
+        [Test]
+        public void SubmitForSettlement_PayPalTransaction()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Result<Transaction> settlementResult = gateway.Transaction.SubmitForSettlement(result.Target.Id);
+            Assert.IsTrue(settlementResult.IsSuccess());
+        }
+
+        [Test]
+        public void Refund_PayPalTransaction()
+        {
+            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            var id = result.Target.Id;
+
+            TestHelper.Settle(service, id);
+
+            Result<Transaction> refundResult = gateway.Transaction.Refund(id);
+            Assert.IsTrue(refundResult.IsSuccess());
         }
     }
-
 }

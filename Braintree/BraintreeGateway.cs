@@ -141,6 +141,16 @@ namespace Braintree
             get { return new MerchantAccountGateway(new BraintreeService(Configuration)); }
         }
 
+        public virtual PaymentMethodGateway PaymentMethod
+        {
+            get { return new PaymentMethodGateway(new BraintreeService(Configuration)); }
+        }
+
+        public virtual PayPalAccountGateway PayPalAccount
+        {
+            get { return new PayPalAccountGateway(new BraintreeService(Configuration)); }
+        }
+
         public virtual PlanGateway Plan
         {
             get { return new PlanGateway(new BraintreeService(Configuration)); }

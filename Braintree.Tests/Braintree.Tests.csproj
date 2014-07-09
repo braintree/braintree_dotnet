@@ -63,6 +63,8 @@
     <Compile Include="CreditCardVerificationTest.cs" />
     <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
+    <Compile Include="PaymentMethodTest.cs" />
+    <Compile Include="PayPalAccountTest.cs" />
     <Compile Include="QueryStringTest.cs" />
     <Compile Include="SubscriptionTest.cs" />
     <Compile Include="TestHelper.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="PlanTest.cs" />
     <Compile Include="PlanRequestForTests.cs" />
     <Compile Include="ModificationRequestForTests.cs" />
+    <Compile Include="ThreeDSecureRequestForTests.cs" />
     <Compile Include="AddOnTest.cs" />
     <Compile Include="DiscountTest.cs" />
     <Compile Include="DisbursementTest.cs" />
