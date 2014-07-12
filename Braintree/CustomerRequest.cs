@@ -56,6 +56,7 @@ namespace Braintree
         public String Phone { get; set; }
         public String Fax { get; set; }
         public String Website { get; set; }
+        public String PaymentMethodNonce { get; set; }
         public Dictionary<String, String> CustomFields { get; set; }
         public CreditCardRequest CreditCard { get; set; }
 
@@ -104,6 +105,7 @@ namespace Braintree
                 AddElement("phone", Phone).
                 AddElement("fax", Fax).
                 AddElement("website", Website).
+                AddElement("payment-method-nonce", PaymentMethodNonce).
                 AddElement("credit-card", CreditCard).
                 AddElement("custom-fields", CustomFields);
         }

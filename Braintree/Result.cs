@@ -6,7 +6,19 @@ using System.Text;
 
 namespace Braintree
 {
-    public class Result<T> where T : class
+    public interface Result<out T>
+    {
+        CreditCardVerification CreditCardVerification { get; }
+        Transaction Transaction { get; }
+        Subscription Subscription { get; }
+        ValidationErrors Errors { get; }
+        Dictionary<String, String> Parameters { get; }
+        String Message { get; }
+        T Target { get; }
+        Boolean IsSuccess();
+    }
+
+    public class ResultImpl<T> : Result<T> where T : class
     {
         public CreditCardVerification CreditCardVerification { get; protected set; }
         public Transaction Transaction { get; protected set; }
@@ -16,7 +28,7 @@ namespace Braintree
         public String Message { get; protected set; }
         public T Target { get; protected set; }
 
-        public Result(NodeWrapper node, BraintreeService service)
+        public ResultImpl(NodeWrapper node, BraintreeService service)
         {
             if (node.IsSuccess())
             {
@@ -80,6 +92,14 @@ namespace Braintree
             else if (typeof(T) == typeof(MerchantAccount))
             {
                 return new MerchantAccount(node) as T;
+            }
+            else if (typeof(T) == typeof(PayPalAccount))
+            {
+                return new PayPalAccount(node) as T;
+            }
+            else if (typeof(T) == typeof(UnknownPaymentMethod))
+            {
+                return new UnknownPaymentMethod(node) as T;
             }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());

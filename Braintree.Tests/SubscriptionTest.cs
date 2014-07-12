@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
+using Braintree.Test;
 
 namespace Braintree.Tests
 {
@@ -1983,6 +1984,27 @@ namespace Braintree.Tests
                 ValidationErrorCode.DESCRIPTOR_PHONE_FORMAT_IS_INVALID,
                 result.Errors.ForObject("Subscription").ForObject("Descriptor").OnField("Phone")[0].Code
             );
+        }
+
+        [Test]
+        public void Create_WithPayPalAccount()
+        {
+            var customerRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            var customer = gateway.Customer.Create(customerRequest).Target;
+
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = customer.PayPalAccounts[0].Token,
+                PlanId = plan.Id,
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(result.Target.PaymentMethodToken, customer.PayPalAccounts[0].Token);
         }
 
         [Test]

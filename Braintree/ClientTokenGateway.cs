@@ -23,7 +23,8 @@ namespace Braintree
 
         public virtual string generate(ClientTokenRequest request = null)
         {
-            if (request != null) verifyOptions(request);
+            if (request == null) request = new ClientTokenRequest();
+            verifyOptions(request);
             return Regex.Unescape(Service.Post("/client_token", request).InnerText);
         }
 

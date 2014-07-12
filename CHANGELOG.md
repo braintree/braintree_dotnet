@@ -1,3 +1,11 @@
+## 2.31.0
+* Add support for v.zero SDKs.
+
+## 2.30.1
+
+* Make webhook parsing more robust with newlines
+* Add messages to InvalidSignature exceptions
+
 ## 2.30.0
 
 * Include Dispute information on Transaction

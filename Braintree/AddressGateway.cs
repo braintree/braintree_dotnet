@@ -24,7 +24,7 @@ namespace Braintree
         {
             XmlNode addressXML = Service.Post("/customers/" + customerId + "/addresses", request);
 
-            return new Result<Address>(new NodeWrapper(addressXML), Service);
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
         }
 
         public virtual void Delete(String customerId, String id)
@@ -46,7 +46,7 @@ namespace Braintree
         {
             XmlNode addressXML = Service.Put("/customers/" + customerId + "/addresses/" + id, request);
 
-            return new Result<Address>(new NodeWrapper(addressXML), Service);
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
         }
     }
 }

@@ -19,14 +19,14 @@ namespace Braintree
         {
             XmlNode merchantAccountXML = Service.Post(CREATE_URL, request);
 
-            return new Result<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
         }
 
         public virtual Result<MerchantAccount> Update(String id, MerchantAccountRequest request)
         {
             XmlNode merchantAccountXML = Service.Put("/merchant_accounts/" + id + "/update_via_api", request);
 
-            return new Result<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
         }
 
         public virtual MerchantAccount Find(String id)

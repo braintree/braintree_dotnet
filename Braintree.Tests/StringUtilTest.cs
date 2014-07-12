@@ -37,6 +37,12 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Dasherize_WorksForCamelCaseStringWithContiguousUppercaseLetters()
+        {
+            Assert.AreEqual("headline-cnn-news", StringUtil.Dasherize("HeadlineCNNNews"));
+        }
+
+        [Test]
         public void Underscore_ReturnsNullForNullString()
         {
             Assert.IsNull(StringUtil.Underscore(null));
@@ -58,6 +64,12 @@ namespace Braintree.Tests
         public void Underscore_WorksForCamelCaseStringWithLeadingUppercaseLetter()
         {
             Assert.AreEqual("first_name", StringUtil.Underscore("FirstName"));
+        }
+
+        [Test]
+        public void Underscore_WorksForCamelCaseStringWithContiguousUppercaseLetters()
+        {
+            Assert.AreEqual("headline_cnn_news", StringUtil.Underscore("HeadlineCNNNews"));
         }
 
         [Test]

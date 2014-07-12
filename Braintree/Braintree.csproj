@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.30.0</AssemblyName>
+    <AssemblyName>Braintree-2.31.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.30.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.31.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.30.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.31.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -113,6 +113,15 @@
     <Compile Include="PartnerConfiguration.cs" />
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />
+    <Compile Include="PaymentMethod.cs" />
+    <Compile Include="PaymentMethodGateway.cs" />
+    <Compile Include="PaymentMethodOptionsRequest.cs" />
+    <Compile Include="PaymentMethodRequest.cs" />
+    <Compile Include="PayPalAccount.cs" />
+    <Compile Include="PayPalAccountGateway.cs" />
+    <Compile Include="PayPalAccountRequest.cs" />
+    <Compile Include="PayPalAccountOptionsRequest.cs" />
+    <Compile Include="PayPalDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryString.cs" />
     <Compile Include="RangeNode.cs" />
@@ -136,6 +145,7 @@
     <Compile Include="SubscriptionSearchRequest.cs" />
     <Compile Include="SubscriptionTransactionRequest.cs" />
     <Compile Include="TextNode.cs" />
+    <Compile Include="Test\Nonce.cs" />
     <Compile Include="TrUtil.cs" />
     <Compile Include="Transaction.cs" />
     <Compile Include="TransactionGateway.cs" />
@@ -167,6 +177,7 @@
     <Compile Include="DiscountGateway.cs" />
     <Compile Include="IsNode.cs" />
     <Compile Include="WebhookTestingGateway.cs" />
+    <Compile Include="UnknownPaymentMethod.cs" />
     <Compile Include="WebhookNotification.cs" />
     <Compile Include="Exceptions\InvalidSignatureException.cs" />
     <Compile Include="WebhookNotificationGateway.cs" />

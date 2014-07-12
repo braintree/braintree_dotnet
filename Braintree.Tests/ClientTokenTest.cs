@@ -106,7 +106,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var clientToken = gateway.ClientToken.generate();
+            var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
             var encodedFingerprint = HttpUtility.UrlEncode(authorizationFingerprint, Encoding.UTF8);
@@ -117,6 +117,42 @@ namespace Braintree.Tests
 
             HttpWebResponse Response = new BraintreeTestHttpService().Get(gateway.MerchantId, url);
             Assert.AreEqual(HttpStatusCode.OK, Response.StatusCode);
+        }
+
+        [Test]
+        public void Generate_SupportsVersionOption()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+            var clientToken = gateway.ClientToken.generate(
+                new ClientTokenRequest
+                {
+                    Version = 1
+                }
+            );
+            int version = TestHelper.extractIntParamFromJson("version", clientToken);
+            Assert.AreEqual(1, version);
+        }
+
+        [Test]
+        public void Generate_DefaultsToVersionTwo()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+            var encodedClientToken = gateway.ClientToken.generate();
+            var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
+            String version = TestHelper.extractParamFromJson("version", decodedClientToken);
+            Assert.AreEqual("2", version);
         }
 
         [Test]
@@ -133,7 +169,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
 
             string customerId = result.Target.Id;
-            var clientToken = gateway.ClientToken.generate(
+            var clientToken = TestHelper.GenerateDecodedClientToken(gateway,
                 new ClientTokenRequest
                 {
                     CustomerId = customerId,
@@ -184,7 +220,7 @@ namespace Braintree.Tests
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var clientToken = gateway.ClientToken.generate(
+            var clientToken = TestHelper.GenerateDecodedClientToken(gateway,
                 new ClientTokenRequest
                 {
                     CustomerId = customerId,
@@ -236,7 +272,7 @@ namespace Braintree.Tests
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
             Assert.IsTrue(creditCardResult.IsSuccess());
 
-            var clientToken = gateway.ClientToken.generate(
+            var clientToken = TestHelper.GenerateDecodedClientToken(gateway,
                 new ClientTokenRequest
                 {
                     CustomerId = customerId,
@@ -267,6 +303,28 @@ namespace Braintree.Tests
                     Assert.IsTrue(creditCard.IsDefault.Value);
                 }
             }
+        }
+
+        [Test]
+        public void Generate_GatewayAcceptsMerchantAccountId()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+
+            var clientToken = TestHelper.GenerateDecodedClientToken(gateway,
+                new ClientTokenRequest
+                {
+                    MerchantAccountId = "my_merchant_account"
+                }
+            );
+            var merchantAccountId = TestHelper.extractParamFromJson("merchantAccountId", clientToken);
+
+            Assert.AreEqual(merchantAccountId, "my_merchant_account");
         }
     }
 }

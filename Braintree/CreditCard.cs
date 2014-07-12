@@ -128,7 +128,7 @@ namespace Braintree
     /// For more information about Credit Cards, see <a href="http://www.braintreepayments.com/gateway/credit-card-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/credit-card-api</a><br />
     /// For more information about Credit Card Verifications, see <a href="http://www.braintreepayments.com/gateway/credit-card-verification-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/credit-card-verification-api</a>
     /// </example>
-    public class CreditCard
+    public class CreditCard : PaymentMethod
     {
         public static readonly String CountryOfIssuanceUnknown = "Unknown";
         public static readonly String IssuingBankUnknown = "Unknown";
