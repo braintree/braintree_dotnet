@@ -29,6 +29,11 @@ namespace Braintree
             return new Customer(new NodeWrapper(customerXML), Service);
         }
 
+        public virtual Result<Customer> Create()
+        {
+            return Create(new CustomerRequest());
+        }
+
         public virtual Result<Customer> Create(CustomerRequest request)
         {
             XmlNode customerXML = Service.Post("/customers", request);

@@ -5,6 +5,8 @@ using Braintree;
 using Braintree.Exceptions;
 using Braintree.Test;
 
+using Params = System.Collections.Generic.Dictionary<string, string>;
+
 namespace Braintree.Tests
 {
     [TestFixture]
@@ -117,6 +119,34 @@ namespace Braintree.Tests
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsTrue(paymentMethodResult.Target.IsDefault.Value);
             Assert.AreEqual(token, paymentMethodResult.Target.Token);
+        }
+
+        [Test]
+        public void Create_DoesntReturnErrorIfCreditCardOptionsArePresentForPayPalNonce()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var originalToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+            var nonce = TestHelper.GetNonceForPayPalAccount(
+                gateway,
+                new Params
+                {
+                    { "consent_code", "consent-code" },
+                    { "token", originalToken }
+                });
+
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerifyCard = true,
+                    FailOnDuplicatePaymentMethod = true,
+                    VerificationMerchantAccountId = "not_a_real_merchant_account_id"
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
         }
 
         [Test]

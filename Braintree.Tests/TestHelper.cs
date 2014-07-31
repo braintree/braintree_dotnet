@@ -94,6 +94,12 @@ namespace Braintree.Tests
       return DateTime.UtcNow - new TimeSpan(05, 00, 00);
     }
 
+    public static string extractParamFromJson(string keyName, HttpWebResponse response)
+    {
+        using (var reader = new StreamReader(response.GetResponseStream()))
+            return extractParamFromJson(keyName, reader.ReadToEnd());
+    }
+
     public static string extractParamFromJson(String keyName, String json)
     {
       String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
@@ -110,6 +116,19 @@ namespace Braintree.Tests
       int keyValue = Convert.ToInt32(match.Groups[1].Value);
 
       return keyValue;
+    }
+
+    public static string GetNonceForPayPalAccount(BraintreeGateway gateway, Dictionary<string, string> paypalAccountDetails)
+    {
+        var clientToken = GenerateDecodedClientToken(gateway);
+        var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+        var builder = new RequestBuilder();
+        builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint);
+        foreach (var param in paypalAccountDetails)
+            builder.AddTopLevelElement(string.Format("paypal_account[{0}]", param.Key), param.Value);
+
+        var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+        return extractParamFromJson("nonce", response);
     }
 
     public static String GenerateUnlockedNonce(BraintreeGateway gateway, String creditCardNumber, String customerId)
