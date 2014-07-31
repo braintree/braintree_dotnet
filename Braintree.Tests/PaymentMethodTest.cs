@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -147,6 +148,75 @@ namespace Braintree.Tests
             });
 
             Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Create_RespectsVerifyCardAndVerificationMerchantAccountIdOutsideTheNonce()
+        {
+            var nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", "4000111111111115" },
+                    { "expiration_month", "11" },
+                    { "expiration_year", "2099" }
+                },
+                isCreditCard : true);
+
+            var customer = gateway.Customer.Create().Target;
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.IsNotNull(result.CreditCardVerification);
+            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, result.CreditCardVerification.Status);
+            Assert.AreEqual("2000", result.CreditCardVerification.ProcessorResponseCode);
+            Assert.AreEqual("Do Not Honor", result.CreditCardVerification.ProcessorResponseText);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.CreditCardVerification.MerchantAccountId);
+        }
+
+        [Test]
+        public void Create_RespectsFailOnDuplicatePaymentMethodWhenIncludedOutsideNonce()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCardResult = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012"
+            });
+
+            Assert.IsTrue(creditCardResult.IsSuccess());
+            var nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", SandboxValues.CreditCardNumber.VISA },
+                    { "expiration_date", "05/2012" }
+                },
+                isCreditCard : true
+            );
+
+            var paypalResult = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                Options = new PaymentMethodOptionsRequest
+                {
+                    FailOnDuplicatePaymentMethod = true
+                }
+            });
+
+            Assert.IsFalse(paypalResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS, paypalResult.Errors.DeepAll().First().Code);
         }
 
         [Test]

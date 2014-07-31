@@ -94,10 +94,15 @@ namespace Braintree.Tests
       return DateTime.UtcNow - new TimeSpan(05, 00, 00);
     }
 
-    public static string extractParamFromJson(string keyName, HttpWebResponse response)
+    public static string GetResponseContent(HttpWebResponse response)
     {
         using (var reader = new StreamReader(response.GetResponseStream()))
-            return extractParamFromJson(keyName, reader.ReadToEnd());
+            return reader.ReadToEnd();
+    }
+
+    public static string extractParamFromJson(string keyName, HttpWebResponse response)
+    {
+        return extractParamFromJson(keyName, GetResponseContent(response));
     }
 
     public static string extractParamFromJson(String keyName, String json)
@@ -128,6 +133,29 @@ namespace Braintree.Tests
             builder.AddTopLevelElement(string.Format("paypal_account[{0}]", param.Key), param.Value);
 
         var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+        return extractParamFromJson("nonce", response);
+    }
+
+    public static string GetNonceForNewPaymentMethod(BraintreeGateway gateway, Dictionary<string, string> @params, bool isCreditCard)
+    {
+        var clientToken = GenerateDecodedClientToken(gateway);
+        var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+
+        var paymentMethodType = isCreditCard ? "credit_card" : "paypal_account";
+        var paymentMethodTypePlural = paymentMethodType + "s";
+        var builder = new RequestBuilder();
+        builder.
+            AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+            AddTopLevelElement("shared_customer_identifier", "test-identifier").
+            AddTopLevelElement("shared_customer_identifier_type", "testing");
+        foreach (var param in @params)
+            builder.AddTopLevelElement(string.Format("{0}[{1}]", paymentMethodType, param.Key), param.Value);
+
+        var response = new BraintreeTestHttpService().Post(
+            gateway.MerchantId,
+            "v1/payment_methods/" + paymentMethodTypePlural,
+            builder.ToQueryString());
+
         return extractParamFromJson("nonce", response);
     }
 
