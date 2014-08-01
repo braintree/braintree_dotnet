@@ -44,7 +44,7 @@ namespace Braintree
 
             if (response.GetName() == "paypal-account")
             {
-                return new PayPalAccount(response);
+                return new PayPalAccount(response, service);
             }
             else if (response.GetName() == "credit-card")
             {

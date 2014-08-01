@@ -95,7 +95,7 @@ namespace Braintree
             }
             else if (typeof(T) == typeof(PayPalAccount))
             {
-                return new PayPalAccount(node) as T;
+                return new PayPalAccount(node, service) as T;
             }
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {

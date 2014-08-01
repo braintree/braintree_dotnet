@@ -10,8 +10,9 @@ namespace Braintree
         public String ImageUrl { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
+        public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal PayPalAccount(NodeWrapper node)
+        protected internal PayPalAccount(NodeWrapper node, BraintreeService service)
         {
             Email = node.GetString("email");
             Token = node.GetString("token");
@@ -19,6 +20,13 @@ namespace Braintree
             ImageUrl = node.GetString("image-url");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
+
+            var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
+            Subscriptions = new Subscription[subscriptionXmlNodes.Count];
+            for (int i = 0; i < subscriptionXmlNodes.Count; i++)
+            {
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+            }
         }
 
     }

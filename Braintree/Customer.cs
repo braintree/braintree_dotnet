@@ -77,7 +77,7 @@ namespace Braintree
             PayPalAccounts = new PayPalAccount[paypalXmlNodes.Count];
             for (int i = 0; i < paypalXmlNodes.Count; i++)
             {
-                PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i]);
+                PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i], service);
             }
 
             PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length];

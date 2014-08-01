@@ -17,7 +17,7 @@ namespace Braintree
         {
             XmlNode xml = Service.Get("/payment_methods/paypal_account/" + token);
 
-            return new PayPalAccount(new NodeWrapper(xml));
+            return new PayPalAccount(new NodeWrapper(xml), Service);
         }
 
         public void Delete(String token)
