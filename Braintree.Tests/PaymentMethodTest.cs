@@ -534,5 +534,440 @@ namespace Braintree.Tests
             }
             catch(NotFoundException) {}
         }
+
+        [Test]
+        public void Update_UpdatesTheCreditCard()
+        {
+            var MASTERCARD = SandboxValues.CreditCardNumber.MASTER_CARD;
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012"
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    CVV = "456",
+                    Number = MASTERCARD,
+                    ExpirationDate = "06/2013"
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOfType(typeof(CreditCard)));
+
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("New Holder", updatedCreditCard.CardholderName);
+            Assert.AreEqual(MASTERCARD.Substring(0, 6), updatedCreditCard.Bin);
+            Assert.AreEqual(MASTERCARD.Substring(MASTERCARD.Length - 4), updatedCreditCard.LastFour);
+            Assert.AreEqual("06/2013", updatedCreditCard.ExpirationDate);
+        }
+
+        [Test]
+        public void Update_CreatesNewBillingAddressByDefault()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    StreetAddress = "123 Nigeria Ave"
+                }
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    BillingAddress = new PaymentMethodAddressRequest
+                    {
+                        Region = "IL",
+                    }
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOfType(typeof(CreditCard)));
+
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("IL", updatedCreditCard.BillingAddress.Region);
+            Assert.IsNull(updatedCreditCard.BillingAddress.StreetAddress);
+            Assert.AreNotEqual(updatedCreditCard.BillingAddress.Id, creditCard.BillingAddress.Id);
+        }
+
+        [Test]
+        public void Update_UpdatesTheBillingAddressIfOptionIsSpecified()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    StreetAddress = "123 Nigeria Ave"
+                }
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    BillingAddress = new PaymentMethodAddressRequest
+                    {
+                        Region = "IL",
+                        Options = new PaymentMethodAddressOptionsRequest
+                        {
+                            UpdateExisting = true
+                        }
+                    }
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOfType(typeof(CreditCard)));
+
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("IL", updatedCreditCard.BillingAddress.Region);
+            Assert.AreEqual("123 Nigeria Ave", updatedCreditCard.BillingAddress.StreetAddress);
+            Assert.AreEqual(updatedCreditCard.BillingAddress.Id, creditCard.BillingAddress.Id);
+        }
+
+        [Test]
+        public void Update_UpdatesCountryViaCodes()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    StreetAddress = "123 Nigeria Ave"
+                }
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    BillingAddress = new PaymentMethodAddressRequest
+                    {
+                        CountryName = "American Samoa",
+                        CountryCodeAlpha2 = "AS",
+                        CountryCodeAlpha3 = "ASM",
+                        CountryCodeNumeric = "016",
+                        Options = new PaymentMethodAddressOptionsRequest
+                        {
+                            UpdateExisting = true
+                        }
+                    }
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("American Samoa", updatedCreditCard.BillingAddress.CountryName);
+            Assert.AreEqual("AS", updatedCreditCard.BillingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("ASM", updatedCreditCard.BillingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("016", updatedCreditCard.BillingAddress.CountryCodeNumeric);
+        }
+
+        [Test]
+        public void Update_CanPassExpirationMonthAndExpirationYear()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationMonth = "07",
+                    ExpirationYear = "2011"
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOfType(typeof(CreditCard)));
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("07", updatedCreditCard.ExpirationMonth);
+            Assert.AreEqual("2011", updatedCreditCard.ExpirationYear);
+            Assert.AreEqual("07/2011", updatedCreditCard.ExpirationDate);
+        }
+
+        [Test]
+        public void Update_VerifiesTheUpdateIfOptionsVerifyCardIsTrue()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    CVV = "456",
+                    Number = CreditCardNumbers.FailsSandboxVerification.MasterCard,
+                    ExpirationDate = "06/2013",
+                    Options = new PaymentMethodOptionsRequest
+                    {
+                        VerifyCard = true
+                    }
+                });
+
+            Assert.IsFalse(updateResult.IsSuccess());
+            Assert.IsNotNull(updateResult.CreditCardVerification);
+            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, updateResult.CreditCardVerification.Status);
+            Assert.IsNull(updateResult.CreditCardVerification.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Update_CanUpdateTheBillingAddress()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "Old First Name",
+                    LastName = "Old Last Name",
+                    Company = "Old Company",
+                    StreetAddress = "123 Old St",
+                    ExtendedAddress = "Apt Old",
+                    Locality = "Old City",
+                    Region = "Old State",
+                    PostalCode = "12345",
+                    CountryName = "Canada"
+                }
+            }).Target;
+
+            var result = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    Options = new PaymentMethodOptionsRequest
+                    {
+                        VerifyCard = false
+                    },
+                    BillingAddress = new PaymentMethodAddressRequest
+                    {
+                        FirstName = "New First Name",
+                        LastName = "New Last Name",
+                        Company = "New Company",
+                        StreetAddress = "123 New St",
+                        Locality = "New City",
+                        Region = "New State",
+                        PostalCode = "56789",
+                        CountryName = "United States of America"
+                    }
+                });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.That(result.Target, Is.InstanceOfType(typeof(CreditCard)));
+            var address = ((CreditCard)result.Target).BillingAddress;
+            Assert.AreEqual("New First Name", address.FirstName);
+            Assert.AreEqual("New Last Name", address.LastName);
+            Assert.AreEqual("New Company", address.Company);
+            Assert.AreEqual("123 New St", address.StreetAddress);
+            Assert.AreEqual("New City", address.Locality);
+            Assert.AreEqual("New State", address.Region);
+            Assert.AreEqual("56789", address.PostalCode);
+            Assert.AreEqual("United States of America", address.CountryName);
+        }
+
+        [Test]
+        public void Update_ReturnsAnErrorResponseIfInvalid()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+            }).Target;
+
+            var result = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    Number = "invalid",
+                    ExpirationDate = "05/2014"
+                });
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual("Credit card number must be 12-19 digits.", result.Errors.ForObject("credit_card").OnField("number")[0].Message);
+        }
+
+        [Test]
+        public void Update_CanUpdateTheDefault()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var card1 = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2009",
+            }).Target;
+
+            var card2 = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2009",
+            }).Target;
+
+            Assert.IsTrue(card1.IsDefault.Value);
+            Assert.IsFalse(card2.IsDefault.Value);
+            gateway.PaymentMethod.Update(
+                card2.Token,
+                new PaymentMethodRequest
+                {
+                    Options = new PaymentMethodOptionsRequest { MakeDefault = true }
+                });
+
+            Assert.IsFalse(gateway.CreditCard.Find(card1.Token).IsDefault.Value);
+            Assert.IsTrue(gateway.CreditCard.Find(card2.Token).IsDefault.Value);
+        }
+
+        [Test]
+        public void Update_UpdatesPayPalAccountToken()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var originalToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+            var nonce = TestHelper.GetNonceForPayPalAccount(
+                gateway,
+                new Params
+                {
+                    { "consent_code", "consent-code" },
+                    { "token", originalToken }
+                });
+
+            var originalResult = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id
+            });
+
+            Assert.That(originalResult.Target, Is.InstanceOfType(typeof(PayPalAccount)));
+            var updatedToken = string.Format("UPDATED_TOKEN-{0}", DateTime.Now.Ticks);
+            var updatedResult = gateway.PaymentMethod.Update(
+                originalToken,
+                new PaymentMethodRequest
+                {
+                    Token = updatedToken
+                });
+
+            Assert.IsTrue(updatedResult.IsSuccess());
+            var updatedPaypalAccount = gateway.PayPalAccount.Find(updatedToken);
+            Assert.AreEqual(((PayPalAccount)originalResult.Target).Email, updatedPaypalAccount.Email);
+            try {
+                gateway.PayPalAccount.Find(originalToken);
+                Assert.Fail("Didn't throw");
+            } catch (NotFoundException) { }
+        }
+
+        [Test]
+        public void Update_CanMakePayPalAccountsTheDefaultPaymentMethod()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var result = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2009",
+                Options = new CreditCardOptionsRequest
+                {
+                    MakeDefault = true
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            var nonce = TestHelper.GetNonceForPayPalAccount(gateway, new Params {{ "consent_code", "consent-code" }});
+            var originalToken = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id
+            }).Target.Token;
+
+            var updatedResult = gateway.PaymentMethod.Update(
+                originalToken,
+                new PaymentMethodRequest { Options = new PaymentMethodOptionsRequest { MakeDefault = true }});
+
+            Assert.IsTrue(updatedResult.IsSuccess());
+            var updatedPaypalAccount = gateway.PayPalAccount.Find(originalToken);
+            Assert.IsTrue(updatedPaypalAccount.IsDefault.Value);
+        }
+
+        [Test]
+        public void Update_ReturnsAnErrorIfTokenForAccountIsUsedToAttemptUpdate()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var firstToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+            var secondToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+
+            var firstNonce = TestHelper.GetNonceForPayPalAccount(
+                gateway,
+                new Params
+                {
+                    { "consent_code", "consent-code" },
+                    { "token", firstToken }
+                });
+
+            gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = firstNonce,
+                CustomerId = customer.Id
+            });
+
+            var secondNonce = TestHelper.GetNonceForPayPalAccount(
+                gateway,
+                new Params
+                {
+                    { "consent_code", "consent-code" },
+                    { "token", secondToken }
+                });
+
+            gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = secondNonce,
+                CustomerId = customer.Id
+            });
+
+            var updatedResult = gateway.PaymentMethod.Update(
+                firstToken,
+                new PaymentMethodRequest { Token = secondToken });
+
+            Assert.IsFalse(updatedResult.IsSuccess());
+            Assert.AreEqual("92906", ((int)updatedResult.Errors.DeepAll().First().Code).ToString());
+        }
     }
 }

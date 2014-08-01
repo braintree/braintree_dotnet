@@ -10,6 +10,12 @@ namespace Braintree
         public PaymentMethodOptionsRequest Options { get; set; }
         public PaymentMethodAddressRequest BillingAddress { get; set; }
         public String BillingAddressId { get; set; }
+        public String CardholderName { get; set; }
+        public String CVV { get; set; }
+        public String ExpirationMonth { get; set; }
+        public String ExpirationYear { get; set; }
+        public String ExpirationDate { get; set; }
+        public String Number { get; set; }
 
         public override String ToXml()
         {
@@ -29,7 +35,13 @@ namespace Braintree
                 AddElement("token", Token).
                 AddElement("options", Options).
                 AddElement("billing-address", BillingAddress).
-                AddElement("billing-address-id", BillingAddressId);
+                AddElement("billing-address-id", BillingAddressId).
+                AddElement("cardholder-name", CardholderName).
+                AddElement("cvv", CVV).
+                AddElement("expiration-date", ExpirationDate).
+                AddElement("expiration-month", ExpirationMonth).
+                AddElement("expiration-year", ExpirationYear).
+                AddElement("number", Number);
         }
     }
 }
