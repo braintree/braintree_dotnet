@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using Braintree;
 using Braintree.Exceptions;
 using Braintree.Test;
 
-using Params = System.Collections.Generic.Dictionary<string, string>;
+using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests
 {
@@ -217,6 +218,155 @@ namespace Braintree.Tests
 
             Assert.IsFalse(paypalResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS, paypalResult.Errors.DeepAll().First().Code);
+        }
+
+        [Test]
+        public void Create_AllowsPassingBillingAddressOutsideTheNonce()
+        {
+            var customer = gateway.Customer.Create().Target;
+            /* var nonce = TestHelper.GenerateUnlockedNonce(gateway, "4111111111111111", customer.Id); */
+            var nonce = TestHelper.GetNonceForNewCreditCard(
+                gateway,
+                new Params
+                {
+                    { "number", "4111111111111111" },
+                    { "expirationMonth", "12" },
+                    { "expirationYear", "2020" },
+                    { "options", new Params
+                        {
+                            { "validate", false }
+                        }
+                    }
+                });
+
+            Assert.IsFalse(string.IsNullOrEmpty(nonce));
+
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                BillingAddress = new PaymentMethodAddressRequest
+                {
+                    StreetAddress = "123 Abc Way"
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.That(result.Target, Is.InstanceOfType(typeof(CreditCard)));
+
+            var token = result.Target.Token;
+            var foundCreditCard = gateway.CreditCard.Find(token);
+            Assert.IsNotNull(foundCreditCard);
+            Assert.AreEqual("123 Abc Way", foundCreditCard.BillingAddress.StreetAddress);
+        }
+
+        [Test]
+        public void Create_OverridesTheBillingAddressInTheNonce()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var nonce = TestHelper.GetNonceForNewCreditCard(
+                gateway,
+                new Params
+                {
+                    { "number", "4111111111111111" },
+                    { "expirationMonth", "12" },
+                    { "expirationYear", "2020" },
+                    { "options", new Params
+                        {
+                            { "validate", false }
+                        }
+                    }
+                });
+
+            Assert.IsFalse(string.IsNullOrEmpty(nonce));
+
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                BillingAddress = new PaymentMethodAddressRequest
+                {
+                    StreetAddress = "123 Abc Way"
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.That(result.Target, Is.InstanceOfType(typeof(CreditCard)));
+
+            var token = result.Target.Token;
+            var foundCreditCard = gateway.CreditCard.Find(token);
+            Assert.IsNotNull(foundCreditCard);
+            Assert.AreEqual("123 Abc Way", foundCreditCard.BillingAddress.StreetAddress);
+        }
+
+        [Test]
+        public void Create_DoesNotOverrideTheBillingAddressForVaultedCreditCards()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var nonce = TestHelper.GetNonceForNewCreditCard(
+                gateway,
+                new Params
+                {
+                    { "number", "4111111111111111" },
+                    { "expirationMonth", "12" },
+                    { "expirationYear", "2020" },
+                    { "billing_address", new Params
+                        {
+                            { "street_address", "456 Xyz Way" }
+                        }
+                    }
+                },
+                customer.Id);
+
+            Assert.IsFalse(string.IsNullOrEmpty(nonce));
+
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                BillingAddress = new PaymentMethodAddressRequest
+                {
+                    StreetAddress = "123 Abc Way"
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.That(result.Target, Is.InstanceOfType(typeof(CreditCard)));
+
+            var token = result.Target.Token;
+            var foundCreditCard = gateway.CreditCard.Find(token);
+            Assert.IsNotNull(foundCreditCard);
+            Assert.AreEqual("456 Xyz Way", foundCreditCard.BillingAddress.StreetAddress);
+        }
+
+        [Test]
+        public void Create_IgnoresPassedBillingAddressParamsForPayPal()
+        {
+            var nonce = TestHelper.GetNonceForPayPalAccount(
+                gateway,
+                new Params
+                {
+                    { "consent-code", "PAYPAL_CONSENT_CODE" }
+                });
+
+            var customer = gateway.Customer.Create().Target;
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                BillingAddress = new PaymentMethodAddressRequest
+                {
+                    StreetAddress = "123 Abc Way"
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.That(result.Target, Is.InstanceOfType(typeof(PayPalAccount)));
+            Assert.IsNotNull(result.Target.ImageUrl);
+
+            var token = result.Target.Token;
+            var foundPaypalAccount = gateway.PayPalAccount.Find(token);
+            Assert.IsNotNull(foundPaypalAccount);
         }
 
         [Test]

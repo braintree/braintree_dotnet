@@ -9,6 +9,8 @@ using System.IO.Compression;
 using NUnit.Framework;
 using Braintree;
 
+using Params = System.Collections.Generic.Dictionary<string, object>;
+
 namespace Braintree.Tests
 {
   public class TestHelper
@@ -123,20 +125,52 @@ namespace Braintree.Tests
       return keyValue;
     }
 
-    public static string GetNonceForPayPalAccount(BraintreeGateway gateway, Dictionary<string, string> paypalAccountDetails)
+    public static string GetNonceForPayPalAccount(BraintreeGateway gateway, Params paypalAccountDetails)
     {
         var clientToken = GenerateDecodedClientToken(gateway);
         var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
         var builder = new RequestBuilder();
         builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint);
         foreach (var param in paypalAccountDetails)
-            builder.AddTopLevelElement(string.Format("paypal_account[{0}]", param.Key), param.Value);
+            builder.AddTopLevelElement(string.Format("paypal_account[{0}]", param.Key), param.Value.ToString());
 
         var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
         return extractParamFromJson("nonce", response);
     }
 
-    public static string GetNonceForNewPaymentMethod(BraintreeGateway gateway, Dictionary<string, string> @params, bool isCreditCard)
+    public static String GetNonceForNewCreditCard(BraintreeGateway gateway, Params creditCardDetails, string customerId = null)
+    {
+        var clientToken = TestHelper.GenerateDecodedClientToken(
+            gateway,
+            customerId == null ? null : new ClientTokenRequest { CustomerId = customerId });
+
+        var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+
+        var builder = new RequestBuilder();
+        builder.
+            AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+            AddTopLevelElement("shared_customer_identifier", "test-identifier").
+            AddTopLevelElement("shared_customer_identifier_type", "testing");
+
+        foreach (var param in creditCardDetails) {
+            var nested = param.Value as Params;
+            if (null != nested) {
+                foreach (var nestedParam in nested) {
+                    builder.AddTopLevelElement(string.Format("credit_card[{0}][{1}]", param.Key, nestedParam.Key), nestedParam.Value.ToString());
+                }
+            } else
+                builder.AddTopLevelElement(string.Format("credit_card[{0}]", param.Key), param.Value.ToString());
+        }
+
+        var response = new BraintreeTestHttpService().Post(
+            gateway.MerchantId,
+            "v1/payment_methods/credit_cards",
+            builder.ToQueryString());
+
+        return extractParamFromJson("nonce", response);
+    }
+
+    public static string GetNonceForNewPaymentMethod(BraintreeGateway gateway, Params @params, bool isCreditCard)
     {
         var clientToken = GenerateDecodedClientToken(gateway);
         var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
@@ -149,7 +183,7 @@ namespace Braintree.Tests
             AddTopLevelElement("shared_customer_identifier", "test-identifier").
             AddTopLevelElement("shared_customer_identifier_type", "testing");
         foreach (var param in @params)
-            builder.AddTopLevelElement(string.Format("{0}[{1}]", paymentMethodType, param.Key), param.Value);
+            builder.AddTopLevelElement(string.Format("{0}[{1}]", paymentMethodType, param.Key), param.Value.ToString());
 
         var response = new BraintreeTestHttpService().Post(
             gateway.MerchantId,

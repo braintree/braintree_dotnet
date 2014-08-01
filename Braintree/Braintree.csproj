@@ -97,6 +97,7 @@
     <Compile Include="Exceptions\UnexpectedException.cs" />
     <Compile Include="Exceptions\UpgradeRequiredException.cs" />
     <Compile Include="FundingRequest.cs" />
+    <Compile Include="GenericAddressRequest.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IndividualRequest.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />
     <Compile Include="PaymentMethod.cs" />
+    <Compile Include="PaymentMethodAddressRequest.cs" />
+    <Compile Include="PaymentMethodAddressOptionsRequest.cs" />
     <Compile Include="PaymentMethodGateway.cs" />
     <Compile Include="PaymentMethodOptionsRequest.cs" />
     <Compile Include="PaymentMethodRequest.cs" />
