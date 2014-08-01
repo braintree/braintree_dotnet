@@ -9,6 +9,7 @@ namespace Braintree
         public String PaymentMethodNonce { get; set; }
         public PaymentMethodOptionsRequest Options { get; set; }
         public PaymentMethodAddressRequest BillingAddress { get; set; }
+        public String BillingAddressId { get; set; }
 
         public override String ToXml()
         {
@@ -27,7 +28,8 @@ namespace Braintree
                 AddElement("payment-method-nonce", PaymentMethodNonce).
                 AddElement("token", Token).
                 AddElement("options", Options).
-                AddElement("billing-address", BillingAddress);
+                AddElement("billing-address", BillingAddress).
+                AddElement("billing-address-id", BillingAddressId);
         }
     }
 }

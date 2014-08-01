@@ -340,6 +340,54 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_AllowsPassingBillingAddressIdOutsideTheNonce()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var nonce = TestHelper.GetNonceForNewCreditCard(
+                gateway,
+                new Params
+                {
+                    { "number", "4111111111111111" },
+                    { "expirationMonth", "12" },
+                    { "expirationYear", "2020" },
+                    { "options", new Params
+
+                        {
+                            { "validate", "456 Xyz Way" }
+                        }
+                    }
+                },
+                customer.Id);
+
+            Assert.IsFalse(string.IsNullOrEmpty(nonce));
+            var addressResult = gateway.Address.Create(
+                customer.Id,
+                new AddressRequest
+                {
+                    FirstName = "Bobby",
+                    LastName = "Tables"
+                });
+
+            Assert.IsTrue(addressResult.IsSuccess());
+            var address = addressResult.Target;
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                BillingAddressId = address.Id
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.That(result.Target, Is.InstanceOfType(typeof(CreditCard)));
+
+            var token = result.Target.Token;
+            var foundCreditCard = gateway.CreditCard.Find(token);
+            Assert.IsNotNull(foundCreditCard);
+            Assert.AreEqual("Bobby", foundCreditCard.BillingAddress.FirstName);
+            Assert.AreEqual("Tables", foundCreditCard.BillingAddress.LastName);
+        }
+
+        [Test]
         public void Create_IgnoresPassedBillingAddressParamsForPayPal()
         {
             var nonce = TestHelper.GetNonceForPayPalAccount(
@@ -358,6 +406,33 @@ namespace Braintree.Tests
                 {
                     StreetAddress = "123 Abc Way"
                 }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.That(result.Target, Is.InstanceOfType(typeof(PayPalAccount)));
+            Assert.IsNotNull(result.Target.ImageUrl);
+
+            var token = result.Target.Token;
+            var foundPaypalAccount = gateway.PayPalAccount.Find(token);
+            Assert.IsNotNull(foundPaypalAccount);
+        }
+
+        [Test]
+        public void Create_IgnoresPassedBillingAddressIdForPayPalAccount()
+        {
+            var nonce = TestHelper.GetNonceForPayPalAccount(
+                gateway,
+                new Params
+                {
+                    { "consent-code", "PAYPAL_CONSENT_CODE" }
+                });
+
+            var customer = gateway.Customer.Create().Target;
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                BillingAddressId = "address_id"
             });
 
             Assert.IsTrue(result.IsSuccess());
