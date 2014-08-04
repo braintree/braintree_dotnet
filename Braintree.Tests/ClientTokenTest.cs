@@ -151,8 +151,8 @@ namespace Braintree.Tests
             };
             var encodedClientToken = gateway.ClientToken.generate();
             var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
-            String version = TestHelper.extractParamFromJson("version", decodedClientToken);
-            Assert.AreEqual("2", version);
+            int version = TestHelper.extractIntParamFromJson("version", decodedClientToken);
+            Assert.AreEqual(2, version);
         }
 
         [Test]
