@@ -161,6 +161,39 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForDisputeOpenedWebhook()
+        {
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_OPENED, "my_id");
+
+            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+            Assert.AreEqual(WebhookKind.DISPUTE_OPENED, notification.Kind);
+            Assert.AreEqual("my_id", notification.Dispute.Id);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForDisputeLostWebhook()
+        {
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_LOST, "my_id");
+
+            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+            Assert.AreEqual(WebhookKind.DISPUTE_LOST, notification.Kind);
+            Assert.AreEqual("my_id", notification.Dispute.Id);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForDisputeWonWebhook()
+        {
+            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_WON, "my_id");
+
+            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["signature"], sampleNotification["payload"]);
+
+            Assert.AreEqual(WebhookKind.DISPUTE_WON, notification.Kind);
+            Assert.AreEqual("my_id", notification.Dispute.Id);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantConnected()
         {
           Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_CONNECTED, "my_id");

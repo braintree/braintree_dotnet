@@ -1,8 +1,11 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
 using Braintree.Test;
+
+using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests
 {
@@ -166,6 +169,46 @@ namespace Braintree.Tests
 
             Assert.IsTrue(updateResult.IsSuccess());
             Assert.IsTrue(updateResult.Target.IsDefault.Value);
+        }
+
+        [Test]
+        public void ReturnsSubscriptionsAssociatedWithPayPalAccount()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var paymentMethodToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+            var nonce = TestHelper.GetNonceForPayPalAccount(
+                gateway,
+                new Params
+                {
+                    { "consent_code", "consent-code" },
+                    { "token", paymentMethodToken }
+                });
+
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            var token = result.Target.Token;
+            var subscription1 = gateway.Subscription.Create(new SubscriptionRequest
+            {
+                PaymentMethodToken = token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            }).Target;
+
+            var subscription2 = gateway.Subscription.Create(new SubscriptionRequest
+            {
+                PaymentMethodToken = token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            }).Target;
+
+            var paypalAccount = gateway.PayPalAccount.Find(token);
+            Assert.IsNotNull(paypalAccount);
+            var ids = from s in new Subscription[] { subscription1, subscription2 } orderby s.Id select s.Id;
+            var accountSubscriptionIds = from s in paypalAccount.Subscriptions orderby s.Id select s.Id;
+            Assert.IsTrue(ids.SequenceEqual(accountSubscriptionIds));
         }
     }
 }

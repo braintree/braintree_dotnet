@@ -30,6 +30,24 @@ namespace Braintree
             }
         }
 
+        public Result<PaymentMethod> Update(string token, PaymentMethodRequest request)
+        {
+            var response = new NodeWrapper(service.Put("/payment_methods/any/" + token, request));
+
+            if (response.GetName() == "paypal-account")
+            {
+                return new ResultImpl<PayPalAccount>(response, service);
+            }
+            else if (response.GetName() == "credit-card")
+            {
+                return new ResultImpl<CreditCard>(response, service);
+            }
+            else
+            {
+                return new ResultImpl<UnknownPaymentMethod>(response, service);
+            }
+        }
+
         public void Delete(String token)
         {
             service.Delete("/payment_methods/any/" + token);
@@ -44,7 +62,7 @@ namespace Braintree
 
             if (response.GetName() == "paypal-account")
             {
-                return new PayPalAccount(response);
+                return new PayPalAccount(response, service);
             }
             else if (response.GetName() == "credit-card")
             {

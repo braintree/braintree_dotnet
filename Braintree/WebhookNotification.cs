@@ -22,6 +22,9 @@ namespace Braintree
         public static readonly WebhookKind TRANSACTION_DISBURSED = new WebhookKind("transaction_disbursed");
         public static readonly WebhookKind DISBURSEMENT_EXCEPTION = new WebhookKind("disbursement_exception");
         public static readonly WebhookKind DISBURSEMENT = new WebhookKind("disbursement");
+        public static readonly WebhookKind DISPUTE_OPENED = new WebhookKind("dispute_opened");
+        public static readonly WebhookKind DISPUTE_LOST = new WebhookKind("dispute_lost");
+        public static readonly WebhookKind DISPUTE_WON = new WebhookKind("dispute_won");
 
         public static readonly WebhookKind[] ALL = {
             PARTNER_MERCHANT_CONNECTED,
@@ -38,7 +41,10 @@ namespace Braintree
             SUB_MERCHANT_ACCOUNT_DECLINED,
             TRANSACTION_DISBURSED,
             DISBURSEMENT_EXCEPTION,
-            DISBURSEMENT
+            DISBURSEMENT,
+            DISPUTE_OPENED,
+            DISPUTE_LOST,
+            DISPUTE_WON
         };
 
         protected WebhookKind(String name) : base(name) {}
@@ -54,6 +60,7 @@ namespace Braintree
         public DateTime? Timestamp { get; protected set; }
         public Transaction Transaction { get; protected set; }
         public Disbursement Disbursement { get; protected set; }
+        public Dispute Dispute { get; protected set; }
         public PartnerMerchant PartnerMerchant { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, BraintreeService service)
@@ -73,6 +80,10 @@ namespace Braintree
 
             if (WrapperNode.GetNode("merchant-account") != null) {
                 MerchantAccount = new MerchantAccount(WrapperNode.GetNode("merchant-account"));
+            }
+
+            if (WrapperNode.GetNode("dispute") != null) {
+                Dispute = new Dispute(WrapperNode.GetNode("dispute"));
             }
 
             if (WrapperNode.GetNode("transaction") != null) {

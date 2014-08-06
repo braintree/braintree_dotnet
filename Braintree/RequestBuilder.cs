@@ -13,6 +13,10 @@ namespace Braintree
         private Dictionary<string, string> TopLevelElements;
         private Dictionary<string, object> Elements;
 
+        public RequestBuilder() : this("")
+        {
+        }
+
         public RequestBuilder(String parent)
         {
             Parent = parent;

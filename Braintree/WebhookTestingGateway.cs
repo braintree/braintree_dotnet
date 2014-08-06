@@ -53,6 +53,12 @@ namespace Braintree
                 return PartnerMerchantDisconnectedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_DECLINED) {
                 return PartnerMerchantDeclinedSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_OPENED) {
+                return DisputeOpenedSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_LOST) {
+                return DisputeLostSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_WON) {
+                return DisputeWonSampleXml(id);
             } else {
                 return SubscriptionXml(id);
             }
@@ -153,6 +159,54 @@ namespace Braintree
                     node_attr("transaction-ids", TYPE_ARRAY,
                         node("item", "asdf"),
                         node("item", "qwer")
+                    )
+            );
+        }
+
+        private String DisputeOpenedSampleXml(String id) {
+            return node("dispute",
+                    node("id", id),
+                    node("amount", "250.00"),
+                    node_attr("received-date", TYPE_DATE, "2014-03-21"),
+                    node_attr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    node("currency-iso-code", "USD"),
+                    node("status", "open"),
+                    node("reason", "fraud"),
+                    node("transaction",
+                        node("id", id),
+                        node("amount", "250.00")
+                    )
+            );
+        }
+
+        private String DisputeLostSampleXml(String id) {
+            return node("dispute",
+                    node("id", id),
+                    node("amount", "250.00"),
+                    node_attr("received-date", TYPE_DATE, "2014-03-21"),
+                    node_attr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    node("currency-iso-code", "USD"),
+                    node("status", "lost"),
+                    node("reason", "fraud"),
+                    node("transaction",
+                        node("id", id),
+                        node("amount", "250.00")
+                    )
+            );
+        }
+
+        private String DisputeWonSampleXml(String id) {
+            return node("dispute",
+                    node("id", id),
+                    node("amount", "250.00"),
+                    node_attr("received-date", TYPE_DATE, "2014-03-21"),
+                    node_attr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    node("currency-iso-code", "USD"),
+                    node("status", "won"),
+                    node("reason", "fraud"),
+                    node("transaction",
+                        node("id", id),
+                        node("amount", "250.00")
                     )
             );
         }
