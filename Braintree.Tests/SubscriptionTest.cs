@@ -1909,7 +1909,8 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "123*123456789012345678",
-                  Phone = "3334445555"
+                  Phone = "3334445555",
+                  Url = "ebay.com"
                 }
             };
 
@@ -1919,9 +1920,11 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
             Assert.AreEqual("123*123456789012345678", subscription.Descriptor.Name);
             Assert.AreEqual("3334445555", subscription.Descriptor.Phone);
+            Assert.AreEqual("ebay.com", subscription.Descriptor.Url);
 
             Assert.AreEqual("123*123456789012345678", subscription.Transactions[0].Descriptor.Name);
             Assert.AreEqual("3334445555", subscription.Transactions[0].Descriptor.Phone);
+            Assert.AreEqual("ebay.com", subscription.Transactions[0].Descriptor.Url);
         }
 
         [Test]
@@ -1935,7 +1938,8 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "123*123456789012345678",
-                  Phone = "3334445555"
+                  Phone = "3334445555",
+                  Url = "ebay.com"
                 }
             };
 
@@ -1946,7 +1950,8 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "999*999",
-                  Phone = "1234567890"
+                  Phone = "1234567890",
+                  Url = "ebay.co.uk"
                 }
             };
             Result<Subscription> result = gateway.Subscription.Update(createResult.Target.Id, updateRequest);
@@ -1955,6 +1960,7 @@ namespace Braintree.Tests
             Subscription subscription = result.Target;
             Assert.AreEqual("999*999", subscription.Descriptor.Name);
             Assert.AreEqual("1234567890", subscription.Descriptor.Phone);
+            Assert.AreEqual("ebay.co.uk", subscription.Descriptor.Url);
         }
 
         [Test]
@@ -1968,7 +1974,8 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "badcompanyname12*badproduct12",
-                  Phone = "%bad4445555"
+                  Phone = "%bad4445555",
+                  Url = "12345678901234"
                 }
             };
 
@@ -1983,6 +1990,10 @@ namespace Braintree.Tests
             Assert.AreEqual(
                 ValidationErrorCode.DESCRIPTOR_PHONE_FORMAT_IS_INVALID,
                 result.Errors.ForObject("Subscription").ForObject("Descriptor").OnField("Phone")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.DESCRIPTOR_URL_FORMAT_IS_INVALID,
+                result.Errors.ForObject("Subscription").ForObject("Descriptor").OnField("Url")[0].Code
             );
         }
 

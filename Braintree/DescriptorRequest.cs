@@ -8,6 +8,7 @@ namespace Braintree
     {
         public String Name { get; set; }
         public String Phone { get; set; }
+        public String Url { get; set; }
 
         public override String ToXml()
         {
@@ -28,7 +29,8 @@ namespace Braintree
         {
             return new RequestBuilder(root).
                 AddElement("name", Name).
-                AddElement("phone", Phone);
+                AddElement("phone", Phone).
+                AddElement("url", Url);
         }
     }
 }
