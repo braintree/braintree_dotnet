@@ -2521,7 +2521,8 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "123*123456789012345678",
-                  Phone = "3334445555"
+                  Phone = "3334445555",
+                  Url = "ebay.com"
                 }
             };
 
@@ -2531,6 +2532,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual("123*123456789012345678", transaction.Descriptor.Name);
             Assert.AreEqual("3334445555", transaction.Descriptor.Phone);
+            Assert.AreEqual("ebay.com", transaction.Descriptor.Url);
         }
 
         [Test]
@@ -2543,7 +2545,8 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "123*123456789012345678",
-                  Phone = "3334445555"
+                  Phone = "3334445555",
+                  Url = "ebay.com"
                 }
             };
 
@@ -2563,6 +2566,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual("123*123456789012345678", transaction.Descriptor.Name);
             Assert.AreEqual("3334445555", transaction.Descriptor.Phone);
+            Assert.AreEqual("ebay.com", transaction.Descriptor.Url);
         }
 
         [Test]
@@ -2579,7 +2583,8 @@ namespace Braintree.Tests
                 Descriptor = new DescriptorRequest
                 {
                   Name = "badcompanyname12*badproduct12",
-                  Phone = "%bad4445555"
+                  Phone = "%bad4445555",
+                  Url = "12345678901234"
                 }
             };
 
@@ -2594,6 +2599,10 @@ namespace Braintree.Tests
             Assert.AreEqual(
                 ValidationErrorCode.DESCRIPTOR_PHONE_FORMAT_IS_INVALID,
                 result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Phone")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.DESCRIPTOR_URL_FORMAT_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Url")[0].Code
             );
         }
 
