@@ -1198,6 +1198,23 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_ReturnsDebugIdForPayPal()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsNotNull(transaction.PayPalDetails);
+            Assert.IsNotNull(transaction.PayPalDetails.DebugId);
+        }
+
+        [Test]
         public void Sale_WithAllAttributes()
         {
             TransactionRequest request = new TransactionRequest
@@ -3548,6 +3565,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
             Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]
@@ -3569,6 +3587,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]
@@ -3590,6 +3609,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNotNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]
