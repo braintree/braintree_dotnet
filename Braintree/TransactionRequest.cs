@@ -41,6 +41,7 @@ namespace Braintree
         public DescriptorRequest Descriptor { get; set; }
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
+        public TransactionPayPalRequest PayPalAccount { get; set; }
         public Decimal TaxAmount { get; set; }
         public Boolean? TaxExempt { get; set; }
         public TransactionType Type { get; set; }
@@ -127,6 +128,7 @@ namespace Braintree
             builder.AddElement("descriptor", Descriptor);
             builder.AddElement("billing", BillingAddress);
             builder.AddElement("shipping", ShippingAddress);
+            builder.AddElement("paypal-account", PayPalAccount);
             builder.AddElement("options", Options);
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
             if (_threeDSecureTransaction) {

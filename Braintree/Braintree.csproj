@@ -153,6 +153,7 @@
     <Compile Include="Transaction.cs" />
     <Compile Include="TransactionGateway.cs" />
     <Compile Include="TransactionOptionsRequest.cs" />
+    <Compile Include="TransactionPayPalRequest.cs" />
     <Compile Include="TransactionRequest.cs" />
     <Compile Include="TransactionSearchRequest.cs" />
     <Compile Include="TransparentRedirectGateway.cs" />

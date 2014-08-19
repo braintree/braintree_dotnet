@@ -10,6 +10,8 @@ namespace Braintree
         public String Token { get; protected set; }
         public String ImageUrl { get; protected set; }
         public String DebugId { get; protected set; }
+        public String PayeeEmail { get; protected set; }
+        public String BNCode { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -19,6 +21,8 @@ namespace Braintree
             Token = node.GetString("token");
             ImageUrl = node.GetString("image-url");
             DebugId = node.GetString("debug-id");
+            PayeeEmail = node.GetString("payee-email");
+            BNCode = node.GetString("bn-code");
         }
     }
 }
