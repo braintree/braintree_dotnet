@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using NUnit.Framework;
 using Braintree;
+using System.Threading;
 
 namespace Braintree.Tests
 {
@@ -67,6 +69,21 @@ namespace Braintree.Tests
             }
 
             Assert.AreEqual(1, visas.Count);
+        }
+
+        [Test]
+        public void Generate_AcceptsDatesInNonUSFormats()
+        {
+            CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+            CultureInfo australianCulture = new CultureInfo("en-AU");
+            Thread.CurrentThread.CurrentCulture = australianCulture;
+
+            DateTime date = new DateTime(2014, 8, 20);
+            var result = gateway.SettlementBatchSummary.Generate(date);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(australianCulture, Thread.CurrentThread.CurrentCulture);
+            Thread.CurrentThread.CurrentCulture = originalCulture;
         }
 
         [Test]
