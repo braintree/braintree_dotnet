@@ -3550,7 +3550,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void CreateTransaction_WithPayeeEmailAndBNCode()
+        public void CreateTransaction_WithPayeeEmail()
         {
             String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
@@ -3559,8 +3559,7 @@ namespace Braintree.Tests
                 PaymentMethodNonce = nonce,
                 PayPalAccount = new TransactionPayPalRequest()
                 {
-                    PayeeEmail = "foo@example.com",
-                    BNCode = "BN12345"
+                    PayeeEmail = "foo@example.com"
                 }
             };
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -3570,7 +3569,6 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
             Assert.AreEqual("foo@example.com", result.Target.PayPalDetails.PayeeEmail);
-            Assert.AreEqual("BN12345", result.Target.PayPalDetails.BNCode);
             Assert.IsNull(result.Target.PayPalDetails.Token);
             Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }

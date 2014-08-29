@@ -11,7 +11,6 @@ namespace Braintree
         public String ImageUrl { get; protected set; }
         public String DebugId { get; protected set; }
         public String PayeeEmail { get; protected set; }
-        public String BNCode { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -22,7 +21,6 @@ namespace Braintree
             ImageUrl = node.GetString("image-url");
             DebugId = node.GetString("debug-id");
             PayeeEmail = node.GetString("payee-email");
-            BNCode = node.GetString("bn-code");
         }
     }
 }

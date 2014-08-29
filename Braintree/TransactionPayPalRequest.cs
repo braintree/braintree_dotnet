@@ -5,7 +5,6 @@ namespace Braintree
     public class TransactionPayPalRequest : Request
     {
         public String PayeeEmail { get; set; }
-        public String BNCode { get; set; }  
 
         public override String ToXml()
         {
@@ -29,9 +28,7 @@ namespace Braintree
 
         protected virtual RequestBuilder BuildRequest(String root)
         {
-            return new RequestBuilder(root).
-                AddElement("payee-email", PayeeEmail).
-                AddElement("bn-code", BNCode);
+            return new RequestBuilder(root).AddElement("payee-email", PayeeEmail);
         }
     }
 }
