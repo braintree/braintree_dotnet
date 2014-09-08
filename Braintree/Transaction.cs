@@ -52,10 +52,12 @@ namespace Braintree
         public static readonly TransactionStatus SUBMITTED_FOR_SETTLEMENT = new TransactionStatus("submitted_for_settlement");
         public static readonly TransactionStatus VOIDED = new TransactionStatus("voided");
         public static readonly TransactionStatus UNRECOGNIZED = new TransactionStatus("unrecognized");
+        public static readonly TransactionStatus SETTLEMENT_DECLINED = new TransactionStatus("settlement_declined");
+        public static readonly TransactionStatus SETTLEMENT_PENDING = new TransactionStatus("settlement_pending");
 
         public static readonly TransactionStatus[] ALL = {
             AUTHORIZATION_EXPIRED, AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED,
-            SETTLED, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED, UNRECOGNIZED
+            SETTLED, SETTLEMENT_DECLINED, SETTLEMENT_PENDING, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED, UNRECOGNIZED
         };
 
         protected TransactionStatus(String name) : base(name) {}
@@ -144,6 +146,8 @@ namespace Braintree
         public String ProcessorAuthorizationCode { get; protected set; }
         public String ProcessorResponseCode { get; protected set; }
         public String ProcessorResponseText { get; protected set; }
+        public String ProcessorSettlementResponseCode { get; protected set; }
+        public String ProcessorSettlementResponseText { get; protected set; }
         public String VoiceReferralNumber { get; protected set; }
         public String PurchaseOrderNumber { get; protected set; }
         public Boolean? Recurring { get; protected set; }
@@ -212,6 +216,8 @@ namespace Braintree
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            ProcessorSettlementResponseCode = node.GetString("processor-settlement-response-code");
+            ProcessorSettlementResponseText = node.GetString("processor-settlement-response-text");
             VoiceReferralNumber = node.GetString("voice-referral-number");
             PurchaseOrderNumber = node.GetString("purchase-order-number");
             Recurring = node.GetBoolean("recurring");

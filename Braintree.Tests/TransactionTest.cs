@@ -3690,5 +3690,53 @@ namespace Braintree.Tests
             Result<Transaction> refundResult = gateway.Transaction.Refund(id);
             Assert.IsTrue(refundResult.IsSuccess());
         }
+
+        [Test]
+        public void PayPalTransactionsReturnSettlementDeclinedResponse()
+        {
+            BraintreeGateway altpayGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "altpay_merchant",
+                PublicKey = "altpay_merchant_public_key",
+                PrivateKey = "altpay_merchant_private_key"
+            };
+
+            var searchRequest = new TransactionSearchRequest().
+                Status.Is(TransactionStatus.SETTLEMENT_DECLINED).
+                PayPalPayerEmail.Is("jane.doe@example.com");
+            ResourceCollection<Transaction> collection = altpayGateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.MaximumCount);
+            Transaction transaction = collection.FirstItem;
+
+            Assert.AreEqual("4001", transaction.ProcessorSettlementResponseCode);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_DECLINED, transaction.Status);
+            Assert.AreEqual("Settlement Declined", transaction.ProcessorSettlementResponseText);
+        }
+
+        [Test]
+        public void PayPalTransactionsReturnSettlementPendingResponse()
+        {
+            BraintreeGateway altpayGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "altpay_merchant",
+                PublicKey = "altpay_merchant_public_key",
+                PrivateKey = "altpay_merchant_private_key"
+            };
+
+            var searchRequest = new TransactionSearchRequest().
+                Status.Is(TransactionStatus.SETTLEMENT_PENDING).
+                PayPalPayerEmail.Is("jane.doe@example.com");
+            ResourceCollection<Transaction> collection = altpayGateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(1, collection.MaximumCount);
+            Transaction transaction = collection.FirstItem;
+
+            Assert.AreEqual("4002", transaction.ProcessorSettlementResponseCode);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.AreEqual("Settlement Pending", transaction.ProcessorSettlementResponseText);
+        }
     }
 }
