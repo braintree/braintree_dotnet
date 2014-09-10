@@ -85,6 +85,18 @@ namespace Braintree.Tests
       Assert.IsTrue(response.IsSuccess());
     }
 
+    public static void SettlementDecline(BraintreeService service, String transactionId)
+    {
+      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_decline"));
+      Assert.IsTrue(response.IsSuccess());
+    }
+
+    public static void SettlementPending(BraintreeService service, String transactionId)
+    {
+      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_pending"));
+      Assert.IsTrue(response.IsSuccess());
+    }
+
     public static void Escrow(BraintreeService service, String transactionId)
     {
       NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/escrow"));

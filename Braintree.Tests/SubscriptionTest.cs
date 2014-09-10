@@ -72,6 +72,8 @@ namespace Braintree.Tests
             Assert.IsTrue(subscription.BillingPeriodStartDate.HasValue);
             Assert.IsTrue(subscription.NextBillingDate.HasValue);
             Assert.IsTrue(subscription.FirstBillingDate.HasValue);
+            Assert.IsTrue(subscription.CreatedAt.HasValue);
+            Assert.IsTrue(subscription.UpdatedAt.HasValue);
             Assert.IsTrue(subscription.PaidThroughDate.HasValue);
         }
 

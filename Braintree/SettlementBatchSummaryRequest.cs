@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
+using System.Threading;
 
 namespace Braintree
 {
@@ -32,8 +34,14 @@ namespace Braintree
 
         public virtual RequestBuilder BuildRequest(String root)
         {
+            CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+
             var builder = new RequestBuilder(root);
             builder.AddElement("settlement-date", SettlementDate.ToShortDateString());
+            
+            Thread.CurrentThread.CurrentCulture = originalCulture;
+
             if (GroupByCustomField != null)
             {
                 builder.AddElement("group-by-custom-field", GroupByCustomField);

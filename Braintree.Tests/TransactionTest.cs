@@ -1198,6 +1198,23 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_ReturnsDebugIdForPayPal()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsNotNull(transaction.PayPalDetails);
+            Assert.IsNotNull(transaction.PayPalDetails.DebugId);
+        }
+
+        [Test]
         public void Sale_WithAllAttributes()
         {
             TransactionRequest request = new TransactionRequest
@@ -3533,6 +3550,30 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void CreateTransaction_WithPayeeEmail()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                PayPalAccount = new TransactionPayPalRequest()
+                {
+                    PayeeEmail = "foo@example.com"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("foo@example.com", result.Target.PayPalDetails.PayeeEmail);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
         public void CreateTransaction_WithOneTimePayPalNonce()
         {
             String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -3548,6 +3589,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
             Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]
@@ -3569,6 +3611,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]
@@ -3590,6 +3633,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNotNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]
@@ -3645,6 +3689,54 @@ namespace Braintree.Tests
 
             Result<Transaction> refundResult = gateway.Transaction.Refund(id);
             Assert.IsTrue(refundResult.IsSuccess());
+        }
+
+        [Test]
+        public void PayPalTransactionsReturnSettlementDeclinedResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 1000M,
+                PaymentMethodNonce = Nonce.PayPalFuturePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+
+            TestHelper.SettlementDecline(service, transactionResult.Target.Id);
+            Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
+
+            Assert.AreEqual("4001", transaction.ProcessorSettlementResponseCode);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_DECLINED, transaction.Status);
+            Assert.AreEqual("Settlement Declined", transaction.ProcessorSettlementResponseText);
+        }
+
+        [Test]
+        public void PayPalTransactionsReturnSettlementPendingResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 1000M,
+                PaymentMethodNonce = Nonce.PayPalFuturePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+
+            TestHelper.SettlementPending(service, transactionResult.Target.Id);
+            Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
+
+            Assert.AreEqual("4002", transaction.ProcessorSettlementResponseCode);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.AreEqual("Settlement Pending", transaction.ProcessorSettlementResponseText);
         }
     }
 }

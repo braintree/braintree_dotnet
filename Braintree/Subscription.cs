@@ -87,6 +87,8 @@ namespace Braintree
         public List<Discount> Discounts { get; protected set; }
         public Int32? FailureCount { get; protected set; }
         public DateTime? FirstBillingDate { get; protected set; }
+        public DateTime? CreatedAt { get; protected set; }
+        public DateTime? UpdatedAt { get; protected set; }
         public Boolean? HasTrialPeriod { get; protected set; }
         public String Id { get; protected set; }
         public Boolean? NeverExpires { get; protected set; }
@@ -115,6 +117,8 @@ namespace Braintree
             Descriptor = new Descriptor(node.GetNode("descriptor"));
             FailureCount = node.GetInteger("failure-count");
             FirstBillingDate = node.GetDateTime("first-billing-date");
+            CreatedAt = node.GetDateTime("created-at");
+            UpdatedAt = node.GetDateTime("updated-at");
             Id = node.GetString("id");
             NextBillAmount = node.GetDecimal("next-bill-amount");
             NextBillingDate = node.GetDateTime("next-billing-date");

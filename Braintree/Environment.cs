@@ -24,7 +24,7 @@ namespace Braintree
                     case "development":
                         return DevelopmentUrl();
                     case "qa":
-                        return "https://qa-master.braintreegateway.com";
+                        return "https://gateway.qa.braintreepayments.com";
                     case "sandbox":
                         return "https://api.sandbox.braintreegateway.com:443";
                     case "production":
