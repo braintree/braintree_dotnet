@@ -3694,21 +3694,21 @@ namespace Braintree.Tests
         [Test]
         public void PayPalTransactionsReturnSettlementDeclinedResponse()
         {
-            BraintreeGateway altpayGateway = new BraintreeGateway
+            var request = new TransactionRequest
             {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "altpay_merchant",
-                PublicKey = "altpay_merchant_public_key",
-                PrivateKey = "altpay_merchant_private_key"
+                Amount = 1000M,
+                PaymentMethodNonce = Nonce.PayPalFuturePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
             };
 
-            var searchRequest = new TransactionSearchRequest().
-                Status.Is(TransactionStatus.SETTLEMENT_DECLINED).
-                PayPalPayerEmail.Is("jane.doe@example.com");
-            ResourceCollection<Transaction> collection = altpayGateway.Transaction.Search(searchRequest);
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
 
-            Assert.AreEqual(1, collection.MaximumCount);
-            Transaction transaction = collection.FirstItem;
+            TestHelper.SettlementDecline(service, transactionResult.Target.Id);
+            Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
 
             Assert.AreEqual("4001", transaction.ProcessorSettlementResponseCode);
             Assert.AreEqual(TransactionStatus.SETTLEMENT_DECLINED, transaction.Status);
@@ -3718,21 +3718,21 @@ namespace Braintree.Tests
         [Test]
         public void PayPalTransactionsReturnSettlementPendingResponse()
         {
-            BraintreeGateway altpayGateway = new BraintreeGateway
+            var request = new TransactionRequest
             {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "altpay_merchant",
-                PublicKey = "altpay_merchant_public_key",
-                PrivateKey = "altpay_merchant_private_key"
+                Amount = 1000M,
+                PaymentMethodNonce = Nonce.PayPalFuturePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
             };
 
-            var searchRequest = new TransactionSearchRequest().
-                Status.Is(TransactionStatus.SETTLEMENT_PENDING).
-                PayPalPayerEmail.Is("jane.doe@example.com");
-            ResourceCollection<Transaction> collection = altpayGateway.Transaction.Search(searchRequest);
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
 
-            Assert.AreEqual(1, collection.MaximumCount);
-            Transaction transaction = collection.FirstItem;
+            TestHelper.SettlementPending(service, transactionResult.Target.Id);
+            Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
 
             Assert.AreEqual("4002", transaction.ProcessorSettlementResponseCode);
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
