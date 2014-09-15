@@ -3574,6 +3574,33 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void CreateTransaction_WithPayeeEmailInOptionsParams()
+        {
+            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                PayPalAccount = new TransactionPayPalRequest()
+                {
+                },
+                Options = new TransactionOptionsRequest()
+                {
+                    PayeeEmail = "foo@example.com"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("foo@example.com", result.Target.PayPalDetails.PayeeEmail);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
         public void CreateTransaction_WithOneTimePayPalNonce()
         {
             String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
