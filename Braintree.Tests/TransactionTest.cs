@@ -1893,35 +1893,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Sale_GatewayRejectedForApplicationIncomplete()
-        {
-           BraintreeGateway processingRulesGateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "processing_rules_merchant_id",
-                PublicKey = "processing_rules_public_key",
-                PrivateKey = "processing_rules_private_key"
-            };
-
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.APPLICATION_INCOMPLETE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2017",
-                    CVV = "200"
-                }
-            };
-
-            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-            Transaction transaction = result.Transaction;
-
-            Assert.AreEqual(TransactionGatewayRejectionReason.APPLICATION_INCOMPLETE, transaction.GatewayRejectionReason);
-        }
-
-        [Test]
         public void UnrecognizedValuesAreCategorizedAsSuch()
         {
           Transaction transaction = gateway.Transaction.Find("unrecognized_transaction_id");
