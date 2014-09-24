@@ -1757,6 +1757,7 @@ namespace Braintree.Tests
             Assert.AreEqual(2000.00, transaction.Amount);
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
             Assert.AreEqual("2000", transaction.ProcessorResponseCode);
+            Assert.AreEqual("2000 : Do Not Honor", transaction.AdditionalProcessorResponse);
             Assert.IsNotNull(transaction.ProcessorResponseText);
             Assert.IsNull(transaction.VoiceReferralNumber);
 

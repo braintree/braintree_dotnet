@@ -148,6 +148,7 @@ namespace Braintree
         public String ProcessorResponseText { get; protected set; }
         public String ProcessorSettlementResponseCode { get; protected set; }
         public String ProcessorSettlementResponseText { get; protected set; }
+        public String AdditionalProcessorResponse { get; protected set; }
         public String VoiceReferralNumber { get; protected set; }
         public String PurchaseOrderNumber { get; protected set; }
         public Boolean? Recurring { get; protected set; }
@@ -218,6 +219,7 @@ namespace Braintree
             ProcessorResponseText = node.GetString("processor-response-text");
             ProcessorSettlementResponseCode = node.GetString("processor-settlement-response-code");
             ProcessorSettlementResponseText = node.GetString("processor-settlement-response-text");
+            AdditionalProcessorResponse = node.GetString("additional-processor-response");
             VoiceReferralNumber = node.GetString("voice-referral-number");
             PurchaseOrderNumber = node.GetString("purchase-order-number");
             Recurring = node.GetBoolean("recurring");
