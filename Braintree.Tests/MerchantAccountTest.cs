@@ -162,6 +162,7 @@ namespace Braintree.Tests
             Assert.AreEqual("3125551212", merchantAccount.FundingDetails.MobilePhone);
             Assert.AreEqual("122100024", merchantAccount.FundingDetails.RoutingNumber);
             Assert.AreEqual("8798", merchantAccount.FundingDetails.AccountNumberLast4);
+            Assert.AreEqual("Job Leoggs OH", merchantAccount.FundingDetails.Descriptor);
         }
 
         [Test]
@@ -370,6 +371,7 @@ namespace Braintree.Tests
                     MobilePhone = "3125551212",
                     RoutingNumber = "122100024",
                     AccountNumber = "43759348798",
+                    Descriptor = "Job Leoggs OH",
                 },
                 TosAccepted = true,
                 Id = id,
