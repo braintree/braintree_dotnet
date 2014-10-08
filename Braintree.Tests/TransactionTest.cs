@@ -3694,6 +3694,7 @@ namespace Braintree.Tests
 
             Result<Transaction> settlementResult = gateway.Transaction.SubmitForSettlement(result.Target.Id);
             Assert.IsTrue(settlementResult.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SETTLING, settlementResult.Target.Status);
         }
 
         [Test]
@@ -3712,8 +3713,6 @@ namespace Braintree.Tests
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             var id = result.Target.Id;
-
-            TestHelper.Settle(service, id);
 
             Result<Transaction> refundResult = gateway.Transaction.Refund(id);
             Assert.IsTrue(refundResult.IsSuccess());
