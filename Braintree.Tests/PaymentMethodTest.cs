@@ -89,6 +89,32 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CreatesApplePayCardWithNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = SandboxValues.Nonce.APPLE_PAY_AMEX
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.IsInstanceOfType(typeof(ApplePayCard), paymentMethodResult.Target);
+            ApplePayCard applePayCard = (ApplePayCard) paymentMethodResult.Target;
+            Assert.IsNotNull(applePayCard.CardType);
+            Assert.IsNotNull(applePayCard.ExpirationMonth);
+            Assert.IsNotNull(applePayCard.ExpirationYear);
+            Assert.IsNotNull(applePayCard.CreatedAt);
+            Assert.IsNotNull(applePayCard.UpdatedAt);
+            Assert.IsNotNull(applePayCard.Subscriptions);
+        }
+
+        [Test]
         public void Create_CanMakeDefaultAndSetToken()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
