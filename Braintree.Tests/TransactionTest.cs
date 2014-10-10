@@ -1738,6 +1738,24 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithApplePayNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = SandboxValues.Nonce.APPLE_PAY_AMEX
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.IsNotNull(result.Target.ApplePayDetails);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CardType);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationMonth);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CardholderName);
+        }
+
+        [Test]
         public void Sale_Declined()
         {
             TransactionRequest request = new TransactionRequest
@@ -3694,6 +3712,7 @@ namespace Braintree.Tests
 
             Result<Transaction> settlementResult = gateway.Transaction.SubmitForSettlement(result.Target.Id);
             Assert.IsTrue(settlementResult.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SETTLING, settlementResult.Target.Status);
         }
 
         [Test]
@@ -3712,8 +3731,6 @@ namespace Braintree.Tests
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             var id = result.Target.Id;
-
-            TestHelper.Settle(service, id);
 
             Result<Transaction> refundResult = gateway.Transaction.Refund(id);
             Assert.IsTrue(refundResult.IsSuccess());

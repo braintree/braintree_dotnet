@@ -11,6 +11,7 @@ namespace Braintree
       public String MobilePhone { get; set; }
       public String RoutingNumber { get; set; }
       public String AccountNumber { get; set; }
+      public String Descriptor { get; set; }
 
       public override String ToXml()
       {
@@ -41,6 +42,7 @@ namespace Braintree
         builder.AddElement("mobile-phone", MobilePhone);
         builder.AddElement("routing-number", RoutingNumber);
         builder.AddElement("account-number", AccountNumber);
+        builder.AddElement("descriptor", Descriptor);
         return builder;
       }
     }

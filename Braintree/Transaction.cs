@@ -170,6 +170,7 @@ namespace Braintree
         public Dictionary<String, String> CustomFields { get; protected set; }
         public Decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
+        public ApplePayDetails ApplePayDetails { get; protected set; }
         public PayPalDetails PayPalDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
 
@@ -248,6 +249,11 @@ namespace Braintree
             if (paypalNode != null)
             {
                 PayPalDetails = new PayPalDetails(paypalNode);
+            }
+            var applePayNode = node.GetNode("apple-pay");
+            if (applePayNode != null)
+            {
+                ApplePayDetails = new ApplePayDetails(applePayNode);
             }
 
             BillingAddress = new Address(node.GetNode("billing"));

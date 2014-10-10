@@ -22,6 +22,13 @@ namespace Braintree
             public const Decimal FAILED = 3000;
         }
 
+        public class Nonce
+        {
+            public const String APPLE_PAY_VISA = "fake-apple-pay-visa-nonce";
+            public const String APPLE_PAY_MASTERCARD = "fake-apple-pay-mastercard-nonce";
+            public const String APPLE_PAY_AMEX = "fake-apple-pay-amex-nonce";
+        }
+
         public class VenmoSdk
         {
             public const String VISA_PAYMENT_METHOD_CODE = "stub-4111111111111111";

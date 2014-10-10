@@ -11,6 +11,7 @@ namespace Braintree
         public String AccountNumberLast4 { get; protected set; }
         public String Email { get; protected set; }
         public String MobilePhone { get; protected set; }
+        public String Descriptor { get; protected set; }
 
         protected internal MerchantAccountFundingDetails(NodeWrapper node)
         {
@@ -22,6 +23,7 @@ namespace Braintree
             AccountNumberLast4 = node.GetString("account-number-last-4");
             Email = node.GetString("email");
             MobilePhone = node.GetString("mobile-phone");
+            Descriptor = node.GetString("descriptor");
         }
     }
 }

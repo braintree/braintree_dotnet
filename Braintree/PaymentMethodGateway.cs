@@ -24,6 +24,10 @@ namespace Braintree
             {
                 return new ResultImpl<CreditCard>(response, service);
             }
+            else if (response.GetName() == "apple-pay-card")
+            {
+                return new ResultImpl<ApplePayCard>(response, service);
+            }
             else
             {
                 return new ResultImpl<UnknownPaymentMethod>(response, service);
@@ -41,6 +45,10 @@ namespace Braintree
             else if (response.GetName() == "credit-card")
             {
                 return new ResultImpl<CreditCard>(response, service);
+            }
+            else if (response.GetName() == "apple-pay-card")
+            {
+                return new ResultImpl<ApplePayCard>(response, service);
             }
             else
             {
