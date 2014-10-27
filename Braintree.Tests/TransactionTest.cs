@@ -1743,7 +1743,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                PaymentMethodNonce = SandboxValues.Nonce.APPLE_PAY_AMEX
+                PaymentMethodNonce = Nonce.ApplePayAmex
             };
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());

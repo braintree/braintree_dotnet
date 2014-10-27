@@ -97,7 +97,7 @@ namespace Braintree.Tests
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
-                PaymentMethodNonce = SandboxValues.Nonce.APPLE_PAY_AMEX
+                PaymentMethodNonce = Nonce.ApplePayAmex
             };
             Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
 
@@ -537,6 +537,22 @@ namespace Braintree.Tests
 
             PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
             Assert.AreEqual(result.Target.Token, found.Token);
+        }
+
+        [Test]
+        public void Find_FindsApplePayCard()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.ApplePayAmex
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
+            Assert.AreEqual(result.Target.Token, found.Token);
+            Assert.IsInstanceOfType(typeof(ApplePayCard), found);
         }
 
         [Test]
