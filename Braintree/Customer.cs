@@ -33,6 +33,7 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public CreditCard[] CreditCards { get; protected set; }
         public PayPalAccount[] PayPalAccounts { get; protected set; }
+        public ApplePayCard[] ApplePayCards { get; protected set; }
         public PaymentMethod[] PaymentMethods { get; protected set; }
         public Address[] Addresses { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
@@ -80,9 +81,17 @@ namespace Braintree
                 PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i], service);
             }
 
-            PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length];
+            var applePayXmlNodes = node.GetList("apple-pay-cards/apple-pay-card");
+            ApplePayCards = new ApplePayCard[applePayXmlNodes.Count];
+            for (int i = 0; i < applePayXmlNodes.Count; i++)
+            {
+                ApplePayCards[i] = new ApplePayCard(applePayXmlNodes[i], service);
+            }
+
+            PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length];
             CreditCards.CopyTo(PaymentMethods, 0);
             PayPalAccounts.CopyTo(PaymentMethods, CreditCards.Length);
+            ApplePayCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length);
 
             var addressXmlNodes = node.GetList("addresses/address");
             Addresses = new Address[addressXmlNodes.Count];

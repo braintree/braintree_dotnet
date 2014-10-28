@@ -94,6 +94,21 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_IncludesPaymentMethods()
+        {
+            var createRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayAmex
+            };
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+            Assert.IsNotNull(customer.ApplePayCards);
+            Assert.IsNotNull(customer.PaymentMethods);
+            Assert.IsNotNull(customer.ApplePayCards[0].Token);
+            Assert.AreEqual(customer.ApplePayCards[0], customer.PaymentMethods[0]);
+        }
+
+        [Test]
         public void Find_RaisesIfIdIsInvalid()
         {
             try
