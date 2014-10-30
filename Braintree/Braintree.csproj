@@ -103,6 +103,8 @@
     <Compile Include="Hasher.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IndividualRequest.cs" />
+    <Compile Include="IndustryRequest.cs" />
+    <Compile Include="IndustryDataRequest.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="MerchantAccount.cs" />
     <Compile Include="MerchantAccountBusinessDetails.cs" />

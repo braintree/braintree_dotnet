@@ -2643,6 +2643,129 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithLodgingIndustryData()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Industry = new IndustryRequest
+                {
+                  IndustryType = TransactionIndustryType.LODGING,
+                  IndustryData = new IndustryDataRequest
+                  {
+                      FolioNumber = "aaa",
+                      CheckInDate = "2014-07-07",
+                      CheckOutDate = "2014-08-08"
+                  }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Sale_WithLodgingIndustryDataValidation()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Industry = new IndustryRequest
+                {
+                  IndustryType = TransactionIndustryType.LODGING,
+                  IndustryData = new IndustryDataRequest
+                  {
+                      FolioNumber = "aaa",
+                      CheckInDate = "2014-07-07",
+                      CheckOutDate = "2014-06-06"
+                  }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.INDUSTRY_DATA_LODGING_CHECK_OUT_DATE_MUST_FOLLOW_CHECK_IN_DATE,
+                result.Errors.ForObject("Transaction").ForObject("Industry").OnField("CheckOutDate")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithTravelCruiseIndustryData()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Industry = new IndustryRequest
+                {
+                  IndustryType = TransactionIndustryType.TRAVEL_AND_CRUISE,
+                  IndustryData = new IndustryDataRequest
+                  {
+                      TravelPackage = "flight",
+                      DepartureDate = "2014-07-07",
+                      LodgingCheckInDate = "2014-07-07",
+                      LodgingCheckOutDate = "2014-08-08",
+                      LodgingName = "Disney",
+                  }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Sale_WithTravelCruiseIndustryDataValidation()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Industry = new IndustryRequest
+                {
+                  IndustryType = TransactionIndustryType.TRAVEL_AND_CRUISE,
+                  IndustryData = new IndustryDataRequest
+                  {
+                      TravelPackage = "foot",
+                      DepartureDate = "2014-07-07",
+                      LodgingCheckInDate = "2014-07-07",
+                      LodgingCheckOutDate = "2014-08-08",
+                      LodgingName = "Disney",
+                  }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.INDUSTRY_DATA_TRAVEL_CRUISE_TRAVEL_PACKAGE_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("Industry").OnField("TravelPackage")[0].Code
+            );
+        }
+
+
+        [Test]
         public void Sale_WithVenmoSdkPaymentMethodCode()
         {
             var request = new TransactionRequest

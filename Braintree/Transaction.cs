@@ -63,6 +63,14 @@ namespace Braintree
         protected TransactionStatus(String name) : base(name) {}
     }
 
+    public class TransactionIndustryType : Enumeration
+    {
+        public static readonly TransactionIndustryType LODGING = new TransactionIndustryType("lodging");
+        public static readonly TransactionIndustryType TRAVEL_AND_CRUISE = new TransactionIndustryType("travel_cruise");
+
+        protected TransactionIndustryType(String name) : base(name) {}
+    }
+
     public class TransactionSource : Enumeration
     {
         public static readonly TransactionSource API = new TransactionSource("api");
