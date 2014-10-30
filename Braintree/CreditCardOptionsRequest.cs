@@ -9,6 +9,7 @@ namespace Braintree
     public class CreditCardOptionsRequest : Request
     {
         public Boolean? VerifyCard { get; set; }
+        public String VerificationAmount { get; set; }
         public Boolean? MakeDefault { get; set; }
         public Boolean? FailOnDuplicatePaymentMethod { get; set; }
         public String VerificationMerchantAccountId { get; set; }
@@ -32,6 +33,7 @@ namespace Braintree
             builder.AddElement("make-default", MakeDefault);
             builder.AddElement("verification-merchant-account-id", VerificationMerchantAccountId);
             builder.AddElement("verify-card", VerifyCard);
+            builder.AddElement("verification-amount", VerificationAmount);
             builder.AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod);
             builder.AddElement("update-existing-token", UpdateExistingToken);
             builder.AddElement("venmo-sdk-session", VenmoSdkSession);
