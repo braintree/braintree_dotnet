@@ -326,5 +326,33 @@ namespace Braintree.Tests
 
             Assert.AreEqual(merchantAccountId, "my_merchant_account");
         }
+
+        [Test]
+        public void Generate_ThrowExceptionWhenCustomerNotFound()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+
+            string encodedClientToken = "";
+
+            try
+            {
+                encodedClientToken += gateway.ClientToken.generate(
+                    new ClientTokenRequest
+                    {
+                        CustomerId = "NON_EXISTENT_CUSTOMER_ID"
+                    }
+                );
+                Assert.Fail("Should raise ArgumentException");
+            } catch (ArgumentException e) {
+                Match match = Regex.Match(e.Message, @"customer_id");
+                Assert.IsTrue(match.Success);
+            }
+        }
     }
 }
