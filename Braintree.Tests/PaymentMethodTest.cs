@@ -115,6 +115,24 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CreatesAbstractPaymentMethod()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.AbstractTransactable
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+        }
+
+        [Test]
         public void Create_CanMakeDefaultAndSetToken()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
@@ -553,6 +571,21 @@ namespace Braintree.Tests
             PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
             Assert.AreEqual(result.Target.Token, found.Token);
             Assert.IsInstanceOfType(typeof(ApplePayCard), found);
+        }
+
+        [Test]
+        public void Find_FindsAbstractPaymentMethod()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.AbstractTransactable
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
+            Assert.AreEqual(result.Target.Token, found.Token);
         }
 
         [Test]
