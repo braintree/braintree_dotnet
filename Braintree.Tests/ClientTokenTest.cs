@@ -306,28 +306,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Generate_GatewayAcceptsMerchantAccountId()
-        {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
-
-            var clientToken = TestHelper.GenerateDecodedClientToken(gateway,
-                new ClientTokenRequest
-                {
-                    MerchantAccountId = "my_merchant_account"
-                }
-            );
-            var merchantAccountId = TestHelper.extractParamFromJson("merchantAccountId", clientToken);
-
-            Assert.AreEqual(merchantAccountId, "my_merchant_account");
-        }
-
-        [Test]
         public void Generate_ThrowExceptionWhenCustomerNotFound()
         {
             BraintreeGateway gateway = new BraintreeGateway
