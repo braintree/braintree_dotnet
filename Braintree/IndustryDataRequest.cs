@@ -9,6 +9,7 @@ namespace Braintree
         public String FolioNumber { get; set; }
         public String CheckInDate { get; set; }
         public String CheckOutDate { get; set; }
+        public String RoomRate { get; set; }
 
         public String TravelPackage { get; set; }
         public String DepartureDate { get; set; }
@@ -41,7 +42,8 @@ namespace Braintree
                 AddElement("departure-date", DepartureDate).
                 AddElement("lodging-check-in-date", LodgingCheckInDate).
                 AddElement("lodging-check-out-date", LodgingCheckOutDate).
-                AddElement("lodging-name", LodgingName);
+                AddElement("lodging-name", LodgingName).
+                AddElement("room-rate", RoomRate);
         }
     }
 }

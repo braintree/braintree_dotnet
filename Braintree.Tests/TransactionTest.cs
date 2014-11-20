@@ -2660,7 +2660,8 @@ namespace Braintree.Tests
                   {
                       FolioNumber = "aaa",
                       CheckInDate = "2014-07-07",
-                      CheckOutDate = "2014-08-08"
+                      CheckOutDate = "2014-08-08",
+                      RoomRate = "239.00"
                   }
                 }
             };
@@ -2687,7 +2688,8 @@ namespace Braintree.Tests
                   {
                       FolioNumber = "aaa",
                       CheckInDate = "2014-07-07",
-                      CheckOutDate = "2014-06-06"
+                      CheckOutDate = "2014-06-06",
+                      RoomRate = "239.00"
                   }
                 }
             };
