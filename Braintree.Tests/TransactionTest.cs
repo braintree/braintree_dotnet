@@ -1128,6 +1128,26 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_ReturnsSuccessfulResponseWithRiskData()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsNotNull(transaction.RiskData);
+        }
+
+        [Test]
         public void Sale_WithDeviceData()
         {
             var request = new TransactionRequest

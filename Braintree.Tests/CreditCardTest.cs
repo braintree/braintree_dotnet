@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Xml;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -858,6 +859,34 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void VerifyValidCreditCardWithVerificationRiskData()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCard card = result.Target;
+
+            CreditCardVerification verification = card.Verification;
+            Assert.IsNotNull(verification);
+
+            Assert.IsNotNull(verification.RiskData);
+        }
+
+        [Test]
         public void VerifyValidCreditCardWithVerificationAmount()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1230,6 +1259,37 @@ namespace Braintree.Tests
           };
           Result<CreditCard> result = gateway.CreditCard.Create(request);
           Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void VerificationIsLatestVerification()
+        {
+            String xml = "<credit-card>"
+                          + "<verifications>"
+                          + "    <verification>"
+                          + "        <created-at type=\"datetime\">2014-11-20T17:27:15Z</created-at>"
+                          + "        <id>123</id>"
+                          + "    </verification>"
+                          + "    <verification>"
+                          + "        <created-at type=\"datetime\">2014-11-20T17:27:18Z</created-at>"
+                          + "        <id>932</id>"
+                          + "    </verification>"
+                          + "    <verification>"
+                          + "        <created-at type=\"datetime\">2014-11-20T17:27:17Z</created-at>"
+                          + "        <id>456</id>"
+                          + "    </verification>"
+                          + "</verifications>"
+                        + "</credit-card>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<CreditCard>(node, service);
+
+            Assert.AreEqual("932", result.Target.Verification.Id);
         }
     }
 }

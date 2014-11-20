@@ -136,6 +136,7 @@
     <Compile Include="RequestBuilder.cs" />
     <Compile Include="ResourceCollection.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="RiskData.cs" />
     <Compile Include="SandboxValues.cs" />
     <Compile Include="SearchCriteria.cs" />
     <Compile Include="SearchNode.cs" />

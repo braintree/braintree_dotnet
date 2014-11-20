@@ -181,6 +181,7 @@ namespace Braintree
         public ApplePayDetails ApplePayDetails { get; protected set; }
         public PayPalDetails PayPalDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
+        public RiskData RiskData { get; protected set; }
 
         private BraintreeService Service;
 
@@ -282,6 +283,11 @@ namespace Braintree
             Disputes = new List<Dispute>();
             foreach (NodeWrapper dispute in node.GetList("disputes/dispute")) {
                 Disputes.Add(new Dispute(dispute));
+            }
+
+            var riskDataNode = node.GetNode("risk-data");
+            if (riskDataNode != null){
+                RiskData = new RiskData(riskDataNode);
             }
         }
 

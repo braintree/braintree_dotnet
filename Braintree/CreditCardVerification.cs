@@ -37,6 +37,7 @@ namespace Braintree
         public Address BillingAddress { get; protected set; }
         public CreditCard CreditCard { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
+        public RiskData RiskData { get; protected set; }
 
         public CreditCardVerification(NodeWrapper node, BraintreeService service)
         {
@@ -59,6 +60,11 @@ namespace Braintree
             BillingAddress = new Address(node.GetNode("billing"));
             CreditCard = new CreditCard(node.GetNode("credit-card"), service);
             CreatedAt = node.GetDateTime("created-at");
+
+            var riskDataNode = node.GetNode("risk-data");
+            if (riskDataNode != null) {
+                RiskData = new RiskData(riskDataNode);
+            }
         }
     }
 }
