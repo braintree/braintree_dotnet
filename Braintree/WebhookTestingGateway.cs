@@ -18,8 +18,8 @@ namespace Braintree
         {
             Dictionary<string, string> response = new Dictionary<string, string>();
             string payload = BuildPayload(kind, id);
-            response["payload"] = payload;
-            response["signature"] = BuildSignature(payload);
+            response["bt_payload"] = payload;
+            response["bt_signature"] = BuildSignature(payload);
             return response;
         }
 

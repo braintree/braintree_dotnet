@@ -39,6 +39,7 @@ namespace Braintree
         public String PurchaseOrderNumber { get; set; }
         public CustomerRequest Customer { get; set; }
         public DescriptorRequest Descriptor { get; set; }
+        public IndustryRequest Industry { get; set; }
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
         public TransactionPayPalRequest PayPalAccount { get; set; }
@@ -126,6 +127,7 @@ namespace Braintree
             builder.AddElement("credit-card", CreditCard);
             builder.AddElement("customer", Customer);
             builder.AddElement("descriptor", Descriptor);
+            builder.AddElement("industry", Industry);
             builder.AddElement("billing", BillingAddress);
             builder.AddElement("shipping", ShippingAddress);
             builder.AddElement("paypal-account", PayPalAccount);

@@ -97,7 +97,7 @@ namespace Braintree.Tests
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
-                PaymentMethodNonce = SandboxValues.Nonce.APPLE_PAY_AMEX
+                PaymentMethodNonce = Nonce.ApplePayAmex
             };
             Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
 
@@ -112,6 +112,24 @@ namespace Braintree.Tests
             Assert.IsNotNull(applePayCard.CreatedAt);
             Assert.IsNotNull(applePayCard.UpdatedAt);
             Assert.IsNotNull(applePayCard.Subscriptions);
+        }
+
+        [Test]
+        public void Create_CreatesAbstractPaymentMethod()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.AbstractTransactable
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
         }
 
         [Test]
@@ -531,6 +549,37 @@ namespace Braintree.Tests
             {
                 CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
                 PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
+            Assert.AreEqual(result.Target.Token, found.Token);
+        }
+
+        [Test]
+        public void Find_FindsApplePayCard()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.ApplePayAmex
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
+            Assert.AreEqual(result.Target.Token, found.Token);
+            Assert.IsInstanceOfType(typeof(ApplePayCard), found);
+        }
+
+        [Test]
+        public void Find_FindsAbstractPaymentMethod()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.AbstractTransactable
             };
             Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
             Assert.IsTrue(result.IsSuccess());

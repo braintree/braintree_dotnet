@@ -157,6 +157,7 @@ namespace Braintree
         public CreditCardHealthcare Healthcare { get; protected set; }
         public CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
         public String ImageUrl { get; protected set; }
+        public CreditCardVerification Verification { get; protected set; }
 
         private String _CountryOfIssuance;
 
@@ -249,6 +250,25 @@ namespace Braintree
             {
                 Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
             }
+
+            var verificationNodes = node.GetList("verifications/verification");
+            Verification = FindLatestVerification(verificationNodes, service);
+        }
+
+        private CreditCardVerification FindLatestVerification(List<NodeWrapper> verificationNodes, BraintreeService service) {
+            if(verificationNodes.Count > 0)
+            {
+                verificationNodes.Sort(delegate(NodeWrapper first, NodeWrapper second) {
+                    DateTime time1 = (DateTime)first.GetDateTime("created-at");
+                    DateTime time2 = (DateTime)second.GetDateTime("created-at");
+
+                    return DateTime.Compare(time2, time1);
+                });
+
+                return new CreditCardVerification(verificationNodes[0], service);
+            }
+
+            return null;
         }
     }
 }

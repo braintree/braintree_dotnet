@@ -76,6 +76,10 @@ namespace Braintree
             {
                 return new CreditCard(response, service);
             }
+            else if (response.GetName() == "apple-pay-card")
+            {
+                return new ApplePayCard(response, service);
+            }
             else
             {
                 return new UnknownPaymentMethod(response);

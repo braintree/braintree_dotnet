@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.36.0</AssemblyName>
+    <AssemblyName>Braintree-2.37.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.36.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.37.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.36.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.37.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -103,6 +103,8 @@
     <Compile Include="Hasher.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IndividualRequest.cs" />
+    <Compile Include="IndustryRequest.cs" />
+    <Compile Include="IndustryDataRequest.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="MerchantAccount.cs" />
     <Compile Include="MerchantAccountBusinessDetails.cs" />
@@ -134,6 +136,7 @@
     <Compile Include="RequestBuilder.cs" />
     <Compile Include="ResourceCollection.cs" />
     <Compile Include="Result.cs" />
+    <Compile Include="RiskData.cs" />
     <Compile Include="SandboxValues.cs" />
     <Compile Include="SearchCriteria.cs" />
     <Compile Include="SearchNode.cs" />

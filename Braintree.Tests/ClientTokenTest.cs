@@ -306,7 +306,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Generate_GatewayAcceptsMerchantAccountId()
+        public void Generate_ThrowExceptionWhenCustomerNotFound()
         {
             BraintreeGateway gateway = new BraintreeGateway
             {
@@ -316,15 +316,21 @@ namespace Braintree.Tests
                 PrivateKey = "integration_private_key"
             };
 
-            var clientToken = TestHelper.GenerateDecodedClientToken(gateway,
-                new ClientTokenRequest
-                {
-                    MerchantAccountId = "my_merchant_account"
-                }
-            );
-            var merchantAccountId = TestHelper.extractParamFromJson("merchantAccountId", clientToken);
+            string encodedClientToken = "";
 
-            Assert.AreEqual(merchantAccountId, "my_merchant_account");
+            try
+            {
+                encodedClientToken += gateway.ClientToken.generate(
+                    new ClientTokenRequest
+                    {
+                        CustomerId = "NON_EXISTENT_CUSTOMER_ID"
+                    }
+                );
+                Assert.Fail("Should raise ArgumentException");
+            } catch (ArgumentException e) {
+                Match match = Regex.Match(e.Message, @"customer_id");
+                Assert.IsTrue(match.Success);
+            }
         }
     }
 }
