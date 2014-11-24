@@ -3793,6 +3793,34 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void CreateTransaction_WithPayPalCustomField()
+        {
+            var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest()
+                {
+                    PayPal = new TransactionOptionsPayPalRequest()
+                    {
+                        CustomField = "custom field stuff"
+                    }
+                }
+            };
+
+            var result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("custom field stuff", result.Target.PayPalDetails.CustomField);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
         public void CreateTransaction_WithOneTimePayPalNonce()
         {
             String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
