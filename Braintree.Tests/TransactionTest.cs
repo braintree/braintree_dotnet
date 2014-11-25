@@ -3120,6 +3120,19 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_ExposesRetrievals()
+        {
+            Transaction transaction = gateway.Transaction.Find("retrievaltransaction");
+
+            List<Dispute> disputes = transaction.Disputes;
+            Dispute dispute = disputes[0];
+
+            Assert.AreEqual(dispute.Amount, Decimal.Parse("1000.00"));
+            Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
+            Assert.AreEqual(dispute.Reason, DisputeReason.RETRIEVAL);
+        }
+
+        [Test]
         public void Find_IsDisbursedFalse()
         {
             TransactionRequest request = new TransactionRequest

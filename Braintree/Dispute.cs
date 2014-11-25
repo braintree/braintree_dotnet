@@ -30,10 +30,11 @@ namespace Braintree
         public static readonly DisputeReason PRODUCT_NOT_RECEIVED = new DisputeReason("product_not_received");
         public static readonly DisputeReason PRODUCT_UNSATISFACTORY = new DisputeReason("product_unsatisfactory");
         public static readonly DisputeReason TRANSACTION_AMOUNT_DIFFERS = new DisputeReason("transaction_amount_differs");
+        public static readonly DisputeReason RETRIEVAL = new DisputeReason("retrieval");
 
 
         public static readonly DisputeReason[] ALL = {
-          CANCELLED_RECURRING_TRANSACTION, CREDIT_NOT_PROCESSED, DUPLICATE, FRAUD, GENERAL, INVALID_ACCOUNT, NOT_RECOGNIZED, PRODUCT_NOT_RECEIVED, PRODUCT_UNSATISFACTORY, TRANSACTION_AMOUNT_DIFFERS
+          CANCELLED_RECURRING_TRANSACTION, CREDIT_NOT_PROCESSED, DUPLICATE, FRAUD, GENERAL, INVALID_ACCOUNT, NOT_RECOGNIZED, PRODUCT_NOT_RECEIVED, PRODUCT_UNSATISFACTORY, TRANSACTION_AMOUNT_DIFFERS, RETRIEVAL
         };
 
         protected DisputeReason(String name) : base(name) {}
