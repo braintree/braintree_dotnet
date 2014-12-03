@@ -151,6 +151,7 @@
     <Compile Include="SubscriptionOptionsRequest.cs" />
     <Compile Include="SubscriptionRequest.cs" />
     <Compile Include="SubscriptionSearchRequest.cs" />
+    <Compile Include="SubscriptionStatusEvent.cs" />
     <Compile Include="SubscriptionTransactionRequest.cs" />
     <Compile Include="TextNode.cs" />
     <Compile Include="Test\Nonce.cs" />

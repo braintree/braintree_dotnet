@@ -75,6 +75,11 @@ namespace Braintree.Tests
             Assert.IsTrue(subscription.CreatedAt.HasValue);
             Assert.IsTrue(subscription.UpdatedAt.HasValue);
             Assert.IsTrue(subscription.PaidThroughDate.HasValue);
+
+            Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.StatusHistory[0].Status);
+            Assert.AreEqual(SubscriptionSource.API, subscription.StatusHistory[0].Source);
+            Assert.AreEqual(plan.Price, subscription.StatusHistory[0].Price);
+            Assert.AreEqual(0.00M, subscription.StatusHistory[0].Balance);
         }
 
         [Test]
