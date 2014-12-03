@@ -64,5 +64,26 @@ namespace Braintree
                 return new TextNode<CreditCardVerificationSearchRequest>("payment-method-token", this);
             }
         }
+        public TextNode<CreditCardVerificationSearchRequest> BillingAddressDetailsPostalCode
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("billing-address-details-postal-code", this);
+            }
+        }
+        public TextNode<CreditCardVerificationSearchRequest> CustomerId
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("customer-id", this);
+            }
+        }
+        public TextNode<CreditCardVerificationSearchRequest> CustomerEmail
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("customer-email", this);
+            }
+        }
     }
 }

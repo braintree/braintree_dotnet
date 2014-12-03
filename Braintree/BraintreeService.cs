@@ -99,7 +99,6 @@ namespace Braintree
 
                 var response = request.GetResponse() as HttpWebResponse;
 
-
                 XmlNode doc = ParseResponseStream(GetResponseStream(response));
                 response.Close();
 
