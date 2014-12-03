@@ -163,6 +163,35 @@ namespace Braintree.Tests
             Assert.AreEqual(verification.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
 
         }
+
+        [Test]
+        public void Search_OnTextFields()
+        {
+            var createRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                      VerifyCard = true
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+            String token = result.Target.CreditCards[0].Token;
+
+            CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
+                PaymentMethodToken.Is(token);
+
+            ResourceCollection<CreditCardVerification> collection = gateway.CreditCardVerification.Search(searchRequest);
+            CreditCardVerification verification = collection.FirstItem;
+
+            Assert.AreEqual(1, collection.MaximumCount);
+            Assert.AreEqual(token, verification.CreditCard.Token);
+        }
     }
 
 }

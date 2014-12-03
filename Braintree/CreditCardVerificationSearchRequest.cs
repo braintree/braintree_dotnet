@@ -57,5 +57,12 @@ namespace Braintree
                 return new DateRangeNode<CreditCardVerificationSearchRequest>("created-at", this);
             }
         }
+        public TextNode<CreditCardVerificationSearchRequest> PaymentMethodToken
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("payment-method-token", this);
+            }
+        }
     }
 }
