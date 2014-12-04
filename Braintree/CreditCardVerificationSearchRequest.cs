@@ -85,5 +85,12 @@ namespace Braintree
                 return new TextNode<CreditCardVerificationSearchRequest>("customer-email", this);
             }
         }
+        public MultipleValueNode<CreditCardVerificationSearchRequest, Braintree.VerificationStatus> Status
+        {
+            get
+            {
+                return new MultipleValueNode<CreditCardVerificationSearchRequest, Braintree.VerificationStatus>("status", this);
+            }
+        }
     }
 }

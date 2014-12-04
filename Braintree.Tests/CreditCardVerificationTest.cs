@@ -121,7 +121,8 @@ namespace Braintree.Tests
 
             CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
                 CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD).
-                Ids.IncludedIn(verification1.Id, verification2.Id);
+                Ids.IncludedIn(verification1.Id, verification2.Id).
+                Status.IncludedIn(verification1.Status);
 
             ResourceCollection<CreditCardVerification> collection = gateway.CreditCardVerification.Search(searchRequest);
 
