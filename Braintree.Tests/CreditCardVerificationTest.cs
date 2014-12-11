@@ -121,7 +121,8 @@ namespace Braintree.Tests
 
             CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
                 CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD).
-                Ids.IncludedIn(verification1.Id, verification2.Id);
+                Ids.IncludedIn(verification1.Id, verification2.Id).
+                Status.IncludedIn(verification1.Status);
 
             ResourceCollection<CreditCardVerification> collection = gateway.CreditCardVerification.Search(searchRequest);
 
@@ -162,6 +163,47 @@ namespace Braintree.Tests
             Assert.AreEqual(verification.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
 
+        }
+
+        [Test]
+        public void Search_OnTextFields()
+        {
+            var createRequest = new CustomerRequest
+            {
+                Email = "mike.a@example.com",
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        PostalCode = "44444"
+                    },
+                    Options = new CreditCardOptionsRequest
+                    {
+                        VerifyCard = true
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+            String token = result.Target.CreditCards[0].Token;
+            String postalCode = result.Target.CreditCards[0].BillingAddress.PostalCode;
+            String customerId = result.Target.Id;
+            String customerEmail = result.Target.Email;
+
+            CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
+                PaymentMethodToken.Is(token).
+                BillingAddressDetailsPostalCode.Is(postalCode).
+                CustomerId.Is(customerId).
+                CustomerEmail.Is(customerEmail);
+
+            ResourceCollection<CreditCardVerification> collection = gateway.CreditCardVerification.Search(searchRequest);
+            CreditCardVerification verification = collection.FirstItem;
+
+            Assert.AreEqual(1, collection.MaximumCount);
+            Assert.AreEqual(token, verification.CreditCard.Token);
+            Assert.AreEqual(postalCode, verification.BillingAddress.PostalCode);
         }
     }
 

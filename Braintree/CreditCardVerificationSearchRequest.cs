@@ -57,5 +57,40 @@ namespace Braintree
                 return new DateRangeNode<CreditCardVerificationSearchRequest>("created-at", this);
             }
         }
+        public TextNode<CreditCardVerificationSearchRequest> PaymentMethodToken
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("payment-method-token", this);
+            }
+        }
+        public TextNode<CreditCardVerificationSearchRequest> BillingAddressDetailsPostalCode
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("billing-address-details-postal-code", this);
+            }
+        }
+        public TextNode<CreditCardVerificationSearchRequest> CustomerId
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("customer-id", this);
+            }
+        }
+        public TextNode<CreditCardVerificationSearchRequest> CustomerEmail
+        {
+            get
+            {
+                return new TextNode<CreditCardVerificationSearchRequest>("customer-email", this);
+            }
+        }
+        public MultipleValueNode<CreditCardVerificationSearchRequest, Braintree.VerificationStatus> Status
+        {
+            get
+            {
+                return new MultipleValueNode<CreditCardVerificationSearchRequest, Braintree.VerificationStatus>("status", this);
+            }
+        }
     }
 }

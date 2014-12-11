@@ -3120,6 +3120,19 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_ExposesRetrievals()
+        {
+            Transaction transaction = gateway.Transaction.Find("retrievaltransaction");
+
+            List<Dispute> disputes = transaction.Disputes;
+            Dispute dispute = disputes[0];
+
+            Assert.AreEqual(dispute.Amount, Decimal.Parse("1000.00"));
+            Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
+            Assert.AreEqual(dispute.Reason, DisputeReason.RETRIEVAL);
+        }
+
+        [Test]
         public void Find_IsDisbursedFalse()
         {
             TransactionRequest request = new TransactionRequest
@@ -3760,6 +3773,62 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
             Assert.AreEqual("foo@example.com", result.Target.PayPalDetails.PayeeEmail);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
+        public void CreateTransaction_WithPayeeEmailInOptionsPaypal()
+        {
+            var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest()
+                {
+                    PayPal = new TransactionOptionsPayPalRequest()
+                    {
+                        PayeeEmail = "bar@example.com"
+                    }
+                }
+            };
+
+            var result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("bar@example.com", result.Target.PayPalDetails.PayeeEmail);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
+        public void CreateTransaction_WithPayPalCustomField()
+        {
+            var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest()
+                {
+                    PayPal = new TransactionOptionsPayPalRequest()
+                    {
+                        CustomField = "custom field stuff"
+                    }
+                }
+            };
+
+            var result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("custom field stuff", result.Target.PayPalDetails.CustomField);
             Assert.IsNull(result.Target.PayPalDetails.Token);
             Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }

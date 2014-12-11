@@ -16,6 +16,7 @@ namespace Braintree
         public Boolean? SubmitForSettlement { get; set; }
         public String VenmoSdkSession { get; set; }
         public String PayeeEmail { get; set; }
+        public TransactionOptionsPayPalRequest PayPal { get; set; }
 
         public override String ToXml(String root)
         {
@@ -37,7 +38,8 @@ namespace Braintree
                 AddElement("store-shipping-address-in-vault", StoreShippingAddressInVault).
                 AddElement("submit-for-settlement", SubmitForSettlement).
                 AddElement("venmo-sdk-session", VenmoSdkSession).
-                AddElement("payee-email", PayeeEmail);
+                AddElement("payee-email", PayeeEmail).
+                AddElement("paypal", PayPal);
         }
     }
 }
