@@ -64,6 +64,18 @@ namespace Braintree
         protected SubscriptionStatus(String name) : base(name) {}
     }
 
+    public class SubscriptionSource : Enumeration
+    {
+        public static readonly SubscriptionSource API = new SubscriptionSource("api");
+        public static readonly SubscriptionSource CONTROL_PANEL = new SubscriptionSource("control_panel");
+        public static readonly SubscriptionSource RECURRING = new SubscriptionSource("recurring");
+        public static readonly SubscriptionSource UNRECOGNIZED = new SubscriptionSource("unrecognized");
+
+        public static readonly SubscriptionSource[] ALL = { API, CONTROL_PANEL, RECURRING, UNRECOGNIZED };
+
+        protected SubscriptionSource(String name) : base(name) {}
+    }
+
     /// <summary>
     /// A subscription returned by the Braintree Gateway
     /// </summary>
@@ -100,6 +112,7 @@ namespace Braintree
         public String PaymentMethodToken { get; protected set; }
         public String PlanId { get; protected set; }
         public Decimal? Price { get; protected set; }
+        public SubscriptionStatusEvent[] StatusHistory { get; protected set; }
         public SubscriptionStatus Status { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
         public Int32? TrialDuration { get; protected set; }
@@ -130,6 +143,12 @@ namespace Braintree
             PlanId = node.GetString("plan-id");
             Price = node.GetDecimal("price");
             Status = (SubscriptionStatus)CollectionUtil.Find(SubscriptionStatus.STATUSES, node.GetString("status"), SubscriptionStatus.UNRECOGNIZED);
+            List<NodeWrapper> statusNodes = node.GetList("status-history/status-event");
+            StatusHistory = new SubscriptionStatusEvent[statusNodes.Count];
+            for (int i = 0; i < statusNodes.Count; i++)
+            {
+                StatusHistory[i] = new SubscriptionStatusEvent(statusNodes[i]);
+            }
             HasTrialPeriod = node.GetBoolean("trial-period");
             TrialDuration = node.GetInteger("trial-duration");
             String trialDurationUnitStr = node.GetString("trial-duration-unit");
