@@ -116,7 +116,9 @@ namespace Braintree.Tests
 
     public static string extractParamFromJson(string keyName, HttpWebResponse response)
     {
-        return extractParamFromJson(keyName, GetResponseContent(response));
+        var param = extractParamFromJson(keyName, GetResponseContent(response));
+        response.Close();
+        return param;
     }
 
     public static string extractParamFromJson(String keyName, String json)
