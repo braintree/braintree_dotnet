@@ -180,6 +180,7 @@ namespace Braintree
         public DisbursementDetails DisbursementDetails { get; protected set; }
         public ApplePayDetails ApplePayDetails { get; protected set; }
         public PayPalDetails PayPalDetails { get; protected set; }
+        public CoinbaseDetails CoinbaseDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public RiskData RiskData { get; protected set; }
 
@@ -258,6 +259,11 @@ namespace Braintree
             if (paypalNode != null)
             {
                 PayPalDetails = new PayPalDetails(paypalNode);
+            }
+            var coinbaseNode = node.GetNode("coinbase-account");
+            if (coinbaseNode != null)
+            {
+                CoinbaseDetails = new CoinbaseDetails(coinbaseNode);
             }
             var applePayNode = node.GetNode("apple-pay");
             if (applePayNode != null)

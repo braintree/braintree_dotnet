@@ -64,6 +64,8 @@
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
     <Compile Include="BusinessRequest.cs" />
+    <Compile Include="CoinbaseAccount.cs" />
+    <Compile Include="CoinbaseDetails.cs" />
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CreditCard.cs" />

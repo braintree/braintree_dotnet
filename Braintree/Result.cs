@@ -77,6 +77,10 @@ namespace Braintree
             {
                 return new CreditCard(node, service) as T;
             }
+            else if (typeof(T) == typeof(CoinbaseAccount))
+            {
+                return new CoinbaseAccount(node, service) as T;
+            }
             else if (typeof(T) == typeof(Customer))
             {
                 return new Customer(node, service) as T;
