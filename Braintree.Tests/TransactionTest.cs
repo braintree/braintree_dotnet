@@ -1773,6 +1773,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationMonth);
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
             Assert.IsNotNull(result.Target.ApplePayDetails.CardholderName);
+            Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
         }
 
         [Test]

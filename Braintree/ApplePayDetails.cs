@@ -5,6 +5,7 @@ namespace Braintree
     public class ApplePayDetails
     {
         public String CardType { get; protected set; }
+        public String PaymentInstrumentName { get; protected set; }
         public String CardholderName { get; protected set; }
         public String ExpirationMonth { get; protected set; }
         public String ExpirationYear { get; protected set; }
@@ -13,6 +14,7 @@ namespace Braintree
         protected internal ApplePayDetails(NodeWrapper node)
         {
             CardType = node.GetString("card-type");
+            PaymentInstrumentName = node.GetString("payment-instrument-name");
             CardholderName = node.GetString("cardholder-name");
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");

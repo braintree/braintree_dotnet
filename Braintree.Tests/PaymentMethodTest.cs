@@ -112,6 +112,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(applePayCard.CreatedAt);
             Assert.IsNotNull(applePayCard.UpdatedAt);
             Assert.IsNotNull(applePayCard.Subscriptions);
+            Assert.IsNotNull(applePayCard.PaymentInstrumentName);
         }
 
         [Test]
