@@ -109,6 +109,10 @@ namespace Braintree
             {
                 return new UnknownPaymentMethod(node) as T;
             }
+            else if (typeof(T) == typeof(PaymentMethodNonce))
+            {
+                return new PaymentMethodNonce(node, service) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }
