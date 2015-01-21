@@ -164,6 +164,7 @@
     <Compile Include="TransactionGateway.cs" />
     <Compile Include="TransactionOptionsRequest.cs" />
     <Compile Include="TransactionOptionsPayPalRequest.cs" />
+    <Compile Include="TransactionOptionsThreeDSecureRequest.cs" />
     <Compile Include="TransactionPayPalRequest.cs" />
     <Compile Include="TransactionRequest.cs" />
     <Compile Include="TransactionSearchRequest.cs" />
