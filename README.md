@@ -66,7 +66,7 @@ The Braintree assembly provides integration access to the Braintree Gateway.
 
 ## Documentation
 
- * [Official documentation](http://www.braintreepayments.com/docs/dotnet)
+* [Official documentation](https://developers.braintreepayments.com/dotnet/sdk/server/overview)
 
 ## Open Source Attribution
 
