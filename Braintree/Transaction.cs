@@ -14,10 +14,11 @@ namespace Braintree
         public static readonly TransactionGatewayRejectionReason CVV = new TransactionGatewayRejectionReason("cvv");
         public static readonly TransactionGatewayRejectionReason DUPLICATE = new TransactionGatewayRejectionReason("duplicate");
         public static readonly TransactionGatewayRejectionReason FRAUD = new TransactionGatewayRejectionReason("fraud");
+        public static readonly TransactionGatewayRejectionReason THREE_D_SECURE = new TransactionGatewayRejectionReason("three_d_secure");
         public static readonly TransactionGatewayRejectionReason UNRECOGNIZED = new TransactionGatewayRejectionReason("unrecognized");
 
         public static readonly TransactionGatewayRejectionReason[] ALL = {
-            AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, UNRECOGNIZED
+            AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, UNRECOGNIZED
         };
 
         protected TransactionGatewayRejectionReason(String name) : base(name) {}
@@ -180,6 +181,7 @@ namespace Braintree
         public DisbursementDetails DisbursementDetails { get; protected set; }
         public ApplePayDetails ApplePayDetails { get; protected set; }
         public PayPalDetails PayPalDetails { get; protected set; }
+        public CoinbaseDetails CoinbaseDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public RiskData RiskData { get; protected set; }
 
@@ -258,6 +260,11 @@ namespace Braintree
             if (paypalNode != null)
             {
                 PayPalDetails = new PayPalDetails(paypalNode);
+            }
+            var coinbaseNode = node.GetNode("coinbase-account");
+            if (coinbaseNode != null)
+            {
+                CoinbaseDetails = new CoinbaseDetails(coinbaseNode);
             }
             var applePayNode = node.GetNode("apple-pay");
             if (applePayNode != null)

@@ -190,5 +190,10 @@ namespace Braintree
         {
             get { return new WebhookTestingGateway(new BraintreeService(Configuration)); }
         }
+
+        public virtual PaymentMethodNonceGateway PaymentMethodNonce
+        {
+            get { return new PaymentMethodNonceGateway(new BraintreeService(Configuration)); }
+        }
     }
 }

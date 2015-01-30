@@ -77,6 +77,10 @@ namespace Braintree
             {
                 return new CreditCard(node, service) as T;
             }
+            else if (typeof(T) == typeof(CoinbaseAccount))
+            {
+                return new CoinbaseAccount(node, service) as T;
+            }
             else if (typeof(T) == typeof(Customer))
             {
                 return new Customer(node, service) as T;
@@ -104,6 +108,10 @@ namespace Braintree
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {
                 return new UnknownPaymentMethod(node) as T;
+            }
+            else if (typeof(T) == typeof(PaymentMethodNonce))
+            {
+                return new PaymentMethodNonce(node, service) as T;
             }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());

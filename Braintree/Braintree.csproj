@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.38.0</AssemblyName>
+    <AssemblyName>Braintree-2.39.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.38.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.39.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.38.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.39.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -64,6 +64,8 @@
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
     <Compile Include="BusinessRequest.cs" />
+    <Compile Include="CoinbaseAccount.cs" />
+    <Compile Include="CoinbaseDetails.cs" />
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="CreditCard.cs" />
@@ -119,9 +121,11 @@
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />
     <Compile Include="PaymentMethod.cs" />
+    <Compile Include="PaymentMethodNonce.cs" />
     <Compile Include="PaymentMethodAddressRequest.cs" />
     <Compile Include="PaymentMethodAddressOptionsRequest.cs" />
     <Compile Include="PaymentMethodGateway.cs" />
+    <Compile Include="PaymentMethodNonceGateway.cs" />
     <Compile Include="PaymentMethodOptionsRequest.cs" />
     <Compile Include="PaymentMethodRequest.cs" />
     <Compile Include="PayPalAccount.cs" />
@@ -151,6 +155,7 @@
     <Compile Include="SubscriptionOptionsRequest.cs" />
     <Compile Include="SubscriptionRequest.cs" />
     <Compile Include="SubscriptionSearchRequest.cs" />
+    <Compile Include="SubscriptionStatusEvent.cs" />
     <Compile Include="SubscriptionTransactionRequest.cs" />
     <Compile Include="TextNode.cs" />
     <Compile Include="Test\Nonce.cs" />
@@ -159,6 +164,7 @@
     <Compile Include="TransactionGateway.cs" />
     <Compile Include="TransactionOptionsRequest.cs" />
     <Compile Include="TransactionOptionsPayPalRequest.cs" />
+    <Compile Include="TransactionOptionsThreeDSecureRequest.cs" />
     <Compile Include="TransactionPayPalRequest.cs" />
     <Compile Include="TransactionRequest.cs" />
     <Compile Include="TransactionSearchRequest.cs" />

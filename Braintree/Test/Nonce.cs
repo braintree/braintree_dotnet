@@ -12,5 +12,6 @@ namespace Braintree.Test
         public const String ApplePayMastercard = "fake-apple-pay-mastercard-nonce";
         public const String ApplePayAmex = "fake-apple-pay-amex-nonce";
         public const String AbstractTransactable = "fake-abstract-transactable-nonce";
+        public const String Coinbase = "fake-coinbase-nonce";
     }
 }

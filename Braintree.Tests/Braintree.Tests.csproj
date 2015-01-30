@@ -56,6 +56,7 @@
     <Compile Include="AddressTest.cs" />
     <Compile Include="ClientTokenTest.cs" />
     <Compile Include="ConfigurationTest.cs" />
+    <Compile Include="CoinbaseTest.cs" />
     <Compile Include="CreditCardTest.cs" />
     <Compile Include="CreditCardNumbers.cs" />
     <Compile Include="CreditCardDefaults.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
     <Compile Include="PaymentMethodTest.cs" />
+    <Compile Include="PaymentMethodNonceTest.cs" />
     <Compile Include="PayPalAccountTest.cs" />
     <Compile Include="QueryStringTest.cs" />
     <Compile Include="SubscriptionTest.cs" />

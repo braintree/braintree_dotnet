@@ -1682,6 +1682,31 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithThreeDSecureOptionRequired()
+        {
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest()
+                {
+                    ThreeDSecure = new TransactionOptionsThreeDSecureRequest()
+                    {
+                        Required = true
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.THREE_D_SECURE, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
         public void Sale_WithThreeDSecureToken()
         {
             var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
@@ -1773,6 +1798,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationMonth);
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
             Assert.IsNotNull(result.Target.ApplePayDetails.CardholderName);
+            Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
         }
 
         [Test]

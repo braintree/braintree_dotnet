@@ -34,6 +34,7 @@ namespace Braintree
         public CreditCard[] CreditCards { get; protected set; }
         public PayPalAccount[] PayPalAccounts { get; protected set; }
         public ApplePayCard[] ApplePayCards { get; protected set; }
+        public CoinbaseAccount[] CoinbaseAccounts { get; protected set; }
         public PaymentMethod[] PaymentMethods { get; protected set; }
         public Address[] Addresses { get; protected set; }
         public Dictionary<String, String> CustomFields { get; protected set; }
@@ -88,10 +89,18 @@ namespace Braintree
                 ApplePayCards[i] = new ApplePayCard(applePayXmlNodes[i], service);
             }
 
-            PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length];
+            var coinbaseXmlNodes = node.GetList("coinbase-accounts/coinbase-account");
+            CoinbaseAccounts = new CoinbaseAccount[coinbaseXmlNodes.Count];
+            for (int i = 0; i < coinbaseXmlNodes.Count; i++)
+            {
+                CoinbaseAccounts[i] = new CoinbaseAccount(coinbaseXmlNodes[i], service);
+            }
+
+            PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length];
             CreditCards.CopyTo(PaymentMethods, 0);
             PayPalAccounts.CopyTo(PaymentMethods, CreditCards.Length);
             ApplePayCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length);
+            CoinbaseAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length);
 
             var addressXmlNodes = node.GetList("addresses/address");
             Addresses = new Address[addressXmlNodes.Count];
