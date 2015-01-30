@@ -121,9 +121,11 @@
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />
     <Compile Include="PaymentMethod.cs" />
+    <Compile Include="PaymentMethodNonce.cs" />
     <Compile Include="PaymentMethodAddressRequest.cs" />
     <Compile Include="PaymentMethodAddressOptionsRequest.cs" />
     <Compile Include="PaymentMethodGateway.cs" />
+    <Compile Include="PaymentMethodNonceGateway.cs" />
     <Compile Include="PaymentMethodOptionsRequest.cs" />
     <Compile Include="PaymentMethodRequest.cs" />
     <Compile Include="PayPalAccount.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="TransactionGateway.cs" />
     <Compile Include="TransactionOptionsRequest.cs" />
     <Compile Include="TransactionOptionsPayPalRequest.cs" />
+    <Compile Include="TransactionOptionsThreeDSecureRequest.cs" />
     <Compile Include="TransactionPayPalRequest.cs" />
     <Compile Include="TransactionRequest.cs" />
     <Compile Include="TransactionSearchRequest.cs" />

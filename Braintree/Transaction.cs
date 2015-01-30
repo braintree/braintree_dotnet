@@ -14,10 +14,11 @@ namespace Braintree
         public static readonly TransactionGatewayRejectionReason CVV = new TransactionGatewayRejectionReason("cvv");
         public static readonly TransactionGatewayRejectionReason DUPLICATE = new TransactionGatewayRejectionReason("duplicate");
         public static readonly TransactionGatewayRejectionReason FRAUD = new TransactionGatewayRejectionReason("fraud");
+        public static readonly TransactionGatewayRejectionReason THREE_D_SECURE = new TransactionGatewayRejectionReason("three_d_secure");
         public static readonly TransactionGatewayRejectionReason UNRECOGNIZED = new TransactionGatewayRejectionReason("unrecognized");
 
         public static readonly TransactionGatewayRejectionReason[] ALL = {
-            AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, UNRECOGNIZED
+            AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, UNRECOGNIZED
         };
 
         protected TransactionGatewayRejectionReason(String name) : base(name) {}

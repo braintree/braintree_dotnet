@@ -17,6 +17,7 @@ namespace Braintree
         public String VenmoSdkSession { get; set; }
         public String PayeeEmail { get; set; }
         public TransactionOptionsPayPalRequest PayPal { get; set; }
+        public TransactionOptionsThreeDSecureRequest ThreeDSecure { get; set; }
 
         public override String ToXml(String root)
         {
@@ -39,6 +40,7 @@ namespace Braintree
                 AddElement("submit-for-settlement", SubmitForSettlement).
                 AddElement("venmo-sdk-session", VenmoSdkSession).
                 AddElement("payee-email", PayeeEmail).
+                AddElement("three-d-secure", ThreeDSecure).
                 AddElement("paypal", PayPal);
         }
     }
