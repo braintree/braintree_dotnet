@@ -2,6 +2,7 @@
 * Add Coinbase support
 * Surface Apple Pay payment instrument name
 * Support making 3D Secure required
+* Surface subscription status events
 
 ## 2.38.0
 * Allow PayPal fields in transaction.options.paypal
