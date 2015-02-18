@@ -28,7 +28,7 @@ The Braintree assembly provides integration access to the Braintree Gateway.
                 TransactionRequest request = new TransactionRequest
                 {
                     Amount = 1000M,
-                    CreditCard = new CreditCardRequest
+                    CreditCard = new TransactionCreditCardRequest
                     {
                         Number = "4111111111111111",
                         ExpirationDate = "05/2012"
