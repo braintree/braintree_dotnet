@@ -12,6 +12,12 @@ namespace Braintree
         public String DebugId { get; protected set; }
         public String PayeeEmail { get; protected set; }
         public String CustomField { get; protected set; }
+        public String PayerId { get; protected set; }
+        public String PayerFirstName { get; protected set; }
+        public String PayerLastName { get; protected set; }
+        public String SellerProtectionStatus { get; protected set; }
+        public String CaptureId { get; protected set; }
+        public String RefundId { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -23,6 +29,12 @@ namespace Braintree
             DebugId = node.GetString("debug-id");
             PayeeEmail = node.GetString("payee-email");
             CustomField = node.GetString("custom-field");
+            PayerId = node.GetString("payer-id");
+            PayerFirstName = node.GetString("payer-first-name");
+            PayerLastName = node.GetString("payer-last-name");
+            SellerProtectionStatus = node.GetString("seller-protection-status");
+            CaptureId = node.GetString("capture-id");
+            RefundId = node.GetString("refund-id");
         }
     }
 }

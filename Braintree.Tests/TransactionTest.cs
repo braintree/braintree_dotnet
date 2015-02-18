@@ -4023,5 +4023,21 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
             Assert.AreEqual("Settlement Pending", transaction.ProcessorSettlementResponseText);
         }
+
+        [Test]
+        public void PayPalTransactionsReturnRequiredFields()
+        {
+          Transaction transaction = gateway.Transaction.Find("settledtransaction");
+
+          Assert.IsNotNull(transaction.PayPalDetails.DebugId);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerEmail);
+          Assert.IsNotNull(transaction.PayPalDetails.AuthorizationId);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerId);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerFirstName);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerLastName);
+          Assert.IsNotNull(transaction.PayPalDetails.SellerProtectionStatus);
+          Assert.IsNotNull(transaction.PayPalDetails.CaptureId);
+          Assert.IsNotNull(transaction.PayPalDetails.RefundId);
+        }
     }
 }
