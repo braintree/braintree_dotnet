@@ -47,7 +47,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Find_RaisesNotFoundErrorWhenTokenDoesntExist()
+        public void Create_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
             try
             {
@@ -56,5 +56,43 @@ namespace Braintree.Tests
             }
             catch(NotFoundException) {}
         }
+
+        [Test]
+        public void Find_ExposesThreeDSecureInfo()
+        {
+            PaymentMethodNonce nonce = gateway.PaymentMethodNonce.Find("threedsecurednonce");
+            ThreeDSecureInfo info = nonce.ThreeDSecureInfo;
+
+            Assert.AreEqual(nonce.Nonce, "threedsecurednonce");
+            Assert.AreEqual(nonce.Type, "CreditCard");
+            Assert.AreEqual(info.Enrolled, "Y");
+            Assert.AreEqual(info.Status, "authenticate_successful");
+            Assert.AreEqual(info.XID, "xidvalue");
+            Assert.AreEqual(info.CAVV, "somebase64value");
+            Assert.AreEqual(info.LiabilityShifted, true);
+            Assert.AreEqual(info.LiabilityShiftPossible, true);
+        }
+
+        [Test]
+        public void Find_ExposesNullThreeDSecureInfoIfBlank()
+        {
+            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+
+            PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(nonce);
+
+            Assert.IsNull(foundNonce.ThreeDSecureInfo);
+        }
+
+        [Test]
+        public void Find_RaisesNotFoundErrorWhenTokenDoesntExist()
+        {
+            try
+            {
+                gateway.PaymentMethodNonce.Find("notarealnonce");
+                Assert.Fail("Should have raised NotFoundException");
+            }
+            catch(NotFoundException) {}
+        }
+
     }
 }
