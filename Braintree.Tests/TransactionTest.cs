@@ -3114,6 +3114,28 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_ExposesThreeDSecureInfo()
+        {
+            Transaction transaction = gateway.Transaction.Find("threedsecuredtransaction");
+
+            ThreeDSecureInfo info = transaction.ThreeDSecureInfo;
+            Assert.AreEqual(info.Enrolled, "Y");
+            Assert.AreEqual(info.Status, "authenticate_successful");
+            Assert.AreEqual(info.XID, "xidvalue");
+            Assert.AreEqual(info.CAVV, "somebase64value");
+            Assert.AreEqual(info.LiabilityShifted, true);
+            Assert.AreEqual(info.LiabilityShiftPossible, true);
+        }
+
+        [Test]
+        public void Find_ExposesNullThreeDSecureInfoIfBlank()
+        {
+            Transaction transaction = gateway.Transaction.Find("settledtransaction");
+
+            Assert.IsNull(transaction.ThreeDSecureInfo);
+        }
+
+        [Test]
         public void Find_ExposesDisbursementDetails()
         {
             Transaction transaction = gateway.Transaction.Find("deposittransaction");

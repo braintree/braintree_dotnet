@@ -186,6 +186,7 @@ namespace Braintree
         public CoinbaseDetails CoinbaseDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public RiskData RiskData { get; protected set; }
+        public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
 
         private BraintreeService Service;
 
@@ -297,6 +298,11 @@ namespace Braintree
             var riskDataNode = node.GetNode("risk-data");
             if (riskDataNode != null){
                 RiskData = new RiskData(riskDataNode);
+            }
+
+            var threeDSecureInfoNode = node.GetNode("three-d-secure-info");
+            if (threeDSecureInfoNode != null && !threeDSecureInfoNode.IsEmpty()){
+                ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
             }
         }
 
