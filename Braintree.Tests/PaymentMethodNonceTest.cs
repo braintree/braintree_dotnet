@@ -67,8 +67,6 @@ namespace Braintree.Tests
             Assert.AreEqual(nonce.Type, "CreditCard");
             Assert.AreEqual(info.Enrolled, "Y");
             Assert.AreEqual(info.Status, "authenticate_successful");
-            Assert.AreEqual(info.XID, "xidvalue");
-            Assert.AreEqual(info.CAVV, "somebase64value");
             Assert.AreEqual(info.LiabilityShifted, true);
             Assert.AreEqual(info.LiabilityShiftPossible, true);
         }
