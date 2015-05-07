@@ -1,3 +1,6 @@
+## 2.41.0
+* Add 3DS info the server side
+
 ## 2.40.0
 * Add 3D Secure transaction fields
 * Add ability to create nonce from vaulted payment methods
