@@ -17,6 +17,16 @@ namespace Braintree
             this.node = node;
         }
 
+        public Boolean IsEmpty()
+        {
+          var attribute = node.Attributes["nil"];
+          if (attribute != null)
+          {
+            return XmlConvert.ToBoolean(attribute.Value);
+          }
+          return false;
+        }
+
         public virtual String GetString(String path)
         {
             if (GetNode(path) == null) return null;

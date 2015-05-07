@@ -3114,6 +3114,26 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Find_ExposesThreeDSecureInfo()
+        {
+            Transaction transaction = gateway.Transaction.Find("threedsecuredtransaction");
+
+            ThreeDSecureInfo info = transaction.ThreeDSecureInfo;
+            Assert.AreEqual(info.Enrolled, "Y");
+            Assert.AreEqual(info.Status, "authenticate_successful");
+            Assert.AreEqual(info.LiabilityShifted, true);
+            Assert.AreEqual(info.LiabilityShiftPossible, true);
+        }
+
+        [Test]
+        public void Find_ExposesNullThreeDSecureInfoIfBlank()
+        {
+            Transaction transaction = gateway.Transaction.Find("settledtransaction");
+
+            Assert.IsNull(transaction.ThreeDSecureInfo);
+        }
+
+        [Test]
         public void Find_ExposesDisbursementDetails()
         {
             Transaction transaction = gateway.Transaction.Find("deposittransaction");
@@ -4022,6 +4042,22 @@ namespace Braintree.Tests
             Assert.AreEqual("4002", transaction.ProcessorSettlementResponseCode);
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
             Assert.AreEqual("Settlement Pending", transaction.ProcessorSettlementResponseText);
+        }
+
+        [Test]
+        public void PayPalTransactionsReturnRequiredFields()
+        {
+          Transaction transaction = gateway.Transaction.Find("settledtransaction");
+
+          Assert.IsNotNull(transaction.PayPalDetails.DebugId);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerEmail);
+          Assert.IsNotNull(transaction.PayPalDetails.AuthorizationId);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerId);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerFirstName);
+          Assert.IsNotNull(transaction.PayPalDetails.PayerLastName);
+          Assert.IsNotNull(transaction.PayPalDetails.SellerProtectionStatus);
+          Assert.IsNotNull(transaction.PayPalDetails.CaptureId);
+          Assert.IsNotNull(transaction.PayPalDetails.RefundId);
         }
     }
 }

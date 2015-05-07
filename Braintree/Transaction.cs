@@ -110,12 +110,14 @@ namespace Braintree
     public class PaymentInstrumentType : Enumeration
     {
         public static readonly PaymentInstrumentType PAYPAL_ACCOUNT = new PaymentInstrumentType("paypal_account");
-        public static readonly PaymentInstrumentType SEPA_BANK_ACCOUNT= new PaymentInstrumentType("sepa_bank_account");
+        public static readonly PaymentInstrumentType EUROPE_BANK_ACCOUNT= new PaymentInstrumentType("europe_bank_account");
         public static readonly PaymentInstrumentType CREDIT_CARD = new PaymentInstrumentType("credit_card");
+        public static readonly PaymentInstrumentType COINBASE_ACCOUNT= new PaymentInstrumentType("coinbase_account");
+        public static readonly PaymentInstrumentType APPLE_PAY_CARD = new PaymentInstrumentType("apple_pay_card");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
 
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, SEPA_BANK_ACCOUNT, CREDIT_CARD, ANY, UNKNOWN };
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, APPLE_PAY_CARD, ANY, UNKNOWN };
 
         protected PaymentInstrumentType(String name) : base(name) {}
     }
@@ -184,6 +186,7 @@ namespace Braintree
         public CoinbaseDetails CoinbaseDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public RiskData RiskData { get; protected set; }
+        public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
 
         private BraintreeService Service;
 
@@ -295,6 +298,11 @@ namespace Braintree
             var riskDataNode = node.GetNode("risk-data");
             if (riskDataNode != null){
                 RiskData = new RiskData(riskDataNode);
+            }
+
+            var threeDSecureInfoNode = node.GetNode("three-d-secure-info");
+            if (threeDSecureInfoNode != null && !threeDSecureInfoNode.IsEmpty()){
+                ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
             }
         }
 
