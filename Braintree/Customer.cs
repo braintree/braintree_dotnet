@@ -34,6 +34,7 @@ namespace Braintree
         public CreditCard[] CreditCards { get; protected set; }
         public PayPalAccount[] PayPalAccounts { get; protected set; }
         public ApplePayCard[] ApplePayCards { get; protected set; }
+        public AndroidPayCard[] AndroidPayCards { get; protected set; }
         public CoinbaseAccount[] CoinbaseAccounts { get; protected set; }
         public PaymentMethod[] PaymentMethods { get; protected set; }
         public Address[] Addresses { get; protected set; }
@@ -89,6 +90,13 @@ namespace Braintree
                 ApplePayCards[i] = new ApplePayCard(applePayXmlNodes[i], service);
             }
 
+            var androidPayCardXmlNodes = node.GetList("android-pay-cards/android-pay-card");
+            AndroidPayCards = new AndroidPayCard[androidPayCardXmlNodes.Count];
+            for (int i = 0; i < androidPayCardXmlNodes.Count; i++)
+            {
+                AndroidPayCards[i] = new AndroidPayCard(androidPayCardXmlNodes[i], service);
+            }
+
             var coinbaseXmlNodes = node.GetList("coinbase-accounts/coinbase-account");
             CoinbaseAccounts = new CoinbaseAccount[coinbaseXmlNodes.Count];
             for (int i = 0; i < coinbaseXmlNodes.Count; i++)
@@ -96,11 +104,12 @@ namespace Braintree
                 CoinbaseAccounts[i] = new CoinbaseAccount(coinbaseXmlNodes[i], service);
             }
 
-            PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length];
+            PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length];
             CreditCards.CopyTo(PaymentMethods, 0);
             PayPalAccounts.CopyTo(PaymentMethods, CreditCards.Length);
             ApplePayCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length);
             CoinbaseAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length);
+            AndroidPayCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length);
 
             var addressXmlNodes = node.GetList("addresses/address");
             Addresses = new Address[addressXmlNodes.Count];

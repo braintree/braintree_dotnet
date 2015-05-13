@@ -53,6 +53,8 @@
     <Compile Include="Address.cs" />
     <Compile Include="AddressGateway.cs" />
     <Compile Include="AddressRequest.cs" />
+    <Compile Include="AndroidPayCard.cs" />
+    <Compile Include="AndroidPayDetails.cs" />
     <Compile Include="ApplePayCard.cs" />
     <Compile Include="ApplePayDetails.cs" />
     <Compile Include="ApplicantDetails.cs" />

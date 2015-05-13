@@ -1802,6 +1802,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_WithAndroidPayCardNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.AndroidPay
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.IsNotNull(result.Target.AndroidPayDetails);
+
+            Assert.IsInstanceOfType(typeof(AndroidPayDetails), result.Target.AndroidPayDetails);
+            AndroidPayDetails androidPayDetails = (AndroidPayDetails) result.Target.AndroidPayDetails;
+
+            Assert.IsNull(androidPayDetails.Token);
+            Assert.IsNotNull(androidPayDetails.ImageUrl);
+            Assert.IsNotNull(androidPayDetails.CardType);
+            Assert.IsNotNull(androidPayDetails.VirtualCardType);
+            Assert.IsNotNull(androidPayDetails.SourceCardType);
+            Assert.IsNotNull(androidPayDetails.Last4);
+            Assert.IsNotNull(androidPayDetails.VirtualCardLast4);
+            Assert.IsNotNull(androidPayDetails.SourceCardLast4);
+            Assert.IsNotNull(androidPayDetails.Bin);
+            Assert.IsNotNull(androidPayDetails.ExpirationMonth);
+            Assert.IsNotNull(androidPayDetails.ExpirationYear);
+            Assert.IsNotNull(androidPayDetails.GoogleTransactionId);
+        }
+
+        [Test]
         public void Sale_Declined()
         {
             TransactionRequest request = new TransactionRequest
