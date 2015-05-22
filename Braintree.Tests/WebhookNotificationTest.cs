@@ -27,8 +27,15 @@ namespace Braintree.Tests
         [Test]
         public void Verify_CreatesVerificationString()
         {
-            string verification = gateway.WebhookNotification.Verify("verification_token");
-            Assert.AreEqual("integration_public_key|c9f15b74b0d98635cd182c51e2703cffa83388c3", verification);
+            string verification = gateway.WebhookNotification.Verify("20f9f8ed05f77439fe955c977e4c8a53");
+            Assert.AreEqual("integration_public_key|d9b899556c966b3f06945ec21311865d35df3ce4", verification);
+        }
+
+        [Test]
+        [ExpectedException(typeof(InvalidChallengeException), ExpectedMessage="challenge contains non-hex characters")]
+        public void Verify_ThrowsErrorOnInvalidChallenge()
+        {
+            gateway.WebhookNotification.Verify("goodbye cruel world");
         }
 
         [Test]

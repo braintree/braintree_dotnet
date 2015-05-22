@@ -196,6 +196,7 @@
     <Compile Include="WebhookTestingGateway.cs" />
     <Compile Include="UnknownPaymentMethod.cs" />
     <Compile Include="WebhookNotification.cs" />
+    <Compile Include="Exceptions\InvalidChallengeException.cs" />
     <Compile Include="Exceptions\InvalidSignatureException.cs" />
     <Compile Include="WebhookNotificationGateway.cs" />
   </ItemGroup>

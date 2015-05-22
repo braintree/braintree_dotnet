@@ -28,6 +28,11 @@ namespace Braintree
 
         public virtual string Verify(string challenge)
         {
+            Match match = Regex.Match (challenge, @"^[a-f0-9]{20,32}$");
+            if (!match.Success)
+            {
+                throw new InvalidChallengeException ("challenge contains non-hex characters");
+            }
             string digest = new Sha1Hasher().HmacHash(Service.PrivateKey, challenge);
             return String.Format("{0}|{1}", Service.PublicKey, digest.ToLower());
         }
