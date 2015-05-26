@@ -35,7 +35,7 @@ namespace Braintree.Tests
         [ExpectedException(typeof(InvalidChallengeException), ExpectedMessage="challenge contains non-hex characters")]
         public void Verify_ThrowsErrorOnInvalidChallenge()
         {
-            gateway.WebhookNotification.Verify("goodbye cruel world");
+            gateway.WebhookNotification.Verify("bad challenge");
         }
 
         [Test]
