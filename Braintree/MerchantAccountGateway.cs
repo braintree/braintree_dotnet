@@ -7,7 +7,6 @@ namespace Braintree
 {
     public class MerchantAccountGateway
     {
-        private static readonly String CREATE_URL = "/merchant_accounts/create_via_api";
         private BraintreeService Service;
 
         protected internal MerchantAccountGateway(BraintreeService service)
@@ -17,14 +16,14 @@ namespace Braintree
 
         public virtual Result<MerchantAccount> Create(MerchantAccountRequest request)
         {
-            XmlNode merchantAccountXML = Service.Post(CREATE_URL, request);
+            XmlNode merchantAccountXML = Service.Post(Service.MerchantPath() + "/merchant_accounts/create_via_api", request);
 
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
         }
 
         public virtual Result<MerchantAccount> Update(String id, MerchantAccountRequest request)
         {
-            XmlNode merchantAccountXML = Service.Put("/merchant_accounts/" + id + "/update_via_api", request);
+            XmlNode merchantAccountXML = Service.Put(Service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);
 
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
         }
@@ -34,7 +33,7 @@ namespace Braintree
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode merchantAccountXML = Service.Get("/merchant_accounts/" + id);
+            XmlNode merchantAccountXML = Service.Get(Service.MerchantPath() + "/merchant_accounts/" + id);
 
             return new MerchantAccount(new NodeWrapper(merchantAccountXML));
         }

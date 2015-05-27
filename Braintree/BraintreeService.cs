@@ -75,7 +75,7 @@ namespace Braintree
         {
             try
             {
-                var request = WebRequest.Create(BaseMerchantURL() + URL) as HttpWebRequest;
+                var request = WebRequest.Create(Environment.GatewayURL + URL) as HttpWebRequest;
                 request.Headers.Add("Authorization", GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", ApiVersion);
                 request.Headers.Add("Accept-Encoding", "gzip");
@@ -155,7 +155,12 @@ namespace Braintree
 
         public String BaseMerchantURL()
         {
-            return Environment.GatewayURL + "/merchants/" + MerchantId;
+            return Environment.GatewayURL + MerchantPath();
+        }
+
+        public String MerchantPath()
+        {
+            return "/merchants/" + MerchantId;
         }
 
         public String GetAuthorizationHeader()

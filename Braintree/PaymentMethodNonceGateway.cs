@@ -14,14 +14,14 @@ namespace Braintree
 
         public Result<PaymentMethodNonce> Create(string token)
         {
-            NodeWrapper response = new NodeWrapper(service.Post("/payment_methods/" + token + "/nonces"));
+            NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods/" + token + "/nonces"));
 
             return new ResultImpl<PaymentMethodNonce>(response, service);
         }
 
         public virtual PaymentMethodNonce Find(String nonce)
         {
-            NodeWrapper response = new NodeWrapper(service.Get("/payment_method_nonces/" + nonce));
+            NodeWrapper response = new NodeWrapper(service.Get(service.MerchantPath() + "/payment_method_nonces/" + nonce));
 
             return new PaymentMethodNonce(response, service);
         }

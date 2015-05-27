@@ -81,26 +81,26 @@ namespace Braintree.Tests
 
     public static NodeWrapper Settle(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settle"));
       Assert.IsTrue(response.IsSuccess());
       return response;
     }
 
     public static void SettlementDecline(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_decline"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_decline"));
       Assert.IsTrue(response.IsSuccess());
     }
 
     public static void SettlementPending(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_pending"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_pending"));
       Assert.IsTrue(response.IsSuccess());
     }
 
     public static void Escrow(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/escrow"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/escrow"));
       Assert.IsTrue(response.IsSuccess());
     }
 
@@ -284,7 +284,7 @@ namespace Braintree.Tests
     public static String Create3DSVerification(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
     {
       String url = "/three_d_secure/create_verification/" + merchantAccountId;
-      NodeWrapper response = new NodeWrapper(service.Post(url, request));
+      NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + url, request));
       Assert.IsTrue(response.IsSuccess());
       return response.GetString("three-d-secure-token");
     }

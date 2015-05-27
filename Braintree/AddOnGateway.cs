@@ -15,7 +15,7 @@ namespace Braintree
 
         public virtual List<AddOn> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Get("/add_ons"));
+            NodeWrapper response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/add_ons"));
 
             List<AddOn> addOns = new List<AddOn>();
             foreach (NodeWrapper node in response.GetList("add-on"))

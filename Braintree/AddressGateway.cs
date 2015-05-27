@@ -22,14 +22,14 @@ namespace Braintree
 
         public virtual Result<Address> Create(String customerId, AddressRequest request)
         {
-            XmlNode addressXML = Service.Post("/customers/" + customerId + "/addresses", request);
+            XmlNode addressXML = Service.Post(Service.MerchantPath() + "/customers/" + customerId + "/addresses", request);
 
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
         }
 
         public virtual void Delete(String customerId, String id)
         {
-            Service.Delete("/customers/" + customerId + "/addresses/" + id);
+            Service.Delete(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
         }
 
         public virtual Address Find(String customerId, String id)
@@ -37,14 +37,14 @@ namespace Braintree
             if(customerId == null || customerId.Trim().Equals("") || id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode addressXML = Service.Get("/customers/" + customerId + "/addresses/" + id);
+            XmlNode addressXML = Service.Get(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
 
             return new Address(new NodeWrapper(addressXML));
         }
 
         public virtual Result<Address> Update(String customerId, String id, AddressRequest request)
         {
-            XmlNode addressXML = Service.Put("/customers/" + customerId + "/addresses/" + id, request);
+            XmlNode addressXML = Service.Put(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id, request);
 
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
         }
