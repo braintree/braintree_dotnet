@@ -6,6 +6,7 @@ using System.Web;
 using System.Net;
 using System.IO;
 using System.IO.Compression;
+using System.Xml;
 using NUnit.Framework;
 using Braintree;
 
@@ -288,6 +289,34 @@ namespace Braintree.Tests
       Assert.IsTrue(response.IsSuccess());
       return response.GetString("three-d-secure-token");
     }
+  }
+
+  public class OAuthTestHelper
+  {
+      private class OAuthGrantRequest : Request
+      {
+          public String MerchantId { get; set; }
+          public String Scope { get; set; }
+
+          public override String ToXml()
+          {
+              return new RequestBuilder("grant")
+                  .AddElement("merchant_public_id", MerchantId)
+                  .AddElement("scope", Scope)
+                  .ToXml();
+          }
+      }
+
+      public static String CreateGrant(BraintreeGateway gateway, String merchantId, string scope)
+      {
+          BraintreeService service = new BraintreeService(gateway.Configuration);
+          XmlNode node = service.Post("/oauth_testing/grants", new OAuthGrantRequest {
+              MerchantId = merchantId,
+              Scope = scope
+          });
+
+          return node["code"].InnerText;
+      }
   }
 
   public class BraintreeTestHttpService

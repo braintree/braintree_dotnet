@@ -84,6 +84,18 @@ namespace Braintree
             set { Configuration.PrivateKey = value; }
         }
 
+        public String ClientId
+        {
+            get { return Configuration.ClientId; }
+            set { Configuration.ClientId = value; }
+        }
+
+        public String ClientSecret
+        {
+            get { return Configuration.ClientSecret; }
+            set { Configuration.ClientSecret = value; }
+        }
+
         public Configuration Configuration { get; set; }
 
         public BraintreeGateway()
@@ -139,6 +151,11 @@ namespace Braintree
         public virtual MerchantAccountGateway MerchantAccount
         {
             get { return new MerchantAccountGateway(new BraintreeService(Configuration)); }
+        }
+
+        public virtual OAuthGateway OAuth
+        {
+            get { return new OAuthGateway(new BraintreeService(Configuration)); }
         }
 
         public virtual PaymentMethodGateway PaymentMethod

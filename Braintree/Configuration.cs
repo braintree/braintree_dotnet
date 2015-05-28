@@ -13,6 +13,8 @@ namespace Braintree
         public string MerchantId { get; set; }
         public string PublicKey { get; set; }
         public string PrivateKey { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
 
         public Configuration() {}
 
@@ -35,6 +37,11 @@ namespace Braintree
             MerchantId = merchantId;
             PublicKey = publicKey;
             PrivateKey = privateKey;
+        }
+
+        public bool IsClientCredentials()
+        {
+           return ClientId != null;
         }
     }
 }

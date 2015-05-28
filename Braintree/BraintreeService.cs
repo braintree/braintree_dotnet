@@ -36,6 +36,16 @@ namespace Braintree
             get { return Configuration.PrivateKey; }
         }
 
+        public String ClientId
+        {
+            get { return Configuration.ClientId; }
+        }
+
+        public String ClientSecret
+        {
+            get { return Configuration.ClientSecret; }
+        }
+
         public BraintreeService(Configuration configuration)
         {
             this.Configuration = configuration;
@@ -165,8 +175,16 @@ namespace Braintree
 
         public String GetAuthorizationHeader()
         {
-            return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(PublicKey + ":" + PrivateKey)).Trim();
-
+            String credentials;
+            if (Configuration.IsClientCredentials())
+            {
+                credentials = ClientId + ":" + ClientSecret;
+            }
+            else
+            {
+                credentials = PublicKey + ":" + PrivateKey;
+            }
+            return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
         }
 
         public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
