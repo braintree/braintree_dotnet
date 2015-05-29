@@ -79,10 +79,11 @@ namespace Braintree.Tests
       return false;
     }
 
-    public static void Settle(BraintreeService service, String transactionId)
+    public static NodeWrapper Settle(BraintreeService service, String transactionId)
     {
       NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
       Assert.IsTrue(response.IsSuccess());
+      return response;
     }
 
     public static void SettlementDecline(BraintreeService service, String transactionId)
@@ -101,11 +102,6 @@ namespace Braintree.Tests
     {
       NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/escrow"));
       Assert.IsTrue(response.IsSuccess());
-    }
-
-    public static DateTime NowInEastern()
-    {
-      return DateTime.UtcNow - new TimeSpan(05, 00, 00);
     }
 
     public static string GetResponseContent(HttpWebResponse response)
