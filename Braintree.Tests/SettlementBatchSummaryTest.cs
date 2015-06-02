@@ -54,10 +54,11 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            TestHelper.Settle(service, transaction.Id);
+            NodeWrapper settlementResult = TestHelper.Settle(service, transaction.Id);
+            var settlementDate = settlementResult.GetString("/transaction/settlement-batch-id").Split('_')[0];
             transaction = gateway.Transaction.Find(transaction.Id);
 
-            var result = gateway.SettlementBatchSummary.Generate(TestHelper.NowInEastern());
+            var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate));
             var visas = new List<IDictionary<String,String>>();
             foreach (var row in result.Target.Records)
             {
@@ -109,10 +110,11 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            TestHelper.Settle(service, transaction.Id);
+            NodeWrapper settlementResult = TestHelper.Settle(service, transaction.Id);
+            var settlementDate = settlementResult.GetString("/transaction/settlement-batch-id").Split('_')[0];
             transaction = gateway.Transaction.Find(transaction.Id);
 
-            var result = gateway.SettlementBatchSummary.Generate(TestHelper.NowInEastern(), "store_me");
+            var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate), "store_me");
             var customValues = new List<IDictionary<String, String>>();
             foreach (var row in result.Target.Records)
             {

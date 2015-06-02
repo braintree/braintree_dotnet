@@ -1,3 +1,6 @@
+## 2.42.0
+* Validate webhook challenge payload
+
 ## 2.41.0
 * Add 3DS info the server side
 
