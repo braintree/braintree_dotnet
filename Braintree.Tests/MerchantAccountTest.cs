@@ -106,6 +106,8 @@ namespace Braintree.Tests
         {
             var request = createRequest(null);
             request.Funding.Destination = FundingDestination.BANK;
+            request.Funding.AccountNumber = "43759348798";
+            request.Funding.RoutingNumber = "122100024";
             Result<MerchantAccount> result = gateway.MerchantAccount.Create(request);
             Assert.IsTrue(result.IsSuccess());
         }
@@ -369,8 +371,6 @@ namespace Braintree.Tests
                     Destination = FundingDestination.EMAIL,
                     Email = "joe+funding@bloggs.com",
                     MobilePhone = "3125551212",
-                    RoutingNumber = "122100024",
-                    AccountNumber = "43759348798",
                     Descriptor = "Job Leoggs OH",
                 },
                 TosAccepted = true,
