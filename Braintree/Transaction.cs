@@ -114,10 +114,11 @@ namespace Braintree
         public static readonly PaymentInstrumentType CREDIT_CARD = new PaymentInstrumentType("credit_card");
         public static readonly PaymentInstrumentType COINBASE_ACCOUNT= new PaymentInstrumentType("coinbase_account");
         public static readonly PaymentInstrumentType APPLE_PAY_CARD = new PaymentInstrumentType("apple_pay_card");
+        public static readonly PaymentInstrumentType ANDROID_PAY_CARD = new PaymentInstrumentType("android_pay_card");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
 
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, APPLE_PAY_CARD, ANY, UNKNOWN };
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, ANY, UNKNOWN };
 
         protected PaymentInstrumentType(String name) : base(name) {}
     }
@@ -182,6 +183,7 @@ namespace Braintree
         public Decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
         public ApplePayDetails ApplePayDetails { get; protected set; }
+        public AndroidPayDetails AndroidPayDetails { get; protected set; }
         public PayPalDetails PayPalDetails { get; protected set; }
         public CoinbaseDetails CoinbaseDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
@@ -273,6 +275,11 @@ namespace Braintree
             if (applePayNode != null)
             {
                 ApplePayDetails = new ApplePayDetails(applePayNode);
+            }
+            var androidPayNode = node.GetNode("android-pay-card");
+            if (androidPayNode != null)
+            {
+                AndroidPayDetails = new AndroidPayDetails(androidPayNode);
             }
 
             BillingAddress = new Address(node.GetNode("billing"));

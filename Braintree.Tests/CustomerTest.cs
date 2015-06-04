@@ -94,7 +94,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Find_IncludesPaymentMethods()
+        public void Find_IncludesApplePayCardsInPaymentMethods()
         {
             var createRequest = new CustomerRequest
             {
@@ -104,8 +104,26 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Find(createdCustomer.Id);
             Assert.IsNotNull(customer.ApplePayCards);
             Assert.IsNotNull(customer.PaymentMethods);
-            Assert.IsNotNull(customer.ApplePayCards[0].Token);
-            Assert.AreEqual(customer.ApplePayCards[0], customer.PaymentMethods[0]);
+            ApplePayCard card = customer.ApplePayCards[0];
+            Assert.IsNotNull(card.Token);
+            Assert.AreEqual(card, customer.PaymentMethods[0]);
+        }
+
+        [Test]
+        public void Find_IncludesAndroidPayCardsInPaymentMethods()
+        {
+            var createRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.AndroidPay
+            };
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+            Assert.IsNotNull(customer.AndroidPayCards);
+            Assert.IsNotNull(customer.PaymentMethods);
+            AndroidPayCard card = customer.AndroidPayCards[0];
+            Assert.IsNotNull(card.Token);
+            Assert.IsNotNull(card.GoogleTransactionId);
+            Assert.AreEqual(card, customer.PaymentMethods[0]);
         }
 
         [Test]

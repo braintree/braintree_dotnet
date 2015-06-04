@@ -73,6 +73,10 @@ namespace Braintree
             {
                 return new ApplePayCard(node, service) as T;
             }
+            else if (typeof(T) == typeof(AndroidPayCard))
+            {
+                return new AndroidPayCard(node, service) as T;
+            }
             else if (typeof(T) == typeof(CreditCard))
             {
                 return new CreditCard(node, service) as T;

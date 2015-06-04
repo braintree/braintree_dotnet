@@ -116,6 +116,40 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CreatesAndroidPayCardWithNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.AndroidPay
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.IsInstanceOfType(typeof(AndroidPayCard), paymentMethodResult.Target);
+            AndroidPayCard androidPayCard = (AndroidPayCard) paymentMethodResult.Target;
+            Assert.IsNotNull(androidPayCard.IsDefault);
+            Assert.IsNotNull(androidPayCard.CardType);
+            Assert.IsNotNull(androidPayCard.VirtualCardType);
+            Assert.IsNotNull(androidPayCard.SourceCardType);
+            Assert.IsNotNull(androidPayCard.Last4);
+            Assert.IsNotNull(androidPayCard.VirtualCardLast4);
+            Assert.IsNotNull(androidPayCard.SourceCardLast4);
+            Assert.IsNotNull(androidPayCard.Bin);
+            Assert.IsNotNull(androidPayCard.ExpirationMonth);
+            Assert.IsNotNull(androidPayCard.ExpirationYear);
+            Assert.IsNotNull(androidPayCard.GoogleTransactionId);
+            Assert.IsNotNull(androidPayCard.CreatedAt);
+            Assert.IsNotNull(androidPayCard.UpdatedAt);
+            Assert.IsNotNull(androidPayCard.Subscriptions);
+        }
+
+        [Test]
         public void Create_CreatesAbstractPaymentMethod()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -572,6 +606,22 @@ namespace Braintree.Tests
             PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
             Assert.AreEqual(result.Target.Token, found.Token);
             Assert.IsInstanceOfType(typeof(ApplePayCard), found);
+        }
+
+        [Test]
+        public void Find_FindsAndroidPayCard()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.AndroidPay
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
+            Assert.AreEqual(result.Target.Token, found.Token);
+            Assert.IsInstanceOfType(typeof(AndroidPayCard), found);
         }
 
         [Test]

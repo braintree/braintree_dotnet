@@ -28,6 +28,10 @@ namespace Braintree
             {
                 return new ResultImpl<ApplePayCard>(response, service);
             }
+            else if (response.GetName() == "android-pay-card")
+            {
+                return new ResultImpl<AndroidPayCard>(response, service);
+            }
             else if (response.GetName() == "coinbase-account")
             {
                 return new ResultImpl<CoinbaseAccount>(response, service);
@@ -53,6 +57,10 @@ namespace Braintree
             else if (response.GetName() == "apple-pay-card")
             {
                 return new ResultImpl<ApplePayCard>(response, service);
+            }
+            else if (response.GetName() == "android-pay-card")
+            {
+                return new ResultImpl<AndroidPayCard>(response, service);
             }
             else
             {
@@ -83,6 +91,10 @@ namespace Braintree
             else if (response.GetName() == "apple-pay-card")
             {
                 return new ApplePayCard(response, service);
+            }
+            else if (response.GetName() == "android-pay-card")
+            {
+                return new AndroidPayCard(response, service);
             }
             else if (response.GetName() == "coinbase-account")
             {
