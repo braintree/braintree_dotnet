@@ -6,6 +6,8 @@ namespace Braintree
     public class CredentialsParser
     {
         public Environment Environment;
+        public string MerchantId;
+        public string AccessToken;
         public string ClientId;
         public string ClientSecret;
 
@@ -33,6 +35,13 @@ namespace Braintree
             Environment = clientIdEnvironment;
         }
 
+        public CredentialsParser(string accessToken)
+        {
+            AccessToken = accessToken;
+            Environment = getEnvironment(accessToken);
+            MerchantId = getMerchantId(accessToken);
+        }
+
         private Environment getEnvironment(string credential)
         {
             char [] separators = new Char [] { '$' };
@@ -49,6 +58,13 @@ namespace Braintree
                 default:
                     throw new Exception("Unsupported environment.");
             }
+        }
+
+        private string getMerchantId(string accessToken)
+        {
+            char [] separators = new Char [] { '$' };
+            string[] parts = accessToken.Split(separators);
+            return parts[2];
         }
     }
 }

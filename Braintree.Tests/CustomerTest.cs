@@ -321,6 +321,44 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CreateCustomerUsingAccessToken()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@compuserver.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.disney.com",
+            };
+
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+            String code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "read_write");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "read_write"
+            });
+
+            gateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            Assert.AreEqual("Michael", customer.FirstName);
+            Assert.AreEqual("Angelo", customer.LastName);
+            Assert.AreEqual("Some Company", customer.Company);
+            Assert.AreEqual("hansolo64@compuserver.com", customer.Email);
+            Assert.AreEqual("312.555.1111", customer.Phone);
+            Assert.AreEqual("312.555.1112", customer.Fax);
+            Assert.AreEqual("www.disney.com", customer.Website);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
+        }
+
+        [Test]
         public void Create_CreateCustomerWithCreditCardAndBillingAddress()
         {
             var createRequest = new CustomerRequest()

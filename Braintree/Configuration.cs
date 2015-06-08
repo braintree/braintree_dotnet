@@ -15,8 +15,16 @@ namespace Braintree
         public string PrivateKey { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
+        public string AccessToken { get; set; }
 
         public Configuration() {}
+        public Configuration(string accessToken) {
+            CredentialsParser parser = new CredentialsParser(accessToken);
+            MerchantId = parser.MerchantId;
+            AccessToken = parser.AccessToken;
+            Environment = parser.Environment;
+        }
+
         public Configuration(string clientId, string clientSecret, string accessToken = null)
         {
             CredentialsParser parser = new CredentialsParser(clientId, clientSecret, accessToken);
@@ -49,6 +57,11 @@ namespace Braintree
         public bool IsClientCredentials()
         {
            return ClientId != null;
+        }
+
+        public bool IsAccessToken()
+        {
+           return AccessToken != null;
         }
     }
 }

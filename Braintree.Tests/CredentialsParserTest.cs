@@ -22,6 +22,18 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void CredentialsParser_ParsesAccessToken()
+        {
+            CredentialsParser parser = new CredentialsParser(
+                "access_token$development$merchant_id$access_token_id"
+            );
+
+            Assert.AreEqual("access_token$development$merchant_id$access_token_id", parser.AccessToken);
+            Assert.AreEqual("merchant_id", parser.MerchantId);
+            Assert.AreEqual(Environment.DEVELOPMENT, parser.Environment);
+        }
+
+        [Test]
         public void CredentialsParser_ThrowErrorOnInconsistentEnvironment()
         {
             try {

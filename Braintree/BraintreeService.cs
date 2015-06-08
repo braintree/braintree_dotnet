@@ -179,12 +179,17 @@ namespace Braintree
             if (Configuration.IsClientCredentials())
             {
                 credentials = ClientId + ":" + ClientSecret;
+                return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
+            }
+            else if (Configuration.IsAccessToken())
+            {
+                return "Bearer " + Configuration.AccessToken;
             }
             else
             {
                 credentials = PublicKey + ":" + PrivateKey;
+                return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
             }
-            return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
         }
 
         public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
