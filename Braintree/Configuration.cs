@@ -17,6 +17,13 @@ namespace Braintree
         public string ClientSecret { get; set; }
 
         public Configuration() {}
+        public Configuration(string clientId, string clientSecret, string accessToken = null)
+        {
+            CredentialsParser parser = new CredentialsParser(clientId, clientSecret, accessToken);
+            ClientId = parser.ClientId;
+            ClientSecret = parser.ClientSecret;
+            Environment = parser.Environment;
+        }
 
         public Configuration(Environment environment, string merchantId, string publicKey, string privateKey)
         {

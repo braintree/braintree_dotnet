@@ -108,6 +108,11 @@ namespace Braintree
             Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
         }
 
+        public BraintreeGateway(string clientId, string clientSecret, string accessToken = null)
+        {
+            Configuration = new Configuration(clientId, clientSecret, accessToken);
+        }
+
         public BraintreeGateway(Configuration configuration)
         {
             Configuration = configuration;

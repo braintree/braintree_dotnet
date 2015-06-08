@@ -11,11 +11,10 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway {
-                Environment = Environment.DEVELOPMENT,
-                ClientId = "client_id$development$integration_client_id",
-                ClientSecret = "client_secret$development$integration_client_secret"
-            };
+            gateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
         }
 
         [Test]
