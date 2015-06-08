@@ -34,5 +34,24 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.ExpiresAt);
             Assert.AreEqual("bearer", result.Target.TokenType);
         }
+
+        [Test]
+        public void CreateTokenFromBadCode_ReturnsFailureCode()
+        {
+            ResultImpl<OAuthCredentials> result = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = "bad_code",
+                Scope = "read_write"
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.OAUTH_INVALID_GRANT,
+                result.Errors.ForObject("Credentials").OnField("Code")[0].Code
+            );
+            Assert.AreEqual(
+                "Invalid grant: code not found",
+                result.Errors.ForObject("Credentials").OnField("Code")[0].Message
+            );
+        }
     }
 }
