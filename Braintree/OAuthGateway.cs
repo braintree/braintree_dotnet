@@ -18,5 +18,13 @@ namespace Braintree
 
             return new ResultImpl<OAuthCredentials>(new NodeWrapper(accessTokenXML), Service);
         }
+
+        public ResultImpl<OAuthCredentials> CreateTokenFromRefreshToken(OAuthCredentialsRequest request)
+        {
+            request.GrantType = "refresh_token";
+            XmlNode accessTokenXML = Service.Post("/oauth/access_tokens", request);
+
+            return new ResultImpl<OAuthCredentials>(new NodeWrapper(accessTokenXML), Service);
+        }
     }
 }

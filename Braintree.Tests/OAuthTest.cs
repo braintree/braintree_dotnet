@@ -35,6 +35,28 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void CreateTokenFromRefreshToken_ExchangesRefreshTokenForAccessToken()
+        {
+            String code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
+
+            ResultImpl<OAuthCredentials> accessTokenResult = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "read_write"
+            });
+
+            ResultImpl<OAuthCredentials> refreshTokenResult = gateway.OAuth.CreateTokenFromRefreshToken(new OAuthCredentialsRequest {
+                RefreshToken = accessTokenResult.Target.RefreshToken,
+                Scope = "read_write"
+            });
+
+            Assert.IsTrue(refreshTokenResult.IsSuccess());
+            Assert.IsNotNull(refreshTokenResult.Target.AccessToken);
+            Assert.IsNotNull(refreshTokenResult.Target.RefreshToken);
+            Assert.IsNotNull(refreshTokenResult.Target.ExpiresAt);
+            Assert.AreEqual("bearer", refreshTokenResult.Target.TokenType);
+        }
+
+        [Test]
         public void CreateTokenFromBadCode_ReturnsFailureCode()
         {
             ResultImpl<OAuthCredentials> result = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
