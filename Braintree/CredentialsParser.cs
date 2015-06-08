@@ -11,7 +11,7 @@ namespace Braintree
         public string ClientId;
         public string ClientSecret;
 
-        public CredentialsParser(string clientId, string clientSecret, string accessToken)
+        public CredentialsParser(string clientId, string clientSecret)
         {
             if (clientId.StartsWith("client_id")) {
                 ClientId = clientId;

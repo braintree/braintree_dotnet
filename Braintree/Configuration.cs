@@ -25,9 +25,9 @@ namespace Braintree
             Environment = parser.Environment;
         }
 
-        public Configuration(string clientId, string clientSecret, string accessToken = null)
+        public Configuration(string clientId, string clientSecret)
         {
-            CredentialsParser parser = new CredentialsParser(clientId, clientSecret, accessToken);
+            CredentialsParser parser = new CredentialsParser(clientId, clientSecret);
             ClientId = parser.ClientId;
             ClientSecret = parser.ClientSecret;
             Environment = parser.Environment;

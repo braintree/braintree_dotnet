@@ -12,8 +12,7 @@ namespace Braintree.Tests
         {
             CredentialsParser parser = new CredentialsParser(
                 "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret",
-                null
+                "client_secret$development$integration_client_secret"
             );
 
             Assert.AreEqual("client_id$development$integration_client_id", parser.ClientId);
@@ -39,8 +38,7 @@ namespace Braintree.Tests
             try {
                 new CredentialsParser(
                     "client_id$development$integration_client_id",
-                    "client_secret$qa$integration_client_secret",
-                    null
+                    "client_secret$qa$integration_client_secret"
                 );
 
                 Assert.Fail("Should throw ConfigurationException");
@@ -53,8 +51,7 @@ namespace Braintree.Tests
             try {
                 new CredentialsParser(
                     "client_id$development$integration_client_id",
-                    "client_id$development$integration_client_id",
-                    null
+                    "client_id$development$integration_client_id"
                 );
 
                 Assert.Fail("Should throw ConfigurationException");
@@ -67,8 +64,7 @@ namespace Braintree.Tests
             try {
                 new CredentialsParser(
                     "client_secret$development$integration_client_secret",
-                    "client_secret$development$integration_client_secret",
-                    null
+                    "client_secret$development$integration_client_secret"
                 );
 
                 Assert.Fail("Should throw ConfigurationException");

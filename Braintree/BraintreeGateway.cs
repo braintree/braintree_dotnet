@@ -119,9 +119,9 @@ namespace Braintree
             Configuration = new Configuration(accessToken);
         }
 
-        public BraintreeGateway(string clientId, string clientSecret, string accessToken = null)
+        public BraintreeGateway(string clientId, string clientSecret)
         {
-            Configuration = new Configuration(clientId, clientSecret, accessToken);
+            Configuration = new Configuration(clientId, clientSecret);
         }
 
         public BraintreeGateway(Configuration configuration)
