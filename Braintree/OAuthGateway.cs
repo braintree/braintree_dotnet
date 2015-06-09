@@ -6,9 +6,10 @@ namespace Braintree
     {
         private BraintreeService Service;
 
-        public OAuthGateway(BraintreeService service)
+        public OAuthGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasClientCredentials();
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public ResultImpl<OAuthCredentials> CreateTokenFromCode(OAuthCredentialsRequest request)

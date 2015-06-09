@@ -63,5 +63,18 @@ namespace Braintree
         {
            return AccessToken != null;
         }
+
+        public void AssertHasClientCredentials()
+        {
+            if (ClientId == null) {
+                throw new ConfigurationException("Missing ClientId when constructing BraintreeGateway");
+            }
+            if (ClientSecret == null) {
+                throw new ConfigurationException("Missing ClientSecret when constructing BraintreeGateway");
+            }
+            if (AccessToken != null) {
+                throw new ConfigurationException("AccessToken must not be passed when constructing BraintreeGateway");
+            }
+        }
     }
 }

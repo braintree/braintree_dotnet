@@ -171,7 +171,7 @@ namespace Braintree
 
         public virtual OAuthGateway OAuth
         {
-            get { return new OAuthGateway(new BraintreeService(Configuration)); }
+            get { return new OAuthGateway(this); }
         }
 
         public virtual PaymentMethodGateway PaymentMethod

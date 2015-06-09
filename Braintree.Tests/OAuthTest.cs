@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
@@ -73,6 +74,20 @@ namespace Braintree.Tests
                 "Invalid grant: code not found",
                 result.Errors.ForObject("Credentials").OnField("Code")[0].Message
             );
+        }
+
+        [Test]
+        public void CreateTokenFromCode_RaisesIfWrongCredentials()
+        {
+            try {
+                gateway = new BraintreeGateway(
+                    "access_token$development$merchant_id$_oops_this_is_not_a_client_id_and_secret"
+                );
+
+                gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest());
+
+                Assert.Fail("Should throw ConfigurationException");
+            } catch (ConfigurationException) {}
         }
     }
 }
