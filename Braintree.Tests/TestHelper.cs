@@ -309,7 +309,7 @@ namespace Braintree.Tests
 
       public static String CreateGrant(BraintreeGateway gateway, String merchantId, string scope)
       {
-          BraintreeService service = new BraintreeService(gateway.Configuration);
+          var service = new BraintreeService(gateway.Configuration);
           XmlNode node = service.Post("/oauth_testing/grants", new OAuthGrantRequest {
               MerchantId = merchantId,
               Scope = scope

@@ -25,8 +25,8 @@ namespace Braintree
                 throw new ConfigurationException("Value passed for clientSecret is not a clientSecret");
             }
 
-            Environment clientIdEnvironment = getEnvironment(clientId);
-            Environment clientSecretEnvironment = getEnvironment(clientSecret);
+            Environment clientIdEnvironment = GetEnvironment(clientId);
+            Environment clientSecretEnvironment = GetEnvironment(clientSecret);
 
             if (clientIdEnvironment != clientSecretEnvironment) {
                 throw new ConfigurationException("Mismatched credential environments: clientId environment is " + clientIdEnvironment + " and clientSecret environment is " + clientSecretEnvironment);
@@ -38,11 +38,11 @@ namespace Braintree
         public CredentialsParser(string accessToken)
         {
             AccessToken = accessToken;
-            Environment = getEnvironment(accessToken);
-            MerchantId = getMerchantId(accessToken);
+            Environment = GetEnvironment(accessToken);
+            MerchantId = GetMerchantId(accessToken);
         }
 
-        private Environment getEnvironment(string credential)
+        private Environment GetEnvironment(string credential)
         {
             char [] separators = new Char [] { '$' };
             string[] parts = credential.Split(separators);
@@ -60,7 +60,7 @@ namespace Braintree
             }
         }
 
-        private string getMerchantId(string accessToken)
+        private string GetMerchantId(string accessToken)
         {
             char [] separators = new Char [] { '$' };
             string[] parts = accessToken.Split(separators);

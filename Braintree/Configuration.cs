@@ -54,14 +54,14 @@ namespace Braintree
             PrivateKey = privateKey;
         }
 
-        public bool IsClientCredentials()
+        public bool IsClientCredentials
         {
-           return ClientId != null;
+           get { return ClientId != null; }
         }
 
-        public bool IsAccessToken()
+        public bool IsAccessToken
         {
-           return AccessToken != null;
+           get { return AccessToken != null; }
         }
 
         public void AssertHasClientCredentials()

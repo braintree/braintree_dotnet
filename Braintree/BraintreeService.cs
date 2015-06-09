@@ -176,18 +176,18 @@ namespace Braintree
         public String GetAuthorizationHeader()
         {
             String credentials;
-            if (Configuration.IsClientCredentials())
-            {
-                credentials = ClientId + ":" + ClientSecret;
-                return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
-            }
-            else if (Configuration.IsAccessToken())
+            if (Configuration.IsAccessToken)
             {
                 return "Bearer " + Configuration.AccessToken;
-            }
-            else
-            {
-                credentials = PublicKey + ":" + PrivateKey;
+            } else {
+                if (Configuration.IsClientCredentials)
+                {
+                    credentials = ClientId + ":" + ClientSecret;
+                }
+                else
+                {
+                    credentials = PublicKey + ":" + PrivateKey;
+                }
                 return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
             }
         }
