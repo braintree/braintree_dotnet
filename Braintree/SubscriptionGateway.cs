@@ -26,7 +26,7 @@ namespace Braintree
 
         public virtual Result<Subscription> Create(SubscriptionRequest request)
         {
-            XmlNode subscriptionXML = Service.Post("/subscriptions", request);
+            XmlNode subscriptionXML = Service.Post(Service.MerchantPath() + "/subscriptions", request);
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
@@ -36,21 +36,21 @@ namespace Braintree
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode subscriptionXML = Service.Get("/subscriptions/" + id);
+            XmlNode subscriptionXML = Service.Get(Service.MerchantPath() + "/subscriptions/" + id);
 
             return new Subscription(new NodeWrapper(subscriptionXML), Gateway);
         }
 
         public virtual Result<Subscription> Update(String id, SubscriptionRequest request)
         {
-            XmlNode subscriptionXML = Service.Put("/subscriptions/" + id, request);
+            XmlNode subscriptionXML = Service.Put(Service.MerchantPath() + "/subscriptions/" + id, request);
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
 
         public virtual Result<Subscription> Cancel(String id)
         {
-            XmlNode subscriptionXML = Service.Put("/subscriptions/" + id + "/cancel");
+            XmlNode subscriptionXML = Service.Put(Service.MerchantPath() + "/subscriptions/" + id + "/cancel");
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
@@ -71,7 +71,7 @@ namespace Braintree
         /// </code>
         public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post("/subscriptions/advanced_search_ids", query));
+            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
 
             return new ResourceCollection<Subscription>(response, delegate(String[] ids) {
                 return FetchSubscriptions(query, ids);
@@ -82,7 +82,7 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post("/subscriptions/advanced_search", query));
+            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/subscriptions/advanced_search", query));
 
             List<Subscription> subscriptions = new List<Subscription>();
             foreach (NodeWrapper node in response.GetList("subscription"))
@@ -100,7 +100,7 @@ namespace Braintree
         }
 
         private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest) {
-           XmlNode response = Service.Post("/transactions", txnRequest);
+           XmlNode response = Service.Post(Service.MerchantPath() + "/transactions", txnRequest);
            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
        }
 

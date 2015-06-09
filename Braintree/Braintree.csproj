@@ -62,6 +62,7 @@
     <Compile Include="ClientTokenGateway.cs" />
     <Compile Include="ClientTokenRequest.cs" />
     <Compile Include="ClientTokenOptionsRequest.cs" />
+    <Compile Include="CredentialsParser.cs" />
     <Compile Include="BaseCreditCardRequest.cs" />
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
@@ -119,6 +120,9 @@
     <Compile Include="Modification.cs" />
     <Compile Include="MultipleValueNode.cs" />
     <Compile Include="NodeWrapper.cs" />
+    <Compile Include="OAuthCredentials.cs" />
+    <Compile Include="OAuthCredentialsRequest.cs" />
+    <Compile Include="OAuthGateway.cs" />
     <Compile Include="PartnerConfiguration.cs" />
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />

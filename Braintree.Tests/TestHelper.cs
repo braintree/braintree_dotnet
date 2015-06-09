@@ -6,6 +6,7 @@ using System.Web;
 using System.Net;
 using System.IO;
 using System.IO.Compression;
+using System.Xml;
 using NUnit.Framework;
 using Braintree;
 
@@ -81,26 +82,26 @@ namespace Braintree.Tests
 
     public static NodeWrapper Settle(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settle"));
       Assert.IsTrue(response.IsSuccess());
       return response;
     }
 
     public static void SettlementDecline(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_decline"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_decline"));
       Assert.IsTrue(response.IsSuccess());
     }
 
     public static void SettlementPending(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_pending"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_pending"));
       Assert.IsTrue(response.IsSuccess());
     }
 
     public static void Escrow(BraintreeService service, String transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/escrow"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/escrow"));
       Assert.IsTrue(response.IsSuccess());
     }
 
@@ -284,10 +285,38 @@ namespace Braintree.Tests
     public static String Create3DSVerification(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
     {
       String url = "/three_d_secure/create_verification/" + merchantAccountId;
-      NodeWrapper response = new NodeWrapper(service.Post(url, request));
+      NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + url, request));
       Assert.IsTrue(response.IsSuccess());
       return response.GetString("three-d-secure-token");
     }
+  }
+
+  public class OAuthTestHelper
+  {
+      private class OAuthGrantRequest : Request
+      {
+          public String MerchantId { get; set; }
+          public String Scope { get; set; }
+
+          public override String ToXml()
+          {
+              return new RequestBuilder("grant")
+                  .AddElement("merchant_public_id", MerchantId)
+                  .AddElement("scope", Scope)
+                  .ToXml();
+          }
+      }
+
+      public static String CreateGrant(BraintreeGateway gateway, String merchantId, string scope)
+      {
+          var service = new BraintreeService(gateway.Configuration);
+          XmlNode node = service.Post("/oauth_testing/grants", new OAuthGrantRequest {
+              MerchantId = merchantId,
+              Scope = scope
+          });
+
+          return node["code"].InnerText;
+      }
   }
 
   public class BraintreeTestHttpService

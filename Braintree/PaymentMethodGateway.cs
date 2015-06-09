@@ -16,7 +16,7 @@ namespace Braintree
 
         public Result<PaymentMethod> Create(PaymentMethodRequest request)
         {
-            NodeWrapper response = new NodeWrapper(service.Post("/payment_methods", request));
+            NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods", request));
 
             if (response.GetName() == "paypal-account")
             {
@@ -46,7 +46,7 @@ namespace Braintree
 
         public Result<PaymentMethod> Update(string token, PaymentMethodRequest request)
         {
-            var response = new NodeWrapper(service.Put("/payment_methods/any/" + token, request));
+            var response = new NodeWrapper(service.Put(service.MerchantPath() + "/payment_methods/any/" + token, request));
 
             if (response.GetName() == "paypal-account")
             {
@@ -72,7 +72,7 @@ namespace Braintree
 
         public void Delete(String token)
         {
-            service.Delete("/payment_methods/any/" + token);
+            service.Delete(service.MerchantPath() + "/payment_methods/any/" + token);
         }
 
         public PaymentMethod Find(String token)
@@ -80,7 +80,7 @@ namespace Braintree
             if(token == null || token.Trim().Equals(""))
                 throw new NotFoundException();
 
-            NodeWrapper response = new NodeWrapper(service.Get("/payment_methods/any/" + token));
+            NodeWrapper response = new NodeWrapper(service.Get(service.MerchantPath() + "/payment_methods/any/" + token));
 
             if (response.GetName() == "paypal-account")
             {

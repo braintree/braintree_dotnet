@@ -26,7 +26,7 @@ namespace Braintree
             if(Id == null || Id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode customerXML = Service.Get("/customers/" + Id);
+            XmlNode customerXML = Service.Get(Service.MerchantPath() + "/customers/" + Id);
 
             return new Customer(new NodeWrapper(customerXML), Gateway);
         }
@@ -38,19 +38,19 @@ namespace Braintree
 
         public virtual Result<Customer> Create(CustomerRequest request)
         {
-            XmlNode customerXML = Service.Post("/customers", request);
+            XmlNode customerXML = Service.Post(Service.MerchantPath() + "/customers", request);
 
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), Gateway);
         }
 
         public virtual void Delete(String Id)
         {
-            Service.Delete("/customers/" + Id);
+            Service.Delete(Service.MerchantPath() + "/customers/" + Id);
         }
 
         public virtual Result<Customer> Update(String Id, CustomerRequest request)
         {
-            XmlNode customerXML = Service.Put("/customers/" + Id, request);
+            XmlNode customerXML = Service.Put(Service.MerchantPath() + "/customers/" + Id, request);
 
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), Gateway);
         }
@@ -59,7 +59,7 @@ namespace Braintree
         public virtual Result<Customer> ConfirmTransparentRedirect(String queryString)
         {
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
-            XmlNode node = Service.Post("/customers/all/confirm_transparent_redirect_request", trRequest);
+            XmlNode node = Service.Post(Service.MerchantPath() + "/customers/all/confirm_transparent_redirect_request", trRequest);
 
             return new ResultImpl<Customer>(new NodeWrapper(node), Gateway);
         }
@@ -78,7 +78,7 @@ namespace Braintree
 
         public virtual ResourceCollection<Customer> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search_ids"));
+            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids"));
             CustomerSearchRequest query = new CustomerSearchRequest();
 
             return new ResourceCollection<Customer>(response, delegate(String[] ids) {
@@ -88,7 +88,7 @@ namespace Braintree
 
         public virtual ResourceCollection<Customer> Search(CustomerSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search_ids", query));
+            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids", query));
 
             return new ResourceCollection<Customer>(response, delegate(String[] ids) {
                 return FetchCustomers(query, ids);
@@ -99,7 +99,7 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post("/customers/advanced_search", query));
+            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search", query));
 
             List<Customer> customers = new List<Customer>();
             foreach (NodeWrapper node in response.GetList("customer"))

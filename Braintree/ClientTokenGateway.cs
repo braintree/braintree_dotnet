@@ -25,7 +25,7 @@ namespace Braintree
         {
             if (request == null) request = new ClientTokenRequest();
             verifyOptions(request);
-            XmlNode response = Service.Post("/client_token", request);
+            XmlNode response = Service.Post(Service.MerchantPath() + "/client_token", request);
 
             if (response.Name.Equals("client-token")) {
                 return Regex.Unescape(response.InnerText);

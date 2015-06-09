@@ -84,6 +84,24 @@ namespace Braintree
             set { Configuration.PrivateKey = value; }
         }
 
+        public String AccessToken
+        {
+            get { return Configuration.AccessToken; }
+            set { Configuration.AccessToken = value; }
+        }
+
+        public String ClientId
+        {
+            get { return Configuration.ClientId; }
+            set { Configuration.ClientId = value; }
+        }
+
+        public String ClientSecret
+        {
+            get { return Configuration.ClientSecret; }
+            set { Configuration.ClientSecret = value; }
+        }
+
         public Configuration Configuration { get; set; }
 
         public BraintreeGateway()
@@ -94,6 +112,16 @@ namespace Braintree
         public BraintreeGateway(Environment environment, string merchantId, string publicKey, string privateKey)
         {
             Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
+        }
+
+        public BraintreeGateway(string accessToken)
+        {
+            Configuration = new Configuration(accessToken);
+        }
+
+        public BraintreeGateway(string clientId, string clientSecret)
+        {
+            Configuration = new Configuration(clientId, clientSecret);
         }
 
         public BraintreeGateway(Configuration configuration)
@@ -139,6 +167,11 @@ namespace Braintree
         public virtual MerchantAccountGateway MerchantAccount
         {
             get { return new MerchantAccountGateway(this); }
+        }
+
+        public virtual OAuthGateway OAuth
+        {
+            get { return new OAuthGateway(this); }
         }
 
         public virtual PaymentMethodGateway PaymentMethod

@@ -15,7 +15,7 @@ namespace Braintree
 
         public virtual List<Discount> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Get("/discounts"));
+            NodeWrapper response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/discounts"));
 
             List<Discount> discounts = new List<Discount>();
             foreach (NodeWrapper node in response.GetList("discount"))

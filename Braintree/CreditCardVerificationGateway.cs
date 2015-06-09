@@ -26,14 +26,14 @@ namespace Braintree
             if(Id == null || Id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode creditCardVerificationXML = Service.Get("/verifications/" + Id);
+            XmlNode creditCardVerificationXML = Service.Get(Service.MerchantPath() + "/verifications/" + Id);
 
             return new CreditCardVerification(new NodeWrapper(creditCardVerificationXML), Gateway);
         }
 
         public virtual ResourceCollection<CreditCardVerification> Search(CreditCardVerificationSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post("/verifications/advanced_search_ids", query));
+            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/verifications/advanced_search_ids", query));
 
             return new ResourceCollection<CreditCardVerification>(response, delegate(String[] ids) {
                 return FetchCreditCardVerifications(query, ids);
@@ -44,7 +44,7 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post("/verifications/advanced_search", query));
+            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/verifications/advanced_search", query));
 
             List<CreditCardVerification> verifications = new List<CreditCardVerification>();
             foreach (NodeWrapper node in response.GetList("verification"))

@@ -2121,7 +2121,7 @@ namespace Braintree.Tests
         private void MakePastDue(Subscription subscription, int numberOfDays)
         {
             BraintreeService service = new BraintreeService(gateway.Configuration);
-            NodeWrapper response = new NodeWrapper(service.Put("/subscriptions/" + subscription.Id + "/make_past_due?days_past_due=" + numberOfDays));
+            NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/subscriptions/" + subscription.Id + "/make_past_due?days_past_due=" + numberOfDays));
             Assert.IsTrue(response.IsSuccess());
         }
     }

@@ -1128,6 +1128,43 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_ReturnsSuccessfulResponseUsingAccessToken()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+            String code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "read_write");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "read_write"
+            });
+
+            gateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponseWithRiskData()
         {
             var request = new TransactionRequest
@@ -1467,10 +1504,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserve.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com"
+                Website = "www.example.com"
             }).Target;
 
             TransactionRequest request = new TransactionRequest
@@ -1501,10 +1538,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com"
+                Website = "www.example.com"
             }).Target;
 
             TransactionRequest request = new TransactionRequest
@@ -2799,7 +2836,7 @@ namespace Braintree.Tests
                       DepartureDate = "2014-07-07",
                       LodgingCheckInDate = "2014-07-07",
                       LodgingCheckOutDate = "2014-08-08",
-                      LodgingName = "Disney",
+                      LodgingName = "Lodgy Lodge",
                   }
                 }
             };
@@ -2828,7 +2865,7 @@ namespace Braintree.Tests
                       DepartureDate = "2014-07-07",
                       LodgingCheckInDate = "2014-07-07",
                       LodgingCheckOutDate = "2014-08-08",
-                      LodgingName = "Disney",
+                      LodgingName = "Lodgy Lodge",
                   }
                 }
             };

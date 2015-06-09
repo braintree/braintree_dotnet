@@ -36,6 +36,16 @@ namespace Braintree
             get { return Configuration.PrivateKey; }
         }
 
+        public String ClientId
+        {
+            get { return Configuration.ClientId; }
+        }
+
+        public String ClientSecret
+        {
+            get { return Configuration.ClientSecret; }
+        }
+
         public BraintreeService(Configuration configuration)
         {
             this.Configuration = configuration;
@@ -75,7 +85,7 @@ namespace Braintree
         {
             try
             {
-                var request = WebRequest.Create(BaseMerchantURL() + URL) as HttpWebRequest;
+                var request = WebRequest.Create(Environment.GatewayURL + URL) as HttpWebRequest;
                 request.Headers.Add("Authorization", GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", ApiVersion);
                 request.Headers.Add("Accept-Encoding", "gzip");
@@ -155,13 +165,31 @@ namespace Braintree
 
         public String BaseMerchantURL()
         {
-            return Environment.GatewayURL + "/merchants/" + MerchantId;
+            return Environment.GatewayURL + MerchantPath();
+        }
+
+        public String MerchantPath()
+        {
+            return "/merchants/" + MerchantId;
         }
 
         public String GetAuthorizationHeader()
         {
-            return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(PublicKey + ":" + PrivateKey)).Trim();
-
+            String credentials;
+            if (Configuration.IsAccessToken)
+            {
+                return "Bearer " + Configuration.AccessToken;
+            } else {
+                if (Configuration.IsClientCredentials)
+                {
+                    credentials = ClientId + ":" + ClientSecret;
+                }
+                else
+                {
+                    credentials = PublicKey + ":" + PrivateKey;
+                }
+                return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
+            }
         }
 
         public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
