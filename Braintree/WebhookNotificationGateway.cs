@@ -12,10 +12,12 @@ namespace Braintree
     public class WebhookNotificationGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal WebhookNotificationGateway(BraintreeService service)
+        protected internal WebhookNotificationGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual WebhookNotification Parse(string signature, string payload)
@@ -23,7 +25,7 @@ namespace Braintree
             ValidateSignature(signature, payload);
             string xmlPayload = Encoding.Default.GetString(Convert.FromBase64String(payload));
             NodeWrapper node = new NodeWrapper(Service.StringToXmlNode(xmlPayload));
-            return new WebhookNotification(node, Service);
+            return new WebhookNotification(node, Gateway);
         }
 
         public virtual string Verify(string challenge)

@@ -13,10 +13,12 @@ namespace Braintree
     public class TransactionGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal TransactionGateway(BraintreeService service)
+        protected internal TransactionGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
@@ -31,7 +33,7 @@ namespace Braintree
 
             XmlNode response = Service.Put("/transactions/" + id + "/cancel_release", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
@@ -40,7 +42,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/transactions/all/confirm_transparent_redirect_request", trRequest);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(node), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(node), Gateway);
         }
 
         public virtual Result<Transaction> HoldInEscrow(String id)
@@ -49,7 +51,7 @@ namespace Braintree
 
             XmlNode response = Service.Put("/transactions/" + id + "/hold_in_escrow", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual String SaleTrData(TransactionRequest trData, String redirectURL)
@@ -71,7 +73,7 @@ namespace Braintree
             request.Type = TransactionType.CREDIT;
             XmlNode response = Service.Post("/transactions", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual Transaction Find(String id)
@@ -81,13 +83,13 @@ namespace Braintree
 
             XmlNode response = Service.Get("/transactions/" + id);
 
-            return new Transaction(new NodeWrapper(response), Service);
+            return new Transaction(new NodeWrapper(response), Gateway);
         }
 
         public virtual Result<Transaction> Refund(String id)
         {
             XmlNode response = Service.Post("/transactions/" + id + "/refund");
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual Result<Transaction> Refund(String id, Decimal amount)
@@ -97,7 +99,7 @@ namespace Braintree
                 Amount = amount
             };
             XmlNode response = Service.Post("/transactions/" + id + "/refund", request);
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual Result<Transaction> Sale(TransactionRequest request)
@@ -105,7 +107,7 @@ namespace Braintree
             request.Type = TransactionType.SALE;
             XmlNode response = Service.Post("/transactions", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual Result<Transaction> ReleaseFromEscrow(String id)
@@ -114,7 +116,7 @@ namespace Braintree
 
             XmlNode response = Service.Put("/transactions/" + id + "/release_from_escrow", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual Result<Transaction> SubmitForSettlement(String id)
@@ -129,14 +131,14 @@ namespace Braintree
 
             XmlNode response = Service.Put("/transactions/" + id + "/submit_for_settlement", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual Result<Transaction> Void(String id)
         {
             XmlNode response = Service.Put("/transactions/" + id + "/void");
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query)
@@ -156,7 +158,7 @@ namespace Braintree
         {
             XmlNode response = Service.Post("/transactions/" + id + "/clone", cloneRequest);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
         private List<Transaction> FetchTransactions(TransactionSearchRequest query, String[] ids)
@@ -168,7 +170,7 @@ namespace Braintree
             List<Transaction> transactions = new List<Transaction>();
             foreach (NodeWrapper node in response.GetList("transaction"))
             {
-                transactions.Add(new Transaction(node, Service));
+                transactions.Add(new Transaction(node, Gateway));
             }
             return transactions;
         }

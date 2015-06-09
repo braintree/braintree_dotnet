@@ -190,11 +190,11 @@ namespace Braintree
         public RiskData RiskData { get; protected set; }
         public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
 
-        private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal Transaction(NodeWrapper node, BraintreeService service)
+        protected internal Transaction(NodeWrapper node, BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
 
             if (node == null) return;
 
@@ -253,9 +253,9 @@ namespace Braintree
             TaxAmount = node.GetDecimal("tax-amount");
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
-            CreditCard = new CreditCard(node.GetNode("credit-card"), service);
-            Subscription = new Subscription(node.GetNode("subscription"), service);
-            Customer = new Customer(node.GetNode("customer"), service);
+            CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
+            Subscription = new Subscription(node.GetNode("subscription"), gateway);
+            Customer = new Customer(node.GetNode("customer"), gateway);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
@@ -352,7 +352,7 @@ namespace Braintree
         {
             if (CreditCard.Token == null) return null;
 
-            return new CreditCardGateway(Service).Find(CreditCard.Token);
+            return new CreditCardGateway(Gateway).Find(CreditCard.Token);
         }
 
         /// <summary>
@@ -377,7 +377,7 @@ namespace Braintree
         {
             if (Customer.Id == null) return null;
 
-            return new CustomerGateway(Service).Find(Customer.Id);
+            return new CustomerGateway(Gateway).Find(Customer.Id);
         }
 
         /// <summary>
@@ -402,7 +402,7 @@ namespace Braintree
         {
             if (BillingAddress.Id == null) return null;
 
-            return new AddressGateway(Service).Find(Customer.Id, BillingAddress.Id);
+            return new AddressGateway(Gateway).Find(Customer.Id, BillingAddress.Id);
         }
 
         /// <summary>
@@ -427,7 +427,7 @@ namespace Braintree
         {
             if (ShippingAddress.Id == null) return null;
 
-            return new AddressGateway(Service).Find(Customer.Id, ShippingAddress.Id);
+            return new AddressGateway(Gateway).Find(Customer.Id, ShippingAddress.Id);
         }
 
         public Boolean IsDisbursed()

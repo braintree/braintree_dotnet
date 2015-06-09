@@ -14,10 +14,12 @@ namespace Braintree
     public class SubscriptionGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal SubscriptionGateway(BraintreeService service)
+        protected internal SubscriptionGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public delegate void SearchDelegate(SubscriptionSearchRequest search);
@@ -26,7 +28,7 @@ namespace Braintree
         {
             XmlNode subscriptionXML = Service.Post("/subscriptions", request);
 
-            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Service);
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
 
         public virtual Subscription Find(String id)
@@ -36,21 +38,21 @@ namespace Braintree
 
             XmlNode subscriptionXML = Service.Get("/subscriptions/" + id);
 
-            return new Subscription(new NodeWrapper(subscriptionXML), Service);
+            return new Subscription(new NodeWrapper(subscriptionXML), Gateway);
         }
 
         public virtual Result<Subscription> Update(String id, SubscriptionRequest request)
         {
             XmlNode subscriptionXML = Service.Put("/subscriptions/" + id, request);
 
-            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Service);
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
 
         public virtual Result<Subscription> Cancel(String id)
         {
             XmlNode subscriptionXML = Service.Put("/subscriptions/" + id + "/cancel");
 
-            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Service);
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
 
         /// <summary>
@@ -85,7 +87,7 @@ namespace Braintree
             List<Subscription> subscriptions = new List<Subscription>();
             foreach (NodeWrapper node in response.GetList("subscription"))
             {
-                subscriptions.Add(new Subscription(node, Service));
+                subscriptions.Add(new Subscription(node, Gateway));
             }
             return subscriptions;
         }
@@ -99,7 +101,7 @@ namespace Braintree
 
         private Result<Transaction> RetryCharge(SubscriptionTransactionRequest txnRequest) {
            XmlNode response = Service.Post("/transactions", txnRequest);
-           return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+           return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
        }
 
        public Result<Transaction> RetryCharge(String subscriptionId) {

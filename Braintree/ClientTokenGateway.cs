@@ -16,9 +16,9 @@ namespace Braintree
     {
         private BraintreeService Service;
 
-        protected internal ClientTokenGateway(BraintreeService service)
+        protected internal ClientTokenGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual string generate(ClientTokenRequest request = null)

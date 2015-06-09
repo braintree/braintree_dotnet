@@ -28,30 +28,30 @@ namespace Braintree
         public String Message { get; protected set; }
         public T Target { get; protected set; }
 
-        public ResultImpl(NodeWrapper node, BraintreeService service)
+        public ResultImpl(NodeWrapper node, BraintreeGateway gateway)
         {
             if (node.IsSuccess())
             {
-                Target = newInstanceFromResponse(node, service);
+                Target = newInstanceFromResponse(node, gateway);
             }
             else
             {
                 Errors = new ValidationErrors(node);
                 NodeWrapper verificationNode = node.GetNode("verification");
                 if (verificationNode != null) {
-                    CreditCardVerification = new CreditCardVerification(verificationNode, service);
+                    CreditCardVerification = new CreditCardVerification(verificationNode, gateway);
                 }
 
                 NodeWrapper transactionNode = node.GetNode("transaction");
                 if (transactionNode != null)
                 {
-                    Transaction = new Transaction(transactionNode, service);
+                    Transaction = new Transaction(transactionNode, gateway);
                 }
 
                 NodeWrapper subscriptionNode = node.GetNode("subscription");
                 if (subscriptionNode != null)
                 {
-                    Subscription = new Subscription(subscriptionNode, service);
+                    Subscription = new Subscription(subscriptionNode, gateway);
                 }
                 Parameters = node.GetNode("params").GetFormParameters();
                 Message = node.GetString("message");
@@ -63,7 +63,7 @@ namespace Braintree
             return Errors == null;
         }
 
-        private T newInstanceFromResponse(NodeWrapper node, BraintreeService service)
+        private T newInstanceFromResponse(NodeWrapper node, BraintreeGateway gateway)
         {
             if (typeof(T) == typeof(Address))
             {
@@ -71,31 +71,31 @@ namespace Braintree
             }
             else if (typeof(T) == typeof(ApplePayCard))
             {
-                return new ApplePayCard(node, service) as T;
+                return new ApplePayCard(node, gateway) as T;
             }
             else if (typeof(T) == typeof(AndroidPayCard))
             {
-                return new AndroidPayCard(node, service) as T;
+                return new AndroidPayCard(node, gateway) as T;
             }
             else if (typeof(T) == typeof(CreditCard))
             {
-                return new CreditCard(node, service) as T;
+                return new CreditCard(node, gateway) as T;
             }
             else if (typeof(T) == typeof(CoinbaseAccount))
             {
-                return new CoinbaseAccount(node, service) as T;
+                return new CoinbaseAccount(node, gateway) as T;
             }
             else if (typeof(T) == typeof(Customer))
             {
-                return new Customer(node, service) as T;
+                return new Customer(node, gateway) as T;
             }
             else if (typeof(T) == typeof(Transaction))
             {
-                return new Transaction(node, service) as T;
+                return new Transaction(node, gateway) as T;
             }
             else if (typeof(T) == typeof(Subscription))
             {
-                return new Subscription(node, service) as T;
+                return new Subscription(node, gateway) as T;
             }
             else if (typeof(T) == typeof(SettlementBatchSummary))
             {
@@ -107,7 +107,7 @@ namespace Braintree
             }
             else if (typeof(T) == typeof(PayPalAccount))
             {
-                return new PayPalAccount(node, service) as T;
+                return new PayPalAccount(node, gateway) as T;
             }
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {
@@ -115,7 +115,7 @@ namespace Braintree
             }
             else if (typeof(T) == typeof(PaymentMethodNonce))
             {
-                return new PaymentMethodNonce(node, service) as T;
+                return new PaymentMethodNonce(node, gateway) as T;
             }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());

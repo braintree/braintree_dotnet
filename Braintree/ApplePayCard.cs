@@ -16,7 +16,7 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal ApplePayCard(NodeWrapper node, BraintreeService service)
+        protected internal ApplePayCard(NodeWrapper node, BraintreeGateway gateway)
         {
             CardType = node.GetString("card-type");
             Last4 = node.GetString("last-4");
@@ -34,7 +34,7 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
     }

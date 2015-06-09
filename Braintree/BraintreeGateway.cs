@@ -103,77 +103,77 @@ namespace Braintree
 
         public virtual ClientTokenGateway ClientToken
         {
-            get { return new ClientTokenGateway(new BraintreeService(Configuration)); }
+            get { return new ClientTokenGateway(this); }
         }
 
         public virtual CustomerGateway Customer
         {
-            get { return new CustomerGateway(new BraintreeService(Configuration)); }
+            get { return new CustomerGateway(this); }
         }
 
         public virtual AddressGateway Address
         {
-            get { return new AddressGateway(new BraintreeService(Configuration)); }
+            get { return new AddressGateway(this); }
         }
 
         public virtual AddOnGateway AddOn
         {
-            get { return new AddOnGateway(new BraintreeService(Configuration)); }
+            get { return new AddOnGateway(this); }
         }
 
         public virtual CreditCardGateway CreditCard
         {
-            get { return new CreditCardGateway(new BraintreeService(Configuration)); }
+            get { return new CreditCardGateway(this); }
         }
 
         public virtual CreditCardVerificationGateway CreditCardVerification
         {
-            get { return new CreditCardVerificationGateway(new BraintreeService(Configuration)); }
+            get { return new CreditCardVerificationGateway(this); }
         }
 
         public virtual DiscountGateway Discount
         {
-            get { return new DiscountGateway(new BraintreeService(Configuration)); }
+            get { return new DiscountGateway(this); }
         }
 
         public virtual MerchantAccountGateway MerchantAccount
         {
-            get { return new MerchantAccountGateway(new BraintreeService(Configuration)); }
+            get { return new MerchantAccountGateway(this); }
         }
 
         public virtual PaymentMethodGateway PaymentMethod
         {
-            get { return new PaymentMethodGateway(new BraintreeService(Configuration)); }
+            get { return new PaymentMethodGateway(this); }
         }
 
         public virtual PayPalAccountGateway PayPalAccount
         {
-            get { return new PayPalAccountGateway(new BraintreeService(Configuration)); }
+            get { return new PayPalAccountGateway(this); }
         }
 
         public virtual PlanGateway Plan
         {
-            get { return new PlanGateway(new BraintreeService(Configuration)); }
+            get { return new PlanGateway(this); }
         }
 
         public virtual SettlementBatchSummaryGateway SettlementBatchSummary
         {
-            get { return new SettlementBatchSummaryGateway(new BraintreeService(Configuration)); }
+            get { return new SettlementBatchSummaryGateway(this); }
         }
 
         public virtual SubscriptionGateway Subscription
         {
-            get { return new SubscriptionGateway(new BraintreeService(Configuration)); }
+            get { return new SubscriptionGateway(this); }
         }
 
         public virtual TransactionGateway Transaction
         {
-            get { return new TransactionGateway(new BraintreeService(Configuration)); }
+            get { return new TransactionGateway(this); }
         }
 
         public virtual TransparentRedirectGateway TransparentRedirect
         {
-            get { return new TransparentRedirectGateway(new BraintreeService(Configuration)); }
+            get { return new TransparentRedirectGateway(this); }
         }
 
         public virtual String TrData(Request trData, String redirectURL)
@@ -183,17 +183,17 @@ namespace Braintree
 
         public virtual WebhookNotificationGateway WebhookNotification
         {
-            get { return new WebhookNotificationGateway(new BraintreeService(Configuration)); }
+            get { return new WebhookNotificationGateway(this); }
         }
 
         public virtual WebhookTestingGateway WebhookTesting
         {
-            get { return new WebhookTestingGateway(new BraintreeService(Configuration)); }
+            get { return new WebhookTestingGateway(this); }
         }
 
         public virtual PaymentMethodNonceGateway PaymentMethodNonce
         {
-            get { return new PaymentMethodNonceGateway(new BraintreeService(Configuration)); }
+            get { return new PaymentMethodNonceGateway(this); }
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal PayPalAccount(NodeWrapper node, BraintreeService service)
+        protected internal PayPalAccount(NodeWrapper node, BraintreeGateway gateway)
         {
             Email = node.GetString("email");
             Token = node.GetString("token");
@@ -25,7 +25,7 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
 

@@ -7,17 +7,19 @@ namespace Braintree
     public class PayPalAccountGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        public PayPalAccountGateway(BraintreeService service)
+        public PayPalAccountGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public PayPalAccount Find(String token)
         {
             XmlNode xml = Service.Get("/payment_methods/paypal_account/" + token);
 
-            return new PayPalAccount(new NodeWrapper(xml), Service);
+            return new PayPalAccount(new NodeWrapper(xml), Gateway);
         }
 
         public void Delete(String token)
@@ -28,7 +30,7 @@ namespace Braintree
         public Result<PayPalAccount> Update(String token, PayPalAccountRequest request)
         {
             XmlNode xml = Service.Put("/payment_methods/paypal_account/" + token, request);
-            return new ResultImpl<PayPalAccount>(new NodeWrapper(xml), Service);
+            return new ResultImpl<PayPalAccount>(new NodeWrapper(xml), Gateway);
         }
     }
 }

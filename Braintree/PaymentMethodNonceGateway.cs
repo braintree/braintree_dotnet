@@ -6,24 +6,26 @@ namespace Braintree
     public class PaymentMethodNonceGateway
     {
         private BraintreeService service;
+        private BraintreeGateway Gateway;
 
-        public PaymentMethodNonceGateway(BraintreeService service)
+        public PaymentMethodNonceGateway(BraintreeGateway gateway)
         {
-            this.service = service;
+            Gateway = gateway;
+            this.service = new BraintreeService(gateway.Configuration);
         }
 
         public Result<PaymentMethodNonce> Create(string token)
         {
             NodeWrapper response = new NodeWrapper(service.Post("/payment_methods/" + token + "/nonces"));
 
-            return new ResultImpl<PaymentMethodNonce>(response, service);
+            return new ResultImpl<PaymentMethodNonce>(response, Gateway);
         }
 
         public virtual PaymentMethodNonce Find(String nonce)
         {
             NodeWrapper response = new NodeWrapper(service.Get("/payment_method_nonces/" + nonce));
 
-            return new PaymentMethodNonce(response, service);
+            return new PaymentMethodNonce(response, Gateway);
         }
 
     }

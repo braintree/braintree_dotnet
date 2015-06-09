@@ -119,7 +119,7 @@ namespace Braintree
         public SubscriptionDurationUnit TrialDurationUnit { get; protected set; }
         public String MerchantAccountId { get; protected set; }
 
-        public Subscription(NodeWrapper node, BraintreeService service)
+        public Subscription(NodeWrapper node, BraintreeGateway gateway)
         {
             Balance = node.GetDecimal("balance");
             BillingDayOfMonth = node.GetInteger("billing-day-of-month");
@@ -167,7 +167,7 @@ namespace Braintree
             }
             Transactions = new List<Transaction> ();
             foreach (NodeWrapper transactionResponse in node.GetList("transactions/transaction")) {
-                Transactions.Add(new Transaction(transactionResponse, service));
+                Transactions.Add(new Transaction(transactionResponse, gateway));
             }
         }
     }

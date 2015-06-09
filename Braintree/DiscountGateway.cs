@@ -8,9 +8,9 @@ namespace Braintree
     {
         private BraintreeService Service;
 
-        public DiscountGateway(BraintreeService service)
+        public DiscountGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual List<Discount> All()

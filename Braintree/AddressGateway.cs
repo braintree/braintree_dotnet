@@ -14,17 +14,19 @@ namespace Braintree
     public class AddressGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal AddressGateway(BraintreeService service)
+        protected internal AddressGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual Result<Address> Create(String customerId, AddressRequest request)
         {
             XmlNode addressXML = Service.Post("/customers/" + customerId + "/addresses", request);
 
-            return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
 
         public virtual void Delete(String customerId, String id)
@@ -46,7 +48,7 @@ namespace Braintree
         {
             XmlNode addressXML = Service.Put("/customers/" + customerId + "/addresses/" + id, request);
 
-            return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
     }
 }

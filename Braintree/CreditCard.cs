@@ -214,7 +214,7 @@ namespace Braintree
             }
         }
 
-        protected internal CreditCard(NodeWrapper node, BraintreeService service)
+        protected internal CreditCard(NodeWrapper node, BraintreeGateway gateway)
         {
             if (node == null) return;
 
@@ -248,14 +248,14 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
 
             var verificationNodes = node.GetList("verifications/verification");
-            Verification = FindLatestVerification(verificationNodes, service);
+            Verification = FindLatestVerification(verificationNodes, gateway);
         }
 
-        private CreditCardVerification FindLatestVerification(List<NodeWrapper> verificationNodes, BraintreeService service) {
+        private CreditCardVerification FindLatestVerification(List<NodeWrapper> verificationNodes, BraintreeGateway gateway) {
             if(verificationNodes.Count > 0)
             {
                 verificationNodes.Sort(delegate(NodeWrapper first, NodeWrapper second) {
@@ -265,7 +265,7 @@ namespace Braintree
                     return DateTime.Compare(time2, time1);
                 });
 
-                return new CreditCardVerification(verificationNodes[0], service);
+                return new CreditCardVerification(verificationNodes[0], gateway);
             }
 
             return null;

@@ -21,7 +21,7 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal AndroidPayCard(NodeWrapper node, BraintreeService service)
+        protected internal AndroidPayCard(NodeWrapper node, BraintreeGateway gateway)
         {
             CardType = node.GetString("virtual-card-type");
             VirtualCardType = node.GetString("virtual-card-type");
@@ -44,7 +44,7 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
     }

@@ -7,9 +7,9 @@ namespace Braintree
     {
         private BraintreeService Service;
 
-        public PlanGateway(BraintreeService service)
+        public PlanGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual List<Plan> All()

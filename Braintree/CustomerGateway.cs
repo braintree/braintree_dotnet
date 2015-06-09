@@ -13,10 +13,12 @@ namespace Braintree
     public class CustomerGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal CustomerGateway(BraintreeService service)
+        protected internal CustomerGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual Customer Find(String Id)
@@ -26,7 +28,7 @@ namespace Braintree
 
             XmlNode customerXML = Service.Get("/customers/" + Id);
 
-            return new Customer(new NodeWrapper(customerXML), Service);
+            return new Customer(new NodeWrapper(customerXML), Gateway);
         }
 
         public virtual Result<Customer> Create()
@@ -38,7 +40,7 @@ namespace Braintree
         {
             XmlNode customerXML = Service.Post("/customers", request);
 
-            return new ResultImpl<Customer>(new NodeWrapper(customerXML), Service);
+            return new ResultImpl<Customer>(new NodeWrapper(customerXML), Gateway);
         }
 
         public virtual void Delete(String Id)
@@ -50,7 +52,7 @@ namespace Braintree
         {
             XmlNode customerXML = Service.Put("/customers/" + Id, request);
 
-            return new ResultImpl<Customer>(new NodeWrapper(customerXML), Service);
+            return new ResultImpl<Customer>(new NodeWrapper(customerXML), Gateway);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
@@ -59,7 +61,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/customers/all/confirm_transparent_redirect_request", trRequest);
 
-            return new ResultImpl<Customer>(new NodeWrapper(node), Service);
+            return new ResultImpl<Customer>(new NodeWrapper(node), Gateway);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
@@ -102,7 +104,7 @@ namespace Braintree
             List<Customer> customers = new List<Customer>();
             foreach (NodeWrapper node in response.GetList("customer"))
             {
-                customers.Add(new Customer(node, Service));
+                customers.Add(new Customer(node, Gateway));
             }
             return customers;
         }

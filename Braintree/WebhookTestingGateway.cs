@@ -9,9 +9,9 @@ namespace Braintree
     {
         private BraintreeService Service;
 
-        protected internal WebhookTestingGateway(BraintreeService service)
+        protected internal WebhookTestingGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual Dictionary<string, string> SampleNotification(WebhookKind kind, string id)

@@ -11,7 +11,6 @@ namespace Braintree.Tests
     public class CreditCardVerificationTest
     {
         private BraintreeGateway gateway;
-        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -23,8 +22,6 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-
-            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -50,7 +47,7 @@ namespace Braintree.Tests
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(builder.ToString());
 
-            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), service);
+            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), gateway);
             Assert.AreEqual(null, verification.AvsErrorResponseCode);
             Assert.AreEqual("I", verification.AvsPostalCodeResponseCode);
             Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, verification.Status);
@@ -74,7 +71,7 @@ namespace Braintree.Tests
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(builder.ToString());
 
-            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), service);
+            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), gateway);
             Assert.AreEqual(null, verification.AvsErrorResponseCode);
             Assert.AreEqual(null, verification.AvsPostalCodeResponseCode);
             Assert.AreEqual(null, verification.Status);

@@ -39,7 +39,7 @@ namespace Braintree
         public DateTime? CreatedAt { get; protected set; }
         public RiskData RiskData { get; protected set; }
 
-        public CreditCardVerification(NodeWrapper node, BraintreeService service)
+        public CreditCardVerification(NodeWrapper node, BraintreeGateway gateway)
         {
             if (node == null) return;
 
@@ -58,7 +58,7 @@ namespace Braintree
             Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
             Id = node.GetString("id");
             BillingAddress = new Address(node.GetNode("billing"));
-            CreditCard = new CreditCard(node.GetNode("credit-card"), service);
+            CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
             CreatedAt = node.GetDateTime("created-at");
 
             var riskDataNode = node.GetNode("risk-data");

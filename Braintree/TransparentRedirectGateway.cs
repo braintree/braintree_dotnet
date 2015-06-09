@@ -19,10 +19,12 @@ namespace Braintree
         }
 
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal TransparentRedirectGateway(BraintreeService service)
+        protected internal TransparentRedirectGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public String BuildTrData(Request request, String redirectURL)
@@ -35,7 +37,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(node), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(node), Gateway);
         }
 
         public virtual Result<Customer> ConfirmCustomer(String queryString)
@@ -43,7 +45,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new ResultImpl<Customer>(new NodeWrapper(node), Service);
+            return new ResultImpl<Customer>(new NodeWrapper(node), Gateway);
         }
 
         public virtual Result<CreditCard> ConfirmCreditCard(String queryString)
@@ -51,7 +53,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post("/transparent_redirect_requests/" + trRequest.Id + "/confirm", trRequest);
 
-            return new ResultImpl<CreditCard>(new NodeWrapper(node), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(node), Gateway);
         }
     }
 }

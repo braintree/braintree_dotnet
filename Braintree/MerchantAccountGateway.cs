@@ -9,24 +9,26 @@ namespace Braintree
     {
         private static readonly String CREATE_URL = "/merchant_accounts/create_via_api";
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal MerchantAccountGateway(BraintreeService service)
+        protected internal MerchantAccountGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual Result<MerchantAccount> Create(MerchantAccountRequest request)
         {
             XmlNode merchantAccountXML = Service.Post(CREATE_URL, request);
 
-            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Gateway);
         }
 
         public virtual Result<MerchantAccount> Update(String id, MerchantAccountRequest request)
         {
             XmlNode merchantAccountXML = Service.Put("/merchant_accounts/" + id + "/update_via_api", request);
 
-            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Service);
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Gateway);
         }
 
         public virtual MerchantAccount Find(String id)

@@ -13,10 +13,12 @@ namespace Braintree
     public class CreditCardVerificationGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal CreditCardVerificationGateway(BraintreeService service)
+        protected internal CreditCardVerificationGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual CreditCardVerification Find(String Id)
@@ -26,7 +28,7 @@ namespace Braintree
 
             XmlNode creditCardVerificationXML = Service.Get("/verifications/" + Id);
 
-            return new CreditCardVerification(new NodeWrapper(creditCardVerificationXML), Service);
+            return new CreditCardVerification(new NodeWrapper(creditCardVerificationXML), Gateway);
         }
 
         public virtual ResourceCollection<CreditCardVerification> Search(CreditCardVerificationSearchRequest query)
@@ -47,7 +49,7 @@ namespace Braintree
             List<CreditCardVerification> verifications = new List<CreditCardVerification>();
             foreach (NodeWrapper node in response.GetList("verification"))
             {
-                verifications.Add(new CreditCardVerification(node, Service));
+                verifications.Add(new CreditCardVerification(node, Gateway));
             }
             return verifications;
         }

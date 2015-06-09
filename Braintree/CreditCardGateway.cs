@@ -15,10 +15,12 @@ namespace Braintree
     public class CreditCardGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal CreditCardGateway(BraintreeService service)
+        protected internal CreditCardGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
@@ -37,7 +39,7 @@ namespace Braintree
         {
             XmlNode creditCardXML = Service.Post("/payment_methods", request);
 
-            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Gateway);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
@@ -46,7 +48,7 @@ namespace Braintree
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode creditCardXML = Service.Post("/payment_methods/all/confirm_transparent_redirect_request", trRequest);
 
-            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Gateway);
         }
 
         public virtual ResourceCollection<CreditCard> Expired()
@@ -62,7 +64,7 @@ namespace Braintree
                 List<CreditCard> creditCards = new List<CreditCard>();
                 foreach (NodeWrapper node in fetchResponse.GetList("credit-card"))
                 {
-                    creditCards.Add(new CreditCard(node, Service));
+                    creditCards.Add(new CreditCard(node, Gateway));
                 }
                 return creditCards;
             });
@@ -83,7 +85,7 @@ namespace Braintree
                 List<CreditCard> creditCards = new List<CreditCard>();
                 foreach (NodeWrapper node in fetchResponse.GetList("credit-card"))
                 {
-                    creditCards.Add(new CreditCard(node, Service));
+                    creditCards.Add(new CreditCard(node, Gateway));
                 }
                 return creditCards;
             });
@@ -96,7 +98,7 @@ namespace Braintree
 
             XmlNode creditCardXML = Service.Get("/payment_methods/credit_card/" + token);
 
-            return new CreditCard(new NodeWrapper(creditCardXML), Service);
+            return new CreditCard(new NodeWrapper(creditCardXML), Gateway);
         }
 
         public virtual CreditCard FromNonce(String nonce)
@@ -106,7 +108,7 @@ namespace Braintree
 
             try {
                 XmlNode creditCardXML = Service.Get("/payment_methods/from_nonce/" + nonce);
-                return new CreditCard(new NodeWrapper(creditCardXML), Service);
+                return new CreditCard(new NodeWrapper(creditCardXML), Gateway);
             } catch (NotFoundException) {
                 throw new NotFoundException("Payment method with nonce " + nonce + " locked, consumed or not found");
             }
@@ -121,7 +123,7 @@ namespace Braintree
         {
             XmlNode creditCardXML = Service.Put("/payment_methods/credit_card/" + token, request);
 
-            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Service);
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), Gateway);
         }
     }
 }

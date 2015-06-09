@@ -16,9 +16,9 @@ namespace Braintree
         public Boolean? Success { get; protected set; }
         public Boolean? Retry { get; protected set; }
 
-        private BraintreeService service;
+        private BraintreeGateway gateway;
 
-        public Disbursement(NodeWrapper node, BraintreeService braintreeService)
+        public Disbursement(NodeWrapper node, BraintreeGateway gateway)
         {
             Id = node.GetString("id");
             Amount = node.GetDecimal("amount");
@@ -33,12 +33,12 @@ namespace Braintree
             }
             Success = node.GetBoolean("success");
             Retry = node.GetBoolean("retry");
-            service = braintreeService;
+            this.gateway = gateway;
         }
 
         public ResourceCollection<Transaction> Transactions()
         {
-            TransactionGateway gateway = new TransactionGateway(service);
+            TransactionGateway gateway = new TransactionGateway(this.gateway);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Ids.IncludedIn(TransactionIds.ToArray());

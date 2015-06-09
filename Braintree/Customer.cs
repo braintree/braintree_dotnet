@@ -54,7 +54,7 @@ namespace Braintree
             }
         }
 
-        protected internal Customer(NodeWrapper node, BraintreeService service)
+        protected internal Customer(NodeWrapper node, BraintreeGateway gateway)
         {
             if (node == null) return;
 
@@ -73,35 +73,35 @@ namespace Braintree
             CreditCards = new CreditCard[creditCardXmlNodes.Count];
             for (int i = 0; i < creditCardXmlNodes.Count; i++)
             {
-                CreditCards[i] = new CreditCard(creditCardXmlNodes[i], service);
+                CreditCards[i] = new CreditCard(creditCardXmlNodes[i], gateway);
             }
 
             var paypalXmlNodes = node.GetList("paypal-accounts/paypal-account");
             PayPalAccounts = new PayPalAccount[paypalXmlNodes.Count];
             for (int i = 0; i < paypalXmlNodes.Count; i++)
             {
-                PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i], service);
+                PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i], gateway);
             }
 
             var applePayXmlNodes = node.GetList("apple-pay-cards/apple-pay-card");
             ApplePayCards = new ApplePayCard[applePayXmlNodes.Count];
             for (int i = 0; i < applePayXmlNodes.Count; i++)
             {
-                ApplePayCards[i] = new ApplePayCard(applePayXmlNodes[i], service);
+                ApplePayCards[i] = new ApplePayCard(applePayXmlNodes[i], gateway);
             }
 
             var androidPayCardXmlNodes = node.GetList("android-pay-cards/android-pay-card");
             AndroidPayCards = new AndroidPayCard[androidPayCardXmlNodes.Count];
             for (int i = 0; i < androidPayCardXmlNodes.Count; i++)
             {
-                AndroidPayCards[i] = new AndroidPayCard(androidPayCardXmlNodes[i], service);
+                AndroidPayCards[i] = new AndroidPayCard(androidPayCardXmlNodes[i], gateway);
             }
 
             var coinbaseXmlNodes = node.GetList("coinbase-accounts/coinbase-account");
             CoinbaseAccounts = new CoinbaseAccount[coinbaseXmlNodes.Count];
             for (int i = 0; i < coinbaseXmlNodes.Count; i++)
             {
-                CoinbaseAccounts[i] = new CoinbaseAccount(coinbaseXmlNodes[i], service);
+                CoinbaseAccounts[i] = new CoinbaseAccount(coinbaseXmlNodes[i], gateway);
             }
 
             PaymentMethods = new PaymentMethod[CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length];

@@ -1287,7 +1287,7 @@ namespace Braintree.Tests
 
             var node = new NodeWrapper(newNode);
 
-            var result = new ResultImpl<CreditCard>(node, service);
+            var result = new ResultImpl<CreditCard>(node, gateway);
 
             Assert.AreEqual("932", result.Target.Verification.Id);
         }
