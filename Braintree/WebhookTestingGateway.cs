@@ -11,6 +11,7 @@ namespace Braintree
 
         protected internal WebhookTestingGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Service = new BraintreeService(gateway.Configuration);
         }
 

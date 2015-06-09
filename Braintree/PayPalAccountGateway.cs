@@ -11,6 +11,7 @@ namespace Braintree
 
         public PayPalAccountGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
             Service = new BraintreeService(gateway.Configuration);
         }

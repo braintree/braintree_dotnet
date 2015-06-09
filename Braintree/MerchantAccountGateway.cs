@@ -12,6 +12,7 @@ namespace Braintree
 
         protected internal MerchantAccountGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
             Service = new BraintreeService(gateway.Configuration);
         }

@@ -76,5 +76,29 @@ namespace Braintree
                 throw new ConfigurationException("AccessToken must not be passed when constructing BraintreeGateway");
             }
         }
+
+        public void AssertHasAccessTokenOrKeys()
+        {
+            if (AccessToken == null) {
+                if (MerchantId == null) {
+                    throw new ConfigurationException("Missing MerchantId (or AccessToken) when constructing BraintreeGateway");
+                }
+                if (Environment == null) {
+                    throw new ConfigurationException("Missing Environment when constructing BraintreeGateway");
+                }
+                if (PublicKey == null) {
+                    throw new ConfigurationException("Missing PublicKey when constructing BraintreeGateway");
+                }
+                if (PrivateKey == null) {
+                    throw new ConfigurationException("Missing PrivateKey when constructing BraintreeGateway");
+                }
+            }
+            if (ClientId != null) {
+                throw new ConfigurationException("ClientId must not be passed when constructing BraintreeGateway");
+            }
+            if (ClientSecret != null) {
+                throw new ConfigurationException("ClientSecret must not be passed when constructing BraintreeGateway");
+            }
+        }
     }
 }

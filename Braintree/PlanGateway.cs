@@ -9,6 +9,7 @@ namespace Braintree
 
         public PlanGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Service = new BraintreeService(gateway.Configuration);
         }
 

@@ -17,6 +17,7 @@ namespace Braintree
 
         protected internal TransactionGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
             Service = new BraintreeService(gateway.Configuration);
         }

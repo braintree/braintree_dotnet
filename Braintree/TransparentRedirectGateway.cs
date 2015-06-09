@@ -23,6 +23,7 @@ namespace Braintree
 
         protected internal TransparentRedirectGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
             Service = new BraintreeService(gateway.Configuration);
         }

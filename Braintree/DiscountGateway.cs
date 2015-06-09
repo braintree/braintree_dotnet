@@ -10,6 +10,7 @@ namespace Braintree
 
         public DiscountGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Service = new BraintreeService(gateway.Configuration);
         }
 

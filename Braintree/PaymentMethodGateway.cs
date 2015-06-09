@@ -10,6 +10,7 @@ namespace Braintree
 
         public PaymentMethodGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
             this.service = new BraintreeService(gateway.Configuration);
         }

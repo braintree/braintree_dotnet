@@ -10,6 +10,7 @@ namespace Braintree
 
         public AddOnGateway(BraintreeGateway gateway)
         {
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
             Service = new BraintreeService(gateway.Configuration);
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
@@ -58,6 +59,23 @@ namespace Braintree.Tests
             Assert.AreEqual(12, addOn.NumberOfBillingCycles);
             Assert.IsNotNull(addOn.CreatedAt);
             Assert.IsNotNull(addOn.UpdatedAt);
+        }
+
+        [Test()]
+        public void All_RaisesIfMissingCredentials()
+        {
+            gateway = new BraintreeGateway
+            {
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+
+            try {
+                gateway.AddOn.All();
+
+                Assert.Fail("Should throw ConfigurationException");
+            } catch (ConfigurationException) {}
         }
     }
 }
