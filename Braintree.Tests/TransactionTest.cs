@@ -170,7 +170,9 @@ namespace Braintree.Tests
                 ShippingLocality.Is("Braintree").
                 ShippingPostalCode.Is("54321").
                 ShippingRegion.Is("MA").
-                ShippingStreetAddress.Is("456 Road");
+                ShippingStreetAddress.Is("456 Road").
+                User.Is("integration_user_public_id").
+                CreditCardUniqueIdentifier.Is(transaction.CreditCard.UniqueNumberIdentifier);
 
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
 
@@ -219,6 +221,90 @@ namespace Braintree.Tests
                 CreditCardCardholderName.IsNot("Tom Smith");
 
             collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(0, collection.MaximumCount);
+        }
+
+        [Test]
+        public void Search_PaymentInstrumentTypeIsCreditCard()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                PaymentInstrumentType.Is("CreditCardDetail");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(collection.FirstItem.PaymentInstrumentType,PaymentInstrumentType.CREDIT_CARD);
+        }
+        
+        [Test]
+        public void Search_PaymentInstrumentTypeIsPayPal()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                PaymentInstrumentType.Is("PayPalDetail");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(collection.FirstItem.PaymentInstrumentType, PaymentInstrumentType.PAYPAL_ACCOUNT);
+        }
+        
+        [Test]
+        public void Search_PaymentInstrumentTypeIsApplePay()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.ApplePayVisa
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                PaymentInstrumentType.Is("ApplePayDetail");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(collection.FirstItem.PaymentInstrumentType, PaymentInstrumentType.APPLE_PAY_CARD);
+        }
+
+        [Test]
+        public void Search_PaymentInstrumentTypeIsEuropeBankAccount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.Transactable
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                PaymentInstrumentType.Is("EuropeBankAccountDetail");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
             Assert.AreEqual(0, collection.MaximumCount);
         }
 

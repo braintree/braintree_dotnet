@@ -113,6 +113,20 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("credit-card-cardholder-name", this);
             }
         }
+        public TextNode<TransactionSearchRequest> User 
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("user", this);
+            }
+        }
+        public TextNode<TransactionSearchRequest> CreditCardUniqueIdentifier 
+        {
+            get
+            {
+                return new TextNode<TransactionSearchRequest>("credit-card-unique-identifier", this);
+            }
+        }
         public EqualityNode<TransactionSearchRequest> CreditCardExpirationDate
         {
             get
@@ -132,6 +146,13 @@ namespace Braintree
             get
             {
                 return new MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCardType>("credit-card-card-type", this);
+            }
+        }
+        public MultipleValueNode<TransactionSearchRequest, String> PaymentInstrumentType
+        {
+            get
+            {
+                return new MultipleValueNode<TransactionSearchRequest, String>("payment-instrument-type", this);
             }
         }
         public MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCustomerLocation> CreditCardCustomerLocation
