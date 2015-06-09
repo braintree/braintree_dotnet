@@ -1504,10 +1504,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserve.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com"
+                Website = "www.example.com"
             }).Target;
 
             TransactionRequest request = new TransactionRequest
@@ -1538,10 +1538,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com"
+                Website = "www.example.com"
             }).Target;
 
             TransactionRequest request = new TransactionRequest
@@ -2836,7 +2836,7 @@ namespace Braintree.Tests
                       DepartureDate = "2014-07-07",
                       LodgingCheckInDate = "2014-07-07",
                       LodgingCheckOutDate = "2014-08-08",
-                      LodgingName = "Disney",
+                      LodgingName = "Lodgy Lodge",
                   }
                 }
             };
@@ -2865,7 +2865,7 @@ namespace Braintree.Tests
                       DepartureDate = "2014-07-07",
                       LodgingCheckInDate = "2014-07-07",
                       LodgingCheckOutDate = "2014-08-08",
-                      LodgingName = "Disney",
+                      LodgingName = "Lodgy Lodge",
                   }
                 }
             };
