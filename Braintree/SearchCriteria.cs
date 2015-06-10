@@ -21,8 +21,8 @@ namespace Braintree
 
         public SearchCriteria(object[] items)
         {
-            StringBuilder builder = new StringBuilder();
-            foreach(object item in items) {
+            var builder = new StringBuilder();
+            foreach (var item in items) {
                 builder.Append(BuildXMLElement("item", item.ToString()));
             }
             Xml = builder.ToString();

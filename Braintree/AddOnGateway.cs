@@ -16,10 +16,10 @@ namespace Braintree
 
         public virtual List<AddOn> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/add_ons"));
+            var response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/add_ons"));
 
-            List<AddOn> addOns = new List<AddOn>();
-            foreach (NodeWrapper node in response.GetList("add-on"))
+            var addOns = new List<AddOn>();
+            foreach (var node in response.GetList("add-on"))
             {
                 addOns.Add(new AddOn(node));
             }

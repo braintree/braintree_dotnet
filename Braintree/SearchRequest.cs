@@ -53,24 +53,24 @@ namespace Braintree
         {
             var builder = new StringBuilder();
             builder.Append("<search>");
-            foreach (KeyValuePair<string, SearchCriteria> pair in Criteria)
+            foreach (var pair in Criteria)
             {
                 builder.AppendFormat("<{0}>{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
-            foreach (KeyValuePair<string, List<SearchCriteria>> pair in RangeCriteria)
+            foreach (var pair in RangeCriteria)
             {
                 builder.AppendFormat("<{0}>", pair.Key);
-                foreach (SearchCriteria criteria in pair.Value)
+                foreach (var criteria in pair.Value)
                 {
                     builder.Append(criteria.ToXml());
                 }
                 builder.AppendFormat("</{0}>", pair.Key);
             }
-            foreach (KeyValuePair<string, SearchCriteria> pair in MultipleValueCriteria)
+            foreach (var pair in MultipleValueCriteria)
             {
                 builder.AppendFormat("<{0} type=\"array\">{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
-            foreach (KeyValuePair<string, string> pair in KeyValueCriteria)
+            foreach (var pair in KeyValueCriteria)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }

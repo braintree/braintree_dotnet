@@ -59,7 +59,7 @@ namespace Braintree
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<Customer> ConfirmTransparentRedirect(string queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
+            var trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post(Service.MerchantPath() + "/customers/all/confirm_transparent_redirect_request", trRequest);
 
             return new ResultImpl<Customer>(new NodeWrapper(node), Gateway);
@@ -79,8 +79,8 @@ namespace Braintree
 
         public virtual ResourceCollection<Customer> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids"));
-            CustomerSearchRequest query = new CustomerSearchRequest();
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids"));
+            var query = new CustomerSearchRequest();
 
             return new ResourceCollection<Customer>(response, delegate(string[] ids) {
                 return FetchCustomers(query, ids);
@@ -89,7 +89,7 @@ namespace Braintree
 
         public virtual ResourceCollection<Customer> Search(CustomerSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids", query));
 
             return new ResourceCollection<Customer>(response, delegate(string[] ids) {
                 return FetchCustomers(query, ids);
@@ -100,10 +100,10 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search", query));
 
-            List<Customer> customers = new List<Customer>();
-            foreach (NodeWrapper node in response.GetList("customer"))
+            var customers = new List<Customer>();
+            foreach (var node in response.GetList("customer"))
             {
                 customers.Add(new Customer(node, Gateway));
             }

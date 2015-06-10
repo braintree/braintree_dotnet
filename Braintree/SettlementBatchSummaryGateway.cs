@@ -18,7 +18,7 @@ namespace Braintree
 
         public Result<SettlementBatchSummary> Generate(DateTime settlementDate)
         {
-            SettlementBatchSummaryRequest request = new SettlementBatchSummaryRequest
+            var request = new SettlementBatchSummaryRequest
             {
                 SettlementDate = settlementDate
             };
@@ -27,7 +27,7 @@ namespace Braintree
 
         public Result<SettlementBatchSummary> Generate(DateTime settlementDate, string groupByCustomField)
         {
-            SettlementBatchSummaryRequest request = new SettlementBatchSummaryRequest
+            var request = new SettlementBatchSummaryRequest
             {
                 SettlementDate = settlementDate,
                 GroupByCustomField = groupByCustomField
@@ -37,7 +37,7 @@ namespace Braintree
 
         private Result<SettlementBatchSummary> GetSummary(SettlementBatchSummaryRequest request)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/settlement_batch_summary", request));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/settlement_batch_summary", request));
             return new ResultImpl<SettlementBatchSummary>(response, Gateway);
         }
     }

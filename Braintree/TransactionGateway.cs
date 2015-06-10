@@ -30,7 +30,7 @@ namespace Braintree
 
         public virtual Result<Transaction> CancelRelease(string id)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
 
             XmlNode response = Service.Put(Service.MerchantPath() + "/transactions/" + id + "/cancel_release", request);
 
@@ -40,7 +40,7 @@ namespace Braintree
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
         public virtual Result<Transaction> ConfirmTransparentRedirect(string queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
+            var trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post(Service.MerchantPath() + "/transactions/all/confirm_transparent_redirect_request", trRequest);
 
             return new ResultImpl<Transaction>(new NodeWrapper(node), Gateway);
@@ -48,7 +48,7 @@ namespace Braintree
 
         public virtual Result<Transaction> HoldInEscrow(string id)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
 
             XmlNode response = Service.Put(Service.MerchantPath() + "/transactions/" + id + "/hold_in_escrow", request);
 
@@ -95,7 +95,7 @@ namespace Braintree
 
         public virtual Result<Transaction> Refund(string id, decimal amount)
         {
-            TransactionRequest request = new TransactionRequest
+            var request = new TransactionRequest
             {
                 Amount = amount
             };
@@ -113,7 +113,7 @@ namespace Braintree
 
         public virtual Result<Transaction> ReleaseFromEscrow(string id)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
 
             XmlNode response = Service.Put(Service.MerchantPath() + "/transactions/" + id + "/release_from_escrow", request);
 
@@ -127,7 +127,7 @@ namespace Braintree
 
         public virtual Result<Transaction> SubmitForSettlement(string id, decimal amount)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
             request.Amount = amount;
 
             XmlNode response = Service.Put(Service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request);
@@ -144,7 +144,7 @@ namespace Braintree
 
         public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/transactions/advanced_search_ids", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/transactions/advanced_search_ids", query));
 
             if (response.GetName() == "search-results") {
                 return new ResourceCollection<Transaction>(response, delegate(string[] ids) {
@@ -166,10 +166,10 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/transactions/advanced_search", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/transactions/advanced_search", query));
 
-            List<Transaction> transactions = new List<Transaction>();
-            foreach (NodeWrapper node in response.GetList("transaction"))
+            var transactions = new List<Transaction>();
+            foreach (var node in response.GetList("transaction"))
             {
                 transactions.Add(new Transaction(node, Gateway));
             }

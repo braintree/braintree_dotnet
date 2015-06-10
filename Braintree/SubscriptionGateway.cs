@@ -72,7 +72,7 @@ namespace Braintree
         /// </code>
         public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
 
             return new ResourceCollection<Subscription>(response, delegate(string[] ids) {
                 return FetchSubscriptions(query, ids);
@@ -83,10 +83,10 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/subscriptions/advanced_search", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/subscriptions/advanced_search", query));
 
-            List<Subscription> subscriptions = new List<Subscription>();
-            foreach (NodeWrapper node in response.GetList("subscription"))
+            var subscriptions = new List<Subscription>();
+            foreach (var node in response.GetList("subscription"))
             {
                 subscriptions.Add(new Subscription(node, Gateway));
             }
@@ -95,7 +95,7 @@ namespace Braintree
 
         public virtual ResourceCollection<Subscription> Search(SearchDelegate searchDelegate)
         {
-            SubscriptionSearchRequest query = new SubscriptionSearchRequest();
+            var query = new SubscriptionSearchRequest();
             searchDelegate(query);
             return Search(query);
         }

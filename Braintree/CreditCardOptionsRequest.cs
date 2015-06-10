@@ -28,7 +28,7 @@ namespace Braintree
 
         protected virtual RequestBuilder BuildRequest(string root)
         {
-            RequestBuilder builder = new RequestBuilder(root);
+            var builder = new RequestBuilder(root);
 
             builder.AddElement("make-default", MakeDefault);
             builder.AddElement("verification-merchant-account-id", VerificationMerchantAccountId);

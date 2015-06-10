@@ -38,7 +38,7 @@ namespace Braintree
         private void verifyOptions(ClientTokenRequest request)
         {
             if (request.Options != null && request.CustomerId == null) {
-                List<string> invalidOptions = new List<string>{};
+                var invalidOptions = new List<string>{};
 
                 if (request.Options.VerifyCard != null) {
                     invalidOptions.Add("VerifyCard");
@@ -51,8 +51,8 @@ namespace Braintree
                 }
 
                 if (invalidOptions.Count != 0) {
-                    string message = "Following arguments are invalid without customerId: ";
-                    foreach(string invalidOption in invalidOptions) {
+                    var message = "Following arguments are invalid without customerId: ";
+                    foreach (var invalidOption in invalidOptions) {
                         message += " " + invalidOption;
                     }
                     throw new ArgumentException(message);

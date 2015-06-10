@@ -10,9 +10,9 @@ namespace Braintree
     {
         public static string BuildTrData(Request request, string redirectURL, BraintreeService service)
         {
-            string dateString = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmss");
+            var dateString = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmss");
 
-            string trContent = new QueryString().
+            var trContent = new QueryString().
                 Append("api_version", service.ApiVersion).
                 Append("public_key", service.PublicKey).
                 Append("redirect_url", redirectURL).
@@ -27,7 +27,7 @@ namespace Braintree
                 trContent += "&" + requestQueryString;
             }
 
-            SignatureService signatureService = new SignatureService {
+            var signatureService = new SignatureService {
               Key = service.PrivateKey,
               Hasher = new Sha1Hasher()
             };
@@ -36,17 +36,17 @@ namespace Braintree
 
         public static bool IsValidTrQueryString(string queryString, BraintreeService service)
         {
-            string[] delimeters = new string[1];
-            delimeters[0] = "&hash=";
-            string[] dataSections = queryString.TrimStart('?').Split(delimeters, StringSplitOptions.None);
+            var delimiters = new string[1];
+            delimiters[0] = "&hash=";
+            string[] dataSections = queryString.TrimStart('?').Split(delimiters, StringSplitOptions.None);
             return dataSections[1] == new Sha1Hasher().HmacHash(service.PrivateKey, dataSections[0]).ToLower();
         }
 
         public static bool IsTrDataValid(string trData, BraintreeService service)
         {
             string[] dataSections = trData.Split('|');
-            string trHash = dataSections[0];
-            string trContent = dataSections[1];
+            var trHash = dataSections[0];
+            var trContent = dataSections[1];
 
             return trHash  == new Sha1Hasher().HmacHash(service.PrivateKey, trContent);
         }

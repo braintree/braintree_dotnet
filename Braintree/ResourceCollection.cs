@@ -33,7 +33,7 @@ namespace Braintree
 
         public System.Collections.IEnumerator GetEnumerator()
         {
-            foreach(List<string> batchIds in BatchIds(Ids, PageSize))
+            foreach(var batchIds in BatchIds(Ids, PageSize))
             {
                 List<T> items = NextPage(batchIds.ToArray());
                 foreach(T item in items)
@@ -45,7 +45,7 @@ namespace Braintree
 
         private List<List<string>> BatchIds(List<string> ids, int size)
         {
-            List<List<string>> batches = new List<List<string>>();
+            var batches = new List<List<string>>();
 
             for (int index = 0; index < ids.Count; index += size) {
                 int count = size;

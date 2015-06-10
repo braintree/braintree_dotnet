@@ -24,12 +24,12 @@ namespace Braintree
             get {
                 int size = 0;
 
-                foreach (List<ValidationError> errorList in errors.Values)
+                foreach (var errorList in errors.Values)
                 {
                     size += errorList.Count;
                 }
 
-                foreach (ValidationErrors nestedError in nestedErrors.Values)
+                foreach (var nestedError in nestedErrors.Values)
                 {
                     size += nestedError.DeepCount;
                 }
@@ -66,7 +66,7 @@ namespace Braintree
         public List<ValidationError> All()
         {
             var results = new List<ValidationError>();
-            foreach (List<ValidationError> validationErrors in errors.Values) {
+            foreach (var validationErrors in errors.Values) {
                 results.AddRange(validationErrors);
             }
 
@@ -153,7 +153,7 @@ namespace Braintree
             }
 
             List<NodeWrapper> errorResponses = node.GetChildren();
-            foreach (NodeWrapper errorResponse in errorResponses)
+            foreach (var errorResponse in errorResponses)
             {
                 if (errorResponse.GetName() != "errors")
                 {
@@ -168,7 +168,7 @@ namespace Braintree
 
         private void PopulateTopLevelErrors(List<NodeWrapper> childErrors)
         {
-            foreach (NodeWrapper childError in childErrors)
+            foreach (var childError in childErrors)
             {
                 if (!errors.ContainsKey(childError.GetString("attribute"))) errors[childError.GetString("attribute")] = new List<ValidationError>();
 

@@ -36,7 +36,7 @@ namespace Braintree
 
         protected virtual RequestBuilder BuildRequest(string root)
         {
-            RequestBuilder builder = new RequestBuilder(root);
+            var builder = new RequestBuilder(root);
 
             if (CustomerId != null) builder.AddElement("customer-id", CustomerId);
             if (Version != 0) builder.AddElement("version", Version);

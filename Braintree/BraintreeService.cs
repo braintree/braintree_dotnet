@@ -156,7 +156,7 @@ namespace Braintree
             }
             else
             {
-                XmlDocument doc = new XmlDocument();
+                var doc = new XmlDocument();
                 doc.LoadXml(xml);
                 if (doc.ChildNodes.Count == 1) return doc.ChildNodes[0];
                 return doc.ChildNodes[1];

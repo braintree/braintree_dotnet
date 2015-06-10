@@ -27,7 +27,7 @@ namespace Braintree
             FollowUpAction = node.GetString("follow-up-action");
             MerchantAccount = new MerchantAccount(node.GetNode("merchant-account"));
             TransactionIds = new List<string>();
-            foreach (NodeWrapper stringNode in node.GetList("transaction-ids/item")) 
+            foreach (var stringNode in node.GetList("transaction-ids/item")) 
             {
                 TransactionIds.Add(stringNode.GetString("."));
             }
@@ -38,9 +38,9 @@ namespace Braintree
 
         public ResourceCollection<Transaction> Transactions()
         {
-            TransactionGateway gateway = new TransactionGateway(this.gateway);
+            var gateway = new TransactionGateway(this.gateway);
 
-            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+            var searchRequest = new TransactionSearchRequest().
                 Ids.IncludedIn(TransactionIds.ToArray());
 
             return gateway.Search(searchRequest);

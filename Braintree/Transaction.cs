@@ -289,16 +289,16 @@ namespace Braintree
             UpdatedAt = node.GetDateTime("updated-at");
 
             AddOns = new List<AddOn>();
-            foreach (NodeWrapper addOnResponse in node.GetList("add-ons/add-on")) {
+            foreach (var addOnResponse in node.GetList("add-ons/add-on")) {
                 AddOns.Add(new AddOn(addOnResponse));
             }
             Discounts = new List<Discount>();
-            foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
+            foreach (var discountResponse in node.GetList("discounts/discount")) {
                 Discounts.Add(new Discount(discountResponse));
             }
 
             Disputes = new List<Dispute>();
-            foreach (NodeWrapper dispute in node.GetList("disputes/dispute")) {
+            foreach (var dispute in node.GetList("disputes/dispute")) {
                 Disputes.Add(new Dispute(dispute));
             }
 

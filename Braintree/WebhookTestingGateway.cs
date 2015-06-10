@@ -17,7 +17,7 @@ namespace Braintree
 
         public virtual Dictionary<string, string> SampleNotification(WebhookKind kind, string id)
         {
-            Dictionary<string, string> response = new Dictionary<string, string>();
+            var response = new Dictionary<string, string>();
             string payload = BuildPayload(kind, id);
             response["bt_payload"] = payload;
             response["bt_signature"] = BuildSignature(payload);
@@ -26,8 +26,8 @@ namespace Braintree
 
         private string BuildPayload(WebhookKind kind, string id)
         {
-            string currentTime = DateTime.Now.ToUniversalTime().ToString("u");
-            string payload = string.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind><subject>{2}</subject></notification>", currentTime, kind, SubjectSampleXml(kind, id));
+            var currentTime = DateTime.Now.ToUniversalTime().ToString("u");
+            var payload = string.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind><subject>{2}</subject></notification>", currentTime, kind, SubjectSampleXml(kind, id));
             return Convert.ToBase64String(Encoding.Default.GetBytes(payload)) + '\n';
         }
 

@@ -54,16 +54,16 @@ namespace Braintree
 
         public virtual ResourceCollection<CreditCard> Expired()
         {
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expired_ids"));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expired_ids"));
 
             return new ResourceCollection<CreditCard>(response, delegate(string[] ids) {
-                IdsSearchRequest query = new IdsSearchRequest().
+                var query = new IdsSearchRequest().
                     Ids.IncludedIn(ids);
 
-                NodeWrapper fetchResponse = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expired", query));
+                var fetchResponse = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expired", query));
 
-                List<CreditCard> creditCards = new List<CreditCard>();
-                foreach (NodeWrapper node in fetchResponse.GetList("credit-card"))
+                var creditCards = new List<CreditCard>();
+                foreach (var node in fetchResponse.GetList("credit-card"))
                 {
                     creditCards.Add(new CreditCard(node, Gateway));
                 }
@@ -75,16 +75,16 @@ namespace Braintree
         {
             string queryString = string.Format("start={0:MMyyyy}&end={1:MMyyyy}", start, end);
 
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expiring_ids?" + queryString));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expiring_ids?" + queryString));
 
             return new ResourceCollection<CreditCard>(response, delegate(string[] ids) {
-                IdsSearchRequest query = new IdsSearchRequest().
+                var query = new IdsSearchRequest().
                     Ids.IncludedIn(ids);
 
-                NodeWrapper fetchResponse = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expiring?" + queryString, query));
+                var fetchResponse = new NodeWrapper(Service.Post(Service.MerchantPath() + "/payment_methods/all/expiring?" + queryString, query));
 
-                List<CreditCard> creditCards = new List<CreditCard>();
-                foreach (NodeWrapper node in fetchResponse.GetList("credit-card"))
+                var creditCards = new List<CreditCard>();
+                foreach (var node in fetchResponse.GetList("credit-card"))
                 {
                     creditCards.Add(new CreditCard(node, Gateway));
                 }

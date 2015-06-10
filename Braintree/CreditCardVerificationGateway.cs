@@ -34,7 +34,7 @@ namespace Braintree
 
         public virtual ResourceCollection<CreditCardVerification> Search(CreditCardVerificationSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/verifications/advanced_search_ids", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/verifications/advanced_search_ids", query));
 
             return new ResourceCollection<CreditCardVerification>(response, delegate(string[] ids) {
                 return FetchCreditCardVerifications(query, ids);
@@ -45,10 +45,10 @@ namespace Braintree
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/verifications/advanced_search", query));
+            var response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/verifications/advanced_search", query));
 
-            List<CreditCardVerification> verifications = new List<CreditCardVerification>();
-            foreach (NodeWrapper node in response.GetList("verification"))
+            var verifications = new List<CreditCardVerification>();
+            foreach (var node in response.GetList("verification"))
             {
                 verifications.Add(new CreditCardVerification(node, Gateway));
             }

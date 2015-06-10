@@ -46,11 +46,11 @@ namespace Braintree
                 TrialDurationUnit = (PlanDurationUnit) CollectionUtil.Find(PlanDurationUnit.ALL, trialDurationUnitStr, PlanDurationUnit.UNRECOGNIZED);
             }
             AddOns = new List<AddOn> ();
-            foreach (NodeWrapper addOnResponse in node.GetList("add-ons/add-on")) {
+            foreach (var addOnResponse in node.GetList("add-ons/add-on")) {
                 AddOns.Add(new AddOn(addOnResponse));
             }
             Discounts = new List<Discount> ();
-            foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
+            foreach (var discountResponse in node.GetList("discounts/discount")) {
                 Discounts.Add(new Discount(discountResponse));
             }
         }

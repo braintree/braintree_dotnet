@@ -4,7 +4,7 @@ namespace Braintree
 {
     public class TransactionOptionsThreeDSecureRequest : Request
     {
-        public Boolean? Required { get; set; }
+        public bool? Required { get; set; }
 
         public override string ToXml(string root)
         {

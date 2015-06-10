@@ -79,7 +79,7 @@ namespace Braintree
 
             var result = new Dictionary<string, string>();
 
-            foreach (NodeWrapper node in GetNode(path).GetChildren())
+            foreach (var node in GetNode(path).GetChildren())
             {
                 result.Add(Underscore(node.GetName()), node.GetString());
             }
@@ -113,8 +113,8 @@ namespace Braintree
 
         public virtual List<string> GetStrings(string path)
         {
-            List<string> strings = new List<string>();
-            foreach(NodeWrapper stringNode in GetList(path))
+            var strings = new List<string>();
+            foreach(var stringNode in GetList(path))
             {
                 strings.Add(stringNode.GetString("."));
             }
@@ -190,7 +190,7 @@ namespace Braintree
         {
             var formParameters = new Dictionary<string, string>();
 
-            foreach (NodeWrapper paramNode in GetList(".//*[not(*)]"))
+            foreach (var paramNode in GetList(".//*[not(*)]"))
             {
                 formParameters[GetFormElementName(paramNode)] = paramNode.GetString(".");
             }

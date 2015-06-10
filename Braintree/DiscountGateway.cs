@@ -16,10 +16,10 @@ namespace Braintree
 
         public virtual List<Discount> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/discounts"));
+            var response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/discounts"));
 
-            List<Discount> discounts = new List<Discount>();
-            foreach (NodeWrapper node in response.GetList("discount"))
+            var discounts = new List<Discount>();
+            foreach (var node in response.GetList("discount"))
             {
                 discounts.Add(new Discount(node));
             }

@@ -37,7 +37,7 @@ namespace Braintree
             }
             else if (value is Dictionary<string, string>)
             {
-                foreach (KeyValuePair<string, string> pair in (Dictionary<string, string>)value)
+                foreach (var pair in (Dictionary<string, string>)value)
                 {
                     AppendString(string.Format("{0}[{1}]", key, pair.Key), pair.Value);
                 }

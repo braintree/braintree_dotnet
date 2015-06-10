@@ -22,7 +22,7 @@ namespace Braintree
 
         protected virtual RequestBuilder BuildRequest(string root)
         {
-            RequestBuilder builder = new RequestBuilder(root);
+            var builder = new RequestBuilder(root);
 
             if (Amount != 0) builder.AddElement("amount", Amount);
             builder.AddElement("subscription-id", SubscriptionId);

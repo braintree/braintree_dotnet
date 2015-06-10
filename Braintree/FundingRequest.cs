@@ -35,7 +35,7 @@ namespace Braintree
 
       protected virtual RequestBuilder BuildRequest(string root)
       {
-        RequestBuilder builder = new RequestBuilder(root);
+        var builder = new RequestBuilder(root);
 
         builder.AddElement("destination", Destination);
         builder.AddElement("email", Email);

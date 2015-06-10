@@ -18,12 +18,12 @@ namespace Braintree
         {
             queryString = queryString.TrimStart('?');
 
-            Dictionary<string, string> paramMap = new Dictionary<string, string>();
+            var paramMap = new Dictionary<string, string>();
             string[] queryParams = queryString.Split('&');
 
-            foreach (string queryParam in queryParams)
+            foreach (var queryParam in queryParams)
             {
-                string[] items = queryParam.Split('=');
+                var items = queryParam.Split('=');
                 paramMap[items[0]] = items[1];
             }
 
@@ -45,7 +45,7 @@ namespace Braintree
 
         public override string ToXml()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append(BuildXMLElement("id", Id));
             
             return builder.ToString();

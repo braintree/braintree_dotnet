@@ -24,14 +24,14 @@ namespace Braintree
         public virtual WebhookNotification Parse(string signature, string payload)
         {
             ValidateSignature(signature, payload);
-            string xmlPayload = Encoding.Default.GetString(Convert.FromBase64String(payload));
-            NodeWrapper node = new NodeWrapper(Service.StringToXmlNode(xmlPayload));
+            var xmlPayload = Encoding.Default.GetString(Convert.FromBase64String(payload));
+            var node = new NodeWrapper(Service.StringToXmlNode(xmlPayload));
             return new WebhookNotification(node, Gateway);
         }
 
         public virtual string Verify(string challenge)
         {
-            Match match = Regex.Match (challenge, @"^[a-f0-9]{20,32}$");
+            var match = Regex.Match (challenge, @"^[a-f0-9]{20,32}$");
             if (!match.Success)
             {
                 throw new InvalidChallengeException ("challenge contains non-hex characters");
@@ -42,15 +42,15 @@ namespace Braintree
 
         private bool PayloadMatches(string signature, string payload)
         {
-            Sha1Hasher sha1Hasher = new Sha1Hasher();
+            var sha1Hasher = new Sha1Hasher();
             string computedSignature = sha1Hasher.HmacHash(Service.PrivateKey, payload).ToLower();
-            Crypto crypto = new Crypto();
+            var crypto = new Crypto();
             return crypto.SecureCompare (computedSignature, signature);
         }
 
         private void ValidateSignature(string signature, string payload)
         {
-            Match match = Regex.Match (payload, @"[^A-Za-z0-9+=/\n]");
+            var match = Regex.Match (payload, @"[^A-Za-z0-9+=/\n]");
             if (match.Success)
             {
                 throw new InvalidSignatureException ("payload contains illegal characters");
@@ -59,7 +59,7 @@ namespace Braintree
             string matchingSignature = null;
             string[] signaturePairs = signature.Split('&');
 
-            foreach (string signaturePair in signaturePairs)
+            foreach (var signaturePair in signaturePairs)
             {
                 if (signaturePair.IndexOf('|') >= 0)
                 {

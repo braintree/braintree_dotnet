@@ -44,8 +44,8 @@ namespace Braintree
 
         private Environment GetEnvironment(string credential)
         {
-            char [] separators = new Char [] { '$' };
-            string[] parts = credential.Split(separators);
+            var separators = new Char [] { '$' };
+            var parts = credential.Split(separators);
             switch (parts[1]) {
                 case "development":
                     return Environment.DEVELOPMENT;
@@ -62,8 +62,8 @@ namespace Braintree
 
         private string GetMerchantId(string accessToken)
         {
-            char [] separators = new Char [] { '$' };
-            string[] parts = accessToken.Split(separators);
+            var separators = new Char [] { '$' };
+            var parts = accessToken.Split(separators);
             return parts[2];
         }
     }

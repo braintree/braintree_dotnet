@@ -41,7 +41,7 @@ namespace Braintree
             var builder = new StringBuilder();
 
             builder.Append(string.Format("<{0}>", Parent));
-            foreach (KeyValuePair<string, object> pair in Elements)
+            foreach (var pair in Elements)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
@@ -54,12 +54,12 @@ namespace Braintree
         {
             string underscoredParent = Parent.Replace("-", "_");
 
-            QueryString qs = new QueryString();
-            foreach (KeyValuePair<string, string> pair in TopLevelElements)
+            var qs = new QueryString();
+            foreach (var pair in TopLevelElements)
             {
                 qs.Append(pair);
             }
-            foreach (KeyValuePair<string, object> pair in Elements)
+            foreach (var pair in Elements)
             {
                 qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
             }
@@ -87,8 +87,8 @@ namespace Braintree
             }
             if (value is Array)
             {
-                string xml = "";
-                foreach (object item in (Array)value)
+                var xml = "";
+                foreach (var item in (Array)value)
                 {
                     xml += BuildXMLElement("item", item);
                 }
@@ -128,7 +128,7 @@ namespace Braintree
             var builder = new StringBuilder();
             builder.Append(string.Format("<{0}>", root));
 
-            foreach (KeyValuePair<string, string> element in elements)
+            foreach (var element in elements)
             {
                 builder.Append(BuildXMLElement(element.Key, element.Value));
             }

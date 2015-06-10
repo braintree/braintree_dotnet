@@ -15,10 +15,10 @@ namespace Braintree
 
         public virtual List<Plan> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/plans"));
+            var response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/plans"));
 
-            List<Plan> plans = new List<Plan>();
-            foreach (NodeWrapper node in response.GetList("plan"))
+            var plans = new List<Plan>();
+            foreach (var node in response.GetList("plan"))
             {
                 plans.Add(new Plan(node));
             }
