@@ -6,17 +6,17 @@ namespace Braintree
 {
     public class DiscountGateway
     {
-        private BraintreeService Service;
+        private BraintreeService service;
 
         public DiscountGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Service = new BraintreeService(gateway.Configuration);
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual List<Discount> All()
         {
-            var response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/discounts"));
+            var response = new NodeWrapper(service.Get(service.MerchantPath() + "/discounts"));
 
             var discounts = new List<Discount>();
             foreach (var node in response.GetList("discount"))

@@ -4,7 +4,6 @@ namespace Braintree
 {
     public class OAuthCredentials
     {
-
         public OAuthCredentials(NodeWrapper node)
         {
             if (node == null) return;

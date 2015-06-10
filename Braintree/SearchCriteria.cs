@@ -7,16 +7,16 @@ namespace Braintree
 {
     public class SearchCriteria : Request
     {
-        private string Xml;
+        private string xml;
 
         public SearchCriteria(string type, string value)
         {
-            Xml = BuildXMLElement(type, DefaultToEmptyString(value));
+            xml = BuildXMLElement(type, DefaultToEmptyString(value));
         }
 
         public SearchCriteria(string type, DateTime value)
         {
-            Xml = BuildXMLElement(type, value);
+            xml = BuildXMLElement(type, value);
         }
 
         public SearchCriteria(object[] items)
@@ -25,12 +25,12 @@ namespace Braintree
             foreach (var item in items) {
                 builder.Append(BuildXMLElement("item", item.ToString()));
             }
-            Xml = builder.ToString();
+            xml = builder.ToString();
         }
 
         public override string ToXml()
         {
-            return Xml;
+            return xml;
         }
 
         public override string ToXml(string rootElement)

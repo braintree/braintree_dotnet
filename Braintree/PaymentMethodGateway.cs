@@ -6,12 +6,12 @@ namespace Braintree
     public class PaymentMethodGateway
     {
         private BraintreeService service;
-        private BraintreeGateway Gateway;
+        private BraintreeGateway gateway;
 
         public PaymentMethodGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Gateway = gateway;
+            this.gateway = gateway;
             this.service = new BraintreeService(gateway.Configuration);
         }
 
@@ -21,27 +21,27 @@ namespace Braintree
 
             if (response.GetName() == "paypal-account")
             {
-                return new ResultImpl<PayPalAccount>(response, Gateway);
+                return new ResultImpl<PayPalAccount>(response, gateway);
             }
             else if (response.GetName() == "credit-card")
             {
-                return new ResultImpl<CreditCard>(response, Gateway);
+                return new ResultImpl<CreditCard>(response, gateway);
             }
             else if (response.GetName() == "apple-pay-card")
             {
-                return new ResultImpl<ApplePayCard>(response, Gateway);
+                return new ResultImpl<ApplePayCard>(response, gateway);
             }
             else if (response.GetName() == "android-pay-card")
             {
-                return new ResultImpl<AndroidPayCard>(response, Gateway);
+                return new ResultImpl<AndroidPayCard>(response, gateway);
             }
             else if (response.GetName() == "coinbase-account")
             {
-                return new ResultImpl<CoinbaseAccount>(response, Gateway);
+                return new ResultImpl<CoinbaseAccount>(response, gateway);
             }
             else
             {
-                return new ResultImpl<UnknownPaymentMethod>(response, Gateway);
+                return new ResultImpl<UnknownPaymentMethod>(response, gateway);
             }
         }
 
@@ -51,23 +51,23 @@ namespace Braintree
 
             if (response.GetName() == "paypal-account")
             {
-                return new ResultImpl<PayPalAccount>(response, Gateway);
+                return new ResultImpl<PayPalAccount>(response, gateway);
             }
             else if (response.GetName() == "credit-card")
             {
-                return new ResultImpl<CreditCard>(response, Gateway);
+                return new ResultImpl<CreditCard>(response, gateway);
             }
             else if (response.GetName() == "apple-pay-card")
             {
-                return new ResultImpl<ApplePayCard>(response, Gateway);
+                return new ResultImpl<ApplePayCard>(response, gateway);
             }
             else if (response.GetName() == "android-pay-card")
             {
-                return new ResultImpl<AndroidPayCard>(response, Gateway);
+                return new ResultImpl<AndroidPayCard>(response, gateway);
             }
             else
             {
-                return new ResultImpl<UnknownPaymentMethod>(response, Gateway);
+                return new ResultImpl<UnknownPaymentMethod>(response, gateway);
             }
         }
 
@@ -85,23 +85,23 @@ namespace Braintree
 
             if (response.GetName() == "paypal-account")
             {
-                return new PayPalAccount(response, Gateway);
+                return new PayPalAccount(response, gateway);
             }
             else if (response.GetName() == "credit-card")
             {
-                return new CreditCard(response, Gateway);
+                return new CreditCard(response, gateway);
             }
             else if (response.GetName() == "apple-pay-card")
             {
-                return new ApplePayCard(response, Gateway);
+                return new ApplePayCard(response, gateway);
             }
             else if (response.GetName() == "android-pay-card")
             {
-                return new AndroidPayCard(response, Gateway);
+                return new AndroidPayCard(response, gateway);
             }
             else if (response.GetName() == "coinbase-account")
             {
-                return new CoinbaseAccount(response, Gateway);
+                return new CoinbaseAccount(response, gateway);
             }
             else
             {

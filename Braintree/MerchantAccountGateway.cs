@@ -7,28 +7,28 @@ namespace Braintree
 {
     public class MerchantAccountGateway
     {
-        private BraintreeService Service;
-        private BraintreeGateway Gateway;
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
         protected internal MerchantAccountGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Gateway = gateway;
-            Service = new BraintreeService(gateway.Configuration);
+            this.gateway = gateway;
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual Result<MerchantAccount> Create(MerchantAccountRequest request)
         {
-            XmlNode merchantAccountXML = Service.Post(Service.MerchantPath() + "/merchant_accounts/create_via_api", request);
+            XmlNode merchantAccountXML = service.Post(service.MerchantPath() + "/merchant_accounts/create_via_api", request);
 
-            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Gateway);
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
 
         public virtual Result<MerchantAccount> Update(string id, MerchantAccountRequest request)
         {
-            XmlNode merchantAccountXML = Service.Put(Service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);
+            XmlNode merchantAccountXML = service.Put(service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);
 
-            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Gateway);
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
 
         public virtual MerchantAccount Find(string id)
@@ -36,7 +36,7 @@ namespace Braintree
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode merchantAccountXML = Service.Get(Service.MerchantPath() + "/merchant_accounts/" + id);
+            XmlNode merchantAccountXML = service.Get(service.MerchantPath() + "/merchant_accounts/" + id);
 
             return new MerchantAccount(new NodeWrapper(merchantAccountXML));
         }

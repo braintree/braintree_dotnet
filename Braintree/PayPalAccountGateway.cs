@@ -6,32 +6,32 @@ namespace Braintree
 {
     public class PayPalAccountGateway
     {
-        private BraintreeService Service;
-        private BraintreeGateway Gateway;
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
         public PayPalAccountGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Gateway = gateway;
-            Service = new BraintreeService(gateway.Configuration);
+            this.gateway = gateway;
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public PayPalAccount Find(string token)
         {
-            XmlNode xml = Service.Get(Service.MerchantPath() + "/payment_methods/paypal_account/" + token);
+            XmlNode xml = service.Get(service.MerchantPath() + "/payment_methods/paypal_account/" + token);
 
-            return new PayPalAccount(new NodeWrapper(xml), Gateway);
+            return new PayPalAccount(new NodeWrapper(xml), gateway);
         }
 
         public void Delete(string token)
         {
-            Service.Delete(Service.MerchantPath() + "/payment_methods/paypal_account/" + token);
+            service.Delete(service.MerchantPath() + "/payment_methods/paypal_account/" + token);
         }
 
         public Result<PayPalAccount> Update(string token, PayPalAccountRequest request)
         {
-            XmlNode xml = Service.Put(Service.MerchantPath() + "/payment_methods/paypal_account/" + token, request);
-            return new ResultImpl<PayPalAccount>(new NodeWrapper(xml), Gateway);
+            XmlNode xml = service.Put(service.MerchantPath() + "/payment_methods/paypal_account/" + token, request);
+            return new ResultImpl<PayPalAccount>(new NodeWrapper(xml), gateway);
         }
     }
 }

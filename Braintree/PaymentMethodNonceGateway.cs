@@ -6,12 +6,12 @@ namespace Braintree
     public class PaymentMethodNonceGateway
     {
         private BraintreeService service;
-        private BraintreeGateway Gateway;
+        private BraintreeGateway gateway;
 
         public PaymentMethodNonceGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Gateway = gateway;
+            this.gateway = gateway;
             this.service = new BraintreeService(gateway.Configuration);
         }
 
@@ -19,14 +19,14 @@ namespace Braintree
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods/" + token + "/nonces"));
 
-            return new ResultImpl<PaymentMethodNonce>(response, Gateway);
+            return new ResultImpl<PaymentMethodNonce>(response, gateway);
         }
 
         public virtual PaymentMethodNonce Find(string nonce)
         {
             var response = new NodeWrapper(service.Get(service.MerchantPath() + "/payment_method_nonces/" + nonce));
 
-            return new PaymentMethodNonce(response, Gateway);
+            return new PaymentMethodNonce(response, gateway);
         }
 
     }

@@ -57,7 +57,6 @@
     <Compile Include="AndroidPayDetails.cs" />
     <Compile Include="ApplePayCard.cs" />
     <Compile Include="ApplePayDetails.cs" />
-    <Compile Include="ApplicantDetails.cs" />
     <Compile Include="ApplicantDetailsRequest.cs" />
     <Compile Include="ClientTokenGateway.cs" />
     <Compile Include="ClientTokenRequest.cs" />

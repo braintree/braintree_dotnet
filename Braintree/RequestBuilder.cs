@@ -10,8 +10,8 @@ namespace Braintree
     public class RequestBuilder
     {
         private string Parent;
-        private Dictionary<string, string> TopLevelElements;
-        private Dictionary<string, object> Elements;
+        private Dictionary<string, string> topLevelElements;
+        private Dictionary<string, object> elements;
 
         public RequestBuilder() : this("")
         {
@@ -20,19 +20,19 @@ namespace Braintree
         public RequestBuilder(string parent)
         {
             Parent = parent;
-            TopLevelElements = new Dictionary<string, string>();
-            Elements = new Dictionary<string, object>();
+            topLevelElements = new Dictionary<string, string>();
+            elements = new Dictionary<string, object>();
         }
 
         public RequestBuilder AddElement(string name, object value)
         {
-            Elements.Add(name, value);
+            elements.Add(name, value);
             return this;
         }
 
         public RequestBuilder AddTopLevelElement(string name, string value)
         {
-            TopLevelElements.Add(name, value);
+            topLevelElements.Add(name, value);
             return this;
         }
 
@@ -41,7 +41,7 @@ namespace Braintree
             var builder = new StringBuilder();
 
             builder.Append(string.Format("<{0}>", Parent));
-            foreach (var pair in Elements)
+            foreach (var pair in elements)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
@@ -55,11 +55,11 @@ namespace Braintree
             string underscoredParent = Parent.Replace("-", "_");
 
             var qs = new QueryString();
-            foreach (var pair in TopLevelElements)
+            foreach (var pair in topLevelElements)
             {
                 qs.Append(pair);
             }
-            foreach (var pair in Elements)
+            foreach (var pair in elements)
             {
                 qs.Append(ParentBracketChildString(underscoredParent, pair.Key.Replace("-", "_")), pair.Value);
             }

@@ -7,12 +7,12 @@ namespace Braintree
 {
     public class WebhookTestingGateway
     {
-        private BraintreeService Service;
+        private BraintreeService service;
 
         protected internal WebhookTestingGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Service = new BraintreeService(gateway.Configuration);
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual Dictionary<string, string> SampleNotification(WebhookKind kind, string id)
@@ -33,7 +33,7 @@ namespace Braintree
 
         private string BuildSignature(string payload)
         {
-            return string.Format("{0}|{1}", Service.PublicKey, new Sha1Hasher().HmacHash(Service.PrivateKey, payload).Trim().ToLower());
+            return string.Format("{0}|{1}", service.PublicKey, new Sha1Hasher().HmacHash(service.PrivateKey, payload).Trim().ToLower());
         }
 
         private string SubjectSampleXml(WebhookKind kind, string id)
