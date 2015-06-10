@@ -124,7 +124,7 @@ namespace Braintree
             return results;
         }
 
-        public virtual ValidationErrors ForIndex(Int32 index)
+        public virtual ValidationErrors ForIndex(int index)
         {
             return ForObject("index-" + index);
         }

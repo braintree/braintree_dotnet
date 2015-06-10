@@ -9,13 +9,13 @@ namespace Braintree
     {
         public delegate List<T> PagingDelegate(string[] ids);
 
-        public Int32 MaximumCount {
+        public int MaximumCount {
             get
             {
                 return Ids.Count;
             }
         }
-        private Int32 PageSize;
+        private int PageSize;
         private List<string> Ids;
         private PagingDelegate NextPage;
         public T FirstItem {
@@ -28,7 +28,7 @@ namespace Braintree
         {
             NextPage = nextPage;
             Ids = response.GetStrings("ids/*");
-            PageSize = Int32.Parse(response.GetString("page-size"));
+            PageSize = int.Parse(response.GetString("page-size"));
         }
 
         public System.Collections.IEnumerator GetEnumerator()
@@ -43,12 +43,12 @@ namespace Braintree
             }
         }
 
-        private List<List<string>> BatchIds(List<string> ids, Int32 size)
+        private List<List<string>> BatchIds(List<string> ids, int size)
         {
             List<List<string>> batches = new List<List<string>>();
 
-            for (Int32 index = 0; index < ids.Count; index += size) {
-                Int32 count = size;
+            for (int index = 0; index < ids.Count; index += size) {
+                int count = size;
                 if (index + count > ids.Count)
                 {
                     count = ids.Count - index;

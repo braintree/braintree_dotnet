@@ -11,9 +11,9 @@ namespace Braintree.Tests
         public string MerchantId { get; set; }
         public string Name { get; set; }
         public bool? NeverExpires { get; set; }
-        public Int32? NumberOfBillingCycles { get; set; }
+        public int? NumberOfBillingCycles { get; set; }
         public string PlanId { get; set; }
-        public Int32? Quantity { get; set; }
+        public int? Quantity { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
         public override string ToXml()

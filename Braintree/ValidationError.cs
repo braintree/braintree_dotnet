@@ -16,7 +16,7 @@ namespace Braintree
         {
 
             Attribute = attribute;
-            Code = (ValidationErrorCode)Int32.Parse(code);
+            Code = (ValidationErrorCode)int.Parse(code);
             Message = message;
         }
     }

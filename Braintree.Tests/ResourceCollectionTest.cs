@@ -35,7 +35,7 @@ namespace Braintree.Tests
 
                 foreach (string id in ids)
                 {
-                    results.Add(values[Int32.Parse(id)]);
+                    results.Add(values[int.Parse(id)]);
                 }
 
                 return results;

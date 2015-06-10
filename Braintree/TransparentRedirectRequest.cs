@@ -33,7 +33,7 @@ namespace Braintree
                 message = HttpUtility.UrlDecode(paramMap["bt_message"]);
             }
 
-            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]), message);
+            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode)int.Parse(paramMap["http_status"]), message);
 
             if (!TrUtil.IsValidTrQueryString(queryString, service))
             {

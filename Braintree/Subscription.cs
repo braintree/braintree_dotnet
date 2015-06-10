@@ -90,14 +90,14 @@ namespace Braintree
     {
         public Decimal? Balance { get; protected set; }
         public List<AddOn> AddOns { get; protected set; }
-        public Int32? BillingDayOfMonth { get; protected set; }
+        public int? BillingDayOfMonth { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
         public DateTime? BillingPeriodStartDate { get; protected set; }
-        public Int32? CurrentBillingCycle { get; protected set; }
-        public Int32? DaysPastDue { get; protected set; }
+        public int? CurrentBillingCycle { get; protected set; }
+        public int? DaysPastDue { get; protected set; }
         public Descriptor Descriptor { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
-        public Int32? FailureCount { get; protected set; }
+        public int? FailureCount { get; protected set; }
         public DateTime? FirstBillingDate { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
@@ -107,7 +107,7 @@ namespace Braintree
         public Decimal? NextBillAmount { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
         public Decimal? NextBillingPeriodAmount { get; protected set; }
-        public Int32? NumberOfBillingCycles { get; protected set; }
+        public int? NumberOfBillingCycles { get; protected set; }
         public DateTime? PaidThroughDate { get; protected set; }
         public string PaymentMethodToken { get; protected set; }
         public string PlanId { get; protected set; }
@@ -115,7 +115,7 @@ namespace Braintree
         public SubscriptionStatusEvent[] StatusHistory { get; protected set; }
         public SubscriptionStatus Status { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
-        public Int32? TrialDuration { get; protected set; }
+        public int? TrialDuration { get; protected set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; protected set; }
         public string MerchantAccountId { get; protected set; }
 

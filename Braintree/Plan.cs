@@ -15,17 +15,17 @@ namespace Braintree
     public class Plan
     {
         public List<AddOn> AddOns { get; protected set; }
-        public Int32? BillingDayOfMonth { get; protected set; }
-        public Int32? BillingFrequency { get; protected set; }
+        public int? BillingDayOfMonth { get; protected set; }
+        public int? BillingFrequency { get; protected set; }
         public string CurrencyIsoCode { get; protected set; }
         public string Description { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
         public string Id { get; protected set; }
         public string Name { get; protected set; }
-        public Int32? NumberOfBillingCycles { get; protected set; }
+        public int? NumberOfBillingCycles { get; protected set; }
         public Decimal? Price { get; protected set; }
         public bool? TrialPeriod { get; protected set; }
-        public Int32? TrialDuration { get; protected set; }
+        public int? TrialDuration { get; protected set; }
         public PlanDurationUnit TrialDurationUnit { get; protected set; }
 
         public Plan(NodeWrapper node)
@@ -56,4 +56,3 @@ namespace Braintree
         }
     }
 }
-

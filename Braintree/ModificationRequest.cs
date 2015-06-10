@@ -8,8 +8,8 @@ namespace Braintree
     {
         public Decimal? Amount { get; set; }
         public bool? NeverExpires { get; set; }
-        public Int32? NumberOfBillingCycles { get; set; }
-        public Int32? Quantity { get; set; }
+        public int? NumberOfBillingCycles { get; set; }
+        public int? Quantity { get; set; }
 
         public override string ToXml(string root)
         {

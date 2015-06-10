@@ -25,20 +25,20 @@ namespace Braintree
     public class SubscriptionRequest : Request
     {
         public AddOnsRequest AddOns { get; set; }
-        public Int32? BillingDayOfMonth { get; set; }
+        public int? BillingDayOfMonth { get; set; }
         public DescriptorRequest Descriptor { get; set; }
         public DiscountsRequest Discounts { get; set; }
         public DateTime? FirstBillingDate { get; set; }
         public bool? HasTrialPeriod { get; set; }
         public string Id { get; set; }
-        public Int32? NumberOfBillingCycles { get; set; }
+        public int? NumberOfBillingCycles { get; set; }
         public bool? NeverExpires { get; set; }
         public SubscriptionOptionsRequest Options { get; set; }
         public string PaymentMethodToken { get; set; }
         public string PaymentMethodNonce { get; set; }
         public string PlanId { get; set; }
         public Decimal? Price { get; set; }
-        public Int32 TrialDuration { get; set; }
+        public int TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
         public string MerchantAccountId { get; set; }
 

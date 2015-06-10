@@ -41,11 +41,11 @@ namespace Braintree
             return node.InnerText;
         }
 
-        public virtual Int32? GetInteger(string path)
+        public virtual int? GetInteger(string path)
         {
             if (GetString(path) == null) return null;
 
-            return Int32.Parse(GetString(path));
+            return int.Parse(GetString(path));
         }
 
         public virtual Decimal? GetDecimal(string path)
