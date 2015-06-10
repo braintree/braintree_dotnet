@@ -10,11 +10,11 @@ namespace Braintree.Tests
         new public List<AddOn> AddOns { get; set; }
         new public Int32? BillingDayOfMonth { get; set; }
         new public Int32? BillingFrequency { get; set; }
-        new public String CurrencyIsoCode { get; set; }
-        new public String Description { get; set; }
+        new public string CurrencyIsoCode { get; set; }
+        new public string Description { get; set; }
         new public List<Discount> Discounts { get; set; }
-        new public String Id { get; set; }
-        new public String Name { get; set; }
+        new public string Id { get; set; }
+        new public string Name { get; set; }
         new public Int32? NumberOfBillingCycles { get; set; }
         new public Decimal? Price { get; set; }
         new public Boolean? TrialPeriod { get; set; }

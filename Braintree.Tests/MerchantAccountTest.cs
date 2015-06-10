@@ -301,7 +301,7 @@ namespace Braintree.Tests
             } catch (NotFoundException) {}
         }
 
-        private MerchantAccountRequest deprecatedCreateRequest(String id)
+        private MerchantAccountRequest deprecatedCreateRequest(string id)
         {
             return new MerchantAccountRequest
             {
@@ -331,7 +331,7 @@ namespace Braintree.Tests
             };
         }
 
-        private MerchantAccountRequest createRequest(String id)
+        private MerchantAccountRequest createRequest(string id)
         {
             return new MerchantAccountRequest
             {

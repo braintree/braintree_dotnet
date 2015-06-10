@@ -242,7 +242,7 @@ namespace Braintree.Tests
 
             Result<Address> createResult = gateway.Address.Create(customer.Id, request);
             Assert.IsFalse(createResult.IsSuccess());
-            Dictionary<String, String> parameters = createResult.Parameters;
+            Dictionary<string, string> parameters = createResult.Parameters;
             Assert.AreEqual("integration_merchant_id", parameters["merchant_id"]);
             Assert.AreEqual(customer.Id, parameters["customer_id"]);
             Assert.AreEqual("United States of Hammer", parameters["address[country_name]"]);

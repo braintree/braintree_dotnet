@@ -8,7 +8,7 @@ namespace Braintree.Tests
     {
         class FakeHasher : Hasher
         {
-            public String HmacHash(String key, String payload)
+            public string HmacHash(string key, string payload)
             {
               return payload + "-signed-with-" + key;
             }
@@ -17,7 +17,7 @@ namespace Braintree.Tests
         [Test]
         public void Sign_SignsTheGivenPayload()
         {
-            String signature = new SignatureService
+            string signature = new SignatureService
             {
               Key = "secret-key",
               Hasher = new FakeHasher()

@@ -31,7 +31,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CreatesPaymentMethodNonce()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
 
             Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(new PaymentMethodRequest
@@ -74,7 +74,7 @@ namespace Braintree.Tests
         [Test]
         public void Find_ExposesNullThreeDSecureInfoIfBlank()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
 
             PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(nonce);
 

@@ -86,7 +86,7 @@ namespace Braintree.Tests
         public void Create_SubscriptionWithPaymentMethodNonce()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4242424242424242", creditCard.CustomerId);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4242424242424242", creditCard.CustomerId);
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodNonce = nonce,
@@ -384,7 +384,7 @@ namespace Braintree.Tests
         public void Create_SetId()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
-            String newId = "new-id-" + new Random().Next(1000000);
+            string newId = "new-id-" + new Random().Next(1000000);
             SubscriptionRequest request = new SubscriptionRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -625,11 +625,11 @@ namespace Braintree.Tests
                 PlanId = plan.Id,
                 AddOns = new AddOnsRequest
                 {
-                    Remove = new String[] { "increase_10", "increase_20" }
+                    Remove = new string[] { "increase_10", "increase_20" }
                 },
                 Discounts = new DiscountsRequest
                 {
-                    Remove = new String[] { "discount_11" }
+                    Remove = new string[] { "discount_11" }
                 }
             };
 
@@ -663,7 +663,7 @@ namespace Braintree.Tests
                             Quantity = 8
                         }
                     },
-                    Remove = new String[] { "increase_10", "increase_20" }
+                    Remove = new string[] { "increase_10", "increase_20" }
                 },
                 Discounts = new DiscountsRequest
                 {
@@ -677,7 +677,7 @@ namespace Braintree.Tests
                             Quantity = 9
                         }
                     },
-                    Remove = new String[] { "discount_7", "discount_11" }
+                    Remove = new string[] { "discount_7", "discount_11" }
                 }
             };
 
@@ -827,7 +827,7 @@ namespace Braintree.Tests
         {
             SubscriptionRequest request1 = new SubscriptionRequest
             {
-                Id = String.Format("find_me{0}", new Random().Next(1000000)),
+                Id = string.Format("find_me{0}", new Random().Next(1000000)),
                 PaymentMethodToken = creditCard.Token,
                 PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 3M
@@ -835,7 +835,7 @@ namespace Braintree.Tests
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
-                Id = String.Format("do_not_find_me{0}", new Random().Next(1000000)),
+                Id = string.Format("do_not_find_me{0}", new Random().Next(1000000)),
                 PaymentMethodToken = creditCard.Token,
                 PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 3M
@@ -925,7 +925,7 @@ namespace Braintree.Tests
         public void Search_OnMerchantAccountIdWithBogusMerchantId()
         {
             Random random = new Random();
-            String subscriptionId = random.Next(0, 100000).ToString();
+            string subscriptionId = random.Next(0, 100000).ToString();
             var subscriptionRequest = new SubscriptionRequest
             {
                 MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
@@ -1374,7 +1374,7 @@ namespace Braintree.Tests
         [Test]
         public void Update_Id()
         {
-            String oldId = "old-id-" + new Random().Next(1000000);
+            string oldId = "old-id-" + new Random().Next(1000000);
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
             {
@@ -1385,7 +1385,7 @@ namespace Braintree.Tests
 
             gateway.Subscription.Create(request);
 
-            String newId = "new-id-" + new Random().Next(1000000);
+            string newId = "new-id-" + new Random().Next(1000000);
             SubscriptionRequest updateRequest = new SubscriptionRequest
             {
                 Id = newId
@@ -1458,7 +1458,7 @@ namespace Braintree.Tests
                 PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id,
             }).Target;
 
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4242424242424242", creditCard.CustomerId);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4242424242424242", creditCard.CustomerId);
             SubscriptionRequest updateRequest = new SubscriptionRequest { PaymentMethodNonce = nonce };
 
             Result<Subscription> result = gateway.Subscription.Update(subscription.Id, updateRequest);
@@ -1517,7 +1517,7 @@ namespace Braintree.Tests
                             Quantity = 7
                         }
                     },
-                    Remove = new String[] { "increase_20" },
+                    Remove = new string[] { "increase_20" },
                     Update = new UpdateAddOnRequest[] {
                         new UpdateAddOnRequest
                         {
@@ -1538,7 +1538,7 @@ namespace Braintree.Tests
                             Quantity = 9
                         }
                     },
-                    Remove = new String[] { "discount_11" },
+                    Remove = new string[] { "discount_11" },
                     Update = new UpdateDiscountRequest[] {
                         new UpdateDiscountRequest
                         {
@@ -1899,7 +1899,7 @@ namespace Braintree.Tests
             Assert.IsFalse(createResult.IsSuccess());
             Assert.IsNull(createResult.Target);
 
-            Dictionary<String, String> parameters = createResult.Parameters;
+            Dictionary<string, string> parameters = createResult.Parameters;
             Assert.AreEqual(creditCard.Token, parameters["payment_method_token"]);
             Assert.AreEqual(plan.Id, parameters["plan_id"]);
             Assert.AreEqual("invalid id", parameters["id"]);

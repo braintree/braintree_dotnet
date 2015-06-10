@@ -29,7 +29,7 @@ namespace Braintree.Tests
         [Test]
         public void Find_FindsCustomerWithGivenId()
         {
-            String id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             var createRequest = new CustomerRequest
             {
                 Id = id,
@@ -157,7 +157,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CanSetCustomFields()
         {
-            var customFields = new Dictionary<String, String>();
+            var customFields = new Dictionary<string, string>();
             customFields.Add("store_me", "a custom value");
             var createRequest = new CustomerRequest()
             {
@@ -338,7 +338,7 @@ namespace Braintree.Tests
                 "client_id$development$integration_client_id",
                 "client_secret$development$integration_client_secret"
             );
-            String code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "read_write");
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "read_write");
             ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
                 Code = code,
                 Scope = "read_write"
@@ -463,7 +463,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithPaymentMethodNonce()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
                 CreditCard = new CreditCardRequest{
                     PaymentMethodNonce = nonce
@@ -475,7 +475,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithPayPalPaymentMethodNonce()
         {
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
                 PaymentMethodNonce = nonce
             });
@@ -497,7 +497,7 @@ namespace Braintree.Tests
                 LastName = "Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -529,13 +529,13 @@ namespace Braintree.Tests
                         CountryCodeNumeric = "484"
                     }
                 },
-                CustomFields = new Dictionary<String, String>
+                CustomFields = new Dictionary<string, string>
                 {
                     { "store_me", "a custom value" }
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -574,7 +574,7 @@ namespace Braintree.Tests
                 LastName = "Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -633,7 +633,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate(), service);
             Customer updatedCustomer = gateway.Customer.ConfirmTransparentRedirect(queryString).Target;
             CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
 
@@ -813,7 +813,7 @@ namespace Braintree.Tests
         [Test]
         public void Delete_DeletesTheCustomer()
         {
-            String id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             gateway.Customer.Create(new CustomerRequest() { Id = id });
             Assert.AreEqual(id, gateway.Customer.Find(id).Id);
             gateway.Customer.Delete(id);
@@ -835,11 +835,11 @@ namespace Braintree.Tests
 
             Assert.IsTrue(collection.MaximumCount > 100);
     
-            List<String> items = new List<String>();
+            List<string> items = new List<string>();
             foreach (Customer item in collection) {
                 items.Add(item.Id);
             }
-            HashSet<String> uniqueItems = new HashSet<String>(items);
+            HashSet<string> uniqueItems = new HashSet<string>(items);
 
             Assert.AreEqual(uniqueItems.Count, collection.MaximumCount);
         }
@@ -873,7 +873,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Customer> collection = gateway.Customer.Search(searchRequest);
 
-            List<String> customerIds = new List<String>();
+            List<string> customerIds = new List<string>();
             foreach (Customer customer in collection) {
                 customerIds.Add(customer.Id);
             }
@@ -885,7 +885,7 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnAllTextFields()
         {
-            String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
 
             CustomerRequest request = new CustomerRequest
             {

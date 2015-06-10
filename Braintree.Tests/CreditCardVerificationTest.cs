@@ -129,7 +129,7 @@ namespace Braintree.Tests
         [Test]
         public void CardTypeIndicators()
         {
-            String name = Guid.NewGuid().ToString("n");
+            string name = Guid.NewGuid().ToString("n");
             var createRequest = new CustomerRequest
             {
                 CreditCard = new CreditCardRequest
@@ -184,10 +184,10 @@ namespace Braintree.Tests
             };
 
             Result<Customer> result = gateway.Customer.Create(createRequest);
-            String token = result.Target.CreditCards[0].Token;
-            String postalCode = result.Target.CreditCards[0].BillingAddress.PostalCode;
-            String customerId = result.Target.Id;
-            String customerEmail = result.Target.Email;
+            string token = result.Target.CreditCards[0].Token;
+            string postalCode = result.Target.CreditCards[0].BillingAddress.PostalCode;
+            string customerId = result.Target.Id;
+            string customerEmail = result.Target.Email;
 
             CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
                 PaymentMethodToken.Is(token).

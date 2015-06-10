@@ -34,7 +34,7 @@ namespace Braintree.Tests
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
@@ -54,7 +54,7 @@ namespace Braintree.Tests
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
@@ -72,7 +72,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CreatesCreditCardWithNonce()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
@@ -181,7 +181,7 @@ namespace Braintree.Tests
             CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
             Assert.IsTrue(creditCard.IsDefault.Value);
 
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Random random = new Random();
             int randomNumber = random.Next(0, 10000);
             var token = "token_" + randomNumber;

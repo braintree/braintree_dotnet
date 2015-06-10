@@ -106,7 +106,7 @@ namespace Braintree.Tests
         {
             TransactionRequest request = new TransactionRequest
             {
-                CustomFields = new Dictionary<String, String>
+                CustomFields = new Dictionary<string, string>
                 {
                     { "<key>", "val&ue" }
                 }

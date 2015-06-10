@@ -21,7 +21,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTokenFromCode_ReturnsOAuthCredentials()
         {
-            String code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
+            string code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
 
             ResultImpl<OAuthCredentials> result = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
                 Code = code,
@@ -38,7 +38,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTokenFromRefreshToken_ExchangesRefreshTokenForAccessToken()
         {
-            String code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
+            string code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
 
             ResultImpl<OAuthCredentials> accessTokenResult = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
                 Code = code,

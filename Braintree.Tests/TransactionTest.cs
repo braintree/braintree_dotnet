@@ -31,7 +31,7 @@ namespace Braintree.Tests
         [Test]
         public void SaleTrData_ReturnsValidTrDataHash()
         {
-            String trData = gateway.Transaction.SaleTrData(new TransactionRequest(), "http://example.com");
+            string trData = gateway.Transaction.SaleTrData(new TransactionRequest(), "http://example.com");
             Assert.IsTrue(trData.Contains("sale"));
             Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
@@ -39,7 +39,7 @@ namespace Braintree.Tests
         [Test]
         public void CreditTrData_ReturnsValidTrDataHash()
         {
-            String trData = gateway.Transaction.CreditTrData(new TransactionRequest(), "http://example.com");
+            string trData = gateway.Transaction.CreditTrData(new TransactionRequest(), "http://example.com");
             Assert.IsTrue(trData.Contains("credit"));
             Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
@@ -47,7 +47,7 @@ namespace Braintree.Tests
         [Test]
         public void TrData_QueryStringParams()
         {
-            String trData = gateway.Transaction.SaleTrData(new TransactionRequest {
+            string trData = gateway.Transaction.SaleTrData(new TransactionRequest {
                 Options = new TransactionOptionsRequest
                 {
                     StoreInVault = true,
@@ -76,8 +76,8 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnAllTextFields()
         {
-            String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());
-            String firstName = String.Format("Tim{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string firstName = string.Format("Tim{0}", new Random().Next(1000000).ToString());
 
             TransactionRequest request = new TransactionRequest
             {
@@ -453,7 +453,7 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnTransactionType()
         {
-            String name = new Random().Next(1000000).ToString();
+            string name = new Random().Next(1000000).ToString();
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -1144,7 +1144,7 @@ namespace Braintree.Tests
                 "client_id$development$integration_client_id",
                 "client_secret$development$integration_client_secret"
             );
-            String code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "read_write");
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "read_write");
             ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
                 Code = code,
                 Scope = "read_write"
@@ -1241,7 +1241,7 @@ namespace Braintree.Tests
         [Test]
         public void Sale_ReturnsPaymentInstrumentTypeForPayPal()
         {
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -1257,7 +1257,7 @@ namespace Braintree.Tests
         [Test]
         public void Sale_ReturnsDebugIdForPayPal()
         {
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -1460,8 +1460,8 @@ namespace Braintree.Tests
         [Test]
         public void Sale_WithStoreInVaultAndSpecifyingToken()
         {
-            String customerId = new Random().Next(1000000).ToString();
-            String paymentToken = new Random().Next(1000000).ToString();
+            string customerId = new Random().Next(1000000).ToString();
+            string paymentToken = new Random().Next(1000000).ToString();
 
             TransactionRequest request = new TransactionRequest
             {
@@ -1721,7 +1721,7 @@ namespace Braintree.Tests
         [Test]
         public void Sale_WithThreeDSecureOptionRequired()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             var request = new TransactionRequest
             {
                 MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
@@ -1800,7 +1800,7 @@ namespace Braintree.Tests
         [Test]
         public void Sale_ErrorWithNullThreeDSecureToken()
         {
-            String three_d_secure_token = null;
+            string three_d_secure_token = null;
 
             var request = new TransactionRequest
             {
@@ -2039,7 +2039,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CustomFields = new Dictionary<String, String>
+                CustomFields = new Dictionary<string, string>
                 {
                     { "store_me", "custom value" },
                     { "another_stored_field", "custom value2" }
@@ -2065,7 +2065,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.DECLINE,
-                CustomFields = new Dictionary<String, String>
+                CustomFields = new Dictionary<string, string>
                 {
                     { "unkown_custom_field", "custom value" }
                 },
@@ -2253,7 +2253,7 @@ namespace Braintree.Tests
                 result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryName")[0].Code
             );
 
-            Dictionary<String, String> parameters = result.Parameters;
+            Dictionary<string, string> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
             Assert.AreEqual("2010", parameters["transaction[credit_card][expiration_year]"]);
@@ -2708,7 +2708,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
             Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -2946,7 +2946,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
             Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -2992,7 +2992,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
             Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
@@ -3077,7 +3077,7 @@ namespace Braintree.Tests
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CustomFields = new Dictionary<String, String>
+                CustomFields = new Dictionary<string, string>
                 {
                     { "store_me", "custom value"},
                     { "another_stored_field", "custom value2" }
@@ -3115,7 +3115,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("Transaction").OnField("Amount")[0].Code);
 
-            Dictionary<String, String> parameters = result.Parameters;
+            Dictionary<string, string> parameters = result.Parameters;
             Assert.IsFalse(parameters.ContainsKey("transaction[amount]"));
             Assert.AreEqual("05", parameters["transaction[credit_card][expiration_month]"]);
             Assert.AreEqual("2010", parameters["transaction[credit_card][expiration_year]"]);
@@ -3412,7 +3412,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String transactionId = gateway.Transaction.Sale(request).Target.Id;
+            string transactionId = gateway.Transaction.Sale(request).Target.Id;
             Transaction transaction = gateway.Transaction.SubmitForSettlement(transactionId, Decimal.Parse("50.00")).Target;
 
             Assert.AreEqual(2, transaction.StatusHistory.Length);
@@ -3829,7 +3829,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithPaymentMethodNonce()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3842,7 +3842,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithPayeeEmail()
         {
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3866,7 +3866,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithPayeeEmailInOptionsParams()
         {
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3949,7 +3949,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithOneTimePayPalNonce()
         {
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3968,7 +3968,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithOneTimePayPalNonceAndAttemptToVault()
         {
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3990,7 +3990,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateTransaction_WithFuturePayPalNonceAndAttemptToVault()
         {
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -4012,7 +4012,7 @@ namespace Braintree.Tests
         [Test]
         public void Void_PayPalTransaction()
         {
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -4028,7 +4028,7 @@ namespace Braintree.Tests
         [Test]
         public void SubmitForSettlement_PayPalTransaction()
         {
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -4045,7 +4045,7 @@ namespace Braintree.Tests
         [Test]
         public void Refund_PayPalTransaction()
         {
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,

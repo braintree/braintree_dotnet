@@ -3,21 +3,21 @@ namespace Braintree.Tests
 {
     public class ThreeDSecureRequestForTests : Request
     {
-        public String ExpirationMonth { get; set; }
-        public String ExpirationYear { get; set; }
-        public String Number { get; set; }
+        public string ExpirationMonth { get; set; }
+        public string ExpirationYear { get; set; }
+        public string Number { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("three-d-secure-verification");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public RequestBuilder BuildRequest(String root)
+        public RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("expiration-month", ExpirationMonth).

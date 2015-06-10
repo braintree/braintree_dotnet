@@ -26,7 +26,7 @@ namespace Braintree.Tests
         [Test]
         public void All_ReturnsAllPlans()
         {
-            String planToken = String.Format("plan{0}", new Random().Next(1000000).ToString());
+            string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
 
             service.Post(service.MerchantPath() + "/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,
@@ -64,7 +64,7 @@ namespace Braintree.Tests
         [Test]
         public void All_ReturnPlansWithAddOnsAndDiscounts()
         {
-            String planToken = String.Format("plan{0}", new Random().Next(1000000).ToString());
+            string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
 
             service.Post(service.MerchantPath() + "/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,

@@ -78,7 +78,7 @@ namespace Braintree.Tests
 
             var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
             var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
-            var expected = String.Format("http://{0}:{1}/merchants/integration_merchant_id", host, port);
+            var expected = string.Format("http://{0}:{1}/merchants/integration_merchant_id", host, port);
 
             Assert.AreEqual(expected, service.BaseMerchantURL());
         }

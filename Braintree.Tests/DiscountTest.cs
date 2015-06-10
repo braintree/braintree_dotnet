@@ -26,7 +26,7 @@ namespace Braintree.Tests
         [Test()]
         public void All_ReturnsAllDiscounts()
         {
-            String discountId = String.Format("dotnet_discount{0}", new Random().Next(1000000).ToString());
+            string discountId = string.Format("dotnet_discount{0}", new Random().Next(1000000).ToString());
 
             service.Post(service.MerchantPath() + "/modifications/create_modification_for_tests", new ModificationRequestForTests {
                 Amount = 100M,
