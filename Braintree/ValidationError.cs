@@ -8,11 +8,11 @@ namespace Braintree
 {
     public class ValidationError
     {
-        public String Attribute { get; protected set; }
+        public string Attribute { get; protected set; }
         public ValidationErrorCode Code { get; protected set; }
-        public String Message { get; protected set; }
+        public string Message { get; protected set; }
 
-        public ValidationError(String attribute, String code, String message)
+        public ValidationError(string attribute, string code, string message)
         {
 
             Attribute = attribute;

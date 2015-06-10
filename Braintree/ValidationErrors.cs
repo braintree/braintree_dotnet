@@ -15,8 +15,8 @@ namespace Braintree
     /// </example>
     public class ValidationErrors
     {
-        private Dictionary<String, List<ValidationError>> errors;
-        private Dictionary<String, ValidationErrors> nestedErrors;
+        private Dictionary<string, List<ValidationError>> errors;
+        private Dictionary<string, ValidationErrors> nestedErrors;
         public int Count {
             get { return errors.Count; }
         }
@@ -40,25 +40,25 @@ namespace Braintree
 
         public ValidationErrors(NodeWrapper node)
         {
-            errors = new Dictionary<String, List<ValidationError>>();
-            nestedErrors = new Dictionary<String, ValidationErrors>();
+            errors = new Dictionary<string, List<ValidationError>>();
+            nestedErrors = new Dictionary<string, ValidationErrors>();
             PopulateErrors(node);
         }
 
         public ValidationErrors()
         {
-            errors = new Dictionary<String, List<ValidationError>>();
-            nestedErrors = new Dictionary<String, ValidationErrors>();
+            errors = new Dictionary<string, List<ValidationError>>();
+            nestedErrors = new Dictionary<string, ValidationErrors>();
         }
 
-        public virtual void AddError(String fieldName, ValidationError error)
+        public virtual void AddError(string fieldName, ValidationError error)
         {
             if (!errors.ContainsKey(fieldName)) errors[fieldName] = new List<ValidationError>();
 
             errors[fieldName].Add(error);
         }
 
-        public virtual void AddErrors(String objectName, ValidationErrors errors)
+        public virtual void AddErrors(string objectName, ValidationErrors errors)
         {
             nestedErrors[objectName] = errors;
         }
@@ -73,15 +73,15 @@ namespace Braintree
             return results;
         }
 
-        public Dictionary<String, List<String>> ByFormField()
+        public Dictionary<string, List<string>> ByFormField()
         {
-            var dict = new Dictionary<String, List<String>>();
+            var dict = new Dictionary<string, List<string>>();
 
             foreach (var pair in errors)
             {
-                String keyName = pair.Key.Replace('-', '_');
+                string keyName = pair.Key.Replace('-', '_');
 
-                if (!dict.ContainsKey(keyName)) dict[keyName] = new List<String>();
+                if (!dict.ContainsKey(keyName)) dict[keyName] = new List<string>();
 
                 foreach (var error in pair.Value)
                 {
@@ -93,7 +93,7 @@ namespace Braintree
             {
                 foreach (var error in pair.Value.ByFormField())
                 {
-                    String keyName = pair.Key.Replace('-', '_');
+                    string keyName = pair.Key.Replace('-', '_');
 
                     dict[ComposeFieldName(keyName, error.Key)] = error.Value;
                 }
@@ -102,13 +102,13 @@ namespace Braintree
             return dict;
         }
 
-        protected String ComposeFieldName(String prefix, String element)
+        protected string ComposeFieldName(string prefix, string element)
         {
             var fieldName = prefix;
 
             foreach (var node in element.Replace("]", "").Split('['))
             {
-                fieldName = String.Format("{0}[{1}]", fieldName, node);
+                fieldName = string.Format("{0}[{1}]", fieldName, node);
             }
 
             return fieldName;
@@ -129,17 +129,17 @@ namespace Braintree
             return ForObject("index-" + index);
         }
 
-        public virtual ValidationErrors ForObject(String objectName)
+        public virtual ValidationErrors ForObject(string objectName)
         {
-            String key = StringUtil.Dasherize(objectName);
+            string key = StringUtil.Dasherize(objectName);
             if (nestedErrors.ContainsKey(key)) return nestedErrors[key];
 
             return new ValidationErrors();
         }
 
-        public virtual List<ValidationError> OnField(String fieldName)
+        public virtual List<ValidationError> OnField(string fieldName)
         {
-            String key = StringUtil.Underscore(fieldName);
+            string key = StringUtil.Underscore(fieldName);
             if (errors.ContainsKey(key)) return errors[key];
 
             return null;

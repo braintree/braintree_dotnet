@@ -6,17 +6,17 @@ namespace Braintree
     {
         public Boolean? UpdateExisting { get; set; }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).AddElement("update-existing", UpdateExisting);
         }

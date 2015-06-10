@@ -26,7 +26,7 @@ namespace Braintree
 
         public static readonly SubscriptionDurationUnit[] ALL = { DAY, MONTH };
 
-        protected SubscriptionDurationUnit(String name) : base(name) {}
+        protected SubscriptionDurationUnit(string name) : base(name) {}
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ namespace Braintree
 
         public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, EXPIRED, PAST_DUE, PENDING};
 
-        protected SubscriptionStatus(String name) : base(name) {}
+        protected SubscriptionStatus(string name) : base(name) {}
     }
 
     public class SubscriptionSource : Enumeration
@@ -73,7 +73,7 @@ namespace Braintree
 
         public static readonly SubscriptionSource[] ALL = { API, CONTROL_PANEL, RECURRING, UNRECOGNIZED };
 
-        protected SubscriptionSource(String name) : base(name) {}
+        protected SubscriptionSource(string name) : base(name) {}
     }
 
     /// <summary>
@@ -102,22 +102,22 @@ namespace Braintree
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Boolean? HasTrialPeriod { get; protected set; }
-        public String Id { get; protected set; }
+        public string Id { get; protected set; }
         public Boolean? NeverExpires { get; protected set; }
         public Decimal? NextBillAmount { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
         public Decimal? NextBillingPeriodAmount { get; protected set; }
         public Int32? NumberOfBillingCycles { get; protected set; }
         public DateTime? PaidThroughDate { get; protected set; }
-        public String PaymentMethodToken { get; protected set; }
-        public String PlanId { get; protected set; }
+        public string PaymentMethodToken { get; protected set; }
+        public string PlanId { get; protected set; }
         public Decimal? Price { get; protected set; }
         public SubscriptionStatusEvent[] StatusHistory { get; protected set; }
         public SubscriptionStatus Status { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
         public Int32? TrialDuration { get; protected set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; protected set; }
-        public String MerchantAccountId { get; protected set; }
+        public string MerchantAccountId { get; protected set; }
 
         public Subscription(NodeWrapper node, BraintreeGateway gateway)
         {
@@ -151,7 +151,7 @@ namespace Braintree
             }
             HasTrialPeriod = node.GetBoolean("trial-period");
             TrialDuration = node.GetInteger("trial-duration");
-            String trialDurationUnitStr = node.GetString("trial-duration-unit");
+            string trialDurationUnitStr = node.GetString("trial-duration-unit");
             if (trialDurationUnitStr != null) {
                 TrialDurationUnit = (SubscriptionDurationUnit)CollectionUtil.Find(SubscriptionDurationUnit.ALL, trialDurationUnitStr, SubscriptionDurationUnit.UNRECOGNIZED);
             }

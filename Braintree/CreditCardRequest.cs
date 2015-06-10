@@ -30,18 +30,18 @@ namespace Braintree
     /// </example>
     public class CreditCardRequest : BaseCreditCardRequest
     {
-        public String CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public CreditCardAddressRequest BillingAddress { get; set; }
-        public String BillingAddressId { get; set; }
-        public String DeviceData { get; set; }
-        public String DeviceSessionId { get; set; }
-        public String FraudMerchantId { get; set; }
+        public string BillingAddressId { get; set; }
+        public string DeviceData { get; set; }
+        public string DeviceSessionId { get; set; }
+        public string FraudMerchantId { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
-        public String PaymentMethodToken { get; set; }
-        public String PaymentMethodNonce { get; set; }
-        public String VenmoSdkPaymentMethodCode { get; set; }
+        public string PaymentMethodToken { get; set; }
+        public string PaymentMethodNonce { get; set; }
+        public string VenmoSdkPaymentMethodCode { get; set; }
 
-        public override String Kind()
+        public override string Kind()
         {
             if (PaymentMethodToken == null)
             {
@@ -51,14 +51,14 @@ namespace Braintree
             return TransparentRedirectGateway.UPDATE_PAYMENT_METHOD;
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).
                 AddTopLevelElement("payment-method-token", PaymentMethodToken).
                 ToQueryString();
         }
 
-        protected override RequestBuilder BuildRequest(String root)
+        protected override RequestBuilder BuildRequest(string root)
         {
             return base.BuildRequest(root).
                 AddElement("billing-address", BillingAddress).

@@ -8,19 +8,19 @@ namespace Braintree
     public class SubscriptionTransactionRequest : Request
     {
         public Decimal Amount { get; set; }
-        public String SubscriptionId { get; set; }
+        public string SubscriptionId { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("transaction");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             RequestBuilder builder = new RequestBuilder(root);
 

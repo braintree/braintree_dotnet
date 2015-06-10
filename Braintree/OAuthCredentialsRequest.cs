@@ -9,7 +9,7 @@ namespace Braintree
         public string GrantType { get; set; }
         public string RefreshToken { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return new RequestBuilder("credentials")
                 .AddElement("code", Code)

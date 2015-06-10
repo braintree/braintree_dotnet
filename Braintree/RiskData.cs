@@ -5,8 +5,8 @@ namespace Braintree
 {
     public class RiskData
     {
-        public String id { get; protected set; }
-        public String decision { get; protected set; }
+        public string id { get; protected set; }
+        public string decision { get; protected set; }
 
         public RiskData(NodeWrapper node)
         {

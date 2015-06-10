@@ -21,7 +21,7 @@ namespace Braintree
             AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, UNRECOGNIZED
         };
 
-        protected TransactionGatewayRejectionReason(String name) : base(name) {}
+        protected TransactionGatewayRejectionReason(string name) : base(name) {}
     }
 
     public class TransactionEscrowStatus : Enumeration
@@ -37,7 +37,7 @@ namespace Braintree
             HELD, HOLD_PENDING, RELEASE_PENDING, RELEASED, REFUNDED, UNRECOGNIZED
         };
 
-        protected TransactionEscrowStatus(String name) : base(name) {}
+        protected TransactionEscrowStatus(string name) : base(name) {}
     }
 
     public class TransactionStatus : Enumeration
@@ -61,7 +61,7 @@ namespace Braintree
             SETTLED, SETTLEMENT_DECLINED, SETTLEMENT_PENDING, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED, UNRECOGNIZED
         };
 
-        protected TransactionStatus(String name) : base(name) {}
+        protected TransactionStatus(string name) : base(name) {}
     }
 
     public class TransactionIndustryType : Enumeration
@@ -69,7 +69,7 @@ namespace Braintree
         public static readonly TransactionIndustryType LODGING = new TransactionIndustryType("lodging");
         public static readonly TransactionIndustryType TRAVEL_AND_CRUISE = new TransactionIndustryType("travel_cruise");
 
-        protected TransactionIndustryType(String name) : base(name) {}
+        protected TransactionIndustryType(string name) : base(name) {}
     }
 
     public class TransactionSource : Enumeration
@@ -81,7 +81,7 @@ namespace Braintree
 
         public static readonly TransactionSource[] ALL = { API, CONTROL_PANEL, RECURRING, UNRECOGNIZED };
 
-        protected TransactionSource(String name) : base(name) {}
+        protected TransactionSource(string name) : base(name) {}
     }
 
     public class TransactionType : Enumeration
@@ -92,7 +92,7 @@ namespace Braintree
 
         public static readonly TransactionType[] ALL = { CREDIT, SALE, UNRECOGNIZED };
 
-        protected TransactionType(String name) : base(name) {}
+        protected TransactionType(string name) : base(name) {}
     }
 
     public class TransactionCreatedUsing : Enumeration
@@ -103,7 +103,7 @@ namespace Braintree
 
         public static readonly TransactionCreatedUsing[] ALL = { FULL_INFORMATION, TOKEN, UNRECOGNIZED };
 
-        protected TransactionCreatedUsing(String name) : base(name) {}
+        protected TransactionCreatedUsing(string name) : base(name) {}
     }
 
 
@@ -120,7 +120,7 @@ namespace Braintree
 
         public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, ANY, UNKNOWN };
 
-        protected PaymentInstrumentType(String name) : base(name) {}
+        protected PaymentInstrumentType(string name) : base(name) {}
     }
 
     /// <summary>
@@ -135,51 +135,51 @@ namespace Braintree
     /// </example>
     public class Transaction
     {
-        public String Id { get; protected set; }
+        public string Id { get; protected set; }
         public List<AddOn> AddOns { get; protected set; }
         public Decimal? Amount { get; protected set; }
-        public String AvsErrorResponseCode { get; protected set; }
-        public String AvsPostalCodeResponseCode { get; protected set; }
-        public String AvsStreetAddressResponseCode { get; protected set; }
+        public string AvsErrorResponseCode { get; protected set; }
+        public string AvsPostalCodeResponseCode { get; protected set; }
+        public string AvsStreetAddressResponseCode { get; protected set; }
         public Address BillingAddress { get; protected set; }
-        public String Channel { get; protected set; }
+        public string Channel { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public CreditCard CreditCard { get; protected set; }
-        public String CurrencyIsoCode { get; protected set; }
+        public string CurrencyIsoCode { get; protected set; }
         public Customer Customer { get; protected set; }
-        public String CvvResponseCode { get; protected set; }
+        public string CvvResponseCode { get; protected set; }
         public Descriptor Descriptor { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
         public List<Dispute> Disputes { get; protected set; }
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
-        public String MerchantAccountId { get; protected set; }
-        public String OrderId { get; protected set; }
-        public String PlanId { get; protected set; }
-        public String ProcessorAuthorizationCode { get; protected set; }
-        public String ProcessorResponseCode { get; protected set; }
-        public String ProcessorResponseText { get; protected set; }
-        public String ProcessorSettlementResponseCode { get; protected set; }
-        public String ProcessorSettlementResponseText { get; protected set; }
-        public String AdditionalProcessorResponse { get; protected set; }
-        public String VoiceReferralNumber { get; protected set; }
-        public String PurchaseOrderNumber { get; protected set; }
+        public string MerchantAccountId { get; protected set; }
+        public string OrderId { get; protected set; }
+        public string PlanId { get; protected set; }
+        public string ProcessorAuthorizationCode { get; protected set; }
+        public string ProcessorResponseCode { get; protected set; }
+        public string ProcessorResponseText { get; protected set; }
+        public string ProcessorSettlementResponseCode { get; protected set; }
+        public string ProcessorSettlementResponseText { get; protected set; }
+        public string AdditionalProcessorResponse { get; protected set; }
+        public string VoiceReferralNumber { get; protected set; }
+        public string PurchaseOrderNumber { get; protected set; }
         public Boolean? Recurring { get; protected set; }
-        public String RefundedTransactionId { get; protected set; }
+        public string RefundedTransactionId { get; protected set; }
         [Obsolete("Use Transaction.RefundIds")]
-        public String RefundId { get; protected set; }
-        public List<String> RefundIds { get; protected set; }
-        public String SettlementBatchId { get; protected set; }
+        public string RefundId { get; protected set; }
+        public List<string> RefundIds { get; protected set; }
+        public string SettlementBatchId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionEscrowStatus EscrowStatus { get; protected set; }
         public TransactionStatus Status { get; protected set; }
         public StatusEvent[] StatusHistory { get; protected set; }
-        public String SubscriptionId { get; protected set; }
+        public string SubscriptionId { get; protected set; }
         public Subscription Subscription { get; protected set; }
         public Decimal? TaxAmount { get; protected set; }
         public Boolean? TaxExempt { get; protected set; }
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
-        public Dictionary<String, String> CustomFields { get; protected set; }
+        public Dictionary<string, string> CustomFields { get; protected set; }
         public Decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
         public ApplePayDetails ApplePayDetails { get; protected set; }

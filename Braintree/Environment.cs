@@ -13,9 +13,9 @@ namespace Braintree
         public static Environment SANDBOX = new Environment("sandbox");
         public static Environment PRODUCTION = new Environment("production");
 
-        private String environmentName;
+        private string environmentName;
 
-        public String GatewayURL
+        public string GatewayURL
         {
             get
             {
@@ -35,7 +35,7 @@ namespace Braintree
             }
         }
 
-        public String AuthURL
+        public string AuthURL
         {
             get
             {
@@ -55,18 +55,18 @@ namespace Braintree
             }
         }
 
-        private Environment(String name)
+        private Environment(string name)
         {
             environmentName = name;
         }
 
-        private static String DevelopmentUrl()
+        private static string DevelopmentUrl()
         {
             // Access environment variables lazily to avoid issues on servers where access to environment variables is restricted
             var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
             var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
 
-            return String.Format("http://{0}:{1}", host, port);
+            return string.Format("http://{0}:{1}", host, port);
         }
     }
 }

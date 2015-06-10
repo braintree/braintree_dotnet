@@ -24,14 +24,14 @@ namespace Braintree
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Gateway);
         }
 
-        public virtual Result<MerchantAccount> Update(String id, MerchantAccountRequest request)
+        public virtual Result<MerchantAccount> Update(string id, MerchantAccountRequest request)
         {
             XmlNode merchantAccountXML = Service.Put(Service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);
 
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), Gateway);
         }
 
-        public virtual MerchantAccount Find(String id)
+        public virtual MerchantAccount Find(string id)
         {
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();

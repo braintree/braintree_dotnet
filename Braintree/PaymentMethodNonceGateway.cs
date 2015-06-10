@@ -22,7 +22,7 @@ namespace Braintree
             return new ResultImpl<PaymentMethodNonce>(response, Gateway);
         }
 
-        public virtual PaymentMethodNonce Find(String nonce)
+        public virtual PaymentMethodNonce Find(string nonce)
         {
             NodeWrapper response = new NodeWrapper(service.Get(service.MerchantPath() + "/payment_method_nonces/" + nonce));
 

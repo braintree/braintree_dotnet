@@ -23,19 +23,19 @@ namespace Braintree
             Service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual Result<Address> Create(String customerId, AddressRequest request)
+        public virtual Result<Address> Create(string customerId, AddressRequest request)
         {
             XmlNode addressXML = Service.Post(Service.MerchantPath() + "/customers/" + customerId + "/addresses", request);
 
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
 
-        public virtual void Delete(String customerId, String id)
+        public virtual void Delete(string customerId, string id)
         {
             Service.Delete(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
         }
 
-        public virtual Address Find(String customerId, String id)
+        public virtual Address Find(string customerId, string id)
         {
             if(customerId == null || customerId.Trim().Equals("") || id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
@@ -45,7 +45,7 @@ namespace Braintree
             return new Address(new NodeWrapper(addressXML));
         }
 
-        public virtual Result<Address> Update(String customerId, String id, AddressRequest request)
+        public virtual Result<Address> Update(string customerId, string id, AddressRequest request)
         {
             XmlNode addressXML = Service.Put(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id, request);
 

@@ -10,9 +10,9 @@ namespace Braintree
     {
         public class CreditCardNumber
         {
-            public const String VISA = "4111111111111111";
-            public const String MASTER_CARD = "5555555555554444";
-            public const String FRAUD = "4000111111111511";
+            public const string VISA = "4111111111111111";
+            public const string MASTER_CARD = "5555555555554444";
+            public const string FRAUD = "4000111111111511";
         }
 
         public class TransactionAmount
@@ -24,19 +24,19 @@ namespace Braintree
 
         public class Nonce
         {
-            public const String APPLE_PAY_VISA = "fake-apple-pay-visa-nonce";
-            public const String APPLE_PAY_MASTERCARD = "fake-apple-pay-mastercard-nonce";
-            public const String APPLE_PAY_AMEX = "fake-apple-pay-amex-nonce";
+            public const string APPLE_PAY_VISA = "fake-apple-pay-visa-nonce";
+            public const string APPLE_PAY_MASTERCARD = "fake-apple-pay-mastercard-nonce";
+            public const string APPLE_PAY_AMEX = "fake-apple-pay-amex-nonce";
         }
 
         public class VenmoSdk
         {
-            public const String VISA_PAYMENT_METHOD_CODE = "stub-4111111111111111";
-            public const String INVALID_PAYMENT_METHOD_CODE = "stub-invalid-payment-method-code";
-            public const String SESSION = "stub-session";
-            public const String INVALID_SESSION = "stub-invalid-session";
+            public const string VISA_PAYMENT_METHOD_CODE = "stub-4111111111111111";
+            public const string INVALID_PAYMENT_METHOD_CODE = "stub-invalid-payment-method-code";
+            public const string SESSION = "stub-session";
+            public const string INVALID_SESSION = "stub-invalid-session";
 
-            public static String GenerateStubPaymentMethodCode(String creditCardNumber)
+            public static string GenerateStubPaymentMethodCode(string creditCardNumber)
             {
                 return "stub-" + creditCardNumber;
             }

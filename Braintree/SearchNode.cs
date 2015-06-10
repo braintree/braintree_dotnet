@@ -6,10 +6,10 @@ namespace Braintree
 {
     public class SearchNode<T>
     {
-        protected String Name;
+        protected string Name;
         protected T Parent;
 
-        public SearchNode(String name, T parent)
+        public SearchNode(string name, T parent)
         {
             Name = name;
             Parent = parent;

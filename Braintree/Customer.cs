@@ -21,14 +21,14 @@ namespace Braintree
     /// </example>
     public class Customer
     {
-        public String Id { get; protected set; }
-        public String FirstName { get; protected set; }
-        public String LastName { get; protected set; }
-        public String Company { get; protected set; }
-        public String Email { get; protected set; }
-        public String Phone { get; protected set; }
-        public String Fax { get; protected set; }
-        public String Website { get; protected set; }
+        public string Id { get; protected set; }
+        public string FirstName { get; protected set; }
+        public string LastName { get; protected set; }
+        public string Company { get; protected set; }
+        public string Email { get; protected set; }
+        public string Phone { get; protected set; }
+        public string Fax { get; protected set; }
+        public string Website { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public CreditCard[] CreditCards { get; protected set; }
@@ -38,7 +38,7 @@ namespace Braintree
         public CoinbaseAccount[] CoinbaseAccounts { get; protected set; }
         public PaymentMethod[] PaymentMethods { get; protected set; }
         public Address[] Addresses { get; protected set; }
-        public Dictionary<String, String> CustomFields { get; protected set; }
+        public Dictionary<string, string> CustomFields { get; protected set; }
         public PaymentMethod DefaultPaymentMethod
         {
             get

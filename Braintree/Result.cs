@@ -12,8 +12,8 @@ namespace Braintree
         Transaction Transaction { get; }
         Subscription Subscription { get; }
         ValidationErrors Errors { get; }
-        Dictionary<String, String> Parameters { get; }
-        String Message { get; }
+        Dictionary<string, string> Parameters { get; }
+        string Message { get; }
         T Target { get; }
         Boolean IsSuccess();
     }
@@ -24,8 +24,8 @@ namespace Braintree
         public Transaction Transaction { get; protected set; }
         public Subscription Subscription { get; protected set; }
         public ValidationErrors Errors { get; protected set; }
-        public Dictionary<String, String> Parameters { get; protected set; }
-        public String Message { get; protected set; }
+        public Dictionary<string, string> Parameters { get; protected set; }
+        public string Message { get; protected set; }
         public T Target { get; protected set; }
 
         public ResultImpl(NodeWrapper node, BraintreeGateway gateway)

@@ -6,16 +6,16 @@ namespace Braintree
 {
     public class PartialMatchNode<T> : EqualityNode<T> where T : SearchRequest
     {
-        public PartialMatchNode(String name, T parent) : base(name, parent)
+        public PartialMatchNode(string name, T parent) : base(name, parent)
         {
         }
 
-        public T EndsWith(String value) {
+        public T EndsWith(string value) {
             Parent.AddCriteria(Name, new SearchCriteria("ends-with", value));
             return Parent;
         }
 
-        public T StartsWith(String value) {
+        public T StartsWith(string value) {
             Parent.AddCriteria(Name, new SearchCriteria("starts-with", value));
             return Parent;
         }

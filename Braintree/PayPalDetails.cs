@@ -4,20 +4,20 @@ namespace Braintree
 {
     public class PayPalDetails
     {
-        public String PayerEmail { get; protected set; }
-        public String PaymentId { get; protected set; }
-        public String AuthorizationId { get; protected set; }
-        public String Token { get; protected set; }
-        public String ImageUrl { get; protected set; }
-        public String DebugId { get; protected set; }
-        public String PayeeEmail { get; protected set; }
-        public String CustomField { get; protected set; }
-        public String PayerId { get; protected set; }
-        public String PayerFirstName { get; protected set; }
-        public String PayerLastName { get; protected set; }
-        public String SellerProtectionStatus { get; protected set; }
-        public String CaptureId { get; protected set; }
-        public String RefundId { get; protected set; }
+        public string PayerEmail { get; protected set; }
+        public string PaymentId { get; protected set; }
+        public string AuthorizationId { get; protected set; }
+        public string Token { get; protected set; }
+        public string ImageUrl { get; protected set; }
+        public string DebugId { get; protected set; }
+        public string PayeeEmail { get; protected set; }
+        public string CustomField { get; protected set; }
+        public string PayerId { get; protected set; }
+        public string PayerFirstName { get; protected set; }
+        public string PayerLastName { get; protected set; }
+        public string SellerProtectionStatus { get; protected set; }
+        public string CaptureId { get; protected set; }
+        public string RefundId { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {

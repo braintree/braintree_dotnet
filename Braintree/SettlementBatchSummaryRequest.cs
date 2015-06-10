@@ -25,14 +25,14 @@ namespace Braintree
     class SettlementBatchSummaryRequest : Request
     {
         public DateTime SettlementDate { get; set; }
-        public String GroupByCustomField { get; set; }
+        public string GroupByCustomField { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return BuildRequest("settlement-batch-summary").ToXml();
         }
 
-        public virtual RequestBuilder BuildRequest(String root)
+        public virtual RequestBuilder BuildRequest(string root)
         {
             CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");

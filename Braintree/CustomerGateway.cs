@@ -22,7 +22,7 @@ namespace Braintree
             Service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual Customer Find(String Id)
+        public virtual Customer Find(string Id)
         {
             if(Id == null || Id.Trim().Equals(""))
                 throw new NotFoundException();
@@ -44,12 +44,12 @@ namespace Braintree
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), Gateway);
         }
 
-        public virtual void Delete(String Id)
+        public virtual void Delete(string Id)
         {
             Service.Delete(Service.MerchantPath() + "/customers/" + Id);
         }
 
-        public virtual Result<Customer> Update(String Id, CustomerRequest request)
+        public virtual Result<Customer> Update(string Id, CustomerRequest request)
         {
             XmlNode customerXML = Service.Put(Service.MerchantPath() + "/customers/" + Id, request);
 
@@ -57,7 +57,7 @@ namespace Braintree
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
-        public virtual Result<Customer> ConfirmTransparentRedirect(String queryString)
+        public virtual Result<Customer> ConfirmTransparentRedirect(string queryString)
         {
             TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
             XmlNode node = Service.Post(Service.MerchantPath() + "/customers/all/confirm_transparent_redirect_request", trRequest);
@@ -66,13 +66,13 @@ namespace Braintree
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual String TransparentRedirectURLForCreate()
+        public virtual string TransparentRedirectURLForCreate()
         {
             return Service.BaseMerchantURL() + "/customers/all/create_via_transparent_redirect_request";
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual String TransparentRedirectURLForUpdate()
+        public virtual string TransparentRedirectURLForUpdate()
         {
             return Service.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
         }
@@ -82,7 +82,7 @@ namespace Braintree
             NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids"));
             CustomerSearchRequest query = new CustomerSearchRequest();
 
-            return new ResourceCollection<Customer>(response, delegate(String[] ids) {
+            return new ResourceCollection<Customer>(response, delegate(string[] ids) {
                 return FetchCustomers(query, ids);
             });
         }
@@ -91,12 +91,12 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/customers/advanced_search_ids", query));
 
-            return new ResourceCollection<Customer>(response, delegate(String[] ids) {
+            return new ResourceCollection<Customer>(response, delegate(string[] ids) {
                 return FetchCustomers(query, ids);
             });
         }
 
-        private List<Customer> FetchCustomers(CustomerSearchRequest query, String[] ids)
+        private List<Customer> FetchCustomers(CustomerSearchRequest query, string[] ids)
         {
             query.Ids.IncludedIn(ids);
 

@@ -51,8 +51,8 @@ namespace Braintree
     ///
     ///             Transaction transaction = gateway.Transaction.Sale(request).Target;
     ///
-    ///             Console.WriteLine(String.Format("Transaction ID: {0}", transaction.Id));
-    ///             Console.WriteLine(String.Format("Status: {0}", transaction.Status));
+    ///             Console.WriteLine(string.Format("Transaction ID: {0}", transaction.Id));
+    ///             Console.WriteLine(string.Format("Status: {0}", transaction.Status));
     ///         }
     ///     }
     /// }
@@ -66,37 +66,37 @@ namespace Braintree
             set { Configuration.Environment = value; }
         }
 
-        public String MerchantId
+        public string MerchantId
         {
             get { return Configuration.MerchantId; }
             set { Configuration.MerchantId = value; }
         }
 
-        public String PublicKey
+        public string PublicKey
         {
             get { return Configuration.PublicKey; }
             set { Configuration.PublicKey = value; }
         }
 
-        public String PrivateKey
+        public string PrivateKey
         {
             get { return Configuration.PrivateKey; }
             set { Configuration.PrivateKey = value; }
         }
 
-        public String AccessToken
+        public string AccessToken
         {
             get { return Configuration.AccessToken; }
             set { Configuration.AccessToken = value; }
         }
 
-        public String ClientId
+        public string ClientId
         {
             get { return Configuration.ClientId; }
             set { Configuration.ClientId = value; }
         }
 
-        public String ClientSecret
+        public string ClientSecret
         {
             get { return Configuration.ClientSecret; }
             set { Configuration.ClientSecret = value; }
@@ -209,7 +209,7 @@ namespace Braintree
             get { return new TransparentRedirectGateway(this); }
         }
 
-        public virtual String TrData(Request trData, String redirectURL)
+        public virtual string TrData(Request trData, string redirectURL)
         {
             return TrUtil.BuildTrData(trData, redirectURL, new BraintreeService(Configuration));
         }

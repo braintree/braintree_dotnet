@@ -47,7 +47,7 @@ namespace Braintree
             DISPUTE_WON
         };
 
-        protected WebhookKind(String name) : base(name) {}
+        protected WebhookKind(string name) : base(name) {}
     }
 
     public class WebhookNotification
@@ -56,7 +56,7 @@ namespace Braintree
         public Subscription Subscription { get; protected set; }
         public MerchantAccount MerchantAccount { get; protected set; }
         public ValidationErrors Errors { get; protected set; }
-        public String Message { get; protected set; }
+        public string Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public Transaction Transaction { get; protected set; }
         public Disbursement Disbursement { get; protected set; }

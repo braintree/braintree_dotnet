@@ -9,6 +9,6 @@ namespace Braintree
 {
     public interface Hasher
     {
-      String HmacHash(String key, String content);
+      string HmacHash(string key, string content);
     }
 }

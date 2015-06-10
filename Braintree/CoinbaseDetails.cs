@@ -4,10 +4,10 @@ namespace Braintree
 {
     public class CoinbaseDetails
     {
-        public String UserId { get; protected set; }
-        public String UserEmail { get; protected set; }
-        public String UserName { get; protected set; }
-        public String Token { get; protected set; }
+        public string UserId { get; protected set; }
+        public string UserEmail { get; protected set; }
+        public string UserName { get; protected set; }
+        public string Token { get; protected set; }
 
         protected internal CoinbaseDetails(NodeWrapper node)
         {

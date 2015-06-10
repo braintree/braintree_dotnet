@@ -28,40 +28,40 @@ namespace Braintree
     /// </example>
     public class AddressRequest : Request
     {
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
-        public String Company { get; set; }
-        public String StreetAddress { get; set; }
-        public String ExtendedAddress { get; set; }
-        public String Locality { get; set; }
-        public String Region { get; set; }
-        public String PostalCode { get; set; }
-        public String CountryCodeAlpha2 { get; set; }
-        public String CountryCodeAlpha3 { get; set; }
-        public String CountryCodeNumeric { get; set; }
-        public String CountryName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Company { get; set; }
+        public string StreetAddress { get; set; }
+        public string ExtendedAddress { get; set; }
+        public string Locality { get; set; }
+        public string Region { get; set; }
+        public string PostalCode { get; set; }
+        public string CountryCodeAlpha2 { get; set; }
+        public string CountryCodeAlpha3 { get; set; }
+        public string CountryCodeNumeric { get; set; }
+        public string CountryName { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("address");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString()
+        public override string ToQueryString()
         {
             return ToQueryString("address");
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("first-name", FirstName).

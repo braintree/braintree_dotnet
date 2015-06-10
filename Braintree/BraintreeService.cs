@@ -12,7 +12,7 @@ namespace Braintree
 {
     public class BraintreeService
     {
-        public String ApiVersion = "4";
+        public string ApiVersion = "4";
 
         protected Configuration Configuration;
 
@@ -21,27 +21,27 @@ namespace Braintree
             get { return Configuration.Environment; }
         }
 
-        public String MerchantId
+        public string MerchantId
         {
             get { return Configuration.MerchantId; }
         }
 
-        public String PublicKey
+        public string PublicKey
         {
             get { return Configuration.PublicKey; }
         }
 
-        public String PrivateKey
+        public string PrivateKey
         {
             get { return Configuration.PrivateKey; }
         }
 
-        public String ClientId
+        public string ClientId
         {
             get { return Configuration.ClientId; }
         }
 
-        public String ClientSecret
+        public string ClientSecret
         {
             get { return Configuration.ClientSecret; }
         }
@@ -71,17 +71,17 @@ namespace Braintree
             return GetXmlResponse(URL, "POST", null);
         }
 
-        public XmlNode Put(String URL)
+        public XmlNode Put(string URL)
         {
             return Put(URL, null);
         }
 
-        internal XmlNode Put(String URL, Request requestBody)
+        internal XmlNode Put(string URL, Request requestBody)
         {
             return GetXmlResponse(URL, "PUT", requestBody);
         }
 
-        private XmlNode GetXmlResponse(String URL, String method, Request requestBody)
+        private XmlNode GetXmlResponse(string URL, string method, Request requestBody)
         {
             try
             {
@@ -163,19 +163,19 @@ namespace Braintree
             }
         }
 
-        public String BaseMerchantURL()
+        public string BaseMerchantURL()
         {
             return Environment.GatewayURL + MerchantPath();
         }
 
-        public String MerchantPath()
+        public string MerchantPath()
         {
             return "/merchants/" + MerchantId;
         }
 
-        public String GetAuthorizationHeader()
+        public string GetAuthorizationHeader()
         {
-            String credentials;
+            string credentials;
             if (Configuration.IsAccessToken)
             {
                 return "Bearer " + Configuration.AccessToken;
@@ -192,7 +192,7 @@ namespace Braintree
             }
         }
 
-        public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
+        public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, string message)
         {
             if (httpStatusCode != HttpStatusCode.OK && httpStatusCode != HttpStatusCode.Created)
             {

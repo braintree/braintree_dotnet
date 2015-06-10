@@ -9,7 +9,7 @@ namespace Braintree
 {
     public class RequestBuilder
     {
-        private String Parent;
+        private string Parent;
         private Dictionary<string, string> TopLevelElements;
         private Dictionary<string, object> Elements;
 
@@ -17,14 +17,14 @@ namespace Braintree
         {
         }
 
-        public RequestBuilder(String parent)
+        public RequestBuilder(string parent)
         {
             Parent = parent;
             TopLevelElements = new Dictionary<string, string>();
             Elements = new Dictionary<string, object>();
         }
 
-        public RequestBuilder AddElement(String name, object value)
+        public RequestBuilder AddElement(string name, object value)
         {
             Elements.Add(name, value);
             return this;
@@ -36,21 +36,21 @@ namespace Braintree
             return this;
         }
 
-        public String ToXml()
+        public string ToXml()
         {
             var builder = new StringBuilder();
 
-            builder.Append(String.Format("<{0}>", Parent));
+            builder.Append(string.Format("<{0}>", Parent));
             foreach (KeyValuePair<string, object> pair in Elements)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
-            builder.Append(String.Format("</{0}>", Parent));
+            builder.Append(string.Format("</{0}>", Parent));
 
             return builder.ToString();
         }
 
-        public String ToQueryString()
+        public string ToQueryString()
         {
             string underscoredParent = Parent.Replace("-", "_");
 
@@ -87,7 +87,7 @@ namespace Braintree
             }
             if (value is Array)
             {
-                String xml = "";
+                string xml = "";
                 foreach (Object item in (Array)value)
                 {
                     xml += BuildXMLElement("item", item);
@@ -108,17 +108,17 @@ namespace Braintree
 
         private static string FormatAsArrayXML(string name, string value)
         {
-            return String.Format("<{0} type=\"array\">{1}</{0}>", SecurityElement.Escape(name), value);
+            return string.Format("<{0} type=\"array\">{1}</{0}>", SecurityElement.Escape(name), value);
         }
 
         private static string FormatAsXml(string name, string value)
         {
-            return String.Format("<{0}>{1}</{0}>", SecurityElement.Escape(name), SecurityElement.Escape(value));
+            return string.Format("<{0}>{1}</{0}>", SecurityElement.Escape(name), SecurityElement.Escape(value));
         }
 
         private static string FormatAsXml(string name, DateTime value)
         {
-            return String.Format("<{0} type=\"datetime\">{1:u}</{0}>", SecurityElement.Escape(name), value.ToUniversalTime());
+            return string.Format("<{0} type=\"datetime\">{1:u}</{0}>", SecurityElement.Escape(name), value.ToUniversalTime());
         }
 
         private static string FormatAsXml(string root, Dictionary<string, string> elements)
@@ -126,21 +126,21 @@ namespace Braintree
             if (elements == null) return "";
 
             var builder = new StringBuilder();
-            builder.Append(String.Format("<{0}>", root));
+            builder.Append(string.Format("<{0}>", root));
 
             foreach (KeyValuePair<string, string> element in elements)
             {
                 builder.Append(BuildXMLElement(element.Key, element.Value));
             }
 
-            builder.Append(String.Format("</{0}>", root));
+            builder.Append(string.Format("</{0}>", root));
 
             return builder.ToString();
         }
 
         internal static string ParentBracketChildString(string parent, string child)
         {
-            return String.Format("{0}[{1}]", parent, child);
+            return string.Format("{0}[{1}]", parent, child);
         }
     }
 }

@@ -14,22 +14,22 @@ namespace Braintree
         public Boolean? AddBillingAddressToPaymentMethod { get; set; }
         public Boolean? StoreShippingAddressInVault { get; set; }
         public Boolean? SubmitForSettlement { get; set; }
-        public String VenmoSdkSession { get; set; }
-        public String PayeeEmail { get; set; }
+        public string VenmoSdkSession { get; set; }
+        public string PayeeEmail { get; set; }
         public TransactionOptionsPayPalRequest PayPal { get; set; }
         public TransactionOptionsThreeDSecureRequest ThreeDSecure { get; set; }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("hold-in-escrow", HoldInEscrow).

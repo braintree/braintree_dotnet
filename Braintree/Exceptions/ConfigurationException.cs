@@ -6,6 +6,6 @@ namespace Braintree.Exceptions
 {
     public class ConfigurationException : BraintreeException
     {
-        public ConfigurationException(String message) : base(message) {}
+        public ConfigurationException(string message) : base(message) {}
     }
 }

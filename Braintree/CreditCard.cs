@@ -16,7 +16,7 @@ namespace Braintree
 
         public static readonly CreditCardCustomerLocation[] ALL = {US, INTERNATIONAL};
 
-        protected CreditCardCustomerLocation(String name) : base(name) {}
+        protected CreditCardCustomerLocation(string name) : base(name) {}
     }
 
     public class CreditCardPrepaid : Enumeration
@@ -27,7 +27,7 @@ namespace Braintree
 
         public static readonly CreditCardPrepaid[] ALL = {YES, NO, UNKNOWN};
 
-        protected CreditCardPrepaid(String name) : base(name) {}
+        protected CreditCardPrepaid(string name) : base(name) {}
     }
 
     public class CreditCardPayroll : Enumeration
@@ -38,7 +38,7 @@ namespace Braintree
 
         public static readonly CreditCardPayroll[] ALL = {YES, NO, UNKNOWN};
 
-        protected CreditCardPayroll(String name) : base(name) {}
+        protected CreditCardPayroll(string name) : base(name) {}
     }
 
     public class CreditCardDebit : Enumeration
@@ -49,7 +49,7 @@ namespace Braintree
 
         public static readonly CreditCardDebit[] ALL = {YES, NO, UNKNOWN};
 
-        protected CreditCardDebit(String name) : base(name) {}
+        protected CreditCardDebit(string name) : base(name) {}
     }
 
     public class CreditCardCommercial : Enumeration
@@ -60,7 +60,7 @@ namespace Braintree
 
         public static readonly CreditCardCommercial[] ALL = {YES, NO, UNKNOWN};
 
-        protected CreditCardCommercial(String name) : base(name) {}
+        protected CreditCardCommercial(string name) : base(name) {}
     }
 
     public class CreditCardHealthcare : Enumeration
@@ -71,7 +71,7 @@ namespace Braintree
 
         public static readonly CreditCardHealthcare[] ALL = {YES, NO, UNKNOWN};
 
-        protected CreditCardHealthcare(String name) : base(name) {}
+        protected CreditCardHealthcare(string name) : base(name) {}
     }
 
     public class CreditCardDurbinRegulated : Enumeration
@@ -82,7 +82,7 @@ namespace Braintree
 
         public static readonly CreditCardDurbinRegulated[] ALL = {YES, NO, UNKNOWN};
 
-        protected CreditCardDurbinRegulated(String name) : base(name) {}
+        protected CreditCardDurbinRegulated(string name) : base(name) {}
     }
 
     public class CreditCardCardType : Enumeration
@@ -107,7 +107,7 @@ namespace Braintree
             JCB, LASER, MAESTRO, MASTER_CARD, SOLO, SWITCH, VISA, UNKNOWN
         };
 
-        protected CreditCardCardType(String name) : base(name) {}
+        protected CreditCardCardType(string name) : base(name) {}
     }
 
     /// <summary>
@@ -130,38 +130,38 @@ namespace Braintree
     /// </example>
     public class CreditCard : PaymentMethod
     {
-        public static readonly String CountryOfIssuanceUnknown = "Unknown";
-        public static readonly String IssuingBankUnknown = "Unknown";
+        public static readonly string CountryOfIssuanceUnknown = "Unknown";
+        public static readonly string IssuingBankUnknown = "Unknown";
 
-        public String Bin { get; protected set; }
-        public String CardholderName { get; protected set; }
+        public string Bin { get; protected set; }
+        public string CardholderName { get; protected set; }
         public CreditCardCardType CardType { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
-        public String CustomerId { get; protected set; }
+        public string CustomerId { get; protected set; }
         public Boolean? IsDefault { get; protected set; }
         public Boolean? IsVenmoSdk { get; protected set; }
         public Boolean? IsExpired { get; protected set; }
         public CreditCardCustomerLocation CustomerLocation { get; protected set; }
-        public String LastFour { get; protected set; }
-        public String UniqueNumberIdentifier { get; protected set; }
+        public string LastFour { get; protected set; }
+        public string UniqueNumberIdentifier { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
-        public String Token { get; protected set; }
+        public string Token { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Address BillingAddress { get; protected set; }
-        public String ExpirationMonth { get; protected set; }
-        public String ExpirationYear { get; protected set; }
+        public string ExpirationMonth { get; protected set; }
+        public string ExpirationYear { get; protected set; }
         public CreditCardPrepaid Prepaid { get; protected set; }
         public CreditCardPayroll Payroll { get; protected set; }
         public CreditCardDebit Debit { get; protected set; }
         public CreditCardCommercial Commercial { get; protected set; }
         public CreditCardHealthcare Healthcare { get; protected set; }
         public CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
-        public String ImageUrl { get; protected set; }
+        public string ImageUrl { get; protected set; }
         public CreditCardVerification Verification { get; protected set; }
 
-        private String _CountryOfIssuance;
+        private string _CountryOfIssuance;
 
-        public String CountryOfIssuance
+        public string CountryOfIssuance
         {
             get
             {
@@ -176,9 +176,9 @@ namespace Braintree
             }
         }
 
-        private String _IssuingBank;
+        private string _IssuingBank;
 
-        public String IssuingBank
+        public string IssuingBank
         {
             get
             {
@@ -193,7 +193,7 @@ namespace Braintree
             }
         }
 
-        public String ExpirationDate
+        public string ExpirationDate
         {
             get
             {
@@ -206,11 +206,11 @@ namespace Braintree
             }
         }
 
-        public String MaskedNumber
+        public string MaskedNumber
         {
             get
             {
-                return String.Format("{0}******{1}", Bin, LastFour);
+                return string.Format("{0}******{1}", Bin, LastFour);
             }
         }
 

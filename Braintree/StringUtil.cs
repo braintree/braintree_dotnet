@@ -7,7 +7,7 @@ namespace Braintree
 {
     public class StringUtil
     {
-        public static String Dasherize(String str)
+        public static string Dasherize(string str)
         {
             if (str == null) return null;
 
@@ -18,7 +18,7 @@ namespace Braintree
                 ToLower();
         }
 
-        public static String Underscore(String str)
+        public static string Underscore(string str)
         {
             if (str == null) return null;
 

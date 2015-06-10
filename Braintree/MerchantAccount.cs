@@ -11,7 +11,7 @@ namespace Braintree
 
         public static readonly FundingDestination[] ALL = { BANK, MOBILE_PHONE, EMAIL, UNRECOGNIZED };
 
-        protected FundingDestination(String name) : base(name) {}
+        protected FundingDestination(string name) : base(name) {}
     }
 
     public class MerchantAccountStatus : Enumeration
@@ -22,12 +22,12 @@ namespace Braintree
 
         public static readonly MerchantAccountStatus[] ALL = { PENDING, ACTIVE, SUSPENDED };
 
-        protected MerchantAccountStatus(String name) : base(name) {}
+        protected MerchantAccountStatus(string name) : base(name) {}
     }
 
     public class MerchantAccount
     {
-      public String Id { get; protected set; }
+      public string Id { get; protected set; }
       public MerchantAccountStatus Status { get; protected set; }
       public MerchantAccount MasterMerchantAccount { get; protected set; }
       public MerchantAccountIndividualDetails IndividualDetails { get; protected set; }

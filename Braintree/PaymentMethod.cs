@@ -4,8 +4,8 @@ namespace Braintree
 {
     public interface PaymentMethod
     {
-        String Token { get; }
+        string Token { get; }
         Boolean? IsDefault { get; }
-        String ImageUrl { get; }
+        string ImageUrl { get; }
     }
 }

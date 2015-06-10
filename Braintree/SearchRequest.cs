@@ -8,25 +8,25 @@ namespace Braintree
 {
     public abstract class SearchRequest : Request
     {
-        private Dictionary<String, SearchCriteria> Criteria;
-        private Dictionary<String, SearchCriteria> MultipleValueCriteria;
-        private Dictionary<String, List<SearchCriteria>> RangeCriteria;
-        private Dictionary<String, String> KeyValueCriteria;
+        private Dictionary<string, SearchCriteria> Criteria;
+        private Dictionary<string, SearchCriteria> MultipleValueCriteria;
+        private Dictionary<string, List<SearchCriteria>> RangeCriteria;
+        private Dictionary<string, string> KeyValueCriteria;
 
         protected SearchRequest()
         {
-            Criteria = new Dictionary<String, SearchCriteria>();
-            MultipleValueCriteria = new Dictionary<String, SearchCriteria>();
-            RangeCriteria = new Dictionary<String, List<SearchCriteria>>();
-            KeyValueCriteria = new Dictionary<String, String>();
+            Criteria = new Dictionary<string, SearchCriteria>();
+            MultipleValueCriteria = new Dictionary<string, SearchCriteria>();
+            RangeCriteria = new Dictionary<string, List<SearchCriteria>>();
+            KeyValueCriteria = new Dictionary<string, string>();
         }
 
-        internal virtual void AddCriteria(String name, SearchCriteria criteria)
+        internal virtual void AddCriteria(string name, SearchCriteria criteria)
         {
             Criteria.Add(name, criteria);
         }
 
-        internal virtual void AddRangeCriteria(String name, SearchCriteria criteria)
+        internal virtual void AddRangeCriteria(string name, SearchCriteria criteria)
         {
             if (!RangeCriteria.ContainsKey(name))
             {
@@ -35,7 +35,7 @@ namespace Braintree
             RangeCriteria[name].Add(criteria);
         }
 
-        internal virtual void AddMultipleValueCriteria(String name, SearchCriteria criteria)
+        internal virtual void AddMultipleValueCriteria(string name, SearchCriteria criteria)
         {
             if (MultipleValueCriteria.ContainsKey(name))
             {
@@ -44,20 +44,20 @@ namespace Braintree
             MultipleValueCriteria.Add(name, criteria);
         }
 
-        internal virtual void AddCriteria(String name, String value)
+        internal virtual void AddCriteria(string name, string value)
         {
             KeyValueCriteria.Add(name, value);
         }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             var builder = new StringBuilder();
             builder.Append("<search>");
-            foreach (KeyValuePair<String, SearchCriteria> pair in Criteria)
+            foreach (KeyValuePair<string, SearchCriteria> pair in Criteria)
             {
                 builder.AppendFormat("<{0}>{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
-            foreach (KeyValuePair<String, List<SearchCriteria>> pair in RangeCriteria)
+            foreach (KeyValuePair<string, List<SearchCriteria>> pair in RangeCriteria)
             {
                 builder.AppendFormat("<{0}>", pair.Key);
                 foreach (SearchCriteria criteria in pair.Value)
@@ -66,11 +66,11 @@ namespace Braintree
                 }
                 builder.AppendFormat("</{0}>", pair.Key);
             }
-            foreach (KeyValuePair<String, SearchCriteria> pair in MultipleValueCriteria)
+            foreach (KeyValuePair<string, SearchCriteria> pair in MultipleValueCriteria)
             {
                 builder.AppendFormat("<{0} type=\"array\">{1}</{0}>", pair.Key, pair.Value.ToXml());
             }
-            foreach (KeyValuePair<String, String> pair in KeyValueCriteria)
+            foreach (KeyValuePair<string, string> pair in KeyValueCriteria)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }

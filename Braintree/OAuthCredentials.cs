@@ -15,17 +15,17 @@ namespace Braintree
             ExpiresAt = node.GetDateTime("expires-at");
         }
 
-        public String AccessToken
+        public string AccessToken
         {
             get; set;
         }
 
-        public String RefreshToken
+        public string RefreshToken
         {
             get; set;
         }
 
-        public String TokenType
+        public string TokenType
         {
             get; set;
         }

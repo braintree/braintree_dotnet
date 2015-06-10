@@ -6,33 +6,33 @@ namespace Braintree
 {
     public class IndustryDataRequest : Request
     {
-        public String FolioNumber { get; set; }
-        public String CheckInDate { get; set; }
-        public String CheckOutDate { get; set; }
-        public String RoomRate { get; set; }
+        public string FolioNumber { get; set; }
+        public string CheckInDate { get; set; }
+        public string CheckOutDate { get; set; }
+        public string RoomRate { get; set; }
 
-        public String TravelPackage { get; set; }
-        public String DepartureDate { get; set; }
-        public String LodgingCheckInDate { get; set; }
-        public String LodgingCheckOutDate { get; set; }
-        public String LodgingName { get; set; }
+        public string TravelPackage { get; set; }
+        public string DepartureDate { get; set; }
+        public string LodgingCheckInDate { get; set; }
+        public string LodgingCheckOutDate { get; set; }
+        public string LodgingName { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("data");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("folio-number", FolioNumber).

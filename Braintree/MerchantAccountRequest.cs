@@ -4,35 +4,35 @@ namespace Braintree
 {
   public class MerchantAccountRequest : Request
   {
-    public String Id { get; set; }
+    public string Id { get; set; }
     public ApplicantDetailsRequest ApplicantDetails { get; set; }
     public BusinessRequest Business { get; set; }
     public FundingRequest Funding { get; set; }
     public IndividualRequest Individual { get; set; }
     public Boolean? TosAccepted { get; set; }
-    public String MasterMerchantAccountId { get; set; }
+    public string MasterMerchantAccountId { get; set; }
 
-    public override String ToXml()
+    public override string ToXml()
     {
       return ToXml("merchant-account");
     }
 
-    public override String ToXml(String root)
+    public override string ToXml(string root)
     {
       return BuildRequest(root).ToXml();
     }
 
-    public override String ToQueryString()
+    public override string ToQueryString()
     {
       return ToQueryString("merchant-account");
     }
 
-    public override String ToQueryString(String root)
+    public override string ToQueryString(string root)
     {
       return BuildRequest(root).ToQueryString();
     }
 
-    protected virtual RequestBuilder BuildRequest(String root)
+    protected virtual RequestBuilder BuildRequest(string root)
     {
       RequestBuilder builder = new RequestBuilder(root);
 

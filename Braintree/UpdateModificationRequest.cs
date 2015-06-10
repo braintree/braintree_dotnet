@@ -6,9 +6,9 @@ namespace Braintree
 {
     public class UpdateModificationRequest : ModificationRequest
     {
-        public String ExistingId { get; set; }
+        public string ExistingId { get; set; }
 
-        protected override RequestBuilder BuildRequest(String root)
+        protected override RequestBuilder BuildRequest(string root)
         {
             return base.BuildRequest(root).
                 AddElement("existing-id", ExistingId);

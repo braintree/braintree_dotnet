@@ -10,17 +10,17 @@ namespace Braintree
     {
         public Boolean? MakeDefault { get; set; }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             RequestBuilder builder = new RequestBuilder(root);
             builder.AddElement("make-default", MakeDefault);

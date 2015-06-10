@@ -4,11 +4,11 @@ namespace Braintree
     {
         public class MerchantAccount
         {
-            public const String Approve = "approve_me";
-            public const String InsufficientFundsContactUs = "insufficient_funds__contact";
-            public const String AccountNotAuthorizedContactUs = "account_not_authorized__contact";
-            public const String BankRejectedUpdateFundingInformation = "bank_rejected__update";
-            public const String BankRejectedNone = "bank_rejected__none";
+            public const string Approve = "approve_me";
+            public const string InsufficientFundsContactUs = "insufficient_funds__contact";
+            public const string AccountNotAuthorizedContactUs = "account_not_authorized__contact";
+            public const string BankRejectedUpdateFundingInformation = "bank_rejected__update";
+            public const string BankRejectedNone = "bank_rejected__none";
 
         }
     }

@@ -7,7 +7,7 @@ namespace Braintree
 
     public class KeyValueNode<T> : SearchNode<T> where T : SearchRequest
     {
-        public KeyValueNode(String name, T parent) : base(name, parent)
+        public KeyValueNode(string name, T parent) : base(name, parent)
         {
         }
 

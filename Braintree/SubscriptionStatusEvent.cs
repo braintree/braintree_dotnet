@@ -11,7 +11,7 @@ namespace Braintree
         public SubscriptionStatus Status { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public SubscriptionSource Source { get; protected set; }
-        public String User { get; protected set; }
+        public string User { get; protected set; }
 
         public SubscriptionStatusEvent(NodeWrapper node)
         {

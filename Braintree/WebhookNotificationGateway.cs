@@ -37,7 +37,7 @@ namespace Braintree
                 throw new InvalidChallengeException ("challenge contains non-hex characters");
             }
             string digest = new Sha1Hasher().HmacHash(Service.PrivateKey, challenge);
-            return String.Format("{0}|{1}", Service.PublicKey, digest.ToLower());
+            return string.Format("{0}|{1}", Service.PublicKey, digest.ToLower());
         }
 
         private bool PayloadMatches(string signature, string payload)
@@ -63,7 +63,7 @@ namespace Braintree
             {
                 if (signaturePair.IndexOf('|') >= 0)
                 {
-                    String[] candidatePair = signaturePair.Split('|');
+                    string[] candidatePair = signaturePair.Split('|');
                     if (Service.PublicKey.Equals(candidatePair[0]))
                     {
                         matchingSignature = candidatePair[1];

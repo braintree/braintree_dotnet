@@ -8,22 +8,22 @@ namespace Braintree
 {
     public abstract class Request
     {
-        public virtual String ToXml()
+        public virtual string ToXml()
         {
             throw new NotImplementedException();
         }
 
-        public virtual String ToXml(String rootElement)
+        public virtual string ToXml(string rootElement)
         {
             throw new NotImplementedException();
         }
 
-        public virtual String ToQueryString()
+        public virtual string ToQueryString()
         {
             throw new NotImplementedException();
         }
 
-        public virtual String ToQueryString(String root)
+        public virtual string ToQueryString(string root)
         {
             throw new NotImplementedException();
         }
@@ -33,12 +33,12 @@ namespace Braintree
             return RequestBuilder.BuildXMLElement(name, value);
         }
 
-        public virtual String Kind()
+        public virtual string Kind()
         {
             return null;
         }
 
-        protected virtual String ParentBracketChildString(String parent, String child)
+        protected virtual string ParentBracketChildString(string parent, string child)
         {
             return RequestBuilder.ParentBracketChildString(parent, child);
         }

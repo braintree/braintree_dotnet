@@ -32,7 +32,7 @@ namespace Braintree
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
 
-        public virtual Subscription Find(String id)
+        public virtual Subscription Find(string id)
         {
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
@@ -42,14 +42,14 @@ namespace Braintree
             return new Subscription(new NodeWrapper(subscriptionXML), Gateway);
         }
 
-        public virtual Result<Subscription> Update(String id, SubscriptionRequest request)
+        public virtual Result<Subscription> Update(string id, SubscriptionRequest request)
         {
             XmlNode subscriptionXML = Service.Put(Service.MerchantPath() + "/subscriptions/" + id, request);
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), Gateway);
         }
 
-        public virtual Result<Subscription> Cancel(String id)
+        public virtual Result<Subscription> Cancel(string id)
         {
             XmlNode subscriptionXML = Service.Put(Service.MerchantPath() + "/subscriptions/" + id + "/cancel");
 
@@ -74,12 +74,12 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
 
-            return new ResourceCollection<Subscription>(response, delegate(String[] ids) {
+            return new ResourceCollection<Subscription>(response, delegate(string[] ids) {
                 return FetchSubscriptions(query, ids);
             });
         }
 
-        private List<Subscription> FetchSubscriptions(SubscriptionSearchRequest query, String[] ids)
+        private List<Subscription> FetchSubscriptions(SubscriptionSearchRequest query, string[] ids)
         {
             query.Ids.IncludedIn(ids);
 
@@ -105,14 +105,14 @@ namespace Braintree
            return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
        }
 
-       public Result<Transaction> RetryCharge(String subscriptionId) {
+       public Result<Transaction> RetryCharge(string subscriptionId) {
           return RetryCharge(new SubscriptionTransactionRequest
             {
                 SubscriptionId = subscriptionId
             });
        }
 
-       public Result<Transaction> RetryCharge(String subscriptionId, Decimal amount) {
+       public Result<Transaction> RetryCharge(string subscriptionId, Decimal amount) {
            return RetryCharge(new SubscriptionTransactionRequest
            {
                SubscriptionId = subscriptionId,

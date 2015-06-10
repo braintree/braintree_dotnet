@@ -6,35 +6,35 @@ namespace Braintree
 {
     public abstract class BaseCreditCardRequest : Request
     {
-        public String CardholderName { get; set; }
-        public String CVV { get; set; }
-        public String ExpirationMonth { get; set; }
-        public String ExpirationYear { get; set; }
-        public String ExpirationDate { get; set; }
-        public String Number { get; set; }
-        public String Token { get; set; }
+        public string CardholderName { get; set; }
+        public string CVV { get; set; }
+        public string ExpirationMonth { get; set; }
+        public string ExpirationYear { get; set; }
+        public string ExpirationDate { get; set; }
+        public string Number { get; set; }
+        public string Token { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("credit-card");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString()
+        public override string ToQueryString()
         {
             return ToQueryString("credit-card");
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("cardholder-name", CardholderName).

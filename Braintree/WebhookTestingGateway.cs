@@ -27,16 +27,16 @@ namespace Braintree
         private string BuildPayload(WebhookKind kind, string id)
         {
             string currentTime = DateTime.Now.ToUniversalTime().ToString("u");
-            string payload = String.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind><subject>{2}</subject></notification>", currentTime, kind, SubjectSampleXml(kind, id));
+            string payload = string.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind><subject>{2}</subject></notification>", currentTime, kind, SubjectSampleXml(kind, id));
             return Convert.ToBase64String(Encoding.Default.GetBytes(payload)) + '\n';
         }
 
         private string BuildSignature(string payload)
         {
-            return String.Format("{0}|{1}", Service.PublicKey, new Sha1Hasher().HmacHash(Service.PrivateKey, payload).Trim().ToLower());
+            return string.Format("{0}|{1}", Service.PublicKey, new Sha1Hasher().HmacHash(Service.PrivateKey, payload).Trim().ToLower());
         }
 
-        private String SubjectSampleXml(WebhookKind kind, String id)
+        private string SubjectSampleXml(WebhookKind kind, string id)
         {
             if (kind == WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED) {
                 return MerchantAccountApprovedSampleXml(id);
@@ -71,7 +71,7 @@ namespace Braintree
         private static readonly string NIL_TRUE = "nil=\"true\"";
         private static readonly string TYPE_BOOLEAN = "type=\"boolean\"";
 
-        private String MerchantAccountDeclinedSampleXml(String id)
+        private string MerchantAccountDeclinedSampleXml(string id)
         {
             return node("api-error-response",
                 node("message", "Applicant declined due to OFAC."),
@@ -97,7 +97,7 @@ namespace Braintree
             );
         }
 
-        private String TransactionDisbursedSampleXml(String id)
+        private string TransactionDisbursedSampleXml(string id)
         {
             return node("transaction",
                     node("id", id),
@@ -114,7 +114,7 @@ namespace Braintree
             );
         }
 
-        private String DisbursementExceptionSampleXml(String id)
+        private string DisbursementExceptionSampleXml(string id)
         {
             return node("disbursement",
                     node("id", id),
@@ -139,7 +139,7 @@ namespace Braintree
             );
         }
 
-        private String DisbursementSampleXml(String id)
+        private string DisbursementSampleXml(string id)
         {
             return node("disbursement",
                     node("id", id),
@@ -164,7 +164,7 @@ namespace Braintree
             );
         }
 
-        private String DisputeOpenedSampleXml(String id) {
+        private string DisputeOpenedSampleXml(string id) {
             return node("dispute",
                     node("id", id),
                     node("amount", "250.00"),
@@ -180,7 +180,7 @@ namespace Braintree
             );
         }
 
-        private String DisputeLostSampleXml(String id) {
+        private string DisputeLostSampleXml(string id) {
             return node("dispute",
                     node("id", id),
                     node("amount", "250.00"),
@@ -196,7 +196,7 @@ namespace Braintree
             );
         }
 
-        private String DisputeWonSampleXml(String id) {
+        private string DisputeWonSampleXml(string id) {
             return node("dispute",
                     node("id", id),
                     node("amount", "250.00"),
@@ -212,7 +212,7 @@ namespace Braintree
             );
         }
 
-        private String SubscriptionXml(String id)
+        private string SubscriptionXml(string id)
         {
             return node("subscription",
                     node("id", id),
@@ -222,7 +222,7 @@ namespace Braintree
             );
         }
 
-        private String MerchantAccountApprovedSampleXml(String id)
+        private string MerchantAccountApprovedSampleXml(string id)
         {
             return node("merchant-account",
                     node("id", id),
@@ -234,7 +234,7 @@ namespace Braintree
             );
         }
 
-        private String PartnerMerchantConnectedSampleXml(String id) {
+        private string PartnerMerchantConnectedSampleXml(string id) {
             return node("partner-merchant",
                     node("partner-merchant-id", "abc123"),
                     node("merchant-public-id", "public_id"),
@@ -244,13 +244,13 @@ namespace Braintree
             );
         }
 
-        private String PartnerMerchantDisconnectedSampleXml(String id) {
+        private string PartnerMerchantDisconnectedSampleXml(string id) {
             return node("partner-merchant",
                     node("partner-merchant-id", "abc123")
             );
         }
 
-        private String PartnerMerchantDeclinedSampleXml(String id) {
+        private string PartnerMerchantDeclinedSampleXml(string id) {
             return node("partner-merchant",
                     node("partner-merchant-id", "abc123")
             );

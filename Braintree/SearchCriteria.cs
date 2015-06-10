@@ -7,14 +7,14 @@ namespace Braintree
 {
     public class SearchCriteria : Request
     {
-        private String Xml;
+        private string Xml;
 
-        public SearchCriteria(String type, String value)
+        public SearchCriteria(string type, string value)
         {
             Xml = BuildXMLElement(type, DefaultToEmptyString(value));
         }
 
-        public SearchCriteria(String type, DateTime value)
+        public SearchCriteria(string type, DateTime value)
         {
             Xml = BuildXMLElement(type, value);
         }
@@ -28,27 +28,27 @@ namespace Braintree
             Xml = builder.ToString();
         }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return Xml;
         }
 
-        public override String ToXml(String rootElement)
+        public override string ToXml(string rootElement)
         {
             throw new NotImplementedException();
         }
 
-        public override String ToQueryString()
+        public override string ToQueryString()
         {
             throw new NotImplementedException();
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             throw new NotImplementedException();
         }
 
-        private String DefaultToEmptyString(String value)
+        private string DefaultToEmptyString(string value)
         {
             if (value == null) {
                 return "";

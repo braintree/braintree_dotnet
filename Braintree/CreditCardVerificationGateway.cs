@@ -22,7 +22,7 @@ namespace Braintree
             Service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual CreditCardVerification Find(String Id)
+        public virtual CreditCardVerification Find(string Id)
         {
             if(Id == null || Id.Trim().Equals(""))
                 throw new NotFoundException();
@@ -36,12 +36,12 @@ namespace Braintree
         {
             NodeWrapper response = new NodeWrapper(Service.Post(Service.MerchantPath() + "/verifications/advanced_search_ids", query));
 
-            return new ResourceCollection<CreditCardVerification>(response, delegate(String[] ids) {
+            return new ResourceCollection<CreditCardVerification>(response, delegate(string[] ids) {
                 return FetchCreditCardVerifications(query, ids);
             });
         }
 
-        private List<CreditCardVerification> FetchCreditCardVerifications(CreditCardVerificationSearchRequest query, String[] ids)
+        private List<CreditCardVerification> FetchCreditCardVerifications(CreditCardVerificationSearchRequest query, string[] ids)
         {
             query.Ids.IncludedIn(ids);
 

@@ -71,12 +71,12 @@ namespace Braintree
             }
         }
 
-        public void Delete(String token)
+        public void Delete(string token)
         {
             service.Delete(service.MerchantPath() + "/payment_methods/any/" + token);
         }
 
-        public PaymentMethod Find(String token)
+        public PaymentMethod Find(string token)
         {
             if(token == null || token.Trim().Equals(""))
                 throw new NotFoundException();

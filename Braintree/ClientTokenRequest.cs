@@ -14,27 +14,27 @@ namespace Braintree
     {
         private readonly int DEFAULT_VERSION = 2;
 
-        public String CustomerId { get; set; }
+        public string CustomerId { get; set; }
         public int Version { get; set; }
         public ClientTokenOptionsRequest Options { get; set; }
-        public String MerchantAccountId { get; set; }
+        public string MerchantAccountId { get; set; }
 
         public ClientTokenRequest()
         {
             Version = DEFAULT_VERSION;
         }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("client-token");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             RequestBuilder builder = new RequestBuilder(root);
 

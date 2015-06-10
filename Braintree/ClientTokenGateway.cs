@@ -38,7 +38,7 @@ namespace Braintree
         private void verifyOptions(ClientTokenRequest request)
         {
             if (request.Options != null && request.CustomerId == null) {
-                List<String> invalidOptions = new List<String>{};
+                List<string> invalidOptions = new List<string>{};
 
                 if (request.Options.VerifyCard != null) {
                     invalidOptions.Add("VerifyCard");
