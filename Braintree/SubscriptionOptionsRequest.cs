@@ -5,11 +5,11 @@ namespace Braintree
 {
     public class SubscriptionOptionsRequest : Request
     {
-        public Boolean? DoNotInheritAddOnsOrDiscounts { get; set; }
-        public Boolean? ProrateCharges { get; set; }
-        public Boolean? ReplaceAllAddOnsAndDiscounts { get; set; }
-        public Boolean? RevertSubscriptionOnProrationFailure { get; set; }
-        public Boolean? StartImmediately { get; set; }
+        public bool? DoNotInheritAddOnsOrDiscounts { get; set; }
+        public bool? ProrateCharges { get; set; }
+        public bool? ReplaceAllAddOnsAndDiscounts { get; set; }
+        public bool? RevertSubscriptionOnProrationFailure { get; set; }
+        public bool? StartImmediately { get; set; }
 
         public override string ToXml(string root)
         {

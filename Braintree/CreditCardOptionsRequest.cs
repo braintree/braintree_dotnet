@@ -8,10 +8,10 @@ namespace Braintree
 {
     public class CreditCardOptionsRequest : Request
     {
-        public Boolean? VerifyCard { get; set; }
+        public bool? VerifyCard { get; set; }
         public string VerificationAmount { get; set; }
-        public Boolean? MakeDefault { get; set; }
-        public Boolean? FailOnDuplicatePaymentMethod { get; set; }
+        public bool? MakeDefault { get; set; }
+        public bool? FailOnDuplicatePaymentMethod { get; set; }
         public string VerificationMerchantAccountId { get; set; }
         public string UpdateExistingToken { get; set; }
         public string VenmoSdkSession { get; set; }

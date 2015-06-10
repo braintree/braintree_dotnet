@@ -65,7 +65,7 @@ namespace Braintree.Tests
             Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
             Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
             Assert.AreEqual(0, subscription.FailureCount);
-            Assert.IsFalse((Boolean)subscription.HasTrialPeriod);
+            Assert.IsFalse((bool)subscription.HasTrialPeriod);
             Assert.AreEqual(1, subscription.CurrentBillingCycle);
 
             Assert.IsTrue(subscription.BillingPeriodEndDate.HasValue);

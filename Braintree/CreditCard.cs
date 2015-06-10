@@ -138,9 +138,9 @@ namespace Braintree
         public CreditCardCardType CardType { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public string CustomerId { get; protected set; }
-        public Boolean? IsDefault { get; protected set; }
-        public Boolean? IsVenmoSdk { get; protected set; }
-        public Boolean? IsExpired { get; protected set; }
+        public bool? IsDefault { get; protected set; }
+        public bool? IsVenmoSdk { get; protected set; }
+        public bool? IsExpired { get; protected set; }
         public CreditCardCustomerLocation CustomerLocation { get; protected set; }
         public string LastFour { get; protected set; }
         public string UniqueNumberIdentifier { get; protected set; }

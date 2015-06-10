@@ -10,7 +10,7 @@ namespace Braintree.Tests
         new public string Kind { get; set; }
         public string MerchantId { get; set; }
         public string Name { get; set; }
-        public Boolean? NeverExpires { get; set; }
+        public bool? NeverExpires { get; set; }
         public Int32? NumberOfBillingCycles { get; set; }
         public string PlanId { get; set; }
         public Int32? Quantity { get; set; }

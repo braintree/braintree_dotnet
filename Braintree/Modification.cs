@@ -14,7 +14,7 @@ namespace Braintree
         public string Kind { get; protected set; }
         public string MerchantId { get; protected set; }
         public string Name { get; protected set; }
-        public Boolean? NeverExpires { get; protected set; }
+        public bool? NeverExpires { get; protected set; }
         public Int32? NumberOfBillingCycles { get; protected set; }
         public Int32? Quantity { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }

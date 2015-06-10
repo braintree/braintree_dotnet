@@ -13,8 +13,8 @@ namespace Braintree
         public string FollowUpAction { get; protected set; }
         public MerchantAccount MerchantAccount { get; protected set; }
         public List<string> TransactionIds { get; protected set; }
-        public Boolean? Success { get; protected set; }
-        public Boolean? Retry { get; protected set; }
+        public bool? Success { get; protected set; }
+        public bool? Retry { get; protected set; }
 
         private BraintreeGateway gateway;
 

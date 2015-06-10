@@ -101,9 +101,9 @@ namespace Braintree
         public DateTime? FirstBillingDate { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
-        public Boolean? HasTrialPeriod { get; protected set; }
+        public bool? HasTrialPeriod { get; protected set; }
         public string Id { get; protected set; }
-        public Boolean? NeverExpires { get; protected set; }
+        public bool? NeverExpires { get; protected set; }
         public Decimal? NextBillAmount { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
         public Decimal? NextBillingPeriodAmount { get; protected set; }

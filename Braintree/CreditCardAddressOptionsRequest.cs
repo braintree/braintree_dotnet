@@ -7,7 +7,7 @@ namespace Braintree
 {
     public class CreditCardAddressOptionsRequest : Request
     {
-        public Boolean? UpdateExisting { get; set; }
+        public bool? UpdateExisting { get; set; }
 
         public override string ToXml(string root)
         {

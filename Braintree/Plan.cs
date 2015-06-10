@@ -24,7 +24,7 @@ namespace Braintree
         public string Name { get; protected set; }
         public Int32? NumberOfBillingCycles { get; protected set; }
         public Decimal? Price { get; protected set; }
-        public Boolean? TrialPeriod { get; protected set; }
+        public bool? TrialPeriod { get; protected set; }
         public Int32? TrialDuration { get; protected set; }
         public PlanDurationUnit TrialDurationUnit { get; protected set; }
 

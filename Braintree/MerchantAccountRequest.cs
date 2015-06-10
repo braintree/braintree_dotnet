@@ -9,7 +9,7 @@ namespace Braintree
     public BusinessRequest Business { get; set; }
     public FundingRequest Funding { get; set; }
     public IndividualRequest Individual { get; set; }
-    public Boolean? TosAccepted { get; set; }
+    public bool? TosAccepted { get; set; }
     public string MasterMerchantAccountId { get; set; }
 
     public override string ToXml()

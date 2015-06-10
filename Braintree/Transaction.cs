@@ -163,7 +163,7 @@ namespace Braintree
         public string AdditionalProcessorResponse { get; protected set; }
         public string VoiceReferralNumber { get; protected set; }
         public string PurchaseOrderNumber { get; protected set; }
-        public Boolean? Recurring { get; protected set; }
+        public bool? Recurring { get; protected set; }
         public string RefundedTransactionId { get; protected set; }
         [Obsolete("Use Transaction.RefundIds")]
         public string RefundId { get; protected set; }
@@ -176,7 +176,7 @@ namespace Braintree
         public string SubscriptionId { get; protected set; }
         public Subscription Subscription { get; protected set; }
         public Decimal? TaxAmount { get; protected set; }
-        public Boolean? TaxExempt { get; protected set; }
+        public bool? TaxExempt { get; protected set; }
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<string, string> CustomFields { get; protected set; }
@@ -430,7 +430,7 @@ namespace Braintree
             return new AddressGateway(Gateway).Find(Customer.Id, ShippingAddress.Id);
         }
 
-        public Boolean IsDisbursed()
+        public bool IsDisbursed()
         {
           return DisbursementDetails.IsValid();
         }

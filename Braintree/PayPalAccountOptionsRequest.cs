@@ -8,7 +8,7 @@ namespace Braintree
 {
     public class PayPalOptionsRequest : Request
     {
-        public Boolean? MakeDefault { get; set; }
+        public bool? MakeDefault { get; set; }
 
         public override string ToXml(string root)
         {

@@ -8,12 +8,12 @@ namespace Braintree
 {
     public class TransactionOptionsRequest : Request
     {
-        public Boolean? HoldInEscrow { get; set; }
-        public Boolean? StoreInVault { get; set; }
-        public Boolean? StoreInVaultOnSuccess { get; set; }
-        public Boolean? AddBillingAddressToPaymentMethod { get; set; }
-        public Boolean? StoreShippingAddressInVault { get; set; }
-        public Boolean? SubmitForSettlement { get; set; }
+        public bool? HoldInEscrow { get; set; }
+        public bool? StoreInVault { get; set; }
+        public bool? StoreInVaultOnSuccess { get; set; }
+        public bool? AddBillingAddressToPaymentMethod { get; set; }
+        public bool? StoreShippingAddressInVault { get; set; }
+        public bool? SubmitForSettlement { get; set; }
         public string VenmoSdkSession { get; set; }
         public string PayeeEmail { get; set; }
         public TransactionOptionsPayPalRequest PayPal { get; set; }

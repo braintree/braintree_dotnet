@@ -8,7 +8,7 @@ namespace Braintree
 {
     public class TransactionOptionsCloneRequest : Request
     {
-        public Boolean? SubmitForSettlement { get; set; }
+        public bool? SubmitForSettlement { get; set; }
 
         public override string ToXml(string root)
         {

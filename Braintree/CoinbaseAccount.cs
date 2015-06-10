@@ -8,7 +8,7 @@ namespace Braintree
         public string UserEmail { get; protected set; }
         public string UserName { get; protected set; }
         public string Token { get; protected set; }
-        public Boolean? IsDefault { get; protected set; }
+        public bool? IsDefault { get; protected set; }
         public string ImageUrl { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }

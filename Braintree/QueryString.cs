@@ -31,7 +31,7 @@ namespace Braintree
             {
                 return AppendRequest(key, (Request)value);
             }
-            if (value is Boolean)
+            if (value is bool)
             {
                 return AppendString(key, value.ToString().ToLower());
             }

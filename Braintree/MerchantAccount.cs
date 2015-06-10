@@ -34,7 +34,7 @@ namespace Braintree
       public MerchantAccountBusinessDetails BusinessDetails { get; protected set; }
       public MerchantAccountFundingDetails FundingDetails { get; protected set; }
 
-      public Boolean IsSubMerchant {
+      public bool IsSubMerchant {
         get {
           return MasterMerchantAccount != null;
         }

@@ -11,14 +11,14 @@ namespace Braintree
         {
         }
 
-        public T IncludedIn(params Boolean[] values)
+        public T IncludedIn(params bool[] values)
         {
-            string[] stringValues = new List<Boolean>(values).ConvertAll(x => x.ToString()).ToArray();
+            string[] stringValues = new List<bool>(values).ConvertAll(x => x.ToString()).ToArray();
             Parent.AddMultipleValueCriteria(Name, new SearchCriteria(stringValues));
             return Parent;
         }
 
-        public T Is(Boolean value)
+        public T Is(bool value)
         {
             return IncludedIn(value.ToString());
         }

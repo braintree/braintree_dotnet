@@ -17,7 +17,7 @@ namespace Braintree
             this.node = node;
         }
 
-        public Boolean IsEmpty()
+        public bool IsEmpty()
         {
           var attribute = node.Attributes["nil"];
           if (attribute != null)
@@ -60,7 +60,7 @@ namespace Braintree
             return node.Name;
         }
 
-        public virtual Boolean IsRootNode()
+        public virtual bool IsRootNode()
         {
             return (node.ParentNode == null);
         }
@@ -126,11 +126,11 @@ namespace Braintree
             return node.OuterXml;
         }
 
-        public virtual Boolean? GetBoolean(string path)
+        public virtual bool? GetBoolean(string path)
         {
             if (GetString(path) == null) return null;
 
-            return Boolean.Parse(GetString(path));
+            return bool.Parse(GetString(path));
         }
 
         public virtual DateTime? GetDateTime(string path)
@@ -141,12 +141,12 @@ namespace Braintree
             return DateTime.Parse(value, null, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
         }
 
-        public virtual Boolean IsSuccess()
+        public virtual bool IsSuccess()
         {
             return GetNode("//api-error-response") == null;
         }
 
-        private Boolean IsSameNode(NodeWrapper other)
+        private bool IsSameNode(NodeWrapper other)
         {
             return node.InnerXml == other.node.InnerXml;
         }

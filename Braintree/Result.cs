@@ -15,7 +15,7 @@ namespace Braintree
         Dictionary<string, string> Parameters { get; }
         string Message { get; }
         T Target { get; }
-        Boolean IsSuccess();
+        bool IsSuccess();
     }
 
     public class ResultImpl<T> : Result<T> where T : class
@@ -58,7 +58,7 @@ namespace Braintree
             }
         }
 
-        public virtual Boolean IsSuccess()
+        public virtual bool IsSuccess()
         {
             return Errors == null;
         }

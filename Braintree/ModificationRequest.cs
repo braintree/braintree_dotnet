@@ -7,7 +7,7 @@ namespace Braintree
     public class ModificationRequest : Request
     {
         public Decimal? Amount { get; set; }
-        public Boolean? NeverExpires { get; set; }
+        public bool? NeverExpires { get; set; }
         public Int32? NumberOfBillingCycles { get; set; }
         public Int32? Quantity { get; set; }
 

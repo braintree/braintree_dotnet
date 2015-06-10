@@ -29,10 +29,10 @@ namespace Braintree
         public DescriptorRequest Descriptor { get; set; }
         public DiscountsRequest Discounts { get; set; }
         public DateTime? FirstBillingDate { get; set; }
-        public Boolean? HasTrialPeriod { get; set; }
+        public bool? HasTrialPeriod { get; set; }
         public string Id { get; set; }
         public Int32? NumberOfBillingCycles { get; set; }
-        public Boolean? NeverExpires { get; set; }
+        public bool? NeverExpires { get; set; }
         public SubscriptionOptionsRequest Options { get; set; }
         public string PaymentMethodToken { get; set; }
         public string PaymentMethodNonce { get; set; }

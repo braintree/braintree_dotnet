@@ -8,9 +8,9 @@ namespace Braintree
 {
     public class PaymentMethodOptionsRequest : Request
     {
-        public Boolean? MakeDefault { get; set; }
-        public Boolean? VerifyCard { get; set; }
-        public Boolean? FailOnDuplicatePaymentMethod { get; set; }
+        public bool? MakeDefault { get; set; }
+        public bool? VerifyCard { get; set; }
+        public bool? FailOnDuplicatePaymentMethod { get; set; }
         public string VerificationMerchantAccountId { get; set; }
 
         public override string ToXml(string root)

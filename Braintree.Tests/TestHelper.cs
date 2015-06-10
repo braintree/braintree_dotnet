@@ -69,7 +69,7 @@ namespace Braintree.Tests
       Assert.IsTrue(all.IndexOf(expected) >= 0, "Expected:\n" + all + "\nto include:\n" + expected);
     }
 
-    public static Boolean IncludesSubscription(ResourceCollection<Subscription> collection, Subscription subscription)
+    public static bool IncludesSubscription(ResourceCollection<Subscription> collection, Subscription subscription)
     {
       foreach (Subscription item in collection)
       {

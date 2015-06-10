@@ -34,7 +34,7 @@ namespace Braintree
         public string FraudMerchantId { get; set; }
         public string Channel { get; set; }
         public string OrderId { get; set; }
-        public Boolean? Recurring { get; set; }
+        public bool? Recurring { get; set; }
         public string MerchantAccountId { get; set; }
         public string PurchaseOrderNumber { get; set; }
         public CustomerRequest Customer { get; set; }
@@ -44,7 +44,7 @@ namespace Braintree
         public AddressRequest ShippingAddress { get; set; }
         public TransactionPayPalRequest PayPalAccount { get; set; }
         public Decimal TaxAmount { get; set; }
-        public Boolean? TaxExempt { get; set; }
+        public bool? TaxExempt { get; set; }
         public TransactionType Type { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
         public TransactionOptionsRequest Options { get; set; }

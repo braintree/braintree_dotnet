@@ -7,8 +7,8 @@ namespace Braintree
     {
         public string Status { get; protected set; }
         public string Enrolled { get; protected set; }
-        public Boolean? LiabilityShifted { get; protected set; }
-        public Boolean? LiabilityShiftPossible { get; protected set; }
+        public bool? LiabilityShifted { get; protected set; }
+        public bool? LiabilityShiftPossible { get; protected set; }
 
         public ThreeDSecureInfo(NodeWrapper node)
         {
