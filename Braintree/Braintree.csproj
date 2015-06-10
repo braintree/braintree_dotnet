@@ -119,6 +119,9 @@
     <Compile Include="Modification.cs" />
     <Compile Include="MultipleValueNode.cs" />
     <Compile Include="NodeWrapper.cs" />
+    <Compile Include="OAuthConnectUrlRequest.cs" />
+    <Compile Include="OAuthConnectUrlUserRequest.cs" />
+    <Compile Include="OAuthConnectUrlBusinessRequest.cs" />
     <Compile Include="OAuthCredentials.cs" />
     <Compile Include="OAuthCredentialsRequest.cs" />
     <Compile Include="OAuthGateway.cs" />
