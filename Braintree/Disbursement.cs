@@ -7,7 +7,7 @@ namespace Braintree
     public class Disbursement
     {
         public string Id { get; protected set; }
-        public Decimal? Amount { get; protected set; }
+        public decimal? Amount { get; protected set; }
         public string ExceptionMessage { get; protected set; }
         public DateTime? DisbursementDate { get; protected set; }
         public string FollowUpAction { get; protected set; }

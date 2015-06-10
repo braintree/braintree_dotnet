@@ -37,7 +37,7 @@ namespace Braintree
         public string PaymentMethodToken { get; set; }
         public string PaymentMethodNonce { get; set; }
         public string PlanId { get; set; }
-        public Decimal? Price { get; set; }
+        public decimal? Price { get; set; }
         public int TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
         public string MerchantAccountId { get; set; }

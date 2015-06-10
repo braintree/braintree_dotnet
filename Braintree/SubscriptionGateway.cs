@@ -112,7 +112,7 @@ namespace Braintree
             });
        }
 
-       public Result<Transaction> RetryCharge(string subscriptionId, Decimal amount) {
+       public Result<Transaction> RetryCharge(string subscriptionId, decimal amount) {
            return RetryCharge(new SubscriptionTransactionRequest
            {
                SubscriptionId = subscriptionId,

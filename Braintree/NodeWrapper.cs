@@ -48,11 +48,11 @@ namespace Braintree
             return int.Parse(GetString(path));
         }
 
-        public virtual Decimal? GetDecimal(string path)
+        public virtual decimal? GetDecimal(string path)
         {
             if (GetString(path) == null) return null;
 
-            return Decimal.Parse(GetString(path), System.Globalization.CultureInfo.InvariantCulture);
+            return decimal.Parse(GetString(path), System.Globalization.CultureInfo.InvariantCulture);
         }
 
         public virtual string GetName()

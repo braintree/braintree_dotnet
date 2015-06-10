@@ -137,7 +137,7 @@ namespace Braintree
     {
         public string Id { get; protected set; }
         public List<AddOn> AddOns { get; protected set; }
-        public Decimal? Amount { get; protected set; }
+        public decimal? Amount { get; protected set; }
         public string AvsErrorResponseCode { get; protected set; }
         public string AvsPostalCodeResponseCode { get; protected set; }
         public string AvsStreetAddressResponseCode { get; protected set; }
@@ -175,12 +175,12 @@ namespace Braintree
         public StatusEvent[] StatusHistory { get; protected set; }
         public string SubscriptionId { get; protected set; }
         public Subscription Subscription { get; protected set; }
-        public Decimal? TaxAmount { get; protected set; }
+        public decimal? TaxAmount { get; protected set; }
         public bool? TaxExempt { get; protected set; }
         public TransactionType Type { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Dictionary<string, string> CustomFields { get; protected set; }
-        public Decimal? ServiceFeeAmount { get; protected set; }
+        public decimal? ServiceFeeAmount { get; protected set; }
         public DisbursementDetails DisbursementDetails { get; protected set; }
         public ApplePayDetails ApplePayDetails { get; protected set; }
         public AndroidPayDetails AndroidPayDetails { get; protected set; }

@@ -6,7 +6,7 @@ namespace Braintree
 {
     public class Modification
     {
-        public Decimal? Amount { get; protected set; }
+        public decimal? Amount { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public int? CurrentBillingCycle { get; protected set; }
         public string Description { get; protected set; }

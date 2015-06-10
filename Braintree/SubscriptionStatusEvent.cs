@@ -6,8 +6,8 @@ namespace Braintree
 {
     public class SubscriptionStatusEvent
     {
-        public Decimal? Price { get; protected set; }
-        public Decimal? Balance { get; protected set; }
+        public decimal? Price { get; protected set; }
+        public decimal? Balance { get; protected set; }
         public SubscriptionStatus Status { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public SubscriptionSource Source { get; protected set; }

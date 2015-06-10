@@ -6,7 +6,7 @@ namespace Braintree
 {
     public class DisbursementDetails
     {
-        public Decimal? SettlementAmount { get; protected set; }
+        public decimal? SettlementAmount { get; protected set; }
         public string SettlementCurrencyIsoCode { get; protected set; }
         public string SettlementCurrencyExchangeRate { get; protected set; }
         public bool? FundsHeld { get; protected set; }

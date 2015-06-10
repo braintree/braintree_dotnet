@@ -42,7 +42,7 @@ namespace Braintree
 
     public class Dispute
     {
-        public Decimal? Amount { get; protected set; }
+        public decimal? Amount { get; protected set; }
         public DateTime? ReceivedDate { get; protected set; }
         public DateTime? ReplyByDate { get; protected set; }
         public DisputeReason Reason { get; protected set; }

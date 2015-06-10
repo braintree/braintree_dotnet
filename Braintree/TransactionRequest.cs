@@ -28,7 +28,7 @@ namespace Braintree
     public class TransactionRequest : Request
     {
         public TransactionCreditCardRequest CreditCard { get; set; }
-        public Decimal Amount { get; set; }
+        public decimal Amount { get; set; }
         public string DeviceData { get; set; }
         public string DeviceSessionId { get; set; }
         public string FraudMerchantId { get; set; }
@@ -43,7 +43,7 @@ namespace Braintree
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
         public TransactionPayPalRequest PayPalAccount { get; set; }
-        public Decimal TaxAmount { get; set; }
+        public decimal TaxAmount { get; set; }
         public bool? TaxExempt { get; set; }
         public TransactionType Type { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
@@ -54,7 +54,7 @@ namespace Braintree
         public string BillingAddressId { get; set; }
         public string VenmoSdkPaymentMethodCode { get; set; }
         public string PaymentMethodNonce { get; set; }
-        public Decimal? ServiceFeeAmount { get; set; }
+        public decimal? ServiceFeeAmount { get; set; }
         private bool _threeDSecureTransaction;
         private string _threeDSecureToken;
         public string ThreeDSecureToken {

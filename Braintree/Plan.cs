@@ -23,7 +23,7 @@ namespace Braintree
         public string Id { get; protected set; }
         public string Name { get; protected set; }
         public int? NumberOfBillingCycles { get; protected set; }
-        public Decimal? Price { get; protected set; }
+        public decimal? Price { get; protected set; }
         public bool? TrialPeriod { get; protected set; }
         public int? TrialDuration { get; protected set; }
         public PlanDurationUnit TrialDurationUnit { get; protected set; }

@@ -9,7 +9,7 @@ namespace Braintree
  
     public class TransactionCloneRequest : Request
     {
-        public Decimal Amount { get; set; }
+        public decimal Amount { get; set; }
         public string Channel { get; set; }
         public TransactionOptionsCloneRequest Options { get; set; }
 

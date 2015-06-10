@@ -88,7 +88,7 @@ namespace Braintree
     /// </example>
     public class Subscription
     {
-        public Decimal? Balance { get; protected set; }
+        public decimal? Balance { get; protected set; }
         public List<AddOn> AddOns { get; protected set; }
         public int? BillingDayOfMonth { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
@@ -104,14 +104,14 @@ namespace Braintree
         public bool? HasTrialPeriod { get; protected set; }
         public string Id { get; protected set; }
         public bool? NeverExpires { get; protected set; }
-        public Decimal? NextBillAmount { get; protected set; }
+        public decimal? NextBillAmount { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
-        public Decimal? NextBillingPeriodAmount { get; protected set; }
+        public decimal? NextBillingPeriodAmount { get; protected set; }
         public int? NumberOfBillingCycles { get; protected set; }
         public DateTime? PaidThroughDate { get; protected set; }
         public string PaymentMethodToken { get; protected set; }
         public string PlanId { get; protected set; }
-        public Decimal? Price { get; protected set; }
+        public decimal? Price { get; protected set; }
         public SubscriptionStatusEvent[] StatusHistory { get; protected set; }
         public SubscriptionStatus Status { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }

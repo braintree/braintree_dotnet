@@ -3209,7 +3209,7 @@ namespace Braintree.Tests
 
             DisbursementDetails details = transaction.DisbursementDetails;
             Assert.AreEqual(details.DisbursementDate, DateTime.Parse("2013-04-10"));
-            Assert.AreEqual(details.SettlementAmount, Decimal.Parse("100.00"));
+            Assert.AreEqual(details.SettlementAmount, decimal.Parse("100.00"));
             Assert.AreEqual(details.SettlementCurrencyIsoCode, "USD");
             Assert.AreEqual(details.SettlementCurrencyExchangeRate, "1");
             Assert.AreEqual(details.FundsHeld, false);
@@ -3226,7 +3226,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(dispute.ReceivedDate, DateTime.Parse("2014-03-01"));
             Assert.AreEqual(dispute.ReplyByDate, DateTime.Parse("2014-03-21"));
-            Assert.AreEqual(dispute.Amount, Decimal.Parse("250.00"));
+            Assert.AreEqual(dispute.Amount, decimal.Parse("250.00"));
             Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
             Assert.AreEqual(dispute.Reason, DisputeReason.FRAUD);
             Assert.AreEqual(dispute.Status, DisputeStatus.WON);
@@ -3240,7 +3240,7 @@ namespace Braintree.Tests
             List<Dispute> disputes = transaction.Disputes;
             Dispute dispute = disputes[0];
 
-            Assert.AreEqual(dispute.Amount, Decimal.Parse("1000.00"));
+            Assert.AreEqual(dispute.Amount, decimal.Parse("1000.00"));
             Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
             Assert.AreEqual(dispute.Reason, DisputeReason.RETRIEVAL);
         }
@@ -3367,7 +3367,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, Decimal.Parse("50.00"));
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, decimal.Parse("50.00"));
 
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
@@ -3413,7 +3413,7 @@ namespace Braintree.Tests
             };
 
             string transactionId = gateway.Transaction.Sale(request).Target.Id;
-            Transaction transaction = gateway.Transaction.SubmitForSettlement(transactionId, Decimal.Parse("50.00")).Target;
+            Transaction transaction = gateway.Transaction.SubmitForSettlement(transactionId, decimal.Parse("50.00")).Target;
 
             Assert.AreEqual(2, transaction.StatusHistory.Length);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.StatusHistory[0].Status);
@@ -3521,10 +3521,10 @@ namespace Braintree.Tests
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             TestHelper.Settle(service, transaction.Id);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, Decimal.Parse("500.00"));
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("500.00"));
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
-            Assert.AreEqual(Decimal.Parse("500.00"), result.Target.Amount);
+            Assert.AreEqual(decimal.Parse("500.00"), result.Target.Amount);
         }
 
         [Test]

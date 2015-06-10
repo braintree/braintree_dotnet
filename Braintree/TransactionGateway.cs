@@ -93,7 +93,7 @@ namespace Braintree
             return new ResultImpl<Transaction>(new NodeWrapper(response), Gateway);
         }
 
-        public virtual Result<Transaction> Refund(string id, Decimal amount)
+        public virtual Result<Transaction> Refund(string id, decimal amount)
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -125,7 +125,7 @@ namespace Braintree
             return SubmitForSettlement(id, 0);
         }
 
-        public virtual Result<Transaction> SubmitForSettlement(string id, Decimal amount)
+        public virtual Result<Transaction> SubmitForSettlement(string id, decimal amount)
         {
             TransactionRequest request = new TransactionRequest();
             request.Amount = amount;

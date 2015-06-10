@@ -7,7 +7,7 @@ namespace Braintree
 {
     public class SubscriptionTransactionRequest : Request
     {
-        public Decimal Amount { get; set; }
+        public decimal Amount { get; set; }
         public string SubscriptionId { get; set; }
 
         public override string ToXml()

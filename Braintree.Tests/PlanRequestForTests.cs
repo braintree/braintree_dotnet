@@ -12,7 +12,7 @@ namespace Braintree.Tests
         public string Id { get; set; }
         public string Name { get; set; }
         public int? NumberOfBillingCycles { get; set; }
-        public Decimal? Price { get; set; }
+        public decimal? Price { get; set; }
         public bool? TrialPeriod { get; set; }
         public int? TrialDuration { get; set; }
         public PlanDurationUnit TrialDurationUnit { get; set; }

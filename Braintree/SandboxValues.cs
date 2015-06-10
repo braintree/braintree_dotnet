@@ -17,9 +17,9 @@ namespace Braintree
 
         public class TransactionAmount
         {
-            public const Decimal AUTHORIZE = 1000;
-            public const Decimal DECLINE = 2000;
-            public const Decimal FAILED = 3000;
+            public const decimal AUTHORIZE = 1000;
+            public const decimal DECLINE = 2000;
+            public const decimal FAILED = 3000;
         }
 
         public class Nonce
