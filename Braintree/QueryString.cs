@@ -21,7 +21,7 @@ namespace Braintree
             return Append(pair.Key.Replace('-', '_'), pair.Value);
         }
 
-        public virtual QueryString Append(string key, Object value)
+        public virtual QueryString Append(string key, object value)
         {
             if (value == null)
             {

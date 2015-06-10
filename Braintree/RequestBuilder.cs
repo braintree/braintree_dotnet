@@ -88,7 +88,7 @@ namespace Braintree
             if (value is Array)
             {
                 string xml = "";
-                foreach (Object item in (Array)value)
+                foreach (object item in (Array)value)
                 {
                     xml += BuildXMLElement("item", item);
                 }
