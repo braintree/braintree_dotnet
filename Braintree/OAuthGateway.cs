@@ -7,43 +7,43 @@ namespace Braintree
 {
     public class OAuthGateway
     {
-        private BraintreeService Service;
-        private BraintreeGateway Gateway;
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
         public OAuthGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasClientCredentials();
-            Gateway = gateway;
-            Service = new BraintreeService(gateway.Configuration);
+            this.gateway = gateway;
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public ResultImpl<OAuthCredentials> CreateTokenFromCode(OAuthCredentialsRequest request)
         {
             request.GrantType = "authorization_code";
-            XmlNode accessTokenXML = Service.Post("/oauth/access_tokens", request);
+            XmlNode accessTokenXML = service.Post("/oauth/access_tokens", request);
 
-            return new ResultImpl<OAuthCredentials>(new NodeWrapper(accessTokenXML), Gateway);
+            return new ResultImpl<OAuthCredentials>(new NodeWrapper(accessTokenXML), gateway);
         }
 
         public ResultImpl<OAuthCredentials> CreateTokenFromRefreshToken(OAuthCredentialsRequest request)
         {
             request.GrantType = "refresh_token";
-            XmlNode accessTokenXML = Service.Post("/oauth/access_tokens", request);
+            XmlNode accessTokenXML = service.Post("/oauth/access_tokens", request);
 
-            return new ResultImpl<OAuthCredentials>(new NodeWrapper(accessTokenXML), Gateway);
+            return new ResultImpl<OAuthCredentials>(new NodeWrapper(accessTokenXML), gateway);
         }
 
         public string ConnectUrl(OAuthConnectUrlRequest request)
         {
-            request.ClientId = Gateway.ClientId;
+            request.ClientId = gateway.ClientId;
             string queryString = request.ToQueryString();
-            string url = Gateway.Environment.GatewayURL+"/oauth/connect?"+queryString;
+            string url = gateway.Environment.GatewayURL+"/oauth/connect?"+queryString;
             return url+"&signature="+ComputeSignature(url)+"&algorithm=SHA256";
         }
 
         private string ComputeSignature(string message)
         {
-            byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(Gateway.ClientSecret));
+            byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(gateway.ClientSecret));
             byte[] signatureBytes = new HMACSHA256(key).ComputeHash(Encoding.UTF8.GetBytes(message));
             return BitConverter.ToString(signatureBytes).Replace("-", "").ToLower();
         }
