@@ -11,22 +11,22 @@ namespace Braintree
 {
     public class WebhookNotificationGateway
     {
-        private BraintreeService Service;
-        private BraintreeGateway Gateway;
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
         protected internal WebhookNotificationGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Gateway = gateway;
-            Service = new BraintreeService(gateway.Configuration);
+            this.gateway = gateway;
+            this.service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual WebhookNotification Parse(string signature, string payload)
         {
             ValidateSignature(signature, payload);
             var xmlPayload = Encoding.Default.GetString(Convert.FromBase64String(payload));
-            var node = new NodeWrapper(Service.StringToXmlNode(xmlPayload));
-            return new WebhookNotification(node, Gateway);
+            var node = new NodeWrapper(service.StringToXmlNode(xmlPayload));
+            return new WebhookNotification(node, gateway);
         }
 
         public virtual string Verify(string challenge)
@@ -36,14 +36,14 @@ namespace Braintree
             {
                 throw new InvalidChallengeException ("challenge contains non-hex characters");
             }
-            string digest = new Sha1Hasher().HmacHash(Service.PrivateKey, challenge);
-            return string.Format("{0}|{1}", Service.PublicKey, digest.ToLower());
+            string digest = new Sha1Hasher().HmacHash(service.PrivateKey, challenge);
+            return string.Format("{0}|{1}", service.PublicKey, digest.ToLower());
         }
 
         private bool PayloadMatches(string signature, string payload)
         {
             var sha1Hasher = new Sha1Hasher();
-            string computedSignature = sha1Hasher.HmacHash(Service.PrivateKey, payload).ToLower();
+            string computedSignature = sha1Hasher.HmacHash(service.PrivateKey, payload).ToLower();
             var crypto = new Crypto();
             return crypto.SecureCompare (computedSignature, signature);
         }
@@ -64,7 +64,7 @@ namespace Braintree
                 if (signaturePair.IndexOf('|') >= 0)
                 {
                     string[] candidatePair = signaturePair.Split('|');
-                    if (Service.PublicKey.Equals(candidatePair[0]))
+                    if (service.PublicKey.Equals(candidatePair[0]))
                     {
                         matchingSignature = candidatePair[1];
                         break;

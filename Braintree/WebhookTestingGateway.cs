@@ -73,25 +73,25 @@ namespace Braintree
 
         private string MerchantAccountDeclinedSampleXml(string id)
         {
-            return node("api-error-response",
-                node("message", "Applicant declined due to OFAC."),
-                node_attr("errors", TYPE_ARRAY,
-                    node("merchant-account",
-                        node_attr("errors", TYPE_ARRAY,
-                            node("error",
-                                node("code", "82621"),
-                                node("message", "Applicant declined due to OFAC."),
-                                node_attr("attribute", TYPE_SYMBOL, "base")
+            return Node("api-error-response",
+                Node("message", "Applicant declined due to OFAC."),
+                NodeAttr("errors", TYPE_ARRAY,
+                    Node("merchant-account",
+                        NodeAttr("errors", TYPE_ARRAY,
+                            Node("error",
+                                Node("code", "82621"),
+                                Node("message", "Applicant declined due to OFAC."),
+                                NodeAttr("attribute", TYPE_SYMBOL, "base")
                             )
                         )
                     )
                 ),
-                node("merchant-account",
-                    node("id", id),
-                    node("status", "suspended"),
-                    node("master-merchant-account",
-                        node("id", "master_ma_for_" + id),
-                        node("status", "suspended")
+                Node("merchant-account",
+                    Node("id", id),
+                    Node("status", "suspended"),
+                    Node("master-merchant-account",
+                        Node("id", "master_ma_for_" + id),
+                        Node("status", "suspended")
                     )
                 )
             );
@@ -99,168 +99,168 @@ namespace Braintree
 
         private string TransactionDisbursedSampleXml(string id)
         {
-            return node("transaction",
-                    node("id", id),
-                    node("amount", "100.00"),
-                    node("disbursement-details",
-                        node_attr("disbursement-date", TYPE_DATE, "2013-07-09")
+            return Node("transaction",
+                    Node("id", id),
+                    Node("amount", "100.00"),
+                    Node("disbursement-details",
+                        NodeAttr("disbursement-date", TYPE_DATE, "2013-07-09")
                     ),
-                    node("billing"),
-                    node("credit-card"),
-                    node("customer"),
-                    node("descriptor"),
-                    node("shipping"),
-                    node("subscription")
+                    Node("billing"),
+                    Node("credit-card"),
+                    Node("customer"),
+                    Node("descriptor"),
+                    Node("shipping"),
+                    Node("subscription")
             );
         }
 
         private string DisbursementExceptionSampleXml(string id)
         {
-            return node("disbursement",
-                    node("id", id),
-                    node("amount", "100.00"),
-                    node("exception-message", "bank_rejected"),
-                    node_attr("disbursement-date", TYPE_DATE, "2014-02-10"),
-                    node("follow-up-action", "update_funding_information"),
-                    node_attr("success", TYPE_BOOLEAN, "false"),
-                    node_attr("retry", TYPE_BOOLEAN, "false"),
-                    node("merchant-account",
-                        node("id", "merchant_account_id"),
-                        node("master-merchant-account",
-                            node("id", "master_ma"),
-                            node("status", "active")
+            return Node("disbursement",
+                    Node("id", id),
+                    Node("amount", "100.00"),
+                    Node("exception-message", "bank_rejected"),
+                    NodeAttr("disbursement-date", TYPE_DATE, "2014-02-10"),
+                    Node("follow-up-action", "update_funding_information"),
+                    NodeAttr("success", TYPE_BOOLEAN, "false"),
+                    NodeAttr("retry", TYPE_BOOLEAN, "false"),
+                    Node("merchant-account",
+                        Node("id", "merchant_account_id"),
+                        Node("master-merchant-account",
+                            Node("id", "master_ma"),
+                            Node("status", "active")
                         ),
-                        node("status", "active")
+                        Node("status", "active")
                     ),
-                    node_attr("transaction-ids", TYPE_ARRAY,
-                        node("item", "asdf"),
-                        node("item", "qwer")
+                    NodeAttr("transaction-ids", TYPE_ARRAY,
+                        Node("item", "asdf"),
+                        Node("item", "qwer")
                     )
             );
         }
 
         private string DisbursementSampleXml(string id)
         {
-            return node("disbursement",
-                    node("id", id),
-                    node("amount", "100.00"),
-                    node_attr("exception-message", NIL_TRUE, ""),
-                    node_attr("disbursement-date", TYPE_DATE, "2014-02-10"),
-                    node_attr("follow-up-action", NIL_TRUE, ""),
-                    node_attr("success", TYPE_BOOLEAN, "true"),
-                    node_attr("retry", TYPE_BOOLEAN, "false"),
-                    node("merchant-account",
-                        node("id", "merchant_account_id"),
-                        node("master-merchant-account",
-                            node("id", "master_ma"),
-                            node("status", "active")
+            return Node("disbursement",
+                    Node("id", id),
+                    Node("amount", "100.00"),
+                    NodeAttr("exception-message", NIL_TRUE, ""),
+                    NodeAttr("disbursement-date", TYPE_DATE, "2014-02-10"),
+                    NodeAttr("follow-up-action", NIL_TRUE, ""),
+                    NodeAttr("success", TYPE_BOOLEAN, "true"),
+                    NodeAttr("retry", TYPE_BOOLEAN, "false"),
+                    Node("merchant-account",
+                        Node("id", "merchant_account_id"),
+                        Node("master-merchant-account",
+                            Node("id", "master_ma"),
+                            Node("status", "active")
                         ),
-                        node("status", "active")
+                        Node("status", "active")
                     ),
-                    node_attr("transaction-ids", TYPE_ARRAY,
-                        node("item", "asdf"),
-                        node("item", "qwer")
+                    NodeAttr("transaction-ids", TYPE_ARRAY,
+                        Node("item", "asdf"),
+                        Node("item", "qwer")
                     )
             );
         }
 
         private string DisputeOpenedSampleXml(string id) {
-            return node("dispute",
-                    node("id", id),
-                    node("amount", "250.00"),
-                    node_attr("received-date", TYPE_DATE, "2014-03-21"),
-                    node_attr("repy-by-date", TYPE_DATE, "2014-03-21"),
-                    node("currency-iso-code", "USD"),
-                    node("status", "open"),
-                    node("reason", "fraud"),
-                    node("transaction",
-                        node("id", id),
-                        node("amount", "250.00")
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("status", "open"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
                     )
             );
         }
 
         private string DisputeLostSampleXml(string id) {
-            return node("dispute",
-                    node("id", id),
-                    node("amount", "250.00"),
-                    node_attr("received-date", TYPE_DATE, "2014-03-21"),
-                    node_attr("repy-by-date", TYPE_DATE, "2014-03-21"),
-                    node("currency-iso-code", "USD"),
-                    node("status", "lost"),
-                    node("reason", "fraud"),
-                    node("transaction",
-                        node("id", id),
-                        node("amount", "250.00")
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("status", "lost"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
                     )
             );
         }
 
         private string DisputeWonSampleXml(string id) {
-            return node("dispute",
-                    node("id", id),
-                    node("amount", "250.00"),
-                    node_attr("received-date", TYPE_DATE, "2014-03-21"),
-                    node_attr("repy-by-date", TYPE_DATE, "2014-03-21"),
-                    node("currency-iso-code", "USD"),
-                    node("status", "won"),
-                    node("reason", "fraud"),
-                    node("transaction",
-                        node("id", id),
-                        node("amount", "250.00")
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("status", "won"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
                     )
             );
         }
 
         private string SubscriptionXml(string id)
         {
-            return node("subscription",
-                    node("id", id),
-                    node_attr("transactions", TYPE_ARRAY),
-                    node_attr("add_ons", TYPE_ARRAY),
-                    node_attr("discounts", TYPE_ARRAY)
+            return Node("subscription",
+                    Node("id", id),
+                    NodeAttr("transactions", TYPE_ARRAY),
+                    NodeAttr("add_ons", TYPE_ARRAY),
+                    NodeAttr("discounts", TYPE_ARRAY)
             );
         }
 
         private string MerchantAccountApprovedSampleXml(string id)
         {
-            return node("merchant-account",
-                    node("id", id),
-                    node("master-merchant-account",
-                        node("id", "master_ma_for_" + id),
-                        node("status", "active")
+            return Node("merchant-account",
+                    Node("id", id),
+                    Node("master-merchant-account",
+                        Node("id", "master_ma_for_" + id),
+                        Node("status", "active")
                     ),
-                    node("status", "active")
+                    Node("status", "active")
             );
         }
 
         private string PartnerMerchantConnectedSampleXml(string id) {
-            return node("partner-merchant",
-                    node("partner-merchant-id", "abc123"),
-                    node("merchant-public-id", "public_id"),
-                    node("public-key", "public_key"),
-                    node("private-key", "private_key"),
-                    node("client-side-encryption-key", "cse_key")
+            return Node("partner-merchant",
+                    Node("partner-merchant-id", "abc123"),
+                    Node("merchant-public-id", "public_id"),
+                    Node("public-key", "public_key"),
+                    Node("private-key", "private_key"),
+                    Node("client-side-encryption-key", "cse_key")
             );
         }
 
         private string PartnerMerchantDisconnectedSampleXml(string id) {
-            return node("partner-merchant",
-                    node("partner-merchant-id", "abc123")
+            return Node("partner-merchant",
+                    Node("partner-merchant-id", "abc123")
             );
         }
 
         private string PartnerMerchantDeclinedSampleXml(string id) {
-            return node("partner-merchant",
-                    node("partner-merchant-id", "abc123")
+            return Node("partner-merchant",
+                    Node("partner-merchant-id", "abc123")
             );
         }
 
-        private static string node(string name, params string[] contents) {
-            return node_attr(name, null, contents);
+        private static string Node(string name, params string[] contents) {
+            return NodeAttr(name, null, contents);
         }
 
-        private static string node_attr(string name, string attributes, params string[] contents) {
+        private static string NodeAttr(string name, string attributes, params string[] contents) {
             StringBuilder buffer = new StringBuilder();
             buffer.Append('<').Append(name);
             if (attributes != null) {
