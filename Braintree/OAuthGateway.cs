@@ -38,7 +38,7 @@ namespace Braintree
             request.ClientId = gateway.ClientId;
             string queryString = request.ToQueryString();
             string url = gateway.Environment.GatewayURL+"/oauth/connect?"+queryString;
-            return url+"&signature="+ComputeSignature(url)+"&algorithm=SHA256";
+            return string.Format("{0}&signature={1}&algorithm=SHA256", url, ComputeSignature(url));
         }
 
         private string ComputeSignature(string message)
