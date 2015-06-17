@@ -121,6 +121,10 @@ namespace Braintree
             {
                 return new OAuthCredentials(node) as T;
             }
+            else if (typeof(T) == typeof(Merchant))
+            {
+                return new Merchant(node) as T;
+            }
 
             throw new Exception("Unknown T: " + typeof(T).ToString());
         }

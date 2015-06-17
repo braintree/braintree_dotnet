@@ -110,6 +110,9 @@
     <Compile Include="IndustryRequest.cs" />
     <Compile Include="IndustryDataRequest.cs" />
     <Compile Include="KeyValueNode.cs" />
+    <Compile Include="Merchant.cs" />
+    <Compile Include="MerchantGateway.cs" />
+    <Compile Include="MerchantRequest.cs" />
     <Compile Include="MerchantAccount.cs" />
     <Compile Include="MerchantAccountBusinessDetails.cs" />
     <Compile Include="MerchantAccountFundingDetails.cs" />
