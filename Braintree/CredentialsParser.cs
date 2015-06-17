@@ -29,7 +29,7 @@ namespace Braintree
             Environment clientSecretEnvironment = GetEnvironment(clientSecret);
 
             if (clientIdEnvironment != clientSecretEnvironment) {
-                throw new ConfigurationException("Mismatched credential environments: clientId environment is " + clientIdEnvironment + " and clientSecret environment is " + clientSecretEnvironment);
+                throw new ConfigurationException("Mismatched credential environments: clientId environment is " + clientIdEnvironment.EnvironmentName + " and clientSecret environment is " + clientSecretEnvironment.EnvironmentName);
             }
 
             Environment = clientIdEnvironment;

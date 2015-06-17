@@ -68,5 +68,10 @@ namespace Braintree
 
             return string.Format("http://{0}:{1}", host, port);
         }
+
+        public string EnvironmentName
+        {
+            get { return environmentName; }
+        }
     }
 }
