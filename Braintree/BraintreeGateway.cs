@@ -174,6 +174,11 @@ namespace Braintree
             get { return new OAuthGateway(this); }
         }
 
+        public virtual MerchantGateway Merchant
+        {
+            get { return new MerchantGateway(this); }
+        }
+
         public virtual PaymentMethodGateway PaymentMethod
         {
             get { return new PaymentMethodGateway(this); }
