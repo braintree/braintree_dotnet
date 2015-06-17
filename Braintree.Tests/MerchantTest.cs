@@ -20,7 +20,6 @@ namespace Braintree.Tests
                 "client_id$development$integration_client_id",
                 "client_secret$development$integration_client_secret"
             );
-
         }
 
         [Test]
