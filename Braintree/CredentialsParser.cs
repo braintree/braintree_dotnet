@@ -47,6 +47,7 @@ namespace Braintree
             var separators = new Char [] { '$' };
             var parts = credential.Split(separators);
             switch (parts[1]) {
+                case "integration":
                 case "development":
                     return Environment.DEVELOPMENT;
                 case "qa":
