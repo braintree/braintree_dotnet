@@ -56,7 +56,7 @@ namespace Braintree
                 case "production":
                     return Environment.PRODUCTION;
                 default:
-                    throw new Exception("Unsupported environment.");
+                    throw new Exception("Unsupported environment: " + parts[1]);
             }
         }
 
