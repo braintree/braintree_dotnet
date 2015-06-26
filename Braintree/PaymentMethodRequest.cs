@@ -7,6 +7,7 @@ namespace Braintree
         public String CustomerId { get; set; }
         public String Token { get; set; }
         public String PaymentMethodNonce { get; set; }
+        public String DeviceData { get; set; }
         public PaymentMethodOptionsRequest Options { get; set; }
         public PaymentMethodAddressRequest BillingAddress { get; set; }
         public String BillingAddressId { get; set; }
@@ -32,6 +33,7 @@ namespace Braintree
             return new RequestBuilder(root).
                 AddElement("customer-id", CustomerId).
                 AddElement("payment-method-nonce", PaymentMethodNonce).
+                AddElement("device-data", DeviceData).
                 AddElement("token", Token).
                 AddElement("options", Options).
                 AddElement("billing-address", BillingAddress).
