@@ -193,5 +193,18 @@ namespace Braintree.Tests
 
             Assert.IsNull(query["redirect_uri"]);
         }
+
+        [Test]
+        public void ConnectUrl_WorksWithMultiplePaymentMethods()
+        {
+            string url = gateway.OAuth.ConnectUrl(new OAuthConnectUrlRequest {
+                PaymentMethods = new string[] {"credit_card", "paypal"}
+            });
+
+            var uri = new Uri(url);
+            NameValueCollection query = HttpUtility.ParseQueryString(uri.Query);
+
+            Assert.AreEqual("credit_card,paypal", query["payment_methods[]"]);
+        }
     }
 }

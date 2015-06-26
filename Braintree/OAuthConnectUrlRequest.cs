@@ -10,6 +10,7 @@ namespace Braintree
         public string Scope { get; set; }
         public string State { get; set; }
         public string ClientId { get; set; }
+        public string[] PaymentMethods { get; set; }
         public OAuthConnectUrlUserRequest User { get; set; }
         public OAuthConnectUrlBusinessRequest Business { get; set; }
 
@@ -21,6 +22,14 @@ namespace Braintree
             builder.AddTopLevelElement("scope", Scope);
             builder.AddTopLevelElement("state", State);
             builder.AddTopLevelElement("client_id", ClientId);
+
+            if (PaymentMethods != null)
+            {
+                foreach (var paymentMethod in PaymentMethods) {
+                    builder.AddTopLevelElement("payment_methods[]", paymentMethod);
+                }
+            }
+
             builder.AddElement("user", User);
             builder.AddElement("business", Business);
             return builder.ToQueryString();

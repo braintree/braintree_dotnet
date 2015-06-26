@@ -1,6 +1,7 @@
 #pragma warning disable 1591
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security;
 using System.Text;
@@ -10,8 +11,8 @@ namespace Braintree
     public class RequestBuilder
     {
         private string Parent;
-        private Dictionary<string, string> topLevelElements;
-        private Dictionary<string, object> elements;
+        private List<KeyValuePair<string, string>> topLevelElements;
+        private List<KeyValuePair<string, object>> elements;
 
         public RequestBuilder() : this("")
         {
@@ -20,19 +21,19 @@ namespace Braintree
         public RequestBuilder(string parent)
         {
             Parent = parent;
-            topLevelElements = new Dictionary<string, string>();
-            elements = new Dictionary<string, object>();
+            topLevelElements = new List<KeyValuePair<string, string>>();
+            elements = new List<KeyValuePair<string, object>>();
         }
 
         public RequestBuilder AddElement(string name, object value)
         {
-            elements.Add(name, value);
+            elements.Add(new KeyValuePair<string, object>(name, value));
             return this;
         }
 
         public RequestBuilder AddTopLevelElement(string name, string value)
         {
-            topLevelElements.Add(name, value);
+            topLevelElements.Add(new KeyValuePair<string, string>(name, value));
             return this;
         }
 
@@ -65,6 +66,7 @@ namespace Braintree
             }
 
             return qs.ToString();
+
         }
 
         internal static string BuildXMLElement(string name, object value)
