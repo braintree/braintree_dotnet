@@ -14,6 +14,11 @@ namespace Braintree
         public OAuthConnectUrlUserRequest User { get; set; }
         public OAuthConnectUrlBusinessRequest Business { get; set; }
 
+        public OAuthConnectUrlRequest()
+        {
+            PaymentMethods = new string[0];
+        }
+
         public override string ToQueryString()
         {
             var builder = new RequestBuilder();
@@ -23,11 +28,8 @@ namespace Braintree
             builder.AddTopLevelElement("state", State);
             builder.AddTopLevelElement("client_id", ClientId);
 
-            if (PaymentMethods != null)
-            {
-                foreach (var paymentMethod in PaymentMethods) {
-                    builder.AddTopLevelElement("payment_methods[]", paymentMethod);
-                }
+            foreach (var paymentMethod in PaymentMethods) {
+                builder.AddTopLevelElement("payment_methods[]", paymentMethod);
             }
 
             builder.AddElement("user", User);
