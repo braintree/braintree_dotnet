@@ -9,6 +9,7 @@ namespace Braintree
 {
     public class TransactionGatewayRejectionReason : Enumeration
     {
+        public static readonly TransactionGatewayRejectionReason APPLICATION_INCOMPLETE = new TransactionGatewayRejectionReason("application_incomplete");
         public static readonly TransactionGatewayRejectionReason AVS = new TransactionGatewayRejectionReason("avs");
         public static readonly TransactionGatewayRejectionReason AVS_AND_CVV = new TransactionGatewayRejectionReason("avs_and_cvv");
         public static readonly TransactionGatewayRejectionReason CVV = new TransactionGatewayRejectionReason("cvv");
@@ -18,7 +19,7 @@ namespace Braintree
         public static readonly TransactionGatewayRejectionReason UNRECOGNIZED = new TransactionGatewayRejectionReason("unrecognized");
 
         public static readonly TransactionGatewayRejectionReason[] ALL = {
-            AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, UNRECOGNIZED
+            APPLICATION_INCOMPLETE, AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, UNRECOGNIZED
         };
 
         protected TransactionGatewayRejectionReason(string name) : base(name) {}
