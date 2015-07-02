@@ -1987,6 +1987,39 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_GatewayRejectedForApplicationIncomplete()
+        {
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+
+            ResultImpl<Merchant> merchantResult = oauthGateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"}
+            });
+
+            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+
+            var request = new TransactionRequest
+            {
+                Amount = 4000.00M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2020"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.APPLICATION_INCOMPLETE, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
         public void Sale_GatewayRejectedForAvs()
         {
             BraintreeGateway processingRulesGateway = new BraintreeGateway
