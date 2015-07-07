@@ -16,7 +16,7 @@ namespace Braintree
         public string ExpirationYear { get; set; }
         public string ExpirationDate { get; set; }
         public string Number { get; set; }
-        public string DeviceData {get; set;}
+        public string DeviceData { get; set; }
 
         public override string ToXml()
         {

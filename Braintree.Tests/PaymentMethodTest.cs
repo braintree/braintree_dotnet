@@ -95,25 +95,24 @@ namespace Braintree.Tests
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
-            var request = new PaymentMethodRequest
+            var request = new PaymentMethodRequest()
             {
                 CustomerId = result.Target.Id,
                 PaymentMethodNonce = nonce,
-                Options = new PaymentMethodOptionsRequest
+                Options = new PaymentMethodOptionsRequest()
                 {
                     VerifyCard = true
                 },
                 DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"my_fmid\"}"
             };
-            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request)
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
 
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsNotNull(paymentMethodResult.Target.Token);
         }
 
-
         [Test]
-        public void ToXml_IncludesDeviceData() 
+        public void ToXml_IncludesDeviceData()
         {
             var request = new PaymentMethodRequest()
             {
