@@ -16,6 +16,7 @@ namespace Braintree
         public string ExpirationYear { get; set; }
         public string ExpirationDate { get; set; }
         public string Number { get; set; }
+        public string DeviceData { get; set; }
 
         public override string ToXml()
         {
@@ -38,6 +39,7 @@ namespace Braintree
                 AddElement("billing-address-id", BillingAddressId).
                 AddElement("cardholder-name", CardholderName).
                 AddElement("cvv", CVV).
+                AddElement("device-data", DeviceData).
                 AddElement("expiration-date", ExpirationDate).
                 AddElement("expiration-month", ExpirationMonth).
                 AddElement("expiration-year", ExpirationYear).
