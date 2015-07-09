@@ -17,7 +17,7 @@ namespace Braintree
             this.node = node;
         }
 
-        public Boolean IsEmpty()
+        public bool IsEmpty()
         {
           var attribute = node.Attributes["nil"];
           if (attribute != null)
@@ -27,7 +27,7 @@ namespace Braintree
           return false;
         }
 
-        public virtual String GetString(String path)
+        public virtual string GetString(string path)
         {
             if (GetNode(path) == null) return null;
 
@@ -36,36 +36,36 @@ namespace Braintree
             return value.Length == 0 ? null : value;
         }
 
-        protected virtual String GetString()
+        protected virtual string GetString()
         {
             return node.InnerText;
         }
 
-        public virtual Int32? GetInteger(String path)
+        public virtual int? GetInteger(string path)
         {
             if (GetString(path) == null) return null;
 
-            return Int32.Parse(GetString(path));
+            return int.Parse(GetString(path));
         }
 
-        public virtual Decimal? GetDecimal(String path)
+        public virtual decimal? GetDecimal(string path)
         {
             if (GetString(path) == null) return null;
 
-            return Decimal.Parse(GetString(path), System.Globalization.CultureInfo.InvariantCulture);
+            return decimal.Parse(GetString(path), System.Globalization.CultureInfo.InvariantCulture);
         }
 
-        public virtual String GetName()
+        public virtual string GetName()
         {
             return node.Name;
         }
 
-        public virtual Boolean IsRootNode()
+        public virtual bool IsRootNode()
         {
             return (node.ParentNode == null);
         }
 
-        public virtual NodeWrapper GetNode(String path)
+        public virtual NodeWrapper GetNode(string path)
         {
             XmlNode subNode = node.SelectSingleNode(path);
             if (subNode == null) return null;
@@ -73,13 +73,13 @@ namespace Braintree
             return new NodeWrapper(subNode);
         }
 
-        public virtual Dictionary<String, String> GetDictionary(String path)
+        public virtual Dictionary<string, string> GetDictionary(string path)
         {
             if (GetNode(path) == null) return null;
 
-            var result = new Dictionary<String, String>();
+            var result = new Dictionary<string, string>();
 
-            foreach (NodeWrapper node in GetNode(path).GetChildren())
+            foreach (var node in GetNode(path).GetChildren())
             {
                 result.Add(Underscore(node.GetName()), node.GetString());
             }
@@ -99,7 +99,7 @@ namespace Braintree
             return result;
         }
 
-        public virtual List<NodeWrapper> GetList(String path)
+        public virtual List<NodeWrapper> GetList(string path)
         {
             XmlNodeList list = node.SelectNodes(path);
             var result = new List<NodeWrapper>();
@@ -111,29 +111,29 @@ namespace Braintree
             return result;
         }
 
-        public virtual List<String> GetStrings(String path)
+        public virtual List<string> GetStrings(string path)
         {
-            List<String> strings = new List<String>();
-            foreach(NodeWrapper stringNode in GetList(path))
+            var strings = new List<string>();
+            foreach(var stringNode in GetList(path))
             {
                 strings.Add(stringNode.GetString("."));
             }
             return strings;
         }
 
-        public virtual String OuterXml()
+        public virtual string OuterXml()
         {
             return node.OuterXml;
         }
 
-        public virtual Boolean? GetBoolean(String path)
+        public virtual bool? GetBoolean(string path)
         {
             if (GetString(path) == null) return null;
 
-            return Boolean.Parse(GetString(path));
+            return bool.Parse(GetString(path));
         }
 
-        public virtual DateTime? GetDateTime(String path)
+        public virtual DateTime? GetDateTime(string path)
         {
             var value = GetString(path);
             if (value == null) return null;
@@ -141,12 +141,12 @@ namespace Braintree
             return DateTime.Parse(value, null, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal);
         }
 
-        public virtual Boolean IsSuccess()
+        public virtual bool IsSuccess()
         {
             return GetNode("//api-error-response") == null;
         }
 
-        private Boolean IsSameNode(NodeWrapper other)
+        private bool IsSameNode(NodeWrapper other)
         {
             return node.InnerXml == other.node.InnerXml;
         }
@@ -158,12 +158,12 @@ namespace Braintree
             return new NodeWrapper(node.ParentNode);
         }
 
-        private String Underscore(String str)
+        private string Underscore(string str)
         {
             return str.Replace("-", "_");
         }
 
-        private String XPathToNode(NodeWrapper node)
+        private string XPathToNode(NodeWrapper node)
         {
             if (this.IsSameNode(node))
                 return "";
@@ -171,10 +171,10 @@ namespace Braintree
             return XPathToNode(node.GetParent()) + "/" + node.GetName();
         }
 
-        private String GetFormElementName(NodeWrapper leafNode)
+        private string GetFormElementName(NodeWrapper leafNode)
         {
-            String[] nodes = XPathToNode(leafNode).Split('/');
-            String formElementName = nodes[1];
+            string[] nodes = XPathToNode(leafNode).Split('/');
+            string formElementName = nodes[1];
 
             for (int i = 2; i < nodes.Length; i++)
             {
@@ -186,11 +186,11 @@ namespace Braintree
             return formElementName;
         }
 
-        public virtual Dictionary<String, String> GetFormParameters()
+        public virtual Dictionary<string, string> GetFormParameters()
         {
-            var formParameters = new Dictionary<String, String>();
+            var formParameters = new Dictionary<string, string>();
 
-            foreach (NodeWrapper paramNode in GetList(".//*[not(*)]"))
+            foreach (var paramNode in GetList(".//*[not(*)]"))
             {
                 formParameters[GetFormElementName(paramNode)] = paramNode.GetString(".");
             }

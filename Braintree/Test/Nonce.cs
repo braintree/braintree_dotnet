@@ -4,16 +4,16 @@ namespace Braintree.Test
 {
     public class Nonce
     {
-        public const String Transactable = "fake-valid-nonce";
-        public const String Consumed = "fake-consumed-nonce";
-        public const String PayPalOneTimePayment = "fake-paypal-one-time-nonce";
-        public const String PayPalFuturePayment = "fake-paypal-future-nonce";
-        public const String ApplePayVisa = "fake-apple-pay-visa-nonce";
-        public const String ApplePayMastercard = "fake-apple-pay-mastercard-nonce";
-        public const String ApplePayAmex = "fake-apple-pay-amex-nonce";
-        public const String AndroidPay = "fake-android-pay-nonce";
-        public const String AbstractTransactable = "fake-abstract-transactable-nonce";
-        public const String Europe = "fake-europe-bank-account-nonce";
-        public const String Coinbase = "fake-coinbase-nonce";
+        public const string Transactable = "fake-valid-nonce";
+        public const string Consumed = "fake-consumed-nonce";
+        public const string PayPalOneTimePayment = "fake-paypal-one-time-nonce";
+        public const string PayPalFuturePayment = "fake-paypal-future-nonce";
+        public const string ApplePayVisa = "fake-apple-pay-visa-nonce";
+        public const string ApplePayMastercard = "fake-apple-pay-mastercard-nonce";
+        public const string ApplePayAmex = "fake-apple-pay-amex-nonce";
+        public const string AndroidPay = "fake-android-pay-nonce";
+        public const string AbstractTransactable = "fake-abstract-transactable-nonce";
+        public const string Europe = "fake-europe-bank-account-nonce";
+        public const string Coinbase = "fake-coinbase-nonce";
     }
 }

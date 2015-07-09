@@ -15,7 +15,7 @@ namespace Braintree
             LOST, WON, UNRECOGNIZED
         };
 
-        protected DisputeStatus(String name) : base(name) {}
+        protected DisputeStatus(string name) : base(name) {}
     }
 
     public class DisputeReason : Enumeration
@@ -37,18 +37,18 @@ namespace Braintree
           CANCELLED_RECURRING_TRANSACTION, CREDIT_NOT_PROCESSED, DUPLICATE, FRAUD, GENERAL, INVALID_ACCOUNT, NOT_RECOGNIZED, PRODUCT_NOT_RECEIVED, PRODUCT_UNSATISFACTORY, TRANSACTION_AMOUNT_DIFFERS, RETRIEVAL
         };
 
-        protected DisputeReason(String name) : base(name) {}
+        protected DisputeReason(string name) : base(name) {}
     }
 
     public class Dispute
     {
-        public Decimal? Amount { get; protected set; }
+        public decimal? Amount { get; protected set; }
         public DateTime? ReceivedDate { get; protected set; }
         public DateTime? ReplyByDate { get; protected set; }
         public DisputeReason Reason { get; protected set; }
         public DisputeStatus Status { get; protected set; }
-        public String CurrencyIsoCode { get; protected set; }
-        public String Id { get; protected set; }
+        public string CurrencyIsoCode { get; protected set; }
+        public string Id { get; protected set; }
 
         public Dispute(NodeWrapper node)
         {

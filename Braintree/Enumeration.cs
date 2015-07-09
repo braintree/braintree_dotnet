@@ -6,14 +6,14 @@ namespace Braintree
 {
     public abstract class Enumeration
     {
-        protected String Name;
+        protected string Name;
 
-        protected Enumeration(String name)
+        protected Enumeration(string name)
         {
             Name = name;
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return Name;
         }

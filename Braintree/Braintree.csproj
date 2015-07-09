@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.43.0</AssemblyName>
+    <AssemblyName>Braintree-2.44.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.43.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.44.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.43.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.44.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -57,11 +57,11 @@
     <Compile Include="AndroidPayDetails.cs" />
     <Compile Include="ApplePayCard.cs" />
     <Compile Include="ApplePayDetails.cs" />
-    <Compile Include="ApplicantDetails.cs" />
     <Compile Include="ApplicantDetailsRequest.cs" />
     <Compile Include="ClientTokenGateway.cs" />
     <Compile Include="ClientTokenRequest.cs" />
     <Compile Include="ClientTokenOptionsRequest.cs" />
+    <Compile Include="CredentialsParser.cs" />
     <Compile Include="BaseCreditCardRequest.cs" />
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
@@ -110,6 +110,9 @@
     <Compile Include="IndustryRequest.cs" />
     <Compile Include="IndustryDataRequest.cs" />
     <Compile Include="KeyValueNode.cs" />
+    <Compile Include="Merchant.cs" />
+    <Compile Include="MerchantGateway.cs" />
+    <Compile Include="MerchantRequest.cs" />
     <Compile Include="MerchantAccount.cs" />
     <Compile Include="MerchantAccountBusinessDetails.cs" />
     <Compile Include="MerchantAccountFundingDetails.cs" />
@@ -119,6 +122,12 @@
     <Compile Include="Modification.cs" />
     <Compile Include="MultipleValueNode.cs" />
     <Compile Include="NodeWrapper.cs" />
+    <Compile Include="OAuthConnectUrlRequest.cs" />
+    <Compile Include="OAuthConnectUrlUserRequest.cs" />
+    <Compile Include="OAuthConnectUrlBusinessRequest.cs" />
+    <Compile Include="OAuthCredentials.cs" />
+    <Compile Include="OAuthCredentialsRequest.cs" />
+    <Compile Include="OAuthGateway.cs" />
     <Compile Include="PartnerConfiguration.cs" />
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />

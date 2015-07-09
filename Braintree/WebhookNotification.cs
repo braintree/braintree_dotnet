@@ -47,7 +47,7 @@ namespace Braintree
             DISPUTE_WON
         };
 
-        protected WebhookKind(String name) : base(name) {}
+        protected WebhookKind(string name) : base(name) {}
     }
 
     public class WebhookNotification
@@ -56,14 +56,14 @@ namespace Braintree
         public Subscription Subscription { get; protected set; }
         public MerchantAccount MerchantAccount { get; protected set; }
         public ValidationErrors Errors { get; protected set; }
-        public String Message { get; protected set; }
+        public string Message { get; protected set; }
         public DateTime? Timestamp { get; protected set; }
         public Transaction Transaction { get; protected set; }
         public Disbursement Disbursement { get; protected set; }
         public Dispute Dispute { get; protected set; }
         public PartnerMerchant PartnerMerchant { get; protected set; }
 
-        public WebhookNotification(NodeWrapper node, BraintreeService service)
+        public WebhookNotification(NodeWrapper node, BraintreeGateway gateway)
         {
             Timestamp = node.GetDateTime("timestamp");
             Kind = (WebhookKind)CollectionUtil.Find(WebhookKind.ALL, node.GetString("kind"), WebhookKind.UNRECOGNIZED);
@@ -75,7 +75,7 @@ namespace Braintree
             }
 
             if (WrapperNode.GetNode("subscription") != null) {
-                Subscription = new Subscription(WrapperNode.GetNode("subscription"), service);
+                Subscription = new Subscription(WrapperNode.GetNode("subscription"), gateway);
             }
 
             if (WrapperNode.GetNode("merchant-account") != null) {
@@ -87,11 +87,11 @@ namespace Braintree
             }
 
             if (WrapperNode.GetNode("transaction") != null) {
-                Transaction = new Transaction(WrapperNode.GetNode("transaction"), service);
+                Transaction = new Transaction(WrapperNode.GetNode("transaction"), gateway);
             }
 
             if (WrapperNode.GetNode("disbursement") != null) {
-                Disbursement = new Disbursement(WrapperNode.GetNode("disbursement"), service);
+                Disbursement = new Disbursement(WrapperNode.GetNode("disbursement"), gateway);
             }
 
             if (WrapperNode.GetNode("partner-merchant") != null) {

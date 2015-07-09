@@ -5,11 +5,11 @@ namespace Braintree
 {
     public class SettlementBatchSummary
     {
-        private IList<IDictionary<String, String>> records;
+        private IList<IDictionary<string, string>> records;
 
         protected internal SettlementBatchSummary (NodeWrapper node)
         {
-            records = new List<IDictionary<String, String>>();
+            records = new List<IDictionary<string, string>>();
 
             foreach (var record in node.GetList("records/record"))
             {
@@ -17,7 +17,7 @@ namespace Braintree
             }
         }
 
-        public IList<IDictionary<String, String>> Records
+        public IList<IDictionary<string, string>> Records
         {
             get { return records; }
         }

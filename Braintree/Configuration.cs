@@ -13,8 +13,25 @@ namespace Braintree
         public string MerchantId { get; set; }
         public string PublicKey { get; set; }
         public string PrivateKey { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public string AccessToken { get; set; }
 
         public Configuration() {}
+        public Configuration(string accessToken) {
+            CredentialsParser parser = new CredentialsParser(accessToken);
+            MerchantId = parser.MerchantId;
+            AccessToken = parser.AccessToken;
+            Environment = parser.Environment;
+        }
+
+        public Configuration(string clientId, string clientSecret)
+        {
+            CredentialsParser parser = new CredentialsParser(clientId, clientSecret);
+            ClientId = parser.ClientId;
+            ClientSecret = parser.ClientSecret;
+            Environment = parser.Environment;
+        }
 
         public Configuration(Environment environment, string merchantId, string publicKey, string privateKey)
         {
@@ -35,6 +52,53 @@ namespace Braintree
             MerchantId = merchantId;
             PublicKey = publicKey;
             PrivateKey = privateKey;
+        }
+
+        public bool IsClientCredentials
+        {
+           get { return ClientId != null; }
+        }
+
+        public bool IsAccessToken
+        {
+           get { return AccessToken != null; }
+        }
+
+        public void AssertHasClientCredentials()
+        {
+            if (ClientId == null) {
+                throw new ConfigurationException("Missing ClientId when constructing BraintreeGateway");
+            }
+            if (ClientSecret == null) {
+                throw new ConfigurationException("Missing ClientSecret when constructing BraintreeGateway");
+            }
+            if (AccessToken != null) {
+                throw new ConfigurationException("AccessToken must not be passed when constructing BraintreeGateway");
+            }
+        }
+
+        public void AssertHasAccessTokenOrKeys()
+        {
+            if (AccessToken == null) {
+                if (MerchantId == null) {
+                    throw new ConfigurationException("Missing MerchantId (or AccessToken) when constructing BraintreeGateway");
+                }
+                if (Environment == null) {
+                    throw new ConfigurationException("Missing Environment when constructing BraintreeGateway");
+                }
+                if (PublicKey == null) {
+                    throw new ConfigurationException("Missing PublicKey when constructing BraintreeGateway");
+                }
+                if (PrivateKey == null) {
+                    throw new ConfigurationException("Missing PrivateKey when constructing BraintreeGateway");
+                }
+            }
+            if (ClientId != null) {
+                throw new ConfigurationException("ClientId must not be passed when constructing BraintreeGateway");
+            }
+            if (ClientSecret != null) {
+                throw new ConfigurationException("ClientSecret must not be passed when constructing BraintreeGateway");
+            }
         }
     }
 }

@@ -8,11 +8,11 @@ namespace Braintree
 {
     public class TrUtil
     {
-        public static String BuildTrData(Request request, String redirectURL, BraintreeService service)
+        public static string BuildTrData(Request request, string redirectURL, BraintreeService service)
         {
-            String dateString = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmss");
+            var dateString = DateTime.Now.ToUniversalTime().ToString("yyyyMMddHHmmss");
 
-            String trContent = new QueryString().
+            var trContent = new QueryString().
                 Append("api_version", service.ApiVersion).
                 Append("public_key", service.PublicKey).
                 Append("redirect_url", redirectURL).
@@ -20,33 +20,33 @@ namespace Braintree
                 Append("kind", request.Kind()).
                 ToString();
 
-            String requestQueryString = request.ToQueryString();
+            string requestQueryString = request.ToQueryString();
 
             if (requestQueryString.Length > 0)
             {
                 trContent += "&" + requestQueryString;
             }
 
-            SignatureService signatureService = new SignatureService {
+            var signatureService = new SignatureService {
               Key = service.PrivateKey,
               Hasher = new Sha1Hasher()
             };
             return signatureService.Sign(trContent);
         }
 
-        public static Boolean IsValidTrQueryString(String queryString, BraintreeService service)
+        public static bool IsValidTrQueryString(string queryString, BraintreeService service)
         {
-            string[] delimeters = new string[1];
-            delimeters[0] = "&hash=";
-            String[] dataSections = queryString.TrimStart('?').Split(delimeters, StringSplitOptions.None);
+            var delimiters = new string[1];
+            delimiters[0] = "&hash=";
+            string[] dataSections = queryString.TrimStart('?').Split(delimiters, StringSplitOptions.None);
             return dataSections[1] == new Sha1Hasher().HmacHash(service.PrivateKey, dataSections[0]).ToLower();
         }
 
-        public static Boolean IsTrDataValid(String trData, BraintreeService service)
+        public static bool IsTrDataValid(string trData, BraintreeService service)
         {
-            String[] dataSections = trData.Split('|');
-            String trHash = dataSections[0];
-            String trContent = dataSections[1];
+            string[] dataSections = trData.Split('|');
+            var trHash = dataSections[0];
+            var trContent = dataSections[1];
 
             return trHash  == new Sha1Hasher().HmacHash(service.PrivateKey, trContent);
         }

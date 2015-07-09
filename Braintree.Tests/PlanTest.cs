@@ -26,9 +26,9 @@ namespace Braintree.Tests
         [Test]
         public void All_ReturnsAllPlans()
         {
-            String planToken = String.Format("plan{0}", new Random().Next(1000000).ToString());
+            string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
 
-            service.Post("/plans/create_plan_for_tests", new PlanRequestForTests {
+            service.Post(service.MerchantPath() + "/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,
                 BillingFrequency = 1,
                 CurrencyIsoCode = "USD",
@@ -64,9 +64,9 @@ namespace Braintree.Tests
         [Test]
         public void All_ReturnPlansWithAddOnsAndDiscounts()
         {
-            String planToken = String.Format("plan{0}", new Random().Next(1000000).ToString());
+            string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
 
-            service.Post("/plans/create_plan_for_tests", new PlanRequestForTests {
+            service.Post(service.MerchantPath() + "/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,
                 BillingFrequency = 1,
                 CurrencyIsoCode = "USD",
@@ -78,14 +78,14 @@ namespace Braintree.Tests
                 TrialPeriod = false,
             });
 
-            service.Post("/modifications/create_modification_for_tests", new ModificationRequestForTests {
+            service.Post(service.MerchantPath() + "/modifications/create_modification_for_tests", new ModificationRequestForTests {
                 Amount = 1,
                 Kind = "add_on",
                 Name = "dotnet_test_modification_add_on",
                 PlanId = planToken
             });
 
-            service.Post("/modifications/create_modification_for_tests", new ModificationRequestForTests {
+            service.Post(service.MerchantPath() + "/modifications/create_modification_for_tests", new ModificationRequestForTests {
                 Amount = 1,
                 Kind = "discount",
                 Name = "dotnet_test_modification_discount",

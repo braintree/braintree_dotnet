@@ -5,20 +5,20 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class BooleanMultipleValueNode<T> : MultipleValueNode<T, String> where T : SearchRequest
+    public class BooleanMultipleValueNode<T> : MultipleValueNode<T, string> where T : SearchRequest
     {
-        public BooleanMultipleValueNode (String name, T parent) : base(name, parent)
+        public BooleanMultipleValueNode (string name, T parent) : base(name, parent)
         {
         }
 
-        public T IncludedIn(params Boolean[] values)
+        public T IncludedIn(params bool[] values)
         {
-            String[] stringValues = new List<Boolean>(values).ConvertAll(x => x.ToString()).ToArray();
+            string[] stringValues = new List<bool>(values).ConvertAll(x => x.ToString()).ToArray();
             Parent.AddMultipleValueCriteria(Name, new SearchCriteria(stringValues));
             return Parent;
         }
 
-        public T Is(Boolean value)
+        public T Is(bool value)
         {
             return IncludedIn(value.ToString());
         }

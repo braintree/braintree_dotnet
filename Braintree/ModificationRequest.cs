@@ -6,17 +6,17 @@ namespace Braintree
 {
     public class ModificationRequest : Request
     {
-        public Decimal? Amount { get; set; }
-        public Boolean? NeverExpires { get; set; }
-        public Int32? NumberOfBillingCycles { get; set; }
-        public Int32? Quantity { get; set; }
+        public decimal? Amount { get; set; }
+        public bool? NeverExpires { get; set; }
+        public int? NumberOfBillingCycles { get; set; }
+        public int? Quantity { get; set; }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("amount", Amount).

@@ -12,139 +12,142 @@ namespace Braintree
     /// </summary>
     public class TransactionGateway
     {
-        private BraintreeService Service;
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
-        protected internal TransactionGateway(BraintreeService service)
+        protected internal TransactionGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            this.gateway = gateway;
+            service = new BraintreeService(gateway.Configuration);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual String TransparentRedirectURLForCreate()
+        public virtual string TransparentRedirectURLForCreate()
         {
-            return Service.BaseMerchantURL() + "/transactions/all/create_via_transparent_redirect_request";
+            return service.BaseMerchantURL() + "/transactions/all/create_via_transparent_redirect_request";
         }
 
-        public virtual Result<Transaction> CancelRelease(String id)
+        public virtual Result<Transaction> CancelRelease(string id)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
 
-            XmlNode response = Service.Put("/transactions/" + id + "/cancel_release", request);
+            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/cancel_release", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
         [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
-        public virtual Result<Transaction> ConfirmTransparentRedirect(String queryString)
+        public virtual Result<Transaction> ConfirmTransparentRedirect(string queryString)
         {
-            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, Service);
-            XmlNode node = Service.Post("/transactions/all/confirm_transparent_redirect_request", trRequest);
+            var trRequest = new TransparentRedirectRequest(queryString, service);
+            XmlNode node = service.Post(service.MerchantPath() + "/transactions/all/confirm_transparent_redirect_request", trRequest);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(node), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(node), gateway);
         }
 
-        public virtual Result<Transaction> HoldInEscrow(String id)
+        public virtual Result<Transaction> HoldInEscrow(string id)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
 
-            XmlNode response = Service.Put("/transactions/" + id + "/hold_in_escrow", request);
+            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/hold_in_escrow", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        public virtual String SaleTrData(TransactionRequest trData, String redirectURL)
+        public virtual string SaleTrData(TransactionRequest trData, string redirectURL)
         {
             trData.Type = TransactionType.SALE;
 
-            return TrUtil.BuildTrData(trData, redirectURL, Service);
+            return TrUtil.BuildTrData(trData, redirectURL, service);
         }
 
-        public virtual String CreditTrData(TransactionRequest trData, String redirectURL)
+        public virtual string CreditTrData(TransactionRequest trData, string redirectURL)
         {
             trData.Type = TransactionType.CREDIT;
 
-            return TrUtil.BuildTrData(trData, redirectURL, Service);
+            return TrUtil.BuildTrData(trData, redirectURL, service);
         }
 
         public virtual Result<Transaction> Credit(TransactionRequest request)
         {
             request.Type = TransactionType.CREDIT;
-            XmlNode response = Service.Post("/transactions", request);
+            XmlNode response = service.Post(service.MerchantPath() + "/transactions", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        public virtual Transaction Find(String id)
+        public virtual Transaction Find(string id)
         {
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode response = Service.Get("/transactions/" + id);
+            XmlNode response = service.Get(service.MerchantPath() + "/transactions/" + id);
 
-            return new Transaction(new NodeWrapper(response), Service);
+            return new Transaction(new NodeWrapper(response), gateway);
         }
 
-        public virtual Result<Transaction> Refund(String id)
+        public virtual Result<Transaction> Refund(string id)
         {
-            XmlNode response = Service.Post("/transactions/" + id + "/refund");
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            XmlNode response = service.Post(service.MerchantPath() + "/transactions/" + id + "/refund");
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        public virtual Result<Transaction> Refund(String id, Decimal amount)
+        public virtual Result<Transaction> Refund(string id, decimal amount)
         {
-            TransactionRequest request = new TransactionRequest
+            var request = new TransactionRequest
             {
                 Amount = amount
             };
-            XmlNode response = Service.Post("/transactions/" + id + "/refund", request);
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            XmlNode response = service.Post(service.MerchantPath() + "/transactions/" + id + "/refund", request);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
         public virtual Result<Transaction> Sale(TransactionRequest request)
         {
             request.Type = TransactionType.SALE;
-            XmlNode response = Service.Post("/transactions", request);
+            XmlNode response = service.Post(service.MerchantPath() + "/transactions", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        public virtual Result<Transaction> ReleaseFromEscrow(String id)
+        public virtual Result<Transaction> ReleaseFromEscrow(string id)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
 
-            XmlNode response = Service.Put("/transactions/" + id + "/release_from_escrow", request);
+            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/release_from_escrow", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        public virtual Result<Transaction> SubmitForSettlement(String id)
+        public virtual Result<Transaction> SubmitForSettlement(string id)
         {
             return SubmitForSettlement(id, 0);
         }
 
-        public virtual Result<Transaction> SubmitForSettlement(String id, Decimal amount)
+        public virtual Result<Transaction> SubmitForSettlement(string id, decimal amount)
         {
-            TransactionRequest request = new TransactionRequest();
+            var request = new TransactionRequest();
             request.Amount = amount;
 
-            XmlNode response = Service.Put("/transactions/" + id + "/submit_for_settlement", request);
+            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        public virtual Result<Transaction> Void(String id)
+        public virtual Result<Transaction> Void(string id)
         {
-            XmlNode response = Service.Put("/transactions/" + id + "/void");
+            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/void");
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
         public virtual ResourceCollection<Transaction> Search(TransactionSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post("/transactions/advanced_search_ids", query));
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/transactions/advanced_search_ids", query));
 
             if (response.GetName() == "search-results") {
-                return new ResourceCollection<Transaction>(response, delegate(String[] ids) {
+                return new ResourceCollection<Transaction>(response, delegate(string[] ids) {
                     return FetchTransactions(query, ids);
                 });
             } else {
@@ -152,23 +155,23 @@ namespace Braintree
             }
         }
 
-        public virtual Result<Transaction> CloneTransaction(String id, TransactionCloneRequest cloneRequest)
+        public virtual Result<Transaction> CloneTransaction(string id, TransactionCloneRequest cloneRequest)
         {
-            XmlNode response = Service.Post("/transactions/" + id + "/clone", cloneRequest);
+            XmlNode response = service.Post(service.MerchantPath() + "/transactions/" + id + "/clone", cloneRequest);
 
-            return new ResultImpl<Transaction>(new NodeWrapper(response), Service);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        private List<Transaction> FetchTransactions(TransactionSearchRequest query, String[] ids)
+        private List<Transaction> FetchTransactions(TransactionSearchRequest query, string[] ids)
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post("/transactions/advanced_search", query));
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/transactions/advanced_search", query));
 
-            List<Transaction> transactions = new List<Transaction>();
-            foreach (NodeWrapper node in response.GetList("transaction"))
+            var transactions = new List<Transaction>();
+            foreach (var node in response.GetList("transaction"))
             {
-                transactions.Add(new Transaction(node, Service));
+                transactions.Add(new Transaction(node, gateway));
             }
             return transactions;
         }

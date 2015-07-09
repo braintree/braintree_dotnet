@@ -8,7 +8,7 @@ namespace Braintree
 {
     public class Sha256Hasher : Hasher
     {
-        public virtual String HmacHash(String key, String message)
+        public virtual string HmacHash(string key, string message)
         {
             var hmac = new HMACSHA256(Sha256Bytes(key));
             byte[] hashBytes = hmac.ComputeHash(Encoding.UTF8.GetBytes(message));
@@ -16,7 +16,7 @@ namespace Braintree
             return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
         }
 
-        public virtual byte[] Sha256Bytes(String s)
+        public virtual byte[] Sha256Bytes(string s)
         {
             byte[] data = Encoding.UTF8.GetBytes(s);
             return SHA256.Create().ComputeHash(data);

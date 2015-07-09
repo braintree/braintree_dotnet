@@ -34,7 +34,7 @@ namespace Braintree.Tests
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
@@ -54,7 +54,7 @@ namespace Braintree.Tests
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
-            String nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
@@ -72,7 +72,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CreatesCreditCardWithNonce()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
@@ -86,6 +86,43 @@ namespace Braintree.Tests
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsNotNull(paymentMethodResult.Target.Token);
             Assert.IsInstanceOfType(typeof(CreditCard), paymentMethodResult.Target);
+        }
+
+        [Test]
+        public void Create_CreatesCreditCardWithNonceAndDeviceData()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest()
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true
+                },
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"my_fmid\"}"
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+        }
+
+        [Test]
+        public void ToXml_IncludesDeviceData()
+        {
+            var request = new PaymentMethodRequest()
+            {
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"my_fmid\"}"
+            };
+
+            Assert.IsTrue(request.ToXml().Contains("device_session_id"));
+            Assert.IsTrue(request.ToXml().Contains("my_dsid"));
+            Assert.IsTrue(request.ToXml().Contains("fraud_merchant_id"));
+            Assert.IsTrue(request.ToXml().Contains("my_fmid"));
         }
 
         [Test]
@@ -181,7 +218,7 @@ namespace Braintree.Tests
             CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
             Assert.IsTrue(creditCard.IsDefault.Value);
 
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Random random = new Random();
             int randomNumber = random.Next(0, 10000);
             var token = "token_" + randomNumber;

@@ -85,11 +85,11 @@ namespace Braintree.Tests
         [Test]
         public void Constructor_RaisesAuthorizationExceptionWithMessageIfStatusIs403AndBtMessageIsInQueryString()
         {
-            String message = "Invalid params: transaction[bad]";
+            string message = "Invalid params: transaction[bad]";
 
             try
             {
-                new TransparentRedirectRequest(String.Format("http_status=403&bt_message={0}&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", HttpUtility.UrlEncode(message)), service);
+                new TransparentRedirectRequest(string.Format("http_status=403&bt_message={0}&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", HttpUtility.UrlEncode(message)), service);
                 Assert.Fail("Expected ServerException.");
             }
             catch (AuthorizationException e)
@@ -119,7 +119,7 @@ namespace Braintree.Tests
                     LastName = "Doe"
                 };
 
-                String queryString = TestHelper.QueryStringForTR(trParams, request, service.BaseMerchantURL() + "/test/maintenance", service);
+                string queryString = TestHelper.QueryStringForTR(trParams, request, service.BaseMerchantURL() + "/test/maintenance", service);
                 gateway.Customer.ConfirmTransparentRedirect(queryString);
                 Assert.Fail("Expected DownForMaintenanceException");
             } catch (Braintree.Exceptions.DownForMaintenanceException) {
@@ -149,7 +149,7 @@ namespace Braintree.Tests
                     LastName = "Doe"
                 };
 
-                String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
+                string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
                 gateway.Customer.ConfirmTransparentRedirect(queryString);
                 Assert.Fail("Expected AuthenticationException");
             } catch (Braintree.Exceptions.AuthenticationException) {

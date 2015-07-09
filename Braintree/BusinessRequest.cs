@@ -6,34 +6,34 @@ namespace Braintree
 {
     public class BusinessRequest : Request
     {
-      public String DbaName { get; set; }
-      public String LegalName { get; set; }
+      public string DbaName { get; set; }
+      public string LegalName { get; set; }
       public AddressRequest Address { get; set; }
-      public String TaxId { get; set; }
+      public string TaxId { get; set; }
 
-      public override String ToXml()
+      public override string ToXml()
       {
         return ToXml("business");
       }
 
-      public override String ToXml(String root)
+      public override string ToXml(string root)
       {
         return BuildRequest(root).ToXml();
       }
 
-      public override String ToQueryString()
+      public override string ToQueryString()
       {
         return ToQueryString("business");
       }
 
-      public override String ToQueryString(String root)
+      public override string ToQueryString(string root)
       {
         return BuildRequest(root).ToQueryString();
       }
 
-      protected virtual RequestBuilder BuildRequest(String root)
+      protected virtual RequestBuilder BuildRequest(string root)
       {
-        RequestBuilder builder = new RequestBuilder(root);
+        var builder = new RequestBuilder(root);
 
         builder.AddElement("dba-name", DbaName);
         builder.AddElement("legal-name", LegalName);

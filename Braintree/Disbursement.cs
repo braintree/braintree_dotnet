@@ -6,19 +6,19 @@ namespace Braintree
 {
     public class Disbursement
     {
-        public String Id { get; protected set; }
-        public Decimal? Amount { get; protected set; }
-        public String ExceptionMessage { get; protected set; }
+        public string Id { get; protected set; }
+        public decimal? Amount { get; protected set; }
+        public string ExceptionMessage { get; protected set; }
         public DateTime? DisbursementDate { get; protected set; }
-        public String FollowUpAction { get; protected set; }
+        public string FollowUpAction { get; protected set; }
         public MerchantAccount MerchantAccount { get; protected set; }
-        public List<String> TransactionIds { get; protected set; }
-        public Boolean? Success { get; protected set; }
-        public Boolean? Retry { get; protected set; }
+        public List<string> TransactionIds { get; protected set; }
+        public bool? Success { get; protected set; }
+        public bool? Retry { get; protected set; }
 
-        private BraintreeService service;
+        private BraintreeGateway gateway;
 
-        public Disbursement(NodeWrapper node, BraintreeService braintreeService)
+        public Disbursement(NodeWrapper node, BraintreeGateway gateway)
         {
             Id = node.GetString("id");
             Amount = node.GetDecimal("amount");
@@ -26,21 +26,21 @@ namespace Braintree
             DisbursementDate = node.GetDateTime("disbursement-date");
             FollowUpAction = node.GetString("follow-up-action");
             MerchantAccount = new MerchantAccount(node.GetNode("merchant-account"));
-            TransactionIds = new List<String>();
-            foreach (NodeWrapper stringNode in node.GetList("transaction-ids/item")) 
+            TransactionIds = new List<string>();
+            foreach (var stringNode in node.GetList("transaction-ids/item")) 
             {
                 TransactionIds.Add(stringNode.GetString("."));
             }
             Success = node.GetBoolean("success");
             Retry = node.GetBoolean("retry");
-            service = braintreeService;
+            this.gateway = gateway;
         }
 
         public ResourceCollection<Transaction> Transactions()
         {
-            TransactionGateway gateway = new TransactionGateway(service);
+            var gateway = new TransactionGateway(this.gateway);
 
-            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+            var searchRequest = new TransactionSearchRequest().
                 Ids.IncludedIn(TransactionIds.ToArray());
 
             return gateway.Search(searchRequest);

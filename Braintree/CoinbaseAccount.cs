@@ -4,17 +4,17 @@ namespace Braintree
 {
     public class CoinbaseAccount : PaymentMethod
     {
-        public String UserId { get; protected set; }
-        public String UserEmail { get; protected set; }
-        public String UserName { get; protected set; }
-        public String Token { get; protected set; }
-        public Boolean? IsDefault { get; protected set; }
-        public String ImageUrl { get; protected set; }
+        public string UserId { get; protected set; }
+        public string UserEmail { get; protected set; }
+        public string UserName { get; protected set; }
+        public string Token { get; protected set; }
+        public bool? IsDefault { get; protected set; }
+        public string ImageUrl { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal CoinbaseAccount(NodeWrapper node, BraintreeService service)
+        protected internal CoinbaseAccount(NodeWrapper node, BraintreeGateway gateway)
         {
             UserId = node.GetString("user-id");
             UserEmail = node.GetString("user-email");
@@ -31,7 +31,7 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
     }

@@ -98,6 +98,9 @@
     <Compile Include="DisbursementTest.cs" />
     <Compile Include="WebhookNotificationTest.cs" />
     <Compile Include="CryptoTest.cs" />
+    <Compile Include="OAuthTest.cs" />
+    <Compile Include="CredentialsParserTest.cs" />
+    <Compile Include="MerchantTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

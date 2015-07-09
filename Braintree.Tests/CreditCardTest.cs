@@ -51,7 +51,7 @@ namespace Braintree.Tests
         [Test]
         public void TrData_ReturnsValidTrDataHash()
         {
-            String trData = gateway.TrData(new CreditCardRequest(), "http://example.com");
+            string trData = gateway.TrData(new CreditCardRequest(), "http://example.com");
             Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
         }
 
@@ -294,7 +294,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
             Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
@@ -339,7 +339,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
 
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
@@ -371,7 +371,7 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
 
             CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
@@ -398,7 +398,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
             Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsFalse(result.IsSuccess());
 
@@ -449,7 +449,7 @@ namespace Braintree.Tests
             };
 
             CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardRequest).Target;
-            String id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             var subscriptionRequest = new SubscriptionRequest
             {
                 Id = id,
@@ -479,7 +479,7 @@ namespace Braintree.Tests
         public void FromNonce_ExchangesANonceForACreditCard()
         {
           Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-          String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
+          string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
           CreditCard card = gateway.CreditCard.FromNonce(nonce);
           Assert.AreEqual("401288******1881", card.MaskedNumber);
         }
@@ -487,7 +487,7 @@ namespace Braintree.Tests
         [Test]
         public void FromNonce_ReturnsErrorWhenProvidedNoncePointingToUnlockedSharedCard()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             try {
                 gateway.CreditCard.FromNonce(nonce);
                 Assert.Fail("Should throw NotFoundException");
@@ -500,7 +500,7 @@ namespace Braintree.Tests
         public void FromNonce_ReturnsErrorWhenProvidedConsumedNonce()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
             gateway.CreditCard.FromNonce(nonce);
             try {
                 gateway.CreditCard.FromNonce(nonce);
@@ -736,7 +736,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
             CreditCard updatedCreditCard = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
 
             Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
@@ -773,7 +773,7 @@ namespace Braintree.Tests
                 CardholderName = "Joe Cool"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
             Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
@@ -994,13 +994,13 @@ namespace Braintree.Tests
 
             Assert.IsTrue(collection.MaximumCount > 1);
 
-            List<String> cards = new List<String>();
+            List<string> cards = new List<string>();
             foreach (CreditCard card in collection) {
                 Assert.IsTrue(card.IsExpired.Value);
                 cards.Add(card.Token);
             }
 
-            HashSet<String> uniqueCards = new HashSet<String>(cards);
+            HashSet<string> uniqueCards = new HashSet<string>(cards);
             Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
         }
 
@@ -1014,13 +1014,13 @@ namespace Braintree.Tests
 
             Assert.IsTrue(collection.MaximumCount > 1);
 
-            List<String> cards = new List<String>();
+            List<string> cards = new List<string>();
             foreach (CreditCard card in collection) {
                 Assert.AreEqual("2010", card.ExpirationYear);
                 cards.Add(card.Token);
             }
 
-            HashSet<String> uniqueCards = new HashSet<String>(cards);
+            HashSet<string> uniqueCards = new HashSet<string>(cards);
             Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
         }
 
@@ -1249,7 +1249,7 @@ namespace Braintree.Tests
         [Test]
         public void CreateWithPaymentMethodNonce()
         {
-          String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+          string nonce = TestHelper.GenerateUnlockedNonce(gateway);
           Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
           CreditCardRequest request = new CreditCardRequest
           {
@@ -1264,7 +1264,7 @@ namespace Braintree.Tests
         [Test]
         public void VerificationIsLatestVerification()
         {
-            String xml = "<credit-card>"
+            string xml = "<credit-card>"
                           + "<verifications>"
                           + "    <verification>"
                           + "        <created-at type=\"datetime\">2014-11-20T17:27:15Z</created-at>"
@@ -1287,7 +1287,7 @@ namespace Braintree.Tests
 
             var node = new NodeWrapper(newNode);
 
-            var result = new ResultImpl<CreditCard>(node, service);
+            var result = new ResultImpl<CreditCard>(node, gateway);
 
             Assert.AreEqual("932", result.Target.Verification.Id);
         }

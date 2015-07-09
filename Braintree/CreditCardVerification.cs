@@ -19,27 +19,27 @@ namespace Braintree
             FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, VERIFIED
         };
 
-        protected VerificationStatus(String name) : base(name) {}
+        protected VerificationStatus(string name) : base(name) {}
     }
 
     public class CreditCardVerification
     {
-        public String AvsErrorResponseCode { get; protected set; }
-        public String AvsPostalCodeResponseCode { get; protected set; }
-        public String AvsStreetAddressResponseCode { get; protected set; }
-        public String CvvResponseCode { get; protected set; }
+        public string AvsErrorResponseCode { get; protected set; }
+        public string AvsPostalCodeResponseCode { get; protected set; }
+        public string AvsStreetAddressResponseCode { get; protected set; }
+        public string CvvResponseCode { get; protected set; }
         public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
-        public String ProcessorResponseCode { get; protected set; }
-        public String ProcessorResponseText { get; protected set; }
-        public String MerchantAccountId { get; protected set; }
+        public string ProcessorResponseCode { get; protected set; }
+        public string ProcessorResponseText { get; protected set; }
+        public string MerchantAccountId { get; protected set; }
         public VerificationStatus Status { get; protected set; }
-        public String Id { get; protected set; }
+        public string Id { get; protected set; }
         public Address BillingAddress { get; protected set; }
         public CreditCard CreditCard { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public RiskData RiskData { get; protected set; }
 
-        public CreditCardVerification(NodeWrapper node, BraintreeService service)
+        public CreditCardVerification(NodeWrapper node, BraintreeGateway gateway)
         {
             if (node == null) return;
 
@@ -58,7 +58,7 @@ namespace Braintree
             Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
             Id = node.GetString("id");
             BillingAddress = new Address(node.GetNode("billing"));
-            CreditCard = new CreditCard(node.GetNode("credit-card"), service);
+            CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
             CreatedAt = node.GetDateTime("created-at");
 
             var riskDataNode = node.GetNode("risk-data");

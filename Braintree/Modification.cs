@@ -6,17 +6,17 @@ namespace Braintree
 {
     public class Modification
     {
-        public Decimal? Amount { get; protected set; }
+        public decimal? Amount { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
-        public Int32? CurrentBillingCycle { get; protected set; }
-        public String Description { get; protected set; }
-        public String Id { get; protected set; }
-        public String Kind { get; protected set; }
-        public String MerchantId { get; protected set; }
-        public String Name { get; protected set; }
-        public Boolean? NeverExpires { get; protected set; }
-        public Int32? NumberOfBillingCycles { get; protected set; }
-        public Int32? Quantity { get; protected set; }
+        public int? CurrentBillingCycle { get; protected set; }
+        public string Description { get; protected set; }
+        public string Id { get; protected set; }
+        public string Kind { get; protected set; }
+        public string MerchantId { get; protected set; }
+        public string Name { get; protected set; }
+        public bool? NeverExpires { get; protected set; }
+        public int? NumberOfBillingCycles { get; protected set; }
+        public int? Quantity { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
 
         protected Modification(NodeWrapper node)

@@ -5,18 +5,18 @@ namespace Braintree
 {
     public class SubscriptionOptionsRequest : Request
     {
-        public Boolean? DoNotInheritAddOnsOrDiscounts { get; set; }
-        public Boolean? ProrateCharges { get; set; }
-        public Boolean? ReplaceAllAddOnsAndDiscounts { get; set; }
-        public Boolean? RevertSubscriptionOnProrationFailure { get; set; }
-        public Boolean? StartImmediately { get; set; }
+        public bool? DoNotInheritAddOnsOrDiscounts { get; set; }
+        public bool? ProrateCharges { get; set; }
+        public bool? ReplaceAllAddOnsAndDiscounts { get; set; }
+        public bool? RevertSubscriptionOnProrationFailure { get; set; }
+        public bool? StartImmediately { get; set; }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("replace-all-add-ons-and-discounts", ReplaceAllAddOnsAndDiscounts).

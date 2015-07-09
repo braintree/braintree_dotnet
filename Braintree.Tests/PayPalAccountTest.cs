@@ -123,7 +123,7 @@ namespace Braintree.Tests
 
             Assert.IsTrue(result.IsSuccess());
 
-            String newToken = Guid.NewGuid().ToString();
+            string newToken = Guid.NewGuid().ToString();
             var updateRequest = new PayPalAccountRequest
             {
                 Token = newToken

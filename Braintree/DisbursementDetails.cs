@@ -6,11 +6,11 @@ namespace Braintree
 {
     public class DisbursementDetails
     {
-        public Decimal? SettlementAmount { get; protected set; }
-        public String SettlementCurrencyIsoCode { get; protected set; }
-        public String SettlementCurrencyExchangeRate { get; protected set; }
-        public Boolean? FundsHeld { get; protected set; }
-        public Boolean? Success { get; protected set; }
+        public decimal? SettlementAmount { get; protected set; }
+        public string SettlementCurrencyIsoCode { get; protected set; }
+        public string SettlementCurrencyExchangeRate { get; protected set; }
+        public bool? FundsHeld { get; protected set; }
+        public bool? Success { get; protected set; }
         public DateTime? DisbursementDate { get; protected set; }
 
         protected internal DisbursementDetails(NodeWrapper node)
@@ -23,7 +23,7 @@ namespace Braintree
             DisbursementDate = node.GetDateTime("disbursement-date");
         }
 
-        public Boolean IsValid()
+        public bool IsValid()
         {
             return DisbursementDate != null;
         }

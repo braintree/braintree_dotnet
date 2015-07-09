@@ -41,7 +41,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsAParsableNotification()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
 
             WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -54,7 +54,7 @@ namespace Braintree.Tests
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="no matching public key")]
         public void Parse_WithInvalidPublicKey()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse("bad" + sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
         }
 
@@ -62,7 +62,7 @@ namespace Braintree.Tests
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="signature does not match payload - one has been modified")]
         public void Parse_WithChangedPayload()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], "bad" + sampleNotification["bt_payload"]);
         }
 
@@ -70,7 +70,7 @@ namespace Braintree.Tests
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="payload contains illegal characters")]
         public void Parse_WithInvalidCharactersInPayload()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], "^& bad ,* chars @!" + sampleNotification["bt_payload"]);
         }
 
@@ -78,21 +78,21 @@ namespace Braintree.Tests
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="signature does not match payload - one has been modified")]
         public void Parse_AllowsAllValidChars()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+=/\n");
         }
 
         [Test]
         public void Retries()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
             gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"].Trim());
         }
 
         [Test]
         public void SampleNotification_ReturnsANotificationForAMerchantAccountApprovedWebhook()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED, "my_id");
 
             WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -107,7 +107,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForAMerchantAccountDeclinedWebhook()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED, "my_id");
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -120,7 +120,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForATransactionDisbursedWebhook()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_DISBURSED, "my_id");
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_DISBURSED, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -133,7 +133,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForADisbursementExceptionWebhook()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISBURSEMENT_EXCEPTION, "my_id");
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISBURSEMENT_EXCEPTION, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -151,7 +151,7 @@ namespace Braintree.Tests
 
         public void SampleNotification_ReturnsANotificationForADisbursementWebhook()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISBURSEMENT, "my_id");
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISBURSEMENT, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -170,7 +170,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForDisputeOpenedWebhook()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_OPENED, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_OPENED, "my_id");
 
             WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -181,7 +181,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForDisputeLostWebhook()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_LOST, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_LOST, "my_id");
 
             WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -192,7 +192,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForDisputeWonWebhook()
         {
-            Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_WON, "my_id");
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_WON, "my_id");
 
             WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -203,7 +203,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantConnected()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_CONNECTED, "my_id");
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_CONNECTED, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -218,7 +218,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantDisconnected()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DISCONNECTED, "my_id");
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DISCONNECTED, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 
@@ -232,7 +232,7 @@ namespace Braintree.Tests
         [Test]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantDeclined()
         {
-          Dictionary<String, String> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DECLINED, "my_id");
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DECLINED, "my_id");
 
           WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
 

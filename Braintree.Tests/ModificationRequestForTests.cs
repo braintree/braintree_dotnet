@@ -3,30 +3,30 @@ namespace Braintree.Tests
 {
     public class ModificationRequestForTests : Request
     {
-        public Decimal? Amount { get; set; }
+        public decimal? Amount { get; set; }
         public DateTime? CreatedAt { get; set; }
-        public String Description { get; set; }
-        public String Id { get; set; }
-        new public String Kind { get; set; }
-        public String MerchantId { get; set; }
-        public String Name { get; set; }
-        public Boolean? NeverExpires { get; set; }
-        public Int32? NumberOfBillingCycles { get; set; }
-        public String PlanId { get; set; }
-        public Int32? Quantity { get; set; }
+        public string Description { get; set; }
+        public string Id { get; set; }
+        new public string Kind { get; set; }
+        public string MerchantId { get; set; }
+        public string Name { get; set; }
+        public bool? NeverExpires { get; set; }
+        public int? NumberOfBillingCycles { get; set; }
+        public string PlanId { get; set; }
+        public int? Quantity { get; set; }
         public DateTime? UpdatedAt { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("modification");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public RequestBuilder BuildRequest(String root)
+        public RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("amount", Amount).

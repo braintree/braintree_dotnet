@@ -51,8 +51,8 @@ namespace Braintree
     ///
     ///             Transaction transaction = gateway.Transaction.Sale(request).Target;
     ///
-    ///             Console.WriteLine(String.Format("Transaction ID: {0}", transaction.Id));
-    ///             Console.WriteLine(String.Format("Status: {0}", transaction.Status));
+    ///             Console.WriteLine(string.Format("Transaction ID: {0}", transaction.Id));
+    ///             Console.WriteLine(string.Format("Status: {0}", transaction.Status));
     ///         }
     ///     }
     /// }
@@ -66,22 +66,40 @@ namespace Braintree
             set { Configuration.Environment = value; }
         }
 
-        public String MerchantId
+        public string MerchantId
         {
             get { return Configuration.MerchantId; }
             set { Configuration.MerchantId = value; }
         }
 
-        public String PublicKey
+        public string PublicKey
         {
             get { return Configuration.PublicKey; }
             set { Configuration.PublicKey = value; }
         }
 
-        public String PrivateKey
+        public string PrivateKey
         {
             get { return Configuration.PrivateKey; }
             set { Configuration.PrivateKey = value; }
+        }
+
+        public string AccessToken
+        {
+            get { return Configuration.AccessToken; }
+            set { Configuration.AccessToken = value; }
+        }
+
+        public string ClientId
+        {
+            get { return Configuration.ClientId; }
+            set { Configuration.ClientId = value; }
+        }
+
+        public string ClientSecret
+        {
+            get { return Configuration.ClientSecret; }
+            set { Configuration.ClientSecret = value; }
         }
 
         public Configuration Configuration { get; set; }
@@ -96,6 +114,16 @@ namespace Braintree
             Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
         }
 
+        public BraintreeGateway(string accessToken)
+        {
+            Configuration = new Configuration(accessToken);
+        }
+
+        public BraintreeGateway(string clientId, string clientSecret)
+        {
+            Configuration = new Configuration(clientId, clientSecret);
+        }
+
         public BraintreeGateway(Configuration configuration)
         {
             Configuration = configuration;
@@ -103,97 +131,107 @@ namespace Braintree
 
         public virtual ClientTokenGateway ClientToken
         {
-            get { return new ClientTokenGateway(new BraintreeService(Configuration)); }
+            get { return new ClientTokenGateway(this); }
         }
 
         public virtual CustomerGateway Customer
         {
-            get { return new CustomerGateway(new BraintreeService(Configuration)); }
+            get { return new CustomerGateway(this); }
         }
 
         public virtual AddressGateway Address
         {
-            get { return new AddressGateway(new BraintreeService(Configuration)); }
+            get { return new AddressGateway(this); }
         }
 
         public virtual AddOnGateway AddOn
         {
-            get { return new AddOnGateway(new BraintreeService(Configuration)); }
+            get { return new AddOnGateway(this); }
         }
 
         public virtual CreditCardGateway CreditCard
         {
-            get { return new CreditCardGateway(new BraintreeService(Configuration)); }
+            get { return new CreditCardGateway(this); }
         }
 
         public virtual CreditCardVerificationGateway CreditCardVerification
         {
-            get { return new CreditCardVerificationGateway(new BraintreeService(Configuration)); }
+            get { return new CreditCardVerificationGateway(this); }
         }
 
         public virtual DiscountGateway Discount
         {
-            get { return new DiscountGateway(new BraintreeService(Configuration)); }
+            get { return new DiscountGateway(this); }
         }
 
         public virtual MerchantAccountGateway MerchantAccount
         {
-            get { return new MerchantAccountGateway(new BraintreeService(Configuration)); }
+            get { return new MerchantAccountGateway(this); }
+        }
+
+        public virtual OAuthGateway OAuth
+        {
+            get { return new OAuthGateway(this); }
+        }
+
+        public virtual MerchantGateway Merchant
+        {
+            get { return new MerchantGateway(this); }
         }
 
         public virtual PaymentMethodGateway PaymentMethod
         {
-            get { return new PaymentMethodGateway(new BraintreeService(Configuration)); }
+            get { return new PaymentMethodGateway(this); }
         }
 
         public virtual PayPalAccountGateway PayPalAccount
         {
-            get { return new PayPalAccountGateway(new BraintreeService(Configuration)); }
+            get { return new PayPalAccountGateway(this); }
         }
 
         public virtual PlanGateway Plan
         {
-            get { return new PlanGateway(new BraintreeService(Configuration)); }
+            get { return new PlanGateway(this); }
         }
 
         public virtual SettlementBatchSummaryGateway SettlementBatchSummary
         {
-            get { return new SettlementBatchSummaryGateway(new BraintreeService(Configuration)); }
+            get { return new SettlementBatchSummaryGateway(this); }
         }
 
         public virtual SubscriptionGateway Subscription
         {
-            get { return new SubscriptionGateway(new BraintreeService(Configuration)); }
+            get { return new SubscriptionGateway(this); }
         }
 
         public virtual TransactionGateway Transaction
         {
-            get { return new TransactionGateway(new BraintreeService(Configuration)); }
+            get { return new TransactionGateway(this); }
         }
 
         public virtual TransparentRedirectGateway TransparentRedirect
         {
-            get { return new TransparentRedirectGateway(new BraintreeService(Configuration)); }
+            get { return new TransparentRedirectGateway(this); }
         }
 
-        public virtual String TrData(Request trData, String redirectURL)
+        public virtual string TrData(Request trData, string redirectURL)
         {
             return TrUtil.BuildTrData(trData, redirectURL, new BraintreeService(Configuration));
         }
 
         public virtual WebhookNotificationGateway WebhookNotification
         {
-            get { return new WebhookNotificationGateway(new BraintreeService(Configuration)); }
+            get { return new WebhookNotificationGateway(this); }
         }
 
         public virtual WebhookTestingGateway WebhookTesting
         {
-            get { return new WebhookTestingGateway(new BraintreeService(Configuration)); }
+            get { return new WebhookTestingGateway(this); }
         }
 
         public virtual PaymentMethodNonceGateway PaymentMethodNonce
         {
-            get { return new PaymentMethodNonceGateway(new BraintreeService(Configuration)); }
+            get { return new PaymentMethodNonceGateway(this); }
         }
     }
 }

@@ -6,41 +6,41 @@ namespace Braintree
 {
     public class ApplicantDetailsRequest : Request
     {
-      public String CompanyName { get; set; }
-      public String FirstName { get; set; }
-      public String LastName { get; set; }
-      public String Email { get; set; }
-      public String Phone { get; set; }
+      public string CompanyName { get; set; }
+      public string FirstName { get; set; }
+      public string LastName { get; set; }
+      public string Email { get; set; }
+      public string Phone { get; set; }
       public AddressRequest Address { get; set; }
-      public String DateOfBirth { get; set; }
-      public String Ssn { get; set; }
-      public String TaxId { get; set; }
-      public String RoutingNumber { get; set; }
-      public String AccountNumber { get; set; }
+      public string DateOfBirth { get; set; }
+      public string Ssn { get; set; }
+      public string TaxId { get; set; }
+      public string RoutingNumber { get; set; }
+      public string AccountNumber { get; set; }
 
-      public override String ToXml()
+      public override string ToXml()
       {
         return ToXml("applicant-details");
       }
 
-      public override String ToXml(String root)
+      public override string ToXml(string root)
       {
         return BuildRequest(root).ToXml();
       }
 
-      public override String ToQueryString()
+      public override string ToQueryString()
       {
         return ToQueryString("applicant-details");
       }
 
-      public override String ToQueryString(String root)
+      public override string ToQueryString(string root)
       {
         return BuildRequest(root).ToQueryString();
       }
 
-      protected virtual RequestBuilder BuildRequest(String root)
+      protected virtual RequestBuilder BuildRequest(string root)
       {
-        RequestBuilder builder = new RequestBuilder(root);
+        var builder = new RequestBuilder(root);
 
         builder.AddElement("company-name", CompanyName);
         builder.AddElement("first-name", FirstName);

@@ -4,15 +4,15 @@ namespace Braintree
 {
     public class PayPalAccount : PaymentMethod
     {
-        public String Email { get; protected set; }
-        public String Token { get; protected set; }
-        public Boolean? IsDefault { get; protected set; }
-        public String ImageUrl { get; protected set; }
+        public string Email { get; protected set; }
+        public string Token { get; protected set; }
+        public bool? IsDefault { get; protected set; }
+        public string ImageUrl { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal PayPalAccount(NodeWrapper node, BraintreeService service)
+        protected internal PayPalAccount(NodeWrapper node, BraintreeGateway gateway)
         {
             Email = node.GetString("email");
             Token = node.GetString("token");
@@ -25,7 +25,7 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
 

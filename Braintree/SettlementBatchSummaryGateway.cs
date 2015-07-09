@@ -5,17 +5,19 @@ namespace Braintree
 {
     public class SettlementBatchSummaryGateway
     {
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
-        private BraintreeService Service;
-
-        protected internal SettlementBatchSummaryGateway(BraintreeService service)
+        protected internal SettlementBatchSummaryGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            this.gateway = gateway;
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public Result<SettlementBatchSummary> Generate(DateTime settlementDate)
         {
-            SettlementBatchSummaryRequest request = new SettlementBatchSummaryRequest
+            var request = new SettlementBatchSummaryRequest
             {
                 SettlementDate = settlementDate
             };
@@ -24,7 +26,7 @@ namespace Braintree
 
         public Result<SettlementBatchSummary> Generate(DateTime settlementDate, string groupByCustomField)
         {
-            SettlementBatchSummaryRequest request = new SettlementBatchSummaryRequest
+            var request = new SettlementBatchSummaryRequest
             {
                 SettlementDate = settlementDate,
                 GroupByCustomField = groupByCustomField
@@ -34,8 +36,8 @@ namespace Braintree
 
         private Result<SettlementBatchSummary> GetSummary(SettlementBatchSummaryRequest request)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post("/settlement_batch_summary", request));
-            return new ResultImpl<SettlementBatchSummary>(response, Service);
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/settlement_batch_summary", request));
+            return new ResultImpl<SettlementBatchSummary>(response, gateway);
         }
     }
 }

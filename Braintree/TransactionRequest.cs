@@ -28,36 +28,36 @@ namespace Braintree
     public class TransactionRequest : Request
     {
         public TransactionCreditCardRequest CreditCard { get; set; }
-        public Decimal Amount { get; set; }
-        public String DeviceData { get; set; }
-        public String DeviceSessionId { get; set; }
-        public String FraudMerchantId { get; set; }
-        public String Channel { get; set; }
-        public String OrderId { get; set; }
-        public Boolean? Recurring { get; set; }
-        public String MerchantAccountId { get; set; }
-        public String PurchaseOrderNumber { get; set; }
+        public decimal Amount { get; set; }
+        public string DeviceData { get; set; }
+        public string DeviceSessionId { get; set; }
+        public string FraudMerchantId { get; set; }
+        public string Channel { get; set; }
+        public string OrderId { get; set; }
+        public bool? Recurring { get; set; }
+        public string MerchantAccountId { get; set; }
+        public string PurchaseOrderNumber { get; set; }
         public CustomerRequest Customer { get; set; }
         public DescriptorRequest Descriptor { get; set; }
         public IndustryRequest Industry { get; set; }
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
         public TransactionPayPalRequest PayPalAccount { get; set; }
-        public Decimal TaxAmount { get; set; }
-        public Boolean? TaxExempt { get; set; }
+        public decimal TaxAmount { get; set; }
+        public bool? TaxExempt { get; set; }
         public TransactionType Type { get; set; }
-        public Dictionary<String, String> CustomFields { get; set; }
+        public Dictionary<string, string> CustomFields { get; set; }
         public TransactionOptionsRequest Options { get; set; }
-        public String PaymentMethodToken { get; set; }
-        public String CustomerId { get; set; }
-        public String ShippingAddressId { get; set; }
-        public String BillingAddressId { get; set; }
-        public String VenmoSdkPaymentMethodCode { get; set; }
-        public String PaymentMethodNonce { get; set; }
-        public Decimal? ServiceFeeAmount { get; set; }
+        public string PaymentMethodToken { get; set; }
+        public string CustomerId { get; set; }
+        public string ShippingAddressId { get; set; }
+        public string BillingAddressId { get; set; }
+        public string VenmoSdkPaymentMethodCode { get; set; }
+        public string PaymentMethodNonce { get; set; }
+        public decimal? ServiceFeeAmount { get; set; }
         private bool _threeDSecureTransaction;
-        private String _threeDSecureToken;
-        public String ThreeDSecureToken {
+        private string _threeDSecureToken;
+        public string ThreeDSecureToken {
             get { return _threeDSecureToken; }
             set
             {
@@ -68,37 +68,37 @@ namespace Braintree
 
         public TransactionRequest()
         {
-            CustomFields = new Dictionary<String, String>();
+            CustomFields = new Dictionary<string, string>();
         }
 
-        public override String Kind()
+        public override string Kind()
         {
             return TransparentRedirectGateway.CREATE_TRANSACTION;
         }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("transaction");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString()
+        public override string ToQueryString()
         {
             return ToQueryString("transaction");
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
-            RequestBuilder builder = new RequestBuilder(root);
+            var builder = new RequestBuilder(root);
 
             if (Amount != 0) builder.AddElement("amount", Amount);
             builder.AddElement("device-data", DeviceData);

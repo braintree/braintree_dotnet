@@ -12,42 +12,45 @@ namespace Braintree
     /// </summary>
     public class CreditCardVerificationGateway
     {
-        private BraintreeService Service;
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
-        protected internal CreditCardVerificationGateway(BraintreeService service)
+        protected internal CreditCardVerificationGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            this.gateway = gateway;
+            service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual CreditCardVerification Find(String Id)
+        public virtual CreditCardVerification Find(string Id)
         {
             if(Id == null || Id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode creditCardVerificationXML = Service.Get("/verifications/" + Id);
+            XmlNode creditCardVerificationXML = service.Get(service.MerchantPath() + "/verifications/" + Id);
 
-            return new CreditCardVerification(new NodeWrapper(creditCardVerificationXML), Service);
+            return new CreditCardVerification(new NodeWrapper(creditCardVerificationXML), gateway);
         }
 
         public virtual ResourceCollection<CreditCardVerification> Search(CreditCardVerificationSearchRequest query)
         {
-            NodeWrapper response = new NodeWrapper(Service.Post("/verifications/advanced_search_ids", query));
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/verifications/advanced_search_ids", query));
 
-            return new ResourceCollection<CreditCardVerification>(response, delegate(String[] ids) {
+            return new ResourceCollection<CreditCardVerification>(response, delegate(string[] ids) {
                 return FetchCreditCardVerifications(query, ids);
             });
         }
 
-        private List<CreditCardVerification> FetchCreditCardVerifications(CreditCardVerificationSearchRequest query, String[] ids)
+        private List<CreditCardVerification> FetchCreditCardVerifications(CreditCardVerificationSearchRequest query, string[] ids)
         {
             query.Ids.IncludedIn(ids);
 
-            NodeWrapper response = new NodeWrapper(Service.Post("/verifications/advanced_search", query));
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/verifications/advanced_search", query));
 
-            List<CreditCardVerification> verifications = new List<CreditCardVerification>();
-            foreach (NodeWrapper node in response.GetList("verification"))
+            var verifications = new List<CreditCardVerification>();
+            foreach (var node in response.GetList("verification"))
             {
-                verifications.Add(new CreditCardVerification(node, Service));
+                verifications.Add(new CreditCardVerification(node, gateway));
             }
             return verifications;
         }

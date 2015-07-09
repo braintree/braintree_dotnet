@@ -7,11 +7,11 @@ namespace Braintree
     public class MerchantAccountFundingDetails
     {
         public FundingDestination Destination { get; protected set; }
-        public String RoutingNumber { get; protected set; }
-        public String AccountNumberLast4 { get; protected set; }
-        public String Email { get; protected set; }
-        public String MobilePhone { get; protected set; }
-        public String Descriptor { get; protected set; }
+        public string RoutingNumber { get; protected set; }
+        public string AccountNumberLast4 { get; protected set; }
+        public string Email { get; protected set; }
+        public string MobilePhone { get; protected set; }
+        public string Descriptor { get; protected set; }
 
         protected internal MerchantAccountFundingDetails(NodeWrapper node)
         {

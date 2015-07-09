@@ -294,7 +294,7 @@ namespace Braintree.Tests
             nestedErrors.AddErrors("some_nested_object", nestedNestedErrors);
             errors.AddErrors("some_object", nestedErrors);
 
-            Dictionary<String, List<String>> formErrors = errors.ByFormField();
+            Dictionary<string, List<string>> formErrors = errors.ByFormField();
             Assert.AreEqual("some error", formErrors["some_error"][0]);
             Assert.AreEqual("some other error", formErrors["some_error"][1]);
 
@@ -323,7 +323,7 @@ namespace Braintree.Tests
             nestedErrors.AddErrors("some-nested-object", nestedNestedErrors);
             errors.AddErrors("some-object", nestedErrors);
 
-            Dictionary<String, List<String>> formErrors = errors.ByFormField();
+            Dictionary<string, List<string>> formErrors = errors.ByFormField();
             Assert.AreEqual("some error", formErrors["some_error"][0]);
             Assert.AreEqual("some other error", formErrors["some_error"][1]);
 

@@ -46,21 +46,21 @@ namespace Braintree
     /// </example>
     public class CustomerRequest : Request
     {
-        public String Id { get; set; }
-        public String DeviceData { get; set; }
-        public String CustomerId { get; set; }
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
-        public String Company { get; set; }
-        public String Email { get; set; }
-        public String Phone { get; set; }
-        public String Fax { get; set; }
-        public String Website { get; set; }
-        public String PaymentMethodNonce { get; set; }
-        public Dictionary<String, String> CustomFields { get; set; }
+        public string Id { get; set; }
+        public string DeviceData { get; set; }
+        public string CustomerId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Company { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Fax { get; set; }
+        public string Website { get; set; }
+        public string PaymentMethodNonce { get; set; }
+        public Dictionary<string, string> CustomFields { get; set; }
         public CreditCardRequest CreditCard { get; set; }
 
-        public override String Kind()
+        public override string Kind()
         {
             if (CustomerId == null)
             {
@@ -72,29 +72,29 @@ namespace Braintree
             }
         }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("customer");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString()
+        public override string ToQueryString()
         {
             return ToQueryString("customer");
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).
                 AddTopLevelElement("customer_id", CustomerId).
                 ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("id", Id).

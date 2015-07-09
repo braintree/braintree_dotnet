@@ -59,7 +59,7 @@ namespace Braintree.Tests
             transaction = gateway.Transaction.Find(transaction.Id);
 
             var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate));
-            var visas = new List<IDictionary<String,String>>();
+            var visas = new List<IDictionary<string,string>>();
             foreach (var row in result.Target.Records)
             {
                 if (Braintree.CreditCardCardType.VISA.ToString().Equals(row["card_type"]))
@@ -103,7 +103,7 @@ namespace Braintree.Tests
                 {
                     SubmitForSettlement = true
                 },
-                CustomFields = new Dictionary<String, String>
+                CustomFields = new Dictionary<string, string>
                 {
                     { "store_me", "custom value" }
                 }
@@ -115,7 +115,7 @@ namespace Braintree.Tests
             transaction = gateway.Transaction.Find(transaction.Id);
 
             var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate), "store_me");
-            var customValues = new List<IDictionary<String, String>>();
+            var customValues = new List<IDictionary<string, string>>();
             foreach (var row in result.Target.Records)
             {
                 if ("custom value".Equals(row["store_me"]))

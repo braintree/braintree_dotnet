@@ -11,29 +11,28 @@ namespace Braintree
 {
     public class TransparentRedirectRequest : Request
     {
+        public string Id { get; protected set; }
 
-        public String Id { get; protected set; }
-
-        public TransparentRedirectRequest(String queryString, BraintreeService service)
+        public TransparentRedirectRequest(string queryString, BraintreeService service)
         {
             queryString = queryString.TrimStart('?');
 
-            Dictionary<String, String> paramMap = new Dictionary<String, String>();
-            String[] queryParams = queryString.Split('&');
+            var paramMap = new Dictionary<string, string>();
+            string[] queryParams = queryString.Split('&');
 
-            foreach (String queryParam in queryParams)
+            foreach (var queryParam in queryParams)
             {
-                String[] items = queryParam.Split('=');
+                var items = queryParam.Split('=');
                 paramMap[items[0]] = items[1];
             }
 
-            String message = null;
+            string message = null;
             if (paramMap.ContainsKey("bt_message"))
             {
                 message = HttpUtility.UrlDecode(paramMap["bt_message"]);
             }
 
-            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode)Int32.Parse(paramMap["http_status"]), message);
+            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode)int.Parse(paramMap["http_status"]), message);
 
             if (!TrUtil.IsValidTrQueryString(queryString, service))
             {
@@ -43,9 +42,9 @@ namespace Braintree
             Id = paramMap["id"];
         }
 
-        public override String ToXml()
+        public override string ToXml()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append(BuildXMLElement("id", Id));
             
             return builder.ToString();

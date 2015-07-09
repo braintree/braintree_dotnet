@@ -12,7 +12,7 @@ namespace Braintree
 {
     public class BraintreeService
     {
-        public String ApiVersion = "4";
+        public string ApiVersion = "4";
 
         protected Configuration Configuration;
 
@@ -21,19 +21,29 @@ namespace Braintree
             get { return Configuration.Environment; }
         }
 
-        public String MerchantId
+        public string MerchantId
         {
             get { return Configuration.MerchantId; }
         }
 
-        public String PublicKey
+        public string PublicKey
         {
             get { return Configuration.PublicKey; }
         }
 
-        public String PrivateKey
+        public string PrivateKey
         {
             get { return Configuration.PrivateKey; }
+        }
+
+        public string ClientId
+        {
+            get { return Configuration.ClientId; }
+        }
+
+        public string ClientSecret
+        {
+            get { return Configuration.ClientSecret; }
         }
 
         public BraintreeService(Configuration configuration)
@@ -61,21 +71,21 @@ namespace Braintree
             return GetXmlResponse(URL, "POST", null);
         }
 
-        public XmlNode Put(String URL)
+        public XmlNode Put(string URL)
         {
             return Put(URL, null);
         }
 
-        internal XmlNode Put(String URL, Request requestBody)
+        internal XmlNode Put(string URL, Request requestBody)
         {
             return GetXmlResponse(URL, "PUT", requestBody);
         }
 
-        private XmlNode GetXmlResponse(String URL, String method, Request requestBody)
+        private XmlNode GetXmlResponse(string URL, string method, Request requestBody)
         {
             try
             {
-                var request = WebRequest.Create(BaseMerchantURL() + URL) as HttpWebRequest;
+                var request = WebRequest.Create(Environment.GatewayURL + URL) as HttpWebRequest;
                 request.Headers.Add("Authorization", GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", ApiVersion);
                 request.Headers.Add("Accept-Encoding", "gzip");
@@ -146,25 +156,43 @@ namespace Braintree
             }
             else
             {
-                XmlDocument doc = new XmlDocument();
+                var doc = new XmlDocument();
                 doc.LoadXml(xml);
                 if (doc.ChildNodes.Count == 1) return doc.ChildNodes[0];
                 return doc.ChildNodes[1];
             }
         }
 
-        public String BaseMerchantURL()
+        public string BaseMerchantURL()
         {
-            return Environment.GatewayURL + "/merchants/" + MerchantId;
+            return Environment.GatewayURL + MerchantPath();
         }
 
-        public String GetAuthorizationHeader()
+        public string MerchantPath()
         {
-            return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(PublicKey + ":" + PrivateKey)).Trim();
-
+            return "/merchants/" + MerchantId;
         }
 
-        public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, String message)
+        public string GetAuthorizationHeader()
+        {
+            string credentials;
+            if (Configuration.IsAccessToken)
+            {
+                return "Bearer " + Configuration.AccessToken;
+            } else {
+                if (Configuration.IsClientCredentials)
+                {
+                    credentials = ClientId + ":" + ClientSecret;
+                }
+                else
+                {
+                    credentials = PublicKey + ":" + PrivateKey;
+                }
+                return "Basic " + Convert.ToBase64String(Encoding.Default.GetBytes(credentials)).Trim();
+            }
+        }
+
+        public static void ThrowExceptionIfErrorStatusCode(HttpStatusCode httpStatusCode, string message)
         {
             if (httpStatusCode != HttpStatusCode.OK && httpStatusCode != HttpStatusCode.Created)
             {

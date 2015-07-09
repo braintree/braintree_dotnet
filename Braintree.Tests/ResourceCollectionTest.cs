@@ -10,12 +10,12 @@ namespace Braintree.Tests
     [TestFixture]
     public class ResourceCollectionTest
     {
-        private String[] values = new String[] { "a", "b", "c", "d", "e" };
+        private string[] values = new string[] { "a", "b", "c", "d", "e" };
 
         [Test]
         public void ResourceCollection_IteratesOverCollectionsProperly()
         {
-            String body = @"<search-results>
+            string body = @"<search-results>
                               <page-size>2</page-size>
                               <ids type='array'>
                                 <items>0</items>
@@ -30,12 +30,12 @@ namespace Braintree.Tests
             doc.LoadXml(body);
             NodeWrapper xml = new NodeWrapper(doc.ChildNodes[0]);
 
-            ResourceCollection<String> resourceCollection = new ResourceCollection<String>(xml, delegate(String[] ids) {
-                List<String> results = new List<String>();
+            ResourceCollection<string> resourceCollection = new ResourceCollection<string>(xml, delegate(string[] ids) {
+                List<string> results = new List<string>();
 
-                foreach (String id in ids)
+                foreach (string id in ids)
                 {
-                    results.Add(values[Int32.Parse(id)]);
+                    results.Add(values[int.Parse(id)]);
                 }
 
                 return results;
@@ -43,7 +43,7 @@ namespace Braintree.Tests
 
             int index = 0;
             int count = 0;
-            foreach (String item in resourceCollection)
+            foreach (string item in resourceCollection)
             {
                 Assert.AreEqual(values[index], item);
                 index++;

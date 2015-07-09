@@ -7,22 +7,22 @@ namespace Braintree
 {
     public class SubscriptionTransactionRequest : Request
     {
-        public Decimal Amount { get; set; }
-        public String SubscriptionId { get; set; }
+        public decimal Amount { get; set; }
+        public string SubscriptionId { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("transaction");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
-            RequestBuilder builder = new RequestBuilder(root);
+            var builder = new RequestBuilder(root);
 
             if (Amount != 0) builder.AddElement("amount", Amount);
             builder.AddElement("subscription-id", SubscriptionId);

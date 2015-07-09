@@ -29,17 +29,17 @@ namespace Braintree.Tests
         [Test]
         public void Find_FindsCustomerWithGivenId()
         {
-            String id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             var createRequest = new CustomerRequest
             {
                 Id = id,
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com",
+                Website = "www.example.com",
                 CreditCard = new CreditCardRequest
                 {
                     Number = "5105105105105100",
@@ -67,10 +67,10 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@compuserver.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
-            Assert.AreEqual("www.disney.com", customer.Website);
+            Assert.AreEqual("www.example.com", customer.Website);
             Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
             Assert.AreEqual(1, customer.CreditCards.Length);
@@ -157,7 +157,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_CanSetCustomFields()
         {
-            var customFields = new Dictionary<String, String>();
+            var customFields = new Dictionary<string, string>();
             customFields.Add("store_me", "a custom value");
             var createRequest = new CustomerRequest()
             {
@@ -176,10 +176,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com",
+                Website = "www.example.com",
                 CreditCard = new CreditCardRequest()
                 {
                     Number = "5105105105105100",
@@ -198,10 +198,10 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@compuserver.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
-            Assert.AreEqual("www.disney.com", customer.Website);
+            Assert.AreEqual("www.example.com", customer.Website);
             Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
 
@@ -239,10 +239,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com",
+                Website = "www.example.com",
                 CreditCard = new CreditCardRequest()
                 {
                     Number = "5105105105105100",
@@ -287,10 +287,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com",
+                Website = "www.example.com",
                 CreditCard = new CreditCardRequest()
                 {
                     Number = "5105105105105100",
@@ -304,10 +304,10 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@compuserver.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
-            Assert.AreEqual("www.disney.com", customer.Website);
+            Assert.AreEqual("www.example.com", customer.Website);
             Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
             Assert.AreEqual(1, customer.CreditCards.Length);
@@ -321,6 +321,44 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Create_CreateCustomerUsingAccessToken()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+            };
+
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "read_write");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "read_write"
+            });
+
+            gateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            Assert.AreEqual("Michael", customer.FirstName);
+            Assert.AreEqual("Angelo", customer.LastName);
+            Assert.AreEqual("Some Company", customer.Company);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
+            Assert.AreEqual("312.555.1111", customer.Phone);
+            Assert.AreEqual("312.555.1112", customer.Fax);
+            Assert.AreEqual("www.example.com", customer.Website);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
+        }
+
+        [Test]
         public void Create_CreateCustomerWithCreditCardAndBillingAddress()
         {
             var createRequest = new CustomerRequest()
@@ -328,10 +366,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com",
+                Website = "www.example.com",
                 CreditCard = new CreditCardRequest()
                 {
                     Number = "5105105105105100",
@@ -357,10 +395,10 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@compuserver.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
-            Assert.AreEqual("www.disney.com", customer.Website);
+            Assert.AreEqual("www.example.com", customer.Website);
             Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
             Assert.AreEqual(1, customer.CreditCards.Length);
@@ -425,7 +463,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithPaymentMethodNonce()
         {
-            String nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
                 CreditCard = new CreditCardRequest{
                     PaymentMethodNonce = nonce
@@ -437,7 +475,7 @@ namespace Braintree.Tests
         [Test]
         public void Create_WithPayPalPaymentMethodNonce()
         {
-            String nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
                 PaymentMethodNonce = nonce
             });
@@ -459,7 +497,7 @@ namespace Braintree.Tests
                 LastName = "Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -491,13 +529,13 @@ namespace Braintree.Tests
                         CountryCodeNumeric = "484"
                     }
                 },
-                CustomFields = new Dictionary<String, String>
+                CustomFields = new Dictionary<string, string>
                 {
                     { "store_me", "a custom value" }
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -536,7 +574,7 @@ namespace Braintree.Tests
                 LastName = "Doe"
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate(), service);
             Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
@@ -595,7 +633,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate(), service);
             Customer updatedCustomer = gateway.Customer.ConfirmTransparentRedirect(queryString).Target;
             CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
 
@@ -637,10 +675,10 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@compuserver.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
-                Website = "www.disney.com"
+                Website = "www.example.com"
             };
 
             Customer updatedCustomer = gateway.Customer.Update(oldId, updateRequest).Target;
@@ -648,10 +686,10 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", updatedCustomer.FirstName);
             Assert.AreEqual("Angelo", updatedCustomer.LastName);
             Assert.AreEqual("Some Company", updatedCustomer.Company);
-            Assert.AreEqual("hansolo64@compuserver.com", updatedCustomer.Email);
+            Assert.AreEqual("hansolo64@example.com", updatedCustomer.Email);
             Assert.AreEqual("312.555.1111", updatedCustomer.Phone);
             Assert.AreEqual("312.555.1112", updatedCustomer.Fax);
-            Assert.AreEqual("www.disney.com", updatedCustomer.Website);
+            Assert.AreEqual("www.example.com", updatedCustomer.Website);
             Assert.AreEqual(DateTime.Now.Year, updatedCustomer.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, updatedCustomer.UpdatedAt.Value.Year);
         }
@@ -775,7 +813,7 @@ namespace Braintree.Tests
         [Test]
         public void Delete_DeletesTheCustomer()
         {
-            String id = Guid.NewGuid().ToString();
+            string id = Guid.NewGuid().ToString();
             gateway.Customer.Create(new CustomerRequest() { Id = id });
             Assert.AreEqual(id, gateway.Customer.Find(id).Id);
             gateway.Customer.Delete(id);
@@ -797,11 +835,11 @@ namespace Braintree.Tests
 
             Assert.IsTrue(collection.MaximumCount > 100);
     
-            List<String> items = new List<String>();
+            List<string> items = new List<string>();
             foreach (Customer item in collection) {
                 items.Add(item.Id);
             }
-            HashSet<String> uniqueItems = new HashSet<String>(items);
+            HashSet<string> uniqueItems = new HashSet<string>(items);
 
             Assert.AreEqual(uniqueItems.Count, collection.MaximumCount);
         }
@@ -835,7 +873,7 @@ namespace Braintree.Tests
 
             ResourceCollection<Customer> collection = gateway.Customer.Search(searchRequest);
 
-            List<String> customerIds = new List<String>();
+            List<string> customerIds = new List<string>();
             foreach (Customer customer in collection) {
                 customerIds.Add(customer.Id);
             }
@@ -847,7 +885,7 @@ namespace Braintree.Tests
         [Test]
         public void Search_OnAllTextFields()
         {
-            String creditCardToken = String.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
 
             CustomerRequest request = new CustomerRequest
             {

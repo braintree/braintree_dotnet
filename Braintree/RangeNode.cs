@@ -6,7 +6,7 @@ namespace Braintree
 {
     public class RangeNode<T> : SearchNode<T> where T : SearchRequest
     {
-        public RangeNode(String name, T parent) : base(name, parent)
+        public RangeNode(string name, T parent) : base(name, parent)
         {
         }
 

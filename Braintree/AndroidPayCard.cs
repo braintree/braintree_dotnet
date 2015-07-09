@@ -4,24 +4,24 @@ namespace Braintree
 {
     public class AndroidPayCard : PaymentMethod
     {
-        public String CardType { get; protected set; }
-        public String Last4 { get; protected set; }
-        public String SourceCardType { get; protected set; }
-        public String SourceCardLast4 { get; protected set; }
-        public String VirtualCardType { get; protected set; }
-        public String VirtualCardLast4 { get; protected set; }
-        public String ExpirationMonth { get; protected set; }
-        public String ExpirationYear { get; protected set; }
-        public String Token { get; protected set; }
-        public String GoogleTransactionId { get; protected set; }
-        public String Bin { get; protected set; }
-        public Boolean? IsDefault { get; protected set; }
-        public String ImageUrl { get; protected set; }
+        public string CardType { get; protected set; }
+        public string Last4 { get; protected set; }
+        public string SourceCardType { get; protected set; }
+        public string SourceCardLast4 { get; protected set; }
+        public string VirtualCardType { get; protected set; }
+        public string VirtualCardLast4 { get; protected set; }
+        public string ExpirationMonth { get; protected set; }
+        public string ExpirationYear { get; protected set; }
+        public string Token { get; protected set; }
+        public string GoogleTransactionId { get; protected set; }
+        public string Bin { get; protected set; }
+        public bool? IsDefault { get; protected set; }
+        public string ImageUrl { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal AndroidPayCard(NodeWrapper node, BraintreeService service)
+        protected internal AndroidPayCard(NodeWrapper node, BraintreeGateway gateway)
         {
             CardType = node.GetString("virtual-card-type");
             VirtualCardType = node.GetString("virtual-card-type");
@@ -44,7 +44,7 @@ namespace Braintree
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
             for (int i = 0; i < subscriptionXmlNodes.Count; i++)
             {
-                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], service);
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
     }

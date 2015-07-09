@@ -6,19 +6,20 @@ namespace Braintree
 {
     public class DiscountGateway
     {
-        private BraintreeService Service;
+        private BraintreeService service;
 
-        public DiscountGateway(BraintreeService service)
+        public DiscountGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual List<Discount> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Get("/discounts"));
+            var response = new NodeWrapper(service.Get(service.MerchantPath() + "/discounts"));
 
-            List<Discount> discounts = new List<Discount>();
-            foreach (NodeWrapper node in response.GetList("discount"))
+            var discounts = new List<Discount>();
+            foreach (var node in response.GetList("discount"))
             {
                 discounts.Add(new Discount(node));
             }

@@ -7,7 +7,7 @@ namespace Braintree
 {
     public class Crypto
     {
-        public virtual Boolean SecureCompare(String left, String right)
+        public virtual bool SecureCompare(string left, string right)
         {
             if (left == null || right == null || (left.Length != right.Length)) {
                 return false;

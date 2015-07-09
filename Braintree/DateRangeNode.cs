@@ -6,7 +6,7 @@ namespace Braintree
 {
     public class DateRangeNode<T> : SearchNode<T> where T : SearchRequest
     {
-        public DateRangeNode(String name, T parent) : base(name, parent)
+        public DateRangeNode(string name, T parent) : base(name, parent)
         {
         }
 

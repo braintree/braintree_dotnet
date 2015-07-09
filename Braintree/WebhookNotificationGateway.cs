@@ -11,43 +11,46 @@ namespace Braintree
 {
     public class WebhookNotificationGateway
     {
-        private BraintreeService Service;
+        private BraintreeService service;
+        private BraintreeGateway gateway;
 
-        protected internal WebhookNotificationGateway(BraintreeService service)
+        protected internal WebhookNotificationGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            this.gateway = gateway;
+            this.service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual WebhookNotification Parse(string signature, string payload)
         {
             ValidateSignature(signature, payload);
-            string xmlPayload = Encoding.Default.GetString(Convert.FromBase64String(payload));
-            NodeWrapper node = new NodeWrapper(Service.StringToXmlNode(xmlPayload));
-            return new WebhookNotification(node, Service);
+            var xmlPayload = Encoding.Default.GetString(Convert.FromBase64String(payload));
+            var node = new NodeWrapper(service.StringToXmlNode(xmlPayload));
+            return new WebhookNotification(node, gateway);
         }
 
         public virtual string Verify(string challenge)
         {
-            Match match = Regex.Match (challenge, @"^[a-f0-9]{20,32}$");
+            var match = Regex.Match (challenge, @"^[a-f0-9]{20,32}$");
             if (!match.Success)
             {
                 throw new InvalidChallengeException ("challenge contains non-hex characters");
             }
-            string digest = new Sha1Hasher().HmacHash(Service.PrivateKey, challenge);
-            return String.Format("{0}|{1}", Service.PublicKey, digest.ToLower());
+            string digest = new Sha1Hasher().HmacHash(service.PrivateKey, challenge);
+            return string.Format("{0}|{1}", service.PublicKey, digest.ToLower());
         }
 
         private bool PayloadMatches(string signature, string payload)
         {
-            Sha1Hasher sha1Hasher = new Sha1Hasher();
-            string computedSignature = sha1Hasher.HmacHash(Service.PrivateKey, payload).ToLower();
-            Crypto crypto = new Crypto();
+            var sha1Hasher = new Sha1Hasher();
+            string computedSignature = sha1Hasher.HmacHash(service.PrivateKey, payload).ToLower();
+            var crypto = new Crypto();
             return crypto.SecureCompare (computedSignature, signature);
         }
 
         private void ValidateSignature(string signature, string payload)
         {
-            Match match = Regex.Match (payload, @"[^A-Za-z0-9+=/\n]");
+            var match = Regex.Match (payload, @"[^A-Za-z0-9+=/\n]");
             if (match.Success)
             {
                 throw new InvalidSignatureException ("payload contains illegal characters");
@@ -56,12 +59,12 @@ namespace Braintree
             string matchingSignature = null;
             string[] signaturePairs = signature.Split('&');
 
-            foreach (string signaturePair in signaturePairs)
+            foreach (var signaturePair in signaturePairs)
             {
                 if (signaturePair.IndexOf('|') >= 0)
                 {
-                    String[] candidatePair = signaturePair.Split('|');
-                    if (Service.PublicKey.Equals(candidatePair[0]))
+                    string[] candidatePair = signaturePair.Split('|');
+                    if (service.PublicKey.Equals(candidatePair[0]))
                     {
                         matchingSignature = candidatePair[1];
                         break;

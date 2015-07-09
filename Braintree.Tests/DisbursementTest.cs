@@ -13,7 +13,6 @@ namespace Braintree.Tests
     public class DisbursementTest
     {
         private BraintreeGateway gateway;
-        private BraintreeService service;
         private NodeWrapper attributes;
 
         [SetUp]
@@ -26,8 +25,6 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-
-            service = new BraintreeService(gateway.Configuration);
 
             XmlDocument attributesXml = CreateAttributesXml();
             attributes = new NodeWrapper(attributesXml).GetNode("//disbursement");
@@ -64,7 +61,7 @@ namespace Braintree.Tests
         [Test]
         public void Transactions()
         {
-          Disbursement disbursement = new Disbursement(attributes, service);
+          Disbursement disbursement = new Disbursement(attributes, gateway);
           ResourceCollection<Transaction> transactions = disbursement.Transactions();
           Assert.IsNotNull(transactions);
           Assert.AreEqual(1, transactions.MaximumCount);

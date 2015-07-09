@@ -6,6 +6,7 @@ using System.Web;
 using System.Net;
 using System.IO;
 using System.IO.Compression;
+using System.Xml;
 using NUnit.Framework;
 using Braintree;
 
@@ -16,7 +17,7 @@ namespace Braintree.Tests
   public class TestHelper
   {
 
-    public static String GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
+    public static string GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
     {
       var encodedClientToken = gateway.ClientToken.generate(request);
       var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
@@ -29,10 +30,10 @@ namespace Braintree.Tests
       return left.Id.CompareTo(right.Id);
     }
 
-    public static String QueryStringForTR(Request trParams, Request req, String postURL, BraintreeService service)
+    public static string QueryStringForTR(Request trParams, Request req, string postURL, BraintreeService service)
     {
-      String trData = TrUtil.BuildTrData(trParams, "http://example.com", service);
-      String postData = "tr_data=" + HttpUtility.UrlEncode(trData, Encoding.UTF8) + "&";
+      string trData = TrUtil.BuildTrData(trParams, "http://example.com", service);
+      string postData = "tr_data=" + HttpUtility.UrlEncode(trData, Encoding.UTF8) + "&";
       postData += req.ToQueryString();
 
       var request = WebRequest.Create(postURL) as HttpWebRequest;
@@ -49,7 +50,7 @@ namespace Braintree.Tests
       requestStream.Close();
 
       var response = request.GetResponse() as HttpWebResponse;
-      String query = new Uri(response.GetResponseHeader("Location")).Query;
+      string query = new Uri(response.GetResponseHeader("Location")).Query;
 
       response.Close();
 
@@ -63,12 +64,12 @@ namespace Braintree.Tests
       Assert.AreEqual(expected.Year, actual.Year);
     }
 
-    public static void AssertIncludes(String expected, String all)
+    public static void AssertIncludes(string expected, string all)
     {
       Assert.IsTrue(all.IndexOf(expected) >= 0, "Expected:\n" + all + "\nto include:\n" + expected);
     }
 
-    public static Boolean IncludesSubscription(ResourceCollection<Subscription> collection, Subscription subscription)
+    public static bool IncludesSubscription(ResourceCollection<Subscription> collection, Subscription subscription)
     {
       foreach (Subscription item in collection)
       {
@@ -79,28 +80,28 @@ namespace Braintree.Tests
       return false;
     }
 
-    public static NodeWrapper Settle(BraintreeService service, String transactionId)
+    public static NodeWrapper Settle(BraintreeService service, string transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settle"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settle"));
       Assert.IsTrue(response.IsSuccess());
       return response;
     }
 
-    public static void SettlementDecline(BraintreeService service, String transactionId)
+    public static void SettlementDecline(BraintreeService service, string transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_decline"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_decline"));
       Assert.IsTrue(response.IsSuccess());
     }
 
-    public static void SettlementPending(BraintreeService service, String transactionId)
+    public static void SettlementPending(BraintreeService service, string transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/settlement_pending"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_pending"));
       Assert.IsTrue(response.IsSuccess());
     }
 
-    public static void Escrow(BraintreeService service, String transactionId)
+    public static void Escrow(BraintreeService service, string transactionId)
     {
-      NodeWrapper response = new NodeWrapper(service.Put("/transactions/" + transactionId + "/escrow"));
+      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/escrow"));
       Assert.IsTrue(response.IsSuccess());
     }
 
@@ -117,18 +118,18 @@ namespace Braintree.Tests
         return param;
     }
 
-    public static string extractParamFromJson(String keyName, String json)
+    public static string extractParamFromJson(string keyName, string json)
     {
-      String regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
+      string regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
       Match match = Regex.Match(json, regex);
       string keyValue = match.Groups[1].Value;
 
       return keyValue;
     }
 
-    public static int extractIntParamFromJson(String keyName, String json)
+    public static int extractIntParamFromJson(string keyName, string json)
     {
-      String regex = string.Format("\"{0}\":\\s?(\\d+)", keyName);
+      string regex = string.Format("\"{0}\":\\s?(\\d+)", keyName);
       Match match = Regex.Match(json, regex);
       int keyValue = Convert.ToInt32(match.Groups[1].Value);
 
@@ -148,7 +149,7 @@ namespace Braintree.Tests
         return extractParamFromJson("nonce", response);
     }
 
-    public static String GetNonceForNewCreditCard(BraintreeGateway gateway, Params creditCardDetails, string customerId = null)
+    public static string GetNonceForNewCreditCard(BraintreeGateway gateway, Params creditCardDetails, string customerId = null)
     {
         var clientToken = TestHelper.GenerateDecodedClientToken(
             gateway,
@@ -203,7 +204,7 @@ namespace Braintree.Tests
         return extractParamFromJson("nonce", response);
     }
 
-    public static String GenerateUnlockedNonce(BraintreeGateway gateway, String creditCardNumber, String customerId)
+    public static string GenerateUnlockedNonce(BraintreeGateway gateway, string creditCardNumber, string customerId)
     {
       var clientToken = "";
       if (customerId ==  null) {
@@ -227,19 +228,19 @@ namespace Braintree.Tests
 
       HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/credit_cards.json", builder.ToQueryString());
       StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-      String responseBody = reader.ReadToEnd();
+      string responseBody = reader.ReadToEnd();
 
       Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
       Match match = regex.Match(responseBody);
       return match.Groups["nonce"].Value;
     }
 
-    public static String GenerateUnlockedNonce(BraintreeGateway gateway)
+    public static string GenerateUnlockedNonce(BraintreeGateway gateway)
     {
       return GenerateUnlockedNonce(gateway, "4111111111111111", null);
     }
 
-    public static String GenerateOneTimePayPalNonce(BraintreeGateway gateway)
+    public static string GenerateOneTimePayPalNonce(BraintreeGateway gateway)
     {
         var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
         var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
@@ -253,14 +254,14 @@ namespace Braintree.Tests
 
         HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
         StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-        String responseBody = reader.ReadToEnd();
+        string responseBody = reader.ReadToEnd();
 
         Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
         Match match = regex.Match(responseBody);
         return match.Groups["nonce"].Value;
     }
 
-    public static String GenerateFuturePaymentPayPalNonce(BraintreeGateway gateway)
+    public static string GenerateFuturePaymentPayPalNonce(BraintreeGateway gateway)
     {
         var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
         var authorizationFingerprint  = extractParamFromJson("authorizationFingerprint", clientToken);
@@ -274,37 +275,65 @@ namespace Braintree.Tests
 
         HttpWebResponse response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
         StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
-        String responseBody = reader.ReadToEnd();
+        string responseBody = reader.ReadToEnd();
 
         Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
         Match match = regex.Match(responseBody);
         return match.Groups["nonce"].Value;
     }
 
-    public static String Create3DSVerification(BraintreeService service, String merchantAccountId, ThreeDSecureRequestForTests request)
+    public static string Create3DSVerification(BraintreeService service, string merchantAccountId, ThreeDSecureRequestForTests request)
     {
-      String url = "/three_d_secure/create_verification/" + merchantAccountId;
-      NodeWrapper response = new NodeWrapper(service.Post(url, request));
+      string url = "/three_d_secure/create_verification/" + merchantAccountId;
+      NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + url, request));
       Assert.IsTrue(response.IsSuccess());
       return response.GetString("three-d-secure-token");
     }
   }
 
+  public class OAuthTestHelper
+  {
+      private class OAuthGrantRequest : Request
+      {
+          public string MerchantId { get; set; }
+          public string Scope { get; set; }
+
+          public override string ToXml()
+          {
+              return new RequestBuilder("grant")
+                  .AddElement("merchant_public_id", MerchantId)
+                  .AddElement("scope", Scope)
+                  .ToXml();
+          }
+      }
+
+      public static string CreateGrant(BraintreeGateway gateway, string merchantId, string scope)
+      {
+          var service = new BraintreeService(gateway.Configuration);
+          XmlNode node = service.Post("/oauth_testing/grants", new OAuthGrantRequest {
+              MerchantId = merchantId,
+              Scope = scope
+          });
+
+          return node["code"].InnerText;
+      }
+  }
+
   public class BraintreeTestHttpService
   {
-    public String ApiVersion = "3";
+    public string ApiVersion = "3";
 
-    public HttpWebResponse Get(String MerchantId, String URL)
+    public HttpWebResponse Get(string MerchantId, string URL)
     {
       return GetJsonResponse(MerchantId, URL, "GET", null);
     }
 
-    public HttpWebResponse Post(String MerchantId, String URL, String requestBody)
+    public HttpWebResponse Post(string MerchantId, string URL, string requestBody)
     {
       return GetJsonResponse(MerchantId, URL, "POST", requestBody);
     }
 
-    private HttpWebResponse GetJsonResponse(String MerchantId, String Path, String method, String requestBody)
+    private HttpWebResponse GetJsonResponse(string MerchantId, string Path, string method, string requestBody)
     {
       try
       {

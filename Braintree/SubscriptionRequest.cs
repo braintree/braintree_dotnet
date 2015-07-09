@@ -25,34 +25,34 @@ namespace Braintree
     public class SubscriptionRequest : Request
     {
         public AddOnsRequest AddOns { get; set; }
-        public Int32? BillingDayOfMonth { get; set; }
+        public int? BillingDayOfMonth { get; set; }
         public DescriptorRequest Descriptor { get; set; }
         public DiscountsRequest Discounts { get; set; }
         public DateTime? FirstBillingDate { get; set; }
-        public Boolean? HasTrialPeriod { get; set; }
-        public String Id { get; set; }
-        public Int32? NumberOfBillingCycles { get; set; }
-        public Boolean? NeverExpires { get; set; }
+        public bool? HasTrialPeriod { get; set; }
+        public string Id { get; set; }
+        public int? NumberOfBillingCycles { get; set; }
+        public bool? NeverExpires { get; set; }
         public SubscriptionOptionsRequest Options { get; set; }
-        public String PaymentMethodToken { get; set; }
-        public String PaymentMethodNonce { get; set; }
-        public String PlanId { get; set; }
-        public Decimal? Price { get; set; }
-        public Int32 TrialDuration { get; set; }
+        public string PaymentMethodToken { get; set; }
+        public string PaymentMethodNonce { get; set; }
+        public string PlanId { get; set; }
+        public decimal? Price { get; set; }
+        public int TrialDuration { get; set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; set; }
-        public String MerchantAccountId { get; set; }
+        public string MerchantAccountId { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("subscription");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public virtual RequestBuilder BuildRequest(String root)
+        public virtual RequestBuilder BuildRequest(string root)
         {
             var builder = new RequestBuilder(root);
 

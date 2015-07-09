@@ -5,19 +5,20 @@ namespace Braintree
 {
     public class PlanGateway
     {
-        private BraintreeService Service;
+        private BraintreeService service;
 
-        public PlanGateway(BraintreeService service)
+        public PlanGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual List<Plan> All()
         {
-            NodeWrapper response = new NodeWrapper(Service.Get("/plans"));
+            var response = new NodeWrapper(service.Get(service.MerchantPath() + "/plans"));
 
-            List<Plan> plans = new List<Plan>();
-            foreach (NodeWrapper node in response.GetList("plan"))
+            var plans = new List<Plan>();
+            foreach (var node in response.GetList("plan"))
             {
                 plans.Add(new Plan(node));
             }

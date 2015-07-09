@@ -4,20 +4,20 @@ namespace Braintree
 {
     public class PayPalAccountRequest : Request
     {
-        public String Token { get; set; }
+        public string Token { get; set; }
         public PayPalOptionsRequest Options { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("paypal-account");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
                 AddElement("options", Options).

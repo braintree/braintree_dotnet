@@ -14,39 +14,42 @@ namespace Braintree
     public class AddressGateway
     {
         private BraintreeService Service;
+        private BraintreeGateway Gateway;
 
-        protected internal AddressGateway(BraintreeService service)
+        protected internal AddressGateway(BraintreeGateway gateway)
         {
-            Service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            Gateway = gateway;
+            Service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual Result<Address> Create(String customerId, AddressRequest request)
+        public virtual Result<Address> Create(string customerId, AddressRequest request)
         {
-            XmlNode addressXML = Service.Post("/customers/" + customerId + "/addresses", request);
+            XmlNode addressXML = Service.Post(Service.MerchantPath() + "/customers/" + customerId + "/addresses", request);
 
-            return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
 
-        public virtual void Delete(String customerId, String id)
+        public virtual void Delete(string customerId, string id)
         {
-            Service.Delete("/customers/" + customerId + "/addresses/" + id);
+            Service.Delete(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
         }
 
-        public virtual Address Find(String customerId, String id)
+        public virtual Address Find(string customerId, string id)
         {
             if(customerId == null || customerId.Trim().Equals("") || id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode addressXML = Service.Get("/customers/" + customerId + "/addresses/" + id);
+            XmlNode addressXML = Service.Get(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
 
             return new Address(new NodeWrapper(addressXML));
         }
 
-        public virtual Result<Address> Update(String customerId, String id, AddressRequest request)
+        public virtual Result<Address> Update(string customerId, string id, AddressRequest request)
         {
-            XmlNode addressXML = Service.Put("/customers/" + customerId + "/addresses/" + id, request);
+            XmlNode addressXML = Service.Put(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id, request);
 
-            return new ResultImpl<Address>(new NodeWrapper(addressXML), Service);
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
     }
 }

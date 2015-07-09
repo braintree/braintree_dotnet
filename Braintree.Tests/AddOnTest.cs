@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
@@ -26,9 +27,9 @@ namespace Braintree.Tests
         [Test()]
         public void All_ReturnsAllAddOns()
         {
-            String addOnId = String.Format("dotnet_add_on{0}", new Random().Next(1000000).ToString());
+            string addOnId = string.Format("dotnet_add_on{0}", new Random().Next(1000000).ToString());
 
-            service.Post("/modifications/create_modification_for_tests", new ModificationRequestForTests {
+            service.Post(service.MerchantPath() + "/modifications/create_modification_for_tests", new ModificationRequestForTests {
                 Amount = 100.00M,
                 Description = "a test add-on",
                 Id = addOnId,
@@ -58,6 +59,23 @@ namespace Braintree.Tests
             Assert.AreEqual(12, addOn.NumberOfBillingCycles);
             Assert.IsNotNull(addOn.CreatedAt);
             Assert.IsNotNull(addOn.UpdatedAt);
+        }
+
+        [Test()]
+        public void All_RaisesIfMissingCredentials()
+        {
+            gateway = new BraintreeGateway
+            {
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+
+            try {
+                gateway.AddOn.All();
+
+                Assert.Fail("Should throw ConfigurationException");
+            } catch (ConfigurationException) {}
         }
     }
 }

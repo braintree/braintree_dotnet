@@ -12,14 +12,14 @@ namespace Braintree.Tests
         [Test]
         public void Append()
         {
-            String actual = new QueryString().Append("foo", "f").Append("bar", "b").ToString();
+            string actual = new QueryString().Append("foo", "f").Append("bar", "b").ToString();
             Assert.AreEqual("foo=f&bar=b", actual);
         }
 
         [Test]
         public void AppendEmptyStringOrNulls()
         {
-            String actual = new QueryString().
+            string actual = new QueryString().
                 Append("foo", "f").
                 Append("", "b").
                 Append("bar", "").
@@ -32,7 +32,7 @@ namespace Braintree.Tests
         [Test]
         public void AppendOtherObjectsWithCanBeConvertedToStrings()
         {
-            String actual = new QueryString().
+            string actual = new QueryString().
                 Append("foo", 10).
                 Append("bar", "20.00").ToString();
 
@@ -48,7 +48,7 @@ namespace Braintree.Tests
                 CardholderName = "Drew"
             };
 
-            String actual = new QueryString().Append("[credit_card]", request).ToString();
+            string actual = new QueryString().Append("[credit_card]", request).ToString();
             Assert.AreEqual("%5bcredit_card%5d%5bcardholder_name%5d=Drew&%5bcredit_card%5d%5bcvv%5d=123", actual);
         }
 
@@ -66,7 +66,7 @@ namespace Braintree.Tests
                 }
             };
 
-            String actual = new QueryString().Append("[credit_card]", request).ToString();
+            string actual = new QueryString().Append("[credit_card]", request).ToString();
             Assert.AreEqual("%5bcredit_card%5d%5bcardholder_name%5d=Drew&%5bcredit_card%5d%5bcvv%5d=123&%5bcredit_card%5d%5boptions%5d%5bmake_default%5d=true&%5bcredit_card%5d%5boptions%5d%5bverify_card%5d=true", actual);
         }
     }

@@ -6,99 +6,102 @@ namespace Braintree
     public class PaymentMethodGateway
     {
         private BraintreeService service;
+        private BraintreeGateway gateway;
 
-        public PaymentMethodGateway(BraintreeService service)
+        public PaymentMethodGateway(BraintreeGateway gateway)
         {
-            this.service = service;
+            gateway.Configuration.AssertHasAccessTokenOrKeys();
+            this.gateway = gateway;
+            this.service = new BraintreeService(gateway.Configuration);
         }
 
         public Result<PaymentMethod> Create(PaymentMethodRequest request)
         {
-            NodeWrapper response = new NodeWrapper(service.Post("/payment_methods", request));
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods", request));
 
             if (response.GetName() == "paypal-account")
             {
-                return new ResultImpl<PayPalAccount>(response, service);
+                return new ResultImpl<PayPalAccount>(response, gateway);
             }
             else if (response.GetName() == "credit-card")
             {
-                return new ResultImpl<CreditCard>(response, service);
+                return new ResultImpl<CreditCard>(response, gateway);
             }
             else if (response.GetName() == "apple-pay-card")
             {
-                return new ResultImpl<ApplePayCard>(response, service);
+                return new ResultImpl<ApplePayCard>(response, gateway);
             }
             else if (response.GetName() == "android-pay-card")
             {
-                return new ResultImpl<AndroidPayCard>(response, service);
+                return new ResultImpl<AndroidPayCard>(response, gateway);
             }
             else if (response.GetName() == "coinbase-account")
             {
-                return new ResultImpl<CoinbaseAccount>(response, service);
+                return new ResultImpl<CoinbaseAccount>(response, gateway);
             }
             else
             {
-                return new ResultImpl<UnknownPaymentMethod>(response, service);
+                return new ResultImpl<UnknownPaymentMethod>(response, gateway);
             }
         }
 
         public Result<PaymentMethod> Update(string token, PaymentMethodRequest request)
         {
-            var response = new NodeWrapper(service.Put("/payment_methods/any/" + token, request));
+            var response = new NodeWrapper(service.Put(service.MerchantPath() + "/payment_methods/any/" + token, request));
 
             if (response.GetName() == "paypal-account")
             {
-                return new ResultImpl<PayPalAccount>(response, service);
+                return new ResultImpl<PayPalAccount>(response, gateway);
             }
             else if (response.GetName() == "credit-card")
             {
-                return new ResultImpl<CreditCard>(response, service);
+                return new ResultImpl<CreditCard>(response, gateway);
             }
             else if (response.GetName() == "apple-pay-card")
             {
-                return new ResultImpl<ApplePayCard>(response, service);
+                return new ResultImpl<ApplePayCard>(response, gateway);
             }
             else if (response.GetName() == "android-pay-card")
             {
-                return new ResultImpl<AndroidPayCard>(response, service);
+                return new ResultImpl<AndroidPayCard>(response, gateway);
             }
             else
             {
-                return new ResultImpl<UnknownPaymentMethod>(response, service);
+                return new ResultImpl<UnknownPaymentMethod>(response, gateway);
             }
         }
 
-        public void Delete(String token)
+        public void Delete(string token)
         {
-            service.Delete("/payment_methods/any/" + token);
+            service.Delete(service.MerchantPath() + "/payment_methods/any/" + token);
         }
 
-        public PaymentMethod Find(String token)
+        public PaymentMethod Find(string token)
         {
             if(token == null || token.Trim().Equals(""))
                 throw new NotFoundException();
 
-            NodeWrapper response = new NodeWrapper(service.Get("/payment_methods/any/" + token));
+            var response = new NodeWrapper(service.Get(service.MerchantPath() + "/payment_methods/any/" + token));
 
             if (response.GetName() == "paypal-account")
             {
-                return new PayPalAccount(response, service);
+                return new PayPalAccount(response, gateway);
             }
             else if (response.GetName() == "credit-card")
             {
-                return new CreditCard(response, service);
+                return new CreditCard(response, gateway);
             }
             else if (response.GetName() == "apple-pay-card")
             {
-                return new ApplePayCard(response, service);
+                return new ApplePayCard(response, gateway);
             }
             else if (response.GetName() == "android-pay-card")
             {
-                return new AndroidPayCard(response, service);
+                return new AndroidPayCard(response, gateway);
             }
             else if (response.GetName() == "coinbase-account")
             {
-                return new CoinbaseAccount(response, service);
+                return new CoinbaseAccount(response, gateway);
             }
             else
             {

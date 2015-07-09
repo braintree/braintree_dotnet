@@ -8,17 +8,17 @@ namespace Braintree.Tests
     public class TestPlan : Plan
     {
         new public List<AddOn> AddOns { get; set; }
-        new public Int32? BillingDayOfMonth { get; set; }
-        new public Int32? BillingFrequency { get; set; }
-        new public String CurrencyIsoCode { get; set; }
-        new public String Description { get; set; }
+        new public int? BillingDayOfMonth { get; set; }
+        new public int? BillingFrequency { get; set; }
+        new public string CurrencyIsoCode { get; set; }
+        new public string Description { get; set; }
         new public List<Discount> Discounts { get; set; }
-        new public String Id { get; set; }
-        new public String Name { get; set; }
-        new public Int32? NumberOfBillingCycles { get; set; }
-        new public Decimal? Price { get; set; }
-        new public Boolean? TrialPeriod { get; set; }
-        new public Int32? TrialDuration { get; set; }
+        new public string Id { get; set; }
+        new public string Name { get; set; }
+        new public int? NumberOfBillingCycles { get; set; }
+        new public decimal? Price { get; set; }
+        new public bool? TrialPeriod { get; set; }
+        new public int? TrialDuration { get; set; }
         new public PlanDurationUnit TrialDurationUnit { get; set; }
 
         internal TestPlan(NodeWrapper node) : base(node) {

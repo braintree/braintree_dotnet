@@ -8,24 +8,24 @@ namespace Braintree
 {
     public class PaymentMethodOptionsRequest : Request
     {
-        public Boolean? MakeDefault { get; set; }
-        public Boolean? VerifyCard { get; set; }
-        public Boolean? FailOnDuplicatePaymentMethod { get; set; }
-        public String VerificationMerchantAccountId { get; set; }
+        public bool? MakeDefault { get; set; }
+        public bool? VerifyCard { get; set; }
+        public bool? FailOnDuplicatePaymentMethod { get; set; }
+        public string VerificationMerchantAccountId { get; set; }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString(string root)
         {
             return BuildRequest(root).ToQueryString();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
-            RequestBuilder builder = new RequestBuilder(root);
+            var builder = new RequestBuilder(root);
             builder.AddElement("make-default", MakeDefault);
             builder.AddElement("verification-merchant-account-id", VerificationMerchantAccountId);
             builder.AddElement("verify-card", VerifyCard);

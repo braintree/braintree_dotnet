@@ -11,7 +11,6 @@ namespace Braintree.Tests
     public class CreditCardVerificationTest
     {
         private BraintreeGateway gateway;
-        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -23,8 +22,6 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-
-            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -50,7 +47,7 @@ namespace Braintree.Tests
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(builder.ToString());
 
-            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), service);
+            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), gateway);
             Assert.AreEqual(null, verification.AvsErrorResponseCode);
             Assert.AreEqual("I", verification.AvsPostalCodeResponseCode);
             Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, verification.Status);
@@ -74,7 +71,7 @@ namespace Braintree.Tests
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(builder.ToString());
 
-            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), service);
+            CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), gateway);
             Assert.AreEqual(null, verification.AvsErrorResponseCode);
             Assert.AreEqual(null, verification.AvsPostalCodeResponseCode);
             Assert.AreEqual(null, verification.Status);
@@ -132,7 +129,7 @@ namespace Braintree.Tests
         [Test]
         public void CardTypeIndicators()
         {
-            String name = Guid.NewGuid().ToString("n");
+            string name = Guid.NewGuid().ToString("n");
             var createRequest = new CustomerRequest
             {
                 CreditCard = new CreditCardRequest
@@ -187,10 +184,10 @@ namespace Braintree.Tests
             };
 
             Result<Customer> result = gateway.Customer.Create(createRequest);
-            String token = result.Target.CreditCards[0].Token;
-            String postalCode = result.Target.CreditCards[0].BillingAddress.PostalCode;
-            String customerId = result.Target.Id;
-            String customerEmail = result.Target.Email;
+            string token = result.Target.CreditCards[0].Token;
+            string postalCode = result.Target.CreditCards[0].BillingAddress.PostalCode;
+            string customerId = result.Target.Id;
+            string customerEmail = result.Target.Email;
 
             CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
                 PaymentMethodToken.Is(token).

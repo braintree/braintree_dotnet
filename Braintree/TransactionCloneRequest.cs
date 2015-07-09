@@ -9,23 +9,23 @@ namespace Braintree
  
     public class TransactionCloneRequest : Request
     {
-        public Decimal Amount { get; set; }
-        public String Channel { get; set; }
+        public decimal Amount { get; set; }
+        public string Channel { get; set; }
         public TransactionOptionsCloneRequest Options { get; set; }
 
-        public override String ToXml()
+        public override string ToXml()
         {
             return ToXml("transaction-clone");
         }
 
-        public override String ToXml(String root)
+        public override string ToXml(string root)
         {
             return BuildRequest(root).ToXml();
         }
 
-        protected virtual RequestBuilder BuildRequest(String root)
+        protected virtual RequestBuilder BuildRequest(string root)
         {
-            RequestBuilder builder = new RequestBuilder(root);
+            var builder = new RequestBuilder(root);
             builder.AddElement("amount", Amount);
             builder.AddElement("channel", Channel);
             builder.AddElement("options", Options);

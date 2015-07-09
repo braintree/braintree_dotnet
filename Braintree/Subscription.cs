@@ -26,7 +26,7 @@ namespace Braintree
 
         public static readonly SubscriptionDurationUnit[] ALL = { DAY, MONTH };
 
-        protected SubscriptionDurationUnit(String name) : base(name) {}
+        protected SubscriptionDurationUnit(string name) : base(name) {}
     }
 
     /// <summary>
@@ -61,7 +61,7 @@ namespace Braintree
 
         public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, EXPIRED, PAST_DUE, PENDING};
 
-        protected SubscriptionStatus(String name) : base(name) {}
+        protected SubscriptionStatus(string name) : base(name) {}
     }
 
     public class SubscriptionSource : Enumeration
@@ -73,7 +73,7 @@ namespace Braintree
 
         public static readonly SubscriptionSource[] ALL = { API, CONTROL_PANEL, RECURRING, UNRECOGNIZED };
 
-        protected SubscriptionSource(String name) : base(name) {}
+        protected SubscriptionSource(string name) : base(name) {}
     }
 
     /// <summary>
@@ -88,38 +88,38 @@ namespace Braintree
     /// </example>
     public class Subscription
     {
-        public Decimal? Balance { get; protected set; }
+        public decimal? Balance { get; protected set; }
         public List<AddOn> AddOns { get; protected set; }
-        public Int32? BillingDayOfMonth { get; protected set; }
+        public int? BillingDayOfMonth { get; protected set; }
         public DateTime? BillingPeriodEndDate { get; protected set; }
         public DateTime? BillingPeriodStartDate { get; protected set; }
-        public Int32? CurrentBillingCycle { get; protected set; }
-        public Int32? DaysPastDue { get; protected set; }
+        public int? CurrentBillingCycle { get; protected set; }
+        public int? DaysPastDue { get; protected set; }
         public Descriptor Descriptor { get; protected set; }
         public List<Discount> Discounts { get; protected set; }
-        public Int32? FailureCount { get; protected set; }
+        public int? FailureCount { get; protected set; }
         public DateTime? FirstBillingDate { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
-        public Boolean? HasTrialPeriod { get; protected set; }
-        public String Id { get; protected set; }
-        public Boolean? NeverExpires { get; protected set; }
-        public Decimal? NextBillAmount { get; protected set; }
+        public bool? HasTrialPeriod { get; protected set; }
+        public string Id { get; protected set; }
+        public bool? NeverExpires { get; protected set; }
+        public decimal? NextBillAmount { get; protected set; }
         public DateTime? NextBillingDate { get; protected set; }
-        public Decimal? NextBillingPeriodAmount { get; protected set; }
-        public Int32? NumberOfBillingCycles { get; protected set; }
+        public decimal? NextBillingPeriodAmount { get; protected set; }
+        public int? NumberOfBillingCycles { get; protected set; }
         public DateTime? PaidThroughDate { get; protected set; }
-        public String PaymentMethodToken { get; protected set; }
-        public String PlanId { get; protected set; }
-        public Decimal? Price { get; protected set; }
+        public string PaymentMethodToken { get; protected set; }
+        public string PlanId { get; protected set; }
+        public decimal? Price { get; protected set; }
         public SubscriptionStatusEvent[] StatusHistory { get; protected set; }
         public SubscriptionStatus Status { get; protected set; }
         public List<Transaction> Transactions { get; protected set; }
-        public Int32? TrialDuration { get; protected set; }
+        public int? TrialDuration { get; protected set; }
         public SubscriptionDurationUnit TrialDurationUnit { get; protected set; }
-        public String MerchantAccountId { get; protected set; }
+        public string MerchantAccountId { get; protected set; }
 
-        public Subscription(NodeWrapper node, BraintreeService service)
+        public Subscription(NodeWrapper node, BraintreeGateway gateway)
         {
             Balance = node.GetDecimal("balance");
             BillingDayOfMonth = node.GetInteger("billing-day-of-month");
@@ -151,23 +151,23 @@ namespace Braintree
             }
             HasTrialPeriod = node.GetBoolean("trial-period");
             TrialDuration = node.GetInteger("trial-duration");
-            String trialDurationUnitStr = node.GetString("trial-duration-unit");
+            var trialDurationUnitStr = node.GetString("trial-duration-unit");
             if (trialDurationUnitStr != null) {
                 TrialDurationUnit = (SubscriptionDurationUnit)CollectionUtil.Find(SubscriptionDurationUnit.ALL, trialDurationUnitStr, SubscriptionDurationUnit.UNRECOGNIZED);
             }
             MerchantAccountId = node.GetString("merchant-account-id");
 
             AddOns = new List<AddOn> ();
-            foreach (NodeWrapper addOnResponse in node.GetList("add-ons/add-on")) {
+            foreach (var addOnResponse in node.GetList("add-ons/add-on")) {
                 AddOns.Add(new AddOn(addOnResponse));
             }
             Discounts = new List<Discount> ();
-            foreach (NodeWrapper discountResponse in node.GetList("discounts/discount")) {
+            foreach (var discountResponse in node.GetList("discounts/discount")) {
                 Discounts.Add(new Discount(discountResponse));
             }
             Transactions = new List<Transaction> ();
-            foreach (NodeWrapper transactionResponse in node.GetList("transactions/transaction")) {
-                Transactions.Add(new Transaction(transactionResponse, service));
+            foreach (var transactionResponse in node.GetList("transactions/transaction")) {
+                Transactions.Add(new Transaction(transactionResponse, gateway));
             }
         }
     }

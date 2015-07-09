@@ -6,6 +6,6 @@ namespace Braintree.Exceptions
 {
     public class AuthorizationException : BraintreeException
     {
-        public AuthorizationException(String message) : base(message) {}
+        public AuthorizationException(string message) : base(message) {}
     }
 }

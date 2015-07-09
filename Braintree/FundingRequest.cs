@@ -7,35 +7,35 @@ namespace Braintree
     public class FundingRequest : Request
     {
       public FundingDestination Destination { get; set; }
-      public String Email { get; set; }
-      public String MobilePhone { get; set; }
-      public String RoutingNumber { get; set; }
-      public String AccountNumber { get; set; }
-      public String Descriptor { get; set; }
+      public string Email { get; set; }
+      public string MobilePhone { get; set; }
+      public string RoutingNumber { get; set; }
+      public string AccountNumber { get; set; }
+      public string Descriptor { get; set; }
 
-      public override String ToXml()
+      public override string ToXml()
       {
         return ToXml("funding");
       }
 
-      public override String ToXml(String root)
+      public override string ToXml(string root)
       {
         return BuildRequest(root).ToXml();
       }
 
-      public override String ToQueryString()
+      public override string ToQueryString()
       {
         return ToQueryString("funding");
       }
 
-      public override String ToQueryString(String root)
+      public override string ToQueryString(string root)
       {
         return BuildRequest(root).ToQueryString();
       }
 
-      protected virtual RequestBuilder BuildRequest(String root)
+      protected virtual RequestBuilder BuildRequest(string root)
       {
-        RequestBuilder builder = new RequestBuilder(root);
+        var builder = new RequestBuilder(root);
 
         builder.AddElement("destination", Destination);
         builder.AddElement("email", Email);

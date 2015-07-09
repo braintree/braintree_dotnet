@@ -7,48 +7,48 @@ namespace Braintree
 {
     public class SearchCriteria : Request
     {
-        private String Xml;
+        private string xml;
 
-        public SearchCriteria(String type, String value)
+        public SearchCriteria(string type, string value)
         {
-            Xml = BuildXMLElement(type, DefaultToEmptyString(value));
+            xml = BuildXMLElement(type, DefaultToEmptyString(value));
         }
 
-        public SearchCriteria(String type, DateTime value)
+        public SearchCriteria(string type, DateTime value)
         {
-            Xml = BuildXMLElement(type, value);
+            xml = BuildXMLElement(type, value);
         }
 
         public SearchCriteria(object[] items)
         {
-            StringBuilder builder = new StringBuilder();
-            foreach(object item in items) {
+            var builder = new StringBuilder();
+            foreach (var item in items) {
                 builder.Append(BuildXMLElement("item", item.ToString()));
             }
-            Xml = builder.ToString();
+            xml = builder.ToString();
         }
 
-        public override String ToXml()
+        public override string ToXml()
         {
-            return Xml;
+            return xml;
         }
 
-        public override String ToXml(String rootElement)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override String ToQueryString()
+        public override string ToXml(string rootElement)
         {
             throw new NotImplementedException();
         }
 
-        public override String ToQueryString(String root)
+        public override string ToQueryString()
         {
             throw new NotImplementedException();
         }
 
-        private String DefaultToEmptyString(String value)
+        public override string ToQueryString(string root)
+        {
+            throw new NotImplementedException();
+        }
+
+        private string DefaultToEmptyString(string value)
         {
             if (value == null) {
                 return "";

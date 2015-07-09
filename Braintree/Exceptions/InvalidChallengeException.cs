@@ -6,7 +6,7 @@ namespace Braintree.Exceptions
 {
     public class InvalidChallengeException : BraintreeException
     {
-        public InvalidChallengeException(String message) : base(message) {}
+        public InvalidChallengeException(string message) : base(message) {}
         public InvalidChallengeException() : base() {}
     }
 }

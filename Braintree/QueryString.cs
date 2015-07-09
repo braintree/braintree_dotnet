@@ -21,7 +21,7 @@ namespace Braintree
             return Append(pair.Key.Replace('-', '_'), pair.Value);
         }
 
-        public virtual QueryString Append(String key, Object value)
+        public virtual QueryString Append(string key, object value)
         {
             if (value == null)
             {
@@ -31,15 +31,15 @@ namespace Braintree
             {
                 return AppendRequest(key, (Request)value);
             }
-            if (value is Boolean)
+            if (value is bool)
             {
                 return AppendString(key, value.ToString().ToLower());
             }
-            else if (value is Dictionary<String, String>)
+            else if (value is Dictionary<string, string>)
             {
-                foreach (KeyValuePair<String, String> pair in (Dictionary<String, String>)value)
+                foreach (var pair in (Dictionary<string, string>)value)
                 {
-                    AppendString(String.Format("{0}[{1}]", key, pair.Key), pair.Value);
+                    AppendString(string.Format("{0}[{1}]", key, pair.Key), pair.Value);
                 }
                 return this;
             }
@@ -47,7 +47,7 @@ namespace Braintree
             return AppendString(key, value.ToString());
         }
 
-        protected virtual QueryString AppendString(String key, String value)
+        protected virtual QueryString AppendString(string key, string value)
         {
             if (key != null && !(key == "") && value != null)
             {
@@ -60,13 +60,13 @@ namespace Braintree
             return this;
         }
 
-        protected virtual QueryString AppendRequest(String parent, Request request)
+        protected virtual QueryString AppendRequest(string parent, Request request)
         {
             if (request == null)
             {
                 return this;
             }
-            String requestQueryString = request.ToQueryString(parent);
+            string requestQueryString = request.ToQueryString(parent);
             if (requestQueryString.Length > 0)
             {
                 if (builder.Length > 0)
@@ -80,12 +80,12 @@ namespace Braintree
         }
 
 
-        protected virtual String EncodeParam(String key, String value)
+        protected virtual string EncodeParam(string key, string value)
         {
             return HttpUtility.UrlEncode(key) + "=" + HttpUtility.UrlEncode(value);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return builder.ToString();
         }
