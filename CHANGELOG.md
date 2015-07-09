@@ -1,3 +1,6 @@
+## 2.44.0
+* Add support for OAuth based authentication
+
 ## 2.43.0
 * Add support for Android Pay
 
