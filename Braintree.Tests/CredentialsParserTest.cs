@@ -57,7 +57,7 @@ namespace Braintree.Tests
                 Assert.Fail("Should throw ConfigurationException");
             } catch (ConfigurationException) {}
         }
-        
+
         [Test]
         public void CredentialsParser_ThrowErrorOnInconsistentClientSecret()
         {

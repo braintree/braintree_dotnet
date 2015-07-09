@@ -36,7 +36,7 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@expample.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
                 Website = "www.example.com",
@@ -67,7 +67,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@expample.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.example.com", customer.Website);
@@ -176,7 +176,7 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@expample.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
                 Website = "www.example.com",
@@ -198,7 +198,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@expample.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.example.com", customer.Website);
@@ -239,7 +239,7 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@expample.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
                 Website = "www.example.com",
@@ -287,7 +287,7 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@expample.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
                 Website = "www.example.com",
@@ -304,7 +304,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@expample.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.example.com", customer.Website);
@@ -328,7 +328,7 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@expample.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
                 Website = "www.example.com",
@@ -350,7 +350,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@expample.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.example.com", customer.Website);
@@ -366,7 +366,7 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@expample.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
                 Website = "www.example.com",
@@ -395,7 +395,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", customer.FirstName);
             Assert.AreEqual("Angelo", customer.LastName);
             Assert.AreEqual("Some Company", customer.Company);
-            Assert.AreEqual("hansolo64@expample.com", customer.Email);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.example.com", customer.Website);
@@ -675,7 +675,7 @@ namespace Braintree.Tests
                 FirstName = "Michael",
                 LastName = "Angelo",
                 Company = "Some Company",
-                Email = "hansolo64@expample.com",
+                Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
                 Fax = "312.555.1112",
                 Website = "www.example.com"
@@ -686,7 +686,7 @@ namespace Braintree.Tests
             Assert.AreEqual("Michael", updatedCustomer.FirstName);
             Assert.AreEqual("Angelo", updatedCustomer.LastName);
             Assert.AreEqual("Some Company", updatedCustomer.Company);
-            Assert.AreEqual("hansolo64@expample.com", updatedCustomer.Email);
+            Assert.AreEqual("hansolo64@example.com", updatedCustomer.Email);
             Assert.AreEqual("312.555.1111", updatedCustomer.Phone);
             Assert.AreEqual("312.555.1112", updatedCustomer.Fax);
             Assert.AreEqual("www.example.com", updatedCustomer.Website);

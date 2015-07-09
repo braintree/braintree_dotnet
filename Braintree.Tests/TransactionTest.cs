@@ -247,7 +247,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(collection.FirstItem.PaymentInstrumentType,PaymentInstrumentType.CREDIT_CARD);
         }
-        
+
         [Test]
         public void Search_PaymentInstrumentTypeIsPayPal()
         {
@@ -267,7 +267,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(collection.FirstItem.PaymentInstrumentType, PaymentInstrumentType.PAYPAL_ACCOUNT);
         }
-        
+
         [Test]
         public void Search_PaymentInstrumentTypeIsApplePay()
         {

@@ -113,14 +113,14 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("credit-card-cardholder-name", this);
             }
         }
-        public TextNode<TransactionSearchRequest> User 
+        public TextNode<TransactionSearchRequest> User
         {
             get
             {
                 return new TextNode<TransactionSearchRequest>("user", this);
             }
         }
-        public TextNode<TransactionSearchRequest> CreditCardUniqueIdentifier 
+        public TextNode<TransactionSearchRequest> CreditCardUniqueIdentifier
         {
             get
             {
