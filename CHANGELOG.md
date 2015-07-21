@@ -1,3 +1,6 @@
+## 2.45.0
+* Add Transaction Details to Dispute webhook notifications
+
 ## 2.44.0
 * Add support for OAuth based authentication
 

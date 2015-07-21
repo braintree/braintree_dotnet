@@ -49,6 +49,7 @@ namespace Braintree
         public DisputeStatus Status { get; protected set; }
         public string CurrencyIsoCode { get; protected set; }
         public string Id { get; protected set; }
+        public TransactionDetails TransactionDetails { get; protected set; }
 
         public Dispute(NodeWrapper node)
         {
@@ -59,6 +60,7 @@ namespace Braintree
             Status = (DisputeStatus)CollectionUtil.Find(DisputeStatus.ALL, node.GetString("status"), DisputeStatus.UNRECOGNIZED);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             Id = node.GetString("id");
+            TransactionDetails = new TransactionDetails(node.GetNode("transaction"));
         }
     }
 }
