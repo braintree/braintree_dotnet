@@ -18,6 +18,9 @@ namespace Braintree
         public string SellerProtectionStatus { get; protected set; }
         public string CaptureId { get; protected set; }
         public string RefundId { get; protected set; }
+        public string TransactionFeeAmount { get; protected set; }
+        public string TransactionFeeCurrencyIsoCode { get; protected set; }
+        public string Description { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -35,6 +38,9 @@ namespace Braintree
             SellerProtectionStatus = node.GetString("seller-protection-status");
             CaptureId = node.GetString("capture-id");
             RefundId = node.GetString("refund-id");
+            TransactionFeeAmount = node.GetString("transaction-fee-amount");
+            TransactionFeeCurrencyIsoCode = node.GetString("transaction-fee-currency-iso-code");
+            Description = node.GetString("description");
         }
     }
 }

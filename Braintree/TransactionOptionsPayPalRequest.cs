@@ -4,6 +4,7 @@ namespace Braintree
 {
     public class TransactionOptionsPayPalRequest : Request
     {
+        public string Description { get; set; }
         public string CustomField { get; set; }
         public string PayeeEmail { get; set; }
 
@@ -20,6 +21,7 @@ namespace Braintree
         private RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
+                AddElement("description", Description).
                 AddElement("custom-field", CustomField).
                 AddElement("payee-email", PayeeEmail);
         }

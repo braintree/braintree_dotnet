@@ -1,3 +1,8 @@
+## 2.46.0
+* Fix issue with Dispute Status of Open returning Unrecognized
+* Add Description parameter for PayPal email receipts to be passed on Transaction.Sale request
+* Add PayPal transaction fees and transaction fee currency in Transaction.Sale response
+
 ## 2.45.0
 * Add Transaction Details to Dispute webhook notifications
 

@@ -4066,6 +4066,28 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void CreateTransaction_WithPayPalDescription()
+        {
+            var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest()
+                {
+                    PayPal = new TransactionOptionsPayPalRequest()
+                    {
+                        Description = "Product Description"
+                    }
+                }
+            };
+
+            var result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual("Product Description", result.Target.PayPalDetails.Description);
+        }
+
+        [Test]
         public void CreateTransaction_WithOneTimePayPalNonce()
         {
             string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4244,6 +4266,8 @@ namespace Braintree.Tests
           Assert.IsNotNull(transaction.PayPalDetails.SellerProtectionStatus);
           Assert.IsNotNull(transaction.PayPalDetails.CaptureId);
           Assert.IsNotNull(transaction.PayPalDetails.RefundId);
+          Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeAmount);
+          Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeCurrencyIsoCode);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Braintree
         public static readonly DisputeStatus UNRECOGNIZED = new DisputeStatus("unrecognized");
 
         public static readonly DisputeStatus[] ALL = {
-            LOST, WON, UNRECOGNIZED
+            OPEN, LOST, WON, UNRECOGNIZED
         };
 
         protected DisputeStatus(string name) : base(name) {}

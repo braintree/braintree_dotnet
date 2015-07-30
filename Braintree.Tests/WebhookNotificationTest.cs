@@ -178,6 +178,7 @@ namespace Braintree.Tests
             Assert.AreEqual("my_id", notification.Dispute.Id);
             Assert.AreEqual("my_id", notification.Dispute.TransactionDetails.Id);
             Assert.AreEqual("250.00", notification.Dispute.TransactionDetails.Amount);
+            Assert.AreEqual(DisputeStatus.OPEN, notification.Dispute.Status);
         }
 
         [Test]
