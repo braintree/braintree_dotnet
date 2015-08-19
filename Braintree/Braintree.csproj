@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.46.0</AssemblyName>
+    <AssemblyName>Braintree-2.47.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.46.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.47.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,11 +33,11 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.46.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.47.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
@@ -211,6 +211,8 @@
     <Compile Include="Exceptions\InvalidChallengeException.cs" />
     <Compile Include="Exceptions\InvalidSignatureException.cs" />
     <Compile Include="WebhookNotificationGateway.cs" />
+    <Compile Include="TestTransactionGateway.cs" />
+    <Compile Include="Exceptions\TestOperationPerformedInProductionException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -132,7 +132,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            TestHelper.Settle(service, transaction.Id);
+            gateway.TestTransaction.Settle(transaction.Id);
             transaction = gateway.Transaction.Find(transaction.Id);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
@@ -559,7 +559,7 @@ namespace Braintree.Tests
 
             Transaction saleTransaction = gateway.Transaction.Sale(request).Target;
 
-            TestHelper.Settle(service, saleTransaction.Id);
+            gateway.TestTransaction.Settle(saleTransaction.Id);
             Transaction refundTransaction = gateway.Transaction.Refund(saleTransaction.Id).Target;
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
@@ -988,7 +988,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            TestHelper.Settle(service, transaction.Id);
+            gateway.TestTransaction.Settle(transaction.Id);
             transaction = gateway.Transaction.Find(transaction.Id);
 
             DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
@@ -3595,7 +3595,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            TestHelper.Settle(service, transaction.Id);
+            gateway.TestTransaction.Settle(transaction.Id);
 
             Result<Transaction> result;
             try
@@ -3638,7 +3638,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            TestHelper.Settle(service, transaction.Id);
+            gateway.TestTransaction.Settle(transaction.Id);
 
             Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("500.00"));
             Assert.IsTrue(result.IsSuccess());
@@ -3664,7 +3664,7 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            TestHelper.Settle(service, transaction.Id);
+            gateway.TestTransaction.Settle(transaction.Id);
 
             Transaction refund1 = gateway.Transaction.Refund(transaction.Id, 500M).Target;
             Assert.AreEqual(TransactionType.CREDIT, refund1.Type);
@@ -4220,7 +4220,7 @@ namespace Braintree.Tests
             var transactionResult = gateway.Transaction.Sale(request);
             Assert.IsTrue(transactionResult.IsSuccess());
 
-            TestHelper.SettlementDecline(service, transactionResult.Target.Id);
+            gateway.TestTransaction.SettlementDecline(transactionResult.Target.Id);
             Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
 
             Assert.AreEqual("4001", transaction.ProcessorSettlementResponseCode);
@@ -4244,7 +4244,7 @@ namespace Braintree.Tests
             var transactionResult = gateway.Transaction.Sale(request);
             Assert.IsTrue(transactionResult.IsSuccess());
 
-            TestHelper.SettlementPending(service, transactionResult.Target.Id);
+            gateway.TestTransaction.SettlementPending(transactionResult.Target.Id);
             Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
 
             Assert.AreEqual("4002", transaction.ProcessorSettlementResponseCode);

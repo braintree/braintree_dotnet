@@ -54,12 +54,13 @@ namespace Braintree
         public static readonly TransactionStatus SUBMITTED_FOR_SETTLEMENT = new TransactionStatus("submitted_for_settlement");
         public static readonly TransactionStatus VOIDED = new TransactionStatus("voided");
         public static readonly TransactionStatus UNRECOGNIZED = new TransactionStatus("unrecognized");
+        public static readonly TransactionStatus SETTLEMENT_CONFIRMED = new TransactionStatus("settlement_confirmed");
         public static readonly TransactionStatus SETTLEMENT_DECLINED = new TransactionStatus("settlement_declined");
         public static readonly TransactionStatus SETTLEMENT_PENDING = new TransactionStatus("settlement_pending");
 
         public static readonly TransactionStatus[] ALL = {
             AUTHORIZATION_EXPIRED, AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED,
-            SETTLED, SETTLEMENT_DECLINED, SETTLEMENT_PENDING, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED, UNRECOGNIZED
+            SETTLED, SETTLEMENT_CONFIRMED, SETTLEMENT_DECLINED, SETTLEMENT_PENDING, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED, UNRECOGNIZED
         };
 
         protected TransactionStatus(string name) : base(name) {}
@@ -322,7 +323,7 @@ namespace Braintree
         /// </returns>
         /// <remarks>
         /// When retrieving a transaction from the gateway, the credit card used in the transaction is returned in the response.
-        /// If the credit card record has been updated in the vault since the transaction occurred, this method can be used to 
+        /// If the credit card record has been updated in the vault since the transaction occurred, this method can be used to
         /// retrieve the updated credit card information.  This is typically useful in situations where a transaction fails, for
         /// example when a credit card expires, and a new transaction needs to be submitted once the new credit card information
         /// has been submitted.
@@ -345,7 +346,7 @@ namespace Braintree
         ///         Amount = failedTransaction.Amount,
         ///         PaymentMethodToken = updatedCreditCard.Token
         ///     };
-        ///     
+        ///
         ///     Result&lt;Transaction&gt; result = gateway.Transaction.Sale(request);
         /// </code>
         /// </example>
@@ -364,7 +365,7 @@ namespace Braintree
         /// </returns>
         /// <remarks>
         /// When retrieving a transaction from the gateway, the customer associated with the transaction is returned in the response.
-        /// If the customer record has been updated in the vault since the transaction occurred, this method can be used to 
+        /// If the customer record has been updated in the vault since the transaction occurred, this method can be used to
         /// retrieve the updated customer information.
         /// </remarks>
         /// <example>
@@ -389,7 +390,7 @@ namespace Braintree
         /// </returns>
         /// <remarks>
         /// When retrieving a transaction from the gateway, the billing address associated with the transaction is returned in the response.
-        /// If the billing address has been updated in the vault since the transaction occurred, this method can be used to 
+        /// If the billing address has been updated in the vault since the transaction occurred, this method can be used to
         /// retrieve the updated billing address.
         /// </remarks>
         /// <example>
@@ -414,7 +415,7 @@ namespace Braintree
         /// </returns>
         /// <remarks>
         /// When retrieving a transaction from the gateway, the shipping address associated with the transaction is returned in the response.
-        /// If the shipping address has been updated in the vault since the transaction occurred, this method can be used to 
+        /// If the shipping address has been updated in the vault since the transaction occurred, this method can be used to
         /// retrieve the updated shipping address.
         /// </remarks>
         /// <example>

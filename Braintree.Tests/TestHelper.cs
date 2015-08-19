@@ -80,25 +80,6 @@ namespace Braintree.Tests
       return false;
     }
 
-    public static NodeWrapper Settle(BraintreeService service, string transactionId)
-    {
-      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settle"));
-      Assert.IsTrue(response.IsSuccess());
-      return response;
-    }
-
-    public static void SettlementDecline(BraintreeService service, string transactionId)
-    {
-      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_decline"));
-      Assert.IsTrue(response.IsSuccess());
-    }
-
-    public static void SettlementPending(BraintreeService service, string transactionId)
-    {
-      NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/settlement_pending"));
-      Assert.IsTrue(response.IsSuccess());
-    }
-
     public static void Escrow(BraintreeService service, string transactionId)
     {
       NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/escrow"));

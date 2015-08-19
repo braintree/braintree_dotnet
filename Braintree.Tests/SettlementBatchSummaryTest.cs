@@ -12,7 +12,6 @@ namespace Braintree.Tests
     public class SettlementBatchSummaryTest
     {
         private BraintreeGateway gateway;
-        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -24,8 +23,6 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-
-            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
@@ -54,10 +51,9 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            NodeWrapper settlementResult = TestHelper.Settle(service, transaction.Id);
-            var settlementDate = settlementResult.GetString("/transaction/settlement-batch-id").Split('_')[0];
+            Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
+            var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
             transaction = gateway.Transaction.Find(transaction.Id);
-
             var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate));
             var visas = new List<IDictionary<string,string>>();
             foreach (var row in result.Target.Records)
@@ -110,8 +106,8 @@ namespace Braintree.Tests
             };
 
             Transaction transaction = gateway.Transaction.Sale(request).Target;
-            NodeWrapper settlementResult = TestHelper.Settle(service, transaction.Id);
-            var settlementDate = settlementResult.GetString("/transaction/settlement-batch-id").Split('_')[0];
+            Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
+            var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
             transaction = gateway.Transaction.Find(transaction.Id);
 
             var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate), "store_me");

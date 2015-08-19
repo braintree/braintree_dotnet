@@ -41,7 +41,7 @@ namespace Braintree
             return string.Format("{0}&signature={1}&algorithm=SHA256", url, ComputeSignature(url));
         }
 
-        private string ComputeSignature(string message)
+        public string ComputeSignature(string message)
         {
             byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(gateway.ClientSecret));
             byte[] signatureBytes = new HMACSHA256(key).ComputeHash(Encoding.UTF8.GetBytes(message));

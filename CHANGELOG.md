@@ -1,3 +1,7 @@
+## 2.47.0
+* Add new test payment method nonces
+* Add methods to change transaction settlement status in sandbox
+
 ## 2.46.0
 * Fix issue with Dispute Status of Open returning Unrecognized
 * Add Description parameter for PayPal email receipts to be passed on Transaction.Sale request
