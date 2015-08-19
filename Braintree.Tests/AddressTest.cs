@@ -165,7 +165,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Update_UpdatesAddress_ReturnsAnErrorResult_ForInconsistentCountry()
+        public void Update_ReturnsAnErrorResult_ForInconsistentCountry()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
