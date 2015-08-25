@@ -12,6 +12,7 @@ namespace Braintree
         {
             public const string VISA = "4111111111111111";
             public const string MASTER_CARD = "5555555555554444";
+            public const string AMEX = "371449635392376";
             public const string FRAUD = "4000111111111511";
         }
 

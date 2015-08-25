@@ -5,6 +5,7 @@ namespace Braintree
     public class PayPalAccount : PaymentMethod
     {
         public string Email { get; protected set; }
+        public string BillingAgreementId { get; protected set; }
         public string Token { get; protected set; }
         public bool? IsDefault { get; protected set; }
         public string ImageUrl { get; protected set; }
@@ -15,6 +16,7 @@ namespace Braintree
         protected internal PayPalAccount(NodeWrapper node, BraintreeGateway gateway)
         {
             Email = node.GetString("email");
+            BillingAgreementId = node.GetString("billing-agreement-id");
             Token = node.GetString("token");
             IsDefault = node.GetBoolean("default");
             ImageUrl = node.GetString("image-url");

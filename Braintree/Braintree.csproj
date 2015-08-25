@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.47.0</AssemblyName>
+    <AssemblyName>Braintree-2.48.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.47.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.48.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.47.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.48.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -178,6 +178,7 @@
     <Compile Include="TransactionOptionsRequest.cs" />
     <Compile Include="TransactionOptionsPayPalRequest.cs" />
     <Compile Include="TransactionOptionsThreeDSecureRequest.cs" />
+    <Compile Include="TransactionOptionsAmexRewardsRequest.cs" />
     <Compile Include="TransactionPayPalRequest.cs" />
     <Compile Include="TransactionRequest.cs" />
     <Compile Include="TransactionSearchRequest.cs" />

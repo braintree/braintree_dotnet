@@ -40,6 +40,7 @@ namespace Braintree.Test
         public const string ProcessorFailureJCB = "fake-processor-failure-jcb-nonce";
         public const string LuhnInvalid = "fake-luhn-invalid-nonce";
         public const string PayPalFuturePaymentRefreshToken = "fake-paypal-future-refresh-token-nonce";
+        public const string PayPalBillingAgreement = "fake-paypal-billing-agreement-nonce";
         public const string SEPA = "fake-sepa-bank-account-nonce";
         public const string GatewayRejectedFraud = "fake-gateway-rejected-fraud-nonce";
     }

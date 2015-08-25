@@ -1,3 +1,6 @@
+## 2.48.0
+* Add BillingAgreementId to PayPalAccount
+
 ## 2.47.0
 * Add new test payment method nonces
 * Add methods to change transaction settlement status in sandbox

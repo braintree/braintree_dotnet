@@ -8,56 +8,20 @@ namespace Braintree
 {
     public class Environment
     {
-        public static Environment DEVELOPMENT = new Environment("development");
-        public static Environment QA = new Environment("qa");
-        public static Environment SANDBOX = new Environment("sandbox");
-        public static Environment PRODUCTION = new Environment("production");
+        public static Environment DEVELOPMENT = new Environment("development", DevelopmentUrl(), "http://auth.venmo.dev:9292");
+        public static Environment QA = new Environment("qa", "https://gateway.qa.braintreepayments.com", "https://auth.qa.venmo.com");
+        public static Environment SANDBOX = new Environment("sandbox", "https://api.sandbox.braintreegateway.com:443", "https://auth.sandbox.venmo.com");
+        public static Environment PRODUCTION = new Environment("production", "https://api.braintreegateway.com:443", "https://auth.venmo.com");
 
-        private string environmentName;
+        public string GatewayURL { get; private set; }
+        public string AuthURL { get; private set; }
+        public string EnvironmentName { get; private set; }
 
-        public string GatewayURL
+        public Environment(string environmentName, string gatewayUrl, string authUrl)
         {
-            get
-            {
-                switch (environmentName)
-                {
-                    case "development":
-                        return DevelopmentUrl();
-                    case "qa":
-                        return "https://gateway.qa.braintreepayments.com";
-                    case "sandbox":
-                        return "https://api.sandbox.braintreegateway.com:443";
-                    case "production":
-                        return "https://api.braintreegateway.com:443";
-                    default:
-                        throw new Exception("Unsupported environment.");
-                }
-            }
-        }
-
-        public string AuthURL
-        {
-            get
-            {
-                switch (environmentName)
-                {
-                    case "development":
-                        return "http://auth.venmo.dev:9292";
-                    case "qa":
-                        return "https://auth.qa.venmo.com";
-                    case "sandbox":
-                        return "https://auth.sandbox.venmo.com";
-                    case "production":
-                        return "https://auth.venmo.com";
-                    default:
-                        throw new Exception("Unsupported environment.");
-                }
-            }
-        }
-
-        private Environment(string name)
-        {
-            environmentName = name;
+            this.GatewayURL = gatewayUrl;
+            this.AuthURL = authUrl;
+            this.EnvironmentName = environmentName;
         }
 
         private static string DevelopmentUrl()
@@ -67,11 +31,6 @@ namespace Braintree
             var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
 
             return string.Format("http://{0}:{1}", host, port);
-        }
-
-        public string EnvironmentName
-        {
-            get { return environmentName; }
         }
     }
 }

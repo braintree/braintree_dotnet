@@ -210,5 +210,24 @@ namespace Braintree.Tests
             var accountSubscriptionIds = from s in paypalAccount.Subscriptions orderby s.Id select s.Id;
             Assert.IsTrue(ids.SequenceEqual(accountSubscriptionIds));
         }
+
+        [Test]
+        public void ReturnsBillingAgreementIdWithPayPalAccount()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var paymentMethodToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = Nonce.PayPalBillingAgreement,
+                CustomerId = customer.Id
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsFalse(string.IsNullOrEmpty(result.Target.Token));
+
+            var paypalAccount = gateway.PayPalAccount.Find(result.Target.Token);
+            Assert.IsNotNull(paypalAccount.BillingAgreementId);
+        }
     }
 }

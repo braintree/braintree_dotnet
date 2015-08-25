@@ -191,6 +191,7 @@ namespace Braintree
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public RiskData RiskData { get; protected set; }
         public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
+        public string AmexRewardsResponse { get; protected set; }
 
         private BraintreeGateway Gateway;
 
@@ -255,6 +256,7 @@ namespace Braintree
             TaxAmount = node.GetDecimal("tax-amount");
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
+            AmexRewardsResponse = node.GetString("amex-rewards-response");
             CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
             Subscription = new Subscription(node.GetNode("subscription"), gateway);
             Customer = new Customer(node.GetNode("customer"), gateway);
