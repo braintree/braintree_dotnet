@@ -10,6 +10,7 @@ namespace Braintree
         public string ExpirationYear { get; protected set; }
         public string Token { get; protected set; }
         public string PaymentInstrumentName { get; protected set; }
+        public string SourceDescription { get; protected set; }
         public bool? IsDefault { get; protected set; }
         public string ImageUrl { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
@@ -24,6 +25,7 @@ namespace Braintree
             ExpirationYear = node.GetString("expiration-year");
             Token = node.GetString("token");
             PaymentInstrumentName = node.GetString("payment-instrument-name");
+            SourceDescription = node.GetString("source-description");
             IsDefault = node.GetBoolean("default");
             ImageUrl = node.GetString("image-url");
 

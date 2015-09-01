@@ -11,6 +11,7 @@ namespace Braintree
         public string ImageUrl { get; protected set; }
         public string SourceCardLast4 { get; protected set; }
         public string SourceCardType { get; protected set; }
+        public string SourceDescription { get; protected set; }
         public string VirtualCardLast4 { get; protected set; }
         public string VirtualCardType { get; protected set; }
         public string CardType { get; protected set; }
@@ -26,6 +27,7 @@ namespace Braintree
             ImageUrl = node.GetString("image-url");
             SourceCardType = node.GetString("source-card-type");
             SourceCardLast4 = node.GetString("source-card-last-4");
+            SourceDescription = node.GetString("source-description");
             VirtualCardLast4 = node.GetString("virtual-card-last-4");
             VirtualCardType = node.GetString("virtual-card-type");
             CardType = node.GetString("virtual-card-type");

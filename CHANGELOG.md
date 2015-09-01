@@ -1,5 +1,10 @@
+## 2.49.0
+* Add sourceDescription attribute to Android Pay and Apple Pay
+* Add new Android Pay test nonces
+
 ## 2.48.0
 * Add BillingAgreementId to PayPalAccount
+* Add support for amex rewards transactions
 
 ## 2.47.0
 * Add new test payment method nonces

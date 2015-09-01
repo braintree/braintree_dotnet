@@ -150,10 +150,11 @@ namespace Braintree.Tests
             Assert.IsNotNull(applePayCard.UpdatedAt);
             Assert.IsNotNull(applePayCard.Subscriptions);
             Assert.IsNotNull(applePayCard.PaymentInstrumentName);
+            Assert.IsNotNull(applePayCard.SourceDescription);
         }
 
         [Test]
-        public void Create_CreatesAndroidPayCardWithNonce()
+        public void Create_CreatesAndroidPayProxyCardWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
@@ -161,7 +162,7 @@ namespace Braintree.Tests
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
-                PaymentMethodNonce = Nonce.AndroidPay
+                PaymentMethodNonce = Nonce.AndroidPayDiscover
             };
             Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
 
@@ -174,6 +175,42 @@ namespace Braintree.Tests
             Assert.IsNotNull(androidPayCard.CardType);
             Assert.IsNotNull(androidPayCard.VirtualCardType);
             Assert.IsNotNull(androidPayCard.SourceCardType);
+            Assert.IsNotNull(androidPayCard.SourceDescription);
+            Assert.IsNotNull(androidPayCard.Last4);
+            Assert.IsNotNull(androidPayCard.VirtualCardLast4);
+            Assert.IsNotNull(androidPayCard.SourceCardLast4);
+            Assert.IsNotNull(androidPayCard.Bin);
+            Assert.IsNotNull(androidPayCard.ExpirationMonth);
+            Assert.IsNotNull(androidPayCard.ExpirationYear);
+            Assert.IsNotNull(androidPayCard.GoogleTransactionId);
+            Assert.IsNotNull(androidPayCard.CreatedAt);
+            Assert.IsNotNull(androidPayCard.UpdatedAt);
+            Assert.IsNotNull(androidPayCard.Subscriptions);
+        }
+
+        [Test]
+        public void Create_CreatesAndroidPayNetworkTokenWithNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.AndroidPayMasterCard
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.IsInstanceOfType(typeof(AndroidPayCard), paymentMethodResult.Target);
+            AndroidPayCard androidPayCard = (AndroidPayCard) paymentMethodResult.Target;
+            Assert.IsNotNull(androidPayCard.IsDefault);
+            Assert.IsNotNull(androidPayCard.CardType);
+            Assert.IsNotNull(androidPayCard.VirtualCardType);
+            Assert.IsNotNull(androidPayCard.SourceCardType);
+            Assert.IsNotNull(androidPayCard.SourceDescription);
             Assert.IsNotNull(androidPayCard.Last4);
             Assert.IsNotNull(androidPayCard.VirtualCardLast4);
             Assert.IsNotNull(androidPayCard.SourceCardLast4);

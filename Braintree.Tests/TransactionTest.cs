@@ -1988,10 +1988,11 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
             Assert.IsNotNull(result.Target.ApplePayDetails.CardholderName);
             Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
+            Assert.IsNotNull(result.Target.ApplePayDetails.SourceDescription);
         }
 
         [Test]
-        public void Sale_WithAndroidPayCardNonce()
+        public void Sale_WithAndroidPayProxyCardNonce()
         {
             TransactionRequest request = new TransactionRequest
             {
@@ -2014,6 +2015,38 @@ namespace Braintree.Tests
             Assert.IsNotNull(androidPayDetails.Last4);
             Assert.IsNotNull(androidPayDetails.VirtualCardLast4);
             Assert.IsNotNull(androidPayDetails.SourceCardLast4);
+            Assert.IsNotNull(androidPayDetails.SourceDescription);
+            Assert.IsNotNull(androidPayDetails.Bin);
+            Assert.IsNotNull(androidPayDetails.ExpirationMonth);
+            Assert.IsNotNull(androidPayDetails.ExpirationYear);
+            Assert.IsNotNull(androidPayDetails.GoogleTransactionId);
+        }
+
+        [Test]
+        public void Sale_WithAndroidPayNetworkTokenNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.AndroidPayDiscover
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.IsNotNull(result.Target.AndroidPayDetails);
+
+            Assert.IsInstanceOfType(typeof(AndroidPayDetails), result.Target.AndroidPayDetails);
+            AndroidPayDetails androidPayDetails = (AndroidPayDetails) result.Target.AndroidPayDetails;
+
+            Assert.IsNull(androidPayDetails.Token);
+            Assert.IsNotNull(androidPayDetails.ImageUrl);
+            Assert.IsNotNull(androidPayDetails.CardType);
+            Assert.IsNotNull(androidPayDetails.VirtualCardType);
+            Assert.IsNotNull(androidPayDetails.SourceCardType);
+            Assert.IsNotNull(androidPayDetails.Last4);
+            Assert.IsNotNull(androidPayDetails.VirtualCardLast4);
+            Assert.IsNotNull(androidPayDetails.SourceCardLast4);
+            Assert.IsNotNull(androidPayDetails.SourceDescription);
             Assert.IsNotNull(androidPayDetails.Bin);
             Assert.IsNotNull(androidPayDetails.ExpirationMonth);
             Assert.IsNotNull(androidPayDetails.ExpirationYear);

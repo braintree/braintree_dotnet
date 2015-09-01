@@ -110,11 +110,28 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Find_IncludesAndroidPayCardsInPaymentMethods()
+        public void Find_IncludesAndroidPayProxyCardsInPaymentMethods()
         {
             var createRequest = new CustomerRequest
             {
-                PaymentMethodNonce = Nonce.AndroidPay
+                PaymentMethodNonce = Nonce.AndroidPayDiscover
+            };
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+            Assert.IsNotNull(customer.AndroidPayCards);
+            Assert.IsNotNull(customer.PaymentMethods);
+            AndroidPayCard card = customer.AndroidPayCards[0];
+            Assert.IsNotNull(card.Token);
+            Assert.IsNotNull(card.GoogleTransactionId);
+            Assert.AreEqual(card, customer.PaymentMethods[0]);
+        }
+
+        [Test]
+        public void Find_IncludesAndroidPayNetworkTokensInPaymentMethods()
+        {
+            var createRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.AndroidPayMasterCard
             };
             Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
             Customer customer = gateway.Customer.Find(createdCustomer.Id);
