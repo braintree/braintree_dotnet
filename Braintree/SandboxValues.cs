@@ -14,6 +14,13 @@ namespace Braintree
             public const string MASTER_CARD = "5555555555554444";
             public const string AMEX = "371449635392376";
             public const string FRAUD = "4000111111111511";
+
+            public class AmexPayWithPoints
+            {
+                public const string SUCCESS = "371260714673002";
+                public const string INELIGIBLE_CARD = "378267515471109";
+                public const string INSUFFICIENT_POINTS = "371544868764018";
+            }
         }
 
         public class TransactionAmount

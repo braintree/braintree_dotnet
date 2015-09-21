@@ -1214,6 +1214,90 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void Sale_ReturnsSuccessfulResponseWithPartialSettlement()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> authorizationResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(authorizationResult.IsSuccess());
+            Transaction authorizedTransaction = authorizationResult.Target;
+
+            Assert.AreEqual(1000.00, authorizedTransaction.Amount); // check authorization amount. not settlement amount
+            Assert.AreEqual(TransactionType.SALE, authorizedTransaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, authorizedTransaction.Status);
+            Assert.IsNotNull(authorizedTransaction.ProcessorAuthorizationCode);
+
+            var partialSettlementResult1 = gateway.Transaction.SubmitForPartialSettlement(authorizedTransaction.Id, 400);
+            var partialSettlementTransaction1 = partialSettlementResult1.Target;
+            Assert.AreEqual(400.00, partialSettlementTransaction1.Amount);
+            Assert.AreEqual(TransactionType.SALE, partialSettlementTransaction1.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, partialSettlementTransaction1.Status);
+            Assert.AreEqual(authorizedTransaction.Id, partialSettlementTransaction1.AuthorizedTransactionId);
+
+            var refreshedAuthorizedTransaction = gateway.Transaction.Find(authorizedTransaction.Id);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, refreshedAuthorizedTransaction.Status);
+            var partialSettlementTransactionIds = new string [] { partialSettlementTransaction1.Id };
+            Assert.AreEqual(refreshedAuthorizedTransaction.PartialSettlementTransactionIds, partialSettlementTransactionIds);
+
+            var partialSettlementResult2 = gateway.Transaction.SubmitForPartialSettlement(authorizedTransaction.Id, 600);
+            var partialSettlementTransaction2 = partialSettlementResult2.Target;
+            Assert.AreEqual(600.00, partialSettlementTransaction2.Amount);
+            Assert.AreEqual(TransactionType.SALE, partialSettlementTransaction2.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, partialSettlementTransaction2.Status);
+
+            refreshedAuthorizedTransaction = gateway.Transaction.Find(authorizedTransaction.Id);
+            partialSettlementTransactionIds = new string [] { partialSettlementTransaction1.Id, partialSettlementTransaction2.Id };
+            CollectionAssert.AreEquivalent(refreshedAuthorizedTransaction.PartialSettlementTransactionIds, partialSettlementTransactionIds);
+        }
+
+        public void Sale_ReturnsUnsuccessfulResponseForPartialSettlementWithAPartialSettlementTransaction()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.ApplePayAmex
+            };
+
+            Result<Transaction> authorizationResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(authorizationResult.IsSuccess());
+            Transaction authorizedTransaction = authorizationResult.Target;
+
+            var partialSettlementResult1 = gateway.Transaction.SubmitForPartialSettlement(authorizedTransaction.Id, 400);
+            var partialSettlementTransaction1 = partialSettlementResult1.Target;
+            Assert.IsTrue(partialSettlementResult1.IsSuccess());
+
+            var partialSettlementResult2 = gateway.Transaction.SubmitForPartialSettlement(partialSettlementTransaction1.Id, 600);
+            Assert.IsFalse(partialSettlementResult2.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_PARTIAL_SETTLEMENT, partialSettlementResult2.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ReturnsUnsuccessfulResponseForPartialSettlementWithUnacceptedPaymentInstrumentType()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.ApplePayAmex
+            };
+
+            Result<Transaction> authorizationResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(authorizationResult.IsSuccess());
+            Transaction authorizedTransaction = authorizationResult.Target;
+
+            var partialSettlementResult = gateway.Transaction.SubmitForPartialSettlement(authorizedTransaction.Id, 400);
+            Assert.IsFalse(partialSettlementResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PAYMENT_INSTRUMENT_TYPE_IS_NOT_ACCEPTED, partialSettlementResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
         public void Sale_WithSuccessfulAmexRewardsResponse()
         {
             var request = new TransactionRequest
@@ -1221,7 +1305,7 @@ namespace Braintree.Tests
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.AMEX,
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.SUCCESS,
                     ExpirationDate = "05/2009",
                 },
                 Options = new TransactionOptionsRequest
@@ -1241,27 +1325,26 @@ namespace Braintree.Tests
             Transaction transaction = result.Target;
 
             Assert.AreEqual(1000.00, transaction.Amount);
-            Assert.AreEqual("success", transaction.AmexRewardsResponse);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
         }
 
         [Test]
-        public void Sale_WithFailedAmexRewardsResponse()
+        public void Sale_WithAmexRewardsResponseSucceedsEvenIfCardIsIneligible()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.AMEX,
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INELIGIBLE_CARD,
                     ExpirationDate = "05/2009",
                 },
                 Options = new TransactionOptionsRequest
                 {
                     SubmitForSettlement = true,
                     AmexRewards = new TransactionOptionsAmexRewardsRequest {
-                        RequestId = "CARD_INELIGIBLE",
+                        RequestId = "ABC123",
                         Points = "100",
                         CurrencyAmount = "1",
                         CurrencyIsoCode = "USD"
@@ -1274,7 +1357,38 @@ namespace Braintree.Tests
             Transaction transaction = result.Target;
 
             Assert.AreEqual(1000.00, transaction.Amount);
-            Assert.AreEqual("RDM2002 Card is not eligible for redemption", transaction.AmexRewardsResponse);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+        }
+
+        [Test]
+        public void Sale_WithAmexRewardsResponseSucceedsEvenIfCardHasInsufficientPoints()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INSUFFICIENT_POINTS,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                    AmexRewards = new TransactionOptionsAmexRewardsRequest {
+                        RequestId = "ABC123",
+                        Points = "100",
+                        CurrencyAmount = "1",
+                        CurrencyIsoCode = "USD"
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
         }
@@ -3593,14 +3707,14 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SubmitForSettlement_WithAmexRewards()
+        public void SubmitForSettlement_WithAmexRewardsSucceeds()
         {
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.AMEX,
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.SUCCESS,
                     ExpirationDate = "05/2008"
                 },
                 Options = new TransactionOptionsRequest
@@ -3620,7 +3734,66 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
             Assert.AreEqual(50.00, result.Target.Amount);
-            Assert.AreEqual("success", result.Target.AmexRewardsResponse);
+        }
+
+        [Test]
+        public void SubmitForSettlement_WithAmexRewardsSucceedsEvenIfCardIsIneligible()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INELIGIBLE_CARD,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    AmexRewards = new TransactionOptionsAmexRewardsRequest {
+                        RequestId = "ABC123",
+                        Points = "100",
+                        CurrencyAmount = "1",
+                        CurrencyIsoCode = "USD"
+                    }
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, decimal.Parse("50.00"));
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual(50.00, result.Target.Amount);
+        }
+
+        [Test]
+        public void SubmitForSettlement_WithAmexRewardsSucceedsEvenIfCardBalanceIsInsufficient()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INSUFFICIENT_POINTS,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    AmexRewards = new TransactionOptionsAmexRewardsRequest {
+                        RequestId = "ABC123",
+                        Points = "100",
+                        CurrencyAmount = "1",
+                        CurrencyIsoCode = "USD"
+                    }
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, decimal.Parse("50.00"));
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual(50.00, result.Target.Amount);
         }
 
         [Test]

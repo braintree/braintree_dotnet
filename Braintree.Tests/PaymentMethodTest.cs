@@ -45,6 +45,7 @@ namespace Braintree.Tests
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsNotNull(paymentMethodResult.Target.Token);
             Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOfType(typeof(PayPalAccount), paymentMethodResult.Target);
         }
 
@@ -85,6 +86,7 @@ namespace Braintree.Tests
 
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOfType(typeof(CreditCard), paymentMethodResult.Target);
         }
 
@@ -109,6 +111,7 @@ namespace Braintree.Tests
 
             Assert.IsTrue(paymentMethodResult.IsSuccess());
             Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
         }
 
         [Test]
@@ -151,6 +154,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(applePayCard.Subscriptions);
             Assert.IsNotNull(applePayCard.PaymentInstrumentName);
             Assert.IsNotNull(applePayCard.SourceDescription);
+            Assert.AreEqual(result.Target.Id, applePayCard.CustomerId);
         }
 
         [Test]

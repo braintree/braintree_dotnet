@@ -10,6 +10,7 @@ namespace Braintree
         public string Token { get; protected set; }
         public bool? IsDefault { get; protected set; }
         public string ImageUrl { get; protected set; }
+        public string CustomerId { get; protected set; }
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
@@ -23,6 +24,7 @@ namespace Braintree
             Token = node.GetString("token");
             IsDefault = node.GetBoolean("default");
             ImageUrl = node.GetString("image-url");
+            CustomerId = node.GetString("customer-id");
 
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");

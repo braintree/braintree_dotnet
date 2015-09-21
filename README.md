@@ -28,11 +28,11 @@ namespace BraintreeExample
 
             TransactionRequest request = new TransactionRequest
             {
-                Amount = 1000M,
-                CreditCard = new TransactionCreditCardRequest
+                Amount = 1000.00M,
+                PaymentMethodNonce = nonceFromTheClient,
+                Options = new TransactionOptionsRequest
                 {
-                    Number = "4111111111111111",
-                    ExpirationDate = "05/2012"
+                    SubmitForSettlement = true
                 }
             };
 

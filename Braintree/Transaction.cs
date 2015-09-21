@@ -170,6 +170,8 @@ namespace Braintree
         [Obsolete("Use Transaction.RefundIds")]
         public string RefundId { get; protected set; }
         public List<string> RefundIds { get; protected set; }
+        public List<string> PartialSettlementTransactionIds { get; protected set; }
+        public string AuthorizedTransactionId { get; protected set; }
         public string SettlementBatchId { get; protected set; }
         public Address ShippingAddress { get; protected set; }
         public TransactionEscrowStatus EscrowStatus { get; protected set; }
@@ -191,7 +193,6 @@ namespace Braintree
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public RiskData RiskData { get; protected set; }
         public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
-        public string AmexRewardsResponse { get; protected set; }
 
         private BraintreeGateway Gateway;
 
@@ -250,13 +251,14 @@ namespace Braintree
             #pragma warning restore 0618
 
             RefundIds = node.GetStrings("refund-ids/*");
+            PartialSettlementTransactionIds = node.GetStrings("partial-settlement-transaction-ids/*");
+            AuthorizedTransactionId = node.GetString("authorized-transaction-id");
             SettlementBatchId = node.GetString("settlement-batch-id");
             PlanId = node.GetString("plan-id");
             SubscriptionId = node.GetString("subscription-id");
             TaxAmount = node.GetDecimal("tax-amount");
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
-            AmexRewardsResponse = node.GetString("amex-rewards-response");
             CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
             Subscription = new Subscription(node.GetNode("subscription"), gateway);
             Customer = new Customer(node.GetNode("customer"), gateway);

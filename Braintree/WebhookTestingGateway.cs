@@ -60,6 +60,8 @@ namespace Braintree
                 return DisputeLostSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_WON) {
                 return DisputeWonSampleXml(id);
+            } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY) {
+                return SubscriptionChargedSuccessfullySampleXml(id);
             } else {
                 return SubscriptionXml(id);
             }
@@ -217,6 +219,31 @@ namespace Braintree
             return Node("subscription",
                     Node("id", id),
                     NodeAttr("transactions", TYPE_ARRAY),
+                    NodeAttr("add_ons", TYPE_ARRAY),
+                    NodeAttr("discounts", TYPE_ARRAY)
+            );
+        }
+
+        private string SubscriptionChargedSuccessfullySampleXml(string id)
+        {
+            return Node("subscription",
+                    Node("id", id),
+                    Node("transactions",
+                        Node("transaction",
+                            Node("id", id),
+                            Node("amount", "49.99"),
+                            Node("status", "submitted_for_settlement"),
+                            Node("disbursement-details",
+                                NodeAttr("disbursement-date", TYPE_DATE, "2013-07-09")
+                            ),
+                            Node("billing"),
+                            Node("credit-card"),
+                            Node("customer"),
+                            Node("descriptor"),
+                            Node("shipping"),
+                            Node("subscription")
+                        )
+                    ),
                     NodeAttr("add_ons", TYPE_ARRAY),
                     NodeAttr("discounts", TYPE_ARRAY)
             );

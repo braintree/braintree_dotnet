@@ -7,5 +7,6 @@ namespace Braintree
         string Token { get; }
         bool? IsDefault { get; }
         string ImageUrl { get; }
+        string CustomerId { get; }
     }
 }

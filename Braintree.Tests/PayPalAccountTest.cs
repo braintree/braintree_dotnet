@@ -215,8 +215,6 @@ namespace Braintree.Tests
         public void ReturnsBillingAgreementIdWithPayPalAccount()
         {
             var customer = gateway.Customer.Create().Target;
-            var paymentMethodToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
-
             var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
             {
                 PaymentMethodNonce = Nonce.PayPalBillingAgreement,

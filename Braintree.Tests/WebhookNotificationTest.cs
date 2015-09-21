@@ -242,5 +242,21 @@ namespace Braintree.Tests
           Assert.AreEqual(WebhookKind.PARTNER_MERCHANT_DECLINED, notification.Kind);
           Assert.AreEqual("abc123", notification.PartnerMerchant.PartnerMerchantId);
         }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForSubscriptionChargedSuccessfully()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY, notification.Kind);
+          Assert.AreEqual("my_id", notification.Subscription.Id);
+          Assert.AreEqual(1, notification.Subscription.Transactions.Count);
+
+          Transaction transaction = notification.Subscription.Transactions[0];
+          Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+          Assert.AreEqual(49.99m, transaction.Amount);
+        }
     }
 }

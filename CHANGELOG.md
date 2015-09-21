@@ -1,3 +1,7 @@
+## 2.50.0
+* Add support for partial settlement transactions
+* Add customer_id to payment methods
+
 ## 2.49.0
 * Add sourceDescription attribute to Android Pay and Apple Pay
 * Add new Android Pay test nonces
