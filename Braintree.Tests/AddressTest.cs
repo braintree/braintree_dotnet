@@ -165,7 +165,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Update_UpdatesAddress_WithInconsistenCounty()
+        public void Update_ReturnsAnErrorResult_ForInconsistentCountry()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
@@ -226,12 +226,9 @@ namespace Braintree.Tests
             try
             {
                 gateway.Address.Find(customer.Id, createdAddress.Id);
-                Assert.Fail("Expected NotFoundException.");
+                Assert.Fail("Should throw NotFoundException");
             }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            catch (NotFoundException) {}
         }
 
         [Test]
