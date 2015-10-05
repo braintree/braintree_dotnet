@@ -4,10 +4,10 @@ using Braintree.Exceptions;
 
 namespace Braintree
 {
-    public class PayPalAccountGateway
+    public class PayPalAccountGateway : IPayPalAccountGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         public PayPalAccountGateway(BraintreeGateway gateway)
         {

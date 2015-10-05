@@ -184,7 +184,7 @@ namespace Braintree
             get { return new PaymentMethodGateway(this); }
         }
 
-        public virtual PayPalAccountGateway PayPalAccount
+        public virtual IPayPalAccountGateway PayPalAccount
         {
             get { return new PayPalAccountGateway(this); }
         }
