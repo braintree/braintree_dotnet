@@ -154,7 +154,7 @@ namespace Braintree
             get { return new CreditCardGateway(this); }
         }
 
-        public virtual CreditCardVerificationGateway CreditCardVerification
+        public virtual ICreditCardVerificationGateway CreditCardVerification
         {
             get { return new CreditCardVerificationGateway(this); }
         }
