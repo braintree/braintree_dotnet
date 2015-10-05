@@ -144,7 +144,7 @@ namespace Braintree
             get { return new AddressGateway(this); }
         }
 
-        public virtual AddOnGateway AddOn
+        public virtual IAddOnGateway AddOn
         {
             get { return new AddOnGateway(this); }
         }
