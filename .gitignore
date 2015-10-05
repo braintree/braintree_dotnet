@@ -20,3 +20,4 @@ Thumbs.db
 tags
 /Braintree/Braintree.csproj.user
 /UpgradeLog.htm
+*.suo

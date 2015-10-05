@@ -13,8 +13,8 @@ namespace Braintree
     /// </summary>
     public class AddressGateway
     {
-        private BraintreeService Service;
-        private BraintreeGateway Gateway;
+        private readonly BraintreeService Service;
+        private readonly BraintreeGateway Gateway;
 
         protected internal AddressGateway(BraintreeGateway gateway)
         {

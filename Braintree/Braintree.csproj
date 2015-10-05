@@ -124,6 +124,7 @@
     <Compile Include="GenericAddressRequest.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="IClientTokenGateway.cs" />
+    <Compile Include="ICustomerGateway.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IndividualRequest.cs" />
     <Compile Include="IndustryRequest.cs" />

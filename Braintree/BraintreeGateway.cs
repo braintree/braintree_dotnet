@@ -134,7 +134,7 @@ namespace Braintree
             get { return new ClientTokenGateway(this); }
         }
 
-        public virtual CustomerGateway Customer
+        public virtual ICustomerGateway Customer
         {
             get { return new CustomerGateway(this); }
         }
