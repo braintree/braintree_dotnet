@@ -132,9 +132,11 @@
     <Compile Include="IDiscountGateway.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IMerchantAccountGateway.cs" />
+    <Compile Include="IMerchantGateway.cs" />
     <Compile Include="IndividualRequest.cs" />
     <Compile Include="IndustryRequest.cs" />
     <Compile Include="IndustryDataRequest.cs" />
+    <Compile Include="IOAuthGateway.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantGateway.cs" />

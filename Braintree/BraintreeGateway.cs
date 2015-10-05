@@ -169,12 +169,12 @@ namespace Braintree
             get { return new MerchantAccountGateway(this); }
         }
 
-        public virtual OAuthGateway OAuth
+        public virtual IOAuthGateway OAuth
         {
             get { return new OAuthGateway(this); }
         }
 
-        public virtual MerchantGateway Merchant
+        public virtual IMerchantGateway Merchant
         {
             get { return new MerchantGateway(this); }
         }
