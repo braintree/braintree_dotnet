@@ -18,3 +18,5 @@
 /Braintree.Tests/TestResult.xml
 Thumbs.db
 tags
+/Braintree/Braintree.csproj.user
+/UpgradeLog.htm

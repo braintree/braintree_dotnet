@@ -129,7 +129,7 @@ namespace Braintree
             Configuration = configuration;
         }
 
-        public virtual ClientTokenGateway ClientToken
+        public virtual IClientTokenGateway ClientToken
         {
             get { return new ClientTokenGateway(this); }
         }

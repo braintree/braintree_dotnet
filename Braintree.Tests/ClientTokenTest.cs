@@ -22,7 +22,7 @@ namespace Braintree.Tests
               PrivateKey = "integration_private_key"
           };
           try {
-              gateway.ClientToken.generate(
+              gateway.ClientToken.Generate(
                   new ClientTokenRequest
                   {
                       Options = new ClientTokenOptionsRequest
@@ -49,7 +49,7 @@ namespace Braintree.Tests
               PrivateKey = "integration_private_key"
           };
           try {
-              gateway.ClientToken.generate(
+              gateway.ClientToken.Generate(
                   new ClientTokenRequest
                   {
                       Options = new ClientTokenOptionsRequest
@@ -76,7 +76,7 @@ namespace Braintree.Tests
                 PrivateKey = "integration_private_key"
             };
             try {
-                gateway.ClientToken.generate(
+                gateway.ClientToken.Generate(
                     new ClientTokenRequest
                     {
                         Options = new ClientTokenOptionsRequest
@@ -130,7 +130,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var clientToken = gateway.ClientToken.generate(
+            var clientToken = gateway.ClientToken.Generate(
                 new ClientTokenRequest
                 {
                     Version = 1
@@ -150,7 +150,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            var encodedClientToken = gateway.ClientToken.generate();
+            var encodedClientToken = gateway.ClientToken.Generate();
             var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
             int version = TestHelper.extractIntParamFromJson("version", decodedClientToken);
             Assert.AreEqual(2, version);
@@ -324,7 +324,7 @@ namespace Braintree.Tests
 
             try
             {
-                encodedClientToken += gateway.ClientToken.generate(
+                encodedClientToken += gateway.ClientToken.Generate(
                     new ClientTokenRequest
                     {
                         CustomerId = "NON_EXISTENT_CUSTOMER_ID"
