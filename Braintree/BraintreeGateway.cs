@@ -164,7 +164,7 @@ namespace Braintree
             get { return new DiscountGateway(this); }
         }
 
-        public virtual MerchantAccountGateway MerchantAccount
+        public virtual IMerchantAccountGateway MerchantAccount
         {
             get { return new MerchantAccountGateway(this); }
         }
