@@ -137,6 +137,7 @@
     <Compile Include="IndustryRequest.cs" />
     <Compile Include="IndustryDataRequest.cs" />
     <Compile Include="IOAuthGateway.cs" />
+    <Compile Include="IPaymentMethodGateway.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantGateway.cs" />

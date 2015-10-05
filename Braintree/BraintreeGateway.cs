@@ -179,7 +179,7 @@ namespace Braintree
             get { return new MerchantGateway(this); }
         }
 
-        public virtual PaymentMethodGateway PaymentMethod
+        public virtual IPaymentMethodGateway PaymentMethod
         {
             get { return new PaymentMethodGateway(this); }
         }
