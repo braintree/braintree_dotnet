@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class PlanGateway
+    public class PlanGateway : IPlanGateway
     {
-        private BraintreeService service;
+        private readonly BraintreeService service;
 
         public PlanGateway(BraintreeGateway gateway)
         {

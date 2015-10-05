@@ -139,6 +139,7 @@
     <Compile Include="IOAuthGateway.cs" />
     <Compile Include="IPaymentMethodGateway.cs" />
     <Compile Include="IPayPalAccountGateway.cs" />
+    <Compile Include="IPlanGateway.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantGateway.cs" />

@@ -189,7 +189,7 @@ namespace Braintree
             get { return new PayPalAccountGateway(this); }
         }
 
-        public virtual PlanGateway Plan
+        public virtual IPlanGateway Plan
         {
             get { return new PlanGateway(this); }
         }
