@@ -4,9 +4,9 @@ using System.Xml;
 
 namespace Braintree
 {
-    public class DiscountGateway
+    public class DiscountGateway : IDiscountGateway
     {
-        private BraintreeService service;
+        private readonly BraintreeService service;
 
         public DiscountGateway(BraintreeGateway gateway)
         {

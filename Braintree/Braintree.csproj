@@ -129,6 +129,7 @@
     <Compile Include="ICreditCardGateway.cs" />
     <Compile Include="ICreditCardVerificationGateway.cs" />
     <Compile Include="ICustomerGateway.cs" />
+    <Compile Include="IDiscountGateway.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IndividualRequest.cs" />
     <Compile Include="IndustryRequest.cs" />

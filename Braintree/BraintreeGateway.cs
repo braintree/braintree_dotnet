@@ -159,7 +159,7 @@ namespace Braintree
             get { return new CreditCardVerificationGateway(this); }
         }
 
-        public virtual DiscountGateway Discount
+        public virtual IDiscountGateway Discount
         {
             get { return new DiscountGateway(this); }
         }
