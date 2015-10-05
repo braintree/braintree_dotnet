@@ -139,7 +139,7 @@ namespace Braintree
             get { return new CustomerGateway(this); }
         }
 
-        public virtual AddressGateway Address
+        public virtual IAddressGateway Address
         {
             get { return new AddressGateway(this); }
         }

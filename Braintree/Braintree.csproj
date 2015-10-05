@@ -123,6 +123,7 @@
     <Compile Include="FundingRequest.cs" />
     <Compile Include="GenericAddressRequest.cs" />
     <Compile Include="Hasher.cs" />
+    <Compile Include="IAddressGateway.cs" />
     <Compile Include="IClientTokenGateway.cs" />
     <Compile Include="ICustomerGateway.cs" />
     <Compile Include="IdsSearchRequest.cs" />

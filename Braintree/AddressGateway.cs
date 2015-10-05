@@ -11,7 +11,7 @@ namespace Braintree
     /// <summary>
     /// Provides operations for creating, finding, updating, and deleting addresses in the vault
     /// </summary>
-    public class AddressGateway
+    public class AddressGateway : IAddressGateway
     {
         private readonly BraintreeService Service;
         private readonly BraintreeGateway Gateway;
