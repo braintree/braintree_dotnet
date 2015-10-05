@@ -194,7 +194,7 @@ namespace Braintree
             get { return new PlanGateway(this); }
         }
 
-        public virtual SettlementBatchSummaryGateway SettlementBatchSummary
+        public virtual ISettlementBatchSummaryGateway SettlementBatchSummary
         {
             get { return new SettlementBatchSummaryGateway(this); }
         }
