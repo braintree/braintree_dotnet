@@ -126,6 +126,7 @@
     <Compile Include="IAddOnGateway.cs" />
     <Compile Include="IAddressGateway.cs" />
     <Compile Include="IClientTokenGateway.cs" />
+    <Compile Include="ICreditCardGateway.cs" />
     <Compile Include="ICustomerGateway.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IndividualRequest.cs" />

@@ -149,7 +149,7 @@ namespace Braintree
             get { return new AddOnGateway(this); }
         }
 
-        public virtual CreditCardGateway CreditCard
+        public virtual ICreditCardGateway CreditCard
         {
             get { return new CreditCardGateway(this); }
         }
