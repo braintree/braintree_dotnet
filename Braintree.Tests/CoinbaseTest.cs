@@ -13,15 +13,8 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            gateway = new BraintreeGateway();
         }
-
 
         [Test]
         public void TransactionCreate()
@@ -32,19 +25,22 @@ namespace Braintree.Tests
                 PaymentMethodNonce = Nonce.Coinbase
             };
             Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
+            if (result.IsSuccess())
+            {
+                CoinbaseDetails details = result.Target.CoinbaseDetails;
+                Assert.IsNotNull(details);
 
-            CoinbaseDetails details = result.Target.CoinbaseDetails;
-            Assert.IsNotNull(details);
+                Assert.AreNotEqual("", details.UserEmail);
+                Assert.IsNotNull(details.UserEmail);
 
-            Assert.AreNotEqual("", details.UserEmail);
-            Assert.IsNotNull(details.UserEmail);
+                Assert.AreNotEqual("", details.UserName);
+                Assert.IsNotNull(details.UserName);
 
-            Assert.AreNotEqual("", details.UserName);
-            Assert.IsNotNull(details.UserName);
-
-            Assert.AreNotEqual("", details.UserId);
-            Assert.IsNotNull(details.UserId);
+                Assert.AreNotEqual("", details.UserId);
+                Assert.IsNotNull(details.UserId);
+            }
+            else
+                StringAssert.Contains("does not support", result.Message);
         }
 
         [Test]
