@@ -224,7 +224,7 @@ namespace Braintree
             return TrUtil.BuildTrData(trData, redirectURL, new BraintreeService(Configuration));
         }
 
-        public virtual WebhookNotificationGateway WebhookNotification
+        public virtual IWebhookNotificationGateway WebhookNotification
         {
             get { return new WebhookNotificationGateway(this); }
         }

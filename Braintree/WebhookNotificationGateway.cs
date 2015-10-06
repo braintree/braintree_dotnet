@@ -9,10 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace Braintree
 {
-    public class WebhookNotificationGateway
+    public class WebhookNotificationGateway : IWebhookNotificationGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal WebhookNotificationGateway(BraintreeGateway gateway)
         {
