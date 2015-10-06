@@ -214,7 +214,7 @@ namespace Braintree
             get { return new TransactionGateway(this); }
         }
 
-        public virtual TransparentRedirectGateway TransparentRedirect
+        public virtual ITransparentRedirectGateway TransparentRedirect
         {
             get { return new TransparentRedirectGateway(this); }
         }
