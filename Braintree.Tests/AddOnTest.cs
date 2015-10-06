@@ -14,12 +14,12 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
+            gateway = new BraintreeGateway(Environment.CONFIGURED)
             {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
+                //Environment = Environment.CONFIGURED,
+                //MerchantId = "integration_merchant_id",
+                //PublicKey = "integration_public_key",
+                //PrivateKey = "integration_private_key"
             };
             service = new BraintreeService(gateway.Configuration);
         }

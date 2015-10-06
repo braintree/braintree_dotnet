@@ -3,7 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Braintree.Exceptions;
+using System.Configuration;
+using ConfigurationException = Braintree.Exceptions.ConfigurationException;
 
 namespace Braintree
 {
@@ -17,8 +18,42 @@ namespace Braintree
         public string ClientSecret { get; set; }
         public string AccessToken { get; set; }
 
-        public Configuration() {}
-        public Configuration(string accessToken) {
+        const string ACCESS_TOKEN = "BRAINTREE.ACCESS_TOKEN";
+        const string CLIENT_ID = "BRAINTREE.CLIENT_ID";
+        const string CLIENT_SECRET = "BRAINTREE.CLIENT_SECRET";
+
+        public Configuration()
+        {
+            string accessToken = Environment.GetValue(ACCESS_TOKEN);
+            if (accessToken != null)
+            {
+                CredentialsParser parser = new CredentialsParser(accessToken);
+                MerchantId = parser.MerchantId;
+                AccessToken = parser.AccessToken;
+                Environment = parser.Environment;
+            }
+            else
+            {
+                string clientId = Environment.GetValue(CLIENT_ID);
+                string clientSecret = Environment.GetValue(CLIENT_SECRET);
+                if (clientId != null && ClientSecret != null)
+                {
+                    CredentialsParser parser = new CredentialsParser(clientId, clientSecret);
+                    ClientId = parser.ClientId;
+                    ClientSecret = parser.ClientSecret;
+                    Environment = parser.Environment;
+                }
+                else
+                {
+                    const string msg = "Default constructor requires environment or application configuration for: " +
+                        ACCESS_TOKEN + " or (" + CLIENT_ID + " and " + CLIENT_SECRET + ")";
+                    throw new ConfigurationException(msg);
+                }
+            }
+        }
+
+        public Configuration(string accessToken)
+        {
             CredentialsParser parser = new CredentialsParser(accessToken);
             MerchantId = parser.MerchantId;
             AccessToken = parser.AccessToken;
@@ -31,6 +66,37 @@ namespace Braintree
             ClientId = parser.ClientId;
             ClientSecret = parser.ClientSecret;
             Environment = parser.Environment;
+        }
+
+        const string MERCHANT_ID = "BRAINTREE.MERCHANT_ID";
+        const string PUBLIC_KEY = "BRAINTREE.PUBLIC_KEY";
+        const string PRIVATE_KEY = "BRAINTREE.PRIVATE_KEY";
+
+        public Configuration(Environment environment)
+        {
+            if (environment == null) {
+                throw new ConfigurationException("Configuration.environment needs to be set");
+            }
+
+            string merchantId = Environment.GetValue(MERCHANT_ID);
+            if (merchantId == null) {
+                throw new ConfigurationException("Environment or application configuration is required for: " + MERCHANT_ID);
+            }
+
+            string publicKey = Environment.GetValue(PUBLIC_KEY);
+            if (publicKey == null) {
+                throw new ConfigurationException("Environment or application configuration is required for: " + PUBLIC_KEY);
+            }
+
+            string privateKey = Environment.GetValue(PRIVATE_KEY);
+            if (privateKey == null) {
+                throw new ConfigurationException("Environment or application configuration is required for: " + PRIVATE_KEY);
+            }
+
+            Environment = environment;
+            MerchantId = merchantId;
+            PublicKey = publicKey;
+            PrivateKey = privateKey;
         }
 
         public Configuration(Environment environment, string merchantId, string publicKey, string privateKey)

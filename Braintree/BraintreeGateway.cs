@@ -110,6 +110,11 @@ namespace Braintree
             configuration = new Configuration();
         }
 
+        public BraintreeGateway(Environment environment)
+        {
+            configuration = new Configuration(environment);
+        }
+
         public BraintreeGateway(Environment environment, string merchantId, string publicKey, string privateKey)
         {
             configuration = new Configuration(environment, merchantId, publicKey, privateKey);
