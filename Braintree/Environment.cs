@@ -16,11 +16,14 @@ namespace Braintree
         public static readonly Environment PRODUCTION = new Environment("production", "https://api.braintreegateway.com:443", "https://auth.venmo.com");
 
         const string ENVIRONMENT = "BRAINTREE.ENVIRONMENT";
+        const string ENVIRONMENT_OLD = "ENVIRONMENT";
         public static Environment CONFIGURED
         {
             get
             {
                 string env = GetValue(ENVIRONMENT);
+                if (env == null)
+                    env = GetValue(ENVIRONMENT_OLD);
                 if (env != null)
                     env = env.ToLower().Trim();
 

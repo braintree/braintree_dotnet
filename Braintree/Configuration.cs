@@ -25,78 +25,75 @@ namespace Braintree
         public Configuration()
         {
             string accessToken = Environment.GetValue(ACCESS_TOKEN);
-            if (accessToken != null)
-            {
-                CredentialsParser parser = new CredentialsParser(accessToken);
-                MerchantId = parser.MerchantId;
-                AccessToken = parser.AccessToken;
-                Environment = parser.Environment;
+            if (accessToken != null) {
+                InitAccessEnvironment(accessToken);
             }
             else
             {
                 string clientId = Environment.GetValue(CLIENT_ID);
                 string clientSecret = Environment.GetValue(CLIENT_SECRET);
-                if (clientId != null && ClientSecret != null)
-                {
-                    CredentialsParser parser = new CredentialsParser(clientId, clientSecret);
-                    ClientId = parser.ClientId;
-                    ClientSecret = parser.ClientSecret;
-                    Environment = parser.Environment;
+                if (clientId != null && ClientSecret != null) {
+                    InitClientEnvironment(clientId, clientSecret);
                 }
-                else
-                {
-                    const string msg = "Default constructor requires environment or application configuration for: " +
-                        ACCESS_TOKEN + " or (" + CLIENT_ID + " and " + CLIENT_SECRET + ")";
-                    throw new ConfigurationException(msg);
+                else {
+                    InitMerchantKeys(Environment.CONFIGURED);
                 }
             }
         }
 
-        public Configuration(string accessToken)
+        void InitAccessEnvironment(string accessToken)
         {
-            CredentialsParser parser = new CredentialsParser(accessToken);
+            var parser = new CredentialsParser(accessToken);
             MerchantId = parser.MerchantId;
             AccessToken = parser.AccessToken;
             Environment = parser.Environment;
         }
 
-        public Configuration(string clientId, string clientSecret)
+        public Configuration(string accessToken)
         {
-            CredentialsParser parser = new CredentialsParser(clientId, clientSecret);
+            InitAccessEnvironment(accessToken);
+        }
+
+        void InitClientEnvironment(string clientId, string clientSecret)
+        {
+            var parser = new CredentialsParser(clientId, clientSecret);
             ClientId = parser.ClientId;
             ClientSecret = parser.ClientSecret;
             Environment = parser.Environment;
+        }
+
+        public Configuration(string clientId, string clientSecret)
+        {
+            InitClientEnvironment(clientId, clientSecret);
         }
 
         const string MERCHANT_ID = "BRAINTREE.MERCHANT_ID";
         const string PUBLIC_KEY = "BRAINTREE.PUBLIC_KEY";
         const string PRIVATE_KEY = "BRAINTREE.PRIVATE_KEY";
 
-        public Configuration(Environment environment)
+        void InitMerchantKeys(Environment environment)
         {
             if (environment == null) {
                 throw new ConfigurationException("Configuration.environment needs to be set");
             }
-
-            string merchantId = Environment.GetValue(MERCHANT_ID);
-            if (merchantId == null) {
+            Environment = environment;
+            MerchantId = Environment.GetValue(MERCHANT_ID);
+            if (MerchantId == null) {
                 throw new ConfigurationException("Environment or application configuration is required for: " + MERCHANT_ID);
             }
-
-            string publicKey = Environment.GetValue(PUBLIC_KEY);
-            if (publicKey == null) {
+            PublicKey = Environment.GetValue(PUBLIC_KEY);
+            if (PublicKey == null) {
                 throw new ConfigurationException("Environment or application configuration is required for: " + PUBLIC_KEY);
             }
-
-            string privateKey = Environment.GetValue(PRIVATE_KEY);
-            if (privateKey == null) {
+            PrivateKey = Environment.GetValue(PRIVATE_KEY);
+            if (PrivateKey == null) {
                 throw new ConfigurationException("Environment or application configuration is required for: " + PRIVATE_KEY);
             }
+        }
 
-            Environment = environment;
-            MerchantId = merchantId;
-            PublicKey = publicKey;
-            PrivateKey = privateKey;
+        public Configuration(Environment environment)
+        {
+            InitMerchantKeys(environment);
         }
 
         public Configuration(Environment environment, string merchantId, string publicKey, string privateKey)
