@@ -260,7 +260,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
-    <Reference Include="nunit.framework" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
