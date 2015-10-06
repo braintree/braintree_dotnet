@@ -229,7 +229,7 @@ namespace Braintree
             get { return new WebhookNotificationGateway(this); }
         }
 
-        public virtual WebhookTestingGateway WebhookTesting
+        public virtual IWebhookTestingGateway WebhookTesting
         {
             get { return new WebhookTestingGateway(this); }
         }

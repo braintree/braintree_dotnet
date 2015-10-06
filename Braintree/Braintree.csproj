@@ -146,6 +146,7 @@
     <Compile Include="ITransactionGateway.cs" />
     <Compile Include="ITransparentRedirectGateway.cs" />
     <Compile Include="IWebhookNotificationGateway.cs" />
+    <Compile Include="IWebhookTestingGateway.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantGateway.cs" />
