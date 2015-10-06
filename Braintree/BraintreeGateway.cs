@@ -204,7 +204,7 @@ namespace Braintree
             get { return new SubscriptionGateway(this); }
         }
 
-        public virtual TestTransactionGateway TestTransaction
+        public virtual ITestTransactionGateway TestTransaction
         {
             get { return new TestTransactionGateway(this); }
         }

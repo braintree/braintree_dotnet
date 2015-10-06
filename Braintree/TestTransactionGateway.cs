@@ -10,10 +10,10 @@ namespace Braintree
     /// <summary>
     /// Provides test operations for settling, settlement confirming, settlement pending, and settlement declining for transactions in the sandbox vault
     /// </summary>
-    public class TestTransactionGateway
+    public class TestTransactionGateway : ITestTransactionGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal TestTransactionGateway(BraintreeGateway gateway)
         {
