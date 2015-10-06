@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
-using Braintree;
 using Braintree.Exceptions;
 
 namespace Braintree.Tests
@@ -16,10 +14,7 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway(
-                "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret"
-            );
+            gateway = new BraintreeGateway();
         }
 
         [Test]

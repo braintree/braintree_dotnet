@@ -4,7 +4,6 @@ using System.Web;
 using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using Braintree;
 
 namespace Braintree.Tests
 {
@@ -17,6 +16,7 @@ namespace Braintree.Tests
             var gateway = new BraintreeGateway();
             Assert.IsNotNull(gateway.ClientToken);
             string token = gateway.ClientToken.Generate();
+            Console.WriteLine(token);
             Assert.IsNotEmpty(token);
         }
 

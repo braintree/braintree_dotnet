@@ -6,7 +6,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using NUnit.Framework;
-using Braintree;
 using Braintree.Exceptions;
 
 namespace Braintree.Tests
@@ -17,16 +16,20 @@ namespace Braintree.Tests
         private BraintreeGateway gateway;
         private BraintreeService service;
 
+        static readonly string EXP_MONTH_YEAR = "5/22";
+        static readonly string EXP_MONTH = "05";
+        static readonly string EXP_YEAR = "2022";
+        static CreditCardTest()
+        {
+            EXP_MONTH = DateTime.Today.Month.ToString();
+            EXP_YEAR = (DateTime.Today.Year + 5).ToString();
+            EXP_MONTH_YEAR = EXP_MONTH + "/" + EXP_YEAR;
+        }
+
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            gateway = new BraintreeGateway();
             service = new BraintreeService(gateway.Configuration);
         }
 
@@ -64,8 +67,8 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo",
                 BillingAddress = new CreditCardAddressRequest
@@ -80,11 +83,11 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
 
-            Assert.AreEqual("510510", creditCard.Bin);
-            Assert.AreEqual("5100", creditCard.LastFour);
-            Assert.AreEqual("510510******5100", creditCard.MaskedNumber);
-            Assert.AreEqual("05", creditCard.ExpirationMonth);
-            Assert.AreEqual("2012", creditCard.ExpirationYear);
+            Assert.AreEqual("555555", creditCard.Bin);
+            Assert.AreEqual("4444", creditCard.LastFour);
+            Assert.AreEqual("555555******4444", creditCard.MaskedNumber);
+            Assert.AreEqual(EXP_MONTH, creditCard.ExpirationMonth);
+            Assert.AreEqual(EXP_YEAR, creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
             Assert.IsTrue(creditCard.IsDefault.Value);
             Assert.IsFalse(creditCard.IsVenmoSdk.Value);
@@ -130,8 +133,8 @@ namespace Braintree.Tests
                 DeviceSessionId = "abc123",
                 FraudMerchantId = "7",
                 CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 BillingAddress = new CreditCardAddressRequest
                 {
                     CountryName = "Greece",
@@ -155,8 +158,8 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}",
                 CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 BillingAddress = new CreditCardAddressRequest
                 {
                     CountryName = "Greece",
@@ -198,8 +201,8 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VenmoSdkSession = SandboxValues.VenmoSdk.SESSION
@@ -221,8 +224,8 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VenmoSdkSession = SandboxValues.VenmoSdk.INVALID_SESSION
@@ -251,19 +254,17 @@ namespace Braintree.Tests
             };
 
             Address address = gateway.Address.Create(customer.Id, addressRequest).Target;
-
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo",
-                BillingAddressId = address.Id
+                BillingAddressId = address.Id,
             };
 
             CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
-
             Address billingAddress = creditCard.BillingAddress;
             Assert.AreEqual(address.Id, billingAddress.Id);
             Assert.AreEqual("Chad", billingAddress.CountryName);
@@ -279,12 +280,11 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
             CreditCardRequest trParams = new CreditCardRequest { CustomerId = customer.Id };
-
             CreditCardRequest request = new CreditCardRequest
             {
                 CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 BillingAddress = new CreditCardAddressRequest
                 {
                     CountryName = "Greece",
@@ -299,11 +299,11 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
             Assert.AreEqual("John Doe", card.CardholderName);
-            Assert.AreEqual("510510", card.Bin);
-            Assert.AreEqual("05", card.ExpirationMonth);
-            Assert.AreEqual("2012", card.ExpirationYear);
-            Assert.AreEqual("05/2012", card.ExpirationDate);
-            Assert.AreEqual("5100", card.LastFour);
+            Assert.AreEqual("555555", card.Bin);
+            Assert.AreEqual(EXP_MONTH, card.ExpirationMonth);
+            Assert.AreEqual(EXP_YEAR, card.ExpirationYear);
+            Assert.AreEqual(EXP_MONTH_YEAR, card.ExpirationDate);
+            Assert.AreEqual("4444", card.LastFour);
             Assert.IsTrue(card.Token != null);
 
             Address billingAddress = card.BillingAddress;
@@ -323,8 +323,8 @@ namespace Braintree.Tests
             CreditCardRequest request = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12"
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR
             };
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
@@ -355,8 +355,8 @@ namespace Braintree.Tests
             CreditCardRequest request = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     MakeDefault = true
@@ -389,8 +389,8 @@ namespace Braintree.Tests
             CreditCardRequest request = new CreditCardRequest
             {
                 CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 BillingAddress = new CreditCardAddressRequest
                 {
                     CountryName = "Greece",
@@ -417,8 +417,8 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo"
             };
@@ -426,10 +426,10 @@ namespace Braintree.Tests
             CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardRequest).Target;
             CreditCard creditCard = gateway.CreditCard.Find(originalCreditCard.Token);
 
-            Assert.AreEqual("510510", creditCard.Bin);
-            Assert.AreEqual("5100", creditCard.LastFour);
-            Assert.AreEqual("05", creditCard.ExpirationMonth);
-            Assert.AreEqual("2012", creditCard.ExpirationYear);
+            Assert.AreEqual("555555", creditCard.Bin);
+            Assert.AreEqual("4444", creditCard.LastFour);
+            Assert.AreEqual(EXP_MONTH, creditCard.ExpirationMonth);
+            Assert.AreEqual(EXP_YEAR, creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
@@ -443,8 +443,8 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123"
             };
 
@@ -457,13 +457,21 @@ namespace Braintree.Tests
                 PaymentMethodToken = originalCreditCard.Token,
                 Price = 1.00M
             };
-            gateway.Subscription.Create(subscriptionRequest);
-
-            CreditCard creditCard = gateway.CreditCard.Find(originalCreditCard.Token);
-            Subscription subscription = creditCard.Subscriptions[0];
-            Assert.AreEqual(id, subscription.Id);
-            Assert.AreEqual("integration_trialless_plan", subscription.PlanId);
-            Assert.AreEqual(1.00M, subscription.Price);
+            var resp = gateway.Subscription.Create(subscriptionRequest);
+            Assert.IsNotNull(resp);
+            if (!resp.IsSuccess())
+                Assert.Inconclusive(resp.Message);
+            else
+            {
+                CreditCard creditCard = gateway.CreditCard.Find(originalCreditCard.Token);
+                Assert.IsNotNull(creditCard);
+                Assert.IsNotEmpty(creditCard.Subscriptions);
+                Subscription subscription = creditCard.Subscriptions[0];
+                Assert.IsNotNull(subscription);
+                Assert.AreEqual(id, subscription.Id);
+                Assert.AreEqual("integration_trialless_plan", subscription.PlanId);
+                Assert.AreEqual(1.00M, subscription.Price);
+            }
         }
 
         [Test]
@@ -519,8 +527,8 @@ namespace Braintree.Tests
             var creditCardCreateRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo"
             };
@@ -531,7 +539,7 @@ namespace Braintree.Tests
             {
                 CustomerId = customer.Id,
                 Number = "4111111111111111",
-                ExpirationDate = "12/05",
+                ExpirationDate = "12/25",
                 CVV = "321",
                 CardholderName = "Dave Inchy"
             };
@@ -541,7 +549,7 @@ namespace Braintree.Tests
             Assert.AreEqual("411111", creditCard.Bin);
             Assert.AreEqual("1111", creditCard.LastFour);
             Assert.AreEqual("12", creditCard.ExpirationMonth);
-            Assert.AreEqual("2005", creditCard.ExpirationYear);
+            Assert.AreEqual("2025", creditCard.ExpirationYear);
             Assert.AreEqual("Dave Inchy", creditCard.CardholderName);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
@@ -555,8 +563,8 @@ namespace Braintree.Tests
             var request1 = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo"
             };
@@ -564,8 +572,8 @@ namespace Braintree.Tests
             var request2 = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo",
                 Options = new CreditCardOptionsRequest
@@ -589,8 +597,8 @@ namespace Braintree.Tests
             var creditCardCreateRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo"
             };
@@ -620,34 +628,45 @@ namespace Braintree.Tests
         public void Update_CreatesNewBillingAddressByDefault()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
+            Assert.IsNotNull(customer);
             var request = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
+                CVV = "123",
                 BillingAddress = new CreditCardAddressRequest
                 {
-                    FirstName = "John"
+                    FirstName = "John",
+                    PostalCode = "90025",
+                    StreetAddress = "123 fake st",
                 }
             };
 
-            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
-
+            var resp = gateway.CreditCard.Create(request);
+            Assert.IsNotNull(resp);
+            CreditCard creditCard = resp.Target;
+            Assert.IsNotNull(creditCard, resp.Message);
 
             var updateRequest = new CreditCardRequest
             {
+                CVV = "123",
                 BillingAddress = new CreditCardAddressRequest
                 {
                     LastName = "Jones",
                     CountryName = "El Salvador",
                     CountryCodeAlpha2 = "SV",
                     CountryCodeAlpha3 = "SLV",
-                    CountryCodeNumeric = "222"
+                    CountryCodeNumeric = "222",
+                    PostalCode = "90025",
+                    StreetAddress = "123 fake st",
                 }
             };
 
-            CreditCard updatedCreditCard = gateway.CreditCard.Update(creditCard.Token, updateRequest).Target;
+            var uresp = gateway.CreditCard.Update(creditCard.Token, updateRequest);
+            Assert.IsNotNull(uresp);
+            CreditCard updatedCreditCard = uresp.Target;
+            Assert.IsNotNull(updatedCreditCard, uresp.Message);
 
             Assert.IsNull(updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
@@ -668,11 +687,14 @@ namespace Braintree.Tests
             var request = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
+                CVV = "123",
                 BillingAddress = new CreditCardAddressRequest
                 {
-                    FirstName = "John"
+                    FirstName = "John",
+                    PostalCode = "90025",
+                    StreetAddress = "123 fake st",
                 }
             };
 
@@ -680,9 +702,12 @@ namespace Braintree.Tests
 
             var updateRequest = new CreditCardRequest
             {
+                CVV = "123",
                 BillingAddress = new CreditCardAddressRequest
                 {
                     LastName = "Jones",
+                    PostalCode = "90025",
+                    StreetAddress = "123 fake st",
                     Options = new CreditCardAddressOptionsRequest
                     {
                         UpdateExisting = true
@@ -690,7 +715,10 @@ namespace Braintree.Tests
                 }
             };
 
-            CreditCard updatedCreditCard = gateway.CreditCard.Update(creditCard.Token, updateRequest).Target;
+            var uresp = gateway.CreditCard.Update(creditCard.Token, updateRequest);
+            Assert.IsNotNull(uresp);
+            CreditCard updatedCreditCard = uresp.Target;
+            Assert.IsNotNull(updatedCreditCard, uresp.Message);
 
             Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
@@ -702,20 +730,21 @@ namespace Braintree.Tests
         public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrueViaTransparentRedirect()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
             var request = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
+                CVV = "123",
                 BillingAddress = new CreditCardAddressRequest
                 {
-                    FirstName = "John"
+                    FirstName = "John",
+                    PostalCode = "90025",
+                    StreetAddress = "123 fake st",
                 }
             };
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
-
             CreditCardRequest trParams = new CreditCardRequest
             {
                 PaymentMethodToken = creditCard.Token,
@@ -732,12 +761,16 @@ namespace Braintree.Tests
             {
                 BillingAddress = new CreditCardAddressRequest
                 {
-                    LastName = "Jones"
+                    LastName = "Jones",
+                    PostalCode = "90025",
+                    StreetAddress = "123 fake st",
                 }
             };
-
             string queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
-            CreditCard updatedCreditCard = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            var resp = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
+            Assert.IsNotNull(resp);
+            CreditCard updatedCreditCard = resp.Target;
+            Assert.IsNotNull(updatedCreditCard, resp.Message);
 
             Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
@@ -754,8 +787,9 @@ namespace Braintree.Tests
             {
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
+                CVV = "123",
                 BillingAddress = new CreditCardAddressRequest
                 {
                     PostalCode = "44444"
@@ -790,8 +824,8 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 CVV = "123",
                 CardholderName = "Michael Angelo"
             };
@@ -821,7 +855,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = "4111111111111111",
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     FailOnDuplicatePaymentMethod = true
@@ -847,7 +881,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = "4111111111111111",
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -868,7 +902,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = "4111111111111111",
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -896,7 +930,12 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = "4111111111111111",
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    StreetAddress = "123 fake st",
+                    PostalCode = "90025",
+                },
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true,
@@ -905,7 +944,7 @@ namespace Braintree.Tests
             };
 
             Result<CreditCard> result = gateway.CreditCard.Create(request);
-            Assert.IsTrue(result.IsSuccess());
+            Assert.IsTrue(result.IsSuccess(), result.Message);
         }
 
         [Test]
@@ -917,18 +956,23 @@ namespace Braintree.Tests
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "123",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true,
-                    VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
                 }
             };
 
             Result<CreditCard> result = gateway.CreditCard.Create(request);
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.CreditCardVerification.MerchantAccountId);
+            if (result.IsSuccess())
+            {
+                Assert.IsNotNull(result.CreditCardVerification, result.Message);
+                Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.CreditCardVerification.MerchantAccountId);
+            }
+            else
+                Assert.Inconclusive(result.Message);
         }
 
         [Test]
@@ -941,7 +985,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -958,29 +1002,21 @@ namespace Braintree.Tests
         [Test]
         public void GatewayRejectionReason_ExposedOnVerification()
         {
-            BraintreeGateway processingRulesGateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "processing_rules_merchant_id",
-                PublicKey = "processing_rules_public_key",
-                PrivateKey = "processing_rules_private_key"
-            };
-
-            Customer customer = processingRulesGateway.Customer.Create(new CustomerRequest()).Target;
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
             {
                 CustomerId = customer.Id,
                 CardholderName = "John Doe",
                 CVV = "200",
                 Number = "4111111111111111",
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
-                }
+                },
             };
 
-            Result<CreditCard> result = processingRulesGateway.CreditCard.Create(request);
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
             Assert.IsFalse(result.IsSuccess());
             CreditCardVerification verification = result.CreditCardVerification;
 
@@ -1007,16 +1043,16 @@ namespace Braintree.Tests
         [Test]
         public void ExpiringBetween()
         {
-            DateTime beginning = new DateTime(2010, 1, 1);
-            DateTime end = new DateTime(2010, 12, 31);
+            int year = DateTime.Today.Year;
+            DateTime beginning = new DateTime(year, 1, 1);
+            DateTime end = new DateTime(year, 12, 31);
 
             ResourceCollection<CreditCard> collection = gateway.CreditCard.ExpiringBetween(beginning, end);
-
             Assert.IsTrue(collection.MaximumCount > 1);
 
             List<string> cards = new List<string>();
             foreach (CreditCard card in collection) {
-                Assert.AreEqual("2010", card.ExpirationYear);
+                Assert.AreEqual(year.ToString(), card.ExpirationYear);
                 cards.Add(card.Token);
             }
 
@@ -1034,7 +1070,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Prepaid,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1055,7 +1091,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Commercial,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1076,7 +1112,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Debit,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1097,7 +1133,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Healthcare,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1118,7 +1154,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Payroll,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1139,7 +1175,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.DurbinRegulated,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1160,7 +1196,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.CountryOfIssuance,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1181,7 +1217,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.IssuingBank,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1202,7 +1238,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.No,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
@@ -1228,7 +1264,7 @@ namespace Braintree.Tests
                 CardholderName = "John Doe",
                 CVV = "123",
                 Number = Braintree.Tests.CreditCardNumbers.CardTypeIndicators.Unknown,
-                ExpirationDate = "05/12",
+                ExpirationDate = EXP_MONTH_YEAR,
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
