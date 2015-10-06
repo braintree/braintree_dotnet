@@ -125,6 +125,7 @@
     <Compile Include="Hasher.cs" />
     <Compile Include="IAddOnGateway.cs" />
     <Compile Include="IAddressGateway.cs" />
+    <Compile Include="IBraintreeGateway.cs" />
     <Compile Include="IClientTokenGateway.cs" />
     <Compile Include="ICreditCardGateway.cs" />
     <Compile Include="ICreditCardVerificationGateway.cs" />

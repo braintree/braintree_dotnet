@@ -58,75 +58,76 @@ namespace Braintree
     /// }
     /// </code>
     /// </example>
-    public class BraintreeGateway
+    public class BraintreeGateway : IBraintreeGateway
     {
-        public Environment Environment
+        public virtual Environment Environment
         {
             get { return Configuration.Environment; }
             set { Configuration.Environment = value; }
         }
 
-        public string MerchantId
+        public virtual string MerchantId
         {
             get { return Configuration.MerchantId; }
             set { Configuration.MerchantId = value; }
         }
 
-        public string PublicKey
+        public virtual string PublicKey
         {
             get { return Configuration.PublicKey; }
             set { Configuration.PublicKey = value; }
         }
 
-        public string PrivateKey
+        public virtual string PrivateKey
         {
             get { return Configuration.PrivateKey; }
             set { Configuration.PrivateKey = value; }
         }
 
-        public string AccessToken
+        public virtual string AccessToken
         {
             get { return Configuration.AccessToken; }
             set { Configuration.AccessToken = value; }
         }
 
-        public string ClientId
+        public virtual string ClientId
         {
             get { return Configuration.ClientId; }
             set { Configuration.ClientId = value; }
         }
 
-        public string ClientSecret
+        public virtual string ClientSecret
         {
             get { return Configuration.ClientSecret; }
             set { Configuration.ClientSecret = value; }
         }
 
-        public Configuration Configuration { get; set; }
+        private readonly Configuration configuration;
+        public virtual Configuration Configuration { get { return configuration; } }
 
         public BraintreeGateway()
         {
-            Configuration = new Configuration();
+            configuration = new Configuration();
         }
 
         public BraintreeGateway(Environment environment, string merchantId, string publicKey, string privateKey)
         {
-            Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
+            configuration = new Configuration(environment, merchantId, publicKey, privateKey);
         }
 
         public BraintreeGateway(string accessToken)
         {
-            Configuration = new Configuration(accessToken);
+            configuration = new Configuration(accessToken);
         }
 
         public BraintreeGateway(string clientId, string clientSecret)
         {
-            Configuration = new Configuration(clientId, clientSecret);
+            configuration = new Configuration(clientId, clientSecret);
         }
 
         public BraintreeGateway(Configuration configuration)
         {
-            Configuration = configuration;
+            this.configuration = configuration;
         }
 
         public virtual IClientTokenGateway ClientToken
