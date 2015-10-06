@@ -138,6 +138,7 @@
     <Compile Include="IndustryDataRequest.cs" />
     <Compile Include="IOAuthGateway.cs" />
     <Compile Include="IPaymentMethodGateway.cs" />
+    <Compile Include="IPaymentMethodNonceGateway.cs" />
     <Compile Include="IPayPalAccountGateway.cs" />
     <Compile Include="IPlanGateway.cs" />
     <Compile Include="ISettlementBatchSummaryGateway.cs" />

@@ -234,7 +234,7 @@ namespace Braintree
             get { return new WebhookTestingGateway(this); }
         }
 
-        public virtual PaymentMethodNonceGateway PaymentMethodNonce
+        public virtual IPaymentMethodNonceGateway PaymentMethodNonce
         {
             get { return new PaymentMethodNonceGateway(this); }
         }
