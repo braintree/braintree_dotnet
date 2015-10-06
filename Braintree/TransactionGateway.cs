@@ -10,10 +10,10 @@ namespace Braintree
     /// <summary>
     /// Provides operations for sales, credits, refunds, voids, submitting for settlement, and searching for transactions in the vault
     /// </summary>
-    public class TransactionGateway
+    public class TransactionGateway : ITransactionGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal TransactionGateway(BraintreeGateway gateway)
         {

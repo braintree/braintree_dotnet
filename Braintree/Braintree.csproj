@@ -143,6 +143,7 @@
     <Compile Include="ISettlementBatchSummaryGateway.cs" />
     <Compile Include="ISubscriptionGateway.cs" />
     <Compile Include="ITestTransactionGateway.cs" />
+    <Compile Include="ITransactionGateway.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantGateway.cs" />

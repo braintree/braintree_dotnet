@@ -209,7 +209,7 @@ namespace Braintree
             get { return new TestTransactionGateway(this); }
         }
 
-        public virtual TransactionGateway Transaction
+        public virtual ITransactionGateway Transaction
         {
             get { return new TransactionGateway(this); }
         }
