@@ -141,6 +141,7 @@
     <Compile Include="IPayPalAccountGateway.cs" />
     <Compile Include="IPlanGateway.cs" />
     <Compile Include="ISettlementBatchSummaryGateway.cs" />
+    <Compile Include="ISubscriptionGateway.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantGateway.cs" />

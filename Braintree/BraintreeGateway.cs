@@ -199,7 +199,7 @@ namespace Braintree
             get { return new SettlementBatchSummaryGateway(this); }
         }
 
-        public virtual SubscriptionGateway Subscription
+        public virtual ISubscriptionGateway Subscription
         {
             get { return new SubscriptionGateway(this); }
         }
