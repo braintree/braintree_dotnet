@@ -5,7 +5,8 @@ using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
-    [TestFixture()]
+    //[Ignore("Need fixing")] //TODO: fix unit test. very bad
+    [TestFixture(Category = "NeedFix")] //TODO: fix unit test
     public class AddOnTest
     {
         private BraintreeGateway gateway;
@@ -64,7 +65,6 @@ namespace Braintree.Tests
             //    PublicKey = "integration_public_key",
             //    PrivateKey = "integration_private_key"
             //};
-
             try {
                 gateway.AddOn.All();
 
