@@ -23,3 +23,5 @@ tags
 *.suo
 /Braintree/Braintree.csproj.VisualState.xml
 packages
+Braintree.csproj.VisualState.xml
+*.user

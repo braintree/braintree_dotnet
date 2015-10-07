@@ -1,0 +1,22 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/ronin1/braintree_dotnet</licenseUrl>
+    <projectUrl>https://github.com/ronin1/braintree_dotnet</projectUrl>
+    <iconUrl>https://s3.amazonaws.com/braintree-badges/braintree-badge-dark.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes></releaseNotes>
+    <copyright>$copyright$</copyright>
+    <tags>Braintree Payments .NET SDK</tags>
+    <!--<files>
+      <file src="..\..\SomeRoot\**\*.*" target="" />
+    </files>-->
+  </metadata>
+</package>
+<!-- NOTE: see https://docs.nuget.org/create/creating-and-publishing-a-package -->
