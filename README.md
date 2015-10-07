@@ -68,6 +68,7 @@ namespace BraintreeExample
 ## Documentation
 
 * [Official documentation](https://developers.braintreepayments.com/dotnet/sdk/server/overview)
+* For *bleeding edge* pre-releases, add the following nuget path: https://ci.appveyor.com/nuget/braintree-dotnet
 
 ## Open Source Attribution
 
