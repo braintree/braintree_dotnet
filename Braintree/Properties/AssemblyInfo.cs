@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Braintree Payment Gateway Client API")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription(".NET SDK")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Braintree")]
 [assembly: AssemblyProduct("Braintree Payment Gateway Client API")]
