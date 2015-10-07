@@ -17,7 +17,6 @@ namespace Braintree.Tests
             var gateway = new BraintreeGateway();
             Assert.IsNotNull(gateway.ClientToken);
             string token = gateway.ClientToken.Generate();
-            Console.WriteLine(token);
             Assert.IsNotEmpty(token);
         }
 
