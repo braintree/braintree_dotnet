@@ -54,21 +54,27 @@ namespace Braintree.Tests
             Assert.IsNotNull(trsp);
             Transaction transaction = trsp.Target;
             Assert.IsNotNull(transaction, trsp.Message);
-            Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
-            var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
-            transaction = gateway.Transaction.Find(transaction.Id);
-            var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate));
-            var visas = new List<IDictionary<string,string>>();
-            foreach (var row in result.Target.Records)
+            if (transaction != null)
             {
-                if (Braintree.CreditCardCardType.VISA.ToString().Equals(row["card_type"]))
+                Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
+                var settlementDate = settlementResult.SettlementBatchId.Substring(0, 10);
+                transaction = gateway.Transaction.Find(transaction.Id);
+                var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate));
+                var visas = new List<IDictionary<string, string>>();
+                foreach (var row in result.Target.Records)
                 {
-                    visas.Add(row);
+                    if (Braintree.CreditCardCardType.VISA.ToString().Equals(row["card_type"]))
+                    {
+                        visas.Add(row);
 
+                    }
                 }
+                Assert.AreEqual(1, visas.Count);
             }
-
-            Assert.AreEqual(1, visas.Count);
+            else if (trsp.Message.Contains("duplicate"))
+                Assert.Inconclusive(trsp.Message);
+            else
+                Assert.Fail(trsp.Message);
         }
 
         [Test]
