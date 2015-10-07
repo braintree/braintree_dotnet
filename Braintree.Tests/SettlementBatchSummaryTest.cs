@@ -53,7 +53,6 @@ namespace Braintree.Tests
             var trsp = gateway.Transaction.Sale(request);
             Assert.IsNotNull(trsp);
             Transaction transaction = trsp.Target;
-            Assert.IsNotNull(transaction, trsp.Message);
             if (transaction != null)
             {
                 Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
