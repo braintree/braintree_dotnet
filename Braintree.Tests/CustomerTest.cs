@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Braintree.Exceptions;
-using Braintree.Test;
 
 namespace Braintree.Tests
 {

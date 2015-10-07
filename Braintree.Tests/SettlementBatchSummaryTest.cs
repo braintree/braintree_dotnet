@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using NUnit.Framework;
-using Braintree;
 using System.Threading;
 
 namespace Braintree.Tests

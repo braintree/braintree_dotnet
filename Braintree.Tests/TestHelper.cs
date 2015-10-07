@@ -8,8 +8,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Xml;
 using NUnit.Framework;
-using Braintree;
-
 using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests

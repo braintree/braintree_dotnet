@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using Braintree;
 using Braintree.Exceptions;
 
 namespace Braintree.Tests

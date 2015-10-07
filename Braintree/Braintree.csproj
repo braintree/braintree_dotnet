@@ -209,7 +209,6 @@
     <Compile Include="SubscriptionStatusEvent.cs" />
     <Compile Include="SubscriptionTransactionRequest.cs" />
     <Compile Include="TextNode.cs" />
-    <Compile Include="Test\Nonce.cs" />
     <Compile Include="ThreeDSecureInfo.cs" />
     <Compile Include="TrUtil.cs" />
     <Compile Include="Transaction.cs" />
@@ -272,4 +271,5 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
 </Project>

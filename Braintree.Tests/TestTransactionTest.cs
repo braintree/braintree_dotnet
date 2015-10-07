@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Braintree.Exceptions;
-using Braintree;
-using Braintree.Test;
 
 namespace Braintree.Tests {
     [TestFixture()]

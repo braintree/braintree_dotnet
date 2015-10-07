@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using NUnit.Framework;
-using Braintree;
 using Braintree.Exceptions;
 
 namespace Braintree.Tests

@@ -1,7 +1,5 @@
 using System;
 using NUnit.Framework;
-using Braintree;
-using Braintree.Test;
 
 namespace Braintree.Tests
 {

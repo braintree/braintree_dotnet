@@ -68,6 +68,7 @@
     <Compile Include="CreditCardVerificationTest.cs" />
     <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
+    <Compile Include="Nonce.cs" />
     <Compile Include="PaymentMethodTest.cs" />
     <Compile Include="PaymentMethodNonceTest.cs" />
     <Compile Include="PayPalAccountTest.cs" />

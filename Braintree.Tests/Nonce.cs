@@ -1,6 +1,6 @@
 using System;
 
-namespace Braintree.Test
+namespace Braintree.Tests
 {
     public class Nonce
     {

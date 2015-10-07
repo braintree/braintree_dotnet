@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
 using NUnit.Framework;
-using Braintree;
 using Braintree.Exceptions;
-using Braintree.Test;
 
 using Params = System.Collections.Generic.Dictionary<string, object>;
 

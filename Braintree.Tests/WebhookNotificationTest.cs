@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using Braintree;
 using Braintree.Exceptions;
 
 namespace Braintree.Tests

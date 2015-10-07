@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 
-using Braintree;
-
 namespace Braintree.Tests
 {
     [TestFixture]

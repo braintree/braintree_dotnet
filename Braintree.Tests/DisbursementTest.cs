@@ -2,10 +2,7 @@ using System;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-
 using NUnit.Framework;
-using Braintree;
-using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
