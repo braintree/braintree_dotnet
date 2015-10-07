@@ -7,8 +7,8 @@ using System.Collections.Specialized;
 
 namespace Braintree.Tests
 {
-    [Ignore("Need fixing")] //TODO: fix unit test
-    [TestFixture]
+    //[Ignore("Need fixing")] //TODO: fix unit test
+    [TestFixture(Category = "NeedFix")] //TODO: fix unit test
     public class OAuthTest
     {
         private BraintreeGateway gateway;

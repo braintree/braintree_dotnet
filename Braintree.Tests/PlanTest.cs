@@ -4,8 +4,8 @@ using NUnit.Framework;
 
 namespace Braintree.Tests
 {
-    [Ignore("Need fixing")] //TODO: fix unit test
-    [TestFixture]
+    //[Ignore("Need fixing")] //TODO: fix unit test
+    [TestFixture(Category = "NeedFix")] //TODO: fix unit test
     public class PlanTest
     {
         private BraintreeGateway gateway;

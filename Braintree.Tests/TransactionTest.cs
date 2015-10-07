@@ -6,8 +6,8 @@ using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
-    [Ignore("Need fixing")] //TODO: fix unit test. very bad
-    [TestFixture]
+    //[Ignore("Need fixing")] //TODO: fix unit test. very bad
+    [TestFixture(Category = "NeedFix")] //TODO: fix unit test
     public class TransactionTest
     {
         private BraintreeGateway gateway;
