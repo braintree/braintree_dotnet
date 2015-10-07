@@ -8,6 +8,7 @@ using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class TransparentRedirectRequestTest
     {
@@ -16,12 +17,7 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            service = new BraintreeService(new Configuration(
-                Environment.DEVELOPMENT,
-                "integration_merchant_id",
-                "integration_public_key",
-                "integration_private_key"
-            ));
+            service = new BraintreeService(new Configuration());
         }
 
         [Test]
@@ -101,14 +97,8 @@ namespace Braintree.Tests
         [Test]
         public void Constructor_RaisesDownForMaintenanceExceptionIfDownForMaintenance()
         {
-            BraintreeGateway gateway = new BraintreeGateway()
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
-            BraintreeService service = new BraintreeService(gateway.Configuration);
+            var gateway = new BraintreeGateway();
+            var service = new BraintreeService(gateway.Configuration);
 
             try {
                 CustomerRequest trParams = new CustomerRequest();
@@ -131,14 +121,8 @@ namespace Braintree.Tests
         [Test]
         public void Constructor_AuthenticationExceptionIfBadCredentials()
         {
-            BraintreeGateway gateway = new BraintreeGateway()
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "bad_key"
-            };
-            BraintreeService service = new BraintreeService(gateway.Configuration);
+            var gateway = new BraintreeGateway { PrivateKey = "bad_key" };
+            var service = new BraintreeService(gateway.Configuration);
 
             try {
                 CustomerRequest trParams = new CustomerRequest();

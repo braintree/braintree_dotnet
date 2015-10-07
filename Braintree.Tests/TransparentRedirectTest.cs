@@ -3,6 +3,7 @@ using NUnit.Framework;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class TransparentRedirectTest
     {
@@ -12,23 +13,16 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            gateway = new BraintreeGateway();
             service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]
         public void Url_ReturnsCorrectUrl()
         {
-            var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
-            var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
-
-            var url = "http://" + host + ":" + port + "/merchants/integration_merchant_id/transparent_redirect_requests";
+            var u = new Uri(Environment.CONFIGURED.GatewayURL);
+            var cfg = new Configuration();
+            var url = u.Scheme + "://" + u.Host + ":" + u.Port + "/merchants/" + cfg.MerchantId + "/transparent_redirect_requests";
             Assert.AreEqual(url, gateway.TransparentRedirect.Url);
         }
 
@@ -53,13 +47,19 @@ namespace Braintree.Tests
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
-                }
+                    ExpirationDate = "05/2099",
+                    CVV = "123",
+                },
+                BillingAddress = new AddressRequest
+                {
+                    StreetAddress = "123 fake st",
+                    PostalCode = "90025",
+                },
             };
 
             string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
             Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
-            Assert.IsTrue(result.IsSuccess());
+            Assert.IsTrue(result.IsSuccess(), result.Message);
             Transaction transaction = result.Target;
 
             Assert.AreEqual(1000.00, transaction.Amount);
@@ -72,9 +72,8 @@ namespace Braintree.Tests
             Assert.AreEqual("411111", creditCard.Bin);
             Assert.AreEqual("1111", creditCard.LastFour);
             Assert.AreEqual("05", creditCard.ExpirationMonth);
-            Assert.AreEqual("2009", creditCard.ExpirationYear);
-            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
-
+            Assert.AreEqual("2099", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2099", creditCard.ExpirationDate);
         }
 
         [Test]
@@ -166,8 +165,8 @@ namespace Braintree.Tests
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
+                Number = "5555555555554444",
+                ExpirationDate = "05/22",
                 CardholderName = "Beverly D'angelo"
             };
 

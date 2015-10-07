@@ -8,6 +8,7 @@ using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class PaymentMethodNonceTest
     {

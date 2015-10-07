@@ -10,6 +10,7 @@ using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class CreditCardTest
     {

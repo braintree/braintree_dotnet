@@ -6,6 +6,7 @@ using System.Xml;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class ValidationErrorsTest
     {

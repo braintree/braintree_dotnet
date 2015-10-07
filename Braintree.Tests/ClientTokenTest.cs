@@ -7,6 +7,7 @@ using NUnit.Framework;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class ClientTokenTest
     {
