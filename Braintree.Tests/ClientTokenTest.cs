@@ -4,79 +4,70 @@ using System.Web;
 using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using Braintree;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class ClientTokenTest
     {
         [Test]
+        public void Generate_DefaultToken()
+        {
+            var gateway = new BraintreeGateway();
+            Assert.IsNotNull(gateway.ClientToken);
+            string token = gateway.ClientToken.Generate();
+            Assert.IsNotEmpty(token);
+        }
+
+        [Test]
         public void Generate_RaisesExceptionIfVerifyCardIsIncludedWithoutCustomerId()
         {
-          BraintreeGateway gateway = new BraintreeGateway
-          {
-              Environment = Environment.DEVELOPMENT,
-              MerchantId = "integration_merchant_id",
-              PublicKey = "integration_public_key",
-              PrivateKey = "integration_private_key"
-          };
-          try {
-              gateway.ClientToken.generate(
-                  new ClientTokenRequest
-                  {
-                      Options = new ClientTokenOptionsRequest
-                      {
-                          VerifyCard = true
-                      }
-                  }
-              );
-              Assert.Fail("Should raise ArgumentException");
-          } catch (ArgumentException e) {
-              Match match = Regex.Match(e.Message, @"VerifyCard");
-              Assert.IsTrue(match.Success);
-          }
+            var gateway = new BraintreeGateway();
+            try {
+                gateway.ClientToken.Generate(
+                    new ClientTokenRequest
+                    {
+                        Options = new ClientTokenOptionsRequest
+                        {
+                            VerifyCard = true
+                        }
+                    }
+                );
+                Assert.Fail("Should raise ArgumentException");
+            } catch (ArgumentException e) {
+                Match match = Regex.Match(e.Message, @"VerifyCard");
+                Assert.IsTrue(match.Success);
+            }
         }
 
         [Test]
         public void Generate_RaisesExceptionIfMakeDefaultIsIncludedWithoutCustomerId()
         {
-          BraintreeGateway gateway = new BraintreeGateway
-          {
-              Environment = Environment.DEVELOPMENT,
-              MerchantId = "integration_merchant_id",
-              PublicKey = "integration_public_key",
-              PrivateKey = "integration_private_key"
-          };
-          try {
-              gateway.ClientToken.generate(
-                  new ClientTokenRequest
-                  {
-                      Options = new ClientTokenOptionsRequest
-                      {
-                          MakeDefault = true
-                      }
-                  }
-              );
-              Assert.Fail("Should raise ArgumentException");
-          } catch (ArgumentException e) {
-              Match match = Regex.Match(e.Message, @"MakeDefault");
-              Assert.IsTrue(match.Success);
-          }
+            var gateway = new BraintreeGateway();
+            try {
+                gateway.ClientToken.Generate(
+                    new ClientTokenRequest
+                    {
+                        Options = new ClientTokenOptionsRequest
+                        {
+                            MakeDefault = true
+                        }
+                    }
+                );
+                Assert.Fail("Should raise ArgumentException");
+            } catch (ArgumentException e) {
+                Match match = Regex.Match(e.Message, @"MakeDefault");
+                Assert.IsTrue(match.Success);
+            }
         }
 
         [Test]
         public void Generate_RaisesExceptionIfFailOnDuplicatePaymentMethodIsIncludedWithoutCustomerId()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            var gateway = new BraintreeGateway();
             try {
-                gateway.ClientToken.generate(
+                gateway.ClientToken.Generate(
                     new ClientTokenRequest
                     {
                         Options = new ClientTokenOptionsRequest
@@ -99,13 +90,7 @@ namespace Braintree.Tests
         [Test]
         public void Generate_GeneratedFingerprintIsAcceptedByGateway()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            var gateway = new BraintreeGateway();
             var clientToken = TestHelper.GenerateDecodedClientToken(gateway);
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
@@ -123,14 +108,8 @@ namespace Braintree.Tests
         [Test]
         public void Generate_SupportsVersionOption()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
-            var clientToken = gateway.ClientToken.generate(
+            var gateway = new BraintreeGateway();
+            var clientToken = gateway.ClientToken.Generate(
                 new ClientTokenRequest
                 {
                     Version = 1
@@ -143,14 +122,8 @@ namespace Braintree.Tests
         [Test]
         public void Generate_DefaultsToVersionTwo()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
-            var encodedClientToken = gateway.ClientToken.generate();
+            var gateway = new BraintreeGateway();
+            var encodedClientToken = gateway.ClientToken.Generate();
             var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
             int version = TestHelper.extractIntParamFromJson("version", decodedClientToken);
             Assert.AreEqual(2, version);
@@ -159,13 +132,7 @@ namespace Braintree.Tests
         [Test]
         public void Generate_GatewayRespectsVerifyCard()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            var gateway = new BraintreeGateway();
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
 
@@ -182,7 +149,7 @@ namespace Braintree.Tests
             );
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
-            RequestBuilder builder = new RequestBuilder("");
+            var builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
                 AddTopLevelElement("shared_customer_identifier_type", "testing").
                 AddTopLevelElement("shared_customer_identifier", "test-identifier").
@@ -201,13 +168,7 @@ namespace Braintree.Tests
         [Test]
         public void Generate_GatewayRespectsFailOnDuplicatePaymentMethod()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            var gateway = new BraintreeGateway();
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
             string customerId = result.Target.Id;
@@ -234,7 +195,7 @@ namespace Braintree.Tests
             );
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
-            RequestBuilder builder = new RequestBuilder("");
+            var builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
                 AddTopLevelElement("shared_customer_identifier_type", "testing").
                 AddTopLevelElement("shared_customer_identifier", "test-identifier").
@@ -255,13 +216,7 @@ namespace Braintree.Tests
         [Test]
         public void Generate_GatewayRespectsMakeDefault()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            var gateway = new BraintreeGateway();
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
             string customerId = result.Target.Id;
@@ -269,7 +224,7 @@ namespace Braintree.Tests
             var request = new CreditCardRequest
             {
                 CustomerId = customerId,
-                Number = "5105105105105100",
+                Number = "5555555555554444",
                 ExpirationDate = "05/2099"
             };
             Result<CreditCard> creditCardResult = gateway.CreditCard.Create(request);
@@ -287,7 +242,7 @@ namespace Braintree.Tests
             );
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
 
-            RequestBuilder builder = new RequestBuilder("");
+            var builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
                 AddTopLevelElement("shared_customer_identifier_type", "testing").
                 AddTopLevelElement("shared_customer_identifier", "test-identifier").
@@ -312,19 +267,11 @@ namespace Braintree.Tests
         [Test]
         public void Generate_ThrowExceptionWhenCustomerNotFound()
         {
-            BraintreeGateway gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
-
+            var gateway = new BraintreeGateway();
             string encodedClientToken = "";
-
             try
             {
-                encodedClientToken += gateway.ClientToken.generate(
+                encodedClientToken += gateway.ClientToken.Generate(
                     new ClientTokenRequest
                     {
                         CustomerId = "NON_EXISTENT_CUSTOMER_ID"

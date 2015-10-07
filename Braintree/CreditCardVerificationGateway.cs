@@ -10,10 +10,10 @@ namespace Braintree
     /// <summary>
     /// Provides operations for finding verifications
     /// </summary>
-    public class CreditCardVerificationGateway
+    public class CreditCardVerificationGateway : ICreditCardVerificationGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal CreditCardVerificationGateway(BraintreeGateway gateway)
         {

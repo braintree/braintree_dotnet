@@ -2,12 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Braintree;
 using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
-    [TestFixture]
+    //NOTE: good
+    [TestFixture(Category = "NeedFix")]
     public class AddressTest
     {
         private BraintreeGateway gateway;
@@ -15,13 +15,7 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            gateway = new BraintreeGateway();
         }
 
         [Test]
@@ -243,7 +237,7 @@ namespace Braintree.Tests
             Result<Address> createResult = gateway.Address.Create(customer.Id, request);
             Assert.IsFalse(createResult.IsSuccess());
             Dictionary<string, string> parameters = createResult.Parameters;
-            Assert.AreEqual("integration_merchant_id", parameters["merchant_id"]);
+            Assert.AreEqual(gateway.Configuration.MerchantId, parameters["merchant_id"]);
             Assert.AreEqual(customer.Id, parameters["customer_id"]);
             Assert.AreEqual("United States of Hammer", parameters["address[country_name]"]);
         }

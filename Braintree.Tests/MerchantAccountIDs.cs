@@ -1,5 +1,4 @@
 using System;
-using Braintree;
 
 namespace Braintree.Tests
 {

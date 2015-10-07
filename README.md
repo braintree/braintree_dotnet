@@ -1,4 +1,4 @@
-# Braintree .NET Client Library
+# Braintree .NET Client Library [![Build status](https://ci.appveyor.com/api/projects/status/03h2gcx7m0h80o0o/branch/master?svg=true)](https://ci.appveyor.com/project/ronin1/braintree-dotnet/branch/master)
 
 The Braintree assembly provides integration access to the Braintree Gateway.
 
@@ -68,6 +68,7 @@ namespace BraintreeExample
 ## Documentation
 
 * [Official documentation](https://developers.braintreepayments.com/dotnet/sdk/server/overview)
+* For *bleeding edge* pre-releases, add the following nuget path: https://ci.appveyor.com/nuget/braintree-dotnet
 
 ## Open Source Attribution
 

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Braintree
 {
-    public class MerchantGateway
+    public class MerchantGateway : IMerchantGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         public MerchantGateway(BraintreeGateway gateway)
         {

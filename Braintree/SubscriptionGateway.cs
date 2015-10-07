@@ -11,10 +11,10 @@ namespace Braintree
     /// <summary>
     /// Provides operations for creating, finding, updating, searching, and deleting subscriptions in the vault
     /// </summary>
-    public class SubscriptionGateway
+    public class SubscriptionGateway : ISubscriptionGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal SubscriptionGateway(BraintreeGateway gateway)
         {

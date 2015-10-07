@@ -18,3 +18,10 @@
 /Braintree.Tests/TestResult.xml
 Thumbs.db
 tags
+/Braintree/Braintree.csproj.user
+/UpgradeLog.htm
+*.suo
+/Braintree/Braintree.csproj.VisualState.xml
+packages
+Braintree.csproj.VisualState.xml
+*.user

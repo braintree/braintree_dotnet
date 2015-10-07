@@ -8,6 +8,7 @@ using System.Net.Security;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class BraintreeServiceTest
     {

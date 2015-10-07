@@ -1,9 +1,18 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree", "Braintree\Braintree.csproj", "{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree.Tests", "Braintree.Tests\Braintree.Tests.csproj", "{60234E7B-1181-4EFF-96EE-624B4524D788}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{456CCFF1-E7E4-48CA-8A27-9E82C3140E5A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\nuget.exe = .nuget\nuget.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,14 +20,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Braintree\Braintree.csproj
@@ -26,7 +38,7 @@ Global
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None
 		$1.ResourceNamePolicy = FileFormatDefault
-		$0.TextStylePolicy = $2
+		$0.TextStylePolicy = $6
 		$2.FileWidth = 120
 		$2.RemoveTrailingWhitespace = True
 		$2.inheritsSet = VisualStudio
@@ -36,26 +48,20 @@ Global
 		$3.inheritsSet = Mono
 		$3.inheritsScope = text/x-csharp
 		$3.scope = text/x-csharp
-		$0.TextStylePolicy = $4
 		$4.FileWidth = 120
 		$4.RemoveTrailingWhitespace = True
 		$4.inheritsSet = VisualStudio
 		$4.inheritsScope = text/plain
 		$4.scope = text/plain
-		$0.TextStylePolicy = $5
 		$5.FileWidth = 120
 		$5.RemoveTrailingWhitespace = True
 		$5.inheritsSet = VisualStudio
 		$5.inheritsScope = text/plain
 		$5.scope = application/config+xml
-		$0.TextStylePolicy = $6
 		$6.FileWidth = 120
 		$6.RemoveTrailingWhitespace = True
 		$6.inheritsSet = VisualStudio
 		$6.inheritsScope = text/plain
 		$6.scope = application/xml
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

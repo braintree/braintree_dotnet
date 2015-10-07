@@ -4,19 +4,19 @@ using System.Xml;
 
 namespace Braintree
 {
-    public class AddOnGateway
+    public class AddOnGateway : IAddOnGateway
     {
-        private BraintreeService Service;
+        private readonly BraintreeService service;
 
         public AddOnGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Service = new BraintreeService(gateway.Configuration);
+            service = new BraintreeService(gateway.Configuration);
         }
 
         public virtual List<AddOn> All()
         {
-            var response = new NodeWrapper(Service.Get(Service.MerchantPath() + "/add_ons"));
+            var response = new NodeWrapper(service.Get(service.MerchantPath() + "/add_ons"));
 
             var addOns = new List<AddOn>();
             foreach (var node in response.GetList("add-on"))
