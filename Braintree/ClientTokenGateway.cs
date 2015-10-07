@@ -12,21 +12,21 @@ namespace Braintree
     /// Generates client tokens, which are used to authenticate requests clients make directly
     ///   on behalf of merchants
     /// </summary>
-    public class ClientTokenGateway
+    public class ClientTokenGateway : IClientTokenGateway
     {
-        private BraintreeService Service;
+        private readonly BraintreeService service;
 
         protected internal ClientTokenGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Service = new BraintreeService(gateway.Configuration);
+            service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual string generate(ClientTokenRequest request = null)
+        public virtual string Generate(ClientTokenRequest request = null)
         {
             if (request == null) request = new ClientTokenRequest();
-            verifyOptions(request);
-            XmlNode response = Service.Post(Service.MerchantPath() + "/client_token", request);
+            VerifyOptions(request);
+            XmlNode response = service.Post(service.MerchantPath() + "/client_token", request);
 
             if (response.Name.Equals("client-token")) {
                 return Regex.Unescape(response.InnerText);
@@ -35,7 +35,7 @@ namespace Braintree
             }
         }
 
-        private void verifyOptions(ClientTokenRequest request)
+        private void VerifyOptions(ClientTokenRequest request)
         {
             if (request.Options != null && request.CustomerId == null) {
                 var invalidOptions = new List<string>{};

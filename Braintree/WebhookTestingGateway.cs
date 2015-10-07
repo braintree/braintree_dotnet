@@ -1,13 +1,14 @@
 #pragma warning disable 1591
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Braintree
 {
-    public class WebhookTestingGateway
+    public class WebhookTestingGateway : IWebhookTestingGateway
     {
-        private BraintreeService service;
+        private readonly BraintreeService service;
 
         protected internal WebhookTestingGateway(BraintreeGateway gateway)
         {
@@ -67,11 +68,11 @@ namespace Braintree
             }
         }
 
-        private static readonly string TYPE_DATE = "type=\"date\"";
-        private static readonly string TYPE_ARRAY = "type=\"array\"";
-        private static readonly string TYPE_SYMBOL = "type=\"symbol\"";
-        private static readonly string NIL_TRUE = "nil=\"true\"";
-        private static readonly string TYPE_BOOLEAN = "type=\"boolean\"";
+        private const string TYPE_DATE = "type=\"date\"";
+        private const string TYPE_ARRAY = "type=\"array\"";
+        private const string TYPE_SYMBOL = "type=\"symbol\"";
+        private const string NIL_TRUE = "nil=\"true\"";
+        private const string TYPE_BOOLEAN = "type=\"boolean\"";
 
         private string MerchantAccountDeclinedSampleXml(string id)
         {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using NUnit.Framework;
-using Braintree;
 using System.Threading;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class SettlementBatchSummaryTest
     {
@@ -16,13 +16,7 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            gateway = new BraintreeGateway();
         }
 
         [Test]
@@ -41,8 +35,14 @@ namespace Braintree.Tests
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = "4111111111111111",
-                    ExpirationDate = "05/2012",
+                    ExpirationDate = "05/2022",
                     CardholderName = "Tom Smith",
+                    CVV = "123",
+                },
+                BillingAddress = new AddressRequest
+                {
+                    StreetAddress = "123 fake st",
+                    PostalCode = "90025",
                 },
                 Options = new TransactionOptionsRequest
                 {
@@ -50,7 +50,10 @@ namespace Braintree.Tests
                 },
             };
 
-            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            var trsp = gateway.Transaction.Sale(request);
+            Assert.IsNotNull(trsp);
+            Transaction transaction = trsp.Target;
+            Assert.IsNotNull(transaction, trsp.Message);
             Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
             var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
             transaction = gateway.Transaction.Find(transaction.Id);
@@ -92,8 +95,14 @@ namespace Braintree.Tests
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = "4111111111111111",
-                    ExpirationDate = "05/2012",
+                    ExpirationDate = "05/2022",
                     CardholderName = "Tom Smith",
+                    CVV = "123",
+                },
+                BillingAddress = new AddressRequest
+                {
+                    StreetAddress = "123 fake st",
+                    PostalCode = "90025",
                 },
                 Options = new TransactionOptionsRequest
                 {
@@ -105,7 +114,10 @@ namespace Braintree.Tests
                 }
             };
 
-            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            var trsp = gateway.Transaction.Sale(request);
+            Assert.IsNotNull(trsp);
+            Transaction transaction = trsp.Target;
+            Assert.IsNotNull(transaction, trsp.Message);
             Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
             var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
             transaction = gateway.Transaction.Find(transaction.Id);

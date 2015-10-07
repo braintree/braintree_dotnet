@@ -1,10 +1,9 @@
 using System;
 using NUnit.Framework;
-using Braintree;
-using Braintree.Exceptions;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class SubscriptionSearchRequestTest
     {

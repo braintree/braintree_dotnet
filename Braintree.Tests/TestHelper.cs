@@ -8,8 +8,6 @@ using System.IO;
 using System.IO.Compression;
 using System.Xml;
 using NUnit.Framework;
-using Braintree;
-
 using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests
@@ -19,7 +17,7 @@ namespace Braintree.Tests
 
     public static string GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
     {
-      var encodedClientToken = gateway.ClientToken.generate(request);
+      var encodedClientToken = gateway.ClientToken.Generate(request);
       var decodedClientToken = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
       var unescapedClientToken = System.Text.RegularExpressions.Regex.Unescape(decodedClientToken);
       return unescapedClientToken;
@@ -318,7 +316,7 @@ namespace Braintree.Tests
     {
       try
       {
-        var request = WebRequest.Create(Environment.DEVELOPMENT.GatewayURL + "/merchants/" + MerchantId + "/client_api/" + Path) as HttpWebRequest;
+        var request = WebRequest.Create(Environment.CONFIGURED.GatewayURL + "/merchants/" + MerchantId + "/client_api/" + Path) as HttpWebRequest;
         request.Headers.Add("X-ApiVersion", ApiVersion);
         request.Accept = "application/json";
         request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();

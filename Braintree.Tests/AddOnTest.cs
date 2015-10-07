@@ -14,13 +14,7 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            gateway = new BraintreeGateway();
             service = new BraintreeService(gateway.Configuration);
         }
 
@@ -64,12 +58,12 @@ namespace Braintree.Tests
         [Test()]
         public void All_RaisesIfMissingCredentials()
         {
-            gateway = new BraintreeGateway
-            {
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            //gateway = new BraintreeGateway
+            //{
+            //    MerchantId = "integration_merchant_id",
+            //    PublicKey = "integration_public_key",
+            //    PrivateKey = "integration_private_key"
+            //};
 
             try {
                 gateway.AddOn.All();

@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using Braintree;
 using System.Xml;
 
 namespace Braintree.Tests
 {
+    //NOTE: good
     [TestFixture]
     public class CreditCardVerificationTest
     {
@@ -15,13 +15,7 @@ namespace Braintree.Tests
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
+            gateway = new BraintreeGateway();
         }
 
         [Test]
