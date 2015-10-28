@@ -11,6 +11,7 @@ namespace Braintree.Tests
     public class CustomerRequestTest
     {
         [Test]
+        [Category("Unit")]
         public void ToXml_Includes_DeviceSessionId()
         {
             var request = new CustomerRequest()
@@ -27,6 +28,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_Includes_DeviceData()
         {
             var request = new CustomerRequest()

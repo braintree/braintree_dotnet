@@ -25,6 +25,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Verify_CreatesVerificationString()
         {
             string verification = gateway.WebhookNotification.Verify("20f9f8ed05f77439fe955c977e4c8a53");
@@ -32,6 +33,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         [ExpectedException(typeof(InvalidChallengeException), ExpectedMessage="challenge contains non-hex characters")]
         public void Verify_ThrowsErrorOnInvalidChallenge()
         {
@@ -39,6 +41,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsAParsableNotification()
         {
             Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
@@ -51,6 +54,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="no matching public key")]
         public void Parse_WithInvalidPublicKey()
         {
@@ -59,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="signature does not match payload - one has been modified")]
         public void Parse_WithChangedPayload()
         {
@@ -67,6 +72,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="payload contains illegal characters")]
         public void Parse_WithInvalidCharactersInPayload()
         {
@@ -75,6 +81,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         [ExpectedException(typeof(InvalidSignatureException), ExpectedMessage="signature does not match payload - one has been modified")]
         public void Parse_AllowsAllValidChars()
         {
@@ -83,6 +90,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Retries()
         {
             Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id");
@@ -90,6 +98,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForAMerchantAccountApprovedWebhook()
         {
             Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED, "my_id");
@@ -105,6 +114,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForAMerchantAccountDeclinedWebhook()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED, "my_id");
@@ -118,6 +128,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForATransactionDisbursedWebhook()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_DISBURSED, "my_id");
@@ -131,6 +142,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForADisbursementExceptionWebhook()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISBURSEMENT_EXCEPTION, "my_id");
@@ -168,6 +180,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForDisputeOpenedWebhook()
         {
             Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_OPENED, "my_id");
@@ -179,9 +192,12 @@ namespace Braintree.Tests
             Assert.AreEqual("my_id", notification.Dispute.TransactionDetails.Id);
             Assert.AreEqual("250.00", notification.Dispute.TransactionDetails.Amount);
             Assert.AreEqual(DisputeStatus.OPEN, notification.Dispute.Status);
+            Assert.AreEqual(DisputeKind.CHARGEBACK, notification.Dispute.Kind);
+            Assert.AreEqual(new DateTime(2014, 3, 21), notification.Dispute.DateOpened);
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForDisputeLostWebhook()
         {
             Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_LOST, "my_id");
@@ -190,9 +206,12 @@ namespace Braintree.Tests
 
             Assert.AreEqual(WebhookKind.DISPUTE_LOST, notification.Kind);
             Assert.AreEqual("my_id", notification.Dispute.Id);
+            Assert.AreEqual(DisputeKind.CHARGEBACK, notification.Dispute.Kind);
+            Assert.AreEqual(new DateTime(2014, 3, 21), notification.Dispute.DateOpened);
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForDisputeWonWebhook()
         {
             Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_WON, "my_id");
@@ -201,9 +220,13 @@ namespace Braintree.Tests
 
             Assert.AreEqual(WebhookKind.DISPUTE_WON, notification.Kind);
             Assert.AreEqual("my_id", notification.Dispute.Id);
+            Assert.AreEqual(DisputeKind.CHARGEBACK, notification.Dispute.Kind);
+            Assert.AreEqual(new DateTime(2014, 3, 21), notification.Dispute.DateOpened);
+            Assert.AreEqual(new DateTime(2014, 3, 22), notification.Dispute.DateWon);
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantConnected()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_CONNECTED, "my_id");
@@ -219,6 +242,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantDisconnected()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DISCONNECTED, "my_id");
@@ -233,6 +257,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForAPartnerMerchantDeclined()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PARTNER_MERCHANT_DECLINED, "my_id");
@@ -244,6 +269,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForSubscriptionChargedSuccessfully()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY, "my_id");
@@ -257,6 +283,17 @@ namespace Braintree.Tests
           Transaction transaction = notification.Subscription.Transactions[0];
           Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
           Assert.AreEqual(49.99m, transaction.Amount);
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void SampleNotification_ReturnsANotificationForCheck()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CHECK, "");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.CHECK, notification.Kind);
         }
     }
 }

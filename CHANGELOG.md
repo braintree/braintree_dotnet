@@ -1,3 +1,6 @@
+## 2.51.0
+* Add `CHECK` webhook kind
+
 ## 2.50.0
 * Add support for partial settlement transactions
 * Add customer_id to payment methods

@@ -5,10 +5,10 @@ using System.Text;
 
 namespace Braintree
 {
-    public class OAuthGateway
+    public class OAuthGateway : IOAuthGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         public OAuthGateway(BraintreeGateway gateway)
         {

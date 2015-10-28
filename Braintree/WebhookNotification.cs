@@ -6,6 +6,7 @@ namespace Braintree
 {
     public class WebhookKind : Enumeration
     {
+        public static readonly WebhookKind CHECK = new WebhookKind("check");
         public static readonly WebhookKind PARTNER_MERCHANT_CONNECTED = new WebhookKind("partner_merchant_connected");
         public static readonly WebhookKind PARTNER_MERCHANT_DISCONNECTED = new WebhookKind("partner_merchant_disconnected");
         public static readonly WebhookKind PARTNER_MERCHANT_DECLINED = new WebhookKind("partner_merchant_declined");
@@ -27,6 +28,7 @@ namespace Braintree
         public static readonly WebhookKind DISPUTE_WON = new WebhookKind("dispute_won");
 
         public static readonly WebhookKind[] ALL = {
+            CHECK,
             PARTNER_MERCHANT_CONNECTED,
             PARTNER_MERCHANT_DISCONNECTED,
             PARTNER_MERCHANT_DECLINED,

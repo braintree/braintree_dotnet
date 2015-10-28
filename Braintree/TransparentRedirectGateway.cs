@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Braintree
 {
-    public class TransparentRedirectGateway
+    public class TransparentRedirectGateway : ITransparentRedirectGateway
     {
         public const string CREATE_CUSTOMER = "create_customer";
         public const string UPDATE_CUSTOMER = "update_customer";
@@ -18,8 +18,8 @@ namespace Braintree
             get { return service.BaseMerchantURL() + "/transparent_redirect_requests"; }
         }
 
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal TransparentRedirectGateway(BraintreeGateway gateway)
         {

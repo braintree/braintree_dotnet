@@ -24,7 +24,8 @@ namespace Braintree.Tests
             service = new BraintreeService(gateway.Configuration);
         }
 
-        [Test()]
+        [Test]
+        [Category("Integration")]
         public void All_ReturnsAllAddOns()
         {
             string addOnId = string.Format("dotnet_add_on{0}", new Random().Next(1000000).ToString());
@@ -61,7 +62,8 @@ namespace Braintree.Tests
             Assert.IsNotNull(addOn.UpdatedAt);
         }
 
-        [Test()]
+        [Test]
+        [Category("Unit")]
         public void All_RaisesIfMissingCredentials()
         {
             gateway = new BraintreeGateway

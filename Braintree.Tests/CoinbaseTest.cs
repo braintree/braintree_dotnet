@@ -24,6 +24,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void TransactionCreate()
         {
             TransactionRequest request = new TransactionRequest
@@ -48,6 +49,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Vault()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
@@ -66,6 +68,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Customer()
         {
             CustomerRequest request = new CustomerRequest

@@ -32,6 +32,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Unit")]
         public void TransparentRedirectURLForCreate_ReturnsCorrectValue()
         {
             Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request",
@@ -41,6 +42,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Unit")]
         public void TransparentRedirectURLForUpdate_ReturnsCorrectValue()
         {
             Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request",
@@ -49,6 +51,7 @@ namespace Braintree.Tests
         #pragma warning restore 0618
 
         [Test]
+        [Category("Unit")]
         public void TrData_ReturnsValidTrDataHash()
         {
             string trData = gateway.TrData(new CreditCardRequest(), "http://example.com");
@@ -57,6 +60,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesCreditCardForGivenCustomerId()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -101,6 +105,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesCreditCardWithAVenmoSdkPaymentMethodCode()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -120,6 +125,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesCreditCardWithSecurityParams()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -146,6 +152,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesCreditCardWithDeviceData()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -171,6 +178,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_FailsToCreateCreditCardWithInvalidVenmoSdkPaymentMethodCode()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -191,6 +199,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_AddsCardToVenmoSdkWithValidSession()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -214,6 +223,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_DoesNotAddCardToVenmoSdkWithInvalidSession()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -238,6 +248,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Create_AcceptsBillingAddressId()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -274,6 +285,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -316,6 +328,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInTRParams()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -348,6 +361,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInRequest()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -380,6 +394,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirectCreate_WithErrors()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -410,6 +425,7 @@ namespace Braintree.Tests
         #pragma warning restore 0618
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsCreditCardByToken()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -436,6 +452,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsAssociatedSubscriptions()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -467,6 +484,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             try {
@@ -476,6 +494,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void FromNonce_ExchangesANonceForACreditCard()
         {
           Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -485,6 +504,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void FromNonce_ReturnsErrorWhenProvidedNoncePointingToUnlockedSharedCard()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -497,6 +517,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void FromNonce_ReturnsErrorWhenProvidedConsumedNonce()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -512,6 +533,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesCreditCardByToken()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -548,6 +570,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SetsDefaultIfSpecified()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -582,6 +605,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesDefaultIfSpecified()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -617,6 +641,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CreatesNewBillingAddressByDefault()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -661,6 +686,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrue()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -699,6 +725,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrueViaTransparentRedirect()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -747,6 +774,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void UpdateViaTransparentRedirect()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -783,6 +811,7 @@ namespace Braintree.Tests
         #pragma warning restore 0618
 
         [Test]
+        [Category("Integration")]
         public void Delete_DeletesTheCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -812,6 +841,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CheckDuplicateCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -838,6 +868,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void VerifyValidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -859,6 +890,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void VerifyValidCreditCardWithVerificationRiskData()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -887,6 +919,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void VerifyValidCreditCardWithVerificationAmount()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -909,6 +942,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void VerifyValidCreditCardSpecifyingMerhantAccount()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -932,6 +966,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void VerifyInvalidCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -956,6 +991,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void GatewayRejectionReason_ExposedOnVerification()
         {
             BraintreeGateway processingRulesGateway = new BraintreeGateway
@@ -988,6 +1024,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Expired()
         {
             ResourceCollection<CreditCard> collection = gateway.CreditCard.Expired();
@@ -1005,6 +1042,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void ExpiringBetween()
         {
             DateTime beginning = new DateTime(2010, 1, 1);
@@ -1025,6 +1063,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Prepaid()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1046,6 +1085,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Commercial()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1067,6 +1107,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Debit()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1088,6 +1129,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Healthcare()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1109,6 +1151,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Payroll()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1130,6 +1173,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void DurbinRegulated()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1151,6 +1195,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CountryOfIssuance()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1172,6 +1217,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void IssuingBank()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1193,6 +1239,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void NegativeCardTypeIndicators()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1219,6 +1266,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void MissingCardTypeIndicators()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1247,6 +1295,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateWithPaymentMethodNonce()
         {
           string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -1262,6 +1311,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void VerificationIsLatestVerification()
         {
             string xml = "<credit-card>"

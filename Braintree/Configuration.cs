@@ -16,6 +16,7 @@ namespace Braintree
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string AccessToken { get; set; }
+        public string Proxy { get; set; }
 
         public Configuration() {}
         public Configuration(string accessToken) {

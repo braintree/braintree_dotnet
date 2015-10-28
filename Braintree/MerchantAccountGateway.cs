@@ -5,10 +5,10 @@ using Braintree.Exceptions;
 
 namespace Braintree
 {
-    public class MerchantAccountGateway
+    public class MerchantAccountGateway : IMerchantAccountGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal MerchantAccountGateway(BraintreeGateway gateway)
         {

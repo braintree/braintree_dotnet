@@ -25,6 +25,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesAddressForGivenCustomerId()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -64,6 +65,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsAddress()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -96,6 +98,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             try {
@@ -110,6 +113,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesAddressForGivenCustomerIdAndAddressId()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -165,7 +169,8 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Update_UpdatesAddress_WithInconsistenCounty()
+        [Category("Integration")]
+        public void Update_ReturnsAnErrorResult_ForInconsistenCountry()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
@@ -210,6 +215,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Delete_DeletesTheAddress()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -222,7 +228,9 @@ namespace Braintree.Tests
 
             Address createdAddress = gateway.Address.Create(customer.Id, addressRequest).Target;
             Assert.AreEqual(createdAddress.Id, gateway.Address.Find(customer.Id, createdAddress.Id).Id);
-            gateway.Address.Delete(customer.Id, createdAddress.Id);
+
+            Result<Address> result = gateway.Address.Delete(customer.Id, createdAddress.Id);
+            Assert.IsTrue(result.IsSuccess());
             try
             {
                 gateway.Address.Find(customer.Id, createdAddress.Id);
@@ -235,6 +243,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_ReturnsAnErrorResult()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -249,6 +258,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_ReturnsAnErrorResult_ForInconsistentCountry()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -267,6 +277,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_ReturnsAnErrorResult_ForIncorrectAlpha2()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -284,6 +295,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_ReturnsAnErrorResult_ForIncorrectAlpha3()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -301,6 +313,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_ReturnsAnErrorResult_ForIncorrectNumeric()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;

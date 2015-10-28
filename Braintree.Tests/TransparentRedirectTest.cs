@@ -24,6 +24,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Url_ReturnsCorrectUrl()
         {
             var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
@@ -34,6 +35,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void BuildTrData_BuildsAQueryStringWithApiVersion()
         {
             string tr_data = gateway.TransparentRedirect.BuildTrData(new TransactionRequest(), "example.com");
@@ -41,6 +43,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransactionFromTransparentRedirect()
         {
             TransactionRequest trParams = new TransactionRequest
@@ -79,6 +82,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateCustomerFromTransparentRedirect()
         {
             CustomerRequest trParams = new CustomerRequest
@@ -101,6 +105,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void UpdateCustomerFromTransparentRedirect()
         {
             var createRequest = new CustomerRequest
@@ -132,6 +137,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateCreditCardFromTransparentRedirect()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -160,6 +166,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void UpdateCreditCardFromTransparentRedirect()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;

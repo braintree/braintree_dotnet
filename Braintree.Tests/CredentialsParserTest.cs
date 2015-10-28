@@ -8,6 +8,7 @@ namespace Braintree.Tests
     public class CredentialsParserTest
     {
         [Test]
+        [Category("Unit")]
         public void CredentialsParser_ParsesClientCredentials()
         {
             var parser = new CredentialsParser(
@@ -21,6 +22,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void CredentialsParser_ParsesAccessToken()
         {
             var parser = new CredentialsParser(
@@ -33,6 +35,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void CredentialsParser_ThrowErrorOnInconsistentEnvironment()
         {
             try {
@@ -46,6 +49,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void CredentialsParser_ThrowErrorOnInvalidClientSecret()
         {
             try {
@@ -59,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void CredentialsParser_ThrowErrorOnInconsistentClientSecret()
         {
             try {

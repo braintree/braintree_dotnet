@@ -27,6 +27,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsCustomerWithGivenId()
         {
             string id = Guid.NewGuid().ToString();
@@ -94,6 +95,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_IncludesApplePayCardsInPaymentMethods()
         {
             var createRequest = new CustomerRequest
@@ -110,6 +112,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_IncludesAndroidPayProxyCardsInPaymentMethods()
         {
             var createRequest = new CustomerRequest
@@ -127,6 +130,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_IncludesAndroidPayNetworkTokensInPaymentMethods()
         {
             var createRequest = new CustomerRequest
@@ -144,6 +148,25 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
+        public void Find_IncludesAmexExpressCheckoutCardsInPaymentMethods()
+        {
+            var createRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.AmexExpressCheckout
+            };
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+            Assert.IsNotNull(customer.AmexExpressCheckoutCards);
+            Assert.IsNotNull(customer.PaymentMethods);
+            AmexExpressCheckoutCard card = customer.AmexExpressCheckoutCards[0];
+            Assert.IsNotNull(card.Token);
+            Assert.IsNotNull(card.CardMemberNumber);
+            Assert.AreEqual(card, customer.PaymentMethods[0]);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Find_RaisesIfIdIsInvalid()
         {
             try
@@ -158,6 +181,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Find_RaisesIfIdIsBlank()
         {
             try
@@ -172,6 +196,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CanSetCustomFields()
         {
             var customFields = new Dictionary<string, string>();
@@ -186,6 +211,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesCustomerWithSpecifiedValues()
         {
             var createRequest = new CustomerRequest()
@@ -230,6 +256,7 @@ namespace Braintree.Tests
         }
         
         [Test]
+        [Category("Integration")]
         public void Create_withSecurityParams()
         {
             var createRequest = new CustomerRequest()
@@ -249,6 +276,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_withErrorsOnCountry()
         {
             var createRequest = new CustomerRequest()
@@ -297,6 +325,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreateCustomerWithCreditCard()
         {
             var createRequest = new CustomerRequest()
@@ -338,6 +367,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreateCustomerUsingAccessToken()
         {
             var createRequest = new CustomerRequest()
@@ -376,6 +406,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreateCustomerWithCreditCardAndBillingAddress()
         {
             var createRequest = new CustomerRequest()
@@ -439,6 +470,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithVenmoSdkPaymentMethodCode()
         {
             var createRequest = new CustomerRequest()
@@ -459,6 +491,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithVenmoSdkSession()
         {
             var createRequest = new CustomerRequest()
@@ -478,6 +511,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithPaymentMethodNonce()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -490,6 +524,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithPayPalPaymentMethodNonce()
         {
             string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
@@ -504,6 +539,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirect_CreatesTheCustomer()
         {
             CustomerRequest trParams = new CustomerRequest();
@@ -525,6 +561,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirect_CreatesNestedElementsAndCustomFields()
         {
             CustomerRequest trParams = new CustomerRequest();
@@ -571,6 +608,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirect_UpdatesTheCustomer()
         {
             CustomerRequest createRequest = new CustomerRequest
@@ -602,6 +640,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesCustomerAndNestedValuesViaTr()
         {
             var createRequest = new CustomerRequest()
@@ -668,6 +707,7 @@ namespace Braintree.Tests
         #pragma warning restore 0618
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesCustomerWithNewValues()
         {
             string oldId = Guid.NewGuid().ToString();
@@ -712,6 +752,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesCustomerAndNestedValues()
         {
             var createRequest = new CustomerRequest()
@@ -774,6 +815,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_AcceptsNestedBillingAddressId()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -804,6 +846,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_AcceptsPaymentMethodNonce()
         {
             var create = new CustomerRequest
@@ -828,13 +871,15 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Delete_DeletesTheCustomer()
         {
             string id = Guid.NewGuid().ToString();
             gateway.Customer.Create(new CustomerRequest() { Id = id });
             Assert.AreEqual(id, gateway.Customer.Find(id).Id);
-            gateway.Customer.Delete(id);
 
+            Result<Customer> result = gateway.Customer.Delete(id);
+            Assert.IsTrue(result.IsSuccess());
             try
             {
                 gateway.Customer.Find(id);
@@ -847,6 +892,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void All() {
             ResourceCollection<Customer> collection = gateway.Customer.All();
 
@@ -862,6 +908,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_FindDuplicateCardsGivenPaymentMethodToken()
         {
             CreditCardRequest creditCard = new CreditCardRequest
@@ -900,6 +947,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnAllTextFields()
         {
             string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
@@ -966,6 +1014,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnCreatedAt()
         {
             CustomerRequest request = new CustomerRequest();
@@ -1003,6 +1052,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPayPalAccountEmail()
         {
             var request = new CustomerRequest

@@ -12,10 +12,10 @@ namespace Braintree
     /// <summary>
     /// Provides operations for creating, finding, updating, and deleting credit cards in the vault
     /// </summary>
-    public class CreditCardGateway
+    public class CreditCardGateway : ICreditCardGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal CreditCardGateway(BraintreeGateway gateway)
         {

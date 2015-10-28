@@ -15,6 +15,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Sign_SignsTheGivenPayload()
         {
             string signature = new SignatureService

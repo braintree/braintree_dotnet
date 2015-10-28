@@ -11,6 +11,7 @@ namespace Braintree.Tests
     public class ConfigurationTest
     {
         [Test]
+        [Category("Unit")]
         public void ConfigurationMissingEnvironment_ThrowsConfigurationException()
         {
             try {
@@ -25,6 +26,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConfigurationMissingMerchantId_ThrowsConfigurationException()
         {
             try {
@@ -39,6 +41,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConfigurationMissingPublicKey_ThrowsConfigurationException()
         {
             try {
@@ -53,6 +56,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConfigurationMissingPrivateKey_ThrowsConfigurationException()
         {
             try {
@@ -67,6 +71,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void BaseMerchantURL_ReturnsDevelopmentURL()
         {
             BraintreeService service = new BraintreeService(new Configuration(
@@ -84,6 +89,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void BaseMerchantURL_ReturnsSandboxURL()
         {
             BraintreeService service = new BraintreeService(new Configuration(
@@ -97,6 +103,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void BaseMerchantURL_ReturnsProductionURL()
         {
             BraintreeService service = new BraintreeService(new Configuration(
@@ -110,6 +117,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void GetAuthorizationHeader_ReturnsBase64EncodePublicAndPrivateKeys()
         {
             BraintreeService service = new BraintreeService(new Configuration(
@@ -120,6 +128,35 @@ namespace Braintree.Tests
             ));
             Assert.AreEqual("Basic aW50ZWdyYXRpb25fcHVibGljX2tleTppbnRlZ3JhdGlvbl9wcml2YXRlX2tleQ==", service.GetAuthorizationHeader());
 
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void Proxy_UsesNoProxyIfNotSpecified()
+        {
+            BraintreeService service = new BraintreeService(new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            ));
+            Assert.AreEqual(null, service.GetProxy());
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void Proxy_ReturnsProxyConfiguration()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.Proxy = "http://localhost:3000";
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.AreEqual("http://localhost:3000", service.GetProxy());
         }
     }
 }

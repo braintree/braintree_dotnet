@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class SettlementBatchSummaryGateway
+    public class SettlementBatchSummaryGateway : ISettlementBatchSummaryGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal SettlementBatchSummaryGateway(BraintreeGateway gateway)
         {

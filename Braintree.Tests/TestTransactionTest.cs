@@ -23,7 +23,8 @@ namespace Braintree.Tests {
             };
         }
 
-        [Test()]
+        [Test]
+        [Category("Integration")]
         public void Settle()
         {
             var request = new TransactionRequest
@@ -42,7 +43,8 @@ namespace Braintree.Tests {
             Assert.AreEqual(TransactionStatus.SETTLED, transaction.Status);
         }
 
-        [Test()]
+        [Test]
+        [Category("Integration")]
         public void SettlementConfirm()
         {
             var request = new TransactionRequest
@@ -61,7 +63,8 @@ namespace Braintree.Tests {
             Assert.AreEqual(TransactionStatus.SETTLEMENT_CONFIRMED, transaction.Status);
         }
 
-        [Test()]
+        [Test]
+        [Category("Integration")]
         public void SettlementPending()
         {
             var request = new TransactionRequest
@@ -80,7 +83,8 @@ namespace Braintree.Tests {
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
         }
 
-        [Test()]
+        [Test]
+        [Category("Integration")]
         public void SettlementDecline()
         {
             var request = new TransactionRequest
@@ -99,7 +103,8 @@ namespace Braintree.Tests {
             Assert.AreEqual(TransactionStatus.SETTLEMENT_DECLINED, transaction.Status);
         }
 
-        [Test()]
+        [Test]
+        [Category("Unit")]
         [ExpectedException(typeof(Braintree.Exceptions.TestOperationPerformedInProductionException))]
         public void FailsInProduction()
         {

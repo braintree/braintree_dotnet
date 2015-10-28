@@ -3,10 +3,10 @@ using Braintree.Exceptions;
 
 namespace Braintree
 {
-    public class PaymentMethodNonceGateway
+    public class PaymentMethodNonceGateway : IPaymentMethodNonceGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         public PaymentMethodNonceGateway(BraintreeGateway gateway)
         {

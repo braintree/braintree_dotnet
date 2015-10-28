@@ -29,6 +29,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesPaymentMethodNonce()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -47,6 +48,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
             try
@@ -58,6 +60,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ExposesThreeDSecureInfo()
         {
             PaymentMethodNonce nonce = gateway.PaymentMethodNonce.Find("threedsecurednonce");
@@ -72,6 +75,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ExposesNullThreeDSecureInfoIfBlank()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -82,6 +86,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
             try

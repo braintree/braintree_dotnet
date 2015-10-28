@@ -26,6 +26,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_ReturnsAnEmptyCollectionIfThereIsNoData()
         {
             Result<SettlementBatchSummary> result = gateway.SettlementBatchSummary.Generate(DateTime.Parse("1979-01-01"));
@@ -33,6 +34,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_ReturnsTransactionsSettledOnAGivenDay()
         {
             TransactionRequest request = new TransactionRequest
@@ -69,6 +71,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_AcceptsDatesInNonUSFormats()
         {
             CultureInfo originalCulture = Thread.CurrentThread.CurrentCulture;
@@ -84,6 +87,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_CanBeGroupedByACustomField()
         {
             TransactionRequest request = new TransactionRequest

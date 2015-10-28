@@ -13,6 +13,7 @@ namespace Braintree.Tests
         private string[] values = new string[] { "a", "b", "c", "d", "e" };
 
         [Test]
+        [Category("Unit")]
         public void ResourceCollection_IteratesOverCollectionsProperly()
         {
             string body = @"<search-results>

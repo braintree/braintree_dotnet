@@ -26,6 +26,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_DeprecatedWithoutId()
         {
             var request = deprecatedCreateRequest(null);
@@ -41,6 +42,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_DeprecatedWithId()
         {
             Random random = new Random();
@@ -59,6 +61,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_HandlesUnsuccessfulResults()
         {
             Result<MerchantAccount> result = gateway.MerchantAccount.Create(new MerchantAccountRequest());
@@ -69,6 +72,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithoutId()
         {
             var request = createRequest(null);
@@ -84,6 +88,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithId()
         {
             Random random = new Random();
@@ -102,6 +107,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_AcceptsBankFundingDestination()
         {
             var request = createRequest(null);
@@ -111,6 +117,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_AcceptsMobilePhoneFundingDestination()
         {
             var request = createRequest(null);
@@ -120,6 +127,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_AcceptsEmailFundingDestination()
         {
             var request = createRequest(null);
@@ -129,6 +137,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesAllFields()
         {
             var request = deprecatedCreateRequest(null);
@@ -166,6 +175,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_HandlesRequiredValidationErrors()
         {
             var request = new MerchantAccountRequest
@@ -197,6 +207,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_HandlesInvalidValidationErrors()
         {
             var request = new MerchantAccountRequest
@@ -285,6 +296,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find()
         {
             MerchantAccount merchantAccount = gateway.MerchantAccount.Create(createRequest(null)).Target;
@@ -293,6 +305,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             try {

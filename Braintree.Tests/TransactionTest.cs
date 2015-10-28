@@ -29,6 +29,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void SaleTrData_ReturnsValidTrDataHash()
         {
             string trData = gateway.Transaction.SaleTrData(new TransactionRequest(), "http://example.com");
@@ -37,6 +38,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void CreditTrData_ReturnsValidTrDataHash()
         {
             string trData = gateway.Transaction.CreditTrData(new TransactionRequest(), "http://example.com");
@@ -45,6 +47,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void TrData_QueryStringParams()
         {
             string trData = gateway.Transaction.SaleTrData(new TransactionRequest {
@@ -74,6 +77,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnAllTextFields()
         {
             string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
@@ -181,6 +185,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnTextNodeOperators() {
             var request = new TransactionRequest
             {
@@ -225,6 +230,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_PaymentInstrumentTypeIsCreditCard()
         {
             TransactionRequest request = new TransactionRequest
@@ -249,6 +255,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_PaymentInstrumentTypeIsPayPal()
         {
             TransactionRequest request = new TransactionRequest
@@ -269,6 +276,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_PaymentInstrumentTypeIsApplePay()
         {
             TransactionRequest request = new TransactionRequest
@@ -289,6 +297,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_PaymentInstrumentTypeIsEuropeBankAccount()
         {
             TransactionRequest request = new TransactionRequest
@@ -309,6 +318,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnCreatedUsing()
         {
             TransactionRequest request = new TransactionRequest
@@ -349,6 +359,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnCreditCardCustomerLocation()
         {
             TransactionRequest request = new TransactionRequest
@@ -383,6 +394,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnMerchantAccountId()
         {
             TransactionRequest request = new TransactionRequest
@@ -417,6 +429,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnCreditCardType()
         {
             TransactionRequest request = new TransactionRequest
@@ -457,6 +470,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnStatus()
         {
             TransactionRequest request = new TransactionRequest
@@ -491,6 +505,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnAuthorizationExpiredStatus()
         {
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
@@ -503,6 +518,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnSource()
         {
             TransactionRequest request = new TransactionRequest
@@ -537,6 +553,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnTransactionType()
         {
             string name = new Random().Next(1000000).ToString();
@@ -590,6 +607,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -630,6 +648,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnCreatedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -675,6 +694,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnCreatedAtUsingLocalTime()
         {
             TransactionRequest request = new TransactionRequest
@@ -700,6 +720,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnDisbursementDate()
         {
             DateTime disbursementDate = DateTime.Parse("2013-04-10");
@@ -733,6 +754,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnDisputeDate()
         {
             DateTime disputeDate = DateTime.Parse("2014-03-01");
@@ -766,6 +788,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnAuthorizedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -810,6 +833,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnAuthorizationExpiredAt()
         {
             DateTime threeDaysEarlier = DateTime.Now.AddDays(-3);
@@ -830,6 +854,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnFailedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -874,6 +899,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnGatewayRejectedAt()
         {
             BraintreeGateway processingRulesGateway = new BraintreeGateway
@@ -927,6 +953,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnProcessorDeclinedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -971,6 +998,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnSettledAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1021,6 +1049,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnSubmittedForSettlementAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1069,6 +1098,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnVoidedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1114,6 +1144,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnMultipleStatuses()
         {
             TransactionRequest request = new TransactionRequest
@@ -1152,6 +1183,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         [ExpectedException(typeof(Braintree.Exceptions.DownForMaintenanceException))]
         public void Search_ReturnsErrorOnTimeout()
         {
@@ -1161,6 +1193,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPayPalFields()
         {
             var request = new TransactionRequest
@@ -1181,6 +1214,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
@@ -1214,6 +1248,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsSuccessfulResponseWithPartialSettlement()
         {
             var request = new TransactionRequest
@@ -1230,7 +1265,7 @@ namespace Braintree.Tests
             Assert.IsTrue(authorizationResult.IsSuccess());
             Transaction authorizedTransaction = authorizationResult.Target;
 
-            Assert.AreEqual(1000.00, authorizedTransaction.Amount); // check authorization amount. not settlement amount
+            Assert.AreEqual(1000.00, authorizedTransaction.Amount);
             Assert.AreEqual(TransactionType.SALE, authorizedTransaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, authorizedTransaction.Status);
             Assert.IsNotNull(authorizedTransaction.ProcessorAuthorizationCode);
@@ -1280,6 +1315,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsUnsuccessfulResponseForPartialSettlementWithUnacceptedPaymentInstrumentType()
         {
             var request = new TransactionRequest
@@ -1298,11 +1334,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithSuccessfulAmexRewardsResponse()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.SUCCESS,
@@ -1330,11 +1368,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithAmexRewardsResponseSucceedsEvenIfCardIsIneligible()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INELIGIBLE_CARD,
@@ -1362,11 +1402,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithAmexRewardsResponseSucceedsEvenIfCardHasInsufficientPoints()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INSUFFICIENT_POINTS,
@@ -1394,6 +1436,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsSuccessfulResponseUsingAccessToken()
         {
             var request = new TransactionRequest
@@ -1431,6 +1474,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsSuccessfulResponseWithRiskData()
         {
             var request = new TransactionRequest
@@ -1451,6 +1495,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithDeviceData()
         {
             var request = new TransactionRequest
@@ -1485,6 +1530,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsPaymentInstrumentType()
         {
             var request = new TransactionRequest
@@ -1505,6 +1551,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsPaymentInstrumentTypeForPayPal()
         {
             string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -1521,6 +1568,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ReturnsDebugIdForPayPal()
         {
             string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -1538,6 +1586,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithAllAttributes()
         {
             TransactionRequest request = new TransactionRequest
@@ -1664,6 +1713,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithSecurityParams()
         {
             var request = new TransactionRequest
@@ -1683,6 +1733,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_SpecifyingMerchantAccountId()
         {
             var request = new TransactionRequest
@@ -1704,6 +1755,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithoutSpecifyingMerchantAccountIdFallsBackToDefault()
         {
             var request = new TransactionRequest
@@ -1724,6 +1776,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithStoreInVaultAndSpecifyingToken()
         {
             string customerId = new Random().Next(1000000).ToString();
@@ -1763,6 +1816,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithVaultCustomerAndNewCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()
@@ -1797,6 +1851,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithVaultCustomerAndNewCreditCardStoresInVault()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()
@@ -1835,6 +1890,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithStoreInVaultWithoutSpecifyingToken()
         {
             TransactionRequest request = new TransactionRequest
@@ -1869,6 +1925,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithStoreInVaultOnSuccessWhenTransactionSuccessful()
         {
             TransactionRequest request = new TransactionRequest
@@ -1905,6 +1962,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithStoreInVaultOnSuccessWhenTransactionFails()
         {
             TransactionRequest request = new TransactionRequest
@@ -1939,6 +1997,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithStoreInVaultForBillingAndShipping()
         {
             TransactionRequest request = new TransactionRequest
@@ -1985,6 +2044,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithThreeDSecureOptionRequired()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -2010,6 +2070,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithThreeDSecureToken()
         {
             var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
@@ -2038,6 +2099,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ErrorThreeDSecureTransactionDataDoesNotMatch()
         {
             var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
@@ -2064,6 +2126,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_ErrorWithNullThreeDSecureToken()
         {
             string three_d_secure_token = null;
@@ -2086,6 +2149,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithApplePayNonce()
         {
             TransactionRequest request = new TransactionRequest
@@ -2106,6 +2170,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithAndroidPayProxyCardNonce()
         {
             TransactionRequest request = new TransactionRequest
@@ -2137,6 +2202,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithAndroidPayNetworkTokenNonce()
         {
             TransactionRequest request = new TransactionRequest
@@ -2168,6 +2234,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
+        public void Sale_WithAmexExpressCheckoutCardNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = Nonce.AmexExpressCheckout
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.IsNotNull(result.Target.AmexExpressCheckoutDetails);
+
+            Assert.IsInstanceOfType(typeof(AmexExpressCheckoutDetails), result.Target.AmexExpressCheckoutDetails);
+            AmexExpressCheckoutDetails amexExpressCheckoutDetails = (AmexExpressCheckoutDetails) result.Target.AmexExpressCheckoutDetails;
+
+            Assert.IsNull(amexExpressCheckoutDetails.Token);
+            Assert.IsNotNull(amexExpressCheckoutDetails.CardType);
+            Assert.IsNotNull(amexExpressCheckoutDetails.Bin);
+            Assert.IsNotNull(amexExpressCheckoutDetails.ExpirationMonth);
+            Assert.IsNotNull(amexExpressCheckoutDetails.ExpirationYear);
+            Assert.IsNotNull(amexExpressCheckoutDetails.CardMemberNumber);
+            Assert.IsNotNull(amexExpressCheckoutDetails.CardMemberExpiryDate);
+            Assert.IsNotNull(amexExpressCheckoutDetails.ImageUrl);
+            Assert.IsNotNull(amexExpressCheckoutDetails.SourceDescription);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Sale_Declined()
         {
             TransactionRequest request = new TransactionRequest
@@ -2200,6 +2296,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_GatewayRejectedForApplicationIncomplete()
         {
             BraintreeGateway oauthGateway = new BraintreeGateway(
@@ -2233,6 +2330,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_GatewayRejectedForAvs()
         {
             BraintreeGateway processingRulesGateway = new BraintreeGateway
@@ -2265,6 +2363,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_GatewayRejectedForAvsAndCvv()
         {
             BraintreeGateway processingRulesGateway = new BraintreeGateway
@@ -2298,6 +2397,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_GatewayRejectedForCvv()
         {
             BraintreeGateway processingRulesGateway = new BraintreeGateway
@@ -2327,6 +2427,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_GatewayRejectedForFraud()
         {
            BraintreeGateway processingRulesGateway = new BraintreeGateway
@@ -2356,6 +2457,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void UnrecognizedValuesAreCategorizedAsSuch()
         {
           Transaction transaction = gateway.Transaction.Find("unrecognized_transaction_id");
@@ -2366,6 +2468,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithCustomFields()
         {
             TransactionRequest request = new TransactionRequest
@@ -2392,6 +2495,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithUnregisteredCustomField()
         {
             TransactionRequest request = new TransactionRequest
@@ -2414,6 +2518,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithPaymentMethodToken()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -2443,6 +2548,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithPaymentMethodTokenAndCvv()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -2476,6 +2582,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_UsesShippingAddressFromVault()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -2506,6 +2613,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_UsesBillingAddressFromVault()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -2536,6 +2644,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithValidationError()
         {
             TransactionRequest request = new TransactionRequest
@@ -2592,6 +2701,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithTooLongPurchaseOrderNumberAttributes()
         {
             var request = new TransactionRequest
@@ -2617,6 +2727,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithInvalidPurchaseOrderNumberAttributes()
         {
             var request = new TransactionRequest
@@ -2641,6 +2752,7 @@ namespace Braintree.Tests
             );
         }
         [Test]
+        [Category("Integration")]
         public void Sale_WithLevel2Validations()
         {
             var request = new TransactionRequest
@@ -2666,6 +2778,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithServiceFee()
         {
             var request = new TransactionRequest
@@ -2688,6 +2801,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithZeroServiceFee()
         {
             var request = new TransactionRequest
@@ -2710,6 +2824,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithServiceFeeWithTooLargeAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -2730,6 +2845,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithMerchantAccountIdAndWithoutServiceFeeAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -2749,6 +2865,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithServiceFeeAmountOnMasterMerchantAccount()
         {
             TransactionRequest request = new TransactionRequest
@@ -2768,6 +2885,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithHoldInEscrow()
         {
             TransactionRequest request = new TransactionRequest
@@ -2792,6 +2910,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithHoldInEscrowFailsForMasterMerchantAccount()
         {
             TransactionRequest request = new TransactionRequest
@@ -2817,6 +2936,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void HoldInEscrow_AfterSale()
         {
             TransactionRequest request = new TransactionRequest
@@ -2842,6 +2962,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void HoldInEscrow_AfterSaleFailsForMasterMerchantAccount()
         {
             TransactionRequest request = new TransactionRequest
@@ -2865,6 +2986,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void ReleaseFromEscrow()
         {
             TransactionRequest request = new TransactionRequest
@@ -2897,6 +3019,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void ReleaseFromEscrow_FailsForNonSubmittableTransaction()
         {
             TransactionRequest request = new TransactionRequest
@@ -2922,6 +3045,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CancelRelease()
         {
             TransactionRequest request = new TransactionRequest
@@ -2958,6 +3082,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CancelRelease_FailsForTransactionsNotPendingRelease()
         {
             TransactionRequest request = new TransactionRequest
@@ -2989,6 +3114,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithDescriptor()
         {
             var request = new TransactionRequest
@@ -3017,6 +3143,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirect_SpecifyingDescriptor()
         {
             TransactionRequest trParams = new TransactionRequest
@@ -3051,6 +3178,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithDescriptorValidation()
         {
             var request = new TransactionRequest
@@ -3088,6 +3216,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithLodgingIndustryData()
         {
             var request = new TransactionRequest
@@ -3116,6 +3245,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithLodgingIndustryDataValidation()
         {
             var request = new TransactionRequest
@@ -3149,6 +3279,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithTravelCruiseIndustryData()
         {
             var request = new TransactionRequest
@@ -3178,6 +3309,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithTravelCruiseIndustryDataValidation()
         {
             var request = new TransactionRequest
@@ -3213,6 +3345,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithVenmoSdkPaymentMethodCode()
         {
             var request = new TransactionRequest
@@ -3229,6 +3362,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Sale_WithVenmoSdkSession()
         {
             var request = new TransactionRequest
@@ -3254,6 +3388,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirect_CreatesTheTransaction()
         {
             TransactionRequest trParams = new TransactionRequest
@@ -3306,6 +3441,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void ConfirmTransparentRedirect_SpecifyingMerchantAccountId()
         {
             TransactionRequest trParams = new TransactionRequest
@@ -3334,6 +3470,7 @@ namespace Braintree.Tests
         #pragma warning restore 0618
 
         [Test]
+        [Category("Integration")]
         public void Credit_WithValidParams()
         {
             TransactionRequest request = new TransactionRequest
@@ -3363,6 +3500,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Credit_SpecifyingMerchantAccountId()
         {
             var request = new TransactionRequest
@@ -3384,6 +3522,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Credit_WithoutSpecifyingMerchantAccountIdFallsBackToDefault()
         {
             var request = new TransactionRequest
@@ -3404,6 +3543,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Credit_WithCustomFields()
         {
             TransactionRequest request = new TransactionRequest
@@ -3430,6 +3570,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Credit_WithValidationError()
         {
             TransactionRequest request = new TransactionRequest
@@ -3454,6 +3595,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Credit_WithServiceFeeIsDisallowed()
         {
             var request = new TransactionRequest
@@ -3477,6 +3619,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_WithAValidTransactionId()
         {
             TransactionRequest request = new TransactionRequest
@@ -3499,6 +3642,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_WithBadId()
         {
             try
@@ -3513,6 +3657,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ExposesThreeDSecureInfo()
         {
             Transaction transaction = gateway.Transaction.Find("threedsecuredtransaction");
@@ -3525,6 +3670,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ExposesNullThreeDSecureInfoIfBlank()
         {
             Transaction transaction = gateway.Transaction.Find("settledtransaction");
@@ -3533,6 +3679,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ExposesDisbursementDetails()
         {
             Transaction transaction = gateway.Transaction.Find("deposittransaction");
@@ -3549,6 +3696,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ExposesDisputes()
         {
             Transaction transaction = gateway.Transaction.Find("disputedtransaction");
@@ -3565,6 +3713,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ExposesRetrievals()
         {
             Transaction transaction = gateway.Transaction.Find("retrievaltransaction");
@@ -3578,6 +3727,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_IsDisbursedFalse()
         {
             TransactionRequest request = new TransactionRequest
@@ -3596,6 +3746,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             try {
@@ -3606,6 +3757,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Void_VoidsTheTransaction()
         {
             TransactionRequest request = new TransactionRequest
@@ -3627,6 +3779,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Void_WithBadId()
         {
             try
@@ -3641,6 +3794,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Void_WithValidationError()
         {
             TransactionRequest request = new TransactionRequest
@@ -3663,6 +3817,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_WithoutAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -3686,6 +3841,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_WithAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -3707,11 +3863,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_WithAmexRewardsSucceeds()
         {
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.SUCCESS,
@@ -3737,11 +3895,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_WithAmexRewardsSucceedsEvenIfCardIsIneligible()
         {
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INELIGIBLE_CARD,
@@ -3767,11 +3927,13 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_WithAmexRewardsSucceedsEvenIfCardBalanceIsInsufficient()
         {
             TransactionRequest request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.INSUFFICIENT_POINTS,
@@ -3797,6 +3959,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_TransactionAmountLessThanServiceFeeAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -3822,6 +3985,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void StatusHistory_HasCorrectValues()
         {
             TransactionRequest request = new TransactionRequest
@@ -3843,6 +4007,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_WithValidationError()
         {
             TransactionRequest request = new TransactionRequest
@@ -3866,6 +4031,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_WithBadId()
         {
             try
@@ -3881,6 +4047,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void Refund_WithABasicTransaction()
         {
             TransactionRequest request = new TransactionRequest
@@ -3924,6 +4091,7 @@ namespace Braintree.Tests
         #pragma warning restore 0618
 
         [Test]
+        [Category("Integration")]
         public void Refund_WithAPartialAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -3950,6 +4118,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Refund_MultipleRefundsWithPartialAmounts()
         {
             TransactionRequest request = new TransactionRequest
@@ -3984,6 +4153,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Settle_RefundFailsWithNonSettledTransaction()
         {
             TransactionRequest request = new TransactionRequest
@@ -4015,6 +4185,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SnapshotPlanIdAddOnsAndDiscountsFromSubscription()
         {
             CustomerRequest customerRequest = new CustomerRequest
@@ -4100,6 +4271,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CloneTransaction()
         {
             TransactionRequest request = new TransactionRequest
@@ -4163,6 +4335,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CloneTransactionAndSubmitForSettlement()
         {
             TransactionRequest request = new TransactionRequest
@@ -4197,6 +4370,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CloneTransaction_WithValidationErrors()
         {
             TransactionRequest request = new TransactionRequest
@@ -4224,6 +4398,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CardTypeIndicators()
         {
             TransactionRequest request = new TransactionRequest
@@ -4249,6 +4424,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithPaymentMethodNonce()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -4262,6 +4438,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithPayeeEmail()
         {
             string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4286,6 +4463,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithPayeeEmailInOptionsParams()
         {
             string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4313,6 +4491,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithPayeeEmailInOptionsPaypal()
         {
             var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4341,6 +4520,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithPayPalCustomField()
         {
             var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4369,6 +4549,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithPayPalDescription()
         {
             var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4391,6 +4572,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithOneTimePayPalNonce()
         {
             string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4410,6 +4592,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithOneTimePayPalNonceAndAttemptToVault()
         {
             string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
@@ -4432,6 +4615,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTransaction_WithFuturePayPalNonceAndAttemptToVault()
         {
             string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
@@ -4454,6 +4638,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Void_PayPalTransaction()
         {
             string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
@@ -4470,6 +4655,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void SubmitForSettlement_PayPalTransaction()
         {
             string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
@@ -4487,6 +4673,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Refund_PayPalTransaction()
         {
             string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
@@ -4508,6 +4695,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void PayPalTransactionsReturnSettlementDeclinedResponse()
         {
             var request = new TransactionRequest
@@ -4532,6 +4720,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void PayPalTransactionsReturnSettlementPendingResponse()
         {
             var request = new TransactionRequest
@@ -4556,6 +4745,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void PayPalTransactionsReturnRequiredFields()
         {
           Transaction transaction = gateway.Transaction.Find("settledtransaction");

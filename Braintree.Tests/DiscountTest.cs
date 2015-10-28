@@ -23,7 +23,8 @@ namespace Braintree.Tests
             service = new BraintreeService(gateway.Configuration);
         }
 
-        [Test()]
+        [Test]
+        [Category("Integration")]
         public void All_ReturnsAllDiscounts()
         {
             string discountId = string.Format("dotnet_discount{0}", new Random().Next(1000000).ToString());

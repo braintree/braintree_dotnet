@@ -56,9 +56,9 @@ namespace Braintree
             return GetXmlResponse(URL, "GET", null);
         }
 
-        internal void Delete(string URL)
+        internal XmlNode Delete(string URL)
         {
-            GetXmlResponse(URL, "DELETE", null);
+            return GetXmlResponse(URL, "DELETE", null);
         }
 
         public XmlNode Post(string URL, Request requestBody)
@@ -91,6 +91,7 @@ namespace Braintree
                 request.Headers.Add("Accept-Encoding", "gzip");
                 request.Accept = "application/xml";
                 request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
+                request.Proxy = new WebProxy(GetProxy());
                 request.Method = method;
                 request.KeepAlive = false;
                 request.Timeout = 60000;
@@ -171,6 +172,11 @@ namespace Braintree
         public string MerchantPath()
         {
             return "/merchants/" + MerchantId;
+        }
+
+        public string GetProxy()
+        {
+            return Configuration.Proxy;
         }
 
         public string GetAuthorizationHeader()

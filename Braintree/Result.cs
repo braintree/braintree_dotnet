@@ -77,6 +77,10 @@ namespace Braintree
             {
                 return new AndroidPayCard(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(AmexExpressCheckoutCard))
+            {
+                return new AmexExpressCheckoutCard(node, gateway) as T;
+            }
             else if (typeof(T) == typeof(CreditCard))
             {
                 return new CreditCard(node, gateway) as T;

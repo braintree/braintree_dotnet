@@ -18,6 +18,20 @@ namespace Braintree
         protected DisputeStatus(string name) : base(name) {}
     }
 
+    public class DisputeKind : Enumeration
+    {
+        public static readonly DisputeKind CHARGEBACK = new DisputeKind("chargeback");
+        public static readonly DisputeKind PRE_ARBITRATION = new DisputeKind("pre_arbitration");
+        public static readonly DisputeKind RETRIEVAL = new DisputeKind("retrieval");
+        public static readonly DisputeKind UNRECOGNIZED = new DisputeKind("unrecognized");
+
+        public static readonly DisputeKind[] ALL = {
+            CHARGEBACK, PRE_ARBITRATION, RETRIEVAL, UNRECOGNIZED
+        };
+
+        protected DisputeKind(string name) : base(name) {}
+    }
+
     public class DisputeReason : Enumeration
     {
         public static readonly DisputeReason CANCELLED_RECURRING_TRANSACTION = new DisputeReason("cancelled_recurring_transaction");
@@ -45,8 +59,11 @@ namespace Braintree
         public decimal? Amount { get; protected set; }
         public DateTime? ReceivedDate { get; protected set; }
         public DateTime? ReplyByDate { get; protected set; }
+        public DateTime? DateOpened { get; protected set; }
+        public DateTime? DateWon { get; protected set; }
         public DisputeReason Reason { get; protected set; }
         public DisputeStatus Status { get; protected set; }
+        public DisputeKind Kind { get; protected set; }
         public string CurrencyIsoCode { get; protected set; }
         public string Id { get; protected set; }
         public TransactionDetails TransactionDetails { get; protected set; }
@@ -56,8 +73,11 @@ namespace Braintree
             Amount = node.GetDecimal("amount");
             ReceivedDate = node.GetDateTime("received-date");
             ReplyByDate = node.GetDateTime("reply-by-date");
+            DateOpened = node.GetDateTime("date-opened");
+            DateWon = node.GetDateTime("date-won");
             Reason = (DisputeReason)CollectionUtil.Find(DisputeReason.ALL, node.GetString("reason"), DisputeReason.GENERAL);
             Status = (DisputeStatus)CollectionUtil.Find(DisputeStatus.ALL, node.GetString("status"), DisputeStatus.UNRECOGNIZED);
+            Kind = (DisputeKind)CollectionUtil.Find(DisputeKind.ALL, node.GetString("kind"), DisputeKind.UNRECOGNIZED);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             Id = node.GetString("id");
             TransactionDetails = new TransactionDetails(node.GetNode("transaction"));

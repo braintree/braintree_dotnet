@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-2.50.0</AssemblyName>
+    <AssemblyName>Braintree-2.51.0</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkSubset>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.50.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.51.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -33,7 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.50.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-2.51.0.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
@@ -57,6 +57,8 @@
     <Compile Include="AndroidPayDetails.cs" />
     <Compile Include="ApplePayCard.cs" />
     <Compile Include="ApplePayDetails.cs" />
+    <Compile Include="AmexExpressCheckoutDetails.cs" />
+    <Compile Include="AmexExpressCheckoutCard.cs" />
     <Compile Include="ApplicantDetailsRequest.cs" />
     <Compile Include="ClientTokenGateway.cs" />
     <Compile Include="ClientTokenRequest.cs" />
@@ -105,10 +107,32 @@
     <Compile Include="FundingRequest.cs" />
     <Compile Include="GenericAddressRequest.cs" />
     <Compile Include="Hasher.cs" />
+    <Compile Include="IAddOnGateway.cs" />
+    <Compile Include="IAddressGateway.cs" />
+    <Compile Include="IBraintreeGateway.cs" />
+    <Compile Include="IClientTokenGateway.cs" />
+    <Compile Include="ICreditCardGateway.cs" />
+    <Compile Include="ICreditCardVerificationGateway.cs" />
+    <Compile Include="ICustomerGateway.cs" />
+    <Compile Include="IDiscountGateway.cs" />
     <Compile Include="IdsSearchRequest.cs" />
+    <Compile Include="IMerchantAccountGateway.cs" />
+    <Compile Include="IMerchantGateway.cs" />
     <Compile Include="IndividualRequest.cs" />
     <Compile Include="IndustryRequest.cs" />
     <Compile Include="IndustryDataRequest.cs" />
+    <Compile Include="IOAuthGateway.cs" />
+    <Compile Include="IPaymentMethodGateway.cs" />
+    <Compile Include="IPaymentMethodNonceGateway.cs" />
+    <Compile Include="IPayPalAccountGateway.cs" />
+    <Compile Include="IPlanGateway.cs" />
+    <Compile Include="ISettlementBatchSummaryGateway.cs" />
+    <Compile Include="ISubscriptionGateway.cs" />
+    <Compile Include="ITestTransactionGateway.cs" />
+    <Compile Include="ITransactionGateway.cs" />
+    <Compile Include="ITransparentRedirectGateway.cs" />
+    <Compile Include="IWebhookNotificationGateway.cs" />
+    <Compile Include="IWebhookTestingGateway.cs" />
     <Compile Include="KeyValueNode.cs" />
     <Compile Include="Merchant.cs" />
     <Compile Include="MerchantGateway.cs" />

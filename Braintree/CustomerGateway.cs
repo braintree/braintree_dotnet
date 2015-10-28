@@ -10,10 +10,10 @@ namespace Braintree
     /// <summary>
     /// Provides operations for creating, finding, updating, and deleting customers in the vault
     /// </summary>
-    public class CustomerGateway
+    public class CustomerGateway : ICustomerGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         protected internal CustomerGateway(BraintreeGateway gateway)
         {
@@ -44,9 +44,11 @@ namespace Braintree
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), gateway);
         }
 
-        public virtual void Delete(string Id)
+        public virtual Result<Customer> Delete(string Id)
         {
-            service.Delete(service.MerchantPath() + "/customers/" + Id);
+            XmlNode customerXML = service.Delete(service.MerchantPath() + "/customers/" + Id);
+
+            return new ResultImpl<Customer>(new NodeWrapper(customerXML), gateway);
         }
 
         public virtual Result<Customer> Update(string Id, CustomerRequest request)

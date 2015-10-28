@@ -24,6 +24,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void IncludesApiVersion()
         {
             string tr_data = TrUtil.BuildTrData(new TransactionRequest(), "example.com", service);
@@ -31,6 +32,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void IncludesKind()
         {
             string tr_data = TrUtil.BuildTrData(new TransactionRequest(), "example.com", service);
@@ -38,6 +40,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void IsValidTrQueryString_ForValidString()
         {
             string queryString = "http_status=200&id=6kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9";
@@ -45,6 +48,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void IsValidTrQueryString_ForValidStringWithQuestionMarke()
         {
             string queryString = "?http_status=200&id=6kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9";
@@ -52,6 +56,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void IsValidTrQueryString_ForInvalidString()
         {
             string queryString = "http_status=200&id=6kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b8";

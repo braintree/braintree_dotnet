@@ -11,6 +11,7 @@ namespace Braintree.Tests
     public class TransactionRequestTest
     {
         [Test]
+        [Category("Unit")]
         public void ToXml_Includes_DeviceSessionId()
         {
             TransactionRequest request = new TransactionRequest();
@@ -20,6 +21,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_Includes_FraudMerchantId()
         {
             TransactionRequest request = new TransactionRequest();
@@ -29,6 +31,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_Includes_DeviceData()
         {
             TransactionRequest request = new TransactionRequest();
@@ -42,6 +45,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_InludesPaymentMethodNonce()
         {
             TransactionRequest request = new TransactionRequest();

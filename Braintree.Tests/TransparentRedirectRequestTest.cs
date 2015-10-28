@@ -26,6 +26,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_RaisesForgedQueryStringExceptionIfGivenInvalidQueryString() 
         {
             try
@@ -41,6 +42,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Unit")]
         public void Constructor_RaisesNotFoundExceptionIfStatusIs500()
         {
             try
@@ -55,6 +57,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_RaisesNotFoundExceptionIfStatusIs500WithLeadQuestionMark()
         {
             try
@@ -69,6 +72,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_RaisesAuthorizationExceptionIfStatusIs403()
         {
             try
@@ -83,6 +87,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_RaisesAuthorizationExceptionWithMessageIfStatusIs403AndBtMessageIsInQueryString()
         {
             string message = "Invalid params: transaction[bad]";
@@ -100,6 +105,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void Constructor_RaisesDownForMaintenanceExceptionIfDownForMaintenance()
         {
             BraintreeGateway gateway = new BraintreeGateway()
@@ -130,6 +136,7 @@ namespace Braintree.Tests
 
         #pragma warning disable 0618
         [Test]
+        [Category("Integration")]
         public void Constructor_AuthenticationExceptionIfBadCredentials()
         {
             BraintreeGateway gateway = new BraintreeGateway()

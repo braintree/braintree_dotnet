@@ -1,13 +1,14 @@
 #pragma warning disable 1591
+
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Braintree
 {
-    public class WebhookTestingGateway
+    public class WebhookTestingGateway : IWebhookTestingGateway
     {
-        private BraintreeService service;
+        private readonly BraintreeService service;
 
         protected internal WebhookTestingGateway(BraintreeGateway gateway)
         {
@@ -62,6 +63,8 @@ namespace Braintree
                 return DisputeWonSampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY) {
                 return SubscriptionChargedSuccessfullySampleXml(id);
+            } else if (kind == WebhookKind.CHECK) {
+                return CheckSampleXml();
             } else {
                 return SubscriptionXml(id);
             }
@@ -171,14 +174,16 @@ namespace Braintree
                     Node("id", id),
                     Node("amount", "250.00"),
                     NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
-                    NodeAttr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
                     Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
                     Node("status", "open"),
                     Node("reason", "fraud"),
                     Node("transaction",
                         Node("id", id),
                         Node("amount", "250.00")
-                    )
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21")
             );
         }
 
@@ -187,14 +192,16 @@ namespace Braintree
                     Node("id", id),
                     Node("amount", "250.00"),
                     NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
-                    NodeAttr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
                     Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
                     Node("status", "lost"),
                     Node("reason", "fraud"),
                     Node("transaction",
                         Node("id", id),
                         Node("amount", "250.00")
-                    )
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21")
             );
         }
 
@@ -203,14 +210,17 @@ namespace Braintree
                     Node("id", id),
                     Node("amount", "250.00"),
                     NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
-                    NodeAttr("repy-by-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
                     Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
                     Node("status", "won"),
                     Node("reason", "fraud"),
                     Node("transaction",
                         Node("id", id),
                         Node("amount", "250.00")
-                    )
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("date-won", TYPE_DATE, "2014-03-22")
             );
         }
 
@@ -247,6 +257,11 @@ namespace Braintree
                     NodeAttr("add_ons", TYPE_ARRAY),
                     NodeAttr("discounts", TYPE_ARRAY)
             );
+        }
+
+        private string CheckSampleXml()
+        {
+            return NodeAttr("check", TYPE_BOOLEAN, "true");
         }
 
         private string MerchantAccountApprovedSampleXml(string id)

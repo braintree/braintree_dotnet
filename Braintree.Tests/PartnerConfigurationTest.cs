@@ -10,6 +10,7 @@ namespace Braintree.Tests
     public class PartnerConfigurationTest
     {
         [Test]
+        [Category("Unit")]
         public void MerchantId_SetProperly()
         {
             Configuration config = new PartnerConfiguration

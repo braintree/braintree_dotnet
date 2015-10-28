@@ -22,6 +22,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTokenFromCode_ReturnsOAuthCredentials()
         {
             string code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
@@ -39,6 +40,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTokenFromRefreshToken_ExchangesRefreshTokenForAccessToken()
         {
             string code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
@@ -61,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CreateTokenFromBadCode_ReturnsFailureCode()
         {
             ResultImpl<OAuthCredentials> result = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
@@ -80,6 +83,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void CreateTokenFromCode_RaisesIfWrongCredentials()
         {
             try {
@@ -94,6 +98,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConnectUrl_ReturnsCorrectUrl()
         {
             string url = gateway.OAuth.ConnectUrl(new OAuthConnectUrlRequest {
@@ -184,6 +189,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConnectUrl_WorksWithoutOptionalParameters()
         {
             string url = gateway.OAuth.ConnectUrl(new OAuthConnectUrlRequest());
@@ -195,6 +201,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConnectUrl_WorksWithMultiplePaymentMethods()
         {
             string url = gateway.OAuth.ConnectUrl(new OAuthConnectUrlRequest {
@@ -208,6 +215,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ComputeSignature_ReturnsCorrectSignature()
         {
             string url = "http://localhost:3000/oauth/connect?business%5Bname%5D=We+Like+Spaces&client_id=client_id%24development%24integration_client_id";

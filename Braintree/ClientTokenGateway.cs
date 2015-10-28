@@ -12,9 +12,9 @@ namespace Braintree
     /// Generates client tokens, which are used to authenticate requests clients make directly
     ///   on behalf of merchants
     /// </summary>
-    public class ClientTokenGateway
+    public class ClientTokenGateway : IClientTokenGateway
     {
-        private BraintreeService Service;
+        private readonly BraintreeService Service;
 
         protected internal ClientTokenGateway(BraintreeGateway gateway)
         {

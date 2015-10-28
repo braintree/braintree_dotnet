@@ -23,6 +23,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_ReturnsMerchantAndCredentials()
         {
             ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
@@ -41,12 +42,13 @@ namespace Braintree.Tests
             Assert.AreEqual("United States of America", result.Target.CountryName);
 
             Assert.IsTrue(result.Target.Credentials.AccessToken.StartsWith("access_token$"));
+            Assert.IsTrue(result.Target.Credentials.RefreshToken.StartsWith("refresh_token$"));
             Assert.IsTrue(result.Target.Credentials.ExpiresAt > DateTime.Now);
-            Assert.IsTrue(string.IsNullOrEmpty(result.Target.Credentials.RefreshToken));
             Assert.AreEqual("bearer", result.Target.Credentials.TokenType);
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_FailsWithInvalidPaymentMethods()
         {
             ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {

@@ -27,6 +27,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_ReturnsPayPalAccountByToken()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
@@ -52,6 +53,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_RaisesNotFoundErrorForUnknownToken()
         {
             try {
@@ -61,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_RaisesNotFoundErrorForCreditCardToken()
         {
             var createRequest = new CustomerRequest
@@ -82,6 +85,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Delete_ReturnsPayPalAccountByToken()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
@@ -100,6 +104,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Delete_RaisesNotFoundErrorForUnknownToken()
         {
             try {
@@ -109,6 +114,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CanUpdateToken()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
@@ -135,6 +141,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CanMakeDefault()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
@@ -172,6 +179,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void ReturnsSubscriptionsAssociatedWithPayPalAccount()
         {
             var customer = gateway.Customer.Create().Target;
@@ -212,6 +220,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void ReturnsBillingAgreementIdWithPayPalAccount()
         {
             var customer = gateway.Customer.Create().Target;

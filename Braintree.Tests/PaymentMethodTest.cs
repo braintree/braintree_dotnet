@@ -29,6 +29,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesPayPalAccountWithFuturePaymentNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -50,6 +51,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesPayPalAccountWithOneTimePaymentNonceFails()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -71,6 +73,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesCreditCardWithNonce()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -91,6 +94,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesCreditCardWithNonceAndDeviceData()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -115,6 +119,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_IncludesDeviceData()
         {
             var request = new PaymentMethodRequest()
@@ -129,6 +134,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesApplePayCardWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -154,10 +160,12 @@ namespace Braintree.Tests
             Assert.IsNotNull(applePayCard.Subscriptions);
             Assert.IsNotNull(applePayCard.PaymentInstrumentName);
             Assert.IsNotNull(applePayCard.SourceDescription);
+            Assert.IsNotNull(applePayCard.IsExpired);
             Assert.AreEqual(result.Target.Id, applePayCard.CustomerId);
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesAndroidPayProxyCardWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -193,6 +201,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CreatesAndroidPayNetworkTokenWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -228,6 +237,41 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
+        public void Create_CreatesAmexExpressCheckoutCardWithNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.AmexExpressCheckout
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.IsInstanceOfType(typeof(AmexExpressCheckoutCard), paymentMethodResult.Target);
+            AmexExpressCheckoutCard amexExpressCheckoutCard = (AmexExpressCheckoutCard) paymentMethodResult.Target;
+
+            Assert.IsNotNull(amexExpressCheckoutCard.CardType);
+            Assert.IsNotNull(amexExpressCheckoutCard.Bin);
+            Assert.IsNotNull(amexExpressCheckoutCard.ExpirationMonth);
+            Assert.IsNotNull(amexExpressCheckoutCard.ExpirationYear);
+            Assert.IsNotNull(amexExpressCheckoutCard.CardMemberNumber);
+            Assert.IsNotNull(amexExpressCheckoutCard.CardMemberExpiryDate);
+            Assert.IsNotNull(amexExpressCheckoutCard.ImageUrl);
+            Assert.IsNotNull(amexExpressCheckoutCard.SourceDescription);
+            Assert.IsNotNull(amexExpressCheckoutCard.IsDefault);
+            Assert.IsNotNull(amexExpressCheckoutCard.CreatedAt);
+            Assert.IsNotNull(amexExpressCheckoutCard.UpdatedAt);
+            Assert.IsNotNull(amexExpressCheckoutCard.Subscriptions);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Create_CreatesAbstractPaymentMethod()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -246,6 +290,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CanMakeDefaultAndSetToken()
         {
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
@@ -281,6 +326,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_DoesntReturnErrorIfCreditCardOptionsArePresentForPayPalNonce()
         {
             var customer = gateway.Customer.Create().Target;
@@ -309,6 +355,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_RespectsVerifyCardAndVerificationMerchantAccountIdOutsideTheNonce()
         {
             var nonce = TestHelper.GetNonceForNewPaymentMethod(
@@ -342,6 +389,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_RespectsFailOnDuplicatePaymentMethodWhenIncludedOutsideNonce()
         {
             var customer = gateway.Customer.Create().Target;
@@ -378,6 +426,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_AllowsPassingBillingAddressOutsideTheNonce()
         {
             var customer = gateway.Customer.Create().Target;
@@ -418,6 +467,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverridesTheBillingAddressInTheNonce()
         {
             var customer = gateway.Customer.Create().Target;
@@ -457,6 +507,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_DoesNotOverrideTheBillingAddressForVaultedCreditCards()
         {
             var customer = gateway.Customer.Create().Target;
@@ -497,6 +548,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_AllowsPassingBillingAddressIdOutsideTheNonce()
         {
             var customer = gateway.Customer.Create().Target;
@@ -545,6 +597,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_IgnoresPassedBillingAddressParamsForPayPal()
         {
             var nonce = TestHelper.GetNonceForPayPalAccount(
@@ -575,6 +628,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_IgnoresPassedBillingAddressIdForPayPalAccount()
         {
             var nonce = TestHelper.GetNonceForPayPalAccount(
@@ -602,6 +656,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Delete_DeletesCreditCard()
         {
             var request = new PaymentMethodRequest
@@ -609,13 +664,16 @@ namespace Braintree.Tests
                 CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
                 PaymentMethodNonce = Nonce.Transactable
             };
-            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
-            Assert.IsTrue(result.IsSuccess());
+            Result<PaymentMethod> createResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(createResult.IsSuccess());
 
-            gateway.PaymentMethod.Delete(result.Target.Token);
+            Result<PaymentMethod> deleteResult = gateway.PaymentMethod.Delete(createResult.Target.Token);
+
+            Assert.IsTrue(deleteResult.IsSuccess());
         }
 
         [Test]
+        [Category("Integration")]
         public void Delete_DeletesPayPalAccount()
         {
             var request = new PaymentMethodRequest
@@ -623,13 +681,50 @@ namespace Braintree.Tests
                 CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
                 PaymentMethodNonce = Nonce.PayPalFuturePayment
             };
-            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
-            Assert.IsTrue(result.IsSuccess());
+            Result<PaymentMethod> createResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(createResult.IsSuccess());
 
-            gateway.PaymentMethod.Delete(result.Target.Token);
+            Result<PaymentMethod> deleteResult = gateway.PaymentMethod.Delete(createResult.Target.Token);
+
+            Assert.IsTrue(deleteResult.IsSuccess());
         }
 
         [Test]
+        [Category("Integration")]
+        public void Delete_DeletesAndroidPayAccount()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.AndroidPay
+            };
+            Result<PaymentMethod> createResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(createResult.IsSuccess());
+
+            Result<PaymentMethod> deleteResult = gateway.PaymentMethod.Delete(createResult.Target.Token);
+
+            Assert.IsTrue(deleteResult.IsSuccess());
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Delete_DeletesApplePayAccount()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.ApplePayVisa
+            };
+            Result<PaymentMethod> createResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(createResult.IsSuccess());
+
+            Result<PaymentMethod> deleteResult = gateway.PaymentMethod.Delete(createResult.Target.Token);
+
+            Assert.IsTrue(deleteResult.IsSuccess());
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Delete_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
             try
@@ -641,6 +736,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsCreditCard()
         {
             var request = new PaymentMethodRequest
@@ -656,6 +752,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsPayPalAccount()
         {
             var request = new PaymentMethodRequest
@@ -671,6 +768,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsApplePayCard()
         {
             var request = new PaymentMethodRequest
@@ -687,6 +785,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsAndroidPayCard()
         {
             var request = new PaymentMethodRequest
@@ -703,6 +802,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsAbstractPaymentMethod()
         {
             var request = new PaymentMethodRequest
@@ -718,6 +818,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Find_RaisesNotFoundErrorWhenTokenIsBlank()
         {
             try
@@ -729,6 +830,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
             try
@@ -740,6 +842,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesTheCreditCard()
         {
             var MASTERCARD = SandboxValues.CreditCardNumber.MASTER_CARD;
@@ -774,6 +877,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CreatesNewBillingAddressByDefault()
         {
             var customer = gateway.Customer.Create().Target;
@@ -808,6 +912,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesTheBillingAddressIfOptionIsSpecified()
         {
             var customer = gateway.Customer.Create().Target;
@@ -846,6 +951,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesCountryViaCodes()
         {
             var customer = gateway.Customer.Create().Target;
@@ -886,6 +992,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CanPassExpirationMonthAndExpirationYear()
         {
             var customer = gateway.Customer.Create().Target;
@@ -914,6 +1021,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_VerifiesTheUpdateIfOptionsVerifyCardIsTrue()
         {
             var customer = gateway.Customer.Create().Target;
@@ -947,6 +1055,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CanUpdateTheBillingAddress()
         {
             var customer = gateway.Customer.Create().Target;
@@ -1006,6 +1115,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_ReturnsAnErrorResponseIfInvalid()
         {
             var customer = gateway.Customer.Create().Target;
@@ -1032,6 +1142,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CanUpdateTheDefault()
         {
             var customer = gateway.Customer.Create().Target;
@@ -1063,6 +1174,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesPayPalAccountToken()
         {
             var customer = gateway.Customer.Create().Target;
@@ -1100,6 +1212,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CanMakePayPalAccountsTheDefaultPaymentMethod()
         {
             var customer = gateway.Customer.Create().Target;
@@ -1132,6 +1245,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_ReturnsAnErrorIfTokenForAccountIsUsedToAttemptUpdate()
         {
             var customer = gateway.Customer.Create().Target;

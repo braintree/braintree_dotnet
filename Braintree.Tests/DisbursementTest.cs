@@ -59,6 +59,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Transactions()
         {
           Disbursement disbursement = new Disbursement(attributes, gateway);

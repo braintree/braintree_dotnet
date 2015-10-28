@@ -58,45 +58,45 @@ namespace Braintree
     /// }
     /// </code>
     /// </example>
-    public class BraintreeGateway
+    public class BraintreeGateway : IBraintreeGateway
     {
-        public Environment Environment
+        public virtual Environment Environment
         {
             get { return Configuration.Environment; }
             set { Configuration.Environment = value; }
         }
 
-        public string MerchantId
+        public virtual string MerchantId
         {
             get { return Configuration.MerchantId; }
             set { Configuration.MerchantId = value; }
         }
 
-        public string PublicKey
+        public virtual string PublicKey
         {
             get { return Configuration.PublicKey; }
             set { Configuration.PublicKey = value; }
         }
 
-        public string PrivateKey
+        public virtual string PrivateKey
         {
             get { return Configuration.PrivateKey; }
             set { Configuration.PrivateKey = value; }
         }
 
-        public string AccessToken
+        public virtual string AccessToken
         {
             get { return Configuration.AccessToken; }
             set { Configuration.AccessToken = value; }
         }
 
-        public string ClientId
+        public virtual string ClientId
         {
             get { return Configuration.ClientId; }
             set { Configuration.ClientId = value; }
         }
 
-        public string ClientSecret
+        public virtual string ClientSecret
         {
             get { return Configuration.ClientSecret; }
             set { Configuration.ClientSecret = value; }
@@ -129,92 +129,92 @@ namespace Braintree
             Configuration = configuration;
         }
 
-        public virtual ClientTokenGateway ClientToken
+        public virtual IClientTokenGateway ClientToken
         {
             get { return new ClientTokenGateway(this); }
         }
 
-        public virtual CustomerGateway Customer
+        public virtual ICustomerGateway Customer
         {
             get { return new CustomerGateway(this); }
         }
 
-        public virtual AddressGateway Address
+        public virtual IAddressGateway Address
         {
             get { return new AddressGateway(this); }
         }
 
-        public virtual AddOnGateway AddOn
+        public virtual IAddOnGateway AddOn
         {
             get { return new AddOnGateway(this); }
         }
 
-        public virtual CreditCardGateway CreditCard
+        public virtual ICreditCardGateway CreditCard
         {
             get { return new CreditCardGateway(this); }
         }
 
-        public virtual CreditCardVerificationGateway CreditCardVerification
+        public virtual ICreditCardVerificationGateway CreditCardVerification
         {
             get { return new CreditCardVerificationGateway(this); }
         }
 
-        public virtual DiscountGateway Discount
+        public virtual IDiscountGateway Discount
         {
             get { return new DiscountGateway(this); }
         }
 
-        public virtual MerchantAccountGateway MerchantAccount
+        public virtual IMerchantAccountGateway MerchantAccount
         {
             get { return new MerchantAccountGateway(this); }
         }
 
-        public virtual OAuthGateway OAuth
+        public virtual IOAuthGateway OAuth
         {
             get { return new OAuthGateway(this); }
         }
 
-        public virtual MerchantGateway Merchant
+        public virtual IMerchantGateway Merchant
         {
             get { return new MerchantGateway(this); }
         }
 
-        public virtual PaymentMethodGateway PaymentMethod
+        public virtual IPaymentMethodGateway PaymentMethod
         {
             get { return new PaymentMethodGateway(this); }
         }
 
-        public virtual PayPalAccountGateway PayPalAccount
+        public virtual IPayPalAccountGateway PayPalAccount
         {
             get { return new PayPalAccountGateway(this); }
         }
 
-        public virtual PlanGateway Plan
+        public virtual IPlanGateway Plan
         {
             get { return new PlanGateway(this); }
         }
 
-        public virtual SettlementBatchSummaryGateway SettlementBatchSummary
+        public virtual ISettlementBatchSummaryGateway SettlementBatchSummary
         {
             get { return new SettlementBatchSummaryGateway(this); }
         }
 
-        public virtual SubscriptionGateway Subscription
+        public virtual ISubscriptionGateway Subscription
         {
             get { return new SubscriptionGateway(this); }
         }
 
-        public virtual TestTransactionGateway TestTransaction
+        public virtual ITestTransactionGateway TestTransaction
         {
             get { return new TestTransactionGateway(this); }
         }
 
-        public virtual TransactionGateway Transaction
+        public virtual ITransactionGateway Transaction
         {
             get { return new TransactionGateway(this); }
         }
 
-        public virtual TransparentRedirectGateway TransparentRedirect
+        public virtual ITransparentRedirectGateway TransparentRedirect
         {
             get { return new TransparentRedirectGateway(this); }
         }
@@ -224,17 +224,17 @@ namespace Braintree
             return TrUtil.BuildTrData(trData, redirectURL, new BraintreeService(Configuration));
         }
 
-        public virtual WebhookNotificationGateway WebhookNotification
+        public virtual IWebhookNotificationGateway WebhookNotification
         {
             get { return new WebhookNotificationGateway(this); }
         }
 
-        public virtual WebhookTestingGateway WebhookTesting
+        public virtual IWebhookTestingGateway WebhookTesting
         {
             get { return new WebhookTestingGateway(this); }
         }
 
-        public virtual PaymentMethodNonceGateway PaymentMethodNonce
+        public virtual IPaymentMethodNonceGateway PaymentMethodNonce
         {
             get { return new PaymentMethodNonceGateway(this); }
         }

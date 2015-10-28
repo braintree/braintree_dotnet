@@ -10,6 +10,7 @@ namespace Braintree.Tests
     public class QueryStringTest
     {
         [Test]
+        [Category("Unit")]
         public void Append()
         {
             string actual = new QueryString().Append("foo", "f").Append("bar", "b").ToString();
@@ -17,6 +18,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void AppendEmptyStringOrNulls()
         {
             string actual = new QueryString().
@@ -30,6 +32,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void AppendOtherObjectsWithCanBeConvertedToStrings()
         {
             string actual = new QueryString().
@@ -40,6 +43,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void AppendWithRequest()
         {
             Request request = new CreditCardRequest
@@ -53,6 +57,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void AppendWithNestedRequest()
         {
             Request request = new CreditCardRequest

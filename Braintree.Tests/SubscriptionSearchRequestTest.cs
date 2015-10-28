@@ -9,6 +9,7 @@ namespace Braintree.Tests
     public class SubscriptionSearchRequestTest
     {
         [Test]
+        [Category("Unit")]
         public void ToXml_BillingCyclesRemainingIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().BillingCyclesRemaining.Is(1);
@@ -17,6 +18,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_BillingCyclesRemainingBetween()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().BillingCyclesRemaining.Between(1, 2);
@@ -25,6 +27,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_BillingCyclesRemainingGreaterThanOrEqualTo()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().BillingCyclesRemaining.GreaterThanOrEqualTo(12.34);
@@ -33,6 +36,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_BillingCyclesRemainingLessThanOrEqualTo()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().BillingCyclesRemaining.LessThanOrEqualTo(12.34);
@@ -41,6 +45,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_IdIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Id.Is("30");
@@ -49,6 +54,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_IdIsNot()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Id.IsNot("30");
@@ -57,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_IdStartsWith()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Id.StartsWith("30");
@@ -65,6 +72,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_IdEndsWith()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Id.EndsWith("30");
@@ -73,6 +81,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_IdContains()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Id.Contains("30");
@@ -81,6 +90,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_MerchantAccountIdIncludedIn()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().MerchantAccountId.IncludedIn("abc", "def");
@@ -89,6 +99,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_MerchantAccountIdIncludedInWithExplicitArray()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().MerchantAccountId.IncludedIn(new string[] {"abc", "def"});
@@ -97,6 +108,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_MerchantAccountIdIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().MerchantAccountId.Is("abc");
@@ -105,6 +117,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PlanIdIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.Is("abc");
@@ -113,6 +126,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PlanIdIsNot()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.IsNot("30");
@@ -121,6 +135,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PlanIdStartsWith()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.StartsWith("30");
@@ -129,6 +144,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PlanIdEndsWith()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.EndsWith("30");
@@ -137,6 +153,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PlanIdContains()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.Contains("30");
@@ -145,6 +162,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PlanIdIncludedIn()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().PlanId.IncludedIn("abc", "def");
@@ -153,6 +171,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_DaysPastDueIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.Is("30");
@@ -161,6 +180,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_DaysPastDueBetween()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.Between(2, 3);
@@ -169,6 +189,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_DaysPastDueGreaterThanOrEqualTo()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.GreaterThanOrEqualTo(3);
@@ -177,6 +198,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_DaysPastDueLessThanOrEqualTo()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.LessThanOrEqualTo(4);
@@ -185,6 +207,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PriceIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Price.Is(1M);
@@ -193,6 +216,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PriceBetween()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Price.Between(1M, 2M);
@@ -201,6 +225,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PriceGreaterThanOrEqualTo()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Price.GreaterThanOrEqualTo(12.34M);
@@ -209,6 +234,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXml_PriceLessThanOrEqualTo()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().Price.LessThanOrEqualTo(12.34M);

@@ -1,4 +1,4 @@
-task :default => :test
+task :default => "test:all"
 
 task :clean do
   sh "rm -rf Braintree/bin"
@@ -12,9 +12,21 @@ task :compile => :clean do
 end
 
 desc "run tests"
-task :test => [:ensure_boolean_type, :compile] do
-  sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+namespace :test do
+  task :unit => [:ensure_boolean_type, :compile] do
+    sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -exclude=Integration Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+  end
+
+  task :integration => [:ensure_boolean_type, :compile] do
+    sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -exclude=Unit Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+  end
+
+  task :all => [:ensure_boolean_type, :compile] do
+    sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+  end
 end
+
+task :test => "test:all"
 
 desc "run single test file (rake test_focus[Braintree.Tests.ClientTokenTestIT.Generate_GatewayRespectsMakeDefault], for example"
 task :test_focus, [:test_name] => [:ensure_boolean_type, :compile] do |t, args|

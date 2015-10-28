@@ -10,6 +10,7 @@ namespace Braintree.Tests
     public class RequestTest
     {
         [Test]
+        [Category("Unit")]
         public void ToXML_EnsuresUSLocaleForDecimals()
         {
             System.Globalization.CultureInfo existingCulture = System.Globalization.CultureInfo.CurrentCulture;
@@ -50,6 +51,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXML_EscapesGeneratedXMLForString()
         {
             TransactionRequest request = new TransactionRequest
@@ -61,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXML_EscapesGeneratedXMLForNestedSearchCriteria()
         {
             TransactionRequest request = new TransactionRequest
@@ -75,6 +78,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXML_EscapesGeneratedXMLForArrayElements()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
@@ -84,6 +88,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXML_EscapesGeneratedXMLForSearchCriteria()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
@@ -93,6 +98,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXML_DefaultsNullCriteriaToEmptyString()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().
@@ -102,6 +108,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ToXML_EscapesGeneratedXMLForCustomFields()
         {
             TransactionRequest request = new TransactionRequest

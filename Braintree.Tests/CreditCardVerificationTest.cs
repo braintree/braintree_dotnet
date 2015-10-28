@@ -25,6 +25,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConstructFromResponse()
         {
             StringBuilder builder = new StringBuilder();
@@ -58,6 +59,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ConstructFromResponseWithNoVerification()
         {
             StringBuilder builder = new StringBuilder();
@@ -82,6 +84,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnMultipleValueFields()
         {
             var createRequest = new CustomerRequest
@@ -127,6 +130,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void CardTypeIndicators()
         {
             string name = Guid.NewGuid().ToString("n");
@@ -163,6 +167,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnTextFields()
         {
             var createRequest = new CustomerRequest

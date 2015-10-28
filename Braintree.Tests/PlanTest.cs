@@ -24,6 +24,7 @@ namespace Braintree.Tests
             service = new BraintreeService(gateway.Configuration); }
 
         [Test]
+        [Category("Integration")]
         public void All_ReturnsAllPlans()
         {
             string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
@@ -62,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void All_ReturnPlansWithAddOnsAndDiscounts()
         {
             string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());

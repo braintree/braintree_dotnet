@@ -41,6 +41,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SubscriptionWithoutTrial()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -83,6 +84,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SubscriptionWithPaymentMethodNonce()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -101,6 +103,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SubscriptionWithZeroDollarPrice()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -122,6 +125,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SubscriptionReturnsATransactionWithSubscriptionBillingPeriod()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -142,6 +146,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_ReturnsDeclinedTransaction()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -159,6 +164,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SubscriptionWithTrial()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -191,6 +197,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverridePlanAddTrial()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -214,6 +221,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverridePlanRemoveTrial()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -232,6 +240,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverridePlanPrice()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -250,6 +259,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverrideNumberOfBillingCycles()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -276,6 +286,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverrideNumberOfBillingCyclesToNeverExpire()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -293,6 +304,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_InheritBillingDayOfMonth()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -309,6 +321,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverrideBillingDayOfMonth()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -326,6 +339,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_OverrideBillingDayOfMonthWithStartImmediately()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -346,6 +360,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SetFirstBillingDate()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -364,6 +379,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SetFirstBillingDateInThePast()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -381,6 +397,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SetId()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -401,6 +418,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_SetMerchantAccountId()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -419,6 +437,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_HasTransactionOnCreateWithNoTrial()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -441,6 +460,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_HasNoTransactionOnCreateWithATrial()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -459,6 +479,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_InheritsNoAddOnsAndDiscountsWhenOptionIsPassed()
         {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
@@ -481,6 +502,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_InheritsAddOnsAndDiscountsFromPlan() {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
             SubscriptionRequest request = new SubscriptionRequest
@@ -529,6 +551,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CanOverrideInheritedAddOnsAndDiscountsFromPlan()
         {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
@@ -616,6 +639,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CanRemoveInheritedAddOnsAndDiscounts()
         {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
@@ -644,6 +668,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_CanAddAddOnsAndDiscounts()
         {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
@@ -705,6 +730,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithBadAddOnParamsCorrectlyParsesValidationErrors()
         {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
@@ -741,6 +767,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find()
         {
             TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
@@ -759,6 +786,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             try {
@@ -768,6 +796,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnBillingCyclesRemainingIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
@@ -800,6 +829,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnDaysPastDueBetween()
         {
             SubscriptionRequest subscriptionRequest = new SubscriptionRequest
@@ -823,6 +853,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnIdIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
@@ -855,6 +886,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnInTrialPeriodIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
@@ -890,6 +922,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnMerchantAccountIdIs()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
@@ -922,6 +955,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnMerchantAccountIdWithBogusMerchantId()
         {
             Random random = new Random();
@@ -966,6 +1000,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnNextBillingDate()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -996,6 +1031,7 @@ namespace Braintree.Tests
             Assert.IsFalse(TestHelper.IncludesSubscription(collection, trialSubscription));
         }
         [Test]
+        [Category("Integration")]
         public void Search_OnPlanIdIs()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1028,6 +1064,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPrice()
         {
             SubscriptionRequest request10 = new SubscriptionRequest
@@ -1067,6 +1104,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPlanIdIsWithDelegate()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1098,6 +1136,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPlanIdIsNot()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1130,6 +1169,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnTransactionId()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1160,6 +1200,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPlanIdStartsWith()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1192,6 +1233,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPlanIdEndsWith()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1224,6 +1266,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPlanIdContains()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1256,6 +1299,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnPlanIdIncludedIn()
         {
             SubscriptionRequest request1 = new SubscriptionRequest
@@ -1295,6 +1339,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnStatusIn()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1327,6 +1372,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnStatusExpired()
         {
             ResourceCollection<Subscription> collection = gateway.Subscription.Search(delegate(SubscriptionSearchRequest search) {
@@ -1340,6 +1386,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Search_OnStatusInMultipleValues()
         {
             TestPlan triallessPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1372,6 +1419,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_Id()
         {
             string oldId = "old-id-" + new Random().Next(1000000);
@@ -1400,6 +1448,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void UpdatePlan()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1422,6 +1471,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_PaymentMethodToken()
         {
             Subscription subscription = gateway.Subscription.Create(new SubscriptionRequest
@@ -1450,6 +1500,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_PaymentMethodWithPaymentMethodNonce()
         {
             Subscription subscription = gateway.Subscription.Create(new SubscriptionRequest
@@ -1471,6 +1522,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void UpdateMerchantAccountId()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1494,6 +1546,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_UpdatesAddOnsAndDiscounts()
         {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
@@ -1589,6 +1642,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_CanReplaceAllAddOnsAndDiscounts()
         {
             TestPlan plan = PlanFixture.ADD_ON_DISCOUNT_PLAN;
@@ -1639,6 +1693,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void IncreasePriceAndTransaction()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1662,6 +1717,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_ProratesChargesWhenSpecified()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1693,6 +1749,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_DoesNotProrateChargesWhenSpecifiedToNotProrate()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1724,6 +1781,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_DoesNotUpdateWhenRevertTrue()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1758,6 +1816,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_DoesUpdateWhenRevertFalse()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1792,6 +1851,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_DontIncreasePriceAndDontAddTransaction()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1815,6 +1875,7 @@ namespace Braintree.Tests
 
 
         [Test]
+        [Category("Integration")]
         public void Create_WithBadPlanId()
         {
             SubscriptionRequest createRequest = new SubscriptionRequest
@@ -1830,6 +1891,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithBadPaymentMethod()
         {
             SubscriptionRequest createRequest = new SubscriptionRequest
@@ -1845,6 +1907,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithValidationErrors()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1863,6 +1926,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_WithValidationErrors() {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
             SubscriptionRequest request = new SubscriptionRequest
@@ -1885,6 +1949,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_GetParamsOnError()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1906,6 +1971,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithDescriptor()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1935,6 +2001,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Update_WithDescriptor()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -1971,6 +2038,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithDescriptorValidation()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -2005,6 +2073,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Create_WithPayPalAccount()
         {
             var customerRequest = new CustomerRequest
@@ -2026,6 +2095,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Cancel()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -2044,6 +2114,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void RetryCharge_WithoutAmount()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -2067,6 +2138,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void RetryCharge_WithAmount()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -2090,6 +2162,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void ParsesUSCultureProperlyForAppsInOtherCultures()
         {
             System.Globalization.CultureInfo existingCulture = System.Globalization.CultureInfo.CurrentCulture;

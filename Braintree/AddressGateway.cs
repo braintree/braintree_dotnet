@@ -11,10 +11,10 @@ namespace Braintree
     /// <summary>
     /// Provides operations for creating, finding, updating, and deleting addresses in the vault
     /// </summary>
-    public class AddressGateway
+    public class AddressGateway : IAddressGateway
     {
-        private BraintreeService Service;
-        private BraintreeGateway Gateway;
+        private readonly BraintreeService Service;
+        private readonly BraintreeGateway Gateway;
 
         protected internal AddressGateway(BraintreeGateway gateway)
         {
@@ -30,9 +30,11 @@ namespace Braintree
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
 
-        public virtual void Delete(string customerId, string id)
+        public virtual Result<Address> Delete(string customerId, string id)
         {
-            Service.Delete(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
+            XmlNode addressXML = Service.Delete(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
+
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
 
         public virtual Address Find(string customerId, string id)

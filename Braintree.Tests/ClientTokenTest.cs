@@ -12,6 +12,7 @@ namespace Braintree.Tests
     public class ClientTokenTest
     {
         [Test]
+        [Category("Unit")]
         public void Generate_RaisesExceptionIfVerifyCardIsIncludedWithoutCustomerId()
         {
           BraintreeGateway gateway = new BraintreeGateway
@@ -39,6 +40,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Generate_RaisesExceptionIfMakeDefaultIsIncludedWithoutCustomerId()
         {
           BraintreeGateway gateway = new BraintreeGateway
@@ -66,6 +68,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Generate_RaisesExceptionIfFailOnDuplicatePaymentMethodIsIncludedWithoutCustomerId()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -97,6 +100,7 @@ namespace Braintree.Tests
     public class ClientTokenTestIT
     {
         [Test]
+        [Category("Integration")]
         public void Generate_GeneratedFingerprintIsAcceptedByGateway()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -121,6 +125,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_SupportsVersionOption()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -141,6 +146,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_DefaultsToVersionTwo()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -157,6 +163,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_GatewayRespectsVerifyCard()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -199,6 +206,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_GatewayRespectsFailOnDuplicatePaymentMethod()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -253,6 +261,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_GatewayRespectsMakeDefault()
         {
             BraintreeGateway gateway = new BraintreeGateway
@@ -310,6 +319,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
         public void Generate_ThrowExceptionWhenCustomerNotFound()
         {
             BraintreeGateway gateway = new BraintreeGateway

@@ -7,6 +7,7 @@ namespace Braintree.Tests
     public class Sha1HasherTest
     {
         [Test]
+        [Category("Unit")]
         public void HmacHash_ReturnsCorrectHash()
         {
             string actual = new Sha1Hasher().HmacHash("secretKey", "hello world");
@@ -14,6 +15,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Sha1Bytes_ReturnsCorrectHash()
         {
             byte[] bytes = new Sha1Hasher().Sha1Bytes("hello world");

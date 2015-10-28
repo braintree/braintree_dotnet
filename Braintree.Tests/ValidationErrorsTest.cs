@@ -11,6 +11,7 @@ namespace Braintree.Tests
     public class ValidationErrorsTest
     {
         [Test]
+        [Category("Unit")]
         public void OnField_WithValidationError()
         {
             ValidationErrors errors = new ValidationErrors();
@@ -20,6 +21,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void OnField_WorksWithAllCommonCasing()
         {
             ValidationError fieldError = new ValidationError("", "1", "");
@@ -32,6 +34,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void OnField_WithNonExistingField()
         {
             ValidationErrors errors = new ValidationErrors();
@@ -39,6 +42,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ForObject_WithNestedErrors()
         {
             ValidationErrors addressErrors = new ValidationErrors();
@@ -51,6 +55,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ForObject_WithNonExistingObject()
         {
             ValidationErrors errors = new ValidationErrors();
@@ -58,6 +63,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ForObject_WorksWithAllCommonCasing()
         {
             ValidationErrors nestedErrors = new ValidationErrors();
@@ -70,6 +76,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Size_WithShallowErrors()
         {
             ValidationErrors errors = new ValidationErrors();
@@ -79,6 +86,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void DeepCount_WithNestedErrors()
         {
             ValidationErrors addressErrors = new ValidationErrors();
@@ -97,6 +105,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_ParsesSimpleValidationErrors()
         {
             StringBuilder builder = new StringBuilder();
@@ -124,6 +133,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_ParsesMulitpleValidationErrorsOnOneObject()
         {
             StringBuilder builder = new StringBuilder();
@@ -157,6 +167,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_ParsesValidationErrorOnNestedObject()
         {
             StringBuilder builder = new StringBuilder();
@@ -187,6 +198,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_ParsesMultipleErrorsOnSingleField()
         {
             StringBuilder builder = new StringBuilder();
@@ -219,6 +231,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void Constructor_ParsesValidationErrorsAtMultipleLevels()
         {
             StringBuilder builder = new StringBuilder();
@@ -277,6 +290,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ByFormField_FlattensErrorsToFormElementNames()
         {
             var errors = new ValidationErrors();
@@ -306,6 +320,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ByFormField_UnderscoresNodes()
         {
             var errors = new ValidationErrors();
@@ -335,6 +350,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void All_ReturnsValidationErrorsAtOneLevel()
         {
             StringBuilder builder = new StringBuilder();
@@ -387,6 +403,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void DeepAll_ReturnsValidationErrorsAtEveryLevel()
         {
             StringBuilder builder = new StringBuilder();

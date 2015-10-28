@@ -3,10 +3,10 @@ using Braintree.Exceptions;
 
 namespace Braintree
 {
-    public class PaymentMethodGateway
+    public class PaymentMethodGateway : IPaymentMethodGateway
     {
-        private BraintreeService service;
-        private BraintreeGateway gateway;
+        private readonly BraintreeService service;
+        private readonly BraintreeGateway gateway;
 
         public PaymentMethodGateway(BraintreeGateway gateway)
         {
@@ -34,6 +34,10 @@ namespace Braintree
             else if (response.GetName() == "android-pay-card")
             {
                 return new ResultImpl<AndroidPayCard>(response, gateway);
+            }
+            else if (response.GetName() == "amex-express-checkout-card")
+            {
+                return new ResultImpl<AmexExpressCheckoutCard>(response, gateway);
             }
             else if (response.GetName() == "coinbase-account")
             {
@@ -71,9 +75,10 @@ namespace Braintree
             }
         }
 
-        public void Delete(string token)
+        public Result<PaymentMethod> Delete(string token)
         {
-            service.Delete(service.MerchantPath() + "/payment_methods/any/" + token);
+            var response = new NodeWrapper(service.Delete(service.MerchantPath() + "/payment_methods/any/" + token));
+            return new ResultImpl<UnknownPaymentMethod>(response, gateway);
         }
 
         public PaymentMethod Find(string token)

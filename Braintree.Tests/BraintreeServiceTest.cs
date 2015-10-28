@@ -12,6 +12,7 @@ namespace Braintree.Tests
     public class BraintreeServiceTest
     {
         [Test]
+        [Category("Unit")]
         public void SandboxSSLCertificateSuccessful()
         {
             try {
@@ -23,6 +24,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ProductionSSLCertificateSuccessful()
         {
             ServicePointManager.ServerCertificateValidationCallback = TrustAllCertificates;
@@ -35,6 +37,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Unit")]
         public void ThrowExceptionIfErrorStatusCodeIsUpgradeRequired()
         {
             try {

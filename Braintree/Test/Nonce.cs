@@ -16,6 +16,7 @@ namespace Braintree.Test
         public const string AndroidPayVisa = "fake-android-pay-visa-nonce";
         public const string AndroidPayMasterCard = "fake-android-pay-mastercard-nonce";
         public const string AndroidPayAmEx = "fake-android-pay-amex-nonce";
+        public const string AmexExpressCheckout = "fake-amex-express-checkout-nonce";
         public const string AbstractTransactable = "fake-abstract-transactable-nonce";
         public const string Europe = "fake-europe-bank-account-nonce";
         public const string Coinbase = "fake-coinbase-nonce";
