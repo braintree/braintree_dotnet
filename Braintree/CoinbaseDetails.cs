@@ -4,10 +4,10 @@ namespace Braintree
 {
     public class CoinbaseDetails
     {
-        public string UserId { get; protected set; }
-        public string UserEmail { get; protected set; }
-        public string UserName { get; protected set; }
-        public string Token { get; protected set; }
+        public virtual string UserId { get; protected set; }
+        public virtual string UserEmail { get; protected set; }
+        public virtual string UserName { get; protected set; }
+        public virtual string Token { get; protected set; }
 
         protected internal CoinbaseDetails(NodeWrapper node)
         {
@@ -17,5 +17,7 @@ namespace Braintree
             Token = node.GetString("token");
         }
 
+        [Obsolete("Mock Use Only")]
+        protected internal CoinbaseDetails() { }
     }
 }

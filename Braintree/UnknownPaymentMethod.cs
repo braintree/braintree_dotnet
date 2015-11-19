@@ -4,10 +4,10 @@ namespace Braintree
 {
     public class UnknownPaymentMethod : PaymentMethod
     {
-        public string Token { get; protected set; }
-        public bool? IsDefault { get; protected set; }
-        public string ImageUrl { get; protected set; }
-        public string CustomerId { get; protected set; }
+        public virtual string Token { get; protected set; }
+        public virtual bool? IsDefault { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual string CustomerId { get; protected set; }
 
         public UnknownPaymentMethod(NodeWrapper node)
         {

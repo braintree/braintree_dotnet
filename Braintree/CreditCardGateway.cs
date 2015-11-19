@@ -15,9 +15,9 @@ namespace Braintree
     public class CreditCardGateway : ICreditCardGateway
     {
         private readonly BraintreeService service;
-        private readonly BraintreeGateway gateway;
+        private readonly IBraintreeGateway gateway;
 
-        protected internal CreditCardGateway(BraintreeGateway gateway)
+        protected internal CreditCardGateway(IBraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;

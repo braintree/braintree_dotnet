@@ -6,12 +6,12 @@ namespace Braintree
 {
     public class SubscriptionStatusEvent
     {
-        public decimal? Price { get; protected set; }
-        public decimal? Balance { get; protected set; }
-        public SubscriptionStatus Status { get; protected set; }
-        public DateTime? Timestamp { get; protected set; }
-        public SubscriptionSource Source { get; protected set; }
-        public string User { get; protected set; }
+        public virtual decimal? Price { get; protected set; }
+        public virtual decimal? Balance { get; protected set; }
+        public virtual SubscriptionStatus Status { get; protected set; }
+        public virtual DateTime? Timestamp { get; protected set; }
+        public virtual SubscriptionSource Source { get; protected set; }
+        public virtual string User { get; protected set; }
 
         public SubscriptionStatusEvent(NodeWrapper node)
         {
@@ -24,5 +24,8 @@ namespace Braintree
             Source = (SubscriptionSource)CollectionUtil.Find(SubscriptionSource.ALL, node.GetString("subscription-source"), SubscriptionSource.UNRECOGNIZED);
             User = node.GetString("user");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal SubscriptionStatusEvent() { }
     }
 }

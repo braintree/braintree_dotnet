@@ -4,11 +4,11 @@ namespace Braintree
 {
     public class PartnerMerchant
     {
-        public string MerchantPublicId { get; protected set; }
-        public string PublicKey { get; protected set; }
-        public string PrivateKey { get; protected set; }
-        public string PartnerMerchantId { get; protected set; }
-        public string ClientSideEncryptionKey { get; protected set; }
+        public virtual string MerchantPublicId { get; protected set; }
+        public virtual string PublicKey { get; protected set; }
+        public virtual string PrivateKey { get; protected set; }
+        public virtual string PartnerMerchantId { get; protected set; }
+        public virtual string ClientSideEncryptionKey { get; protected set; }
 
         protected internal PartnerMerchant(NodeWrapper node)
         {
@@ -18,6 +18,9 @@ namespace Braintree
             PartnerMerchantId = node.GetString("partner-merchant-id");
             ClientSideEncryptionKey = node.GetString("client-side-encryption-key");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal PartnerMerchant() { }
     }
 }
 

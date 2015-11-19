@@ -88,38 +88,38 @@ namespace Braintree
     /// </example>
     public class Subscription
     {
-        public decimal? Balance { get; protected set; }
-        public List<AddOn> AddOns { get; protected set; }
-        public int? BillingDayOfMonth { get; protected set; }
-        public DateTime? BillingPeriodEndDate { get; protected set; }
-        public DateTime? BillingPeriodStartDate { get; protected set; }
-        public int? CurrentBillingCycle { get; protected set; }
-        public int? DaysPastDue { get; protected set; }
-        public Descriptor Descriptor { get; protected set; }
-        public List<Discount> Discounts { get; protected set; }
-        public int? FailureCount { get; protected set; }
-        public DateTime? FirstBillingDate { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
-        public bool? HasTrialPeriod { get; protected set; }
-        public string Id { get; protected set; }
-        public bool? NeverExpires { get; protected set; }
-        public decimal? NextBillAmount { get; protected set; }
-        public DateTime? NextBillingDate { get; protected set; }
-        public decimal? NextBillingPeriodAmount { get; protected set; }
-        public int? NumberOfBillingCycles { get; protected set; }
-        public DateTime? PaidThroughDate { get; protected set; }
-        public string PaymentMethodToken { get; protected set; }
-        public string PlanId { get; protected set; }
-        public decimal? Price { get; protected set; }
-        public SubscriptionStatusEvent[] StatusHistory { get; protected set; }
-        public SubscriptionStatus Status { get; protected set; }
-        public List<Transaction> Transactions { get; protected set; }
-        public int? TrialDuration { get; protected set; }
-        public SubscriptionDurationUnit TrialDurationUnit { get; protected set; }
-        public string MerchantAccountId { get; protected set; }
+        public virtual decimal? Balance { get; protected set; }
+        public virtual List<AddOn> AddOns { get; protected set; }
+        public virtual int? BillingDayOfMonth { get; protected set; }
+        public virtual DateTime? BillingPeriodEndDate { get; protected set; }
+        public virtual DateTime? BillingPeriodStartDate { get; protected set; }
+        public virtual int? CurrentBillingCycle { get; protected set; }
+        public virtual int? DaysPastDue { get; protected set; }
+        public virtual Descriptor Descriptor { get; protected set; }
+        public virtual List<Discount> Discounts { get; protected set; }
+        public virtual int? FailureCount { get; protected set; }
+        public virtual DateTime? FirstBillingDate { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual bool? HasTrialPeriod { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual bool? NeverExpires { get; protected set; }
+        public virtual decimal? NextBillAmount { get; protected set; }
+        public virtual DateTime? NextBillingDate { get; protected set; }
+        public virtual decimal? NextBillingPeriodAmount { get; protected set; }
+        public virtual int? NumberOfBillingCycles { get; protected set; }
+        public virtual DateTime? PaidThroughDate { get; protected set; }
+        public virtual string PaymentMethodToken { get; protected set; }
+        public virtual string PlanId { get; protected set; }
+        public virtual decimal? Price { get; protected set; }
+        public virtual SubscriptionStatusEvent[] StatusHistory { get; protected set; }
+        public virtual SubscriptionStatus Status { get; protected set; }
+        public virtual List<Transaction> Transactions { get; protected set; }
+        public virtual int? TrialDuration { get; protected set; }
+        public virtual SubscriptionDurationUnit TrialDurationUnit { get; protected set; }
+        public virtual string MerchantAccountId { get; protected set; }
 
-        public Subscription(NodeWrapper node, BraintreeGateway gateway)
+        public Subscription(NodeWrapper node, IBraintreeGateway gateway)
         {
             Balance = node.GetDecimal("balance");
             BillingDayOfMonth = node.GetInteger("billing-day-of-month");
@@ -170,5 +170,7 @@ namespace Braintree
                 Transactions.Add(new Transaction(transactionResponse, gateway));
             }
         }
+
+        protected internal Subscription() { }
     }
 }

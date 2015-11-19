@@ -13,9 +13,9 @@ namespace Braintree
     public class CustomerGateway : ICustomerGateway
     {
         private readonly BraintreeService service;
-        private readonly BraintreeGateway gateway;
+        private readonly IBraintreeGateway gateway;
 
-        protected internal CustomerGateway(BraintreeGateway gateway)
+        protected internal CustomerGateway(IBraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;

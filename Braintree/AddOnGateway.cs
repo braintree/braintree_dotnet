@@ -8,7 +8,7 @@ namespace Braintree
     {
         private readonly BraintreeService Service;
 
-        public AddOnGateway(BraintreeGateway gateway)
+        public AddOnGateway(IBraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             Service = new BraintreeService(gateway.Configuration);

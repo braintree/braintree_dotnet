@@ -6,13 +6,13 @@ namespace Braintree
 {
     public class MerchantAccountIndividualDetails
     {
-        public string FirstName { get; protected set; }
-        public string LastName { get; protected set; }
-        public string Email { get; protected set; }
-        public string Phone { get; protected set; }
-        public string DateOfBirth { get; protected set; }
-        public string SsnLastFour { get; protected set; }
-        public Address Address { get; protected set; }
+        public virtual string FirstName { get; protected set; }
+        public virtual string LastName { get; protected set; }
+        public virtual string Email { get; protected set; }
+        public virtual string Phone { get; protected set; }
+        public virtual string DateOfBirth { get; protected set; }
+        public virtual string SsnLastFour { get; protected set; }
+        public virtual Address Address { get; protected set; }
 
         protected internal MerchantAccountIndividualDetails(NodeWrapper node)
         {
@@ -24,5 +24,8 @@ namespace Braintree
             SsnLastFour = node.GetString("ssn-last-4");
             Address = new Address(node.GetNode("address"));
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal MerchantAccountIndividualDetails() { }
     }
 }

@@ -24,22 +24,22 @@ namespace Braintree
 
     public class CreditCardVerification
     {
-        public string AvsErrorResponseCode { get; protected set; }
-        public string AvsPostalCodeResponseCode { get; protected set; }
-        public string AvsStreetAddressResponseCode { get; protected set; }
-        public string CvvResponseCode { get; protected set; }
-        public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
-        public string ProcessorResponseCode { get; protected set; }
-        public string ProcessorResponseText { get; protected set; }
-        public string MerchantAccountId { get; protected set; }
-        public VerificationStatus Status { get; protected set; }
-        public string Id { get; protected set; }
-        public Address BillingAddress { get; protected set; }
-        public CreditCard CreditCard { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public RiskData RiskData { get; protected set; }
+        public virtual string AvsErrorResponseCode { get; protected set; }
+        public virtual string AvsPostalCodeResponseCode { get; protected set; }
+        public virtual string AvsStreetAddressResponseCode { get; protected set; }
+        public virtual string CvvResponseCode { get; protected set; }
+        public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
+        public virtual string ProcessorResponseCode { get; protected set; }
+        public virtual string ProcessorResponseText { get; protected set; }
+        public virtual string MerchantAccountId { get; protected set; }
+        public virtual VerificationStatus Status { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual Address BillingAddress { get; protected set; }
+        public virtual CreditCard CreditCard { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual RiskData RiskData { get; protected set; }
 
-        public CreditCardVerification(NodeWrapper node, BraintreeGateway gateway)
+        public CreditCardVerification(NodeWrapper node, IBraintreeGateway gateway)
         {
             if (node == null) return;
 
@@ -66,5 +66,8 @@ namespace Braintree
                 RiskData = new RiskData(riskDataNode);
             }
         }
+        
+        [Obsolete("Mock Use Only")]
+        protected internal CreditCardVerification() { }
     }
 }

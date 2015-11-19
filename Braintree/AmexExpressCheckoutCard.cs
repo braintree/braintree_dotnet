@@ -4,22 +4,22 @@ namespace Braintree
 {
     public class AmexExpressCheckoutCard : PaymentMethod
     {
-        public string Token { get; protected set; }
-        public string CardType { get; protected set; }
-        public string Bin { get; protected set; }
-        public string ExpirationMonth { get; protected set; }
-        public string ExpirationYear { get; protected set; }
-        public string CardMemberNumber { get; protected set; }
-        public string CardMemberExpiryDate { get; protected set; }
-        public string ImageUrl { get; protected set; }
-        public string SourceDescription { get; protected set; }
-        public bool? IsDefault { get; protected set; }
-        public string CustomerId { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
-        public Subscription[] Subscriptions { get; protected set; }
+        public virtual string Token { get; protected set; }
+        public virtual string CardType { get; protected set; }
+        public virtual string Bin { get; protected set; }
+        public virtual string ExpirationMonth { get; protected set; }
+        public virtual string ExpirationYear { get; protected set; }
+        public virtual string CardMemberNumber { get; protected set; }
+        public virtual string CardMemberExpiryDate { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual string SourceDescription { get; protected set; }
+        public virtual bool? IsDefault { get; protected set; }
+        public virtual string CustomerId { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual Subscription[] Subscriptions { get; protected set; }
 
-        protected internal AmexExpressCheckoutCard(NodeWrapper node, BraintreeGateway gateway)
+        protected internal AmexExpressCheckoutCard(NodeWrapper node, IBraintreeGateway gateway)
         {
             Token = node.GetString("token");
             CardType = node.GetString("card-type");
@@ -43,5 +43,8 @@ namespace Braintree
                 Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal AmexExpressCheckoutCard() { }
     }
 }

@@ -17,7 +17,10 @@ namespace Braintree
             }
         }
 
-        public IList<IDictionary<string, string>> Records
+        [Obsolete("Mock Use Only")]
+        protected internal SettlementBatchSummary() { }
+
+        public virtual IList<IDictionary<string, string>> Records
         {
             get { return records; }
         }

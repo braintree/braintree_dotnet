@@ -4,11 +4,11 @@ namespace Braintree
 {
     public class PaymentMethodNonce
     {
-        public string Nonce { get; protected set; }
-        public string Type { get; protected set; }
-        public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
+        public virtual string Nonce { get; protected set; }
+        public virtual string Type { get; protected set; }
+        public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
 
-        protected internal PaymentMethodNonce(NodeWrapper node, BraintreeGateway gateway)
+        protected internal PaymentMethodNonce(NodeWrapper node, IBraintreeGateway gateway)
         {
             Nonce = node.GetString("nonce");
             Type = node.GetString("type");
@@ -18,5 +18,8 @@ namespace Braintree
                 ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
             }
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal PaymentMethodNonce() { }
     }
 }

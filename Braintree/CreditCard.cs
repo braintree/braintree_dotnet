@@ -133,35 +133,35 @@ namespace Braintree
         public static readonly string CountryOfIssuanceUnknown = "Unknown";
         public static readonly string IssuingBankUnknown = "Unknown";
 
-        public string Bin { get; protected set; }
-        public string CardholderName { get; protected set; }
-        public CreditCardCardType CardType { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public string CustomerId { get; protected set; }
-        public bool? IsDefault { get; protected set; }
-        public bool? IsVenmoSdk { get; protected set; }
-        public bool? IsExpired { get; protected set; }
-        public CreditCardCustomerLocation CustomerLocation { get; protected set; }
-        public string LastFour { get; protected set; }
-        public string UniqueNumberIdentifier { get; protected set; }
-        public Subscription[] Subscriptions { get; protected set; }
-        public string Token { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
-        public Address BillingAddress { get; protected set; }
-        public string ExpirationMonth { get; protected set; }
-        public string ExpirationYear { get; protected set; }
-        public CreditCardPrepaid Prepaid { get; protected set; }
-        public CreditCardPayroll Payroll { get; protected set; }
-        public CreditCardDebit Debit { get; protected set; }
-        public CreditCardCommercial Commercial { get; protected set; }
-        public CreditCardHealthcare Healthcare { get; protected set; }
-        public CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
-        public string ImageUrl { get; protected set; }
-        public CreditCardVerification Verification { get; protected set; }
+        public virtual string Bin { get; protected set; }
+        public virtual string CardholderName { get; protected set; }
+        public virtual CreditCardCardType CardType { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual string CustomerId { get; protected set; }
+        public virtual bool? IsDefault { get; protected set; }
+        public virtual bool? IsVenmoSdk { get; protected set; }
+        public virtual bool? IsExpired { get; protected set; }
+        public virtual CreditCardCustomerLocation CustomerLocation { get; protected set; }
+        public virtual string LastFour { get; protected set; }
+        public virtual string UniqueNumberIdentifier { get; protected set; }
+        public virtual Subscription[] Subscriptions { get; protected set; }
+        public virtual string Token { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual Address BillingAddress { get; protected set; }
+        public virtual string ExpirationMonth { get; protected set; }
+        public virtual string ExpirationYear { get; protected set; }
+        public virtual CreditCardPrepaid Prepaid { get; protected set; }
+        public virtual CreditCardPayroll Payroll { get; protected set; }
+        public virtual CreditCardDebit Debit { get; protected set; }
+        public virtual CreditCardCommercial Commercial { get; protected set; }
+        public virtual CreditCardHealthcare Healthcare { get; protected set; }
+        public virtual CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual CreditCardVerification Verification { get; protected set; }
 
         private string _CountryOfIssuance;
 
-        public string CountryOfIssuance
+        public virtual string CountryOfIssuance
         {
             get
             {
@@ -178,7 +178,7 @@ namespace Braintree
 
         private string _IssuingBank;
 
-        public string IssuingBank
+        public virtual string IssuingBank
         {
             get
             {
@@ -193,7 +193,7 @@ namespace Braintree
             }
         }
 
-        public string ExpirationDate
+        public virtual string ExpirationDate
         {
             get
             {
@@ -214,7 +214,7 @@ namespace Braintree
             }
         }
 
-        protected internal CreditCard(NodeWrapper node, BraintreeGateway gateway)
+        protected internal CreditCard(NodeWrapper node, IBraintreeGateway gateway)
         {
             if (node == null) return;
 
@@ -255,7 +255,10 @@ namespace Braintree
             Verification = FindLatestVerification(verificationNodes, gateway);
         }
 
-        private CreditCardVerification FindLatestVerification(List<NodeWrapper> verificationNodes, BraintreeGateway gateway) {
+        [Obsolete("Mock Use Only")]
+        protected internal CreditCard() { }
+
+        private CreditCardVerification FindLatestVerification(List<NodeWrapper> verificationNodes, IBraintreeGateway gateway) {
             if(verificationNodes.Count > 0)
             {
                 verificationNodes.Sort(delegate(NodeWrapper first, NodeWrapper second) {

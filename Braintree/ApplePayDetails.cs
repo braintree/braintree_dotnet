@@ -4,13 +4,13 @@ namespace Braintree
 {
     public class ApplePayDetails
     {
-        public string CardType { get; protected set; }
-        public string PaymentInstrumentName { get; protected set; }
-        public string SourceDescription { get; protected set; }
-        public string CardholderName { get; protected set; }
-        public string ExpirationMonth { get; protected set; }
-        public string ExpirationYear { get; protected set; }
-        public string Token { get; protected set; }
+        public virtual string CardType { get; protected set; }
+        public virtual string PaymentInstrumentName { get; protected set; }
+        public virtual string SourceDescription { get; protected set; }
+        public virtual string CardholderName { get; protected set; }
+        public virtual string ExpirationMonth { get; protected set; }
+        public virtual string ExpirationYear { get; protected set; }
+        public virtual string Token { get; protected set; }
 
         protected internal ApplePayDetails(NodeWrapper node)
         {
@@ -22,5 +22,8 @@ namespace Braintree
             ExpirationYear = node.GetString("expiration-year");
             Token = node.GetString("token");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal ApplePayDetails() { }
     }
 }

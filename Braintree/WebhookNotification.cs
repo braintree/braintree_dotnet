@@ -54,18 +54,18 @@ namespace Braintree
 
     public class WebhookNotification
     {
-        public WebhookKind Kind { get; protected set; }
-        public Subscription Subscription { get; protected set; }
-        public MerchantAccount MerchantAccount { get; protected set; }
-        public ValidationErrors Errors { get; protected set; }
-        public string Message { get; protected set; }
-        public DateTime? Timestamp { get; protected set; }
-        public Transaction Transaction { get; protected set; }
-        public Disbursement Disbursement { get; protected set; }
-        public Dispute Dispute { get; protected set; }
-        public PartnerMerchant PartnerMerchant { get; protected set; }
+        public virtual WebhookKind Kind { get; protected set; }
+        public virtual Subscription Subscription { get; protected set; }
+        public virtual MerchantAccount MerchantAccount { get; protected set; }
+        public virtual ValidationErrors Errors { get; protected set; }
+        public virtual string Message { get; protected set; }
+        public virtual DateTime? Timestamp { get; protected set; }
+        public virtual Transaction Transaction { get; protected set; }
+        public virtual Disbursement Disbursement { get; protected set; }
+        public virtual Dispute Dispute { get; protected set; }
+        public virtual PartnerMerchant PartnerMerchant { get; protected set; }
 
-        public WebhookNotification(NodeWrapper node, BraintreeGateway gateway)
+        public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
         {
             Timestamp = node.GetDateTime("timestamp");
             Kind = (WebhookKind)CollectionUtil.Find(WebhookKind.ALL, node.GetString("kind"), WebhookKind.UNRECOGNIZED);
@@ -108,5 +108,7 @@ namespace Braintree
                 Message = WrapperNode.GetString("message");
             }
         }
+
+        protected internal WebhookNotification() { }
     }
 }
