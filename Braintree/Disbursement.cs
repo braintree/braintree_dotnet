@@ -18,7 +18,6 @@ namespace Braintree
 
         private IBraintreeGateway gateway;
 
-
         public Disbursement(NodeWrapper node, IBraintreeGateway gateway)
         {
             Id = node.GetString("id");
