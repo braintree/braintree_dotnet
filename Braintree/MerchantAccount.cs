@@ -28,6 +28,7 @@ namespace Braintree
     public class MerchantAccount
     {
       public string Id { get; protected set; }
+      public string CurrencyIsoCode { get; protected set; }
       public MerchantAccountStatus Status { get; protected set; }
       public MerchantAccount MasterMerchantAccount { get; protected set; }
       public MerchantAccountIndividualDetails IndividualDetails { get; protected set; }
@@ -43,6 +44,7 @@ namespace Braintree
       protected internal MerchantAccount(NodeWrapper node)
       {
         Id = node.GetString("id");
+        CurrencyIsoCode = node.GetString("currency-iso-code");
         Status = (MerchantAccountStatus) CollectionUtil.Find(MerchantAccountStatus.ALL, node.GetString("status"), null);
         NodeWrapper masterNode = node.GetNode("master-merchant-account");
         if (masterNode != null)

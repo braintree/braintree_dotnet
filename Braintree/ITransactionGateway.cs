@@ -25,6 +25,7 @@ namespace Braintree
         Result<Transaction> SubmitForPartialSettlement(string id, decimal amount);
         Result<Transaction> SubmitForSettlement(string id);
         Result<Transaction> SubmitForSettlement(string id, decimal amount);
+        Result<Transaction> SubmitForSettlement(string id, TransactionRequest request);
         string TransparentRedirectURLForCreate();
         Result<Transaction> Void(string id);
     }

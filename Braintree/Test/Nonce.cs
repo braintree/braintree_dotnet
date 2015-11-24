@@ -20,6 +20,7 @@ namespace Braintree.Test
         public const string AbstractTransactable = "fake-abstract-transactable-nonce";
         public const string Europe = "fake-europe-bank-account-nonce";
         public const string Coinbase = "fake-coinbase-nonce";
+        public const string VenmoAccount = "fake-venmo-account-nonce";
         public const string TransactableVisa = "fake-valid-visa-nonce";
         public const string TransactableAmEx = "fake-valid-amex-nonce";
         public const string TransactableMasterCard = "fake-valid-mastercard-nonce";

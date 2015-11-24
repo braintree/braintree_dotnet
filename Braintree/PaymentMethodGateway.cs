@@ -43,6 +43,10 @@ namespace Braintree
             {
                 return new ResultImpl<CoinbaseAccount>(response, gateway);
             }
+            else if (response.GetName() == "venmo-account")
+            {
+                return new ResultImpl<VenmoAccount>(response, gateway);
+            }
             else
             {
                 return new ResultImpl<UnknownPaymentMethod>(response, gateway);
@@ -107,6 +111,10 @@ namespace Braintree
             else if (response.GetName() == "coinbase-account")
             {
                 return new CoinbaseAccount(response, gateway);
+            }
+            else if (response.GetName() == "venmo-account")
+            {
+                return new VenmoAccount(response, gateway);
             }
             else
             {

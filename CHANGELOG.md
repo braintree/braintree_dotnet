@@ -1,3 +1,6 @@
+## 2.52.0
+* Add VenmoAccount payment method
+
 ## 2.51.0
 * Add `CHECK` webhook kind
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Braintree
 {
@@ -7,6 +8,12 @@ namespace Braintree
         public string Description { get; set; }
         public string CustomField { get; set; }
         public string PayeeEmail { get; set; }
+        public Dictionary<string, string> SupplementaryData { get; set; }
+
+        public TransactionOptionsPayPalRequest()
+        {
+            SupplementaryData = new Dictionary<string, string>();
+        }
 
         public override string ToXml(string root)
         {
@@ -20,10 +27,14 @@ namespace Braintree
 
         private RequestBuilder BuildRequest(string root)
         {
-            return new RequestBuilder(root).
+            var builder = new RequestBuilder(root).
                 AddElement("description", Description).
                 AddElement("custom-field", CustomField).
                 AddElement("payee-email", PayeeEmail);
+
+            if(SupplementaryData.Count != 0) builder.AddElement("supplementary-data", SupplementaryData);
+
+            return builder;
         }
     }
 }

@@ -167,6 +167,25 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Find_IncludesVenmoAccountsInPaymentMethods()
+        {
+            var createRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.VenmoAccount
+            };
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+            Assert.IsNotNull(customer.VenmoAccounts);
+            Assert.IsNotNull(customer.PaymentMethods);
+            VenmoAccount account = customer.VenmoAccounts[0];
+            Assert.IsNotNull(account.Token);
+            Assert.IsNotNull(account.Username);
+            Assert.IsNotNull(account.VenmoUserId);
+            Assert.AreEqual(account, customer.PaymentMethods[0]);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Find_RaisesIfIdIsInvalid()
         {
             try

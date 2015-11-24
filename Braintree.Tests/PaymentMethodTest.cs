@@ -272,6 +272,35 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Create_CreatesVenmoAccountWithNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.VenmoAccount
+            };
+
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            VenmoAccount venmoAccount = (VenmoAccount) paymentMethodResult.Target;
+
+            Assert.IsNotNull(venmoAccount.Username);
+            Assert.IsNotNull(venmoAccount.VenmoUserId);
+            Assert.IsNotNull(venmoAccount.ImageUrl);
+            Assert.IsNotNull(venmoAccount.SourceDescription);
+            Assert.IsNotNull(venmoAccount.IsDefault);
+            Assert.IsNotNull(venmoAccount.CreatedAt);
+            Assert.IsNotNull(venmoAccount.UpdatedAt);
+            Assert.IsNotNull(venmoAccount.CustomerId);
+            Assert.IsNotNull(venmoAccount.Subscriptions);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Create_CreatesAbstractPaymentMethod()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());

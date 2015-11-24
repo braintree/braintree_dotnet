@@ -2264,6 +2264,30 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Sale_WithVenmoAccountNonce()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_VENMO_ACCOUNT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = Nonce.VenmoAccount
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.IsNotNull(result.Target.VenmoAccountDetails);
+
+            VenmoAccountDetails venmoAccountDetails = (VenmoAccountDetails) result.Target.VenmoAccountDetails;
+
+            Assert.IsNull(venmoAccountDetails.Token);
+            Assert.IsNotNull(venmoAccountDetails.Username);
+            Assert.IsNotNull(venmoAccountDetails.VenmoUserId);
+            Assert.IsNotNull(venmoAccountDetails.ImageUrl);
+            Assert.IsNotNull(venmoAccountDetails.SourceDescription);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Sale_Declined()
         {
             TransactionRequest request = new TransactionRequest
@@ -3710,6 +3734,9 @@ namespace Braintree.Tests
             Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
             Assert.AreEqual(dispute.Reason, DisputeReason.FRAUD);
             Assert.AreEqual(dispute.Status, DisputeStatus.WON);
+            Assert.AreEqual(dispute.Kind, DisputeKind.CHARGEBACK);
+            Assert.AreEqual(dispute.DateOpened, DateTime.Parse("2014-03-01"));
+            Assert.AreEqual(dispute.DateWon, DateTime.Parse("2014-03-07"));
         }
 
         [Test]
@@ -3860,6 +3887,104 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
             Assert.AreEqual(50.00, result.Target.Amount);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SubmitForSettlement_WithOrderId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                OrderId = "ABC123"
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual("ABC123", result.Target.OrderId);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SubmitForSettlement_WithDescriptor()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555",
+                  Url = "ebay.com"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
+
+            Transaction submittedTransaction = result.Target;
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, submittedTransaction.Status);
+            Assert.AreEqual("123*123456789012345678", submittedTransaction.Descriptor.Name);
+            Assert.AreEqual("3334445555", submittedTransaction.Descriptor.Phone);
+            Assert.AreEqual("ebay.com", submittedTransaction.Descriptor.Url);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SubmitForSettlement_WithInvalidParams()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.SUCCESS,
+                    ExpirationDate = "05/2008"
+                },
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                PurchaseOrderNumber = "111"
+            };
+
+            try
+            {
+                gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
+                Assert.Fail("Expected ServerException.");
+            }
+            catch (AuthorizationException)
+            {
+                // expected
+            }
         }
 
         [Test]
@@ -4546,6 +4671,33 @@ namespace Braintree.Tests
             Assert.AreEqual("custom field stuff", result.Target.PayPalDetails.CustomField);
             Assert.IsNull(result.Target.PayPalDetails.Token);
             Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void CreateTransaction_WithPayPalSupplementaryData()
+        {
+            var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest()
+                {
+                    PayPal = new TransactionOptionsPayPalRequest()
+                    {
+                        SupplementaryData = new Dictionary<string, string>
+                        {
+                            { "key1", "value1" },
+                            { "key2", "value2" }
+                        }
+                    }
+                }
+            };
+
+            // note - supplementary data is not returned in response
+            var result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
         }
 
         [Test]

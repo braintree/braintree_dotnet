@@ -305,6 +305,14 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
+        public void RetrievesCurrencyIsoCode()
+        {
+            MerchantAccount foundMerchantAccount = gateway.MerchantAccount.Find("sandbox_master_merchant_account");
+            Assert.AreEqual("USD", foundMerchantAccount.CurrencyIsoCode);
+        }
+
+        [Test]
         [Category("Unit")]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {

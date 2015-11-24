@@ -89,6 +89,10 @@ namespace Braintree
             {
                 return new CoinbaseAccount(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(VenmoAccount))
+            {
+                return new VenmoAccount(node, gateway) as T;
+            }
             else if (typeof(T) == typeof(Customer))
             {
                 return new Customer(node, gateway) as T;

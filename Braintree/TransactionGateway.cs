@@ -130,6 +130,11 @@ namespace Braintree
             var request = new TransactionRequest();
             request.Amount = amount;
 
+            return SubmitForSettlement(id, request);
+        }
+
+        public virtual Result<Transaction> SubmitForSettlement(string id, TransactionRequest request)
+        {
             XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);

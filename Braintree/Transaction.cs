@@ -192,6 +192,7 @@ namespace Braintree
         public AmexExpressCheckoutDetails AmexExpressCheckoutDetails { get; protected set; }
         public PayPalDetails PayPalDetails { get; protected set; }
         public CoinbaseDetails CoinbaseDetails { get; protected set; }
+        public VenmoAccountDetails VenmoAccountDetails { get; protected set; }
         public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public RiskData RiskData { get; protected set; }
         public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
@@ -293,6 +294,11 @@ namespace Braintree
             if (amexExpressCheckoutNode != null)
             {
                 AmexExpressCheckoutDetails = new AmexExpressCheckoutDetails(amexExpressCheckoutNode);
+            }
+            var venmoAccountNode = node.GetNode("venmo-account");
+            if (venmoAccountNode != null)
+            {
+                VenmoAccountDetails = new VenmoAccountDetails(venmoAccountNode);
             }
 
             BillingAddress = new Address(node.GetNode("billing"));
