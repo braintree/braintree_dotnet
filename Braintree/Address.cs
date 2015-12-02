@@ -26,22 +26,22 @@ namespace Braintree
     /// </example>
     public class Address
     {
-        public string Id { get; protected set; }
-        public string CustomerId { get; protected set; }
-        public string FirstName { get; protected set; }
-        public string LastName { get; protected set; }
-        public string Company { get; protected set; }
-        public string StreetAddress { get; protected set; }
-        public string ExtendedAddress { get; protected set; }
-        public string Locality { get; protected set; }
-        public string Region { get; protected set; }
-        public string PostalCode { get; protected set; }
-        public string CountryCodeAlpha2 { get; protected set; }
-        public string CountryCodeAlpha3 { get; protected set; }
-        public string CountryCodeNumeric { get; protected set; }
-        public string CountryName { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual string CustomerId { get; protected set; }
+        public virtual string FirstName { get; protected set; }
+        public virtual string LastName { get; protected set; }
+        public virtual string Company { get; protected set; }
+        public virtual string StreetAddress { get; protected set; }
+        public virtual string ExtendedAddress { get; protected set; }
+        public virtual string Locality { get; protected set; }
+        public virtual string Region { get; protected set; }
+        public virtual string PostalCode { get; protected set; }
+        public virtual string CountryCodeAlpha2 { get; protected set; }
+        public virtual string CountryCodeAlpha3 { get; protected set; }
+        public virtual string CountryCodeNumeric { get; protected set; }
+        public virtual string CountryName { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
 
         protected internal Address(NodeWrapper node)
         {
@@ -64,5 +64,8 @@ namespace Braintree
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected Address() { }
     }
 }

@@ -4,15 +4,15 @@ namespace Braintree
 {
     public class AmexExpressCheckoutDetails
     {
-        public string Token { get; protected set; }
-        public string CardType { get; protected set; }
-        public string Bin { get; protected set; }
-        public string ExpirationMonth { get; protected set; }
-        public string ExpirationYear { get; protected set; }
-        public string CardMemberNumber { get; protected set; }
-        public string CardMemberExpiryDate { get; protected set; }
-        public string ImageUrl { get; protected set; }
-        public string SourceDescription { get; protected set; }
+        public virtual string Token { get; protected set; }
+        public virtual string CardType { get; protected set; }
+        public virtual string Bin { get; protected set; }
+        public virtual string ExpirationMonth { get; protected set; }
+        public virtual string ExpirationYear { get; protected set; }
+        public virtual string CardMemberNumber { get; protected set; }
+        public virtual string CardMemberExpiryDate { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual string SourceDescription { get; protected set; }
 
         protected internal AmexExpressCheckoutDetails(NodeWrapper node)
         {
@@ -26,5 +26,8 @@ namespace Braintree
             ImageUrl = node.GetString("image-url");
             SourceDescription = node.GetString("source-description");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal AmexExpressCheckoutDetails() { }
     }
 }

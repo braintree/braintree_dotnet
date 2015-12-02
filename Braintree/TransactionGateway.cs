@@ -13,9 +13,9 @@ namespace Braintree
     public class TransactionGateway : ITransactionGateway
     {
         private readonly BraintreeService service;
-        private readonly BraintreeGateway gateway;
+        private readonly IBraintreeGateway gateway;
 
-        protected internal TransactionGateway(BraintreeGateway gateway)
+        protected internal TransactionGateway(IBraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;

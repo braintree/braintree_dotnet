@@ -4,23 +4,23 @@ namespace Braintree
 {
     public class PayPalDetails
     {
-        public string PayerEmail { get; protected set; }
-        public string PaymentId { get; protected set; }
-        public string AuthorizationId { get; protected set; }
-        public string Token { get; protected set; }
-        public string ImageUrl { get; protected set; }
-        public string DebugId { get; protected set; }
-        public string PayeeEmail { get; protected set; }
-        public string CustomField { get; protected set; }
-        public string PayerId { get; protected set; }
-        public string PayerFirstName { get; protected set; }
-        public string PayerLastName { get; protected set; }
-        public string SellerProtectionStatus { get; protected set; }
-        public string CaptureId { get; protected set; }
-        public string RefundId { get; protected set; }
-        public string TransactionFeeAmount { get; protected set; }
-        public string TransactionFeeCurrencyIsoCode { get; protected set; }
-        public string Description { get; protected set; }
+        public virtual string PayerEmail { get; protected set; }
+        public virtual string PaymentId { get; protected set; }
+        public virtual string AuthorizationId { get; protected set; }
+        public virtual string Token { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual string DebugId { get; protected set; }
+        public virtual string PayeeEmail { get; protected set; }
+        public virtual string CustomField { get; protected set; }
+        public virtual string PayerId { get; protected set; }
+        public virtual string PayerFirstName { get; protected set; }
+        public virtual string PayerLastName { get; protected set; }
+        public virtual string SellerProtectionStatus { get; protected set; }
+        public virtual string CaptureId { get; protected set; }
+        public virtual string RefundId { get; protected set; }
+        public virtual string TransactionFeeAmount { get; protected set; }
+        public virtual string TransactionFeeCurrencyIsoCode { get; protected set; }
+        public virtual string Description { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -42,5 +42,8 @@ namespace Braintree
             TransactionFeeCurrencyIsoCode = node.GetString("transaction-fee-currency-iso-code");
             Description = node.GetString("description");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal PayPalDetails() { }
     }
 }

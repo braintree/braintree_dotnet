@@ -56,17 +56,17 @@ namespace Braintree
 
     public class Dispute
     {
-        public decimal? Amount { get; protected set; }
-        public DateTime? ReceivedDate { get; protected set; }
-        public DateTime? ReplyByDate { get; protected set; }
-        public DateTime? DateOpened { get; protected set; }
-        public DateTime? DateWon { get; protected set; }
-        public DisputeReason Reason { get; protected set; }
-        public DisputeStatus Status { get; protected set; }
-        public DisputeKind Kind { get; protected set; }
-        public string CurrencyIsoCode { get; protected set; }
-        public string Id { get; protected set; }
-        public TransactionDetails TransactionDetails { get; protected set; }
+        public virtual decimal? Amount { get; protected set; }
+        public virtual DateTime? ReceivedDate { get; protected set; }
+        public virtual DateTime? ReplyByDate { get; protected set; }
+        public virtual DateTime? DateOpened { get; protected set; }
+        public virtual DateTime? DateWon { get; protected set; }
+        public virtual DisputeReason Reason { get; protected set; }
+        public virtual DisputeStatus Status { get; protected set; }
+        public virtual DisputeKind Kind { get; protected set; }
+        public virtual string CurrencyIsoCode { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual TransactionDetails TransactionDetails { get; protected set; }
 
         public Dispute(NodeWrapper node)
         {
@@ -82,5 +82,8 @@ namespace Braintree
             Id = node.GetString("id");
             TransactionDetails = new TransactionDetails(node.GetNode("transaction"));
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal Dispute() { }
     }
 }

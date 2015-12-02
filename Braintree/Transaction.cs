@@ -138,68 +138,71 @@ namespace Braintree
     /// </example>
     public class Transaction
     {
-        public string Id { get; protected set; }
-        public List<AddOn> AddOns { get; protected set; }
-        public decimal? Amount { get; protected set; }
-        public string AvsErrorResponseCode { get; protected set; }
-        public string AvsPostalCodeResponseCode { get; protected set; }
-        public string AvsStreetAddressResponseCode { get; protected set; }
-        public Address BillingAddress { get; protected set; }
-        public string Channel { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public CreditCard CreditCard { get; protected set; }
-        public string CurrencyIsoCode { get; protected set; }
-        public Customer Customer { get; protected set; }
-        public string CvvResponseCode { get; protected set; }
-        public Descriptor Descriptor { get; protected set; }
-        public List<Discount> Discounts { get; protected set; }
-        public List<Dispute> Disputes { get; protected set; }
-        public TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
-        public string MerchantAccountId { get; protected set; }
-        public string OrderId { get; protected set; }
-        public string PlanId { get; protected set; }
-        public string ProcessorAuthorizationCode { get; protected set; }
-        public string ProcessorResponseCode { get; protected set; }
-        public string ProcessorResponseText { get; protected set; }
-        public string ProcessorSettlementResponseCode { get; protected set; }
-        public string ProcessorSettlementResponseText { get; protected set; }
-        public string AdditionalProcessorResponse { get; protected set; }
-        public string VoiceReferralNumber { get; protected set; }
-        public string PurchaseOrderNumber { get; protected set; }
-        public bool? Recurring { get; protected set; }
-        public string RefundedTransactionId { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual List<AddOn> AddOns { get; protected set; }
+        public virtual decimal? Amount { get; protected set; }
+        public virtual string AvsErrorResponseCode { get; protected set; }
+        public virtual string AvsPostalCodeResponseCode { get; protected set; }
+        public virtual string AvsStreetAddressResponseCode { get; protected set; }
+        public virtual Address BillingAddress { get; protected set; }
+        public virtual string Channel { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual CreditCard CreditCard { get; protected set; }
+        public virtual string CurrencyIsoCode { get; protected set; }
+        public virtual Customer Customer { get; protected set; }
+        public virtual string CvvResponseCode { get; protected set; }
+        public virtual Descriptor Descriptor { get; protected set; }
+        public virtual List<Discount> Discounts { get; protected set; }
+        public virtual List<Dispute> Disputes { get; protected set; }
+        public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
+        public virtual string MerchantAccountId { get; protected set; }
+        public virtual string OrderId { get; protected set; }
+        public virtual string PlanId { get; protected set; }
+        public virtual string ProcessorAuthorizationCode { get; protected set; }
+        public virtual string ProcessorResponseCode { get; protected set; }
+        public virtual string ProcessorResponseText { get; protected set; }
+        public virtual string ProcessorSettlementResponseCode { get; protected set; }
+        public virtual string ProcessorSettlementResponseText { get; protected set; }
+        public virtual string AdditionalProcessorResponse { get; protected set; }
+        public virtual string VoiceReferralNumber { get; protected set; }
+        public virtual string PurchaseOrderNumber { get; protected set; }
+        public virtual bool? Recurring { get; protected set; }
+        public virtual string RefundedTransactionId { get; protected set; }
         [Obsolete("Use Transaction.RefundIds")]
-        public string RefundId { get; protected set; }
-        public List<string> RefundIds { get; protected set; }
-        public List<string> PartialSettlementTransactionIds { get; protected set; }
-        public string AuthorizedTransactionId { get; protected set; }
-        public string SettlementBatchId { get; protected set; }
-        public Address ShippingAddress { get; protected set; }
-        public TransactionEscrowStatus EscrowStatus { get; protected set; }
-        public TransactionStatus Status { get; protected set; }
-        public StatusEvent[] StatusHistory { get; protected set; }
-        public string SubscriptionId { get; protected set; }
-        public Subscription Subscription { get; protected set; }
-        public decimal? TaxAmount { get; protected set; }
-        public bool? TaxExempt { get; protected set; }
-        public TransactionType Type { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
-        public Dictionary<string, string> CustomFields { get; protected set; }
-        public decimal? ServiceFeeAmount { get; protected set; }
-        public DisbursementDetails DisbursementDetails { get; protected set; }
-        public ApplePayDetails ApplePayDetails { get; protected set; }
-        public AndroidPayDetails AndroidPayDetails { get; protected set; }
-        public AmexExpressCheckoutDetails AmexExpressCheckoutDetails { get; protected set; }
-        public PayPalDetails PayPalDetails { get; protected set; }
-        public CoinbaseDetails CoinbaseDetails { get; protected set; }
-        public VenmoAccountDetails VenmoAccountDetails { get; protected set; }
-        public PaymentInstrumentType PaymentInstrumentType { get; protected set; }
-        public RiskData RiskData { get; protected set; }
-        public ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
+        public virtual string RefundId { get; protected set; }
+        public virtual List<string> RefundIds { get; protected set; }
+        public virtual List<string> PartialSettlementTransactionIds { get; protected set; }
+        public virtual string AuthorizedTransactionId { get; protected set; }
+        public virtual string SettlementBatchId { get; protected set; }
+        public virtual Address ShippingAddress { get; protected set; }
+        public virtual TransactionEscrowStatus EscrowStatus { get; protected set; }
+        public virtual TransactionStatus Status { get; protected set; }
+        public virtual StatusEvent[] StatusHistory { get; protected set; }
+        public virtual string SubscriptionId { get; protected set; }
+        public virtual Subscription Subscription { get; protected set; }
+        public virtual decimal? TaxAmount { get; protected set; }
+        public virtual bool? TaxExempt { get; protected set; }
+        public virtual TransactionType Type { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual Dictionary<string, string> CustomFields { get; protected set; }
+        public virtual decimal? ServiceFeeAmount { get; protected set; }
+        public virtual DisbursementDetails DisbursementDetails { get; protected set; }
+        public virtual ApplePayDetails ApplePayDetails { get; protected set; }
+        public virtual AndroidPayDetails AndroidPayDetails { get; protected set; }
+        public virtual AmexExpressCheckoutDetails AmexExpressCheckoutDetails { get; protected set; }
+        public virtual PayPalDetails PayPalDetails { get; protected set; }
+        public virtual CoinbaseDetails CoinbaseDetails { get; protected set; }
+        public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
+        public virtual RiskData RiskData { get; protected set; }
+        public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
 
-        private BraintreeGateway Gateway;
+        private IBraintreeGateway Gateway;
 
-        protected internal Transaction(NodeWrapper node, BraintreeGateway gateway)
+        [Obsolete("Mock Use Only")]
+        protected Transaction() { }
+
+        protected internal Transaction(NodeWrapper node, IBraintreeGateway gateway)
         {
             Gateway = gateway;
 

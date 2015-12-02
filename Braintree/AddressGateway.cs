@@ -14,9 +14,9 @@ namespace Braintree
     public class AddressGateway : IAddressGateway
     {
         private readonly BraintreeService Service;
-        private readonly BraintreeGateway Gateway;
+        private readonly IBraintreeGateway Gateway;
 
-        protected internal AddressGateway(BraintreeGateway gateway)
+        protected internal AddressGateway(IBraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;

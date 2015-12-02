@@ -6,10 +6,10 @@ namespace Braintree
 {
     public class MerchantAccountBusinessDetails
     {
-        public string DbaName { get; protected set; }
-        public string LegalName { get; protected set; }
-        public string TaxId { get; protected set; }
-        public Address Address { get; protected set; }
+        public virtual string DbaName { get; protected set; }
+        public virtual string LegalName { get; protected set; }
+        public virtual string TaxId { get; protected set; }
+        public virtual Address Address { get; protected set; }
 
         protected internal MerchantAccountBusinessDetails(NodeWrapper node)
         {
@@ -18,5 +18,8 @@ namespace Braintree
             TaxId = node.GetString("tax-id");
             Address = new Address(node.GetNode("address"));
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal MerchantAccountBusinessDetails() { }
     }
 }

@@ -5,10 +5,10 @@ namespace Braintree
 {
     public class ThreeDSecureInfo
     {
-        public string Status { get; protected set; }
-        public string Enrolled { get; protected set; }
-        public bool? LiabilityShifted { get; protected set; }
-        public bool? LiabilityShiftPossible { get; protected set; }
+        public virtual string Status { get; protected set; }
+        public virtual string Enrolled { get; protected set; }
+        public virtual bool? LiabilityShifted { get; protected set; }
+        public virtual bool? LiabilityShiftPossible { get; protected set; }
 
         public ThreeDSecureInfo(NodeWrapper node)
         {
@@ -19,6 +19,9 @@ namespace Braintree
             LiabilityShifted = node.GetBoolean("liability-shifted");
             LiabilityShiftPossible = node.GetBoolean("liability-shift-possible");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal ThreeDSecureInfo() { }
     }
 }
 

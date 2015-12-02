@@ -21,26 +21,26 @@ namespace Braintree
     /// </example>
     public class Customer
     {
-        public string Id { get; protected set; }
-        public string FirstName { get; protected set; }
-        public string LastName { get; protected set; }
-        public string Company { get; protected set; }
-        public string Email { get; protected set; }
-        public string Phone { get; protected set; }
-        public string Fax { get; protected set; }
-        public string Website { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
-        public CreditCard[] CreditCards { get; protected set; }
-        public PayPalAccount[] PayPalAccounts { get; protected set; }
-        public ApplePayCard[] ApplePayCards { get; protected set; }
-        public AndroidPayCard[] AndroidPayCards { get; protected set; }
-        public AmexExpressCheckoutCard[] AmexExpressCheckoutCards { get; protected set; }
-        public CoinbaseAccount[] CoinbaseAccounts { get; protected set; }
-        public VenmoAccount[] VenmoAccounts { get; protected set; }
-        public PaymentMethod[] PaymentMethods { get; protected set; }
-        public Address[] Addresses { get; protected set; }
-        public Dictionary<string, string> CustomFields { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual string FirstName { get; protected set; }
+        public virtual string LastName { get; protected set; }
+        public virtual string Company { get; protected set; }
+        public virtual string Email { get; protected set; }
+        public virtual string Phone { get; protected set; }
+        public virtual string Fax { get; protected set; }
+        public virtual string Website { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual CreditCard[] CreditCards { get; protected set; }
+        public virtual PayPalAccount[] PayPalAccounts { get; protected set; }
+        public virtual ApplePayCard[] ApplePayCards { get; protected set; }
+        public virtual AndroidPayCard[] AndroidPayCards { get; protected set; }
+        public virtual AmexExpressCheckoutCard[] AmexExpressCheckoutCards { get; protected set; }
+        public virtual CoinbaseAccount[] CoinbaseAccounts { get; protected set; }
+        public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
+        public virtual PaymentMethod[] PaymentMethods { get; protected set; }
+        public virtual Address[] Addresses { get; protected set; }
+        public virtual Dictionary<string, string> CustomFields { get; protected set; }
         public PaymentMethod DefaultPaymentMethod
         {
             get
@@ -56,7 +56,7 @@ namespace Braintree
             }
         }
 
-        protected internal Customer(NodeWrapper node, BraintreeGateway gateway)
+        protected internal Customer(NodeWrapper node, IBraintreeGateway gateway)
         {
             if (node == null) return;
 
@@ -147,5 +147,8 @@ namespace Braintree
 
             CustomFields = node.GetDictionary("custom-fields");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal Customer() { }
     }
 }

@@ -6,12 +6,12 @@ namespace Braintree
 {
     public class MerchantAccountFundingDetails
     {
-        public FundingDestination Destination { get; protected set; }
-        public string RoutingNumber { get; protected set; }
-        public string AccountNumberLast4 { get; protected set; }
-        public string Email { get; protected set; }
-        public string MobilePhone { get; protected set; }
-        public string Descriptor { get; protected set; }
+        public virtual FundingDestination Destination { get; protected set; }
+        public virtual string RoutingNumber { get; protected set; }
+        public virtual string AccountNumberLast4 { get; protected set; }
+        public virtual string Email { get; protected set; }
+        public virtual string MobilePhone { get; protected set; }
+        public virtual string Descriptor { get; protected set; }
 
         protected internal MerchantAccountFundingDetails(NodeWrapper node)
         {
@@ -25,5 +25,8 @@ namespace Braintree
             MobilePhone = node.GetString("mobile-phone");
             Descriptor = node.GetString("descriptor");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal MerchantAccountFundingDetails() { }
     }
 }

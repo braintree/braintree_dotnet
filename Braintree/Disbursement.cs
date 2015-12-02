@@ -6,19 +6,19 @@ namespace Braintree
 {
     public class Disbursement
     {
-        public string Id { get; protected set; }
-        public decimal? Amount { get; protected set; }
-        public string ExceptionMessage { get; protected set; }
-        public DateTime? DisbursementDate { get; protected set; }
-        public string FollowUpAction { get; protected set; }
-        public MerchantAccount MerchantAccount { get; protected set; }
-        public List<string> TransactionIds { get; protected set; }
-        public bool? Success { get; protected set; }
-        public bool? Retry { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual decimal? Amount { get; protected set; }
+        public virtual string ExceptionMessage { get; protected set; }
+        public virtual DateTime? DisbursementDate { get; protected set; }
+        public virtual string FollowUpAction { get; protected set; }
+        public virtual MerchantAccount MerchantAccount { get; protected set; }
+        public virtual List<string> TransactionIds { get; protected set; }
+        public virtual bool? Success { get; protected set; }
+        public virtual bool? Retry { get; protected set; }
 
-        private BraintreeGateway gateway;
+        private IBraintreeGateway gateway;
 
-        public Disbursement(NodeWrapper node, BraintreeGateway gateway)
+        public Disbursement(NodeWrapper node, IBraintreeGateway gateway)
         {
             Id = node.GetString("id");
             Amount = node.GetDecimal("amount");
@@ -36,7 +36,10 @@ namespace Braintree
             this.gateway = gateway;
         }
 
-        public ResourceCollection<Transaction> Transactions()
+        [Obsolete("Mock Use Only")]
+        protected internal Disbursement() { }
+
+        public virtual ResourceCollection<Transaction> Transactions()
         {
             var gateway = new TransactionGateway(this.gateway);
 

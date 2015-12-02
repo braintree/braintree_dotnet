@@ -28,7 +28,7 @@ namespace Braintree
         public string Message { get; protected set; }
         public T Target { get; protected set; }
 
-        public ResultImpl(NodeWrapper node, BraintreeGateway gateway)
+        public ResultImpl(NodeWrapper node, IBraintreeGateway gateway)
         {
             if (node.IsSuccess())
             {
@@ -63,7 +63,7 @@ namespace Braintree
             return Errors == null;
         }
 
-        private T newInstanceFromResponse(NodeWrapper node, BraintreeGateway gateway)
+        private T newInstanceFromResponse(NodeWrapper node, IBraintreeGateway gateway)
         {
             if (typeof(T) == typeof(Address))
             {

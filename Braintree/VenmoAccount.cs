@@ -15,7 +15,7 @@ namespace Braintree
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
 
-        protected internal VenmoAccount(NodeWrapper node, BraintreeGateway gateway)
+        protected internal VenmoAccount(NodeWrapper node, IBraintreeGateway gateway)
         {
             Token = node.GetString("token");
             Username = node.GetString("username");
@@ -36,6 +36,9 @@ namespace Braintree
                 Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal VenmoAccount() { }
     }
 }
 

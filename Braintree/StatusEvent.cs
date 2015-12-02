@@ -6,11 +6,11 @@ namespace Braintree
 {
     public class StatusEvent
     {
-        public decimal? Amount { get; protected set; }
-        public TransactionStatus Status { get; protected set; }
-        public DateTime? Timestamp { get; protected set; }
-        public TransactionSource Source { get; protected set; }
-        public string User { get; protected set; }
+        public virtual decimal? Amount { get; protected set; }
+        public virtual TransactionStatus Status { get; protected set; }
+        public virtual DateTime? Timestamp { get; protected set; }
+        public virtual TransactionSource Source { get; protected set; }
+        public virtual string User { get; protected set; }
 
         public StatusEvent(NodeWrapper node)
         {
@@ -22,5 +22,8 @@ namespace Braintree
             Source = (TransactionSource)CollectionUtil.Find(TransactionSource.ALL, node.GetString("transaction-source"), TransactionSource.UNRECOGNIZED);
             User = node.GetString("user");
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal StatusEvent() { }
     }
 }

@@ -27,13 +27,13 @@ namespace Braintree
 
     public class MerchantAccount
     {
-      public string Id { get; protected set; }
-      public string CurrencyIsoCode { get; protected set; }
-      public MerchantAccountStatus Status { get; protected set; }
-      public MerchantAccount MasterMerchantAccount { get; protected set; }
-      public MerchantAccountIndividualDetails IndividualDetails { get; protected set; }
-      public MerchantAccountBusinessDetails BusinessDetails { get; protected set; }
-      public MerchantAccountFundingDetails FundingDetails { get; protected set; }
+      public virtual string Id { get; protected set; }
+      public virtual string CurrencyIsoCode { get; protected set; }
+      public virtual MerchantAccountStatus Status { get; protected set; }
+      public virtual MerchantAccount MasterMerchantAccount { get; protected set; }
+      public virtual MerchantAccountIndividualDetails IndividualDetails { get; protected set; }
+      public virtual MerchantAccountBusinessDetails BusinessDetails { get; protected set; }
+      public virtual MerchantAccountFundingDetails FundingDetails { get; protected set; }
 
       public bool IsSubMerchant {
         get {
@@ -67,5 +67,8 @@ namespace Braintree
         else
             FundingDetails = null;
       }
+
+      [Obsolete("Mock Use Only")]
+      protected MerchantAccount() { }
     }
 }

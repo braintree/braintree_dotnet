@@ -14,19 +14,19 @@ namespace Braintree
 
     public class Plan
     {
-        public List<AddOn> AddOns { get; protected set; }
-        public int? BillingDayOfMonth { get; protected set; }
-        public int? BillingFrequency { get; protected set; }
-        public string CurrencyIsoCode { get; protected set; }
-        public string Description { get; protected set; }
-        public List<Discount> Discounts { get; protected set; }
-        public string Id { get; protected set; }
-        public string Name { get; protected set; }
-        public int? NumberOfBillingCycles { get; protected set; }
-        public decimal? Price { get; protected set; }
-        public bool? TrialPeriod { get; protected set; }
-        public int? TrialDuration { get; protected set; }
-        public PlanDurationUnit TrialDurationUnit { get; protected set; }
+        public virtual List<AddOn> AddOns { get; protected set; }
+        public virtual int? BillingDayOfMonth { get; protected set; }
+        public virtual int? BillingFrequency { get; protected set; }
+        public virtual string CurrencyIsoCode { get; protected set; }
+        public virtual string Description { get; protected set; }
+        public virtual List<Discount> Discounts { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual string Name { get; protected set; }
+        public virtual int? NumberOfBillingCycles { get; protected set; }
+        public virtual decimal? Price { get; protected set; }
+        public virtual bool? TrialPeriod { get; protected set; }
+        public virtual int? TrialDuration { get; protected set; }
+        public virtual PlanDurationUnit TrialDurationUnit { get; protected set; }
 
         public Plan(NodeWrapper node)
         {
@@ -54,5 +54,8 @@ namespace Braintree
                 Discounts.Add(new Discount(discountResponse));
             }
         }
+
+        [Obsolete("Mock Use Only")]
+        protected internal Plan() { }
     }
 }

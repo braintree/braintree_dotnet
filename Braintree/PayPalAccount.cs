@@ -4,17 +4,17 @@ namespace Braintree
 {
     public class PayPalAccount : PaymentMethod
     {
-        public string Email { get; protected set; }
-        public string BillingAgreementId { get; protected set; }
-        public string Token { get; protected set; }
-        public bool? IsDefault { get; protected set; }
-        public string ImageUrl { get; protected set; }
-        public string CustomerId { get; protected set; }
-        public DateTime? CreatedAt { get; protected set; }
-        public DateTime? UpdatedAt { get; protected set; }
-        public Subscription[] Subscriptions { get; protected set; }
+        public virtual string Email { get; protected set; }
+        public virtual string BillingAgreementId { get; protected set; }
+        public virtual string Token { get; protected set; }
+        public virtual bool? IsDefault { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual string CustomerId { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual Subscription[] Subscriptions { get; protected set; }
 
-        protected internal PayPalAccount(NodeWrapper node, BraintreeGateway gateway)
+        protected internal PayPalAccount(NodeWrapper node, IBraintreeGateway gateway)
         {
             Email = node.GetString("email");
             BillingAgreementId = node.GetString("billing-agreement-id");
@@ -33,5 +33,7 @@ namespace Braintree
             }
         }
 
+        [Obsolete("Mock Use Only")]
+        protected internal PayPalAccount() { }
     }
 }
