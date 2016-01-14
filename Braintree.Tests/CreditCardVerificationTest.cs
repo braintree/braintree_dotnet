@@ -85,6 +85,70 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Create_ReturnsSuccessfulResponse()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.MerchantAccountId,
+                            MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Create_HandlesInvalidResponse()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "-5.00"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(ValidationErrorCode.VERIFICATION_OPTIONS_AMOUNT_CANNOT_BE_NEGATIVE,
+                            result.Errors.ForObject("Verification").ForObject("Options").OnField("Amount")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Search_OnMultipleValueFields()
         {
             var createRequest = new CustomerRequest
@@ -208,5 +272,4 @@ namespace Braintree.Tests
             Assert.AreEqual(postalCode, verification.BillingAddress.PostalCode);
         }
     }
-
 }

@@ -11,5 +11,6 @@ namespace Braintree
     {
         CreditCardVerification Find(string Id);
         ResourceCollection<CreditCardVerification> Search(CreditCardVerificationSearchRequest query);
+        Result<CreditCardVerification> Create(CreditCardVerificationRequest request);
     }
 }

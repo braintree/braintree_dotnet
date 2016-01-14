@@ -22,6 +22,7 @@ namespace Braintree
         Result<Transaction> Sale(TransactionRequest request);
         string SaleTrData(TransactionRequest trData, string redirectURL);
         ResourceCollection<Transaction> Search(TransactionSearchRequest query);
+        Result<Transaction> SubmitForPartialSettlement(string id, TransactionRequest request);
         Result<Transaction> SubmitForPartialSettlement(string id, decimal amount);
         Result<Transaction> SubmitForSettlement(string id);
         Result<Transaction> SubmitForSettlement(string id, decimal amount);

@@ -85,6 +85,10 @@ namespace Braintree
             {
                 return new CreditCard(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(CreditCardVerification))
+            {
+                return new CreditCardVerification(node, gateway) as T;
+            }
             else if (typeof(T) == typeof(CoinbaseAccount))
             {
                 return new CoinbaseAccount(node, gateway) as T;

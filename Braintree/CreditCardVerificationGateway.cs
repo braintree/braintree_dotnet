@@ -22,6 +22,13 @@ namespace Braintree
             service = new BraintreeService(gateway.Configuration);
         }
 
+        public virtual Result<CreditCardVerification> Create(CreditCardVerificationRequest request)
+        {
+            XmlNode response = service.Post(service.MerchantPath() + "/verifications", request);
+
+            return new ResultImpl<CreditCardVerification>(new NodeWrapper(response), gateway);
+        }
+
         public virtual CreditCardVerification Find(string Id)
         {
             if(Id == null || Id.Trim().Equals(""))

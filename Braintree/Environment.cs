@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Braintree.Exceptions;
 
 namespace Braintree
 {
@@ -31,6 +32,23 @@ namespace Braintree
             var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
 
             return string.Format("http://{0}:{1}", host, port);
+        }
+
+        public static Environment ParseEnvironment(string environment)
+        {
+            switch (environment) {
+                case "integration":
+                case "development":
+                    return Environment.DEVELOPMENT;
+                case "qa":
+                    return Environment.QA;
+                case "sandbox":
+                    return Environment.SANDBOX;
+                case "production":
+                    return Environment.PRODUCTION;
+                default:
+                    throw new ConfigurationException("Unsupported environment: " + environment);
+            }
         }
     }
 }

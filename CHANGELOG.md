@@ -1,3 +1,8 @@
+## 2.53.0
+* Support setting environment with just a string
+* Add support for easy mocking during testing (thanks @richardlawley)
+* Add new error codes
+
 ## 2.52.0
 * Add VenmoAccount payment method
 

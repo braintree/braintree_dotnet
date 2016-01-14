@@ -45,20 +45,9 @@ namespace Braintree
         private Environment GetEnvironment(string credential)
         {
             var separators = new Char [] { '$' };
-            var parts = credential.Split(separators);
-            switch (parts[1]) {
-                case "integration":
-                case "development":
-                    return Environment.DEVELOPMENT;
-                case "qa":
-                    return Environment.QA;
-                case "sandbox":
-                    return Environment.SANDBOX;
-                case "production":
-                    return Environment.PRODUCTION;
-                default:
-                    throw new Exception("Unsupported environment: " + parts[1]);
-            }
+            var environment = credential.Split(separators)[1];
+
+            return Environment.ParseEnvironment(environment);
         }
 
         private string GetMerchantId(string accessToken)

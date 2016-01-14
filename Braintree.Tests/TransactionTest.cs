@@ -4111,6 +4111,129 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void SubmitForPartialSettlement_WithAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Result<Transaction> result = gateway.Transaction.SubmitForPartialSettlement(transaction.Id, decimal.Parse("50.00"));
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual(50.00, result.Target.Amount);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SubmitForPartialSettlement_WithOrderId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                OrderId = "ABC123",
+                Amount = decimal.Parse("50.00")
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForPartialSettlement(transaction.Id, submitForSettlementRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual("ABC123", result.Target.OrderId);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SubmitForPartialSettlement_WithDescriptor()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555",
+                  Url = "ebay.com"
+                },
+                Amount = decimal.Parse("50.00")
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForPartialSettlement(transaction.Id, submitForSettlementRequest);
+
+            Transaction submittedTransaction = result.Target;
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, submittedTransaction.Status);
+            Assert.AreEqual("123*123456789012345678", submittedTransaction.Descriptor.Name);
+            Assert.AreEqual("3334445555", submittedTransaction.Descriptor.Phone);
+            Assert.AreEqual("ebay.com", submittedTransaction.Descriptor.Url);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void SubmitForPartialSettlement_WithInvalidParams()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.SUCCESS,
+                    ExpirationDate = "05/2008"
+                },
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                PurchaseOrderNumber = "111",
+                Amount = decimal.Parse("50.00")
+            };
+
+            try
+            {
+                gateway.Transaction.SubmitForPartialSettlement(transaction.Id, submitForSettlementRequest);
+                Assert.Fail("Expected ServerException.");
+            }
+            catch (AuthorizationException)
+            {
+                // expected
+            }
+        }
+
+        [Test]
+        [Category("Integration")]
         public void StatusHistory_HasCorrectValues()
         {
             TransactionRequest request = new TransactionRequest

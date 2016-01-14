@@ -102,6 +102,8 @@
     <Compile Include="CredentialsParserTest.cs" />
     <Compile Include="MerchantTest.cs" />
     <Compile Include="TestTransactionTest.cs" />
+    <Compile Include="EnvironmentTest.cs" />
+    <Compile Include="BraintreeGatewayTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Braintree\Braintree.csproj">

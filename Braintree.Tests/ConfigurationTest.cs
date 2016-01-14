@@ -15,8 +15,9 @@ namespace Braintree.Tests
         public void ConfigurationMissingEnvironment_ThrowsConfigurationException()
         {
             try {
+                Environment environment = null;
                 new Configuration(
-                    null,
+                    environment,
                     "integration_merchant_id",
                     "integration_public_key",
                     "integration_private_key"
@@ -68,6 +69,25 @@ namespace Braintree.Tests
                 );
                 Assert.Fail("Should throw ConfigurationException");
             } catch (ConfigurationException) {}
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void ConfigurationWithStringEnvironment_Initializes()
+        {
+            Configuration config = new Configuration(
+                "development",
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+            BraintreeService service = new BraintreeService(config);
+
+            var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
+            var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
+            var expected = string.Format("http://{0}:{1}/merchants/integration_merchant_id", host, port);
+
+            Assert.AreEqual(expected, service.BaseMerchantURL());
         }
 
         [Test]

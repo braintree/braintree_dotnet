@@ -19,7 +19,8 @@ namespace Braintree
         public string Proxy { get; set; }
 
         public Configuration() {}
-        public Configuration(string accessToken) {
+        public Configuration(string accessToken)
+        {
             CredentialsParser parser = new CredentialsParser(accessToken);
             MerchantId = parser.MerchantId;
             AccessToken = parser.AccessToken;
@@ -53,6 +54,11 @@ namespace Braintree
             MerchantId = merchantId;
             PublicKey = publicKey;
             PrivateKey = privateKey;
+        }
+
+        public Configuration(string environment, string merchantId, string publicKey, string privateKey) :
+            this(Environment.ParseEnvironment(environment), merchantId, publicKey, privateKey)
+        {
         }
 
         public bool IsClientCredentials
