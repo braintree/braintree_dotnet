@@ -91,7 +91,11 @@ namespace Braintree
                 request.Headers.Add("Accept-Encoding", "gzip");
                 request.Accept = "application/xml";
                 request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
-                request.Proxy = new WebProxy(GetProxy());
+                var proxy = GetProxy();
+                if (proxy != null)
+                {
+                    request.Proxy = new WebProxy(proxy);
+                }
                 request.Method = method;
                 request.KeepAlive = false;
                 request.Timeout = 60000;
