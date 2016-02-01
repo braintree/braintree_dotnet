@@ -2,11 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using Braintree.Exceptions;
 
 namespace Braintree
 {
+    public delegate HttpWebRequest HttpWebRequestFactoryDelegate(string requestUriString);
+
     public class Configuration
     {
         public Environment Environment { get; set; }
@@ -17,9 +20,15 @@ namespace Braintree
         public string ClientSecret { get; set; }
         public string AccessToken { get; set; }
         public string Proxy { get; set; }
+        public HttpWebRequestFactoryDelegate HttpWebRequestFactory { get; set; }
 
-        public Configuration() {}
+        public Configuration()
+        {
+            HttpWebRequestFactory = requestUriString => WebRequest.Create(requestUriString) as HttpWebRequest;
+        }
+
         public Configuration(string accessToken)
+            : this()
         {
             CredentialsParser parser = new CredentialsParser(accessToken);
             MerchantId = parser.MerchantId;
@@ -28,6 +37,7 @@ namespace Braintree
         }
 
         public Configuration(string clientId, string clientSecret)
+            : this()
         {
             CredentialsParser parser = new CredentialsParser(clientId, clientSecret);
             ClientId = parser.ClientId;
@@ -36,6 +46,7 @@ namespace Braintree
         }
 
         public Configuration(Environment environment, string merchantId, string publicKey, string privateKey)
+            : this()
         {
             if (environment == null) {
                 throw new ConfigurationException("Configuration.environment needs to be set");
