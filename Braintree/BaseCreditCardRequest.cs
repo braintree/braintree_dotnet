@@ -12,7 +12,6 @@ namespace Braintree
         public string ExpirationYear { get; set; }
         public string ExpirationDate { get; set; }
         public string Number { get; set; }
-        public string Token { get; set; }
 
         public override string ToXml()
         {
@@ -42,8 +41,7 @@ namespace Braintree
                 AddElement("expiration-date", ExpirationDate).
                 AddElement("expiration-month", ExpirationMonth).
                 AddElement("expiration-year", ExpirationYear).
-                AddElement("number", Number).
-                AddElement("token", Token);
+                AddElement("number", Number);
         }
     }
 }

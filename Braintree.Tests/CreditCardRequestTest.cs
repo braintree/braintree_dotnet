@@ -53,5 +53,15 @@ namespace Braintree.Tests
 
             Assert.IsTrue(request.ToXml().Contains("my-payment-method-nonce"));
         }
+
+        [Test]
+        [Category("Unit")]
+        public void ToXml_Includes_Token()
+        {
+            CreditCardRequest request = new CreditCardRequest();
+            request.Token = "my-token";
+
+            Assert.IsTrue(request.ToXml().Contains("my-token"));
+        }
     }
 }

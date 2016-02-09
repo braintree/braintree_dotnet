@@ -6,7 +6,15 @@ using System.Text;
 
 namespace Braintree
 {
-    public class TransactionCreditCardRequest : BaseCreditCardRequest {}
+    public class TransactionCreditCardRequest : BaseCreditCardRequest
+    {
+        public string Token { get; set; }
+
+        protected override RequestBuilder BuildRequest(string root)
+        {
+            return base.BuildRequest(root).AddElement("token", Token);
+        }
+    }
 
     /// <summary>
     /// A class for building requests to manipulate <see cref="Transaction"/> records in the vault.

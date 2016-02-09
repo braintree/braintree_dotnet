@@ -40,6 +40,7 @@ namespace Braintree
         public string PaymentMethodToken { get; set; }
         public string PaymentMethodNonce { get; set; }
         public string VenmoSdkPaymentMethodCode { get; set; }
+        public string Token { get; set; }
 
         public override string Kind()
         {
@@ -69,7 +70,8 @@ namespace Braintree
                 AddElement("fraud-merchant-id", FraudMerchantId).
                 AddElement("options", Options).
                 AddElement("payment-method-nonce", PaymentMethodNonce).
-                AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
+                AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode).
+                AddElement("token", Token);
         }
     }
 }

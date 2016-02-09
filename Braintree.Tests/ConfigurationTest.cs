@@ -152,7 +152,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
-        public void Proxy_UsesNoProxyIfNotSpecified()
+        public void Proxy_ReturnsNullIfNotSpecified()
         {
             BraintreeService service = new BraintreeService(new Configuration(
                 Environment.DEVELOPMENT,

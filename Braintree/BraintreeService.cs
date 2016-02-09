@@ -91,7 +91,7 @@ namespace Braintree
                 request.Headers.Add("Accept-Encoding", "gzip");
                 request.Accept = "application/xml";
                 request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
-                request.Proxy = new WebProxy(GetProxy());
+                setRequestProxy(request);
                 request.Method = method;
                 request.KeepAlive = false;
                 request.Timeout = 60000;
@@ -147,6 +147,15 @@ namespace Braintree
         {
             var body = new StreamReader(stream).ReadToEnd();
             return StringToXmlNode(body);
+        }
+
+        private void setRequestProxy(WebRequest request)
+        {
+            var proxy = GetProxy();
+            if (proxy != null)
+            {
+                request.Proxy = new WebProxy(proxy);
+            }
         }
 
         internal XmlNode StringToXmlNode(string xml)

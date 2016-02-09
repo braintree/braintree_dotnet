@@ -1,3 +1,7 @@
+## 2.54.0
+* Add Strong Naming support
+* Fix proxy setup to only set proxy if it is set in configuration. Thanks @chrisjdiver
+
 ## 2.53.0
 * Support setting environment with just a string
 * Add support for easy mocking during testing (thanks @richardlawley)
