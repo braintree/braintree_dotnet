@@ -65,6 +65,8 @@ namespace Braintree
                 return SubscriptionChargedSuccessfullySampleXml(id);
             } else if (kind == WebhookKind.CHECK) {
                 return CheckSampleXml();
+            } else if (kind == WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT) {
+                return AccountUpdaterDailyReportSampleXml(id);
             } else {
                 return SubscriptionXml(id);
             }
@@ -295,6 +297,13 @@ namespace Braintree
         private string PartnerMerchantDeclinedSampleXml(string id) {
             return Node("partner-merchant",
                     Node("partner-merchant-id", "abc123")
+            );
+        }
+
+        private string AccountUpdaterDailyReportSampleXml(string id) {
+            return Node("account-updater-daily-report",
+                    NodeAttr("report-date", TYPE_DATE, "2016-01-14"),
+                    Node("report-url", "link-to-csv-report")
             );
         }
 

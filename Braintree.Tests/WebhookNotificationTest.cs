@@ -287,6 +287,19 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        public void SampleNotification_ReturnsANotificationForAccountUpdaterDailyReport()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT, notification.Kind);
+          Assert.AreEqual("link-to-csv-report", notification.AccountUpdaterDailyReport.ReportUrl);
+          Assert.AreEqual(DateTime.Parse("2016-01-14"), notification.AccountUpdaterDailyReport.ReportDate);
+        }
+
+        [Test]
+        [Category("Unit")]
         public void SampleNotification_ReturnsANotificationForCheck()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CHECK, "");

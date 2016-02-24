@@ -26,6 +26,7 @@ namespace Braintree
         public static readonly WebhookKind DISPUTE_OPENED = new WebhookKind("dispute_opened");
         public static readonly WebhookKind DISPUTE_LOST = new WebhookKind("dispute_lost");
         public static readonly WebhookKind DISPUTE_WON = new WebhookKind("dispute_won");
+        public static readonly WebhookKind ACCOUNT_UPDATER_DAILY_REPORT = new WebhookKind("account_updater_daily_report");
 
         public static readonly WebhookKind[] ALL = {
             CHECK,
@@ -46,7 +47,8 @@ namespace Braintree
             DISBURSEMENT,
             DISPUTE_OPENED,
             DISPUTE_LOST,
-            DISPUTE_WON
+            DISPUTE_WON,
+            ACCOUNT_UPDATER_DAILY_REPORT
         };
 
         protected WebhookKind(string name) : base(name) {}
@@ -64,6 +66,7 @@ namespace Braintree
         public virtual Disbursement Disbursement { get; protected set; }
         public virtual Dispute Dispute { get; protected set; }
         public virtual PartnerMerchant PartnerMerchant { get; protected set; }
+        public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -98,6 +101,10 @@ namespace Braintree
 
             if (WrapperNode.GetNode("partner-merchant") != null) {
                 PartnerMerchant = new PartnerMerchant(WrapperNode.GetNode("partner-merchant"));
+            }
+
+            if (WrapperNode.GetNode("account-updater-daily-report") != null) {
+                AccountUpdaterDailyReport = new AccountUpdaterDailyReport(WrapperNode.GetNode("account-updater-daily-report"));
             }
 
             if (WrapperNode.GetNode("errors") != null) {
