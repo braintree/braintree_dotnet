@@ -85,7 +85,7 @@ namespace Braintree
         {
             try
             {
-                var request = WebRequest.Create(Environment.GatewayURL + URL) as HttpWebRequest;
+                var request = Configuration.HttpWebRequestFactory(Environment.GatewayURL + URL);
                 request.Headers.Add("Authorization", GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", ApiVersion);
                 request.Headers.Add("Accept-Encoding", "gzip");
