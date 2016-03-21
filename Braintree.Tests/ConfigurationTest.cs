@@ -178,5 +178,35 @@ namespace Braintree.Tests
             BraintreeService service = new BraintreeService(configuration);
             Assert.AreEqual("http://localhost:3000", service.GetProxy());
         }
+
+        [Test]
+        [Category("Unit")]
+        public void Timeout_DefaultsToSixtySeconds()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            Assert.AreEqual(60000, configuration.Timeout);
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void Timeout_ReturnsTheSetValue()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.Timeout = 1;
+
+            Assert.AreEqual(1, configuration.Timeout);
+        }
     }
 }

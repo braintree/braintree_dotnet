@@ -94,8 +94,8 @@ namespace Braintree
                 setRequestProxy(request);
                 request.Method = method;
                 request.KeepAlive = false;
-                request.Timeout = 60000;
-                request.ReadWriteTimeout = 60000;
+                request.Timeout = Configuration.Timeout;
+                request.ReadWriteTimeout = Configuration.Timeout;
 
                 if (requestBody != null)
                 {

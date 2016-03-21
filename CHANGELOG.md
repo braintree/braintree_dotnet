@@ -1,3 +1,7 @@
+## 2.56.0
+* Add timeout attribute to Configuration
+* Add shared vault parameters
+
 ## 2.55.0
 * Add AccountUpdaterDailyReport webhook parsing
 

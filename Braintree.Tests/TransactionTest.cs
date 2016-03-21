@@ -5037,5 +5037,53 @@ namespace Braintree.Tests
           Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeAmount);
           Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeCurrencyIsoCode);
         }
+
+        [Test]
+        [Category("Integration")]
+        public void SharedVault() {
+            var sharerGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_public_id",
+                PublicKey = "oauth_app_partner_user_public_key",
+                PrivateKey = "oauth_app_partner_user_private_key"
+            };
+            var customerRequest = new CustomerRequest
+            {CreditCard = new CreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/19",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        PostalCode = "94107"
+                }
+            }};
+
+            Customer customer = sharerGateway.Customer.Create(customerRequest).Target;
+            CreditCard card = customer.CreditCards[0];
+            Address billingAddress = card.BillingAddress;
+            Address shippingAddress = customer.Addresses[0];
+
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "shared_vault_transactions");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "shared_vault_transactions"
+            });
+
+            gateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+            var request = new TransactionRequest {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                SharedPaymentMethodToken = card.Token,
+                SharedCustomerId = customer.Id,
+                SharedShippingAddressId = shippingAddress.Id,
+                SharedBillingAddressId = billingAddress.Id
+            };
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+        }
     }
 }

@@ -10,13 +10,20 @@ namespace Braintree
     public class Configuration
     {
         public Environment Environment { get; set; }
-        public string MerchantId { get; set; }
-        public string PublicKey { get; set; }
-        public string PrivateKey { get; set; }
+        public string AccessToken { get; set; }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
-        public string AccessToken { get; set; }
+        public string MerchantId { get; set; }
+        public string PrivateKey { get; set; }
         public string Proxy { get; set; }
+        public string PublicKey { get; set; }
+
+        private int timeout;
+        public int Timeout
+        {
+            get { return timeout == 0 ? 60000 : timeout; }
+            set { timeout = value; }
+        }
 
         public Configuration() {}
         public Configuration(string accessToken)

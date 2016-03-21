@@ -63,6 +63,10 @@ namespace Braintree
         public string VenmoSdkPaymentMethodCode { get; set; }
         public string PaymentMethodNonce { get; set; }
         public decimal? ServiceFeeAmount { get; set; }
+        public string SharedPaymentMethodToken { get; set; }
+        public string SharedCustomerId { get; set; }
+        public string SharedShippingAddressId { get; set; }
+        public string SharedBillingAddressId { get; set; }
         private bool _threeDSecureTransaction;
         private string _threeDSecureToken;
         public string ThreeDSecureToken {
@@ -141,6 +145,10 @@ namespace Braintree
             builder.AddElement("paypal-account", PayPalAccount);
             builder.AddElement("options", Options);
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
+            builder.AddElement("shared-payment-method-token", SharedPaymentMethodToken);
+            builder.AddElement("shared-customer-id", SharedCustomerId);
+            builder.AddElement("shared-shipping-address-id", SharedShippingAddressId);
+            builder.AddElement("shared-billing-address-id", SharedBillingAddressId);
             if (_threeDSecureTransaction) {
                 builder.AddElement("three-d-secure-token", ThreeDSecureToken ?? "");
             }
