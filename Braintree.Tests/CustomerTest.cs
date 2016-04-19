@@ -387,6 +387,37 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Create_CreateCustomerWithCreditCardAndVerificationAmount()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5555555555554444",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    Options = new CreditCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "1.02"
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Create_CreateCustomerUsingAccessToken()
         {
             var createRequest = new CustomerRequest()
@@ -831,6 +862,35 @@ namespace Braintree.Tests
             Assert.AreEqual("TD", updatedAddress.CountryCodeAlpha2);
             Assert.AreEqual("TCD", updatedAddress.CountryCodeAlpha3);
             Assert.AreEqual("148", updatedAddress.CountryCodeNumeric);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Update_UpdatesCustomerWithVerificationAmount()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Joe",
+                LastName = "Shmo",
+            };
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+
+            var updateRequest = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5555555555554444",
+                    ExpirationDate = "10/10",
+                    Options = new CreditCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "1.02"
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(updateRequest);
+            Assert.IsTrue(result.IsSuccess());
         }
 
         [Test]

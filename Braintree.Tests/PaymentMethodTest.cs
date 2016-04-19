@@ -907,6 +907,32 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Update_UpdatesTheCoinbaseAccount()
+        {
+            var customer = gateway.Customer.Create().Target;
+            PaymentMethodRequest request = new PaymentMethodRequest()
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.Coinbase
+            };
+            var coinbaseAccount = gateway.PaymentMethod.Create(request).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                coinbaseAccount.Token,
+                new PaymentMethodRequest
+                {
+                    Options = new PaymentMethodOptionsRequest { MakeDefault = true }
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOfType(typeof(CoinbaseAccount)));
+
+            var updatedCoinbaseAccount = (CoinbaseAccount)updateResult.Target;
+            Assert.IsTrue(updatedCoinbaseAccount.IsDefault.Value);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Update_CreatesNewBillingAddressByDefault()
         {
             var customer = gateway.Customer.Create().Target;

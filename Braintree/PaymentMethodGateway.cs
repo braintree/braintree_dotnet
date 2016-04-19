@@ -61,6 +61,10 @@ namespace Braintree
             {
                 return new ResultImpl<PayPalAccount>(response, gateway);
             }
+            else if (response.GetName() == "coinbase-account")
+            {
+                return new ResultImpl<CoinbaseAccount>(response, gateway);
+            }
             else if (response.GetName() == "credit-card")
             {
                 return new ResultImpl<CreditCard>(response, gateway);

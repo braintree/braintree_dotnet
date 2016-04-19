@@ -34,6 +34,7 @@ namespace Braintree
       public virtual MerchantAccountIndividualDetails IndividualDetails { get; protected set; }
       public virtual MerchantAccountBusinessDetails BusinessDetails { get; protected set; }
       public virtual MerchantAccountFundingDetails FundingDetails { get; protected set; }
+      public virtual bool? IsDefault { get; protected set; }
 
       public bool IsSubMerchant {
         get {
@@ -46,6 +47,8 @@ namespace Braintree
         Id = node.GetString("id");
         CurrencyIsoCode = node.GetString("currency-iso-code");
         Status = (MerchantAccountStatus) CollectionUtil.Find(MerchantAccountStatus.ALL, node.GetString("status"), null);
+        IsDefault = node.GetBoolean("default");
+
         NodeWrapper masterNode = node.GetNode("master-merchant-account");
         if (masterNode != null)
             MasterMerchantAccount = new MerchantAccount(masterNode);

@@ -1321,7 +1321,7 @@ namespace Braintree.Tests
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                PaymentMethodNonce = Nonce.ApplePayAmex
+                PaymentMethodNonce = Nonce.AndroidPay
             };
 
             Result<Transaction> authorizationResult = gateway.Transaction.Sale(request);

@@ -1,3 +1,10 @@
+## 2.57.0
+* Allow Coinbase account to be updated
+* Add support to pass currencies to merchant create
+* Support multiple partial settlements
+* Add IsInvalid error code for addresses
+* Add establishedOn to partner business data
+
 ## 2.56.0
 * Add timeout attribute to Configuration
 * Add shared vault parameters

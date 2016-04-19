@@ -137,6 +137,7 @@ namespace Braintree.Tests
                     FulfillmentCompletedIn = 7,
                     Currency = "USD",
                     Website = "http://example.com",
+                    EstablishedOn = "2010-10",
                 },
             });
 
@@ -181,6 +182,7 @@ namespace Braintree.Tests
             Assert.AreEqual("7", query["business[fulfillment_completed_in]"]);
             Assert.AreEqual("USD", query["business[currency]"]);
             Assert.AreEqual("http://example.com", query["business[website]"]);
+            Assert.AreEqual("2010-10", query["business[established_on]"]);
 
             Assert.AreEqual(64, query["signature"].Length);
             var hexRegex = new Regex("^[a-f0-9]+$");

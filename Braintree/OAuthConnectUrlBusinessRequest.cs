@@ -20,6 +20,7 @@ namespace Braintree
         public int FulfillmentCompletedIn { get; set; }
         public string Currency { get; set; }
         public string Website { get; set; }
+        public string EstablishedOn { get; set; }
 
         public override string ToQueryString(string root)
         {
@@ -40,6 +41,7 @@ namespace Braintree
             builder.AddElement("fulfillment_completed_in", FulfillmentCompletedIn);
             builder.AddElement("currency", Currency);
             builder.AddElement("website", Website);
+            builder.AddElement("established_on", EstablishedOn);
             return builder.ToQueryString();
         }
     }
