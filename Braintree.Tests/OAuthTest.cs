@@ -106,6 +106,7 @@ namespace Braintree.Tests
                 RedirectUri = "http://bar.example.com",
                 Scope = "read_write",
                 State = "baz_state",
+                LandingPage = "login",
                 User = new OAuthConnectUrlUserRequest {
                     Country = "USA",
                     Email = "foo@example.com",
@@ -152,6 +153,7 @@ namespace Braintree.Tests
             Assert.AreEqual("http://bar.example.com", query["redirect_uri"]);
             Assert.AreEqual("read_write", query["scope"]);
             Assert.AreEqual("baz_state", query["state"]);
+            Assert.AreEqual("login", query["landing_page"]);
 
             Assert.AreEqual("USA", query["user[country]"]);
             Assert.AreEqual("foo@example.com", query["user[email]"]);

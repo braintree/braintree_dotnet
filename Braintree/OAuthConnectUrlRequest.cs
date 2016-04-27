@@ -10,6 +10,7 @@ namespace Braintree
         public string Scope { get; set; }
         public string State { get; set; }
         public string ClientId { get; set; }
+        public string LandingPage { get; set; }
         public string[] PaymentMethods { get; set; }
         public OAuthConnectUrlUserRequest User { get; set; }
         public OAuthConnectUrlBusinessRequest Business { get; set; }
@@ -26,6 +27,7 @@ namespace Braintree
             builder.AddTopLevelElement("redirect_uri", RedirectUri);
             builder.AddTopLevelElement("scope", Scope);
             builder.AddTopLevelElement("state", State);
+            builder.AddTopLevelElement("landing_page", LandingPage);
             builder.AddTopLevelElement("client_id", ClientId);
 
             foreach (var paymentMethod in PaymentMethods) {

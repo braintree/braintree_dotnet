@@ -1,3 +1,6 @@
+## 2.58.0
+* Add landing_page param to ConnectUrlRequest
+
 ## 2.57.0
 * Allow Coinbase account to be updated
 * Add support to pass currencies to merchant create
