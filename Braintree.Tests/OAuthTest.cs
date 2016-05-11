@@ -84,17 +84,14 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void CreateTokenFromCode_RaisesIfWrongCredentials()
         {
-            try {
-                gateway = new BraintreeGateway(
-                    "access_token$development$merchant_id$_oops_this_is_not_a_client_id_and_secret"
-                );
+            gateway = new BraintreeGateway(
+                "access_token$development$merchant_id$_oops_this_is_not_a_client_id_and_secret"
+            );
 
-                gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest());
-
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest());
         }
 
         [Test]

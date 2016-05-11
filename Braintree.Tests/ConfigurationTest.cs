@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Net;
 using NUnit.Framework;
 using Braintree;
 using Braintree.Exceptions;
@@ -12,63 +13,55 @@ namespace Braintree.Tests
     {
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void ConfigurationMissingEnvironment_ThrowsConfigurationException()
         {
-            try {
-                Environment environment = null;
-                new Configuration(
-                    environment,
-                    "integration_merchant_id",
-                    "integration_public_key",
-                    "integration_private_key"
-                );
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            Environment environment = null;
+            new Configuration(
+                environment,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void ConfigurationMissingMerchantId_ThrowsConfigurationException()
         {
-            try {
-                new Configuration(
-                    Environment.DEVELOPMENT,
-                    null,
-                    "integration_public_key",
-                    "integration_private_key"
-                );
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            new Configuration(
+                Environment.DEVELOPMENT,
+                null,
+                "integration_public_key",
+                "integration_private_key"
+            );
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void ConfigurationMissingPublicKey_ThrowsConfigurationException()
         {
-            try {
-                new Configuration(
-                    Environment.DEVELOPMENT,
-                    "integration_merchant_id",
-                    null,
-                    "integration_private_key"
-                );
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                null,
+                "integration_private_key"
+            );
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void ConfigurationMissingPrivateKey_ThrowsConfigurationException()
         {
-            try {
-                new Configuration(
-                    Environment.DEVELOPMENT,
-                    "integration_merchant_id",
-                    "integration_public_key",
-                    null
-                );
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                null
+            );
         }
 
         [Test]
@@ -207,6 +200,51 @@ namespace Braintree.Tests
             configuration.Timeout = 1;
 
             Assert.AreEqual(1, configuration.Timeout);
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void HttpWebRequestFactory_ReturnsDefaultIfNotSpecified()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            Assert.IsNotNull(configuration.HttpWebRequestFactory);
+
+            HttpWebRequest httpWebRequest = WebRequest.Create("http://webrequest.com") as HttpWebRequest;
+            Assert.IsInstanceOfType(httpWebRequest.GetType(), configuration.HttpWebRequestFactory(configuration.Environment.GatewayURL + "/merchants/integration_merchant_id"));
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void HttpWebRequestFactory_AcceptsCustomDelegate()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.HttpWebRequestFactory =
+                delegate(String requestUriString)
+                {
+                    var webRequest = WebRequest.Create(requestUriString) as HttpWebRequest;
+                    webRequest.AddRange(1024);
+                    return webRequest;
+                };
+
+            Assert.IsNotNull(configuration.HttpWebRequestFactory);
+
+            var btWebRequest = configuration.HttpWebRequestFactory(configuration.Environment.GatewayURL + "/merchants/integration_merchant_id");
+            HttpWebRequest httpWebRequest = WebRequest.Create("http://webrequest.com") as HttpWebRequest;
+
+            Assert.IsInstanceOfType(httpWebRequest.GetType(), btWebRequest);
+            StringAssert.Contains("1024", btWebRequest.Headers["Range"]);
         }
     }
 }

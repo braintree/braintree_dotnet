@@ -27,63 +27,35 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
-        public void Constructor_RaisesForgedQueryStringExceptionIfGivenInvalidQueryString() 
+        [ExpectedException(typeof(ForgedQueryStringException))]
+        public void Constructor_RaisesForgedQueryStringExceptionIfGivenInvalidQueryString()
         {
-            try
-            {
-                new TransparentRedirectRequest("http_status=200&id=7kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9" + "this makes it invalid", service);
-                Assert.Fail("Expected ForgedQueryStringException.");
-            }
-            catch(ForgedQueryStringException)
-            {
-                // expected
-            }
+            new TransparentRedirectRequest("http_status=200&id=7kdj469tw7yck32j&hash=99c9ff20cd7910a1c1e793ff9e3b2d15586dc6b9" + "this makes it invalid", service);
         }
 
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ServerException))]
         public void Constructor_RaisesNotFoundExceptionIfStatusIs500()
         {
-            try
-            {
-                new TransparentRedirectRequest("http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
-                Assert.Fail("Expected ServerException.");
-            }
-            catch (ServerException)
-            {
-                // expected
-            }
+            new TransparentRedirectRequest("http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ServerException))]
         public void Constructor_RaisesNotFoundExceptionIfStatusIs500WithLeadQuestionMark()
         {
-            try
-            {
-                new TransparentRedirectRequest("?http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
-                Assert.Fail("Expected ServerException.");
-            }
-            catch (ServerException)
-            {
-                // expected
-            }
+            new TransparentRedirectRequest("?http_status=500&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(AuthorizationException))]
         public void Constructor_RaisesAuthorizationExceptionIfStatusIs403()
         {
-            try
-            {
-                new TransparentRedirectRequest("http_status=403&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
-                Assert.Fail("Expected ServerException.");
-            }
-            catch (AuthorizationException)
-            {
-                // expected
-            }
+            new TransparentRedirectRequest("http_status=403&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", service);
         }
 
         [Test]
@@ -91,16 +63,17 @@ namespace Braintree.Tests
         public void Constructor_RaisesAuthorizationExceptionWithMessageIfStatusIs403AndBtMessageIsInQueryString()
         {
             string message = "Invalid params: transaction[bad]";
+            Exception exception = null;
 
-            try
-            {
+            try {
                 new TransparentRedirectRequest(string.Format("http_status=403&bt_message={0}&id=6kdj469tw7yck32j&hash=a839a44ca69d59a3d6f639c294794989676632dc", HttpUtility.UrlEncode(message)), service);
-                Assert.Fail("Expected ServerException.");
+            } catch (Exception localException) {
+               exception = localException;
             }
-            catch (AuthorizationException e)
-            {
-                Assert.AreEqual(message, e.Message);
-            }
+
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(AuthorizationException),exception);
+            Assert.AreEqual(message, exception.Message);
         }
 
         #pragma warning disable 0618
@@ -117,6 +90,8 @@ namespace Braintree.Tests
             };
             BraintreeService service = new BraintreeService(gateway.Configuration);
 
+            Exception exception = null;
+
             try {
                 CustomerRequest trParams = new CustomerRequest();
                 CustomerRequest request = new CustomerRequest
@@ -127,10 +102,12 @@ namespace Braintree.Tests
 
                 string queryString = TestHelper.QueryStringForTR(trParams, request, service.BaseMerchantURL() + "/test/maintenance", service);
                 gateway.Customer.ConfirmTransparentRedirect(queryString);
-                Assert.Fail("Expected DownForMaintenanceException");
-            } catch (Braintree.Exceptions.DownForMaintenanceException) {
-                // expected
+            } catch (Exception localException) {
+                exception = localException;
             }
+
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(DownForMaintenanceException), exception);
         }
         #pragma warning restore 0618
 
@@ -148,6 +125,7 @@ namespace Braintree.Tests
             };
             BraintreeService service = new BraintreeService(gateway.Configuration);
 
+            Exception exception = null;
             try {
                 CustomerRequest trParams = new CustomerRequest();
                 CustomerRequest request = new CustomerRequest
@@ -158,10 +136,12 @@ namespace Braintree.Tests
 
                 string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
                 gateway.Customer.ConfirmTransparentRedirect(queryString);
-                Assert.Fail("Expected AuthenticationException");
-            } catch (Braintree.Exceptions.AuthenticationException) {
-                // expected
+            } catch (Exception localException) {
+                exception = localException;
             }
+
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(AuthenticationException), exception);
         }
         #pragma warning restore 0618
     }

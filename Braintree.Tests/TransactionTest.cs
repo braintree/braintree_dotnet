@@ -3667,17 +3667,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_WithBadId()
         {
-            try
-            {
-                gateway.Transaction.Find("badId");
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            gateway.Transaction.Find("badId");
         }
 
         [Test]
@@ -3774,12 +3767,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
-            try {
-                gateway.Transaction.Find(" ");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.Transaction.Find(" ");
         }
 
 
@@ -3807,17 +3798,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Void_WithBadId()
         {
-            try
-            {
-                gateway.Transaction.Void("badId");
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            gateway.Transaction.Void("badId");
         }
 
         [Test]
@@ -3956,6 +3940,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(AuthorizationException))]
         public void SubmitForSettlement_WithInvalidParams()
         {
             TransactionRequest request = new TransactionRequest
@@ -3976,15 +3961,7 @@ namespace Braintree.Tests
                 PurchaseOrderNumber = "111"
             };
 
-            try
-            {
-                gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
-                Assert.Fail("Expected ServerException.");
-            }
-            catch (AuthorizationException)
-            {
-                // expected
-            }
+            gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
         }
 
         [Test]
@@ -4111,6 +4088,253 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void UpdateDetails()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest updateRequest = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE - 1,
+                OrderId = "123",
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555",
+                  Url = "ebay.com"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.UpdateDetails(transaction.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE - 1, result.Target.Amount);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual("123", result.Target.OrderId);
+            Assert.AreEqual("123*123456789012345678", result.Target.Descriptor.Name);
+            Assert.AreEqual("3334445555", result.Target.Descriptor.Phone);
+            Assert.AreEqual("ebay.com", result.Target.Descriptor.Url);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void UpdateDetails_WithInvalidParams()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest updateRequest = new TransactionRequest
+            {
+                PurchaseOrderNumber = "111"
+            };
+
+            try
+            {
+                gateway.Transaction.UpdateDetails(transaction.Id, updateRequest);
+                Assert.Fail("Expected ServerException.");
+            }
+            catch (AuthorizationException)
+            {
+                // expected
+            }
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void UpdateDetails_WithInvalidAmount()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest updateRequest = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE * 10
+            };
+
+            Result<Transaction> result = gateway.Transaction.UpdateDetails(transaction.Id, updateRequest);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_SETTLEMENT_AMOUNT_IS_TOO_LARGE, result.Errors.ForObject("Transaction").OnField("Amount")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void UpdateDetails_WithInvalidDescriptor()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest updateRequest = new TransactionRequest
+            {
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "invalid name",
+                  Phone = "invalid phone",
+                  Url = "invalid url that is too long to be valid"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.UpdateDetails(transaction.Id, updateRequest);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.DESCRIPTOR_NAME_FORMAT_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Name")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.DESCRIPTOR_PHONE_FORMAT_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Phone")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.DESCRIPTOR_URL_FORMAT_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Descriptor").OnField("Url")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void UpdateDetails_WithInvalidOrderId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest updateRequest = new TransactionRequest
+            {
+                OrderId = new string ('A', 256)
+            };
+
+            Result<Transaction> result = gateway.Transaction.UpdateDetails(transaction.Id, updateRequest);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_ORDER_ID_IS_TOO_LONG, result.Errors.ForObject("Transaction").OnField("OrderId")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void UpdateDetails_WithInvalidStatus()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest updateRequest = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE - 1,
+                OrderId = "123",
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555",
+                  Url = "ebay.com"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.UpdateDetails(transaction.Id, updateRequest);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_UPDATE_DETAILS_NOT_SUBMITTED_FOR_SETTLEMENT, result.Errors.ForObject("Transaction").OnField("base")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void UpdateDetails_WithInvalidProcessor()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.AmexPayWithPoints.SUCCESS,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest updateRequest = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE - 1,
+                OrderId = "123",
+                Descriptor = new DescriptorRequest
+                {
+                  Name = "123*123456789012345678",
+                  Phone = "3334445555",
+                  Url = "ebay.com"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.UpdateDetails(transaction.Id, updateRequest);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PROCESSOR_DOES_NOT_SUPPORT_UPDATING_DETAILS, result.Errors.ForObject("Transaction").OnField("base")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void SubmitForPartialSettlement_WithAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -4200,6 +4424,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(AuthorizationException))]
         public void SubmitForPartialSettlement_WithInvalidParams()
         {
             TransactionRequest request = new TransactionRequest
@@ -4221,15 +4446,7 @@ namespace Braintree.Tests
                 Amount = decimal.Parse("50.00")
             };
 
-            try
-            {
-                gateway.Transaction.SubmitForPartialSettlement(transaction.Id, submitForSettlementRequest);
-                Assert.Fail("Expected ServerException.");
-            }
-            catch (AuthorizationException)
-            {
-                // expected
-            }
+            gateway.Transaction.SubmitForPartialSettlement(transaction.Id, submitForSettlementRequest);
         }
 
         [Test]
@@ -4280,17 +4497,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void SubmitForSettlement_WithBadId()
         {
-            try
-            {
-                gateway.Transaction.SubmitForSettlement("badId");
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            gateway.Transaction.SubmitForSettlement("badId");
         }
 
         #pragma warning disable 0618

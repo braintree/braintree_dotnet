@@ -787,12 +787,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
-            try {
-                gateway.Subscription.Find(" ");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.Subscription.Find(" ");
         }
 
         [Test]

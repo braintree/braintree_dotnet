@@ -485,12 +485,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
-            try {
-                gateway.CreditCard.Find(" ");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.CreditCard.Find(" ");
         }
 
         [Test]
@@ -508,12 +506,16 @@ namespace Braintree.Tests
         public void FromNonce_ReturnsErrorWhenProvidedNoncePointingToUnlockedSharedCard()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Exception exception = null;
             try {
                 gateway.CreditCard.FromNonce(nonce);
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException e) {
-                StringAssert.Contains("not found", e.Message);
+            } catch (Exception tempException) {
+                exception = tempException;
             }
+
+            Assert.IsNotNull(exception);
+            StringAssert.Contains("not found", exception.Message);
+            Assert.IsInstanceOfType(typeof(NotFoundException), exception);
         }
 
         [Test]
@@ -523,14 +525,17 @@ namespace Braintree.Tests
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
             gateway.CreditCard.FromNonce(nonce);
+
+            Exception exception = null; 
             try {
                 gateway.CreditCard.FromNonce(nonce);
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException e) {
-                StringAssert.Contains("consumed", e.Message);
+            } catch (Exception tempException) {
+                exception = tempException;
             }
+            StringAssert.Contains("consumed", exception.Message);
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(NotFoundException), exception);
         }
-
 
         [Test]
         [Category("Integration")]
@@ -812,6 +817,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Delete_DeletesTheCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -829,15 +835,7 @@ namespace Braintree.Tests
 
             Assert.AreEqual(creditCard.Token, gateway.CreditCard.Find(creditCard.Token).Token);
             gateway.CreditCard.Delete(creditCard.Token);
-            try
-            {
-                gateway.CreditCard.Find(creditCard.Token);
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            gateway.CreditCard.Find(creditCard.Token);
         }
 
         [Test]

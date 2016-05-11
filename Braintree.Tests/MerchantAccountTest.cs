@@ -314,12 +314,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
-            try {
-                gateway.MerchantAccount.Find(" ");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.MerchantAccount.Find(" ");
         }
 
         private MerchantAccountRequest deprecatedCreateRequest(string id)

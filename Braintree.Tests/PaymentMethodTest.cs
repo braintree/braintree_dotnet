@@ -754,14 +754,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Delete_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
-            try
-            {
-                gateway.PaymentMethod.Delete(" ");
-                Assert.Fail("Should have raised NotFoundException");
-            }
-            catch(NotFoundException) {}
+            gateway.PaymentMethod.Delete(" ");
         }
 
         [Test]
@@ -848,26 +844,18 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_RaisesNotFoundErrorWhenTokenIsBlank()
         {
-            try
-            {
-                gateway.PaymentMethod.Find(" ");
-                Assert.Fail("Should have raised NotFoundException");
-            }
-            catch(NotFoundException) {}
+            gateway.PaymentMethod.Find(" ");
         }
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
-            try
-            {
-                gateway.PaymentMethod.Find("missing");
-                Assert.Fail("Should have raised NotFoundException");
-            }
-            catch(NotFoundException) {}
+            gateway.PaymentMethod.Find("missing");
         }
 
         [Test]
@@ -1260,10 +1248,16 @@ namespace Braintree.Tests
             Assert.IsTrue(updatedResult.IsSuccess());
             var updatedPaypalAccount = gateway.PayPalAccount.Find(updatedToken);
             Assert.AreEqual(((PayPalAccount)originalResult.Target).Email, updatedPaypalAccount.Email);
+
+            Exception exception = null;
             try {
                 gateway.PayPalAccount.Find(originalToken);
-                Assert.Fail("Didn't throw");
-            } catch (NotFoundException) { }
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(NotFoundException), exception);
         }
 
         [Test]

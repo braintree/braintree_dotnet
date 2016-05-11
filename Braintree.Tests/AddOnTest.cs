@@ -64,6 +64,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void All_RaisesIfMissingCredentials()
         {
             gateway = new BraintreeGateway
@@ -73,11 +74,7 @@ namespace Braintree.Tests
                 PrivateKey = "integration_private_key"
             };
 
-            try {
-                gateway.AddOn.All();
-
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            gateway.AddOn.All();
         }
     }
 }

@@ -186,32 +186,18 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_RaisesIfIdIsInvalid()
         {
-            try
-            {
-                gateway.Customer.Find("DOES_NOT_EXIST_999");
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            gateway.Customer.Find("DOES_NOT_EXIST_999");
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_RaisesIfIdIsBlank()
         {
-            try
-            {
-                gateway.Customer.Find("  ");
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+            gateway.Customer.Find("  ");
         }
 
         [Test]
@@ -273,7 +259,7 @@ namespace Braintree.Tests
             Assert.AreEqual("MAC", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("446", billingAddress.CountryCodeNumeric);
         }
-        
+
         [Test]
         [Category("Integration")]
         public void Create_withSecurityParams()
@@ -951,6 +937,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Delete_DeletesTheCustomer()
         {
             string id = Guid.NewGuid().ToString();
@@ -959,15 +946,8 @@ namespace Braintree.Tests
 
             Result<Customer> result = gateway.Customer.Delete(id);
             Assert.IsTrue(result.IsSuccess());
-            try
-            {
-                gateway.Customer.Find(id);
-                Assert.Fail("Expected NotFoundException.");
-            }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+
+            gateway.Customer.Find(id);
         }
 
         [Test]
@@ -976,7 +956,7 @@ namespace Braintree.Tests
             ResourceCollection<Customer> collection = gateway.Customer.All();
 
             Assert.IsTrue(collection.MaximumCount > 100);
-    
+
             List<string> items = new List<string>();
             foreach (Customer item in collection) {
                 items.Add(item.Id);

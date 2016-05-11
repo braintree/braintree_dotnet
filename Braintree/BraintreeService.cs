@@ -85,7 +85,7 @@ namespace Braintree
         {
             try
             {
-                var request = WebRequest.Create(Environment.GatewayURL + URL) as HttpWebRequest;
+                var request = Configuration.HttpWebRequestFactory(Environment.GatewayURL + URL);
                 request.Headers.Add("Authorization", GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", ApiVersion);
                 request.Headers.Add("Accept-Encoding", "gzip");
@@ -223,6 +223,8 @@ namespace Braintree
                         throw new ServerException();
                     case HttpStatusCode.ServiceUnavailable:
                         throw new DownForMaintenanceException();
+                    case (HttpStatusCode) 429:
+                        throw new TooManyRequestsException();
                     case (HttpStatusCode) 426:
                         throw new UpgradeRequiredException();
                     default:

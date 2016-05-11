@@ -99,17 +99,18 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
-        public void Find_FindsErrorsOutOnWhitespaceIds()
+        [ExpectedException(typeof(NotFoundException))]
+        public void Find_FindsErrorsOutOnWhitespaceAddressId()
         {
-            try {
-                gateway.Address.Find(" ", "address_id");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.Address.Find(" ", "address_id");
+        }
 
-            try {
-                gateway.Address.Find("customer_id", " ");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+        [Test]
+        [Category("Unit")]
+        [ExpectedException(typeof(NotFoundException))]
+        public void Find_FindsErrorsOutOnWhitespaceCustomerId()
+        {
+            gateway.Address.Find("customer_id", " ");
         }
 
         [Test]
@@ -216,6 +217,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Delete_DeletesTheAddress()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -229,17 +231,14 @@ namespace Braintree.Tests
             Address createdAddress = gateway.Address.Create(customer.Id, addressRequest).Target;
             Assert.AreEqual(createdAddress.Id, gateway.Address.Find(customer.Id, createdAddress.Id).Id);
 
-            Result<Address> result = gateway.Address.Delete(customer.Id, createdAddress.Id);
-            Assert.IsTrue(result.IsSuccess());
-            try
-            {
-                gateway.Address.Find(customer.Id, createdAddress.Id);
-                Assert.Fail("Expected NotFoundException.");
+            try {
+                Result<Address> result = gateway.Address.Delete(customer.Id, createdAddress.Id);
+                Assert.IsTrue(result.IsSuccess());
+            } catch (NotFoundException) {
+                Assert.Fail("Unable to delete the created address");
             }
-            catch (NotFoundException)
-            {
-                // expected
-            }
+
+            gateway.Address.Find(customer.Id, createdAddress.Id);
         }
 
         [Test]

@@ -49,14 +49,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Create_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
-            try
-            {
-                gateway.PaymentMethodNonce.Create("notarealtoken");
-                Assert.Fail("Should have raised NotFoundException");
-            }
-            catch(NotFoundException) {}
+            gateway.PaymentMethodNonce.Create("notarealtoken");
         }
 
         [Test]
@@ -87,14 +83,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
-            try
-            {
-                gateway.PaymentMethodNonce.Find("notarealnonce");
-                Assert.Fail("Should have raised NotFoundException");
-            }
-            catch(NotFoundException) {}
+            gateway.PaymentMethodNonce.Find("notarealnonce");
         }
 
     }

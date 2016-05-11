@@ -13,39 +13,43 @@ namespace Braintree.Tests
     {
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(Braintree.Exceptions.AuthenticationException))]
         public void SandboxSSLCertificateSuccessful()
         {
-            try {
-                new BraintreeService(new Configuration(Environment.SANDBOX, "dummy", "dummy", "dummy")).Get("/");
-                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
-            } catch (Braintree.Exceptions.AuthenticationException) {
-                // expected
-            }
+            new BraintreeService(new Configuration(Environment.SANDBOX, "dummy", "dummy", "dummy")).Get("/");
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(Braintree.Exceptions.AuthenticationException))]
         public void ProductionSSLCertificateSuccessful()
         {
             ServicePointManager.ServerCertificateValidationCallback = TrustAllCertificates;
-            try {
-                new BraintreeService(new Configuration(Environment.PRODUCTION, "dummy", "dummy", "dummy")).Get("/");
-                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
-            } catch (Braintree.Exceptions.AuthenticationException) {
-                // expected
-            }
+            new BraintreeService(new Configuration(Environment.PRODUCTION, "dummy", "dummy", "dummy")).Get("/");
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(Braintree.Exceptions.UpgradeRequiredException))]
         public void ThrowExceptionIfErrorStatusCodeIsUpgradeRequired()
         {
-            try {
-                BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 426, null);
-                Assert.Fail ("Expected an AuthenticationException but none was thrown.");
-            } catch (Braintree.Exceptions.UpgradeRequiredException) {
-                // expected
-            }
+            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 426, null);
+        }
+
+        [Test]
+        [Category("Unit")]
+        [ExpectedException(typeof(Braintree.Exceptions.TooManyRequestsException))]
+        public void ThrowExceptionIfErrorStatusCodeIsTooManyRequests()
+        {
+            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 429, null);
+        }
+
+        [Test]
+        [Category("Unit")]
+        [ExpectedException(typeof(Braintree.Exceptions.DownForMaintenanceException))]
+        public void ThrowExceptionIfErrorStatusCodeIsDownForMaintenance()
+        {
+            BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 503, null);
         }
 
         private static bool TrustAllCertificates(object sender, X509Certificate x509Certificate, X509Chain x509Chain, SslPolicyErrors sslPolicyErrors)

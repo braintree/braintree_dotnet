@@ -44,12 +44,17 @@ namespace Braintree.Tests
         [Category("Unit")]
         public void ParseEnvironment_ThrowsException()
         {
+            Exception exception = null;
+
             try {
                 Environment.ParseEnvironment("QA_2");
-                Assert.Fail("Should throw Exception");
-            } catch (ConfigurationException error) {
-                Assert.AreEqual(error.Message, "Unsupported environment: QA_2");
+            } catch (Exception localException) {
+                exception = localException;
             }
+
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOfType(typeof(ConfigurationException), exception);
+            Assert.AreEqual("Unsupported environment: QA_2", exception.Message);
         }
     }
 }

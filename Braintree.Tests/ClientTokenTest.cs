@@ -22,6 +22,7 @@ namespace Braintree.Tests
               PublicKey = "integration_public_key",
               PrivateKey = "integration_private_key"
           };
+          Exception exception = null;
           try {
               gateway.ClientToken.generate(
                   new ClientTokenRequest
@@ -32,11 +33,12 @@ namespace Braintree.Tests
                       }
                   }
               );
-              Assert.Fail("Should raise ArgumentException");
-          } catch (ArgumentException e) {
-              Match match = Regex.Match(e.Message, @"VerifyCard");
-              Assert.IsTrue(match.Success);
+          } catch (Exception tempException) {
+              exception = tempException;
           }
+          Assert.IsNotNull(exception);
+          Assert.IsTrue(Regex.Match(exception.Message, @"VerifyCard").Success);
+          Assert.IsInstanceOfType(typeof(System.ArgumentException), exception);
         }
 
         [Test]
@@ -50,6 +52,7 @@ namespace Braintree.Tests
               PublicKey = "integration_public_key",
               PrivateKey = "integration_private_key"
           };
+          Exception exception = null;
           try {
               gateway.ClientToken.generate(
                   new ClientTokenRequest
@@ -60,11 +63,12 @@ namespace Braintree.Tests
                       }
                   }
               );
-              Assert.Fail("Should raise ArgumentException");
-          } catch (ArgumentException e) {
-              Match match = Regex.Match(e.Message, @"MakeDefault");
-              Assert.IsTrue(match.Success);
+          } catch (Exception tempException) {
+              exception = tempException;
           }
+          Assert.IsNotNull(exception);
+          Assert.IsTrue(Regex.Match(exception.Message, @"MakeDefault").Success);
+          Assert.IsInstanceOfType(typeof(System.ArgumentException), exception);
         }
 
         [Test]
@@ -78,6 +82,7 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+            Exception exception = null;
             try {
                 gateway.ClientToken.generate(
                     new ClientTokenRequest
@@ -88,11 +93,12 @@ namespace Braintree.Tests
                         }
                     }
                 );
-                Assert.Fail("Should raise ArgumentException");
-            } catch (ArgumentException e) {
-                Match match = Regex.Match(e.Message, @"FailOnDuplicatePaymentMethod");
-                Assert.IsTrue(match.Success);
+            } catch (Exception tempException) {
+                exception = tempException;
             }
+            Assert.IsNotNull(exception);
+            Assert.IsTrue(Regex.Match(exception.Message, @"FailOnDuplicatePaymentMethod").Success);
+            Assert.IsInstanceOfType(typeof(System.ArgumentException), exception);
         }
     }
 
@@ -331,7 +337,7 @@ namespace Braintree.Tests
             };
 
             string encodedClientToken = "";
-
+            Exception exception = null;
             try
             {
                 encodedClientToken += gateway.ClientToken.generate(
@@ -340,11 +346,12 @@ namespace Braintree.Tests
                         CustomerId = "NON_EXISTENT_CUSTOMER_ID"
                     }
                 );
-                Assert.Fail("Should raise ArgumentException");
-            } catch (ArgumentException e) {
-                Match match = Regex.Match(e.Message, @"customer_id");
-                Assert.IsTrue(match.Success);
+            } catch (Exception tempException) {
+                exception = tempException;
             }
-        }
+            Assert.IsNotNull(exception);
+            Assert.IsTrue(Regex.Match(exception.Message, @"customer_id").Success);
+            Assert.IsInstanceOfType(typeof(System.ArgumentException), exception);
+        } 
     }
 }

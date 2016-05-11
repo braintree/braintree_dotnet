@@ -54,16 +54,15 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_RaisesNotFoundErrorForUnknownToken()
         {
-            try {
-                gateway.PayPalAccount.Find(" ");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.PayPalAccount.Find(" ");
         }
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Find_RaisesNotFoundErrorForCreditCardToken()
         {
             var createRequest = new CustomerRequest
@@ -78,10 +77,7 @@ namespace Braintree.Tests
 
             Customer customer = gateway.Customer.Create(createRequest).Target;
 
-            try {
-                gateway.PayPalAccount.Find(customer.CreditCards[0].Token);
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.PayPalAccount.Find(customer.CreditCards[0].Token);
         }
 
         [Test]
@@ -105,12 +101,10 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        [ExpectedException(typeof(NotFoundException))]
         public void Delete_RaisesNotFoundErrorForUnknownToken()
         {
-            try {
-                gateway.PayPalAccount.Delete(" ");
-                Assert.Fail("Should throw NotFoundException");
-            } catch (NotFoundException) {}
+            gateway.PayPalAccount.Delete(" ");
         }
 
         [Test]

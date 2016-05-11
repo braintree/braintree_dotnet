@@ -1,3 +1,8 @@
+## 2.59.0
+* Add Transaction `UpdateDetails`
+* Support for Too Many Request response code
+* Add support for custom HttpWebRequest in configuration
+
 ## 2.58.0
 * Add landing_page param to ConnectUrlRequest
 

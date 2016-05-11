@@ -36,44 +36,35 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void CredentialsParser_ThrowErrorOnInconsistentEnvironment()
         {
-            try {
-                new CredentialsParser(
-                    "client_id$development$integration_client_id",
-                    "client_secret$qa$integration_client_secret"
-                );
-
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            new CredentialsParser(
+                "client_id$development$integration_client_id",
+                "client_secret$qa$integration_client_secret"
+            );
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void CredentialsParser_ThrowErrorOnInvalidClientSecret()
         {
-            try {
-                new CredentialsParser(
-                    "client_id$development$integration_client_id",
-                    "client_id$development$integration_client_id"
-                );
-
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            new CredentialsParser(
+                "client_id$development$integration_client_id",
+                "client_id$development$integration_client_id"
+            );
         }
 
         [Test]
         [Category("Unit")]
+        [ExpectedException(typeof(ConfigurationException))]
         public void CredentialsParser_ThrowErrorOnInconsistentClientSecret()
         {
-            try {
-                new CredentialsParser(
-                    "client_secret$development$integration_client_secret",
-                    "client_secret$development$integration_client_secret"
-                );
-
-                Assert.Fail("Should throw ConfigurationException");
-            } catch (ConfigurationException) {}
+            new CredentialsParser(
+                "client_secret$development$integration_client_secret",
+                "client_secret$development$integration_client_secret"
+            );
         }
     }
 }
