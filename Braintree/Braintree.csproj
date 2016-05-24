@@ -28,7 +28,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.59.0.*</ApplicationVersion>
+    <ApplicationVersion>2.60.0.*</ApplicationVersion>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -180,6 +180,8 @@
     <Compile Include="OAuthCredentials.cs" />
     <Compile Include="OAuthCredentialsRequest.cs" />
     <Compile Include="OAuthGateway.cs" />
+    <Compile Include="OAuthResult.cs" />
+    <Compile Include="OAuthRevokeAccessTokenRequest.cs" />
     <Compile Include="PartnerConfiguration.cs" />
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />

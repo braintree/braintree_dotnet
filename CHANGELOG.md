@@ -1,3 +1,6 @@
+## 2.60.0
+* Add method of revoking OAuth access tokens
+
 ## 2.59.0
 * Add Transaction `UpdateDetails`
 * Support for Too Many Request response code

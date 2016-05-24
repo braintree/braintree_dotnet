@@ -10,5 +10,6 @@ namespace Braintree
         string ConnectUrl(OAuthConnectUrlRequest request);
         ResultImpl<OAuthCredentials> CreateTokenFromCode(OAuthCredentialsRequest request);
         ResultImpl<OAuthCredentials> CreateTokenFromRefreshToken(OAuthCredentialsRequest request);
+        ResultImpl<OAuthResult> RevokeAccessToken(string token);
     }
 }

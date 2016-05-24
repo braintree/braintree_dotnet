@@ -95,6 +95,32 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [Category("Integration")]
+        public void RevokeAccessToken_RevokesAccessToken()
+        {
+            string code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
+
+            ResultImpl<OAuthCredentials> accessTokenResult = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "read_write"
+            });
+
+            string accessToken = accessTokenResult.Target.AccessToken;
+            ResultImpl<OAuthResult> result = gateway.OAuth.RevokeAccessToken(accessToken);
+            Assert.IsTrue(result.Target.Result.Value);
+
+            try {
+                gateway = new BraintreeGateway(
+                    accessToken
+                );
+
+                gateway.Customer.Create();
+
+                Assert.Fail("Should throw AuthenticationException");
+            } catch (AuthenticationException) {}
+        }
+
+        [Test]
         [Category("Unit")]
         public void ConnectUrl_ReturnsCorrectUrl()
         {

@@ -33,6 +33,15 @@ namespace Braintree
             return new ResultImpl<OAuthCredentials>(new NodeWrapper(accessTokenXML), gateway);
         }
 
+        public ResultImpl<OAuthResult> RevokeAccessToken(string accessToken)
+        {
+            OAuthRevokeAccessTokenRequest request = new OAuthRevokeAccessTokenRequest();
+            request.Token = accessToken;
+            XmlNode accessTokenXML = service.Post("/oauth/revoke_access_token", request);
+
+            return new ResultImpl<OAuthResult>(new NodeWrapper(accessTokenXML), gateway);
+        }
+
         public string ConnectUrl(OAuthConnectUrlRequest request)
         {
             request.ClientId = gateway.ClientId;

@@ -133,6 +133,10 @@ namespace Braintree
             {
                 return new OAuthCredentials(node) as T;
             }
+            else if (typeof(T) == typeof(OAuthResult))
+            {
+                return new OAuthResult(node) as T;
+            }
             else if (typeof(T) == typeof(Merchant))
             {
                 return new Merchant(node) as T;
