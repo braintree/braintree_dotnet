@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree", "Braintree\Braintree.csproj", "{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree.Tests", "Braintree.Tests\Braintree.Tests.csproj", "{60234E7B-1181-4EFF-96EE-624B4524D788}"
@@ -8,17 +10,27 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug452|Any CPU = Debug452|Any CPU
 		Release|Any CPU = Release|Any CPU
+		Release452|Any CPU = Release452|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug452|Any CPU.ActiveCfg = Debug452|Any CPU
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Debug452|Any CPU.Build.0 = Debug452|Any CPU
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release452|Any CPU.ActiveCfg = Release452|Any CPU
+		{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}.Release452|Any CPU.Build.0 = Release452|Any CPU
 		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug452|Any CPU.ActiveCfg = Debug452|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Debug452|Any CPU.Build.0 = Debug452|Any CPU
 		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release452|Any CPU.ActiveCfg = Release452|Any CPU
+		{60234E7B-1181-4EFF-96EE-624B4524D788}.Release452|Any CPU.Build.0 = Release452|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
