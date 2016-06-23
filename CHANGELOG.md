@@ -1,3 +1,8 @@
+## 2.61.0
+* Add OrderId to refund
+* Add 3DS Pass thru support
+* Expose ids in resource collections
+
 ## 2.60.0
 * Add method of revoking OAuth access tokens
 

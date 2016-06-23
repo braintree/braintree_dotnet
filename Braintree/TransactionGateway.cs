@@ -95,11 +95,17 @@ namespace Braintree
 
         public virtual Result<Transaction> Refund(string id, decimal amount)
         {
-            var request = new TransactionRequest
+            var request = new TransactionRefundRequest
             {
                 Amount = amount
             };
-            XmlNode response = service.Post(service.MerchantPath() + "/transactions/" + id + "/refund", request);
+
+            return Refund(id, request);
+        }
+
+        public virtual Result<Transaction> Refund(string id, TransactionRefundRequest refundRequest)
+        {
+            XmlNode response = service.Post(service.MerchantPath() + "/transactions/" + id + "/refund", refundRequest);
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 

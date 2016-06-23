@@ -18,6 +18,7 @@ namespace Braintree
         Result<Transaction> HoldInEscrow(string id);
         Result<Transaction> Refund(string id);
         Result<Transaction> Refund(string id, decimal amount);
+        Result<Transaction> Refund(string id, TransactionRefundRequest refundRequest);
         Result<Transaction> ReleaseFromEscrow(string id);
         Result<Transaction> Sale(TransactionRequest request);
         string SaleTrData(TransactionRequest trData, string redirectURL);

@@ -2150,6 +2150,142 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Sale_WithThreeDSecurePassThru()
+        {
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Sale_ErrorWithThreeDSecurePassThruWhenMerchantAccountDoesNotSupportCardType()
+        {
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = "adyen_ma",
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_MERCHANT_ACCOUNT_DOES_NOT_SUPPORT_CARD_TYPE, result.Errors.ForObject("Transaction").OnField("Merchant-Account-Id")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Sale_ErrorWithMissingThreeDSecurePassThruEciFlag()
+        {
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_ECI_FLAG_IS_REQUIRED, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Eci-Flag")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Sale_ErrorWithMissingThreeDSecurePassThruCavvOrXid()
+        {
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "06",
+                    Cavv = "",
+                    Xid = "",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_CAVV_IS_REQUIRED, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Cavv")[0].Code);
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_XID_IS_REQUIRED, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Xid")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Sale_ErrorWithInvalidThreeDSecurePassThruEciFlag()
+        {
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "bad_eci_flag",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_ECI_FLAG_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Eci-Flag")[0].Code);
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Sale_WithApplePayNonce()
         {
             TransactionRequest request = new TransactionRequest
@@ -4573,6 +4709,70 @@ namespace Braintree.Tests
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(decimal.Parse("500.00"), result.Target.Amount);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Refund_WithOrderId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+
+            TransactionRefundRequest refundRequest = new TransactionRefundRequest() {
+                OrderId = "1234567"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, refundRequest);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual("1234567", result.Target.OrderId);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Refund_WithAmountOrderId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+
+            TransactionRefundRequest refundRequest = new TransactionRefundRequest() {
+                Amount = 500M,
+                OrderId = "1234567"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, refundRequest);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual("1234567", result.Target.OrderId);
+            Assert.AreEqual(500M, result.Target.Amount);
         }
 
         [Test]

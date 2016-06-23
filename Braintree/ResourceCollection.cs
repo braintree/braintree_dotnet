@@ -16,7 +16,7 @@ namespace Braintree
             }
         }
         private int PageSize;
-        private List<string> Ids;
+        public List<string> Ids { get; private set; }
         private PagingDelegate NextPage;
         public T FirstItem {
             get {

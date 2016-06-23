@@ -56,6 +56,7 @@ namespace Braintree
         public TransactionType Type { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
         public TransactionOptionsRequest Options { get; set; }
+        public TransactionThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
         public string PaymentMethodToken { get; set; }
         public string CustomerId { get; set; }
         public string ShippingAddressId { get; set; }
@@ -144,6 +145,7 @@ namespace Braintree
             builder.AddElement("shipping", ShippingAddress);
             builder.AddElement("paypal-account", PayPalAccount);
             builder.AddElement("options", Options);
+            builder.AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
             builder.AddElement("shared-payment-method-token", SharedPaymentMethodToken);
             builder.AddElement("shared-customer-id", SharedCustomerId);
