@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0-*",
+
+  "runtimes": {
+    "win10-x64": {} 
+  },
+
+  "dependencies": {
+    "Braintree": {
+      "target": "project"
+    },
+    "dotnet-test-nunit": "3.4.0-alpha-2",
+    "Microsoft.AspNetCore.WebUtilities": "1.0.0",
+    "NUnit": "3.4.0",
+    "System.Collections.Specialized": "4.0.1",
+    "System.Net.Http.WinHttpHandler": "4.0.0"
+  },
+  "testRunner": "nunit",
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": [
+        "dnxcore50",
+        "netcoreapp1.0",
+        "portable-net45+win8"
+      ],
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "version": "1.0.0-*",
+          "type": "platform"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "version": "2.63.0",
+  "runtimes": {
+    "win10-x64": {}
+  },
+  "dependencies": {
+  },
+
+  "frameworks": {
+    "net452": {
+      "dependencies": {},
+      "frameworkAssemblies": {
+        "System.Net.Http": "",
+        "System.IO.Compression": "",
+        "System.Linq": "",
+        "System.Xml": "",
+        "System.Net": ""
+      }
+    },
+    "netcoreapp1.0": {
+      "buildOptions": {
+        "define": [
+          "netcoreapp10"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.NETCore.App": "1.0.0",
+        "System.Net.Http.WinHttpHandler": "4.0.0",
+        "System.Net.Http": "4.1.0",
+        "System.Linq": "4.1.0",
+        "System.IO.Compression": "4.1.0",
+        "system.xml.xpath.xmldocument": "4.0.0",
+        "Microsoft.AspNetCore.WebUtilities": "1.0.0"
+      },
+      "imports": [
+        "dnxcore50",
+        "portable-net45+win8"
+      ]
+    }
+  }
+}
