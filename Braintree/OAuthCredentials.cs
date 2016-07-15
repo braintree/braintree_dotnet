@@ -11,6 +11,7 @@ namespace Braintree
             AccessToken = node.GetString("access-token");
             RefreshToken = node.GetString("refresh-token");
             TokenType = node.GetString("token-type");
+            Scope = node.GetString("scope");
             ExpiresAt = node.GetDateTime("expires-at");
         }
 
@@ -25,6 +26,11 @@ namespace Braintree
         }
 
         public string TokenType
+        {
+            get; set;
+        }
+
+        public string Scope
         {
             get; set;
         }

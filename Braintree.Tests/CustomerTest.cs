@@ -12,6 +12,7 @@ namespace Braintree.Tests
     {
         private BraintreeGateway gateway;
         private BraintreeService service;
+        private Random random;
 
         [SetUp]
         public void Setup()
@@ -24,6 +25,7 @@ namespace Braintree.Tests
                 PrivateKey = "integration_private_key"
             };
             service = new BraintreeService(gateway.Configuration);
+            random = new Random();
         }
 
         [Test]
@@ -848,6 +850,104 @@ namespace Braintree.Tests
             Assert.AreEqual("TD", updatedAddress.CountryCodeAlpha2);
             Assert.AreEqual("TCD", updatedAddress.CountryCodeAlpha3);
             Assert.AreEqual("148", updatedAddress.CountryCodeNumeric);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Update_MakeExistingCreditCardPaymentMethodTheDefaultUsingOptions()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardToken1 = GenerateToken();
+
+            var creditCardCreateRequest1 = new PaymentMethodRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.TransactableMasterCard,
+                Token = creditCardToken1
+            };
+            PaymentMethod creditCardPaymentMethod1 = gateway.PaymentMethod.Create(creditCardCreateRequest1).Target;
+
+            customer = gateway.Customer.Find(customer.Id);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, creditCardToken1);
+
+            var creditCardToken2 = GenerateToken();
+
+            var creditCardCreateRequest2 = new PaymentMethodRequest(){
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.TransactableVisa,
+                Token = creditCardToken2
+            };
+
+            PaymentMethod creditCardPaymentMethod2 = gateway.PaymentMethod.Create(creditCardCreateRequest2).Target;
+
+            customer = gateway.Customer.Find(customer.Id);
+            Assert.AreNotEqual(customer.DefaultPaymentMethod.Token, creditCardToken2);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, creditCardToken1);
+
+            var updateRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        UpdateExistingToken = creditCardToken2,
+                        MakeDefault = true
+                    }
+                }
+            };
+
+            gateway.Customer.Update(customer.Id, updateRequest);
+            customer = gateway.Customer.Find(customer.Id);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, creditCardToken2);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Update_MakeExistingPaymentMethodTheDefaultUsingDefaultPaymentMethodToken()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var coinbaseToken = GenerateToken();
+
+            var coinbaseCreateRequest = new PaymentMethodRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.Coinbase,
+                Token = coinbaseToken
+            };
+            PaymentMethod coinbasePaymentMethod = gateway.PaymentMethod.Create(coinbaseCreateRequest).Target;
+
+            customer = gateway.Customer.Find(customer.Id);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, coinbaseToken);
+
+            var venmoToken = GenerateToken();
+
+            var venmoCreateRequest = new PaymentMethodRequest(){
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.VenmoAccount,
+                Token = venmoToken
+            };
+
+            PaymentMethod venmoPaymentMethod = gateway.PaymentMethod.Create(venmoCreateRequest).Target;
+
+            customer = gateway.Customer.Find(customer.Id);
+            Assert.AreNotEqual(customer.DefaultPaymentMethod.Token, venmoToken);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, coinbaseToken);
+
+            var updateRequest = new CustomerRequest
+            {
+                DefaultPaymentMethodToken = venmoToken
+            };
+
+            gateway.Customer.Update(customer.Id, updateRequest);
+            customer = gateway.Customer.Find(customer.Id);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, venmoToken);
+        }
+
+        private String GenerateToken()
+        {
+            return String.Format("token{0}", random.Next());
         }
 
         [Test]

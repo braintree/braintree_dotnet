@@ -1,3 +1,7 @@
+## 2.62.0
+* Set DefaultPaymentMethod when updating Customer
+* Allow passing OAuth scopes to merchant create
+
 ## 2.61.0
 * Add OrderId to refund
 * Add 3DS Pass thru support

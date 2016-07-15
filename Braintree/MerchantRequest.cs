@@ -7,6 +7,7 @@ namespace Braintree
         public string Email { get; set; }
         public string CountryCodeAlpha3 { get; set; }
         public string CompanyName { get; set; }
+        public string Scope { get; set; }
         public string[] Currencies { get; set; }
         public string[] PaymentMethods { get; set; }
         public PayPalOnlyAccountRequest PayPalAccount { get; set; }
@@ -20,6 +21,7 @@ namespace Braintree
                 .AddElement("currencies", Currencies)
                 .AddElement("payment_methods", PaymentMethods)
                 .AddElement("paypal_account", PayPalAccount)
+                .AddElement("scope", Scope)
                 .ToXml();
         }
     }

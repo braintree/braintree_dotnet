@@ -30,7 +30,8 @@ namespace Braintree.Tests
             ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
                 CountryCodeAlpha3 = "USA",
-                PaymentMethods = new string[] {"credit_card", "paypal"}
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                Scope = "read_write,shared_vault_transactions",
             });
 
             Assert.IsTrue(result.IsSuccess());
@@ -46,6 +47,7 @@ namespace Braintree.Tests
             Assert.IsTrue(result.Target.Credentials.RefreshToken.StartsWith("refresh_token$"));
             Assert.IsTrue(result.Target.Credentials.ExpiresAt > DateTime.Now);
             Assert.AreEqual("bearer", result.Target.Credentials.TokenType);
+            Assert.AreEqual("read_write,shared_vault_transactions", result.Target.Credentials.Scope);
         }
 
         [Test]
