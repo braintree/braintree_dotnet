@@ -284,6 +284,33 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Create_withRiskDataParam()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/10",
+                    Options = new CreditCardOptionsRequest
+                    {
+                        VerifyCard = true
+                    }
+                },
+                RiskData = new RiskDataRequest()
+                {
+                    CustomerBrowser = "IE6",
+                    CustomerIP = "192.168.0.1"
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Create_withErrorsOnCountry()
         {
             var createRequest = new CustomerRequest()

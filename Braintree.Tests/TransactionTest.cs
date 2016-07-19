@@ -1531,6 +1531,29 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Integration")]
+        public void Sale_WithRiskData()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/10"
+                },
+                RiskData = new RiskDataRequest()
+                {
+                    CustomerBrowser = "IE6",
+                    CustomerIP = "192.168.0.1"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        [Category("Integration")]
         public void Sale_ReturnsPaymentInstrumentType()
         {
             var request = new TransactionRequest
@@ -1710,6 +1733,48 @@ namespace Braintree.Tests
             Assert.AreEqual("MX", shippingAddress.CountryCodeAlpha2);
             Assert.AreEqual("MEX", shippingAddress.CountryCodeAlpha3);
             Assert.AreEqual("484", shippingAddress.CountryCodeNumeric);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Sale_WithTransactionSourceAsRecurring()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                TransactionSource = "recurring"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsTrue(transaction.Recurring.Value);
+        }
+
+        [Test]
+        [Category("Integration")]
+        public void Sale_WithTransactionSourceAsMoto()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                TransactionSource = "moto"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsFalse(transaction.Recurring.Value);
         }
 
         [Test]

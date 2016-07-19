@@ -43,6 +43,7 @@ namespace Braintree
         public string Channel { get; set; }
         public string OrderId { get; set; }
         public bool? Recurring { get; set; }
+        public string TransactionSource { get; set; }
         public string MerchantAccountId { get; set; }
         public string PurchaseOrderNumber { get; set; }
         public CustomerRequest Customer { get; set; }
@@ -78,6 +79,7 @@ namespace Braintree
                 _threeDSecureToken = value;
             }
         }
+        public RiskDataRequest RiskData { get; set; }
 
         public TransactionRequest()
         {
@@ -121,6 +123,7 @@ namespace Braintree
             builder.AddElement("device-session-id", DeviceSessionId);
             builder.AddElement("fraud-merchant-id", FraudMerchantId);
             if (Recurring.HasValue) builder.AddElement("recurring", Recurring);
+            builder.AddElement("transaction-source", TransactionSource);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("payment-method-nonce", PaymentMethodNonce);
             builder.AddElement("purchase-order-number", PurchaseOrderNumber);
@@ -154,6 +157,7 @@ namespace Braintree
             if (_threeDSecureTransaction) {
                 builder.AddElement("three-d-secure-token", ThreeDSecureToken ?? "");
             }
+            builder.AddElement("risk-data", RiskData);
             return builder;
         }
     }

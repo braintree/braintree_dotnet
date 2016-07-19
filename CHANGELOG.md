@@ -1,3 +1,7 @@
+## 2.63.0
+* Add support for passing risk data on Customer and Transaction requests
+* Add support for passing `transaction_source` to set MOTO or recurring ECI flag
+
 ## 2.62.0
 * Set DefaultPaymentMethod when updating Customer
 * Allow passing OAuth scopes to merchant create
