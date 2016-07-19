@@ -1,9 +1,9 @@
 ﻿<NUnitProject>
   <Settings activeconfig="Release" />
   <Config name="Debug" binpathtype="Auto">
-    <assembly path="Braintree.Tests\bin\Debug\Braintree.Tests.dll" />
+    <assembly path="src\Braintree.Tests\bin\Debug\netcoreapp1.0\Braintree.Tests.dll" />
   </Config>
   <Config name="Release" binpathtype="Auto">
-    <assembly path="Braintree.Tests\bin\Release\Braintree.Tests.dll" />
+    <assembly path="src\Braintree.Tests\bin\Release\netcoreapp1.0\Braintree.Tests.dll" />
   </Config>
 </NUnitProject>
