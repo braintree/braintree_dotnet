@@ -145,20 +145,7 @@ namespace Braintree.Tests
 
         [Test]
         [Category("Unit")]
-        public void Proxy_ReturnsNullIfNotSpecified()
-        {
-            BraintreeService service = new BraintreeService(new Configuration(
-                Environment.DEVELOPMENT,
-                "integration_merchant_id",
-                "integration_public_key",
-                "integration_private_key"
-            ));
-            Assert.AreEqual(null, service.GetProxy());
-        }
-
-        [Test]
-        [Category("Unit")]
-        public void Proxy_ReturnsProxyConfiguration()
+        public void GetWebProxy_SpecifiedByProxy()
         {
             Configuration configuration = new Configuration(
                 Environment.DEVELOPMENT,
@@ -168,8 +155,54 @@ namespace Braintree.Tests
             );
 
             configuration.Proxy = "http://localhost:3000";
-            BraintreeService service = new BraintreeService(configuration);
-            Assert.AreEqual("http://localhost:3000", service.GetProxy());
+            Assert.AreEqual("http://localhost:3000", configuration.WebProxy.GetProxy(new Uri("http://0.0.0.0")).OriginalString);
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void GetProxy_SpecifiedByWebProxy()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.WebProxy = new WebProxy("http://localhost:3000");
+            Assert.AreEqual("http://localhost:3000", configuration.Proxy);
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void GetProxy_ReturnsNullWhenWebProxyNull()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.Proxy = "http://localhost:3000";
+            configuration.WebProxy = null;
+            Assert.AreEqual(null, configuration.Proxy);
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void GetWebProxy_ReturnsNullWhenProxyNull()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.WebProxy = new WebProxy();
+            configuration.Proxy = null;
+            Assert.AreEqual(null, configuration.WebProxy);
         }
 
         [Test]

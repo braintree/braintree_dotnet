@@ -1,3 +1,7 @@
+## 2.64.0
+* Accept WebProxy in Configuration
+* Set PaymentInstrumentType to VenmoAccount for Pay with Venmo transactions
+
 ## 2.63.0
 * Add support for passing risk data on Customer and Transaction requests
 * Add support for passing `transaction_source` to set MOTO or recurring ECI flag

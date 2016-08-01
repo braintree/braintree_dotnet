@@ -151,10 +151,10 @@ namespace Braintree
 
         private void setRequestProxy(WebRequest request)
         {
-            var proxy = GetProxy();
+            var proxy = GetWebProxy();
             if (proxy != null)
             {
-                request.Proxy = new WebProxy(proxy);
+                request.Proxy = proxy;
             }
         }
 
@@ -183,9 +183,9 @@ namespace Braintree
             return "/merchants/" + MerchantId;
         }
 
-        public string GetProxy()
+        public IWebProxy GetWebProxy()
         {
-            return Configuration.Proxy;
+            return Configuration.WebProxy;
         }
 
         public string GetAuthorizationHeader()

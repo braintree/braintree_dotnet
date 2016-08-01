@@ -18,7 +18,11 @@ namespace Braintree
         public string ClientSecret { get; set; }
         public string MerchantId { get; set; }
         public string PrivateKey { get; set; }
-        public string Proxy { get; set; }
+        public IWebProxy WebProxy { get; set; }
+        public string Proxy {
+            get { if (WebProxy != null) { return WebProxy.GetProxy(new Uri("http://0.0.0.0")).OriginalString; } else { return null; } }
+            set { if (value != null) { WebProxy = new WebProxy(value); } else { WebProxy = null; } }
+        }
         public string PublicKey { get; set; }
         public HttpWebRequestFactoryDelegate HttpWebRequestFactory { get; set; }
 

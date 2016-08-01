@@ -13,6 +13,51 @@ namespace Braintree.Tests
     {
         [Test]
         [Category("Unit")]
+        public void GetWebProxy_ReturnsNullIfNotSpecified()
+        {
+            BraintreeService service = new BraintreeService(new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            ));
+            Assert.AreEqual(null, service.GetWebProxy());
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void GetWebProxy_ReturnsProxyConfiguration()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.Proxy = "http://localhost:3000";
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.AreEqual("http://localhost:3000", service.GetWebProxy().GetProxy(new Uri("http://0.0.0.0")).OriginalString);
+        }
+
+        [Test]
+        [Category("Unit")]
+        public void WebProxy_ReturnsWebProxyConfiguration()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.WebProxy = new WebProxy("http://localhost:3000");
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.AreEqual(configuration.WebProxy, service.GetWebProxy());
+        }
+
+        [Test]
+        [Category("Unit")]
         [ExpectedException(typeof(Braintree.Exceptions.AuthenticationException))]
         public void SandboxSSLCertificateSuccessful()
         {

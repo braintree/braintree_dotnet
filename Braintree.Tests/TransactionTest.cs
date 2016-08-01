@@ -2476,6 +2476,7 @@ namespace Braintree.Tests
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
 
+            Assert.AreEqual(result.Target.PaymentInstrumentType, PaymentInstrumentType.VENMO_ACCOUNT);
             Assert.IsNotNull(result.Target.VenmoAccountDetails);
 
             VenmoAccountDetails venmoAccountDetails = (VenmoAccountDetails) result.Target.VenmoAccountDetails;
