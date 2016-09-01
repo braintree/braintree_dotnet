@@ -81,6 +81,7 @@ namespace Braintree.Tests
             Assert.AreEqual(SubscriptionSource.API, subscription.StatusHistory[0].Source);
             Assert.AreEqual(plan.Price, subscription.StatusHistory[0].Price);
             Assert.AreEqual(0.00M, subscription.StatusHistory[0].Balance);
+            Assert.AreEqual("USD", subscription.StatusHistory[0].CurrencyIsoCode);
         }
 
         [Test]

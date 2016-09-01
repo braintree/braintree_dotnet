@@ -12,6 +12,7 @@ namespace Braintree
         public virtual DateTime? Timestamp { get; protected set; }
         public virtual SubscriptionSource Source { get; protected set; }
         public virtual string User { get; protected set; }
+        public virtual string CurrencyIsoCode { get; protected set; }
 
         public SubscriptionStatusEvent(NodeWrapper node)
         {
@@ -23,6 +24,7 @@ namespace Braintree
             Timestamp = node.GetDateTime("timestamp");
             Source = (SubscriptionSource)CollectionUtil.Find(SubscriptionSource.ALL, node.GetString("subscription-source"), SubscriptionSource.UNRECOGNIZED);
             User = node.GetString("user");
+            CurrencyIsoCode = node.GetString("currency-iso-code");
         }
 
         [Obsolete("Mock Use Only")]

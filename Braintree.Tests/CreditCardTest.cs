@@ -1146,6 +1146,7 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
             Assert.AreEqual(Braintree.CreditCardHealthcare.YES, creditCard.Healthcare);
+            Assert.AreEqual("J3", creditCard.ProductId);
         }
 
         [Test]
@@ -1168,6 +1169,7 @@ namespace Braintree.Tests
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
             Assert.AreEqual(Braintree.CreditCardPayroll.YES, creditCard.Payroll);
+            Assert.AreEqual("MSA", creditCard.ProductId);
         }
 
         [Test]
@@ -1261,6 +1263,7 @@ namespace Braintree.Tests
             Assert.AreEqual(Braintree.CreditCardDurbinRegulated.NO, creditCard.DurbinRegulated);
             Assert.AreEqual(Braintree.CreditCardPayroll.NO, creditCard.Payroll);
             Assert.AreEqual(Braintree.CreditCardDebit.NO, creditCard.Debit);
+            Assert.AreEqual("MSB", creditCard.ProductId);
         }
 
         [Test]
@@ -1290,6 +1293,7 @@ namespace Braintree.Tests
             Assert.AreEqual(Braintree.CreditCardDebit.UNKNOWN, creditCard.Debit);
             Assert.AreEqual(Braintree.CreditCard.CountryOfIssuanceUnknown, creditCard.CountryOfIssuance);
             Assert.AreEqual(Braintree.CreditCard.IssuingBankUnknown, creditCard.IssuingBank);
+            Assert.AreEqual(Braintree.CreditCard.ProductIdUnknown, creditCard.ProductId);
         }
 
         [Test]

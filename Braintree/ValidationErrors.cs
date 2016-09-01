@@ -114,7 +114,7 @@ namespace Braintree
             return fieldName;
         }
 
-        public List<ValidationError> DeepAll()
+        public virtual List<ValidationError> DeepAll()
         {
             var results = new List<ValidationError>();
             results.AddRange(All());

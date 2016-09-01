@@ -5145,6 +5145,9 @@ namespace Braintree.Tests
             Assert.AreEqual(transaction.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
+            Assert.AreEqual(transaction.CreditCard.CountryOfIssuance, Braintree.CreditCard.CountryOfIssuanceUnknown);
+            Assert.AreEqual(transaction.CreditCard.IssuingBank, Braintree.CreditCard.IssuingBankUnknown);
+            Assert.AreEqual(transaction.CreditCard.ProductId, Braintree.CreditCard.ProductIdUnknown);
         }
 
         [Test]

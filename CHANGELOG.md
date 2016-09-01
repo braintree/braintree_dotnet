@@ -1,3 +1,9 @@
+## 2.65.0
+* Add validation error for verifications with sub-merchants
+* Expose credit card product ID
+* Add currency iso code
+* Update ValidationErrors.DeepAll() to be virtual
+
 ## 2.64.0
 * Accept WebProxy in Configuration
 * Set PaymentInstrumentType to VenmoAccount for Pay with Venmo transactions

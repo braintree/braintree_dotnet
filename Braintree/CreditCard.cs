@@ -132,6 +132,7 @@ namespace Braintree
     {
         public static readonly string CountryOfIssuanceUnknown = "Unknown";
         public static readonly string IssuingBankUnknown = "Unknown";
+        public static readonly string ProductIdUnknown = "Unknown";
 
         public virtual string Bin { get; protected set; }
         public virtual string CardholderName { get; protected set; }
@@ -193,6 +194,23 @@ namespace Braintree
             }
         }
 
+        private string _ProductId;
+
+        public virtual string ProductId
+        {
+            get
+            {
+                if (_ProductId == "")
+                {
+                    return ProductIdUnknown;
+                }
+                else
+                {
+                    return _ProductId;
+                }
+            }
+        }
+
         public virtual string ExpirationDate
         {
             get
@@ -242,6 +260,7 @@ namespace Braintree
             Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, node.GetString("healthcare"), CreditCardHealthcare.UNKNOWN);
             _CountryOfIssuance = node.GetString("country-of-issuance");
             _IssuingBank = node.GetString("issuing-bank");
+            _ProductId = node.GetString("product-id");
             ImageUrl = node.GetString("image-url");
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");

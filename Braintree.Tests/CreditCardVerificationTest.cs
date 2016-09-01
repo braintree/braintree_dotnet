@@ -227,7 +227,9 @@ namespace Braintree.Tests
             Assert.AreEqual(verification.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
-
+            Assert.AreEqual(verification.CreditCard.CountryOfIssuance, Braintree.CreditCard.CountryOfIssuanceUnknown);
+            Assert.AreEqual(verification.CreditCard.IssuingBank, Braintree.CreditCard.IssuingBankUnknown);
+            Assert.AreEqual(verification.CreditCard.ProductId, Braintree.CreditCard.ProductIdUnknown);
         }
 
         [Test]
