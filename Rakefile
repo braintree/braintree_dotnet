@@ -1,40 +1,49 @@
 task :default => "test:all"
 
 task :clean do
-  sh "rm -rf Braintree/bin"
-  sh "rm -rf Braintree/obj"
-  sh "rm -rf Braintree.Tests/bin"
-  sh "rm -rf Braintree.Tests/obj"
+  sh "rm -f src/Braintree/project.lock.json"
+  sh "rm -f test/Braintree.Tests/project.lock.json"
+  sh "rm -f test/Braintree.TestUtil/project.lock.json"
+  sh "rm -f test/Braintree.Tests.Integration/project.lock.json"
+  sh "rm -rf src/Braintree/bin"
+  sh "rm -rf src/Braintree/obj"
+  sh "rm -rf test/Braintree.Tests/bin"
+  sh "rm -rf test/Braintree.Tests/obj"
+  sh "rm -rf test/Braintree.TestUtil/bin"
+  sh "rm -rf test/Braintree.TestUtil/obj"
+  sh "rm -rf test/Braintree.Tests.Integration/bin"
+  sh "rm -rf test/Braintree.Tests.Integration/obj"
 end
 
 task :compile => :clean do
-  sh "xbuild Braintree.sln"
+  sh "dotnet restore src/Braintree && dotnet build -f netcoreapp1.0 src/Braintree"
+
+  sh "dotnet restore test/Braintree.TestUtil && dotnet build -f netcoreapp1.0 test/Braintree.TestUtil"
+
+  sh "dotnet restore test/Braintree.Tests && dotnet build -f netcoreapp1.0 test/Braintree.Tests"
+
+  sh "dotnet restore test/Braintree.Tests.Integration && dotnet build -f netcoreapp1.0 test/Braintree.Tests.Integration"
 end
 
 desc "run tests"
 namespace :test do
-  task :unit => [:ensure_boolean_type, :compile] do
-    sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -exclude=Integration Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+  task :unit => [:compile] do
+    sh "dotnet test test/Braintree.Tests -f netcoreapp1.0"
   end
 
-  task :integration => [:ensure_boolean_type, :compile] do
-    sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -exclude=Unit Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+  task :integration => [:compile] do
+    sh "dotnet test test/Braintree.Tests.Integration -f netcoreapp1.0"
   end
 
-  task :all => [:ensure_boolean_type, :compile] do
-    sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe Braintree.Tests/bin/Debug/Braintree.Tests.dll"
+  task :all => [:compile] do
+    sh "dotnet test test/Braintree.Tests -f netcoreapp1.0 && dotnet test test/Braintree.Tests.Integration -f netcoreapp1.0"
   end
 end
 
 task :test => "test:all"
 
+# Not implemented in dotnet CLI
 desc "run single test file (rake test_focus[Braintree.Tests.ClientTokenTestIT.Generate_GatewayRespectsMakeDefault], for example"
 task :test_focus, [:test_name] => [:ensure_boolean_type, :compile] do |t, args|
-  sh "mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -run=#{args[:test_name]} Braintree.Tests/bin/Debug/Braintree.Tests.dll"
-end
-
-desc "ensure that Request objects use Boolean? type instead of Boolean"
-task :ensure_boolean_type do
-  output = `find . -iname '*Request.cs' | xargs grep 'Boolean '`
-  raise "\nUse Boolean? instead of Boolean in Request classes to prevent erroneous falses from being sent to the gateway:\n\n#{output}\n" unless output.empty?
+  sh ""
 end

@@ -1,0 +1,36 @@
+{
+  "version": "3.0.0-*",
+  "dependencies": { },
+  "frameworks": {
+    "net452": {
+      "buildOptions": {
+        "define": [
+          "net452"
+        ]
+      },
+      "dependencies": {},
+      "frameworkAssemblies": {
+        "System.Xml": "4.0.0.0",
+        "System.Net": "4.0.0.0",
+        "System.Web": "4.0.0.0"
+      }
+    },
+    "netcoreapp1.0": {
+      "buildOptions": {
+        "define": [
+          "netcoreapp10"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final",
+        "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
+        "NETStandard.Library": "1.6.0",
+        "System.Xml.XPath.XmlDocument": "4.0.1"
+      },
+      "imports": [
+        "dnxcore50",
+        "portable-net45+win7"
+      ]
+    }
+  }
+}

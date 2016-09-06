@@ -1,3 +1,7 @@
+## 3.0.0
+* Remove compatibility with .NET 4.5.1 and below
+* Add compatibility with .NET Core 1.0
+
 ## 2.65.0
 * Add validation error for verifications with sub-merchants
 * Expose credit card product ID

@@ -4,7 +4,7 @@ The Braintree assembly provides integration access to the Braintree Gateway.
 
 ## Dependencies
 
-* none
+* .NET Core 1.0 or .NET Framework 4.5.2+
 
 ## Quick Start Example
 
@@ -71,11 +71,20 @@ namespace BraintreeExample
 
 ## Tests
 
-The unit specs can be run by anyone on any system, but the integration specs are meant to be run against a local development server of our gateway code. These integration specs are not meant for public consumption and will likely fail if run on your system. To run unit tests use rake (`rake test:unit`) or run the unit tests manually. Here is an example of how to run unit tests using xbuild and mono:
+The unit specs can be run by anyone on any system, but the integration specs are meant to be run against a local development server of our gateway code. These integration specs are not meant for public consumption and will likely fail if run on your system. To run unit tests use rake (`rake test:unit`) or run the unit tests manually. Here is an example of how to run unit tests using the dotnet CLI tool from within /test/Braintree.Tests:
 
+#### On Mac OS X or Unix-like environment
 ```
-xbuild Braintree.sln
-mono Braintree.Tests/lib/NUnit-2.4.8-net-2.0/bin/nunit-console.exe -exclude=Integration Braintree.Tests/bin/Debug/Braintree.Tests.dll
+dotnet restore
+dotnet build -f netcoreapp1.0
+dotnet test . -f netcoreapp1.0
+```
+
+#### On a Windows environment
+```
+dotnet restore
+dotnet build
+dotnet test .
 ```
 
 ## Open Source Attribution

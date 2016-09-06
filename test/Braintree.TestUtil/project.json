@@ -1,0 +1,27 @@
+{
+  "dependencies": {
+    "NUnit": "3.4.1",
+    "Braintree": "*",
+    "dotnet-test-nunit": "3.4.0-beta-2"
+  },
+
+  "frameworks": {
+    "net452": {
+      "buildOptions": {
+        "define": [
+          "net452"
+        ]
+      }
+    },
+    "netcoreapp1.0": {
+      "buildOptions": {
+        "define": [
+          "netcoreapp10"
+        ]
+      },
+      "imports": [
+        "dnxcore50"
+      ]
+    }
+  }
+}
