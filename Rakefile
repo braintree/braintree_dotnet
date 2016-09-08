@@ -16,7 +16,7 @@ task :clean do
 end
 
 task :compile => :clean do
-  sh "dotnet restore src/Braintree && dotnet build -f netcoreapp1.0 src/Braintree"
+  sh "dotnet restore src/Braintree && dotnet build -f netstandard1.6 src/Braintree"
 
   sh "dotnet restore test/Braintree.TestUtil && dotnet build -f netcoreapp1.0 test/Braintree.TestUtil"
 

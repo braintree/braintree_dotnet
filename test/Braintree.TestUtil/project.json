@@ -16,7 +16,7 @@
     "netcoreapp1.0": {
       "buildOptions": {
         "define": [
-          "netcoreapp10"
+          "netcore"
         ]
       },
       "imports": [

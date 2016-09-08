@@ -1,12 +1,12 @@
 using Braintree.Exceptions;
 using System.Net;
-#if netcoreapp10
+#if netcore
 using System.Net.Http;
 #endif
 
 namespace Braintree
 {
-#if netcoreapp10
+#if netcore
     public delegate HttpRequestMessage HttpRequestMessageFactory(HttpMethod method, string requestUriString);
 #else
     public delegate HttpWebRequest HttpWebRequestFactory(string requestUriString);
@@ -22,7 +22,7 @@ namespace Braintree
         public string PrivateKey { get; set; }
         public IWebProxy WebProxy { get; set; }
         public string PublicKey { get; set; }
-#if netcoreapp10
+#if netcore
         public HttpRequestMessageFactory HttpRequestMessageFactory { get; set; }
 #else
         public HttpWebRequestFactory HttpWebRequestFactory { get; set; }
@@ -37,7 +37,7 @@ namespace Braintree
 
         public Configuration()
         {
-#if netcoreapp10
+#if netcore
             HttpRequestMessageFactory = (method, requestUriString) => new HttpRequestMessage(method, requestUriString);
 #else
             HttpWebRequestFactory = requestUriString => WebRequest.Create(requestUriString) as HttpWebRequest;

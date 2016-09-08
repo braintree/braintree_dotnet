@@ -1,3 +1,7 @@
+## 3.0.1
+* Change compatibility with .NET Core 1.0 to .NET Standard 1.6 (Thanks, @thoughtentity!)
+* Change to dotnet pack deployment strategy (Thanks, @devscott!)
+
 ## 3.0.0
 * Remove compatibility with .NET 4.5.1 and below
 * Add compatibility with .NET Core 1.0

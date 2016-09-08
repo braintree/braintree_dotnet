@@ -71,7 +71,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Generate_AcceptsDatesInNonUSFormats()
         {
-#if netcoreapp10
+#if netcore
             CultureInfo originalCulture = CultureInfo.CurrentCulture;
             CultureInfo australianCulture = new CultureInfo("en-AU");
             CultureInfo.CurrentCulture = australianCulture;
@@ -86,7 +86,7 @@ namespace Braintree.Tests.Integration
 
             Assert.IsTrue(result.IsSuccess());
 
-#if netcoreapp10
+#if netcore
             Assert.AreEqual(australianCulture, CultureInfo.CurrentCulture);
             CultureInfo.CurrentCulture = originalCulture;
 #else

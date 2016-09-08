@@ -2094,7 +2094,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void ParsesUSCultureProperlyForAppsInOtherCultures()
         {
-#if netcoreapp10
+#if netcore
             CultureInfo existingCulture = CultureInfo.CurrentCulture;
 #else
             CultureInfo existingCulture = CultureInfo.CurrentCulture;
@@ -2102,7 +2102,7 @@ namespace Braintree.Tests.Integration
 
             try
             {
-#if netcoreapp10
+#if netcore
                 CultureInfo.CurrentCulture = new CultureInfo("it-IT");
 #else
                 Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("it-IT");
@@ -2124,7 +2124,7 @@ namespace Braintree.Tests.Integration
             }
             finally
             {
-#if netcoreapp10
+#if netcore
                 CultureInfo.CurrentCulture = existingCulture;
 #else
                 Thread.CurrentThread.CurrentCulture = existingCulture;

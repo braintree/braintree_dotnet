@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{60234E7B-1181-4EFF-96EE-624B4524D788}</ProjectGuid>
+    <ProjectGuid>{43b67537-f368-4734-b00a-57d8d33d3656}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree.TestUtil</RootNamespace>

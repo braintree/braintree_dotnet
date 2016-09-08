@@ -34,7 +34,7 @@ namespace Braintree
 
         public virtual RequestBuilder BuildRequest(string root)
         {
-#if netcoreapp10
+#if netcore
             CultureInfo originalCulture = CultureInfo.CurrentCulture;
             CultureInfo.CurrentCulture = new CultureInfo("en-US");
 #else
@@ -45,7 +45,7 @@ namespace Braintree
             var builder = new RequestBuilder(root);
             builder.AddElement("settlement-date", SettlementDate.ToString("d"));
 
-#if netcoreapp10
+#if netcore
             CultureInfo.CurrentCulture = originalCulture;
 #else
             Thread.CurrentThread.CurrentCulture = originalCulture;

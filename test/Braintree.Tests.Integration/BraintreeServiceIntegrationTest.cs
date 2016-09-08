@@ -63,7 +63,7 @@ namespace Braintree.Tests.Integration
             Configuration oauthConfiguration = gateway.Configuration;
             BraintreeService oauthService = new BraintreeService(oauthConfiguration);
             var headers = oauthService.GetAuthorizationHeader();
-#if netcoreapp10
+#if netcore
             Assert.AreEqual(oauthConfiguration.AccessToken, headers);
 #else
             Assert.AreEqual(oauthConfiguration.AccessToken, headers.Split(' ')[1]);

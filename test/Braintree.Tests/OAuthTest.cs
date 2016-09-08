@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 
-#if netcoreapp10
+#if netcore
 using Microsoft.AspNetCore.WebUtilities;
 #else
 using System.Web;
@@ -81,7 +81,7 @@ namespace Braintree.Tests
             });
 
             var uri = new Uri(url);
-#if netcoreapp10
+#if netcore
             IDictionary query = QueryHelpers.ParseQuery(uri.Query);
 #else
             var query = HttpUtility.ParseQueryString(uri.Query); ;
@@ -140,7 +140,7 @@ namespace Braintree.Tests
 
             var uri = new Uri(url);
 
-#if netcoreapp10
+#if netcore
             IDictionary query = QueryHelpers.ParseQuery(uri.Query);
 #else
             var query = HttpUtility.ParseQueryString(uri.Query); ;
@@ -156,7 +156,7 @@ namespace Braintree.Tests
             });
 
             var uri = new Uri(url);
-#if netcoreapp10
+#if netcore
             IDictionary query = QueryHelpers.ParseQuery(uri.Query);
 #else
             var query = HttpUtility.ParseQueryString(uri.Query); ;

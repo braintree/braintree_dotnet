@@ -4,7 +4,7 @@ using Braintree.Exceptions;
 using System;
 using System.IO;
 using System.Net;
-#if netcoreapp10
+#if netcore
 using System.Net.Http;
 #else
 using System.IO.Compression;
@@ -93,7 +93,7 @@ namespace Braintree
 
         private XmlNode GetXmlResponse(string URL, string method, Request requestBody)
         {
-#if netcoreapp10
+#if netcore
             try
             {
                 var request = Configuration.HttpRequestMessageFactory(new HttpMethod(method), Environment.GatewayURL + URL);
@@ -192,7 +192,7 @@ namespace Braintree
             }
 #endif
         }
-#if netcoreapp10
+#if netcore
         private void SetWebProxy(HttpClientHandler httpClientHandler, string URL)
         {
             var proxy = GetWebProxy();
@@ -280,7 +280,7 @@ namespace Braintree
         {
 
             string credentials;
-#if netcoreapp10
+#if netcore
             if (Configuration.IsAccessToken)
             {
                 return Configuration.AccessToken;

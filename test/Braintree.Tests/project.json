@@ -10,7 +10,7 @@
   "frameworks": {
     "netcoreapp1.0": {
       "buildOptions": {
-        "define": [ "netcoreapp10" ]
+        "define": [ "netcore" ]
       },
       "imports": [
         "dnxcore50",

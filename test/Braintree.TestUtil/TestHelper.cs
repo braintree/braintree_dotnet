@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System;
 using System.IO;
 using System.Net;
-#if netcoreapp10
+#if netcore
 using System.Net.Http;
 #else
 using System.Web;
@@ -34,7 +34,7 @@ namespace Braintree.TestUtil
 
         public static string QueryStringForTR(Request trParams, Request req, string postURL, BraintreeService service)
         {
-#if netcoreapp10
+#if netcore
             string trData = TrUtil.BuildTrData(trParams, "http://example.com", service);
             string postData = "tr_data=" + WebUtility.UrlEncode(trData) + "&";
             postData += req.ToQueryString();
@@ -120,7 +120,7 @@ namespace Braintree.TestUtil
             Assert.IsTrue(response.IsSuccess());
         }
 
-#if netcoreapp10
+#if netcore
         public static string GetResponseContent(HttpResponseMessage response)
         {
             using (var reader = new StreamReader(response.Content.ReadAsStreamAsync().Result))
@@ -176,7 +176,7 @@ namespace Braintree.TestUtil
 
             var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
 
-#if netcoreapp10
+#if netcore
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
             string responseBody = reader.ReadToEnd();
             return extractParamFromJson("nonce", responseBody);
@@ -237,7 +237,7 @@ namespace Braintree.TestUtil
                 "v1/payment_methods/" + paymentMethodTypePlural,
                 builder.ToQueryString());
 
-#if netcoreapp10
+#if netcore
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
             string responseBody = reader.ReadToEnd();
             return extractParamFromJson("nonce", responseBody);
@@ -270,7 +270,7 @@ namespace Braintree.TestUtil
 
             var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/credit_cards.json", builder.ToQueryString());
 
-#if netcoreapp10
+#if netcore
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
 #else
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
@@ -302,7 +302,7 @@ namespace Braintree.TestUtil
 
             var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
 
-#if netcoreapp10
+#if netcore
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
 #else
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
@@ -329,7 +329,7 @@ namespace Braintree.TestUtil
 
             var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
 
-#if netcoreapp10
+#if netcore
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
 #else
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
@@ -384,7 +384,7 @@ namespace Braintree.TestUtil
     {
         public string ApiVersion = "3";
 
-#if netcoreapp10
+#if netcore
         public HttpResponseMessage Get(string MerchantId, string URL)
         {
             return GetJsonResponse(MerchantId, URL, "GET", null);

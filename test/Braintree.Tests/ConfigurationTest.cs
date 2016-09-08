@@ -1,7 +1,7 @@
 using Braintree.Exceptions;
 using NUnit.Framework;
 using System;
-#if netcoreapp10
+#if netcore
 using System.Net.Http;
 using System.Net.Http.Headers;
 #else
@@ -129,7 +129,7 @@ namespace Braintree.Tests
                 "integration_private_key"
             ));
 
-#if netcoreapp10
+#if netcore
             Assert.AreEqual("aW50ZWdyYXRpb25fcHVibGljX2tleTppbnRlZ3JhdGlvbl9wcml2YXRlX2tleQ==", service.GetAuthorizationHeader());
 #else
             Assert.AreEqual("Basic aW50ZWdyYXRpb25fcHVibGljX2tleTppbnRlZ3JhdGlvbl9wcml2YXRlX2tleQ==", service.GetAuthorizationHeader());
@@ -201,7 +201,7 @@ namespace Braintree.Tests
                 "integration_private_key"
             );
 
-#if netcoreapp10
+#if netcore
             Assert.IsNotNull(configuration.HttpRequestMessageFactory);
             HttpRequestMessage httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, "http://webrequest.com");
             Assert.IsInstanceOf(httpRequestMessage.GetType(), configuration.HttpRequestMessageFactory(HttpMethod.Get, configuration.Environment.GatewayURL + "/merchants/integration_merchant_id"));
@@ -222,7 +222,7 @@ namespace Braintree.Tests
                 "integration_private_key"
             );
 
-#if netcoreapp10
+#if netcore
             configuration.HttpRequestMessageFactory =
                 delegate (HttpMethod method, string requestUriString)
                 {

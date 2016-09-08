@@ -18,7 +18,7 @@ namespace Braintree.Tests
 
             try
             {
-#if netcoreapp10
+#if netcore
                 CultureInfo.CurrentCulture = new CultureInfo("it-IT");
 #else
                 Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("it-IT");
@@ -51,7 +51,7 @@ namespace Braintree.Tests
             }
             finally
             {
-#if netcoreapp10
+#if netcore
                 CultureInfo.CurrentCulture = existingCulture;
 #else
                 Thread.CurrentThread.CurrentCulture = existingCulture;
