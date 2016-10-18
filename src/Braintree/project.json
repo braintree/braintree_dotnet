@@ -42,7 +42,7 @@
         "System.Web": "4.0.0.0"
       }
     },
-    "netstandard1.6": {
+    "netstandard1.3": {
       "buildOptions": {
         "define": [
           "netcore"
