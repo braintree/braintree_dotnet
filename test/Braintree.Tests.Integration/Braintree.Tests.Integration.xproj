@@ -81,14 +81,7 @@
     <Compile Include="TransparentRedirectRequestIntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Braintree\Braintree.xproj">
-      <Project>{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}</Project>
-      <Name>Braintree</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Braintree.TestUtil\Braintree.TestUtil.xproj">
-      <Name>Braintree.TestUtil</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\src\Braintree\Braintree.xproj" />
+    <ProjectReference Include="..\Braintree.TestUtil\Braintree.TestUtil.xproj" />
   </ItemGroup>
 </Project>

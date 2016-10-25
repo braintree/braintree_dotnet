@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE;net452</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Braintree-2.59.0.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Braintree-3.0.1.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
