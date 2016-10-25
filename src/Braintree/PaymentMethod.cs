@@ -6,5 +6,6 @@ namespace Braintree
         bool? IsDefault { get; }
         string ImageUrl { get; }
         string CustomerId { get; }
+        PaymentInstrumentType PaymentInstrumentType { get; }
     }
 }

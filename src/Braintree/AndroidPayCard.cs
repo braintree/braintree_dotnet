@@ -22,6 +22,7 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual Subscription[] Subscriptions { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get { return PaymentInstrumentType.ANDROID_PAY_CARD; } }
 
         protected internal AndroidPayCard(NodeWrapper node, IBraintreeGateway gateway)
         {

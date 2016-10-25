@@ -44,6 +44,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
+            Assert.AreEqual(PaymentInstrumentType.PAYPAL_ACCOUNT, paymentMethodResult.Target.PaymentInstrumentType);
         }
         
         [Test]
@@ -85,6 +86,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethodResult.Target.Token);
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOf(typeof(CreditCard), paymentMethodResult.Target);
+            Assert.AreEqual(PaymentInstrumentType.CREDIT_CARD, paymentMethodResult.Target.PaymentInstrumentType);
         }
         
         [Test]
@@ -139,6 +141,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(applePayCard.SourceDescription);
             Assert.IsNotNull(applePayCard.IsExpired);
             Assert.AreEqual(result.Target.Id, applePayCard.CustomerId);
+            Assert.AreEqual(PaymentInstrumentType.APPLE_PAY_CARD, paymentMethodResult.Target.PaymentInstrumentType);
         }
 
         [Test]
@@ -174,6 +177,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayCard.CreatedAt);
             Assert.IsNotNull(androidPayCard.UpdatedAt);
             Assert.IsNotNull(androidPayCard.Subscriptions);
+            Assert.AreEqual(PaymentInstrumentType.ANDROID_PAY_CARD, paymentMethodResult.Target.PaymentInstrumentType);
         }
 
         [Test]
@@ -242,6 +246,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(amexExpressCheckoutCard.CreatedAt);
             Assert.IsNotNull(amexExpressCheckoutCard.UpdatedAt);
             Assert.IsNotNull(amexExpressCheckoutCard.Subscriptions);
+            Assert.AreEqual(PaymentInstrumentType.AMEX_EXPRESS_CHECKOUT_CARD, paymentMethodResult.Target.PaymentInstrumentType);
         }
 
         [Test]
@@ -270,6 +275,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(venmoAccount.UpdatedAt);
             Assert.IsNotNull(venmoAccount.CustomerId);
             Assert.IsNotNull(venmoAccount.Subscriptions);
+            Assert.AreEqual(PaymentInstrumentType.VENMO_ACCOUNT, paymentMethodResult.Target.PaymentInstrumentType);
         }
 
         [Test]
@@ -806,6 +812,7 @@ namespace Braintree.Tests.Integration
 
             var updatedCoinbaseAccount = (CoinbaseAccount)updateResult.Target;
             Assert.IsTrue(updatedCoinbaseAccount.IsDefault.Value);
+            Assert.AreEqual(PaymentInstrumentType.COINBASE_ACCOUNT, updateResult.Target.PaymentInstrumentType);
         }
 
         [Test]

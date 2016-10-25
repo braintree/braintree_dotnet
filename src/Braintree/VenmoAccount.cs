@@ -14,6 +14,7 @@ namespace Braintree
         public DateTime? CreatedAt { get; protected set; }
         public DateTime? UpdatedAt { get; protected set; }
         public Subscription[] Subscriptions { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get { return PaymentInstrumentType.VENMO_ACCOUNT; } }
 
         protected internal VenmoAccount(NodeWrapper node, IBraintreeGateway gateway)
         {

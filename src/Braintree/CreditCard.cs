@@ -156,6 +156,7 @@ namespace Braintree
         public virtual CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
         public virtual CreditCardVerification Verification { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get { return PaymentInstrumentType.CREDIT_CARD; } }
 
         private string _CountryOfIssuance;
 
