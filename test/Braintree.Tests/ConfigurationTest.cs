@@ -26,11 +26,33 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ConfigurationEmptyStringEnvironment_ThrowsConfigurationException()
+        {
+            Assert.Throws<ConfigurationException>(() => new Configuration(
+                "",
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            ));
+        }
+
+        [Test]
         public void ConfigurationMissingMerchantId_ThrowsConfigurationException()
         {
             Assert.Throws<ConfigurationException>(() => new Configuration(
                 Environment.DEVELOPMENT,
                 null,
+                "integration_public_key",
+                "integration_private_key"
+            ));
+        }
+
+        [Test]
+        public void ConfigurationEmptyStringMerchantId_ThrowsConfigurationException()
+        {
+            Assert.Throws<ConfigurationException>(() => new Configuration(
+                Environment.DEVELOPMENT,
+                "",
                 "integration_public_key",
                 "integration_private_key"
             ));
@@ -48,6 +70,17 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ConfigurationEmptyStringPublicKey_ThrowsConfigurationException()
+        {
+            Assert.Throws<ConfigurationException>(() => new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "",
+                "integration_private_key"
+            ));
+        }
+
+        [Test]
         public void ConfigurationMissingPrivateKey_ThrowsConfigurationException()
         {
             Assert.Throws<ConfigurationException>(() => new Configuration(
@@ -55,6 +88,17 @@ namespace Braintree.Tests
                 "integration_merchant_id",
                 "integration_public_key",
                 null
+            ));
+        }
+
+        [Test]
+        public void ConfigurationEmptyStringPrivateKey_ThrowsConfigurationException()
+        {
+            Assert.Throws<ConfigurationException>(() => new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                ""
             ));
         }
 

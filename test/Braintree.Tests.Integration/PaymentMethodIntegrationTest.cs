@@ -12,6 +12,8 @@ namespace Braintree.Tests.Integration
     public class PaymentMethodIntegrationTest
     {
         private BraintreeGateway gateway;
+        private BraintreeGateway partnerMerchantGateway; 
+        private BraintreeGateway oauthGateway;
 
         [SetUp]
         public void Setup()
@@ -23,6 +25,20 @@ namespace Braintree.Tests.Integration
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+
+            partnerMerchantGateway = new BraintreeGateway
+            (
+                Environment.DEVELOPMENT,
+                "integration_merchant_public_id",
+                "oauth_app_partner_user_public_key",
+                "oauth_app_partner_user_private_key"
+            );
+
+            oauthGateway = new BraintreeGateway
+            (
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
         }
         
         [Test]
@@ -1213,6 +1229,36 @@ namespace Braintree.Tests.Integration
 
             Assert.IsFalse(updatedResult.IsSuccess());
             Assert.AreEqual("92906", ((int)updatedResult.Errors.DeepAll().First().Code).ToString());
+        }
+
+
+        [Test]
+        public void PaymentMethodGrantAndRevoke()
+        {
+            Result<Customer> result = partnerMerchantGateway.Customer.Create(new CustomerRequest());
+            var token = partnerMerchantGateway.PaymentMethod.Create(new PaymentMethodRequest
+                {
+                  PaymentMethodNonce = Nonce.Transactable,
+                  CustomerId = result.Target.Id
+                 }).Target.Token;
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "grant_payment_method");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                    Code = code,
+                    Scope = "grant_payment_method"
+                });
+
+            BraintreeGateway accessTokenGateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+            PaymentMethodGrantRequest grantRequest = new PaymentMethodGrantRequest()
+            {
+                AllowVaulting = false,
+                IncludeBillingPostalCode = true
+            };
+            Result<PaymentMethodNonce> grantResult = accessTokenGateway.PaymentMethod.Grant(token, grantRequest);
+            Assert.IsTrue(grantResult.IsSuccess());
+            Assert.IsNotNull(grantResult.Target.Nonce);
+
+            Result<PaymentMethod> revokeResult = accessTokenGateway.PaymentMethod.Revoke(token);
+            Assert.IsTrue(revokeResult.IsSuccess());
         }
     }
 }

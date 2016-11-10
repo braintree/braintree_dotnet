@@ -1,3 +1,12 @@
+## 3.1.0
+* Add createdAt to SubscriptionSearch
+* Add cannot clone marketplace transaction error
+* Add PlanId to subscription status event
+* Add grant and revoke APIs to PaymentMethodGateway
+* Support TLS v1.2
+* Support netstandard 1.3
+* Throw configuration exception for empty strings
+
 ## 3.0.1
 * Change compatibility with .NET Core 1.0 to .NET Standard 1.6 (Thanks, @thoughtentity!)
 * Change to dotnet pack deployment strategy (Thanks, @devscott!)

@@ -13,6 +13,7 @@ namespace Braintree
         public virtual SubscriptionSource Source { get; protected set; }
         public virtual string User { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
+        public virtual string PlanId { get; protected set; }
 
         public SubscriptionStatusEvent(NodeWrapper node)
         {
@@ -25,6 +26,7 @@ namespace Braintree
             Source = (SubscriptionSource)CollectionUtil.Find(SubscriptionSource.ALL, node.GetString("subscription-source"), SubscriptionSource.UNRECOGNIZED);
             User = node.GetString("user");
             CurrencyIsoCode = node.GetString("currency-iso-code");
+            PlanId = node.GetString("plan-id");
         }
 
         [Obsolete("Mock Use Only")]

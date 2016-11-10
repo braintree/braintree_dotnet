@@ -124,5 +124,22 @@ namespace Braintree
                 return new UnknownPaymentMethod(response);
             }
         }
+
+        public Result<PaymentMethodNonce> Grant(string token, PaymentMethodGrantRequest request)
+        {
+            request.SharedPaymentMethodToken = token;
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods/grant", request));
+            return new ResultImpl<PaymentMethodNonce>(response, gateway);
+        }
+
+        public Result<PaymentMethod> Revoke(string token)
+        {
+            var request = new PaymentMethodGrantRevokeRequest()
+            {
+                SharedPaymentMethodToken = token
+            };
+            var response = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods/revoke", request));
+            return new ResultImpl<UnknownPaymentMethod>(response, gateway);
+        }
     }
 }

@@ -665,6 +665,40 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
         }
 
+        [Test]
+        public void Update_CheckDuplicateCreditCard()
+        {
+            var customer = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                }
+            };
+
+            var dupCustomer = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                        FailOnDuplicatePaymentMethod = true
+                    }
+                }
+            };
+
+            var createResult = gateway.Customer.Create(customer);
+            Assert.IsTrue(createResult.IsSuccess());
+            var updateResult = gateway.Customer.Update(createResult.Target.Id, dupCustomer);
+            Assert.IsFalse(updateResult.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS,
+                updateResult.Errors.ForObject("Customer").ForObject("CreditCard").OnField("Number")[0].Code
+            );
+        }
+
         #pragma warning disable 0618
         [Test]
         public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrueViaTransparentRedirect()

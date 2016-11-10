@@ -144,6 +144,8 @@ namespace Braintree
 #else
             try
             {
+                const int SecurityProtocolTypeTls12 = 3072;
+                ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | ((SecurityProtocolType)SecurityProtocolTypeTls12);
                 var request = Configuration.HttpWebRequestFactory(Environment.GatewayURL + URL);
                 request.Headers.Add("Authorization", GetAuthorizationHeader());
                 request.Headers.Add("X-ApiVersion", ApiVersion);

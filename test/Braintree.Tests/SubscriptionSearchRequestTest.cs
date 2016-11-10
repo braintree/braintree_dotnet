@@ -150,6 +150,38 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ToXml_CreatedAtIs()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().CreatedAt.Is("1/1/2015");
+            var xml = "<search><created-at><is>1/1/2015</is></created-at></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_CreatedAtBetween()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().CreatedAt.Between("1/1/2015", "1/2/2015");
+            var xml = "<search><created-at><min>1/1/2015</min><max>1/2/2015</max></created-at></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_CreatedAtThanOrEqualTo()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().CreatedAt.GreaterThanOrEqualTo("1/1/2015");
+            var xml = "<search><created-at><min>1/1/2015</min></created-at></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
+        public void ToXml_CreatedAtLessThanOrEqualTo()
+        {
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().CreatedAt.LessThanOrEqualTo("1/1/2015");
+            var xml = "<search><created-at><max>1/1/2015</max></created-at></search>";
+            Assert.AreEqual(xml, request.ToXml());
+        }
+
+        [Test]
         public void ToXml_DaysPastDueIs()
         {
             SubscriptionSearchRequest request = new SubscriptionSearchRequest().DaysPastDue.Is("30");

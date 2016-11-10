@@ -85,6 +85,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(plan.Price, subscription.StatusHistory[0].Price);
             Assert.AreEqual(0.00M, subscription.StatusHistory[0].Balance);
             Assert.AreEqual("USD", subscription.StatusHistory[0].CurrencyIsoCode);
+            Assert.AreEqual("integration_trialless_plan", subscription.StatusHistory[0].PlanId);
         }
 
         [Test]
@@ -996,6 +997,48 @@ namespace Braintree.Tests.Integration
 
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, triallessSubscription));
             Assert.IsFalse(TestHelper.IncludesSubscription(collection, trialSubscription));
+        }
+
+        [Test]
+        public void Search_OnCreatedAt()
+        {
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+            };
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+
+            DateTime createdAt = subscription.CreatedAt.Value;
+            DateTime oneDayEarlier = createdAt.AddDays(-1);
+            DateTime oneDayLater = createdAt.AddDays(1);
+            DateTime twoDaysLater = createdAt.AddDays(2);
+
+            SubscriptionSearchRequest betweenSearch = new SubscriptionSearchRequest().
+                Id.Is(subscription.Id).
+                CreatedAt.Between(oneDayEarlier, oneDayLater);
+            Assert.That(gateway.Subscription.Search(betweenSearch).MaximumCount, Is.GreaterThan(0));
+
+            SubscriptionSearchRequest greaterThanSearch = new SubscriptionSearchRequest().
+                Id.Is(subscription.Id).
+                CreatedAt.GreaterThanOrEqualTo(oneDayEarlier);
+            Assert.That(gateway.Subscription.Search(greaterThanSearch).MaximumCount, Is.GreaterThan(0));
+
+            SubscriptionSearchRequest lessThanSearch = new SubscriptionSearchRequest().
+                Id.Is(subscription.Id).
+                CreatedAt.LessThanOrEqualTo(oneDayLater);
+            Assert.That(gateway.Subscription.Search(lessThanSearch).MaximumCount, Is.GreaterThan(0));
+
+            SubscriptionSearchRequest isSearch = new SubscriptionSearchRequest().
+                Id.Is(subscription.Id).
+                CreatedAt.Is(createdAt.ToString() + " UTC");
+            Assert.That(gateway.Subscription.Search(isSearch).MaximumCount, Is.GreaterThan(0));
+
+            SubscriptionSearchRequest noResultsBetweenSearch = new SubscriptionSearchRequest().
+                Id.Is(subscription.Id).
+                CreatedAt.Between(oneDayLater, twoDaysLater);
+            Assert.AreEqual(gateway.Subscription.Search(noResultsBetweenSearch).MaximumCount, 0);
         }
 
         [Test]

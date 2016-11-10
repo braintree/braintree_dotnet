@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.0.1</AssemblyName>
+    <AssemblyName>Braintree-3.1.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,7 +35,7 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <PropertyGroup>
     <AssemblyOriginatorKeyFile>braintreeSgKey.pfx</AssemblyOriginatorKeyFile>
@@ -172,6 +172,8 @@
     <Compile Include="PaymentMethodNonceGateway.cs" />
     <Compile Include="PaymentMethodOptionsRequest.cs" />
     <Compile Include="PaymentMethodRequest.cs" />
+    <Compile Include="PaymentMethodGrantRequest.cs" />
+    <Compile Include="PaymentMethodGrantRevokeRequest.cs" />
     <Compile Include="PayPalAccount.cs" />
     <Compile Include="PayPalAccountGateway.cs" />
     <Compile Include="PayPalAccountRequest.cs" />

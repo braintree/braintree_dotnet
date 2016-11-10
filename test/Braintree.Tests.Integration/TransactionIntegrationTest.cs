@@ -2197,7 +2197,7 @@ namespace Braintree.Tests.Integration
                 },
                 ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
                 {
-                    EciFlag = "06",
+                    EciFlag = "05",
                     Cavv = "",
                     Xid = "",
                 }
@@ -2252,6 +2252,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationMonth);
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
             Assert.IsNotNull(result.Target.ApplePayDetails.CardholderName);
+            Assert.IsNotNull(result.Target.ApplePayDetails.LastFour);
             Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
             Assert.IsNotNull(result.Target.ApplePayDetails.SourceDescription);
         }
@@ -5326,6 +5327,61 @@ namespace Braintree.Tests.Integration
             };
             var transactionResult = gateway.Transaction.Sale(request);
             Assert.IsTrue(transactionResult.IsSuccess());
+        }
+
+
+        [Test]
+        public void PaymentMethodGrantIncludeBillingPostalCode() {
+            var partnerMerchantGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_public_id",
+                PublicKey = "oauth_app_partner_user_public_key",
+                PrivateKey = "oauth_app_partner_user_private_key"
+            };
+            var customerRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/19",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        PostalCode = "94107"
+                    }
+                }
+            };
+
+            Customer customer = partnerMerchantGateway.Customer.Create(customerRequest).Target;
+            CreditCard creditCard = customer.CreditCards[0];
+            var token = creditCard.Token;
+
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "grant_payment_method");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "grant_payment_method"
+            });
+
+            BraintreeGateway accessTokenGateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+            PaymentMethodGrantRequest optionsRequest = new PaymentMethodGrantRequest()
+            {
+                AllowVaulting = false,
+                IncludeBillingPostalCode = true
+            };
+
+            Result<PaymentMethodNonce> grantResult = accessTokenGateway.PaymentMethod.Grant(token, optionsRequest);
+            var request = new TransactionRequest {
+                Amount = 100M,
+                PaymentMethodNonce = grantResult.Target.Nonce
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Assert.AreEqual(transactionResult.Target.BillingAddress.PostalCode, "94107");
         }
     }
 }

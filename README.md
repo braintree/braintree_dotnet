@@ -2,9 +2,16 @@
 
 The Braintree assembly provides integration access to the Braintree Gateway.
 
+## Please Note
+> **The Payment Card Industry (PCI) Council has [mandated](http://blog.pcisecuritystandards.org/migrating-from-ssl-and-early-tls) that early versions of TLS be retired from service.  All organizations that handle credit card information are required to comply with this standard. As part of this obligation, Braintree is updating its services to require TLS 1.2 for all HTTPS connections. Braintree will also require HTTP/1.1 for all connections. Please see our [technical documentation](https://github.com/paypal/tls-update) for more information.**
+
 ## Dependencies
 
 * .NET Core 1.0 or .NET Framework 4.5.2+
+
+## Using Older Versions of .NET
+
+For .NET Framework 2.x, 3.x, and < 4.5.2, the latest compatible version of the Braintree .NET library is [2.65.0](https://github.com/braintree/braintree_dotnet/tree/2.65.0)
 
 ## Quick Start Example
 
@@ -86,10 +93,6 @@ dotnet restore
 dotnet build
 dotnet test .
 ```
-
-## Open Source Attribution
-
-A list of open source projects that help power Braintree can be found [here](https://www.braintreepayments.com/developers/open-source).
 
 ## License
 

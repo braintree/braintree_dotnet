@@ -67,6 +67,13 @@ namespace Braintree
                 return new RangeNode<SubscriptionSearchRequest>("days-past-due", this);
             }
         }
+        public RangeNode<SubscriptionSearchRequest> CreatedAt
+        {
+            get
+            {
+                return new RangeNode<SubscriptionSearchRequest>("created-at", this);
+            }
+        }
         public MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus> Status
         {
             get

@@ -66,15 +66,15 @@ namespace Braintree
             {
                 throw new ConfigurationException("Configuration.environment needs to be set");
             }
-            else if (merchantId == null)
+            else if (string.IsNullOrEmpty(merchantId))
             {
                 throw new ConfigurationException("Configuration.merchantId needs to be set");
             }
-            else if (publicKey == null)
+            else if (string.IsNullOrEmpty(publicKey))
             {
                 throw new ConfigurationException("Configuration.publicKey needs to be set");
             }
-            else if (privateKey == null)
+            else if (string.IsNullOrEmpty(privateKey))
             {
                 throw new ConfigurationException("Configuration.privateKey needs to be set");
             }
