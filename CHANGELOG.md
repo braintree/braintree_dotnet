@@ -1,3 +1,6 @@
+## 3.2.1
+* Make Newtonsoft.json a test-only dependency
+
 ## 3.2.0
 * Change compatibility from .NET Standard 1.6 to 1.3 (Thanks, @hughbe)
 * Add `UsBankAccount` payment method
