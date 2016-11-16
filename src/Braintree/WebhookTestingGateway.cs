@@ -45,6 +45,10 @@ namespace Braintree
                 return MerchantAccountDeclinedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_DISBURSED) {
                 return TransactionDisbursedSampleXml(id);
+            } else if (kind == WebhookKind.TRANSACTION_SETTLED) {
+                return TransactionSettledSampleXml(id);
+            } else if (kind == WebhookKind.TRANSACTION_SETTLEMENT_DECLINED) {
+                return TransactionSettlementDeclinedSampleXml(id);
             } else if (kind == WebhookKind.DISBURSEMENT_EXCEPTION) {
                 return DisbursementExceptionSampleXml(id);
             } else if (kind == WebhookKind.DISBURSEMENT) {
@@ -112,6 +116,54 @@ namespace Braintree
                     Node("disbursement-details",
                         NodeAttr("disbursement-date", TYPE_DATE, "2013-07-09")
                     ),
+                    Node("billing"),
+                    Node("credit-card"),
+                    Node("customer"),
+                    Node("descriptor"),
+                    Node("shipping"),
+                    Node("subscription")
+            );
+        }
+
+        private string TransactionSettledSampleXml(string id)
+        {
+            return Node("transaction",
+                    Node("id", id),
+                    Node("status", "settled"),
+                    Node("type", "sale"),
+                    Node("currency-iso-code", "USD"),
+                    Node("amount", "100.00"),
+                    Node("us-bank-account",
+                        Node("routing-number", "123456789"),
+                        Node("last-4", "1234"),
+                        Node("account-type", "checking"),
+                        Node("account-description", "PayPal Checking - 1234"),
+                        Node("account-holder-name", "Dan Schulman")),
+                    Node("disbursement-details"),
+                    Node("billing"),
+                    Node("credit-card"),
+                    Node("customer"),
+                    Node("descriptor"),
+                    Node("shipping"),
+                    Node("subscription")
+            );
+        }
+
+        private string TransactionSettlementDeclinedSampleXml(string id)
+        {
+            return Node("transaction",
+                    Node("id", id),
+                    Node("status", "settlement_declined"),
+                    Node("type", "sale"),
+                    Node("currency-iso-code", "USD"),
+                    Node("amount", "100.00"),
+                    Node("us-bank-account",
+                        Node("routing-number", "123456789"),
+                        Node("last-4", "1234"),
+                        Node("account-type", "checking"),
+                        Node("account-description", "PayPal Checking - 1234"),
+                        Node("account-holder-name", "Dan Schulman")),
+                    Node("disbursement-details"),
                     Node("billing"),
                     Node("credit-card"),
                     Node("customer"),

@@ -21,6 +21,8 @@ namespace Braintree
         public static readonly WebhookKind SUB_MERCHANT_ACCOUNT_DECLINED = new WebhookKind("sub_merchant_account_declined");
         public static readonly WebhookKind UNRECOGNIZED = new WebhookKind("unrecognized");
         public static readonly WebhookKind TRANSACTION_DISBURSED = new WebhookKind("transaction_disbursed");
+        public static readonly WebhookKind TRANSACTION_SETTLED = new WebhookKind("transaction_settled");
+        public static readonly WebhookKind TRANSACTION_SETTLEMENT_DECLINED = new WebhookKind("transaction_settlement_declined");
         public static readonly WebhookKind DISBURSEMENT_EXCEPTION = new WebhookKind("disbursement_exception");
         public static readonly WebhookKind DISBURSEMENT = new WebhookKind("disbursement");
         public static readonly WebhookKind DISPUTE_OPENED = new WebhookKind("dispute_opened");
@@ -43,6 +45,8 @@ namespace Braintree
             SUB_MERCHANT_ACCOUNT_APPROVED,
             SUB_MERCHANT_ACCOUNT_DECLINED,
             TRANSACTION_DISBURSED,
+            TRANSACTION_SETTLED,
+            TRANSACTION_SETTLEMENT_DECLINED,
             DISBURSEMENT_EXCEPTION,
             DISBURSEMENT,
             DISPUTE_OPENED,

@@ -26,7 +26,8 @@ namespace Braintree.Tests
 
                 TransactionRequest transactionRequest = new TransactionRequest
                 {
-                    Amount = 100.0M
+                    Amount = 100.0M,
+                    TaxAmount = 10.0M,
                 };
 
                 SubscriptionRequest subscriptionRequest = new SubscriptionRequest
@@ -44,10 +45,11 @@ namespace Braintree.Tests
                     Amount = 400.0M
                 };
 
-                TestHelper.AssertIncludes("<amount>100.0</amount>", transactionRequest.ToXml());
-                TestHelper.AssertIncludes("<price>200.0</price>", subscriptionRequest.ToXml());
-                TestHelper.AssertIncludes("<amount>300.0</amount>", subscriptionTransactionRequest.ToXml());
-                TestHelper.AssertIncludes("<amount>400.0</amount>", modificationRequest.ToXml("root"));
+                TestHelper.AssertIncludes("<amount>100.00</amount>", transactionRequest.ToXml());
+                TestHelper.AssertIncludes("<tax-amount>10.00</tax-amount>", transactionRequest.ToXml());
+                TestHelper.AssertIncludes("<price>200.00</price>", subscriptionRequest.ToXml());
+                TestHelper.AssertIncludes("<amount>300.00</amount>", subscriptionTransactionRequest.ToXml());
+                TestHelper.AssertIncludes("<amount>400.00</amount>", modificationRequest.ToXml("root"));
             }
             finally
             {

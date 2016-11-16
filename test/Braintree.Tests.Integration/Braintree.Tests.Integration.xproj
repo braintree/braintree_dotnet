@@ -79,6 +79,7 @@
     <Compile Include="TestTransactionIntegrationTest.cs" />
     <Compile Include="TransactionIntegrationTest.cs" />
     <Compile Include="TransparentRedirectRequestIntegrationTest.cs" />
+    <Compile Include="UsBankIntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Braintree\Braintree.xproj">

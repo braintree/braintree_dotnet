@@ -289,6 +289,33 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Create_CreatesUsBankAccountWithNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway)
+            };
+
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            UsBankAccount usBankAccount = (UsBankAccount) paymentMethodResult.Target;
+
+            Assert.IsNotNull(usBankAccount.Token);
+
+            Assert.AreEqual("123456789", usBankAccount.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccount.Last4);
+            Assert.AreEqual("checking", usBankAccount.AccountType);
+            Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
+            Assert.AreEqual("UNKNOWN", usBankAccount.BankName);
+        }
+
+        [Test]
         public void Create_CreatesAbstractPaymentMethod()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());

@@ -129,6 +129,49 @@ namespace Braintree.Tests
           Assert.IsTrue(notification.Transaction.DisbursementDetails.IsValid());
         }
 
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForATransactionSettledWebHook()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_SETTLED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.TRANSACTION_SETTLED, notification.Kind);
+          Transaction transaction = notification.Transaction;
+          Assert.AreEqual(TransactionStatus.SETTLED, transaction.Status);
+          Assert.AreEqual(100.00, transaction.Amount);
+          Assert.AreEqual("my_id", transaction.Id);
+
+          UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
+          Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+          Assert.AreEqual("1234", usBankAccountDetails.Last4);
+          Assert.AreEqual("checking", usBankAccountDetails.AccountType);
+          Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
+          Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForATransactionSettlementDeclinedWebhook()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_SETTLEMENT_DECLINED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.TRANSACTION_SETTLEMENT_DECLINED, notification.Kind);
+          Transaction transaction = notification.Transaction;
+          Assert.AreEqual(TransactionStatus.SETTLEMENT_DECLINED, transaction.Status);
+          Assert.AreEqual(100.00, transaction.Amount);
+          Assert.AreEqual("my_id", transaction.Id);
+
+          UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
+          Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+          Assert.AreEqual("1234", usBankAccountDetails.Last4);
+          Assert.AreEqual("checking", usBankAccountDetails.AccountType);
+          Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
+          Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+        }
+
         [Test]
         public void SampleNotification_ReturnsANotificationForADisbursementExceptionWebhook()
         {

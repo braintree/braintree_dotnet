@@ -12,7 +12,9 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
+using Newtonsoft.Json;
 using Params = System.Collections.Generic.Dictionary<string, object>;
+using System.Diagnostics;
 
 namespace Braintree.TestUtil
 {
@@ -25,6 +27,95 @@ namespace Braintree.TestUtil
             var decodedClientToken = Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
             var unescapedClientToken = Regex.Unescape(decodedClientToken);
             return unescapedClientToken;
+        }
+
+        public static string GenerateValidUsBankAccountNonce(BraintreeGateway gateway)
+        {
+            var clientToken = GenerateDecodedClientToken(gateway);
+            var def =  new {
+                braintree_api = new {
+                    url = "",
+                    access_token = ""
+                }
+            };
+            var config = JsonConvert.DeserializeAnonymousType(clientToken, def);
+            var url = config.braintree_api.url + "/tokens";
+            var accessToken = config.braintree_api.access_token;
+            string postData = @"
+            {
+                ""type"": ""us_bank_account"",
+                ""billing_address"": {
+                    ""street_address"": ""123 Ave"",
+                    ""region"": ""CA"",
+                    ""locality"": ""San Francisco"",
+                    ""postal_code"": ""94112""
+                },
+                ""account_type"": ""checking"",
+                ""routing_number"": ""123456789"",
+                ""account_number"": ""567891234"",
+                ""account_holder_name"": ""Dan Schulman"",
+                ""account_description"": ""PayPal Checking - 1234"",
+                ""ach_mandate"": {
+                    ""text"": """"
+                }
+            }";
+
+#if netcore
+            var request = new HttpRequestMessage(new HttpMethod("POST"), url);
+            byte[] buffer = Encoding.UTF8.GetBytes(postData);
+            request.Content = new StringContent(postData, Encoding.UTF8, "application/json");
+            request.Headers.Add("Braintree-Version", "2015-11-01");
+            request.Headers.Add("Authorization", "Bearer " + accessToken);
+
+            var httpClientHandler = new HttpClientHandler{};
+
+            HttpResponseMessage response;
+            using (var client = new HttpClient(httpClientHandler))
+            {
+                response = client.SendAsync(request).GetAwaiter().GetResult();
+            }
+            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            string responseBody = reader.ReadToEnd();
+#else
+            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPost ""{url}""";
+            Process process = new Process {
+                StartInfo = new ProcessStartInfo {
+                    FileName = "curl",
+                             Arguments = curlCommand,
+                             UseShellExecute = false,
+                             RedirectStandardOutput = true,
+                }
+            };
+            process.Start();
+
+            StringBuilder responseBodyBuilder = new StringBuilder();
+            while (!process.HasExited) {
+                responseBodyBuilder.Append(process.StandardOutput.ReadToEnd());
+            }
+            responseBodyBuilder.Append(process.StandardOutput.ReadToEnd());
+            string responseBody = responseBodyBuilder.ToString();
+#endif
+            var resDef =  new {
+                data = new {
+                    id = "",
+                }
+            };
+            var json = JsonConvert.DeserializeAnonymousType(responseBody, resDef);
+            return json.data.id;
+        }
+
+        public static string GenerateInvalidUsBankAccountNonce()
+        {
+            var valid_characters = "bcdfghjkmnpqrstvwxyz23456789";
+            var token = "tokenusbankacct";
+            Random rnd = new Random();
+            for(int i=0; i<4; i++) {
+                token += "_";
+                for(int j=0; j<6; j++) {
+                    token += valid_characters[rnd.Next(0,valid_characters.ToCharArray().Length)];
+                }
+            }
+            return token + "_xxx";
         }
 
         public static int CompareModificationsById(Modification left, Modification right)

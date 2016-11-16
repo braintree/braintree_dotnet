@@ -1,3 +1,8 @@
+## 3.2.0
+* Change compatibility from .NET Standard 1.6 to 1.3 (Thanks, @hughbe)
+* Add `UsBankAccount` payment method
+* Throw `ConfigurationException` for missing credentials
+
 ## 3.1.0
 * Add createdAt to SubscriptionSearch
 * Add cannot clone marketplace transaction error

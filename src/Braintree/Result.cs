@@ -120,6 +120,10 @@ namespace Braintree
             {
                 return new PayPalAccount(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(UsBankAccount))
+            {
+                return new UsBankAccount(node) as T;
+            }
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {
                 return new UnknownPaymentMethod(node) as T;

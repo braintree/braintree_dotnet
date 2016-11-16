@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.1.0</AssemblyName>
+    <AssemblyName>Braintree-3.2.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -226,6 +226,11 @@
     <Compile Include="UpdateAddOnRequest.cs" />
     <Compile Include="UpdateDiscountRequest.cs" />
     <Compile Include="UpdateModificationRequest.cs" />
+    <Compile Include="UsBankAccount.cs" />
+    <Compile Include="UsBankAccountDetails.cs" />
+    <Compile Include="UsBankAccountRequest.cs" />
+    <Compile Include="UsBankAccountGateway.cs" />
+    <Compile Include="IUsBankAccountGateway.cs" />
     <Compile Include="ValidationError.cs" />
     <Compile Include="ValidationErrorCode.cs" />
     <Compile Include="ValidationErrors.cs" />

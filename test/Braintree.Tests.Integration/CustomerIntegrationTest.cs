@@ -114,6 +114,31 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Find_IncludesUsBankAccountInPaymentMethods()
+        {
+            var createRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway)
+            };
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+            Assert.IsNotNull(customer.UsBankAccounts);
+            Assert.IsNotNull(customer.PaymentMethods);
+
+            UsBankAccount usBankAccount = customer.UsBankAccounts[0];
+            Assert.IsNotNull(usBankAccount.Token);
+            Assert.AreEqual(usBankAccount, customer.PaymentMethods[0]);
+
+            Assert.AreEqual(1, customer.PaymentMethods.Length);
+            Assert.AreEqual("123456789", usBankAccount.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccount.Last4);
+            Assert.AreEqual("checking", usBankAccount.AccountType);
+            Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
+            Assert.AreEqual("UNKNOWN", usBankAccount.BankName);
+        }
+
+        [Test]
         public void Find_IncludesAndroidPayProxyCardsInPaymentMethods()
         {
             var createRequest = new CustomerRequest
@@ -576,6 +601,25 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(customer.PayPalAccounts[0].Token, customer.DefaultPaymentMethod.Token);
                
          }
+
+        [Test]
+        public void Create_WithUsBankAccountPaymentMethodNonce()
+        {
+            string nonce = TestHelper.GenerateValidUsBankAccountNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+                PaymentMethodNonce = nonce
+            });
+            Assert.IsTrue(result.IsSuccess());
+            UsBankAccount usBankAccount = result.Target.UsBankAccounts[0];
+
+            Assert.AreEqual(1, result.Target.PaymentMethods.Length);
+            Assert.AreEqual("123456789", usBankAccount.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccount.Last4);
+            Assert.AreEqual("checking", usBankAccount.AccountType);
+            Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
+            Assert.AreEqual("UNKNOWN", usBankAccount.BankName);
+        }
 
         #pragma warning disable 0618
         [Test]

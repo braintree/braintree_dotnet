@@ -58,6 +58,7 @@ namespace Braintree
         public string DefaultPaymentMethodToken { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
         public CreditCardRequest CreditCard { get; set; }
+        public UsBankAccountRequest UsBankAccount { get; set; }
         public RiskDataRequest RiskData { get; set; }
 
         public override string Kind()

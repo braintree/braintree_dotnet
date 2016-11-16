@@ -50,7 +50,7 @@ namespace Braintree
         public AddressRequest BillingAddress { get; set; }
         public AddressRequest ShippingAddress { get; set; }
         public TransactionPayPalRequest PayPalAccount { get; set; }
-        public decimal TaxAmount { get; set; }
+        public decimal? TaxAmount { get; set; }
         public bool? TaxExempt { get; set; }
         public TransactionType Type { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
@@ -128,7 +128,8 @@ namespace Braintree
             builder.AddElement("purchase-order-number", PurchaseOrderNumber);
             builder.AddElement("shipping-address-id", ShippingAddressId);
             builder.AddElement("billing-address-id", BillingAddressId);
-            if (TaxAmount != 0) builder.AddElement("tax-amount", TaxAmount);
+            if (TaxAmount.HasValue)
+                builder.AddElement("tax-amount", TaxAmount);
             if (TaxExempt.HasValue)
                 builder.AddElement("tax-exempt", TaxExempt);
             builder.AddElement("merchant-account-id", MerchantAccountId);

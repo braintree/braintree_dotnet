@@ -101,7 +101,7 @@ namespace Braintree
             }
             if (value is decimal)
             {
-                return FormatAsXml(name, ((decimal) value).ToString(System.Globalization.CultureInfo.InvariantCulture));
+                return FormatAsXml(name, ((decimal) value).ToString("F2", System.Globalization.CultureInfo.InvariantCulture));
             }
 
             return FormatAsXml(name, value.ToString());
@@ -109,7 +109,6 @@ namespace Braintree
 
         private static string FormatAsArrayXML(string name, string value)
         {
-           
             return string.Format("<{0} type=\"array\">{1}</{0}>", WebUtility.HtmlEncode(name), value);
         }
 

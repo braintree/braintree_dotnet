@@ -1167,7 +1167,122 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
         }
 
-        [Test]        
+        [Test]
+        public void Sale_ReturnsSuccessfulResponseWithUsBankAccount()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway),
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                    StoreInVault = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+
+            UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
+            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("checking", usBankAccountDetails.AccountType);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
+            Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+        }
+
+        [Test]
+        public void Sale_ReturnsSuccessfulResponseWithUsBankAccountAndVaultedToken()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway),
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                    StoreInVault = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+
+            UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
+            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("checking", usBankAccountDetails.AccountType);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
+            Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+
+            request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                PaymentMethodToken = usBankAccountDetails.Token,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                }
+            };
+
+            result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+
+            usBankAccountDetails = transaction.UsBankAccountDetails;
+            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("checking", usBankAccountDetails.AccountType);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
+            Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+        }
+
+        [Test]
+        public void Sale_ReturnsFailureResponseWithInvalidUsBankAccount()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = TestHelper.GenerateInvalidUsBankAccountNonce(),
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                    StoreInVault = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PAYMENT_METHOD_NONCE_UNKNOWN, result.Errors.ForObject("Transaction").OnField("PaymentMethodNonce")[0].Code);
+        }
+
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponseWithPartialSettlement()
         {
             var request = new TransactionRequest
@@ -1389,7 +1504,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
         }
-        
+
         [Test]
         public void Sale_ReturnsSuccessfulResponseWithRiskData()
         {
@@ -1485,7 +1600,7 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(PaymentInstrumentType.CREDIT_CARD, transaction.PaymentInstrumentType);
         }
-        
+
         [Test]
         public void Sale_ReturnsPaymentInstrumentTypeForPayPal()
         {
@@ -2372,6 +2487,36 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithUsBankAccountNonce()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway),
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.AreEqual(PaymentInstrumentType.US_BANK_ACCOUNT, result.Target.PaymentInstrumentType);
+            Assert.IsNotNull(result.Target.UsBankAccountDetails);
+
+            UsBankAccountDetails usBankAccountDetails = result.Target.UsBankAccountDetails;
+            Assert.IsNull(usBankAccountDetails.Token);
+
+            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("checking", usBankAccountDetails.AccountType);
+            Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
+            Assert.AreEqual("UNKNOWN", usBankAccountDetails.BankName);
+        }
+
+        [Test]
         public void Sale_Declined()
         {
             TransactionRequest request = new TransactionRequest
@@ -2836,7 +2981,7 @@ namespace Braintree.Tests.Integration
                     ExpirationDate = "05/2009",
                 }
             };
-            
+
             Result<Transaction> result = gateway.Transaction.Sale(request);
 
             Assert.IsFalse(result.IsSuccess());
@@ -2869,6 +3014,31 @@ namespace Braintree.Tests.Integration
 
             Assert.IsTrue(transaction.TaxExempt.Value);
             Assert.AreEqual(10M, transaction.TaxAmount.Value);
+            Assert.AreEqual("12345", transaction.PurchaseOrderNumber);
+        }
+
+        [Test]
+        public void Sale_WithLevel2ValidationsWithZeroTax()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                TaxExempt = true,
+                TaxAmount = 0M,
+                PurchaseOrderNumber = "12345",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsTrue(transaction.TaxExempt.Value);
+            Assert.AreEqual(0.00, transaction.TaxAmount.Value);
             Assert.AreEqual("12345", transaction.PurchaseOrderNumber);
         }
 
@@ -5281,7 +5451,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeAmount);
             Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeCurrencyIsoCode);
         }
-        
+
         [Test]
         public void SharedVault() {
             var sharerGateway = new BraintreeGateway

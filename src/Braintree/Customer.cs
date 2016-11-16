@@ -34,6 +34,7 @@ namespace Braintree
         public virtual AmexExpressCheckoutCard[] AmexExpressCheckoutCards { get; protected set; }
         public virtual CoinbaseAccount[] CoinbaseAccounts { get; protected set; }
         public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
+        public virtual UsBankAccount[] UsBankAccounts { get; protected set; }
         public virtual PaymentMethod[] PaymentMethods { get; protected set; }
         public virtual Address[] Addresses { get; protected set; }
         public virtual Dictionary<string, string> CustomFields { get; protected set; }
@@ -116,6 +117,13 @@ namespace Braintree
                 VenmoAccounts[i] = new VenmoAccount(venmoAccountXmlNodes[i], gateway);
             }
 
+            var usBankAccountXmlNodes = node.GetList("us-bank-accounts/us-bank-account");
+            UsBankAccounts = new UsBankAccount[usBankAccountXmlNodes.Count];
+            for (int i = 0; i < usBankAccountXmlNodes.Count; i++)
+            {
+                UsBankAccounts[i] = new UsBankAccount(usBankAccountXmlNodes[i]);
+            }
+
             PaymentMethods = new PaymentMethod[
                 CreditCards.Length
                 + PayPalAccounts.Length
@@ -124,6 +132,7 @@ namespace Braintree
                 + AndroidPayCards.Length
                 + AmexExpressCheckoutCards.Length
                 + VenmoAccounts.Length
+                + UsBankAccounts.Length
             ];
 
             CreditCards.CopyTo(PaymentMethods, 0);
@@ -133,6 +142,7 @@ namespace Braintree
             AndroidPayCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length);
             AmexExpressCheckoutCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length);
             VenmoAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length + AmexExpressCheckoutCards.Length);
+            UsBankAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length + AmexExpressCheckoutCards.Length + VenmoAccounts.Length);
 
             var addressXmlNodes = node.GetList("addresses/address");
             Addresses = new Address[addressXmlNodes.Count];

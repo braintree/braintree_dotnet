@@ -22,6 +22,10 @@ namespace Braintree
             {
                 return new ResultImpl<PayPalAccount>(response, gateway);
             }
+            else if (response.GetName() == "us-bank-account")
+            {
+                return new ResultImpl<UsBankAccount>(response, gateway);
+            }
             else if (response.GetName() == "credit-card")
             {
                 return new ResultImpl<CreditCard>(response, gateway);

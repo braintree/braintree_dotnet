@@ -117,10 +117,11 @@ namespace Braintree
         public static readonly PaymentInstrumentType ANDROID_PAY_CARD = new PaymentInstrumentType("android_pay_card");
         public static readonly PaymentInstrumentType AMEX_EXPRESS_CHECKOUT_CARD = new PaymentInstrumentType("amex_express_checkout_card");
         public static readonly PaymentInstrumentType VENMO_ACCOUNT = new PaymentInstrumentType("venmo_account");
+        public static readonly PaymentInstrumentType US_BANK_ACCOUNT = new PaymentInstrumentType("us_bank_account");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
 
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, ANY, UNKNOWN };
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, ANY, UNKNOWN };
 
         protected PaymentInstrumentType(string name) : base(name) {}
     }
@@ -192,6 +193,7 @@ namespace Braintree
         public virtual PayPalDetails PayPalDetails { get; protected set; }
         public virtual CoinbaseDetails CoinbaseDetails { get; protected set; }
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
+        public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
@@ -302,6 +304,11 @@ namespace Braintree
             if (venmoAccountNode != null)
             {
                 VenmoAccountDetails = new VenmoAccountDetails(venmoAccountNode);
+            }
+            var usBankAccountNode = node.GetNode("us-bank-account");
+            if (usBankAccountNode != null)
+            {
+                UsBankAccountDetails = new UsBankAccountDetails(usBankAccountNode);
             }
 
             BillingAddress = new Address(node.GetNode("billing"));
