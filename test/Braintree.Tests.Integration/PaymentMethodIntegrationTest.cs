@@ -4,6 +4,7 @@ using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests.Integration
@@ -307,12 +308,14 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(usBankAccount.Token);
 
-            Assert.AreEqual("123456789", usBankAccount.RoutingNumber);
+            Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
             Assert.AreEqual("1234", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
-            Assert.AreEqual("UNKNOWN", usBankAccount.BankName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
+            var found = gateway.PaymentMethod.Find(usBankAccount.Token);
+            Assert.IsInstanceOf(typeof(UsBankAccount), found);
         }
 
         [Test]
@@ -427,6 +430,36 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2000", result.CreditCardVerification.ProcessorResponseCode);
             Assert.AreEqual("Do Not Honor", result.CreditCardVerification.ProcessorResponseText);
             Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.CreditCardVerification.MerchantAccountId);
+        }
+
+        [Test]
+        public void Create_AllowsCustomVerificationAmount()
+        {
+            var nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", "4000111111111115" },
+                    { "expiration_month", "11" },
+                    { "expiration_year", "2099" }
+                },
+                isCreditCard: true);
+
+            var customer = gateway.Customer.Create().Target;
+            var result = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerifyCard = true,
+                    VerificationAmount = "1.02"
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.IsNotNull(result.CreditCardVerification);
+            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, result.CreditCardVerification.Status);
         }
 
         [Test]

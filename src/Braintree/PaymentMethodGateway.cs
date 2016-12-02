@@ -103,6 +103,10 @@ namespace Braintree
             {
                 return new PayPalAccount(response, gateway);
             }
+            else if (response.GetName() == "us-bank-account")
+            {
+                return new UsBankAccount(response);
+            }
             else if (response.GetName() == "credit-card")
             {
                 return new CreditCard(response, gateway);

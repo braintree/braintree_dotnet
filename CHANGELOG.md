@@ -1,3 +1,7 @@
+## 3.3.0
+* Allow custom verification amount in `PaymentMethodOptionsRequest`
+* Allow `PaymentMethod.find(token)` to return `UsBankAccount`
+
 ## 3.2.1
 * Make Newtonsoft.json a test-only dependency
 

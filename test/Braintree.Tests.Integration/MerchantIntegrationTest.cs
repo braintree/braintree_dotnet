@@ -184,63 +184,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Create_IgnoresMultiCurrencyIfOnboardingApplicationIsNotInternal()
-        {
-            ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
-                PaymentMethods = new string[] {"paypal"},
-                Currencies = new string[] {"GBP", "USD"},
-                PayPalAccount = new PayPalOnlyAccountRequest {
-                    ClientId = "paypal_client_id",
-                    ClientSecret = "paypal_client_secret"
-                }
-            });
-
-            Assert.IsTrue(result.IsSuccess());
-            Assert.IsFalse(string.IsNullOrEmpty(result.Target.Id));
-            Assert.AreEqual("name@email.com", result.Target.Email);
-            Assert.AreEqual("name@email.com", result.Target.CompanyName);
-            Assert.AreEqual("USA", result.Target.CountryCodeAlpha3);
-            Assert.AreEqual("US", result.Target.CountryCodeAlpha2);
-            Assert.AreEqual("840", result.Target.CountryCodeNumeric);
-            Assert.AreEqual("United States of America", result.Target.CountryName);
-
-            Assert.IsTrue(result.Target.Credentials.AccessToken.StartsWith("access_token$"));
-            Assert.IsTrue(result.Target.Credentials.RefreshToken.StartsWith("refresh_token$"));
-            Assert.IsTrue(result.Target.Credentials.ExpiresAt > DateTime.Now);
-            Assert.AreEqual("bearer", result.Target.Credentials.TokenType);
-
-            Assert.AreEqual(1, result.Target.MerchantAccounts.Length);
-        }
-
-        [Test]
-        public void Create_ReturnsErrorIfValidPaymentMethodOtherThanPayPalPassedForMultiCurrency()
-        {
-            gateway = new BraintreeGateway(
-                "client_id$development$signup_client_id",
-                "client_secret$development$signup_client_secret"
-            );
-
-            ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
-                PaymentMethods = new string[] {"credit_card"},
-                Currencies = new string[] {"GBP", "USD"},
-                PayPalAccount = new PayPalOnlyAccountRequest {
-                    ClientId = "paypal_client_id",
-                    ClientSecret = "paypal_client_secret"
-                }
-            });
-
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(
-                ValidationErrorCode.MERCHANT_PAYMENT_METHODS_ARE_NOT_ALLOWED,
-                result.Errors.ForObject("merchant").OnField("payment-methods")[0].Code
-            );
-        }
-
-        [Test]
         public void Create_ReturnsErrorIfInvalidCurrencyPassed()
         {
             gateway = new BraintreeGateway(

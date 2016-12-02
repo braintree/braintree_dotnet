@@ -3,6 +3,7 @@ using Braintree.Test;
 using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
+using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
 namespace Braintree.Tests.Integration
@@ -1193,11 +1194,12 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
             UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
-            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
             Assert.AreEqual("1234", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
         }
 
         [Test]
@@ -1226,11 +1228,12 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
             UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
-            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
             Assert.AreEqual("1234", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
 
             request = new TransactionRequest
             {
@@ -1254,11 +1257,12 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
             usBankAccountDetails = transaction.UsBankAccountDetails;
-            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
             Assert.AreEqual("1234", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
         }
 
         [Test]
@@ -2508,12 +2512,12 @@ namespace Braintree.Tests.Integration
             UsBankAccountDetails usBankAccountDetails = result.Target.UsBankAccountDetails;
             Assert.IsNull(usBankAccountDetails.Token);
 
-            Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
             Assert.AreEqual("1234", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
-            Assert.AreEqual("UNKNOWN", usBankAccountDetails.BankName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
         }
 
         [Test]

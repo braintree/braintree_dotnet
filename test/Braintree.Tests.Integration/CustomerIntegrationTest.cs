@@ -130,12 +130,12 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(usBankAccount, customer.PaymentMethods[0]);
 
             Assert.AreEqual(1, customer.PaymentMethods.Length);
-            Assert.AreEqual("123456789", usBankAccount.RoutingNumber);
+            Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
             Assert.AreEqual("1234", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
-            Assert.AreEqual("UNKNOWN", usBankAccount.BankName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
         }
 
         [Test]
@@ -613,12 +613,12 @@ namespace Braintree.Tests.Integration
             UsBankAccount usBankAccount = result.Target.UsBankAccounts[0];
 
             Assert.AreEqual(1, result.Target.PaymentMethods.Length);
-            Assert.AreEqual("123456789", usBankAccount.RoutingNumber);
+            Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
             Assert.AreEqual("1234", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
-            Assert.AreEqual("UNKNOWN", usBankAccount.BankName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
         }
 
         #pragma warning disable 0618

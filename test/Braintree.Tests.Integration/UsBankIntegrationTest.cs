@@ -4,6 +4,7 @@ using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests.Integration
@@ -24,7 +25,7 @@ namespace Braintree.Tests.Integration
                 PrivateKey = "integration_private_key"
             };
         }
-        
+
         [Test]
         public void Find_FindsUsBankAccountWithToken()
         {
@@ -41,16 +42,17 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(paymentMethodResult.IsSuccess());
 
             Assert.IsInstanceOf(typeof(UsBankAccount), paymentMethodResult.Target);
-            UsBankAccount usbankAccount = (UsBankAccount) paymentMethodResult.Target;
+            UsBankAccount usBankAccount = (UsBankAccount) paymentMethodResult.Target;
 
             UsBankAccountGateway usBankAccountGateway = new UsBankAccountGateway(gateway);
-            usbankAccount = usBankAccountGateway.Find(usbankAccount.Token);
+            usBankAccount = usBankAccountGateway.Find(usBankAccount.Token);
 
-            Assert.AreEqual("123456789", usbankAccount.RoutingNumber);
-            Assert.AreEqual("1234", usbankAccount.Last4);
-            Assert.AreEqual("checking", usbankAccount.AccountType);
-            Assert.AreEqual("PayPal Checking - 1234", usbankAccount.AccountDescription);
-            Assert.AreEqual("Dan Schulman", usbankAccount.AccountHolderName);
+            Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
+            Assert.AreEqual("1234", usBankAccount.Last4);
+            Assert.AreEqual("checking", usBankAccount.AccountType);
+            Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
+            Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
+            Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
         }
 
         [Test]
@@ -77,7 +79,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(paymentMethodResult.IsSuccess());
 
             Assert.IsInstanceOf(typeof(UsBankAccount), paymentMethodResult.Target);
-            UsBankAccount usbankAccount = (UsBankAccount) paymentMethodResult.Target;
+            UsBankAccount usBankAccount = (UsBankAccount) paymentMethodResult.Target;
 
             var transactionRequest = new TransactionRequest
             {
@@ -86,18 +88,18 @@ namespace Braintree.Tests.Integration
             };
 
             UsBankAccountGateway usBankAccountGateway = new UsBankAccountGateway(gateway);
-            Result<Transaction> transactionResult = usBankAccountGateway.Sale(usbankAccount.Token, transactionRequest);
+            Result<Transaction> transactionResult = usBankAccountGateway.Sale(usBankAccount.Token, transactionRequest);
 
             Assert.IsTrue(transactionResult.IsSuccess());
             Transaction transaction = transactionResult.Target;
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
 
             UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
-            Assert.AreEqual(usbankAccount.RoutingNumber, usBankAccountDetails.RoutingNumber);
-            Assert.AreEqual(usbankAccount.Last4, usBankAccountDetails.Last4);
-            Assert.AreEqual(usbankAccount.AccountType, usBankAccountDetails.AccountType);
-            Assert.AreEqual(usbankAccount.AccountDescription, usBankAccountDetails.AccountDescription);
-            Assert.AreEqual(usbankAccount.AccountHolderName, usBankAccountDetails.AccountHolderName);
+            Assert.AreEqual(usBankAccount.RoutingNumber, usBankAccountDetails.RoutingNumber);
+            Assert.AreEqual(usBankAccount.Last4, usBankAccountDetails.Last4);
+            Assert.AreEqual(usBankAccount.AccountType, usBankAccountDetails.AccountType);
+            Assert.AreEqual(usBankAccount.AccountDescription, usBankAccountDetails.AccountDescription);
+            Assert.AreEqual(usBankAccount.AccountHolderName, usBankAccountDetails.AccountHolderName);
         }
 
     }

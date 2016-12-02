@@ -8,6 +8,7 @@ namespace Braintree
         public bool? VerifyCard { get; set; }
         public bool? FailOnDuplicatePaymentMethod { get; set; }
         public string VerificationMerchantAccountId { get; set; }
+        public string VerificationAmount { get; set; }
 
         public override string ToXml(string root)
         {
@@ -25,6 +26,7 @@ namespace Braintree
                 AddElement("make-default", MakeDefault).
                 AddElement("verification-merchant-account-id", VerificationMerchantAccountId).
                 AddElement("verify-card", VerifyCard).
+                AddElement("verification-amount", VerificationAmount).
                 AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod);
         }
     }
