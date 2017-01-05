@@ -3632,6 +3632,30 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(transaction.CreditCard.IsVenmoSdk.Value);
         }
 
+        [Test]
+        public void Sale_WithAdvancedFraudCheckingSkipped()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2016",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SkipAdvancedFraudChecking = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.Null(transaction.RiskData.id);
+        }
+
         #pragma warning disable 0618
         [Test]    
         public void ConfirmTransparentRedirect_CreatesTheTransaction()
@@ -5449,6 +5473,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.PayPalDetails.PayerId);
             Assert.IsNotNull(transaction.PayPalDetails.PayerFirstName);
             Assert.IsNotNull(transaction.PayPalDetails.PayerLastName);
+            Assert.IsNotNull(transaction.PayPalDetails.PayerStatus);
             Assert.IsNotNull(transaction.PayPalDetails.SellerProtectionStatus);
             Assert.IsNotNull(transaction.PayPalDetails.CaptureId);
             Assert.IsNotNull(transaction.PayPalDetails.RefundId);

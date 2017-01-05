@@ -9,10 +9,6 @@ The Braintree assembly provides integration access to the Braintree Gateway.
 
 * .NET Core 1.0 or .NET Framework 4.5.2+
 
-## Using Older Versions of .NET
-
-For .NET Framework 2.x, 3.x, and < 4.5.2, the latest compatible version of the Braintree .NET library is [2.65.0](https://github.com/braintree/braintree_dotnet/tree/2.65.0)
-
 ## Quick Start Example
 
 ```csharp

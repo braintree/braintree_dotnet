@@ -88,7 +88,18 @@ namespace Braintree
 
         public Result<PaymentMethod> Delete(string token)
         {
-            var response = new NodeWrapper(service.Delete(service.MerchantPath() + "/payment_methods/any/" + token));
+            return Delete(token, null);
+        }
+
+        public Result<PaymentMethod> Delete(string token, PaymentMethodDeleteRequest request)
+        {
+            string queryString = "";
+            if (request != null)
+            {
+                queryString = "?" + request.ToQueryString();
+            }
+            var response = new NodeWrapper(service.Delete(service.MerchantPath() + "/payment_methods/any/" + token
+            + queryString));
             return new ResultImpl<UnknownPaymentMethod>(response, gateway);
         }
 

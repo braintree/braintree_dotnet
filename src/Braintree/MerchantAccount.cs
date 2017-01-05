@@ -44,6 +44,12 @@ namespace Braintree
 
       protected internal MerchantAccount(NodeWrapper node)
       {
+        NodeWrapper merchantAccountNode = node.GetNode("merchant-account");
+
+        if (merchantAccountNode != null) {
+            node = merchantAccountNode;
+        }
+
         Id = node.GetString("id");
         CurrencyIsoCode = node.GetString("currency-iso-code");
         Status = (MerchantAccountStatus) CollectionUtil.Find(MerchantAccountStatus.ALL, node.GetString("status"), null);

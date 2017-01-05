@@ -15,6 +15,7 @@ namespace Braintree
         public virtual string PayerId { get; protected set; }
         public virtual string PayerFirstName { get; protected set; }
         public virtual string PayerLastName { get; protected set; }
+        public virtual string PayerStatus { get; protected set; }
         public virtual string SellerProtectionStatus { get; protected set; }
         public virtual string CaptureId { get; protected set; }
         public virtual string RefundId { get; protected set; }
@@ -35,6 +36,7 @@ namespace Braintree
             PayerId = node.GetString("payer-id");
             PayerFirstName = node.GetString("payer-first-name");
             PayerLastName = node.GetString("payer-last-name");
+            PayerStatus = node.GetString("payer-status");
             SellerProtectionStatus = node.GetString("seller-protection-status");
             CaptureId = node.GetString("capture-id");
             RefundId = node.GetString("refund-id");

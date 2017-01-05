@@ -440,6 +440,14 @@ namespace Braintree.TestUtil
             Assert.IsTrue(response.IsSuccess());
             return response.GetString("three-d-secure-token");
         }
+
+        public static string Generate3DSNonce(BraintreeService service, CreditCardRequest request)
+        {
+            string url = "/three_d_secure/create_nonce/" + MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID;
+            NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + url, request));
+            Assert.IsTrue(response.IsSuccess());
+            return response.GetString("nonce");
+        }
     }
 
     public class OAuthTestHelper

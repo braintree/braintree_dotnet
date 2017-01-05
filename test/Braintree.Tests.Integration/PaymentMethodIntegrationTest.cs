@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests.Integration
@@ -699,7 +700,8 @@ namespace Braintree.Tests.Integration
             Result<PaymentMethod> createResult = gateway.PaymentMethod.Create(request);
             Assert.IsTrue(createResult.IsSuccess());
 
-            Result<PaymentMethod> deleteResult = gateway.PaymentMethod.Delete(createResult.Target.Token);
+            var deleteRequest = new PaymentMethodDeleteRequest { RevokeAllGrants = false};
+            Result<PaymentMethod> deleteResult = gateway.PaymentMethod.Delete(createResult.Target.Token, deleteRequest);
 
             Assert.IsTrue(deleteResult.IsSuccess());
         }
@@ -1319,6 +1321,46 @@ namespace Braintree.Tests.Integration
 
             Result<PaymentMethod> revokeResult = accessTokenGateway.PaymentMethod.Revoke(token);
             Assert.IsTrue(revokeResult.IsSuccess());
+        }
+
+        [Test]
+        public void PaymentMethodGrantAndDeleteWithRevoke()
+        {
+            Result<Customer> result = partnerMerchantGateway.Customer.Create(new CustomerRequest());
+            var token = partnerMerchantGateway.PaymentMethod.Create(new PaymentMethodRequest
+                {
+                  PaymentMethodNonce = Nonce.Transactable,
+                  CustomerId = result.Target.Id
+                 }).Target.Token;
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "grant_payment_method");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                    Code = code,
+                    Scope = "grant_payment_method"
+                });
+
+            BraintreeGateway accessTokenGateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+            PaymentMethodGrantRequest grantRequest = new PaymentMethodGrantRequest()
+            {
+                AllowVaulting = true,
+                IncludeBillingPostalCode = true
+            };
+            Result<PaymentMethodNonce> grantResult = accessTokenGateway.PaymentMethod.Grant(token, grantRequest);
+            Assert.IsTrue(grantResult.IsSuccess());
+            Assert.IsNotNull(grantResult.Target.Nonce);
+
+            var deleteRequest = new PaymentMethodDeleteRequest { RevokeAllGrants = true};
+            Result<PaymentMethod> deleteResult = partnerMerchantGateway.PaymentMethod.Delete(token, deleteRequest);
+            Assert.IsTrue(deleteResult.IsSuccess());
+            Thread.Sleep(6000);
+
+            Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
+            var vaultResult = gateway.PaymentMethod.Create(new PaymentMethodRequest
+                {
+                  PaymentMethodNonce = grantResult.Target.Nonce,
+                  CustomerId = customerResult.Target.Id
+                 });
+            Assert.IsFalse(vaultResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.PAYMENT_METHOD_PAYMENT_METHOD_NONCE_UNKNOWN, vaultResult.Errors.DeepAll().First().Code);
         }
     }
 }

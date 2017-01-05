@@ -12,6 +12,7 @@ namespace Braintree
         public bool? SubmitForSettlement { get; set; }
         public string VenmoSdkSession { get; set; }
         public string PayeeEmail { get; set; }
+        public bool? SkipAdvancedFraudChecking { get; set; }
         public TransactionOptionsPayPalRequest PayPal { get; set; }
         public TransactionOptionsThreeDSecureRequest ThreeDSecure { get; set; }
         public TransactionOptionsAmexRewardsRequest AmexRewards { get; set; }
@@ -37,6 +38,7 @@ namespace Braintree
                 AddElement("submit-for-settlement", SubmitForSettlement).
                 AddElement("venmo-sdk-session", VenmoSdkSession).
                 AddElement("payee-email", PayeeEmail).
+                AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).
                 AddElement("three-d-secure", ThreeDSecure).
                 AddElement("paypal", PayPal).
                 AddElement("amex-rewards", AmexRewards);

@@ -40,5 +40,12 @@ namespace Braintree.Tests
         {
             Assert.Throws<NotFoundException>(() => gateway.PaymentMethod.Find(" "));
         }
+
+        [Test]
+        public void PaymentMethod_Delete_ToQueryString_IncludesRevokeAllGrants()
+        {
+            var request = new PaymentMethodDeleteRequest { RevokeAllGrants = true};
+            Assert.IsTrue(request.ToQueryString().Contains("revoke_all_grants=true"));
+        }
     }
 }

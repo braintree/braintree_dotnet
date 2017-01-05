@@ -73,5 +73,24 @@ namespace Braintree.Tests
         {
             Assert.Throws<NotFoundException>(() => gateway.Transaction.Find(" "));
         }
+
+        [Test]
+        public void TransactionRequest_ToXml_Includes_SkipAdvancedFraudChecking()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2016",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SkipAdvancedFraudChecking = false
+                }
+            };
+            Assert.IsTrue(request.ToXml().Contains("<skip-advanced-fraud-checking>false</skip-advanced-fraud-checking>"));
+        }
     }
 }

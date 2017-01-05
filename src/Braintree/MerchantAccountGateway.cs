@@ -22,6 +22,13 @@ namespace Braintree
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
 
+        public virtual Result<MerchantAccount> CreateForCurrency(MerchantAccountCreateForCurrencyRequest request)
+        {
+            XmlNode merchantAccountXML = service.Post(service.MerchantPath() + "/merchant_accounts/create_for_currency", request);
+
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
+        }
+
         public virtual Result<MerchantAccount> Update(string id, MerchantAccountRequest request)
         {
             XmlNode merchantAccountXML = service.Put(service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);

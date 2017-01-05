@@ -71,6 +71,47 @@ namespace Braintree.Tests.Integration
             ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
                 CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                CompanyName = "Ziarog LTD",
+                Currencies = new string[] {"GBP", "USD"}
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsFalse(string.IsNullOrEmpty(result.Target.Id));
+            Assert.AreEqual("name@email.com", result.Target.Email);
+            Assert.AreEqual("Ziarog LTD", result.Target.CompanyName);
+            Assert.AreEqual("USA", result.Target.CountryCodeAlpha3);
+            Assert.AreEqual("US", result.Target.CountryCodeAlpha2);
+            Assert.AreEqual("840", result.Target.CountryCodeNumeric);
+            Assert.AreEqual("United States of America", result.Target.CountryName);
+
+            Assert.IsTrue(result.Target.Credentials.AccessToken.StartsWith("access_token$"));
+            Assert.IsTrue(result.Target.Credentials.RefreshToken.StartsWith("refresh_token$"));
+            Assert.IsTrue(result.Target.Credentials.ExpiresAt > DateTime.Now);
+            Assert.AreEqual("bearer", result.Target.Credentials.TokenType);
+
+            Assert.AreEqual(2, result.Target.MerchantAccounts.Length);
+
+            var usdMerchantAccount = (from ma in result.Target.MerchantAccounts where ma.Id == "USD" select ma).ToArray()[0];
+            Assert.AreEqual("USD", usdMerchantAccount.CurrencyIsoCode);
+            Assert.IsTrue(usdMerchantAccount.IsDefault.Value);
+
+            var gbpMerchantAccount = (from ma in result.Target.MerchantAccounts where ma.Id == "GBP" select ma).ToArray()[0];
+            Assert.AreEqual("GBP", gbpMerchantAccount.CurrencyIsoCode);
+            Assert.IsFalse(gbpMerchantAccount.IsDefault.Value);
+        }
+
+        [Test]
+        public void Create_PayPalOnlyMultiCurrencyMerchant()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$signup_client_id",
+                "client_secret$development$signup_client_secret"
+            );
+
+            ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
                 PaymentMethods = new string[] {"paypal"},
                 CompanyName = "Ziarog LTD",
                 Currencies = new string[] {"GBP", "USD"},

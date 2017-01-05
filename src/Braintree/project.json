@@ -6,11 +6,11 @@
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.3.0-*",
+  "version": "3.4.0-*",
   "packOptions": {
     "releaseNotes": "
-* Allow custom verification amount in `PaymentMethodOptionsRequest`
-* Allow `PaymentMethod.find(token)` to return `UsBankAccount`
+* Add payer_status accessor to paypal_details object
+* Add option `skip_advanced_fraud_check` for transaction flows
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for

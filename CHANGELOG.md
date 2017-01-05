@@ -1,3 +1,7 @@
+## 3.4.0
+* Add payer_status accessor to paypal_details object
+* Add option `skip_advanced_fraud_check` for transaction flows
+
 ## 3.3.0
 * Allow custom verification amount in `PaymentMethodOptionsRequest`
 * Allow `PaymentMethod.find(token)` to return `UsBankAccount`

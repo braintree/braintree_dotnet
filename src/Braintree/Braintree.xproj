@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.3.0</AssemblyName>
+    <AssemblyName>Braintree-3.4.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -146,6 +146,7 @@
     <Compile Include="MerchantGateway.cs" />
     <Compile Include="MerchantRequest.cs" />
     <Compile Include="MerchantAccount.cs" />
+    <Compile Include="MerchantAccountCreateForCurrencyRequest.cs" />
     <Compile Include="MerchantAccountBusinessDetails.cs" />
     <Compile Include="MerchantAccountFundingDetails.cs" />
     <Compile Include="MerchantAccountGateway.cs" />
@@ -172,6 +173,7 @@
     <Compile Include="PaymentMethodNonceGateway.cs" />
     <Compile Include="PaymentMethodOptionsRequest.cs" />
     <Compile Include="PaymentMethodRequest.cs" />
+    <Compile Include="PaymentMethodDeleteRequest.cs" />
     <Compile Include="PaymentMethodGrantRequest.cs" />
     <Compile Include="PaymentMethodGrantRevokeRequest.cs" />
     <Compile Include="PayPalAccount.cs" />

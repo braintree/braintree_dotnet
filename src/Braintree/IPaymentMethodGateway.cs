@@ -6,6 +6,7 @@ namespace Braintree
     {
         Result<PaymentMethod> Create(PaymentMethodRequest request);
         Result<PaymentMethod> Delete(string token);
+        Result<PaymentMethod> Delete(string token, PaymentMethodDeleteRequest request);
         PaymentMethod Find(string token);
         Result<PaymentMethod> Update(string token, PaymentMethodRequest request);
         Result<PaymentMethodNonce> Grant(string token, PaymentMethodGrantRequest request);

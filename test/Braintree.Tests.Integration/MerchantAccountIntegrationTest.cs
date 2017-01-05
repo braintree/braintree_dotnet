@@ -295,6 +295,145 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("USD", foundMerchantAccount.CurrencyIsoCode);
         }
 
+        [Test]
+        public void CreateForCurrency()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$signup_client_id",
+                "client_secret$development$signup_client_secret"
+            );
+
+            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                CompanyName = "Ziarog LTD"
+            });
+
+            Assert.IsTrue(merchantResult.IsSuccess());
+
+            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+            Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
+                Currency = "GBP",
+                Id = "testId",
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual("testId", result.Target.Id);
+            Assert.AreEqual("GBP", result.Target.CurrencyIsoCode);
+        }
+
+        [Test]
+        public void CreateForCurrency_HandlesAlreadyExistingMerchantAccountForCurrency()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$signup_client_id",
+                "client_secret$development$signup_client_secret"
+            );
+
+            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                CompanyName = "Ziarog LTD"
+            });
+
+            Assert.IsTrue(merchantResult.IsSuccess());
+
+            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+            Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
+                Currency = "USD",
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            List<ValidationError> errors = result.Errors.ForObject("merchant").OnField("currency");
+            Assert.AreEqual(1, errors.Count);
+            Assert.AreEqual(ValidationErrorCode.MERCHANT_MERCHANT_ACCOUNT_EXISTS_FOR_CURRENCY, errors[0].Code);
+        }
+
+        [Test]
+        public void CreateForCurrency_HandlesCurrencyRequirement()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$signup_client_id",
+                "client_secret$development$signup_client_secret"
+            );
+
+            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                CompanyName = "Ziarog LTD"
+            });
+
+            Assert.IsTrue(merchantResult.IsSuccess());
+
+            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+            Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest());
+
+            Assert.IsFalse(result.IsSuccess());
+            List<ValidationError> errors = result.Errors.ForObject("merchant").OnField("currency");
+            Assert.AreEqual(1, errors.Count);
+            Assert.AreEqual(ValidationErrorCode.MERCHANT_CURRENCY_IS_REQUIRED, errors[0].Code);
+        }
+
+        [Test]
+        public void CreateForCurrency_HandlesInvalidCurrency()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$signup_client_id",
+                "client_secret$development$signup_client_secret"
+            );
+
+            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                CompanyName = "Ziarog LTD"
+            });
+
+            Assert.IsTrue(merchantResult.IsSuccess());
+
+            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+            Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
+                Currency = "badCurrency",
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            List<ValidationError> errors = result.Errors.ForObject("merchant").OnField("currency");
+            Assert.AreEqual(1, errors.Count);
+            Assert.AreEqual(ValidationErrorCode.MERCHANT_CURRENCY_IS_INVALID, errors[0].Code);
+        }
+
+        [Test]
+        public void CreateForCurrency_HandlesExistingMerchantAccountForId()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$signup_client_id",
+                "client_secret$development$signup_client_secret"
+            );
+
+            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                CompanyName = "Ziarog LTD"
+            });
+
+            Assert.IsTrue(merchantResult.IsSuccess());
+
+            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+            Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
+                Currency = "GBP",
+                Id = merchantResult.Target.MerchantAccounts[0].Id,
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            List<ValidationError> errors = result.Errors.ForObject("merchant").OnField("id");
+            Assert.AreEqual(1, errors.Count);
+            Assert.AreEqual(ValidationErrorCode.MERCHANT_MERCHANT_ACCOUNT_EXISTS_FOR_ID, errors[0].Code);
+        }
+
         private MerchantAccountRequest deprecatedCreateRequest(string id)
         {
             return new MerchantAccountRequest
