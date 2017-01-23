@@ -1,3 +1,8 @@
+## 3.5.0
+* Stop sending account_description field from us bank accounts
+* Add multi-currency support for OAuth Onboarded Merchants
+* Add functionality to list all merchant accounts for a merchant with `MerchantAccount.all`
+
 ## 3.4.0
 * Add payer_status accessor to paypal_details object
 * Add option `skip_advanced_fraud_check` for transaction flows

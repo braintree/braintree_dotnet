@@ -6,11 +6,12 @@
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.4.0-*",
+  "version": "3.5.0-*",
   "packOptions": {
     "releaseNotes": "
-* Add payer_status accessor to paypal_details object
-* Add option `skip_advanced_fraud_check` for transaction flows
+* Stop sending account_description field from us bank accounts
+* Add multi-currency support for OAuth Onboarded Merchants
+* Add functionality to list all merchant accounts for a merchant with `MerchantAccount.all`
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for

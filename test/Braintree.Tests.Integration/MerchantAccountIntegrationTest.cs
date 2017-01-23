@@ -1,3 +1,4 @@
+using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -432,6 +433,64 @@ namespace Braintree.Tests.Integration
             List<ValidationError> errors = result.Errors.ForObject("merchant").OnField("id");
             Assert.AreEqual(1, errors.Count);
             Assert.AreEqual(ValidationErrorCode.MERCHANT_MERCHANT_ACCOUNT_EXISTS_FOR_ID, errors[0].Code);
+        }
+
+        [Test]
+        public void All_ReturnsAllMerchantAccounts()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+
+            var code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
+            ResultImpl<OAuthCredentials> accessTokenResult = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest
+            {
+                Code = code,
+                Scope = "read_write"
+            });
+
+            BraintreeGateway OAuthGateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+
+            var merchantAccountResults = OAuthGateway.MerchantAccount.All();
+
+            var merchantAccounts = new List<MerchantAccount>();
+            foreach (var merchantAccount in merchantAccountResults)
+            {
+                merchantAccounts.Add(merchantAccount);
+            }
+            Assert.IsTrue(merchantAccounts.Count > 20);
+        }
+
+        [Test]
+        public void All_ReturnsMerchantAccountWithCorrectAttributes()
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+
+            ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                Scope = "read_write,shared_vault_transactions",
+            });
+
+            BraintreeGateway OAuthGateway = new BraintreeGateway(result.Target.Credentials.AccessToken);
+
+            PaginatedCollection<MerchantAccount> merchantAccountResults = OAuthGateway.MerchantAccount.All();
+            var merchantAccounts = new List<MerchantAccount>();
+            foreach (var ma in merchantAccountResults)
+            {
+                merchantAccounts.Add(ma);
+            }
+            Assert.AreEqual(1, merchantAccounts.Count);
+
+            MerchantAccount merchantAccount = merchantAccounts[0];
+            Assert.AreEqual("USD", merchantAccount.CurrencyIsoCode);
+            Assert.AreEqual(MerchantAccountStatus.ACTIVE, merchantAccount.Status);
+            Assert.IsTrue(merchantAccount.IsDefault);
         }
 
         private MerchantAccountRequest deprecatedCreateRequest(string id)

@@ -1,4 +1,4 @@
-# Braintree .NET Client Library
+# Braintree .NET Server Library
 
 The Braintree assembly provides integration access to the Braintree Gateway.
 

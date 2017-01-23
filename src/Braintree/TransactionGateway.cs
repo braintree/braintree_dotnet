@@ -204,12 +204,19 @@ namespace Braintree
 
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/transactions/advanced_search", query));
 
-            var transactions = new List<Transaction>();
-            foreach (var node in response.GetList("transaction"))
+            if (response.GetName() == "credit-card-transactions")
             {
-                transactions.Add(new Transaction(node, gateway));
+                var transactions = new List<Transaction>();
+                foreach (var node in response.GetList("transaction"))
+                {
+                    transactions.Add(new Transaction(node, gateway));
+                }
+                return transactions;
             }
-            return transactions;
+            else
+            {
+                throw new DownForMaintenanceException();
+            }
         }
     }
 }

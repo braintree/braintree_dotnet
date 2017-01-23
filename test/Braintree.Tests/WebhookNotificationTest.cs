@@ -147,7 +147,6 @@ namespace Braintree.Tests
           Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
           Assert.AreEqual("1234", usBankAccountDetails.Last4);
           Assert.AreEqual("checking", usBankAccountDetails.AccountType);
-          Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
           Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
         }
 
@@ -168,7 +167,6 @@ namespace Braintree.Tests
           Assert.AreEqual("123456789", usBankAccountDetails.RoutingNumber);
           Assert.AreEqual("1234", usBankAccountDetails.Last4);
           Assert.AreEqual("checking", usBankAccountDetails.AccountType);
-          Assert.AreEqual("PayPal Checking - 1234", usBankAccountDetails.AccountDescription);
           Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
         }
 

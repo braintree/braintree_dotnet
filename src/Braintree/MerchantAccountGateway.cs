@@ -1,4 +1,5 @@
 using Braintree.Exceptions;
+using System.Collections.Generic;
 using System.Xml;
 
 namespace Braintree
@@ -46,6 +47,27 @@ namespace Braintree
             XmlNode merchantAccountXML = service.Get(service.MerchantPath() + "/merchant_accounts/" + id);
 
             return new MerchantAccount(new NodeWrapper(merchantAccountXML));
+        }
+
+        public virtual PaginatedCollection<MerchantAccount> All()
+        {
+            return new PaginatedCollection<MerchantAccount>(FetchMerchantAccounts);
+        }
+
+        private PaginatedResult<MerchantAccount> FetchMerchantAccounts(int page)
+        {
+            XmlNode merchantAccountXML = service.Get(service.MerchantPath() + "/merchant_accounts?page=" + page);
+            var nodeWrapper = new NodeWrapper(merchantAccountXML);
+
+            var totalItems = nodeWrapper.GetInteger("total-items").Value;
+            var pageSize = nodeWrapper.GetInteger("page-size").Value;
+            var merchantAccounts = new List<MerchantAccount>();
+            foreach (var node in nodeWrapper.GetList("merchant-account"))
+            {
+                merchantAccounts.Add(new MerchantAccount(node));
+            }
+
+            return new PaginatedResult<MerchantAccount>(totalItems, pageSize, merchantAccounts);
         }
     }
 }

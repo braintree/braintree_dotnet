@@ -313,7 +313,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("1234", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
-            Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
             var found = gateway.PaymentMethod.Find(usBankAccount.Token);
             Assert.IsInstanceOf(typeof(UsBankAccount), found);

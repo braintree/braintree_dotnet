@@ -33,7 +33,7 @@ namespace Braintree.Tests.Integration
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            BraintreeService service = new BraintreeService(gateway.Configuration);
+            service = new BraintreeService(gateway.Configuration);
 
             Exception exception = null;
 
@@ -68,7 +68,7 @@ namespace Braintree.Tests.Integration
                 PublicKey = "integration_public_key",
                 PrivateKey = "bad_key"
             };
-            BraintreeService service = new BraintreeService(gateway.Configuration);
+            service = new BraintreeService(gateway.Configuration);
 
             Exception exception = null;
             try {

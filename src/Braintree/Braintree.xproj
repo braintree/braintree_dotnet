@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.4.0</AssemblyName>
+    <AssemblyName>Braintree-3.5.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -50,6 +50,7 @@
   -->
   <ItemGroup>
     <Compile Include="AccountUpdaterDailyReport.cs" />
+    <Compile Include="AchMandate.cs" />
     <Compile Include="AddAddOnRequest.cs" />
     <Compile Include="AddDiscountRequest.cs" />
     <Compile Include="AddModificationRequest.cs" />
@@ -163,6 +164,8 @@
     <Compile Include="OAuthGateway.cs" />
     <Compile Include="OAuthResult.cs" />
     <Compile Include="OAuthRevokeAccessTokenRequest.cs" />
+    <Compile Include="PaginatedCollection.cs" />
+    <Compile Include="PaginatedResult.cs" />
     <Compile Include="PartnerMerchant.cs" />
     <Compile Include="PartialMatchNode.cs" />
     <Compile Include="PaymentMethod.cs" />

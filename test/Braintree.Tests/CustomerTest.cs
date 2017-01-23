@@ -7,7 +7,6 @@ namespace Braintree.Tests
     public class CustomerTest
     {
         private BraintreeGateway gateway;
-        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -19,7 +18,6 @@ namespace Braintree.Tests
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            service = new BraintreeService(gateway.Configuration);
         }
 
         [Test]

@@ -50,9 +50,12 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
             Assert.AreEqual("1234", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
-            Assert.AreEqual("PayPal Checking - 1234", usBankAccount.AccountDescription);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
+            AchMandate achMandate = usBankAccount.AchMandate;
+            Assert.AreEqual("cl mandate text", achMandate.Text);
+            Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
+            Assert.IsTrue(usBankAccount.IsDefault);
         }
 
         [Test]
@@ -98,8 +101,10 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(usBankAccount.RoutingNumber, usBankAccountDetails.RoutingNumber);
             Assert.AreEqual(usBankAccount.Last4, usBankAccountDetails.Last4);
             Assert.AreEqual(usBankAccount.AccountType, usBankAccountDetails.AccountType);
-            Assert.AreEqual(usBankAccount.AccountDescription, usBankAccountDetails.AccountDescription);
             Assert.AreEqual(usBankAccount.AccountHolderName, usBankAccountDetails.AccountHolderName);
+            AchMandate achMandate = usBankAccountDetails.AchMandate;
+            Assert.AreEqual(usBankAccount.AchMandate.Text, achMandate.Text);
+            Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
         }
 
     }
