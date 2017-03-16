@@ -61,6 +61,7 @@
     <Compile Include="AddOnIntegrationTest.cs" />
     <Compile Include="AddressIntegrationTest.cs" />
     <Compile Include="BraintreeServiceIntegrationTest.cs" />
+    <Compile Include="ClientTokenIntegrationTest.cs" />
     <Compile Include="CoinbaseIntegrationTest.cs" />
     <Compile Include="CreditCardIntegrationTest.cs" />
     <Compile Include="CreditCardVerificationIntegrationTest.cs" />

@@ -14,7 +14,7 @@ namespace Braintree
     ///     CardholderName = "John Doe",
     ///     Number = "5105105105105100",
     ///     ExpirationDate = "05/12",
-    ///     BillingAddress = new AddressRequest
+    ///     BillingAddress = new CreditCardAddressRequest
     ///     {
     ///         PostalCode = "44444"
     ///     },

@@ -1,6 +1,7 @@
 using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -127,6 +128,61 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(2, collection.MaximumCount);
         }
+
+        [Test]
+#if netcore
+        public async Task SearchAsync_OnMultipleValueFields()
+#else
+        public void SearchAsync_OnMultipleValueFields()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var createRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = TestUtil.CreditCardNumbers.FailsSandboxVerification.Visa,
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                      VerifyCard = true
+                    }
+                }
+            };
+
+            Result<Customer> result = await gateway.Customer.CreateAsync(createRequest);
+            CreditCardVerification verification1 = gateway.CreditCardVerification.Find(result.CreditCardVerification.Id);
+
+            createRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = TestUtil.CreditCardNumbers.FailsSandboxVerification.MasterCard,
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                      VerifyCard = true
+                    }
+                }
+            };
+
+            result = await gateway.Customer.CreateAsync(createRequest);
+            CreditCardVerification verification2 = gateway.CreditCardVerification.Find(result.CreditCardVerification.Id);
+
+            CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
+                CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD).
+                Ids.IncludedIn(verification1.Id, verification2.Id).
+                Status.IncludedIn(verification1.Status);
+
+            ResourceCollection<CreditCardVerification> collection = await gateway.CreditCardVerification.SearchAsync(searchRequest);
+
+            Assert.AreEqual(2, collection.MaximumCount);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void CardTypeIndicators()

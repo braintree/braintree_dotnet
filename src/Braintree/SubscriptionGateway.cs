@@ -2,6 +2,7 @@
 
 using Braintree.Exceptions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Braintree
@@ -30,12 +31,29 @@ namespace Braintree
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
         }
 
+        public virtual async Task<Result<Subscription>> CreateAsync(SubscriptionRequest request)
+        {
+            XmlNode subscriptionXML = await service.PostAsync(service.MerchantPath() + "/subscriptions", request);
+
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
+        }
+
         public virtual Subscription Find(string id)
         {
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
             XmlNode subscriptionXML = service.Get(service.MerchantPath() + "/subscriptions/" + id);
+
+            return new Subscription(new NodeWrapper(subscriptionXML), gateway);
+        }
+
+        public virtual async Task<Subscription> FindAsync(string id)
+        {
+            if(id == null || id.Trim().Equals(""))
+                throw new NotFoundException();
+
+            XmlNode subscriptionXML = await service.GetAsync(service.MerchantPath() + "/subscriptions/" + id);
 
             return new Subscription(new NodeWrapper(subscriptionXML), gateway);
         }
@@ -47,9 +65,23 @@ namespace Braintree
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
         }
 
+        public virtual async Task<Result<Subscription>> UpdateAsync(string id, SubscriptionRequest request)
+        {
+            XmlNode subscriptionXML = await service.PutAsync(service.MerchantPath() + "/subscriptions/" + id, request);
+
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
+        }
+
         public virtual Result<Subscription> Cancel(string id)
         {
             XmlNode subscriptionXML = service.Put(service.MerchantPath() + "/subscriptions/" + id + "/cancel");
+
+            return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
+        }
+
+        public virtual async Task<Result<Subscription>> CancelAsync(string id)
+        {
+            XmlNode subscriptionXML = await service.PutAsync(service.MerchantPath() + "/subscriptions/" + id + "/cancel");
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
         }
@@ -71,6 +103,15 @@ namespace Braintree
         public virtual ResourceCollection<Subscription> Search(SubscriptionSearchRequest query)
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
+
+            return new ResourceCollection<Subscription>(response, delegate(string[] ids) {
+                return FetchSubscriptions(query, ids);
+            });
+        }
+
+        public virtual async Task<ResourceCollection<Subscription>> SearchAsync(SubscriptionSearchRequest query)
+        {
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
 
             return new ResourceCollection<Subscription>(response, delegate(string[] ids) {
                 return FetchSubscriptions(query, ids);
@@ -103,6 +144,11 @@ namespace Braintree
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
+        private async Task<Result<Transaction>> RetryChargeAsync(SubscriptionTransactionRequest txnRequest) {
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", txnRequest);
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
+        }
+
         public Result<Transaction> RetryCharge(string subscriptionId) {
             return RetryCharge(new SubscriptionTransactionRequest
             {
@@ -110,8 +156,23 @@ namespace Braintree
             });
         }
 
+        public async Task<Result<Transaction>> RetryChargeAsync(string subscriptionId) {
+            return await RetryChargeAsync(new SubscriptionTransactionRequest
+            {
+                SubscriptionId = subscriptionId
+            });
+        }
+
         public Result<Transaction> RetryCharge(string subscriptionId, decimal amount) {
             return RetryCharge(new SubscriptionTransactionRequest
+            {
+                SubscriptionId = subscriptionId,
+                Amount = amount
+            });
+        }
+
+        public async Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, decimal amount) {
+            return await RetryChargeAsync(new SubscriptionTransactionRequest
             {
                 SubscriptionId = subscriptionId,
                 Amount = amount

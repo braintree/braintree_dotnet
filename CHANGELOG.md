@@ -1,3 +1,8 @@
+## 3.6.0
+* Add async support (thanks, @ejohnsonTKTNET and @ebonilla40!)
+* Update Accept-Encoding and User-Agent headers in dotnet core
+* Add stricter XML processing
+
 ## 3.5.0
 * Stop sending account_description field from us bank accounts
 * Add multi-currency support for OAuth Onboarded Merchants

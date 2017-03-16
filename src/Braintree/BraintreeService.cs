@@ -11,6 +11,7 @@ using System.IO.Compression;
 #endif
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Braintree
@@ -66,9 +67,19 @@ namespace Braintree
             return GetXmlResponse(URL, "GET", null);
         }
 
+        public async Task<XmlNode> GetAsync(string URL)
+        {
+            return await GetXmlResponseAsync(URL, "GET", null);
+        }
+
         internal XmlNode Delete(string URL)
         {
             return GetXmlResponse(URL, "DELETE", null);
+        }
+
+        internal async Task<XmlNode> DeleteAsync(string URL)
+        {
+            return await GetXmlResponseAsync(URL, "DELETE", null);
         }
 
         public XmlNode Post(string URL, Request requestBody)
@@ -76,9 +87,19 @@ namespace Braintree
             return GetXmlResponse(URL, "POST", requestBody);
         }
 
+        public async Task<XmlNode> PostAsync(string URL, Request requestBody)
+        {
+            return await GetXmlResponseAsync(URL, "POST", requestBody);
+        }
+
         internal XmlNode Post(string URL)
         {
-            return GetXmlResponse(URL, "POST", null);
+            return Post(URL, null);
+        }
+
+        internal async Task<XmlNode> PostAsync(string URL)
+        {
+            return await PostAsync(URL, null);
         }
 
         public XmlNode Put(string URL)
@@ -86,10 +107,40 @@ namespace Braintree
             return Put(URL, null);
         }
 
+        public async Task<XmlNode> PutAsync(string URL)
+        {
+            return await PutAsync(URL, null);
+        }
+
         internal XmlNode Put(string URL, Request requestBody)
         {
             return GetXmlResponse(URL, "PUT", requestBody);
         }
+
+        internal async Task<XmlNode> PutAsync(string URL, Request requestBody)
+        {
+            return await GetXmlResponseAsync(URL, "PUT", requestBody);
+        }
+
+#if netcore
+        internal void SetRequestHeaders(HttpRequestMessage request)
+        {
+                request.Headers.Add("X-ApiVersion", ApiVersion);
+                request.Headers.Add("Accept-Encoding", "gzip");
+                request.Headers.Add("Accept", "application/xml");
+                request.Headers.Add("User-Agent", "Braintree .NET " + typeof(BraintreeService).GetTypeInfo().Assembly.GetName().Version.ToString());
+                request.Headers.Add("Keep-Alive", "false");
+        }
+#else
+        internal void SetRequestHeaders(HttpWebRequest request)
+        {
+            request.Headers.Add("Authorization", GetAuthorizationHeader());
+            request.Headers.Add("X-ApiVersion", ApiVersion);
+            request.Headers.Add("Accept-Encoding", "gzip");
+            request.Accept = "application/xml";
+            request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
+        }
+#endif
 
         private XmlNode GetXmlResponse(string URL, string method, Request requestBody)
         {
@@ -99,11 +150,7 @@ namespace Braintree
                 var request = Configuration.HttpRequestMessageFactory(new HttpMethod(method), Environment.GatewayURL + URL);
                 request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(GetAuthorizationSchema(), GetAuthorizationHeader());
 
-                request.Headers.Add("X-ApiVersion", ApiVersion);
-                request.Headers.Add("AcceptEncoding", "gzip");
-                request.Headers.Add("Accept", "application/xml");
-                request.Headers.Add("UserAgent", "Braintree .NET " + typeof(BraintreeService).GetTypeInfo().Assembly.GetName().Version.ToString());
-                request.Headers.Add("Keep-Alive", "false");
+                SetRequestHeaders(request);
 
                 if (requestBody != null)
                 {
@@ -121,7 +168,6 @@ namespace Braintree
 
                 SetWebProxy(httpClientHandler, URL);
 
-                XmlNode doc = new XmlDocument();
                 using (var client = new HttpClient(httpClientHandler))
                 {
                     client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
@@ -132,10 +178,8 @@ namespace Braintree
                         ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
                     }
 
-                    doc = ParseResponseStream(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
+                    return ParseResponseStream(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
                 }
-
-                return doc;
             }
             catch (HttpRequestException e)
             {
@@ -147,11 +191,7 @@ namespace Braintree
                 const int SecurityProtocolTypeTls12 = 3072;
                 ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | ((SecurityProtocolType)SecurityProtocolTypeTls12);
                 var request = Configuration.HttpWebRequestFactory(Environment.GatewayURL + URL);
-                request.Headers.Add("Authorization", GetAuthorizationHeader());
-                request.Headers.Add("X-ApiVersion", ApiVersion);
-                request.Headers.Add("Accept-Encoding", "gzip");
-                request.Accept = "application/xml";
-                request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
+                SetRequestHeaders(request);
                 setRequestProxy(request);
                 request.Method = method;
                 request.KeepAlive = false;
@@ -164,36 +204,128 @@ namespace Braintree
                     byte[] buffer = Encoding.UTF8.GetBytes(xmlPrefix + requestBody.ToXml());
                     request.ContentType = "application/xml";
                     request.ContentLength = buffer.Length;
-                    Stream requestStream = request.GetRequestStream();
-                    requestStream.Write(buffer, 0, buffer.Length);
-                    requestStream.Close();
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(buffer, 0, buffer.Length);
+                    }
                 }
 
-                var response = request.GetResponse() as HttpWebResponse;
-
-                XmlNode doc = ParseResponseStream(GetResponseStream(response));
-                response.Close();
-
-                return doc;
+                using (var response = (HttpWebResponse) request.GetResponse())
+                {
+                    return ParseResponseStream(GetResponseStream(response));
+                }
             }
             catch (WebException e)
             {
-                var response = (HttpWebResponse)e.Response;
-                if (response == null) throw e;
-
-                if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
+                using (var response = (HttpWebResponse) e.Response)
                 {
-                    XmlNode doc = ParseResponseStream(GetResponseStream((HttpWebResponse)e.Response));
-                    e.Response.Close();
-                    return doc;
-                }
+                    if (response == null) throw e;
 
-                ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+                    if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
+                    {
+                        return ParseResponseStream(GetResponseStream((HttpWebResponse)e.Response));
+                    }
+
+                    ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+                }
 
                 throw e;
             }
 #endif
         }
+
+        private async Task<XmlNode> GetXmlResponseAsync(string URL, string method, Request requestBody)
+        {
+#if netcore
+            try
+            {
+                var request = Configuration.HttpRequestMessageFactory(new HttpMethod(method), Environment.GatewayURL + URL);
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(GetAuthorizationSchema(), GetAuthorizationHeader());
+
+                SetRequestHeaders(request);
+
+                if (requestBody != null)
+                {
+                    var xmlPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+                    var content = xmlPrefix + requestBody.ToXml();
+                    var utf8_string = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(content));
+                    request.Content = new StringContent(utf8_string, Encoding.UTF8, "application/xml");
+                    request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(utf8_string);
+                }
+
+                var httpClientHandler = new HttpClientHandler
+                {
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                };
+
+                SetWebProxy(httpClientHandler, URL);
+
+                using (var client = new HttpClient(httpClientHandler))
+                {
+                    client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
+                    var response = client.SendAsync(request).GetAwaiter().GetResult();
+
+                    if (response.StatusCode != (HttpStatusCode)422)
+                    {
+                        ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+                    }
+
+                    return await ParseResponseStreamAsync(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                throw e;
+            }
+#else
+            try
+            {
+                const int SecurityProtocolTypeTls12 = 3072;
+                ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | ((SecurityProtocolType)SecurityProtocolTypeTls12);
+                var request = Configuration.HttpWebRequestFactory(Environment.GatewayURL + URL);
+                SetRequestHeaders(request);
+                setRequestProxy(request);
+                request.Method = method;
+                request.KeepAlive = false;
+                request.Timeout = Configuration.Timeout;
+                request.ReadWriteTimeout = Configuration.Timeout;
+
+                if (requestBody != null)
+                {
+                    var xmlPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+                    byte[] buffer = Encoding.UTF8.GetBytes(xmlPrefix + requestBody.ToXml());
+                    request.ContentType = "application/xml";
+                    request.ContentLength = buffer.Length;
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(buffer, 0, buffer.Length);
+                    }
+                }
+
+                using (var response = (HttpWebResponse) request.GetResponse())
+                {
+                    return await ParseResponseStreamAsync(GetResponseStream(response));
+                }
+            }
+            catch (WebException e)
+            {
+                using (var response = (HttpWebResponse) e.Response)
+                {
+                    if (response == null) throw e;
+
+                    if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
+                    {
+                        return await ParseResponseStreamAsync(GetResponseStream((HttpWebResponse)e.Response));
+                    }
+
+                    ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+                }
+
+                throw e;
+            }
+#endif
+        }
+
 #if netcore
         private void SetWebProxy(HttpClientHandler httpClientHandler, string URL)
         {
@@ -231,7 +363,23 @@ namespace Braintree
 
         private XmlNode ParseResponseStream(Stream stream)
         {
-            var body = new StreamReader(stream).ReadToEnd();
+            string body;
+            using (var streamReader = new StreamReader(stream))
+            {
+                body = streamReader.ReadToEnd();
+            }
+
+            return StringToXmlNode(body);
+        }
+
+        private async Task<XmlNode> ParseResponseStreamAsync(Stream stream)
+        {
+            string body;
+            using (var streamReader = new StreamReader(stream))
+            {
+                body = await streamReader.ReadToEndAsync();
+            }
+
             return StringToXmlNode(body);
         }
 
@@ -244,6 +392,11 @@ namespace Braintree
             else
             {
                 var doc = new XmlDocument();
+#if netcore
+                // Do not need to set XmlResolver property for netcore
+#else
+                doc.XmlResolver = null;
+#endif
                 doc.LoadXml(xml);
                 if (doc.ChildNodes.Count == 1) return doc.ChildNodes[0];
                 return doc.ChildNodes[1];

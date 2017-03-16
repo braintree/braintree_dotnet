@@ -1,5 +1,7 @@
 #pragma warning disable 1591
 
+using System.Threading.Tasks;
+
 namespace Braintree
 {
     /// <summary>
@@ -9,5 +11,6 @@ namespace Braintree
     public interface IClientTokenGateway
     {
         string generate(ClientTokenRequest request = null);
+        Task<string> generateAsync(ClientTokenRequest request = null);
     }
 }

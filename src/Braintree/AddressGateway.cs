@@ -1,6 +1,7 @@
 #pragma warning disable 1591
 
 using Braintree.Exceptions;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Braintree
@@ -27,6 +28,13 @@ namespace Braintree
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
 
+        public virtual async Task<Result<Address>> CreateAsync(string customerId, AddressRequest request)
+        {
+            XmlNode addressXML = await Service.PostAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses", request);
+
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
+        }
+
         public virtual Result<Address> Delete(string customerId, string id)
         {
             XmlNode addressXML = Service.Delete(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
@@ -34,19 +42,48 @@ namespace Braintree
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
 
+        public virtual async Task<Result<Address>> DeleteAsync(string customerId, string id)
+        {
+            XmlNode addressXML = await Service.DeleteAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
+
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
+        }
+
         public virtual Address Find(string customerId, string id)
         {
             if(customerId == null || customerId.Trim().Equals("") || id == null || id.Trim().Equals(""))
+            {
                 throw new NotFoundException();
+            }
 
             XmlNode addressXML = Service.Get(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
 
             return new Address(new NodeWrapper(addressXML));
         }
 
+        public virtual async Task<Address> FindAsync(string customerId, string id)
+        {
+            if(customerId == null || customerId.Trim().Equals("") || id == null || id.Trim().Equals(""))
+            {
+                throw new NotFoundException();
+            }
+
+            XmlNode addressXML = await Service.GetAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
+
+            return new Address(new NodeWrapper(addressXML));
+        }
+
+
         public virtual Result<Address> Update(string customerId, string id, AddressRequest request)
         {
             XmlNode addressXML = Service.Put(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id, request);
+
+            return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
+        }
+
+        public virtual async Task<Result<Address>> UpdateAsync(string customerId, string id, AddressRequest request)
+        {
+            XmlNode addressXML = await Service.PutAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id, request);
 
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }

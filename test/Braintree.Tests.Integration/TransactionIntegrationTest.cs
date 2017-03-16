@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -134,6 +135,124 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1, collection.MaximumCount);
             Assert.AreEqual(transaction.Id, collection.FirstItem.Id);
         }
+
+        [Test]
+#if netcore
+        public async Task SearchAsync_OnAllTextFields()
+#else
+        public void SearchAsync_OnAllTextFields()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string firstName = string.Format("Tim{0}", new Random().Next(1000000).ToString());
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/2012",
+                    CardholderName = "Tom Smith",
+                    Token = creditCardToken
+                },
+                BillingAddress = new AddressRequest
+                {
+                    Company = "Braintree",
+                    CountryName = "United States of America",
+                    ExtendedAddress = "Suite 123",
+                    FirstName = firstName,
+                    LastName = "Smith",
+                    Locality = "Chicago",
+                    PostalCode = "12345",
+                    Region = "IL",
+                    StreetAddress = "123 Main St"
+                },
+                Customer = new CustomerRequest
+                {
+                    Company = "Braintree",
+                    Email = "smith@example.com",
+                    Fax = "5551231234",
+                    FirstName = "Tom",
+                    LastName = "Smith",
+                    Phone = "5551231234",
+                    Website = "http://example.com"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVault = true,
+                    SubmitForSettlement = true
+                },
+                OrderId = "myorder",
+                ShippingAddress = new AddressRequest
+                {
+                    Company = "Braintree P.S.",
+                    CountryName = "Mexico",
+                    ExtendedAddress = "Apt 456",
+                    FirstName = "Thomas",
+                    LastName = "Smithy",
+                    Locality = "Braintree",
+                    PostalCode = "54321",
+                    Region = "MA",
+                    StreetAddress = "456 Road"
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+            transaction = await gateway.Transaction.FindAsync(transaction.Id);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                BillingCompany.Is("Braintree").
+                BillingCountryName.Is("United States of America").
+                BillingExtendedAddress.Is("Suite 123").
+                BillingFirstName.Is(firstName).
+                BillingLastName.Is("Smith").
+                BillingLocality.Is("Chicago").
+                BillingPostalCode.Is("12345").
+                BillingRegion.Is("IL").
+                BillingStreetAddress.Is("123 Main St").
+                CreditCardCardholderName.Is("Tom Smith").
+                CreditCardExpirationDate.Is("05/2012").
+                CreditCardNumber.Is(SandboxValues.CreditCardNumber.VISA).
+                Currency.Is("USD").
+                CustomerCompany.Is("Braintree").
+                CustomerEmail.Is("smith@example.com").
+                CustomerFax.Is("5551231234").
+                CustomerFirstName.Is("Tom").
+                CustomerId.Is(transaction.Customer.Id).
+                CustomerLastName.Is("Smith").
+                CustomerPhone.Is("5551231234").
+                CustomerWebsite.Is("http://example.com").
+                OrderId.Is("myorder").
+                PaymentMethodToken.Is(creditCardToken).
+                ProcessorAuthorizationCode.Is(transaction.ProcessorAuthorizationCode).
+                SettlementBatchId.Is(transaction.SettlementBatchId).
+                ShippingCompany.Is("Braintree P.S.").
+                ShippingCountryName.Is("Mexico").
+                ShippingExtendedAddress.Is("Apt 456").
+                ShippingFirstName.Is("Thomas").
+                ShippingLastName.Is("Smithy").
+                ShippingLocality.Is("Braintree").
+                ShippingPostalCode.Is("54321").
+                ShippingRegion.Is("MA").
+                ShippingStreetAddress.Is("456 Road").
+                User.Is("integration_user_public_id").
+                CreditCardUniqueIdentifier.Is(transaction.CreditCard.UniqueNumberIdentifier);
+
+            ResourceCollection<Transaction> collection = await gateway.Transaction.SearchAsync(searchRequest);
+
+            Assert.AreEqual(1, collection.MaximumCount);
+            Assert.AreEqual(transaction.Id, collection.FirstItem.Id);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Search_OnTextNodeOperators()
@@ -1167,6 +1286,49 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
         }
+
+        [Test]
+#if netcore
+        public async Task SaleAsync_ReturnsSuccessfulResponse()
+#else
+        public void SaleAsync_ReturnsSuccessfulResponse()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = await gateway.Transaction.SaleAsync(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Sale_ReturnsSuccessfulResponseWithUsBankAccount()
@@ -2332,7 +2494,6 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Target;
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_CAVV_IS_REQUIRED, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Cavv")[0].Code);
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_XID_IS_REQUIRED, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Xid")[0].Code);
         }
 
         [Test]
@@ -3228,6 +3389,41 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task HoldInEscrowAsync_AfterSale()
+#else
+        public void HoldInEscrowAsync_AfterSale()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ServiceFeeAmount = 1M
+            };
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction saleTransaction = saleResult.Target;
+            Result<Transaction> result = await gateway.Transaction.HoldInEscrowAsync(saleTransaction.Id);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual(
+                TransactionEscrowStatus.HOLD_PENDING,
+                transaction.EscrowStatus
+            );
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void HoldInEscrow_AfterSaleFailsForMasterMerchantAccount()
         {
             TransactionRequest request = new TransactionRequest
@@ -3281,6 +3477,48 @@ namespace Braintree.Tests.Integration
                 transaction.EscrowStatus
             );
         }
+
+        [Test]
+#if netcore
+        public async Task ReleaseFromEscrowAsync()
+#else
+        public void ReleaseFromEscrowAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    HoldInEscrow = true
+                },
+                ServiceFeeAmount = 1M
+            };
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction saleTransaction = saleResult.Target;
+            Assert.IsTrue(saleResult.IsSuccess());
+            TestHelper.Escrow(service, saleTransaction.Id);
+            Result<Transaction> result = await gateway.Transaction.ReleaseFromEscrowAsync(saleTransaction.Id);
+
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual(
+                TransactionEscrowStatus.RELEASE_PENDING,
+                transaction.EscrowStatus
+            );
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void ReleaseFromEscrow_FailsForNonSubmittableTransaction()
@@ -3342,6 +3580,52 @@ namespace Braintree.Tests.Integration
                 transaction.EscrowStatus
             );
         }
+
+        [Test]
+#if netcore
+        public async Task CancelReleaseAsync()
+#else
+        public void CancelReleaseAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 4M,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_SUB_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    HoldInEscrow = true
+                },
+                ServiceFeeAmount = 1M
+            };
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction saleTransaction = saleResult.Target;
+            Assert.IsTrue(saleResult.IsSuccess());
+            TestHelper.Escrow(service, saleTransaction.Id);
+            Result<Transaction> result = await gateway.Transaction.ReleaseFromEscrowAsync(saleTransaction.Id);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction releasedTransaction = result.Target;
+
+            Result<Transaction> cancelResult = await gateway.Transaction.CancelReleaseAsync(releasedTransaction.Id);
+            Assert.IsTrue(cancelResult.IsSuccess());
+            Transaction transaction = cancelResult.Target;
+            Assert.AreEqual(
+                TransactionEscrowStatus.HELD,
+                transaction.EscrowStatus
+            );
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void CancelRelease_FailsForTransactionsNotPendingRelease()
@@ -3772,6 +4056,45 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task CreditAsync_WithValidParams()
+#else
+        public void CreditAsync_WithValidParams()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                }
+            };
+
+            Result<Transaction> result = await gateway.Transaction.CreditAsync(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.CREDIT, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Credit_SpecifyingMerchantAccountId()
         {
             var request = new TransactionRequest
@@ -3908,6 +4231,39 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task FindAsync_WithAValidTransactionId()
+#else
+        public void FindAsync_WithAValidTransactionId()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Result<Transaction> transactionResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = transactionResult.Target;
+
+            Transaction foundTransaction = await gateway.Transaction.FindAsync(transaction.Id);
+
+            Assert.AreEqual(transaction.Id, foundTransaction.Id);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, foundTransaction.Status);
+            Assert.AreEqual("05/2008", foundTransaction.CreditCard.ExpirationDate);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Find_WithBadId()
         {
             Assert.Throws<NotFoundException>(() => gateway.Transaction.Find("badId"));
@@ -4021,6 +4377,38 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task VoidAsync_VoidsTheTransaction()
+#else
+        public void VoidAsync_VoidsTheTransaction()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            Result<Transaction> result = await gateway.Transaction.VoidAsync(transaction.Id);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.AreEqual(transaction.Id, result.Target.Id);
+            Assert.AreEqual(TransactionStatus.VOIDED, result.Target.Status);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Void_WithBadId()
         {
             Assert.Throws<NotFoundException>(() => gateway.Transaction.Void("badId"));
@@ -4072,6 +4460,40 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task SubmitForSettlementAsync_WithoutAmount()
+#else
+        public void SubmitForSettlementAsync_WithoutAmount()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+
+            Result<Transaction> result = await gateway.Transaction.SubmitForSettlementAsync(transaction.Id);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, result.Target.Amount);
+            Assert.IsNull(result.Message);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void SubmitForSettlement_WithAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -4091,6 +4513,38 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
             Assert.AreEqual(50.00, result.Target.Amount);
         }
+
+        [Test]
+#if netcore
+        public async Task SubmitForSettlementAsync_WithAmount()
+#else
+        public void SubmitForSettlementAsync_WithAmount()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            Result<Transaction> result = await gateway.Transaction.SubmitForSettlementAsync(transaction.Id, decimal.Parse("50.00"));
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual(50.00, result.Target.Amount);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void SubmitForSettlement_WithOrderId()
@@ -4745,6 +5199,61 @@ namespace Braintree.Tests.Integration
         }
         #pragma warning restore 0618
 
+        #pragma warning disable 0618
+        [Test]
+#if netcore
+        public async Task RefundAsync_WithABasicTransaction()
+#else
+        public void RefundAsync_WithABasicTransaction()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+
+            Result<Transaction> result;
+            try
+            {
+                result = await gateway.Transaction.RefundAsync(transaction.Id);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Got exception! " + e.Source);
+                throw e;
+            }
+
+            Assert.IsTrue(result.IsSuccess());
+            var refund = result.Target;
+
+            Assert.AreEqual(TransactionType.CREDIT, refund.Type);
+            Assert.AreEqual(transaction.Amount, refund.Amount);
+
+            Transaction firstTransaction = await gateway.Transaction.FindAsync(transaction.Id);
+            Assert.AreEqual(refund.Id, firstTransaction.RefundId);
+            Assert.AreEqual(firstTransaction.Id, refund.RefundedTransactionId);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+        #pragma warning restore 0618
+
         [Test]
         public void Refund_WithAPartialAmount()
         {
@@ -4770,6 +5279,43 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual(decimal.Parse("500.00"), result.Target.Amount);
         }
+
+        [Test]
+#if netcore
+        public async Task RefundAsync_WithAPartialAmount()
+#else
+        public void RefundAsync_WithAPartialAmount()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            await gateway.TestTransaction.SettleAsync(transaction.Id);
+
+            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("500.00"));
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual(decimal.Parse("500.00"), result.Target.Amount);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Refund_WithOrderId()
@@ -4801,6 +5347,48 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
             Assert.AreEqual("1234567", result.Target.OrderId);
         }
+
+        [Test]
+#if netcore
+        public async Task RefundAsync_WithOrderId()
+#else
+        public void RefundAsync_WithOrderId()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            await gateway.TestTransaction.SettleAsync(transaction.Id);
+
+            TransactionRefundRequest refundRequest = new TransactionRefundRequest()
+            {
+                OrderId = "1234567"
+            };
+
+            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, refundRequest);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual("1234567", result.Target.OrderId);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Refund_WithAmountOrderId()
@@ -5047,6 +5635,78 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Andrew", cloneTransaction.ShippingAddress.FirstName);
 
         }
+
+        [Test]
+#if netcore
+        public async Task CloneTransactionAsync()
+#else
+        public void CloneTransactionAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Dan",
+                },
+                BillingAddress = new AddressRequest
+                {
+                    FirstName = "Carl",
+                },
+                ShippingAddress = new AddressRequest
+                {
+                    FirstName = "Andrew",
+                }
+            };
+
+            Result<Transaction> result = await gateway.Transaction.SaleAsync(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            TransactionCloneRequest cloneRequest = new TransactionCloneRequest
+            {
+                Amount = 123.45M,
+                Channel = "MyShoppingCartProvider",
+                Options = new TransactionOptionsCloneRequest
+                {
+                    SubmitForSettlement = false
+                }
+            };
+
+            Result<Transaction> cloneResult = await gateway.Transaction.CloneTransactionAsync(transaction.Id, cloneRequest);
+            Assert.IsTrue(cloneResult.IsSuccess());
+            Transaction cloneTransaction = cloneResult.Target;
+
+            Assert.AreEqual(123.45, cloneTransaction.Amount);
+            Assert.AreEqual("MyShoppingCartProvider", cloneTransaction.Channel);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, cloneTransaction.Status);
+            Assert.IsNull(cloneTransaction.GetVaultCreditCard());
+            Assert.IsNull(cloneTransaction.GetVaultCustomer());
+            Assert.IsNull(cloneTransaction.GetVaultCreditCard());
+            Assert.IsNull(cloneTransaction.GetVaultBillingAddress());
+            Assert.IsNull(cloneTransaction.GetVaultShippingAddress());
+
+            CreditCard creditCard = cloneTransaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+
+            Assert.AreEqual("Dan", cloneTransaction.Customer.FirstName);
+            Assert.AreEqual("Carl", cloneTransaction.BillingAddress.FirstName);
+            Assert.AreEqual("Andrew", cloneTransaction.ShippingAddress.FirstName);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void CloneTransactionAndSubmitForSettlement()

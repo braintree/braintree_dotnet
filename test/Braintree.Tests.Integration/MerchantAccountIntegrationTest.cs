@@ -2,6 +2,7 @@ using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -79,6 +80,31 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(merchantAccount.MasterMerchantAccount.IsSubMerchant);
             Assert.IsTrue(merchantAccount.Id != null);
         }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_WithoutId()
+#else
+        public void CreateAsync_WithoutId()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var request = createRequest(null);
+            Result<MerchantAccount> result = await gateway.MerchantAccount.CreateAsync(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            MerchantAccount merchantAccount = result.Target;
+            Assert.AreEqual(MerchantAccountStatus.PENDING, merchantAccount.Status);
+            Assert.AreEqual("sandbox_master_merchant_account", merchantAccount.MasterMerchantAccount.Id);
+            Assert.IsTrue(merchantAccount.IsSubMerchant);
+            Assert.IsFalse(merchantAccount.MasterMerchantAccount.IsSubMerchant);
+            Assert.IsTrue(merchantAccount.Id != null);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Create_WithId()
@@ -161,6 +187,53 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("8798", merchantAccount.FundingDetails.AccountNumberLast4);
             Assert.AreEqual("Job Leoggs OH", merchantAccount.FundingDetails.Descriptor);
         }
+
+        [Test]
+#if netcore
+        public async Task UpdateAsync_UpdatesAllFields()
+#else
+        public void UpdateAsync_UpdatesAllFields()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var request = deprecatedCreateRequest(null);
+            Result<MerchantAccount> result = await gateway.MerchantAccount.CreateAsync(request);
+            Assert.IsTrue(result.IsSuccess());
+            var updateRequest = createRequest(null);
+            updateRequest.TosAccepted = null;
+            updateRequest.MasterMerchantAccountId = null;
+            Result<MerchantAccount> updateResult = await gateway.MerchantAccount.UpdateAsync(result.Target.Id, updateRequest);
+            Assert.IsTrue(updateResult.IsSuccess());
+            MerchantAccount merchantAccount = updateResult.Target;
+            Assert.AreEqual("Job", merchantAccount.IndividualDetails.FirstName);
+            Assert.AreEqual("Leoggs", merchantAccount.IndividualDetails.LastName);
+            Assert.AreEqual("job@leoggs.com", merchantAccount.IndividualDetails.Email);
+            Assert.AreEqual("5555551212", merchantAccount.IndividualDetails.Phone);
+            Assert.AreEqual("1235", merchantAccount.IndividualDetails.SsnLastFour);
+            Assert.AreEqual("193 Credibility St.", merchantAccount.IndividualDetails.Address.StreetAddress);
+            Assert.AreEqual("60611", merchantAccount.IndividualDetails.Address.PostalCode);
+            Assert.AreEqual("Avondale", merchantAccount.IndividualDetails.Address.Locality);
+            Assert.AreEqual("IN", merchantAccount.IndividualDetails.Address.Region);
+            Assert.AreEqual("1985-09-10", merchantAccount.IndividualDetails.DateOfBirth);
+            Assert.AreEqual("coaterie.com", merchantAccount.BusinessDetails.LegalName);
+            Assert.AreEqual("Coaterie", merchantAccount.BusinessDetails.DbaName);
+            Assert.AreEqual("123456780", merchantAccount.BusinessDetails.TaxId);
+            Assert.AreEqual("135 Credibility St.", merchantAccount.BusinessDetails.Address.StreetAddress);
+            Assert.AreEqual("60602", merchantAccount.BusinessDetails.Address.PostalCode);
+            Assert.AreEqual("Gary", merchantAccount.BusinessDetails.Address.Locality);
+            Assert.AreEqual("OH", merchantAccount.BusinessDetails.Address.Region);
+            Assert.AreEqual(FundingDestination.EMAIL, merchantAccount.FundingDetails.Destination);
+            Assert.AreEqual("joe+funding@bloggs.com", merchantAccount.FundingDetails.Email);
+            Assert.AreEqual("3125551212", merchantAccount.FundingDetails.MobilePhone);
+            Assert.AreEqual("122100024", merchantAccount.FundingDetails.RoutingNumber);
+            Assert.AreEqual("8798", merchantAccount.FundingDetails.AccountNumberLast4);
+            Assert.AreEqual("Job Leoggs OH", merchantAccount.FundingDetails.Descriptor);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Create_HandlesRequiredValidationErrors()
@@ -290,6 +363,25 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task FindAsync()
+#else
+        public void FindAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Result<MerchantAccount> result = await gateway.MerchantAccount.CreateAsync(createRequest(null));
+            MerchantAccount merchantAccount = result.Target;
+            MerchantAccount foundMerchantAccount = await gateway.MerchantAccount.FindAsync(merchantAccount.Id);
+            Assert.AreEqual(merchantAccount.Id, foundMerchantAccount.Id);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void RetrievesCurrencyIsoCode()
         {
             MerchantAccount foundMerchantAccount = gateway.MerchantAccount.Find("sandbox_master_merchant_account");
@@ -323,6 +415,44 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("testId", result.Target.Id);
             Assert.AreEqual("GBP", result.Target.CurrencyIsoCode);
         }
+
+        [Test]
+#if netcore
+        public async Task CreateForCurrencyAsync()
+#else
+        public void CreateForCurrencyAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            gateway = new BraintreeGateway(
+                "client_id$development$signup_client_id",
+                "client_secret$development$signup_client_secret"
+            );
+
+            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
+                Email = "name@email.com",
+                CountryCodeAlpha3 = "USA",
+                PaymentMethods = new string[] {"credit_card", "paypal"},
+                CompanyName = "Ziarog LTD"
+            });
+
+            Assert.IsTrue(merchantResult.IsSuccess());
+
+            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+            Result<MerchantAccount> result = await gateway.MerchantAccount.CreateForCurrencyAsync(new MerchantAccountCreateForCurrencyRequest {
+                Currency = "GBP",
+                Id = "testId",
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual("testId", result.Target.Id);
+            Assert.AreEqual("GBP", result.Target.CurrencyIsoCode);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void CreateForCurrency_HandlesAlreadyExistingMerchantAccountForCurrency()

@@ -3,6 +3,7 @@
 using Braintree.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml;
 
 
@@ -38,6 +39,13 @@ namespace Braintree
         public virtual Result<CreditCard> Create(CreditCardRequest request)
         {
             XmlNode creditCardXML = service.Post(service.MerchantPath() + "/payment_methods", request);
+
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
+        }
+
+        public virtual async Task<Result<CreditCard>> CreateAsync(CreditCardRequest request)
+        {
+            XmlNode creditCardXML = await service.PostAsync(service.MerchantPath() + "/payment_methods", request);
 
             return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
         }
@@ -91,12 +99,43 @@ namespace Braintree
             });
         }
 
+        public virtual async Task<ResourceCollection<CreditCard>> ExpiringBetweenAsync(DateTime start, DateTime end)
+        {
+            string queryString = string.Format("start={0:MMyyyy}&end={1:MMyyyy}", start, end);
+
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/all/expiring_ids?" + queryString));
+
+            return new ResourceCollection<CreditCard>(response, delegate(string[] ids) {
+                var query = new IdsSearchRequest().
+                    Ids.IncludedIn(ids);
+
+                var fetchResponse = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods/all/expiring?" + queryString, query));
+
+                var creditCards = new List<CreditCard>();
+                foreach (var node in fetchResponse.GetList("credit-card"))
+                {
+                    creditCards.Add(new CreditCard(node, gateway));
+                }
+                return creditCards;
+            });
+        }
+
         public virtual CreditCard Find(string token)
         {
             if(token == null || token.Trim().Equals(""))
                 throw new NotFoundException();
 
             XmlNode creditCardXML = service.Get(service.MerchantPath() + "/payment_methods/credit_card/" + token);
+
+            return new CreditCard(new NodeWrapper(creditCardXML), gateway);
+        }
+
+        public virtual async Task<CreditCard> FindAsync(string token)
+        {
+            if(token == null || token.Trim().Equals(""))
+                throw new NotFoundException();
+
+            XmlNode creditCardXML = await service.GetAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token);
 
             return new CreditCard(new NodeWrapper(creditCardXML), gateway);
         }
@@ -119,9 +158,21 @@ namespace Braintree
             service.Delete(service.MerchantPath() + "/payment_methods/credit_card/" + token);
         }
 
+        public virtual async Task DeleteAsync(string token)
+        {
+            await service.DeleteAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token);
+        }
+
         public virtual Result<CreditCard> Update(string token, CreditCardRequest request)
         {
             XmlNode creditCardXML = service.Put(service.MerchantPath() + "/payment_methods/credit_card/" + token, request);
+
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
+        }
+
+        public virtual async Task<Result<CreditCard>> UpdateAsync(string token, CreditCardRequest request)
+        {
+            XmlNode creditCardXML = await service.PutAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token, request);
 
             return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
         }

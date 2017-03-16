@@ -6,12 +6,12 @@
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.5.0-*",
+  "version": "3.6.0-*",
   "packOptions": {
     "releaseNotes": "
-* Stop sending account_description field from us bank accounts
-* Add multi-currency support for OAuth Onboarded Merchants
-* Add functionality to list all merchant accounts for a merchant with `MerchantAccount.all`
+* Add async support (thanks, @ejohnsonTKTNET and @ebonilla40!)
+* Update Accept-Encoding and User-Agent headers in dotnet core
+* Add stricter XML processing
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for

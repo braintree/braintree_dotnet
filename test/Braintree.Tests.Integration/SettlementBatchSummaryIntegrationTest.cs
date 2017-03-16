@@ -5,6 +5,7 @@ using System.Globalization;
 #if net452
 using System.Threading;
 #endif
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -53,7 +54,7 @@ namespace Braintree.Tests.Integration
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
             var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
-            transaction = gateway.Transaction.Find(transaction.Id);
+
             var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate));
             var visas = new List<IDictionary<string,string>>();
             foreach (var row in result.Target.Records)
@@ -64,9 +65,54 @@ namespace Braintree.Tests.Integration
                 }
             }
 
-            Assert.AreEqual(1, visas.Count);
+            Assert.IsTrue(visas.Count >= 1);
         }
 
+        [Test]
+#if netcore
+        public async Task GenerateAsync_ReturnsTransactionsSettledOnAGivenDay()
+#else
+        public void GenerateAsync_ReturnsTransactionsSettledOnAGivenDay()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5555555555554444",
+                    ExpirationDate = "05/2012",
+                    CardholderName = "Jane Smith",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                },
+            };
+
+            Result<Transaction> transactionResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = transactionResult.Target;
+            Transaction settlementResult = await gateway.TestTransaction.SettleAsync(transaction.Id);
+            var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
+
+            var result = await gateway.SettlementBatchSummary.GenerateAsync(System.DateTime.Parse(settlementDate));
+            var mastercards = new List<IDictionary<string,string>>();
+            foreach (var row in result.Target.Records)
+            {
+                if (CreditCardCardType.MASTER_CARD.ToString().Equals(row["card_type"]))
+                {
+                    mastercards.Add(row);
+                }
+            }
+
+            Assert.IsTrue(mastercards.Count >= 1);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Generate_AcceptsDatesInNonUSFormats()
@@ -120,7 +166,6 @@ namespace Braintree.Tests.Integration
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             Transaction settlementResult = gateway.TestTransaction.Settle(transaction.Id);
             var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
-            transaction = gateway.Transaction.Find(transaction.Id);
 
             var result = gateway.SettlementBatchSummary.Generate(System.DateTime.Parse(settlementDate), "store_me");
             var customValues = new List<IDictionary<string, string>>();
@@ -134,6 +179,56 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(1, customValues.Count);
         }
+
+        [Test]
+#if netcore
+        public async Task GenerateAsync_CanBeGroupedByACustomField()
+#else
+        public void GenerateAsync_CanBeGroupedByACustomField()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 1000M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5555555555554444",
+                    ExpirationDate = "05/2012",
+                    CardholderName = "Jane Smith",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                },
+                CustomFields = new Dictionary<string, string>
+                {
+                    { "store_me", "custom value async" }
+                }
+            };
+
+            Result<Transaction> transactionResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = transactionResult.Target;
+            Transaction settlementResult = await gateway.TestTransaction.SettleAsync(transaction.Id);
+            var settlementDate = settlementResult.SettlementBatchId.Substring(0,10);
+
+            var result = await gateway.SettlementBatchSummary.GenerateAsync(System.DateTime.Parse(settlementDate), "store_me");
+            var customValues = new List<IDictionary<string, string>>();
+            foreach (var row in result.Target.Records)
+            {
+                if ("custom value async".Equals(row["store_me"]))
+                {
+                    customValues.Add(row);
+                }
+            }
+
+            Assert.AreEqual(1, customValues.Count);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
     }
 }
 

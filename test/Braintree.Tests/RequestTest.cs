@@ -69,7 +69,7 @@ namespace Braintree.Tests
                 OrderId = "<>&\"'"
             };
 
-            TestHelper.AssertIncludes("<order-id>&lt;&gt;&amp;&quot;&#39;</order-id>", request.ToXml());
+            TestHelper.AssertIncludes("<order-id>&lt;&gt;&amp;&quot;&apos;</order-id>", request.ToXml());
         }
 
         [Test]
@@ -125,6 +125,21 @@ namespace Braintree.Tests
             };
 
             TestHelper.AssertIncludes("<custom-fields><&lt;key&gt;>val&amp;ue</&lt;key&gt;></custom-fields>", request.ToXml());
+        }
+
+        [Test]
+        public void ToXML_EscapesParentElementName()
+        {
+            var requestBuilder = new RequestBuilder("<&\"\'>");
+
+            Assert.AreEqual("<&lt;&amp;&quot;&apos;&gt;></&lt;&amp;&quot;&apos;&gt;>", requestBuilder.ToXml());
+        }
+
+        [Test]
+        public void ToXML_EscapesParentElementNameWithDictionaryValue()
+        {
+            var customFields = new Dictionary<string, string>();
+            Assert.AreEqual("<&lt;&amp;&quot;&apos;&gt;></&lt;&amp;&quot;&apos;&gt;>", RequestBuilder.BuildXMLElement("<&\"\'>", customFields));
         }
     }
 }

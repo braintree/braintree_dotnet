@@ -1,5 +1,6 @@
 using Braintree.Exceptions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Braintree
@@ -23,6 +24,13 @@ namespace Braintree
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
 
+        public virtual async Task<Result<MerchantAccount>> CreateAsync(MerchantAccountRequest request)
+        {
+            XmlNode merchantAccountXML = await service.PostAsync(service.MerchantPath() + "/merchant_accounts/create_via_api", request);
+
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
+        }
+
         public virtual Result<MerchantAccount> CreateForCurrency(MerchantAccountCreateForCurrencyRequest request)
         {
             XmlNode merchantAccountXML = service.Post(service.MerchantPath() + "/merchant_accounts/create_for_currency", request);
@@ -30,9 +38,23 @@ namespace Braintree
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
 
+        public virtual async Task<Result<MerchantAccount>> CreateForCurrencyAsync(MerchantAccountCreateForCurrencyRequest request)
+        {
+            XmlNode merchantAccountXML = await service.PostAsync(service.MerchantPath() + "/merchant_accounts/create_for_currency", request);
+
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
+        }
+
         public virtual Result<MerchantAccount> Update(string id, MerchantAccountRequest request)
         {
             XmlNode merchantAccountXML = service.Put(service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);
+
+            return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
+        }
+
+        public virtual async Task<Result<MerchantAccount>> UpdateAsync(string id, MerchantAccountRequest request)
+        {
+            XmlNode merchantAccountXML = await service.PutAsync(service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);
 
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
@@ -45,6 +67,18 @@ namespace Braintree
             }
 
             XmlNode merchantAccountXML = service.Get(service.MerchantPath() + "/merchant_accounts/" + id);
+
+            return new MerchantAccount(new NodeWrapper(merchantAccountXML));
+        }
+
+        public virtual async Task<MerchantAccount> FindAsync(string id)
+        {
+            if (id == null || id.Trim().Equals(""))
+            {
+                throw new NotFoundException();
+            }
+
+            XmlNode merchantAccountXML = await service.GetAsync(service.MerchantPath() + "/merchant_accounts/" + id);
 
             return new MerchantAccount(new NodeWrapper(merchantAccountXML));
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Braintree
 {
@@ -23,6 +24,15 @@ namespace Braintree
             return GetSummary(request);
         }
 
+        public async Task<Result<SettlementBatchSummary>> GenerateAsync(DateTime settlementDate)
+        {
+            var request = new SettlementBatchSummaryRequest
+            {
+                SettlementDate = settlementDate
+            };
+            return await GetSummaryAsync(request);
+        }
+
         public Result<SettlementBatchSummary> Generate(DateTime settlementDate, string groupByCustomField)
         {
             var request = new SettlementBatchSummaryRequest
@@ -33,9 +43,25 @@ namespace Braintree
             return GetSummary(request);
         }
 
+        public async Task<Result<SettlementBatchSummary>> GenerateAsync(DateTime settlementDate, string groupByCustomField)
+        {
+            var request = new SettlementBatchSummaryRequest
+            {
+                SettlementDate = settlementDate,
+                GroupByCustomField = groupByCustomField
+            };
+            return await GetSummaryAsync(request);
+        }
+
         private Result<SettlementBatchSummary> GetSummary(SettlementBatchSummaryRequest request)
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/settlement_batch_summary", request));
+            return new ResultImpl<SettlementBatchSummary>(response, gateway);
+        }
+
+        private async Task<Result<SettlementBatchSummary>> GetSummaryAsync(SettlementBatchSummaryRequest request)
+        {
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/settlement_batch_summary", request));
             return new ResultImpl<SettlementBatchSummary>(response, gateway);
         }
     }

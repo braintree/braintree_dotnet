@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 #if net452
 using System.Threading;
 #endif
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -87,6 +88,60 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("USD", subscription.StatusHistory[0].CurrencyIsoCode);
             Assert.AreEqual("integration_trialless_plan", subscription.StatusHistory[0].PlanId);
         }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_SubscriptionWithoutTrial()
+#else
+        public void CreateAsync_SubscriptionWithoutTrial()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Result<Subscription> result = await gateway.Subscription.CreateAsync(request);
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+
+            Assert.AreEqual(creditCard.Token, subscription.PaymentMethodToken);
+            Assert.AreEqual(plan.Id, subscription.PlanId);
+            Assert.AreEqual(MerchantAccountIDs.DEFAULT_MERCHANT_ACCOUNT_ID, subscription.MerchantAccountId);
+            Assert.AreEqual(plan.Price, subscription.Price);
+            Assert.AreEqual(plan.Price, subscription.NextBillAmount);
+            Assert.AreEqual(plan.Price, subscription.NextBillingPeriodAmount);
+            Assert.AreEqual(0.00M, subscription.Balance);
+            Assert.IsTrue(Regex.IsMatch(subscription.Id, "^\\w{6}$"));
+            Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.Status);
+            Assert.AreEqual(0, subscription.FailureCount);
+            Assert.IsFalse((bool)subscription.HasTrialPeriod);
+            Assert.AreEqual(1, subscription.CurrentBillingCycle);
+
+            Assert.IsTrue(subscription.BillingPeriodEndDate.HasValue);
+            Assert.IsTrue(subscription.BillingPeriodStartDate.HasValue);
+            Assert.IsTrue(subscription.NextBillingDate.HasValue);
+            Assert.IsTrue(subscription.FirstBillingDate.HasValue);
+            Assert.IsTrue(subscription.CreatedAt.HasValue);
+            Assert.IsTrue(subscription.UpdatedAt.HasValue);
+            Assert.IsTrue(subscription.PaidThroughDate.HasValue);
+
+            Assert.AreEqual(SubscriptionStatus.ACTIVE, subscription.StatusHistory[0].Status);
+            Assert.AreEqual(SubscriptionSource.API, subscription.StatusHistory[0].Source);
+            Assert.AreEqual(plan.Price, subscription.StatusHistory[0].Price);
+            Assert.AreEqual(0.00M, subscription.StatusHistory[0].Balance);
+            Assert.AreEqual("USD", subscription.StatusHistory[0].CurrencyIsoCode);
+            Assert.AreEqual("integration_trialless_plan", subscription.StatusHistory[0].PlanId);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Create_SubscriptionWithPaymentMethodNonce()
@@ -765,6 +820,35 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task FindAsync()
+#else
+        public void FindAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TestPlan plan = PlanFixture.PLAN_WITH_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+
+            Result<Subscription> subscriptionResult = await gateway.Subscription.CreateAsync(request);
+            Subscription subscription = subscriptionResult.Target;
+
+            Subscription foundSubscription = await gateway.Subscription.FindAsync(subscription.Id);
+            Assert.AreEqual(subscription.Id, foundSubscription.Id);
+            Assert.AreEqual(subscription.PaymentMethodToken, creditCard.Token);
+            Assert.AreEqual(subscription.PlanId, plan.Id);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             Assert.Throws<NotFoundException>(() => gateway.Subscription.Find(" "));
@@ -801,6 +885,50 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(TestHelper.IncludesSubscription(collection, subscription1));
             Assert.IsFalse(TestHelper.IncludesSubscription(collection, subscription2));
         }
+
+        [Test]
+#if netcore
+        public async Task SearchAsync_OnBillingCyclesRemainingIs()
+#else
+        public void SearchAsync_OnBillingCyclesRemainingIs()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            SubscriptionRequest request1 = new SubscriptionRequest
+            {
+                NumberOfBillingCycles = 5,
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
+                Price = 4M
+            };
+
+            SubscriptionRequest request2 = new SubscriptionRequest
+            {
+                NumberOfBillingCycles = 10,
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
+                Price = 4M
+            };
+
+            Result<Subscription> result = await gateway.Subscription.CreateAsync(request1);
+            Subscription subscription1 = result.Target;
+            result = await gateway.Subscription.CreateAsync(request2);
+            Subscription subscription2 = result.Target;
+
+            SubscriptionSearchRequest request = new SubscriptionSearchRequest().
+                BillingCyclesRemaining.Is(5).
+                Price.Is(4M);
+
+            ResourceCollection<Subscription> collection = await gateway.Subscription.SearchAsync(request);
+
+            Assert.IsTrue(TestHelper.IncludesSubscription(collection, subscription1));
+            Assert.IsFalse(TestHelper.IncludesSubscription(collection, subscription2));
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Search_OnDaysPastDueBetween()
@@ -1446,6 +1574,44 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task UpdateAsync_Id()
+#else
+        public void UpdateAsync_Id()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string oldId = "old-id-" + new Random().Next(1000000);
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+                Id = oldId
+            };
+
+            await gateway.Subscription.CreateAsync(request);
+
+            string newId = "new-id-" + new Random().Next(1000000);
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Id = newId
+            };
+            Result<Subscription> result = await gateway.Subscription.UpdateAsync(oldId, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Subscription updatedSubscription = result.Target;
+
+            Assert.AreEqual(newId, updatedSubscription.Id);
+            Assert.IsNotNull(gateway.Subscription.Find(newId));
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void UpdatePlan()
         {
             TestPlan originalPlan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -2089,6 +2255,35 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task CancelAsync()
+#else
+        public void CancelAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id,
+            };
+
+            Result<Subscription> createResult = await gateway.Subscription.CreateAsync(request);
+            Result<Subscription> cancelResult = await gateway.Subscription.CancelAsync(createResult.Target.Id);
+
+            Assert.IsTrue(cancelResult.IsSuccess());
+            Assert.AreEqual(SubscriptionStatus.CANCELED, cancelResult.Target.Status);
+            Subscription canceledSubscription = await gateway.Subscription.FindAsync(createResult.Target.Id);
+            Assert.AreEqual(SubscriptionStatus.CANCELED, canceledSubscription.Status);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void RetryCharge_WithoutAmount()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -2112,6 +2307,40 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task RetryChargeAsync_WithoutAmount()
+#else
+        public void RetryChargeAsync_WithoutAmount()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Result<Subscription> subscriptionResult = await gateway.Subscription.CreateAsync(request);
+            Subscription subscription = subscriptionResult.Target;
+            MakePastDue(subscription, 1);
+
+            Result<Transaction> result = await gateway.Subscription.RetryChargeAsync(subscription.Id);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(subscription.Price, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void RetryCharge_WithAmount()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -2133,6 +2362,40 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
         }
+
+        [Test]
+#if netcore
+        public async Task RetryChargeAsync_WithAmount()
+#else
+        public void RetryChargeAsync_WithAmount()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Result<Subscription> subscriptionResult = await gateway.Subscription.CreateAsync(request);
+            Subscription subscription = subscriptionResult.Target;
+            MakePastDue(subscription, 1);
+
+            Result<Transaction> result = await gateway.Subscription.RetryChargeAsync(subscription.Id, SandboxValues.TransactionAmount.AUTHORIZE);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void ParsesUSCultureProperlyForAppsInOtherCultures()

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -69,6 +70,62 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
             Assert.IsTrue(Regex.IsMatch(creditCard.UniqueNumberIdentifier, "\\A\\w{32}\\z"));
         }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_CreatesCreditCardForGivenCustomerId()
+#else
+        public void CreateAsync_CreatesCreditCardForGivenCustomerId()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John",
+                    CountryName = "Chad",
+                    CountryCodeAlpha2 = "TD",
+                    CountryCodeAlpha3 = "TCD",
+                    CountryCodeNumeric = "148"
+                }
+            };
+
+            Result<CreditCard> creditCardResult = await gateway.CreditCard.CreateAsync(creditCardRequest);
+            CreditCard creditCard = creditCardResult.Target;
+
+            Assert.AreEqual("510510", creditCard.Bin);
+            Assert.AreEqual("5100", creditCard.LastFour);
+            Assert.AreEqual("510510******5100", creditCard.MaskedNumber);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2012", creditCard.ExpirationYear);
+            Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
+            Assert.IsTrue(creditCard.IsDefault.Value);
+            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+            Assert.IsNotNull(creditCard.ImageUrl);
+
+            Address billingAddress = creditCard.BillingAddress;
+            Assert.AreEqual("Chad", billingAddress.CountryName);
+            Assert.AreEqual("TD", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("TCD", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
+            Assert.IsTrue(Regex.IsMatch(creditCard.UniqueNumberIdentifier, "\\A\\w{32}\\z"));
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Create_CreatesCreditCardWithAVenmoSdkPaymentMethodCode()
@@ -406,6 +463,45 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task FindAsync_FindsCreditCardByToken()
+#else
+        public void FindAsync_FindsCreditCardByToken()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo"
+            };
+
+            Result<CreditCard> originalCreditCardResult = await gateway.CreditCard.CreateAsync(creditCardRequest);
+            CreditCard originalCreditCard = originalCreditCardResult.Target;
+
+            CreditCard creditCard = await gateway.CreditCard.FindAsync(originalCreditCard.Token);
+
+            Assert.AreEqual("510510", creditCard.Bin);
+            Assert.AreEqual("5100", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2012", creditCard.ExpirationYear);
+            Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Find_FindsAssociatedSubscriptions()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -514,6 +610,55 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
         }
+
+        [Test]
+#if netcore
+        public async Task UpdateAsync_UpdatesCreditCardByToken()
+#else
+        public void UpdateAsync_UpdatesCreditCardByToken()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo"
+            };
+
+            Result<CreditCard> originalCreditCardResult = await gateway.CreditCard.CreateAsync(creditCardCreateRequest);
+            CreditCard originalCreditCard = originalCreditCardResult.Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "4111111111111111",
+                ExpirationDate = "12/05",
+                CVV = "321",
+                CardholderName = "Dave Inchy"
+            };
+
+            Result<CreditCard> creditCardUpdateResult = await gateway.CreditCard.UpdateAsync(originalCreditCard.Token, creditCardUpdateRequest);
+            CreditCard creditCard = creditCardUpdateResult.Target;
+
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("12", creditCard.ExpirationMonth);
+            Assert.AreEqual("2005", creditCard.ExpirationYear);
+            Assert.AreEqual("Dave Inchy", creditCard.CardholderName);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Create_SetsDefaultIfSpecified()
@@ -785,7 +930,6 @@ namespace Braintree.Tests.Integration
         #pragma warning restore 0618
 
         [Test]
-        
         public void Delete_DeletesTheCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -805,6 +949,39 @@ namespace Braintree.Tests.Integration
             gateway.CreditCard.Delete(creditCard.Token);
             Assert.Throws<NotFoundException>(() => gateway.CreditCard.Find(creditCard.Token));
         }
+
+        [Test]
+#if netcore
+        public async Task DeleteAsync_DeletesTheCreditCard()
+#else
+        public void DeleteAsync_DeletesTheCreditCard()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                CardholderName = "Michael Angelo"
+            };
+
+            Result<CreditCard> creditCardResult = await gateway.CreditCard.CreateAsync(creditCardRequest);
+            CreditCard creditCard = creditCardResult.Target;
+
+            Assert.AreEqual(creditCard.Token, gateway.CreditCard.Find(creditCard.Token).Token);
+            await gateway.CreditCard.DeleteAsync(creditCard.Token);
+            Assert.Throws<NotFoundException>(() => gateway.CreditCard.Find(creditCard.Token));
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         
@@ -1019,6 +1196,36 @@ namespace Braintree.Tests.Integration
             HashSet<string> uniqueCards = new HashSet<string>(cards);
             Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
         }
+
+        [Test]
+#if netcore
+        public async Task ExpiringBetweenAsync()
+#else
+        public void ExpiringBetweenAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            DateTime beginning = new DateTime(2010, 1, 1);
+            DateTime end = new DateTime(2010, 12, 31);
+
+            ResourceCollection<CreditCard> collection = await gateway.CreditCard.ExpiringBetweenAsync(beginning, end);
+
+            Assert.IsTrue(collection.MaximumCount > 1);
+
+            List<string> cards = new List<string>();
+            foreach (CreditCard card in collection) {
+                Assert.AreEqual("2010", card.ExpirationYear);
+                cards.Add(card.Token);
+            }
+
+            HashSet<string> uniqueCards = new HashSet<string>(cards);
+            Assert.AreEqual(uniqueCards.Count, collection.MaximumCount);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Prepaid()

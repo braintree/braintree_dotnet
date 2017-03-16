@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Params = System.Collections.Generic.Dictionary<string, object>;
 
 namespace Braintree.Tests.Integration
@@ -105,6 +106,36 @@ namespace Braintree.Tests.Integration
             Assert.IsInstanceOf(typeof(CreditCard), paymentMethodResult.Target);
         }
         
+        [Test]
+#if netcore
+        public async Task CreateAsync_CreatesCreditCardWithNonce()
+#else
+        public void CreateAsync_CreatesCreditCardWithNonce()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce
+            };
+            Result<PaymentMethod> paymentMethodResult = await gateway.PaymentMethod.CreateAsync(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
+            Assert.IsInstanceOf(typeof(CreditCard), paymentMethodResult.Target);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
         [Test]
         public void Create_CreatesCreditCardWithNonceAndDeviceData()
         {
@@ -689,6 +720,34 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task DeleteAsync_DeletesCreditCard()
+#else
+        public void DeleteAsync_DeletesCreditCard()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var customer = await gateway.Customer.CreateAsync(new CustomerRequest());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Target.Id,
+                PaymentMethodNonce = Nonce.Transactable
+            };
+            Result<PaymentMethod> createResult = await gateway.PaymentMethod.CreateAsync(request);
+            Assert.IsTrue(createResult.IsSuccess());
+
+            Result<PaymentMethod> deleteResult = await gateway.PaymentMethod.DeleteAsync(createResult.Target.Token);
+
+            Assert.IsTrue(deleteResult.IsSuccess());
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Delete_DeletesPayPalAccount()
         {
             var request = new PaymentMethodRequest
@@ -757,6 +816,31 @@ namespace Braintree.Tests.Integration
             PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
             Assert.AreEqual(result.Target.Token, found.Token);
         }
+
+        [Test]
+#if netcore
+        public async Task FindAsync_FindsCreditCard()
+#else
+        public void FindAsync_FindsCreditCard()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.Transactable
+            };
+            Result<PaymentMethod> result = await gateway.PaymentMethod.CreateAsync(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethod found = await gateway.PaymentMethod.FindAsync(result.Target.Token);
+            Assert.AreEqual(result.Target.Token, found.Token);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Find_FindsPayPalAccount()
@@ -859,6 +943,53 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(MASTERCARD.Substring(MASTERCARD.Length - 4), updatedCreditCard.LastFour);
             Assert.AreEqual("06/2013", updatedCreditCard.ExpirationDate);
         }
+
+        [Test]
+#if netcore
+        public async Task UpdateAsync_UpdatesTheCreditCard()
+#else
+        public void UpdateAsync_UpdatesTheCreditCard()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var MASTERCARD = SandboxValues.CreditCardNumber.MASTER_CARD;
+            var customerResult = await gateway.Customer.CreateAsync();
+            var customer = customerResult.Target;
+
+            var creditCardResult = await gateway.CreditCard.CreateAsync(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012"
+            });
+            var creditCard = creditCardResult.Target;
+
+            var updateResult = await gateway.PaymentMethod.UpdateAsync(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    CVV = "456",
+                    Number = MASTERCARD,
+                    ExpirationDate = "06/2013"
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOf(typeof(CreditCard)));
+
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("New Holder", updatedCreditCard.CardholderName);
+            Assert.AreEqual(MASTERCARD.Substring(0, 6), updatedCreditCard.Bin);
+            Assert.AreEqual(MASTERCARD.Substring(MASTERCARD.Length - 4), updatedCreditCard.LastFour);
+            Assert.AreEqual("06/2013", updatedCreditCard.ExpirationDate);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Update_UpdatesTheCoinbaseAccount()
@@ -1049,6 +1180,37 @@ namespace Braintree.Tests.Integration
                     Options = new PaymentMethodOptionsRequest
                     {
                         VerifyCard = true
+                    }
+                });
+
+            Assert.IsFalse(updateResult.IsSuccess());
+            Assert.IsNotNull(updateResult.CreditCardVerification);
+            Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, updateResult.CreditCardVerification.Status);
+            Assert.IsNull(updateResult.CreditCardVerification.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Update_AllowsCustomVerificationAmount()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Card Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2020",
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    PaymentMethodNonce = Nonce.ProcessorDeclinedMasterCard,
+                    Options = new PaymentMethodOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "2.34"
                     }
                 });
 

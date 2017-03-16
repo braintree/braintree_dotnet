@@ -1,6 +1,7 @@
 using Braintree.Exceptions;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -61,6 +62,57 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task CreateAsync_CreatesAddressForGivenCustomerId()
+#else
+        public void CreateAsync_CreatesAddressForGivenCustomerId()
+        {
+            Task.Run(async() =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var addressRequest = new AddressRequest
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Angelo Co.",
+                StreetAddress = "1 E Main St",
+                ExtendedAddress = "Apt 3",
+                Locality = "Chicago",
+                Region = "IL",
+                PostalCode = "60622",
+                CountryCodeAlpha2 = "US",
+                CountryCodeAlpha3 = "USA",
+                CountryCodeNumeric = "840",
+                CountryName = "United States of America"
+            };
+
+            Result<Address> addressResult = await gateway.Address.CreateAsync(customer.Id, addressRequest);
+            Address address = addressResult.Target;
+
+            Assert.AreEqual("Michael", address.FirstName);
+            Assert.AreEqual("Angelo", address.LastName);
+            Assert.AreEqual("Angelo Co.", address.Company);
+            Assert.AreEqual("1 E Main St", address.StreetAddress);
+            Assert.AreEqual("Apt 3", address.ExtendedAddress);
+            Assert.AreEqual("Chicago", address.Locality);
+            Assert.AreEqual("IL", address.Region);
+            Assert.AreEqual("60622", address.PostalCode);
+            Assert.AreEqual("US", address.CountryCodeAlpha2);
+            Assert.AreEqual("USA", address.CountryCodeAlpha3);
+            Assert.AreEqual("840", address.CountryCodeNumeric);
+            Assert.AreEqual("United States of America", address.CountryName);
+            Assert.IsNotNull(address.CreatedAt);
+            Assert.IsNotNull(address.UpdatedAt);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Find_FindsAddress()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -91,6 +143,50 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("60622", address.PostalCode);
             Assert.AreEqual("United States of America", address.CountryName);
         }
+
+        [Test]
+#if netcore
+        public async Task FindAsync_FindsAddress()
+#else
+        public void FindAsync_FindsAddress()
+        {
+            Task.Run(async() =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var addressRequest = new AddressRequest
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Angelo Co.",
+                StreetAddress = "1 E Main St",
+                ExtendedAddress = "Apt 3",
+                Locality = "Chicago",
+                Region = "IL",
+                PostalCode = "60622",
+                CountryName = "United States of America"
+            };
+
+            Result<Address> addressResult = await gateway.Address.CreateAsync(customer.Id, addressRequest);
+            Address createdAddress = addressResult.Target;
+            Address address = await gateway.Address.FindAsync(customer.Id, createdAddress.Id);
+
+            Assert.AreEqual("Michael", address.FirstName);
+            Assert.AreEqual("Angelo", address.LastName);
+            Assert.AreEqual("Angelo Co.", address.Company);
+            Assert.AreEqual("1 E Main St", address.StreetAddress);
+            Assert.AreEqual("Apt 3", address.ExtendedAddress);
+            Assert.AreEqual("Chicago", address.Locality);
+            Assert.AreEqual("IL", address.Region);
+            Assert.AreEqual("60622", address.PostalCode);
+            Assert.AreEqual("United States of America", address.CountryName);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Update_UpdatesAddressForGivenCustomerIdAndAddressId()
@@ -146,6 +242,74 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("USA", address.CountryCodeAlpha3);
             Assert.AreEqual("840", address.CountryCodeNumeric);
         }
+
+        [Test]
+#if netcore
+        public async Task UpdateAsync_UpdatesAddressForGivenCustomerIdAndAddressId()
+#else
+        public void UpdateAsync_UpdatesAddressForGivenCustomerIdAndAddressId()
+        {
+            Task.Run(async() =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var addressCreateRequest = new AddressRequest
+            {
+                FirstName = "Dave",
+                LastName = "Inchy",
+                Company = "Leon Ardo Co.",
+                StreetAddress = "1 E State St",
+                ExtendedAddress = "Apt 4",
+                Locality = "Boston",
+                Region = "MA",
+                PostalCode = "11111",
+                CountryName = "Canada",
+                CountryCodeAlpha2 = "CA",
+                CountryCodeAlpha3 = "CAN",
+                CountryCodeNumeric = "124"
+            };
+
+            Result<Address> addressResult = await gateway.Address.CreateAsync(customer.Id, addressCreateRequest);
+            Address originalAddress = addressResult.Target;
+
+            var addressUpdateRequest = new AddressRequest
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Angelo Co.",
+                StreetAddress = "1 E Main St",
+                ExtendedAddress = "Apt 3",
+                Locality = "Chicago",
+                Region = "IL",
+                PostalCode = "60622",
+                CountryName = "United States of America",
+                CountryCodeAlpha2 = "US",
+                CountryCodeAlpha3 = "USA",
+                CountryCodeNumeric = "840"
+            };
+
+            addressResult = await gateway.Address.UpdateAsync(customer.Id, originalAddress.Id, addressUpdateRequest);
+            Address address = addressResult.Target;
+
+            Assert.AreEqual("Michael", address.FirstName);
+            Assert.AreEqual("Angelo", address.LastName);
+            Assert.AreEqual("Angelo Co.", address.Company);
+            Assert.AreEqual("1 E Main St", address.StreetAddress);
+            Assert.AreEqual("Apt 3", address.ExtendedAddress);
+            Assert.AreEqual("Chicago", address.Locality);
+            Assert.AreEqual("IL", address.Region);
+            Assert.AreEqual("60622", address.PostalCode);
+            Assert.AreEqual("United States of America", address.CountryName);
+            Assert.AreEqual("US", address.CountryCodeAlpha2);
+            Assert.AreEqual("USA", address.CountryCodeAlpha3);
+            Assert.AreEqual("840", address.CountryCodeNumeric);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Update_ReturnsAnErrorResult_ForInconsistenCountry()
@@ -215,6 +379,42 @@ namespace Braintree.Tests.Integration
 
             Assert.Throws<NotFoundException> (() => gateway.Address.Find(customer.Id, createdAddress.Id));
         }
+
+        [Test]
+#if netcore
+        public async Task DeleteAsync_DeletesTheAddress()
+#else
+        public void DeleteAsync_DeletesTheAddress()
+        {
+            Task.Run(async() =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(new CustomerRequest());
+            Customer customer = customerResult.Target;
+
+            var addressRequest = new AddressRequest
+            {
+                StreetAddress = "1 E Main St",
+                ExtendedAddress = "Apt 3",
+            };
+
+            Result<Address> addressResult = await gateway.Address.CreateAsync(customer.Id, addressRequest);
+            Address createdAddress = addressResult.Target;
+            Assert.AreEqual(createdAddress.Id, gateway.Address.Find(customer.Id, createdAddress.Id).Id);
+
+            try {
+                Result<Address> result = await gateway.Address.DeleteAsync(customer.Id, createdAddress.Id);
+                Assert.IsTrue(result.IsSuccess());
+            } catch (NotFoundException) {
+                Assert.Fail("Unable to delete the created address");
+            }
+
+            Assert.Throws<NotFoundException> (() => gateway.Address.Find(customer.Id, createdAddress.Id));
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Create_ReturnsAnErrorResult()

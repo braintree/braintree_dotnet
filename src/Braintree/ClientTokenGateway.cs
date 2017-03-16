@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace Braintree
@@ -26,6 +27,22 @@ namespace Braintree
             if (request == null) request = new ClientTokenRequest();
             verifyOptions(request);
             XmlNode response = Service.Post(Service.MerchantPath() + "/client_token", request);
+
+            if (response.Name.Equals("client-token"))
+            {
+                return Regex.Unescape(response.InnerText);
+            }
+            else
+            {
+                throw new ArgumentException(response.SelectSingleNode("message").InnerText);
+            }
+        }
+
+        public virtual async Task<string> generateAsync(ClientTokenRequest request = null)
+        {
+            if (request == null) request = new ClientTokenRequest();
+            verifyOptions(request);
+            XmlNode response = await Service.PostAsync(Service.MerchantPath() + "/client_token", request);
 
             if (response.Name.Equals("client-token"))
             {

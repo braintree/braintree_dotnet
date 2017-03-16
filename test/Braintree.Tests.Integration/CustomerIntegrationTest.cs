@@ -5,6 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -30,7 +31,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        
         public void Find_FindsCustomerWithGivenId()
         {
             string id = Guid.NewGuid().ToString();
@@ -96,6 +96,83 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("60622", customer.Addresses[0].PostalCode);
             Assert.AreEqual("United States of America", customer.Addresses[0].CountryName);
         }
+
+        [Test]
+#if netcore
+        public async Task FindAsync_FindsCustomerWithGivenId()
+#else
+        public void FindAsync_FindsCustomerWithGivenId()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string id = Guid.NewGuid().ToString();
+            var createRequest = new CustomerRequest
+            {
+                Id = id,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        FirstName = "Mike",
+                        LastName = "Smith",
+                        Company = "Smith Co.",
+                        StreetAddress = "1 W Main St",
+                        ExtendedAddress = "Suite 330",
+                        Locality = "Chicago",
+                        Region = "IL",
+                        PostalCode = "60622",
+                        CountryName = "United States of America"
+                    }
+                }
+            };
+
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(createRequest);
+            Customer customer = await gateway.Customer.FindAsync(customerResult.Target.Id);
+            Assert.AreEqual(id, customer.Id);
+            Assert.AreEqual("Michael", customer.FirstName);
+            Assert.AreEqual("Angelo", customer.LastName);
+            Assert.AreEqual("Some Company", customer.Company);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
+            Assert.AreEqual("312.555.1111", customer.Phone);
+            Assert.AreEqual("312.555.1112", customer.Fax);
+            Assert.AreEqual("www.example.com", customer.Website);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
+            Assert.AreEqual(1, customer.CreditCards.Length);
+            Assert.AreEqual("510510", customer.CreditCards[0].Bin);
+            Assert.AreEqual("5100", customer.CreditCards[0].LastFour);
+            Assert.AreEqual("05", customer.CreditCards[0].ExpirationMonth);
+            Assert.AreEqual("2012", customer.CreditCards[0].ExpirationYear);
+            Assert.AreEqual("Michael Angelo", customer.CreditCards[0].CardholderName);
+            Assert.IsTrue(Regex.IsMatch(customer.CreditCards[0].UniqueNumberIdentifier, "\\A\\w{32}\\z"));
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreditCards[0].UpdatedAt.Value.Year);
+            Assert.AreEqual("Mike", customer.Addresses[0].FirstName);
+            Assert.AreEqual("Smith", customer.Addresses[0].LastName);
+            Assert.AreEqual("Smith Co.", customer.Addresses[0].Company);
+            Assert.AreEqual("1 W Main St", customer.Addresses[0].StreetAddress);
+            Assert.AreEqual("Suite 330", customer.Addresses[0].ExtendedAddress);
+            Assert.AreEqual("Chicago", customer.Addresses[0].Locality);
+            Assert.AreEqual("IL", customer.Addresses[0].Region);
+            Assert.AreEqual("60622", customer.Addresses[0].PostalCode);
+            Assert.AreEqual("United States of America", customer.Addresses[0].CountryName);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Find_IncludesApplePayCardsInPaymentMethods()
@@ -227,6 +304,36 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Create_WithoutCustomerRequestObject()
+        {
+            Result<Customer> customerResult = gateway.Customer.Create();
+            Assert.IsTrue(customerResult.IsSuccess());
+
+            Customer customer = customerResult.Target;
+            Assert.IsNotNull(customer.Id);
+        }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_WithoutCustomerRequestObject()
+#else
+        public void CreateAsync_WithoutCustomerRequestObject()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync();
+            Assert.IsTrue(customerResult.IsSuccess());
+
+            Customer customer = customerResult.Target;
+            Assert.IsNotNull(customer.Id);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Create_CreatesCustomerWithSpecifiedValues()
         {
             var createRequest = new CustomerRequest()
@@ -269,6 +376,62 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("MAC", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("446", billingAddress.CountryCodeNumeric);
         }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_CreatesCustomerWithSpecifiedValues()
+#else
+        public void CreateAsync_CreatesCustomerWithSpecifiedValues()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Macau",
+                        CountryCodeAlpha2 = "MO",
+                        CountryCodeAlpha3 = "MAC",
+                        CountryCodeNumeric = "446"
+                    }
+                }
+            };
+
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(createRequest);
+            Customer customer = customerResult.Target;
+
+            Assert.AreEqual("Michael", customer.FirstName);
+            Assert.AreEqual("Angelo", customer.LastName);
+            Assert.AreEqual("Some Company", customer.Company);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
+            Assert.AreEqual("312.555.1111", customer.Phone);
+            Assert.AreEqual("312.555.1112", customer.Fax);
+            Assert.AreEqual("www.example.com", customer.Website);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
+
+            Address billingAddress = customer.CreditCards[0].BillingAddress;
+            Assert.AreEqual("Macau", billingAddress.CountryName);
+            Assert.AreEqual("MO", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("MAC", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("446", billingAddress.CountryCodeNumeric);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Create_withSecurityParams()
@@ -829,6 +992,62 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task UpdateAsync_UpdatesCustomerWithNewValues()
+#else
+        public void UpdateAsync_UpdatesCustomerWithNewValues()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string oldId = Guid.NewGuid().ToString();
+            string newId = Guid.NewGuid().ToString();
+            var createRequest = new CustomerRequest()
+            {
+                Id = oldId,
+                FirstName = "Old First",
+                LastName = "Old Last",
+                Company = "Old Company",
+                Email = "old@example.com",
+                Phone = "312.555.1111 xOld",
+                Fax = "312.555.1112 xOld",
+                Website = "old.example.com"
+            };
+
+            await gateway.Customer.CreateAsync(createRequest);
+
+            var updateRequest = new CustomerRequest()
+            {
+                Id = newId,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com"
+            };
+
+            Result<Customer> customerResult = await gateway.Customer.UpdateAsync(oldId, updateRequest);
+            Customer updatedCustomer = customerResult.Target;
+
+            Assert.AreEqual(newId, updatedCustomer.Id);
+            Assert.AreEqual("Michael", updatedCustomer.FirstName);
+            Assert.AreEqual("Angelo", updatedCustomer.LastName);
+            Assert.AreEqual("Some Company", updatedCustomer.Company);
+            Assert.AreEqual("hansolo64@example.com", updatedCustomer.Email);
+            Assert.AreEqual("312.555.1111", updatedCustomer.Phone);
+            Assert.AreEqual("312.555.1112", updatedCustomer.Fax);
+            Assert.AreEqual("www.example.com", updatedCustomer.Website);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.UpdatedAt.Value.Year);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Update_UpdatesCustomerAndNestedValues()
         {
             var createRequest = new CustomerRequest()
@@ -1083,6 +1302,29 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task DeleteAsync_DeletesTheCustomer()
+#else
+        public void DeleteAsync_DeletesTheCustomer()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string id = Guid.NewGuid().ToString();
+            await gateway.Customer.CreateAsync(new CustomerRequest() { Id = id });
+            Assert.AreEqual(id, gateway.Customer.Find(id).Id);
+
+            Result<Customer> result = await gateway.Customer.DeleteAsync(id);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.Throws<NotFoundException>(() => gateway.Customer.Find(id));
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void All() {
             ResourceCollection<Customer> collection = gateway.Customer.All();
 
@@ -1096,6 +1338,32 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(uniqueItems.Count, collection.MaximumCount);
         }
+
+        [Test]
+#if netcore
+        public async Task AllAsync()
+#else
+        public void AllAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            ResourceCollection<Customer> collection = await gateway.Customer.AllAsync();
+
+            Assert.IsTrue(collection.MaximumCount > 100);
+
+            List<string> items = new List<string>();
+            foreach (Customer item in collection) {
+                items.Add(item.Id);
+            }
+            HashSet<string> uniqueItems = new HashSet<string>(items);
+
+            Assert.AreEqual(uniqueItems.Count, collection.MaximumCount);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Search_FindDuplicateCardsGivenPaymentMethodToken()
@@ -1200,6 +1468,82 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1, collection.MaximumCount);
             Assert.AreEqual(customer.Id, collection.FirstItem.Id);
         }
+
+        [Test]
+#if netcore
+        public async Task SearchAsync_OnAllTextFields()
+#else
+        public void SearchAsync_OnAllTextFields()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+
+            CustomerRequest request = new CustomerRequest
+            {
+                Company = "Braintree",
+                Email = "smith@example.com",
+                Fax = "5551231234",
+                FirstName = "Tom",
+                LastName = "Smith",
+                Phone = "5551231235",
+                Website = "http://example.com",
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Tim Toole",
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/2012",
+                    Token = creditCardToken,
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        Company = "Braintree",
+                        CountryName = "United States of America",
+                        ExtendedAddress = "Suite 123",
+                        FirstName = "Drew",
+                        LastName = "Michaelson",
+                        Locality = "Chicago",
+                        PostalCode = "12345",
+                        Region = "IL",
+                        StreetAddress = "123 Main St"
+                    }
+                }
+            };
+
+            Result<Customer> customerResult = await gateway.Customer.CreateAsync(request);
+            Customer customer = await gateway.Customer.FindAsync(customerResult.Target.Id);
+
+            CustomerSearchRequest searchRequest = new CustomerSearchRequest().
+                Id.Is(customer.Id).
+                FirstName.Is("Tom").
+                LastName.Is("Smith").
+                Company.Is("Braintree").
+                Email.Is("smith@example.com").
+                Website.Is("http://example.com").
+                Fax.Is("5551231234").
+                Phone.Is("5551231235").
+                AddressFirstName.Is("Drew").
+                AddressLastName.Is("Michaelson").
+                AddressLocality.Is("Chicago").
+                AddressPostalCode.Is("12345").
+                AddressRegion.Is("IL").
+                AddressCountryName.Is("United States of America").
+                AddressStreetAddress.Is("123 Main St").
+                AddressExtendedAddress.Is("Suite 123").
+                PaymentMethodToken.Is(creditCardToken).
+                CardholderName.Is("Tim Toole").
+                CreditCardNumber.Is("4111111111111111").
+                CreditCardExpirationDate.Is("05/2012");
+
+            ResourceCollection<Customer> collection = await gateway.Customer.SearchAsync(searchRequest);
+
+            Assert.AreEqual(1, collection.MaximumCount);
+            Assert.AreEqual(customer.Id, collection.FirstItem.Id);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void Search_OnCreatedAt()

@@ -40,12 +40,12 @@ namespace Braintree
         {
             var builder = new StringBuilder();
 
-            builder.Append(string.Format("<{0}>", Parent));
+            builder.Append(string.Format("<{0}>", EscapeXml(Parent)));
             foreach (var pair in elements)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
-            builder.Append(string.Format("</{0}>", Parent));
+            builder.Append(string.Format("</{0}>", EscapeXml(Parent)));
 
             return builder.ToString();
         }
@@ -109,17 +109,17 @@ namespace Braintree
 
         private static string FormatAsArrayXML(string name, string value)
         {
-            return string.Format("<{0} type=\"array\">{1}</{0}>", WebUtility.HtmlEncode(name), value);
+            return string.Format("<{0} type=\"array\">{1}</{0}>", EscapeXml(name), value);
         }
 
         private static string FormatAsXml(string name, string value)
         {
-            return string.Format("<{0}>{1}</{0}>", WebUtility.HtmlEncode(name), WebUtility.HtmlEncode(value));
+            return string.Format("<{0}>{1}</{0}>", EscapeXml(name), EscapeXml(value));
         }
 
         private static string FormatAsXml(string name, DateTime value)
         {
-            return string.Format("<{0} type=\"datetime\">{1:u}</{0}>", WebUtility.HtmlEncode(name), value.ToUniversalTime());
+            return string.Format("<{0} type=\"datetime\">{1:u}</{0}>", EscapeXml(name), value.ToUniversalTime());
         }
 
         private static string FormatAsXml(string root, Dictionary<string, string> elements)
@@ -127,14 +127,14 @@ namespace Braintree
             if (elements == null) return "";
 
             var builder = new StringBuilder();
-            builder.Append(string.Format("<{0}>", root));
+            builder.Append(string.Format("<{0}>", EscapeXml(root)));
 
             foreach (var element in elements)
             {
                 builder.Append(BuildXMLElement(element.Key, element.Value));
             }
 
-            builder.Append(string.Format("</{0}>", root));
+            builder.Append(string.Format("</{0}>", EscapeXml(root)));
 
             return builder.ToString();
         }
@@ -142,6 +142,11 @@ namespace Braintree
         internal static string ParentBracketChildString(string parent, string child)
         {
             return string.Format("{0}[{1}]", parent, child);
+        }
+
+        internal static string EscapeXml(string xml)
+        {
+            return xml.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
         }
     }
 }
