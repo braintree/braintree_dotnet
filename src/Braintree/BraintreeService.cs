@@ -67,9 +67,9 @@ namespace Braintree
             return GetXmlResponse(URL, "GET", null);
         }
 
-        public async Task<XmlNode> GetAsync(string URL)
+        public Task<XmlNode> GetAsync(string URL)
         {
-            return await GetXmlResponseAsync(URL, "GET", null);
+            return GetXmlResponseAsync(URL, "GET", null);
         }
 
         internal XmlNode Delete(string URL)
@@ -77,9 +77,9 @@ namespace Braintree
             return GetXmlResponse(URL, "DELETE", null);
         }
 
-        internal async Task<XmlNode> DeleteAsync(string URL)
+        internal Task<XmlNode> DeleteAsync(string URL)
         {
-            return await GetXmlResponseAsync(URL, "DELETE", null);
+            return GetXmlResponseAsync(URL, "DELETE", null);
         }
 
         public XmlNode Post(string URL, Request requestBody)
@@ -87,9 +87,9 @@ namespace Braintree
             return GetXmlResponse(URL, "POST", requestBody);
         }
 
-        public async Task<XmlNode> PostAsync(string URL, Request requestBody)
+        public Task<XmlNode> PostAsync(string URL, Request requestBody)
         {
-            return await GetXmlResponseAsync(URL, "POST", requestBody);
+            return GetXmlResponseAsync(URL, "POST", requestBody);
         }
 
         internal XmlNode Post(string URL)
@@ -97,9 +97,9 @@ namespace Braintree
             return Post(URL, null);
         }
 
-        internal async Task<XmlNode> PostAsync(string URL)
+        internal Task<XmlNode> PostAsync(string URL)
         {
-            return await PostAsync(URL, null);
+            return PostAsync(URL, null);
         }
 
         public XmlNode Put(string URL)
@@ -107,9 +107,9 @@ namespace Braintree
             return Put(URL, null);
         }
 
-        public async Task<XmlNode> PutAsync(string URL)
+        public Task<XmlNode> PutAsync(string URL)
         {
-            return await PutAsync(URL, null);
+            return PutAsync(URL, null);
         }
 
         internal XmlNode Put(string URL, Request requestBody)
@@ -117,9 +117,9 @@ namespace Braintree
             return GetXmlResponse(URL, "PUT", requestBody);
         }
 
-        internal async Task<XmlNode> PutAsync(string URL, Request requestBody)
+        internal Task<XmlNode> PutAsync(string URL, Request requestBody)
         {
-            return await GetXmlResponseAsync(URL, "PUT", requestBody);
+            return GetXmlResponseAsync(URL, "PUT", requestBody);
         }
 
 #if netcore
@@ -296,13 +296,13 @@ namespace Braintree
                     byte[] buffer = Encoding.UTF8.GetBytes(xmlPrefix + requestBody.ToXml());
                     request.ContentType = "application/xml";
                     request.ContentLength = buffer.Length;
-                    using (Stream requestStream = request.GetRequestStream())
+                    using (Stream requestStream = await request.GetRequestStreamAsync().ConfigureAwait(false))
                     {
-                        requestStream.Write(buffer, 0, buffer.Length);
+                        await requestStream.WriteAsync(buffer, 0, buffer.Length);
                     }
                 }
 
-                using (var response = (HttpWebResponse) request.GetResponse())
+                using (var response = (HttpWebResponse) await request.GetResponseAsync().ConfigureAwait(false))
                 {
                     return await ParseResponseStreamAsync(GetResponseStream(response));
                 }
@@ -355,7 +355,7 @@ namespace Braintree
             var stream = response.GetResponseStream();
             if (response.ContentEncoding.Equals("gzip", StringComparison.CurrentCultureIgnoreCase))
             {
-                stream = new GZipStream(response.GetResponseStream(), CompressionMode.Decompress);
+                stream = new GZipStream(stream, CompressionMode.Decompress);
             }
             return stream;
         }
@@ -377,7 +377,7 @@ namespace Braintree
             string body;
             using (var streamReader = new StreamReader(stream))
             {
-                body = await streamReader.ReadToEndAsync();
+                body = await streamReader.ReadToEndAsync().ConfigureAwait(false);
             }
 
             return StringToXmlNode(body);

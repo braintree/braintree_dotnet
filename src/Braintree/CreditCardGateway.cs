@@ -45,7 +45,7 @@ namespace Braintree
 
         public virtual async Task<Result<CreditCard>> CreateAsync(CreditCardRequest request)
         {
-            XmlNode creditCardXML = await service.PostAsync(service.MerchantPath() + "/payment_methods", request);
+            XmlNode creditCardXML = await service.PostAsync(service.MerchantPath() + "/payment_methods", request).ConfigureAwait(false);
 
             return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
         }
@@ -103,7 +103,7 @@ namespace Braintree
         {
             string queryString = string.Format("start={0:MMyyyy}&end={1:MMyyyy}", start, end);
 
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/all/expiring_ids?" + queryString));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/all/expiring_ids?" + queryString).ConfigureAwait(false));
 
             return new ResourceCollection<CreditCard>(response, delegate(string[] ids) {
                 var query = new IdsSearchRequest().
@@ -135,7 +135,7 @@ namespace Braintree
             if(token == null || token.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode creditCardXML = await service.GetAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token);
+            XmlNode creditCardXML = await service.GetAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token).ConfigureAwait(false);
 
             return new CreditCard(new NodeWrapper(creditCardXML), gateway);
         }
@@ -158,9 +158,9 @@ namespace Braintree
             service.Delete(service.MerchantPath() + "/payment_methods/credit_card/" + token);
         }
 
-        public virtual async Task DeleteAsync(string token)
+        public virtual Task DeleteAsync(string token)
         {
-            await service.DeleteAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token);
+            return service.DeleteAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token);
         }
 
         public virtual Result<CreditCard> Update(string token, CreditCardRequest request)

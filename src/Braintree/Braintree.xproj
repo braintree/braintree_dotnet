@@ -267,6 +267,7 @@
     <Compile Include="Exceptions\TestOperationPerformedInProductionException.cs" />
     <Compile Include="Test\MerchantAccount.cs" />
     <Compile Include="WebProxy.cs" />
+    <Compile Include="WebRequestAsyncExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

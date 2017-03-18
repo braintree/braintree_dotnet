@@ -38,7 +38,7 @@ namespace Braintree
             if(Id == null || Id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode customerXML = await service.GetAsync(service.MerchantPath() + "/customers/" + Id);
+            XmlNode customerXML = await service.GetAsync(service.MerchantPath() + "/customers/" + Id).ConfigureAwait(false);
 
             return new Customer(new NodeWrapper(customerXML), gateway);
         }
@@ -48,9 +48,9 @@ namespace Braintree
             return Create(new CustomerRequest());
         }
 
-        public virtual async Task<Result<Customer>> CreateAsync()
+        public virtual Task<Result<Customer>> CreateAsync()
         {
-            return await CreateAsync(new CustomerRequest());
+            return CreateAsync(new CustomerRequest());
         }
 
         public virtual Result<Customer> Create(CustomerRequest request)
@@ -62,7 +62,7 @@ namespace Braintree
 
         public virtual async Task<Result<Customer>> CreateAsync(CustomerRequest request)
         {
-            XmlNode customerXML = await service.PostAsync(service.MerchantPath() + "/customers", request);
+            XmlNode customerXML = await service.PostAsync(service.MerchantPath() + "/customers", request).ConfigureAwait(false);
 
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), gateway);
         }
@@ -76,7 +76,7 @@ namespace Braintree
 
         public virtual async Task<Result<Customer>> DeleteAsync(string Id)
         {
-            XmlNode customerXML = await service.DeleteAsync(service.MerchantPath() + "/customers/" + Id);
+            XmlNode customerXML = await service.DeleteAsync(service.MerchantPath() + "/customers/" + Id).ConfigureAwait(false);
 
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), gateway);
         }
@@ -90,7 +90,7 @@ namespace Braintree
 
         public virtual async Task<Result<Customer>> UpdateAsync(string Id, CustomerRequest request)
         {
-            XmlNode customerXML = await service.PutAsync(service.MerchantPath() + "/customers/" + Id, request);
+            XmlNode customerXML = await service.PutAsync(service.MerchantPath() + "/customers/" + Id, request).ConfigureAwait(false);
 
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), gateway);
         }
@@ -128,7 +128,7 @@ namespace Braintree
 
         public virtual async Task<ResourceCollection<Customer>> AllAsync()
         {
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/customers/advanced_search_ids"));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/customers/advanced_search_ids").ConfigureAwait(false));
             var query = new CustomerSearchRequest();
 
             return new ResourceCollection<Customer>(response, delegate(string[] ids) {
@@ -147,7 +147,7 @@ namespace Braintree
 
         public virtual async Task<ResourceCollection<Customer>> SearchAsync(CustomerSearchRequest query)
         {
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/customers/advanced_search_ids", query));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/customers/advanced_search_ids", query).ConfigureAwait(false));
 
             return new ResourceCollection<Customer>(response, delegate(string[] ids) {
                 return FetchCustomers(query, ids);
