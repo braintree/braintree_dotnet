@@ -1248,7 +1248,7 @@ namespace Braintree.Tests.Integration
             var searchRequest = new TransactionSearchRequest().
                 Id.Is(transactionResult.Target.Id).
                 PayPalPaymentId.StartsWith("PAY").
-                PayPalAuthorizationId.StartsWith("SALE").
+                PayPalAuthorizationId.StartsWith("AUTH").
                 PayPalPayerEmail.Is("payer@example.com");
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
@@ -1453,6 +1453,53 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_PAYMENT_METHOD_NONCE_UNKNOWN, result.Errors.ForObject("Transaction").OnField("PaymentMethodNonce")[0].Code);
         }
 
+        [Test]
+        public void Sale_ReturnsSuccessfulResponseWithIdealPayment()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = "ideal_merchant_account",
+                PaymentMethodNonce = TestHelper.GenerateValidIdealPaymentId(gateway),
+                OrderId = "ABC123",
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            IdealPaymentDetails idealPaymentDetails = transaction.IdealPaymentDetails;
+            Assert.AreEqual(TransactionStatus.SETTLED, transaction.Status);
+            Assert.IsTrue(Regex.IsMatch(idealPaymentDetails.IdealPaymentId, "^idealpayment_\\w{6,}$"));
+            Assert.IsTrue(Regex.IsMatch(idealPaymentDetails.IdealTransactionId, "^\\d{16,}$"));
+            Assert.IsTrue(idealPaymentDetails.ImageUrl.StartsWith("https://"));
+            Assert.IsNotNull(idealPaymentDetails.MaskedIban);
+            Assert.IsNotNull(idealPaymentDetails.Bic);
+        }
+
+        [Test]
+        public void Sale_ReturnsFailureResponseWithNotCompleteIdealPayment()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 3.00m,
+                MerchantAccountId = "ideal_merchant_account",
+                PaymentMethodNonce = TestHelper.GenerateValidIdealPaymentId(gateway, 3.00m),
+                OrderId = "ABC123",
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_IDEAL_PAYMENT_NOT_COMPLETE, result.Errors.ForObject("Transaction").OnField("PaymentMethodNonce")[0].Code);
+        }
 
         [Test]
         public void Sale_ReturnsSuccessfulResponseWithPartialSettlement()
@@ -3943,6 +3990,55 @@ namespace Braintree.Tests.Integration
 
             Transaction transaction = result.Target;
             Assert.Null(transaction.RiskData.id);
+        }
+
+        [Test]
+        public void Sale_WithSkipAvsOptionSet()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2019",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SkipAvs = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.Null(transaction.AvsErrorResponseCode);
+            Assert.AreEqual("B", transaction.AvsStreetAddressResponseCode);
+        }
+
+        [Test]
+        public void Sale_WithSkipCvvOptionSet()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2019",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SkipCvv = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual("B", transaction.CvvResponseCode);
         }
 
         #pragma warning disable 0618

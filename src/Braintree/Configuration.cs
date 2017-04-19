@@ -15,7 +15,18 @@ namespace Braintree
     public class Configuration
     {
         public Environment Environment { get; set; }
-        public string AccessToken { get; set; }
+        private string _AccessToken;
+        public string AccessToken {
+            get {
+                return this._AccessToken;
+            }
+            set {
+                CredentialsParser parser = new CredentialsParser(value);
+                this.MerchantId = parser.MerchantId;
+                this._AccessToken = parser.AccessToken;
+                this.Environment = parser.Environment;
+            }
+        }
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public string MerchantId { get; set; }
@@ -46,10 +57,7 @@ namespace Braintree
 
         public Configuration(string accessToken) : this()
         {
-            CredentialsParser parser = new CredentialsParser(accessToken);
-            MerchantId = parser.MerchantId;
-            AccessToken = parser.AccessToken;
-            Environment = parser.Environment;
+            AccessToken = accessToken;
         }
 
         public Configuration(string clientId, string clientSecret) : this()

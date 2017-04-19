@@ -57,6 +57,10 @@ namespace Braintree
                 return PartnerMerchantConnectedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_DISCONNECTED) {
                 return PartnerMerchantDisconnectedSampleXml(id);
+            } else if (kind == WebhookKind.CONNECTED_MERCHANT_STATUS_TRANSITIONED) {
+                return ConnectedMerchantStatusTransitionedSampleXml(id);
+            } else if (kind == WebhookKind.CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED) {
+                return ConnectedMerchantPayPalStatusChangedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_DECLINED) {
                 return PartnerMerchantDeclinedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_OPENED) {
@@ -342,6 +346,22 @@ namespace Braintree
             return Node("partner-merchant",
                     Node("partner-merchant-id", "abc123")
             );
+        }
+
+        private string ConnectedMerchantStatusTransitionedSampleXml(string id) {
+            return Node("connected-merchant-status-transitioned",
+                    Node("oauth-application-client-id", "oauth_application_client_id"),
+                    Node("merchant-public-id", id),
+                    Node("status", "new_status")
+                   );
+        }
+
+        private string ConnectedMerchantPayPalStatusChangedSampleXml(string id) {
+            return Node("connected-merchant-paypal-status-changed",
+                    Node("oauth-application-client-id", "oauth_application_client_id"),
+                    Node("merchant-public-id", id),
+                    Node("action", "link")
+                   );
         }
 
         private string PartnerMerchantDeclinedSampleXml(string id) {

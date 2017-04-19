@@ -117,6 +117,110 @@ namespace Braintree.TestUtil
             return token + "_xxx";
         }
 
+        public static string GenerateValidIdealPaymentId(BraintreeGateway gateway, decimal amount)
+        {
+            var clientTokenJson = GenerateDecodedClientToken(
+                gateway,
+                new ClientTokenRequest { MerchantAccountId = "ideal_merchant_account" }
+            );
+            var clientTokenDef = new
+            {
+                authorizationFingerprint = "",
+                braintree_api = new
+                {
+                    url = "",
+                    access_token = ""
+                }
+            };
+            var clientToken = JsonConvert.DeserializeAnonymousType(clientTokenJson, clientTokenDef);
+            var configuration = GetClientConfiguration(gateway, clientToken.authorizationFingerprint);
+
+            var url = clientToken.braintree_api.url + "/ideal-payments";
+            var accessToken = clientToken.braintree_api.access_token;
+            var routeId = configuration.Ideal.RouteId;
+
+            StringBuilder postDataBuilder = new StringBuilder();
+            postDataBuilder.Append(@"{
+                ""issuer"": ""ROBONL2u"",
+                ""order_id"": ""ABC123"",
+                ""currency"": ""EUR"",
+                ""redirect_url"": ""https:\/\/braintree-api.com"",
+                ""amount"": """);
+            postDataBuilder.Append(amount.ToString());
+            postDataBuilder.Append(@""",");
+            postDataBuilder.Append(@"""route_id"": """);
+            postDataBuilder.Append(routeId);
+            postDataBuilder.Append(@"""}");
+            string postData = postDataBuilder.ToString();
+
+#if netcore
+            var request = new HttpRequestMessage(new HttpMethod("POST"), url);
+            byte[] buffer = Encoding.UTF8.GetBytes(postData);
+            request.Content = new StringContent(postData, Encoding.UTF8, "application/json");
+            request.Headers.Add("Braintree-Version", "2015-11-01");
+            request.Headers.Add("Authorization", "Bearer " + accessToken);
+
+            var httpClientHandler = new HttpClientHandler{};
+
+            HttpResponseMessage response;
+            using (var client = new HttpClient(httpClientHandler))
+            {
+                response = client.SendAsync(request).GetAwaiter().GetResult();
+            }
+            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            string responseBody = reader.ReadToEnd();
+#else
+            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPost ""{url}""";
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "curl",
+                    Arguments = curlCommand,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                }
+            };
+            process.Start();
+
+            StringBuilder responseBodyBuilder = new StringBuilder();
+            while (!process.HasExited)
+            {
+                responseBodyBuilder.Append(process.StandardOutput.ReadToEnd());
+            }
+            responseBodyBuilder.Append(process.StandardOutput.ReadToEnd());
+            string responseBody = responseBodyBuilder.ToString();
+#endif
+            var resDef = new
+            {
+                data = new
+                {
+                    id = "",
+                }
+            };
+            var json = JsonConvert.DeserializeAnonymousType(responseBody, resDef);
+            return json.data.id;
+        }
+
+        public static string GenerateValidIdealPaymentId(BraintreeGateway gateway)
+        {
+            return GenerateValidIdealPaymentId(gateway, SandboxValues.TransactionAmount.AUTHORIZE);
+        }
+
+        public static string GenerateInvalidIdealPaymentId()
+        {
+            var valid_characters = "bcdfghjkmnpqrstvwxyz23456789";
+            var token = "idealpayment";
+            Random rnd = new Random();
+            for(int i=0; i<4; i++) {
+                token += "_";
+                for(int j=0; j<6; j++) {
+                    token += valid_characters[rnd.Next(0,valid_characters.ToCharArray().Length)];
+                }
+            }
+            return token + "_xxx";
+        }
+
         public static int CompareModificationsById(Modification left, Modification right)
         {
             return left.Id.CompareTo(right.Id);
@@ -208,6 +312,31 @@ namespace Braintree.TestUtil
         {
             NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/escrow"));
             Assert.IsTrue(response.IsSuccess());
+        }
+
+        private class ClientConfiguration {
+            [JsonProperty("ideal")]
+            public IdealConfiguration Ideal { get; set; }
+
+            public class IdealConfiguration {
+                [JsonProperty("routeId")]
+                public string RouteId { get; set; }
+            }
+        }
+
+        private static ClientConfiguration GetClientConfiguration(BraintreeGateway gateway, String authorizationFingerprint) {
+            var queryParams = new RequestBuilder();
+            queryParams.AddTopLevelElement("authorizationFingerprint", authorizationFingerprint);
+            queryParams.AddTopLevelElement("configVersion", "3");
+
+            var response = new BraintreeTestHttpService().Get(
+                gateway.MerchantId,
+                "v1/configuration?" + queryParams.ToQueryString()
+            );
+
+            var json = GetResponseContent(response);
+
+            return JsonConvert.DeserializeObject<ClientConfiguration>(json);
         }
 
 #if netcore
@@ -416,6 +545,33 @@ namespace Braintree.TestUtil
                 AddTopLevelElement("paypal_account[consent_code]", "consent").
                 AddTopLevelElement("paypal_account[correlation_id]", Guid.NewGuid().ToString()).
                 AddTopLevelElement("paypal_account[options][validate]", "false");
+
+            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+
+#if netcore
+            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+#else
+            StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
+#endif
+
+            string responseBody = reader.ReadToEnd();
+
+            Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
+            Match match = regex.Match(responseBody);
+            return match.Groups["nonce"].Value;
+        }
+
+        public static string GenerateOrderPaymentPayPalNonce(BraintreeGateway gateway)
+        {
+            var clientToken = GenerateDecodedClientToken(gateway);
+            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            RequestBuilder builder = new RequestBuilder("");
+            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
+                AddTopLevelElement("shared_customer_identifier_type", "testing").
+                AddTopLevelElement("shared_customer_identifier", "test-identifier").
+                AddTopLevelElement("paypal_account[intent]", "order").
+                AddTopLevelElement("paypal_account[payment_token]", Guid.NewGuid().ToString()).
+                AddTopLevelElement("paypal_account[payer_id]", "false");
 
             var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
 

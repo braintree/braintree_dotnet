@@ -28,6 +28,8 @@ namespace Braintree.Tests
             builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             builder.Append("<api-error-response>");
             builder.Append("  <verification>");
+            builder.Append("    <amount>1.02</amount>");
+            builder.Append("    <currency-iso-code>USD</currency-iso-code>");
             builder.Append("    <avs-error-response-code nil=\"true\"></avs-error-response-code>");
             builder.Append("    <avs-postal-code-response-code>I</avs-postal-code-response-code>");
             builder.Append("    <status>processor_declined</status>");
@@ -45,6 +47,8 @@ namespace Braintree.Tests
             doc.LoadXml(builder.ToString());
 
             CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), gateway);
+            Assert.AreEqual(decimal.Parse("1.02"), verification.Amount);
+            Assert.AreEqual("USD", verification.CurrencyIsoCode);
             Assert.AreEqual(null, verification.AvsErrorResponseCode);
             Assert.AreEqual("I", verification.AvsPostalCodeResponseCode);
             Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, verification.Status);
@@ -69,6 +73,8 @@ namespace Braintree.Tests
             doc.LoadXml(builder.ToString());
 
             CreditCardVerification verification = new CreditCardVerification(new NodeWrapper(doc).GetNode("//verification"), gateway);
+            Assert.AreEqual(null, verification.Amount);
+            Assert.AreEqual(null, verification.CurrencyIsoCode);
             Assert.AreEqual(null, verification.AvsErrorResponseCode);
             Assert.AreEqual(null, verification.AvsPostalCodeResponseCode);
             Assert.AreEqual(null, verification.Status);

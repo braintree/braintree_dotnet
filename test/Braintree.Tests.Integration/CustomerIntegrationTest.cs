@@ -761,6 +761,38 @@ namespace Braintree.Tests.Integration
             var customer = result.Target;
             Assert.AreEqual(1, customer.PayPalAccounts.Length);
             Assert.AreEqual(customer.PayPalAccounts[0].Token, customer.DefaultPaymentMethod.Token);
+         }
+
+        [Test]
+        public void Create_WithPayPalOrderPaymentMethodNonce()
+        {            
+            string nonce = TestHelper.GenerateOrderPaymentPayPalNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+                PaymentMethodNonce = nonce
+            });
+            Assert.IsTrue(result.IsSuccess());
+            var customer = result.Target;
+            Assert.AreEqual(1, customer.PayPalAccounts.Length);
+            Assert.AreEqual(customer.PayPalAccounts[0].Token, customer.DefaultPaymentMethod.Token);
+               
+         }
+
+        [Test]
+        public void Create_WithPayPalOrderPaymentMethodNonceAndPayeeEmail()
+        {            
+            string nonce = TestHelper.GenerateOrderPaymentPayPalNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+                PaymentMethodNonce = nonce,
+                Options = new CustomerOptionsRequest {
+                    OptionsPayPal = new CustomerOptionsPayPalRequest {
+                        PayeeEmail = "payee@example.com",
+                    }
+                }
+            });
+            Assert.IsTrue(result.IsSuccess());
+            var customer = result.Target;
+            Assert.AreEqual(1, customer.PayPalAccounts.Length);
+            Assert.AreEqual(customer.PayPalAccounts[0].Token, customer.DefaultPaymentMethod.Token);
                
          }
 
@@ -1280,6 +1312,37 @@ namespace Braintree.Tests.Integration
             var update = new CustomerRequest
             {
                 PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            var updatedCustomer = gateway.Customer.Update(customer.Id, update).Target;
+
+            Assert.AreEqual(1, updatedCustomer.PayPalAccounts.Length);
+            Assert.AreEqual(1, updatedCustomer.CreditCards.Length);
+            Assert.AreEqual(2, updatedCustomer.PaymentMethods.Length);
+        }
+
+        [Test]
+        public void Update_AcceptsPayPalOrderPaymentMethodNonceAndPayeeEmail()
+        {
+            var create = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/18",
+                }
+            };
+            var customer = gateway.Customer.Create(create).Target;
+
+            string paymentMethodNonce = TestHelper.GenerateOrderPaymentPayPalNonce(gateway);
+
+            var update = new CustomerRequest
+            {
+                PaymentMethodNonce = paymentMethodNonce,
+                Options = new CustomerOptionsRequest {
+                    OptionsPayPal = new CustomerOptionsPayPalRequest {
+                        PayeeEmail = "payee@example.com"
+                    }
+                }
             };
             var updatedCustomer = gateway.Customer.Update(customer.Id, update).Target;
 

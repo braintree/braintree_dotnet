@@ -60,6 +60,7 @@ namespace Braintree
         public CreditCardRequest CreditCard { get; set; }
         public UsBankAccountRequest UsBankAccount { get; set; }
         public RiskDataRequest RiskData { get; set; }
+        public CustomerOptionsRequest Options { get; set; }
 
         public override string Kind()
         {
@@ -110,7 +111,8 @@ namespace Braintree
                 AddElement("default-payment-method-token", DefaultPaymentMethodToken).
                 AddElement("credit-card", CreditCard).
                 AddElement("custom-fields", CustomFields).
-                AddElement("risk-data", RiskData);
+                AddElement("risk-data", RiskData).
+                AddElement("options", Options);
         }
     }
 }

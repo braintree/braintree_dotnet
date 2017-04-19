@@ -1,3 +1,9 @@
+## 3.7.0
+* Add Visa Checkout support
+* Add ConnectedMerchantStatusTransitioned and ConnectedMerchantPayPalStatusChanged Auth webhooks
+* Parse access tokens properly
+* Remove unused dependencies
+
 ## 3.6.0
 * Add async support (thanks, @ejohnsonTKTNET and @ebonilla40!)
 * Update Accept-Encoding and User-Agent headers in dotnet core

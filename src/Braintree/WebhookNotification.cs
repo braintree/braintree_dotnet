@@ -10,6 +10,8 @@ namespace Braintree
         public static readonly WebhookKind PARTNER_MERCHANT_CONNECTED = new WebhookKind("partner_merchant_connected");
         public static readonly WebhookKind PARTNER_MERCHANT_DISCONNECTED = new WebhookKind("partner_merchant_disconnected");
         public static readonly WebhookKind PARTNER_MERCHANT_DECLINED = new WebhookKind("partner_merchant_declined");
+        public static readonly WebhookKind CONNECTED_MERCHANT_STATUS_TRANSITIONED = new WebhookKind("connected_merchant_status_transitioned");
+        public static readonly WebhookKind CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED = new WebhookKind("connected_merchant_paypal_status_changed");
         public static readonly WebhookKind SUBSCRIPTION_CANCELED = new WebhookKind("subscription_canceled");
         public static readonly WebhookKind SUBSCRIPTION_CHARGED_SUCCESSFULLY = new WebhookKind("subscription_charged_successfully");
         public static readonly WebhookKind SUBSCRIPTION_CHARGED_UNSUCCESSFULLY = new WebhookKind("subscription_charged_unsuccessfully");
@@ -35,6 +37,8 @@ namespace Braintree
             PARTNER_MERCHANT_CONNECTED,
             PARTNER_MERCHANT_DISCONNECTED,
             PARTNER_MERCHANT_DECLINED,
+            CONNECTED_MERCHANT_STATUS_TRANSITIONED,
+            CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED,
             SUBSCRIPTION_CANCELED,
             SUBSCRIPTION_CHARGED_SUCCESSFULLY,
             SUBSCRIPTION_CHARGED_UNSUCCESSFULLY,
@@ -70,6 +74,8 @@ namespace Braintree
         public virtual Disbursement Disbursement { get; protected set; }
         public virtual Dispute Dispute { get; protected set; }
         public virtual PartnerMerchant PartnerMerchant { get; protected set; }
+        public virtual ConnectedMerchantStatusTransitioned ConnectedMerchantStatusTransitioned { get; protected set; }
+        public virtual ConnectedMerchantPayPalStatusChanged ConnectedMerchantPayPalStatusChanged { get; protected set; }
         public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
@@ -112,6 +118,16 @@ namespace Braintree
             if (WrapperNode.GetNode("partner-merchant") != null)
             {
                 PartnerMerchant = new PartnerMerchant(WrapperNode.GetNode("partner-merchant"));
+            }
+
+            if (WrapperNode.GetNode("connected-merchant-status-transitioned") != null)
+            {
+                ConnectedMerchantStatusTransitioned = new ConnectedMerchantStatusTransitioned(WrapperNode.GetNode("connected-merchant-status-transitioned"));
+            }
+
+            if (WrapperNode.GetNode("connected-merchant-paypal-status-changed") != null)
+            {
+                ConnectedMerchantPayPalStatusChanged = new ConnectedMerchantPayPalStatusChanged(WrapperNode.GetNode("connected-merchant-paypal-status-changed"));
             }
 
             if (WrapperNode.GetNode("account-updater-daily-report") != null)

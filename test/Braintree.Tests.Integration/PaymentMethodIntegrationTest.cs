@@ -66,6 +66,53 @@ namespace Braintree.Tests.Integration
         }
         
         [Test]
+        public void Create_CreatesPayPalAccountWithOrderPaymentNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            string nonce = TestHelper.GenerateOrderPaymentPayPalNonce(gateway);
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
+            Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
+        }
+        
+        [Test]
+        public void Create_CreatesPayPalAccountWithOrderPaymentNonceAndPayeeEmail()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            string nonce = TestHelper.GenerateOrderPaymentPayPalNonce(gateway);
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest {
+                    OptionsPayPal = new PaymentMethodOptionsPayPalRequest {
+                        PayeeEmail = "payee@example.com"
+                    }
+                }
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
+            Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
+        }
+        
+        [Test]
         public void Create_CreatesPayPalAccountWithOneTimePaymentNonceFails()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());

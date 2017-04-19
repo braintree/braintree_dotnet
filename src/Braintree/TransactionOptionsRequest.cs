@@ -13,6 +13,8 @@ namespace Braintree
         public string VenmoSdkSession { get; set; }
         public string PayeeEmail { get; set; }
         public bool? SkipAdvancedFraudChecking { get; set; }
+        public bool? SkipAvs { get; set; }
+        public bool? SkipCvv { get; set; }
         public TransactionOptionsPayPalRequest PayPal { get; set; }
         public TransactionOptionsThreeDSecureRequest ThreeDSecure { get; set; }
         public TransactionOptionsAmexRewardsRequest AmexRewards { get; set; }
@@ -39,6 +41,8 @@ namespace Braintree
                 AddElement("venmo-sdk-session", VenmoSdkSession).
                 AddElement("payee-email", PayeeEmail).
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).
+                AddElement("skip-avs", SkipAvs).
+                AddElement("skip-cvv", SkipCvv).
                 AddElement("three-d-secure", ThreeDSecure).
                 AddElement("paypal", PayPal).
                 AddElement("amex-rewards", AmexRewards);

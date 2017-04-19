@@ -118,10 +118,12 @@ namespace Braintree
         public static readonly PaymentInstrumentType AMEX_EXPRESS_CHECKOUT_CARD = new PaymentInstrumentType("amex_express_checkout_card");
         public static readonly PaymentInstrumentType VENMO_ACCOUNT = new PaymentInstrumentType("venmo_account");
         public static readonly PaymentInstrumentType US_BANK_ACCOUNT = new PaymentInstrumentType("us_bank_account");
+        public static readonly PaymentInstrumentType VISA_CHECKOUT_CARD = new PaymentInstrumentType("visa_checkout_card");
+        public static readonly PaymentInstrumentType MASTERPASS_CARD = new PaymentInstrumentType("masterpass_card");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
 
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, ANY, UNKNOWN };
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, ANY, UNKNOWN };
 
         protected PaymentInstrumentType(string name) : base(name) {}
     }
@@ -194,6 +196,9 @@ namespace Braintree
         public virtual CoinbaseDetails CoinbaseDetails { get; protected set; }
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
         public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
+        public virtual IdealPaymentDetails IdealPaymentDetails { get; protected set; }
+        public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
+        public virtual MasterpassCardDetails MasterpassCardDetails { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
@@ -309,6 +314,21 @@ namespace Braintree
             if (usBankAccountNode != null)
             {
                 UsBankAccountDetails = new UsBankAccountDetails(usBankAccountNode);
+            }
+            var idealPaymentNode = node.GetNode("ideal-payment");
+            if (idealPaymentNode != null)
+            {
+                IdealPaymentDetails = new IdealPaymentDetails(idealPaymentNode);
+            }
+            var visaCheckoutNode = node.GetNode("visa-checkout-card");
+            if (visaCheckoutNode != null)
+            {
+                VisaCheckoutCardDetails = new VisaCheckoutCardDetails(visaCheckoutNode);
+            }
+            var masterpassNode = node.GetNode("masterpass-card");
+            if (masterpassNode != null)
+            {
+                MasterpassCardDetails = new MasterpassCardDetails(masterpassNode);
             }
 
             BillingAddress = new Address(node.GetNode("billing"));

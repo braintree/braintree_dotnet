@@ -291,6 +291,32 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForAConnectedMerchantStatusTransitioned()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CONNECTED_MERCHANT_STATUS_TRANSITIONED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.CONNECTED_MERCHANT_STATUS_TRANSITIONED, notification.Kind);
+          Assert.AreEqual("my_id", notification.ConnectedMerchantStatusTransitioned.MerchantPublicId);
+          Assert.AreEqual("new_status", notification.ConnectedMerchantStatusTransitioned.Status);
+          Assert.AreEqual("oauth_application_client_id", notification.ConnectedMerchantStatusTransitioned.OAuthApplicationClientId);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForAConnectedMerchantPayPalStatusChanged()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED, notification.Kind);
+          Assert.AreEqual("my_id", notification.ConnectedMerchantPayPalStatusChanged.MerchantPublicId);
+          Assert.AreEqual("link", notification.ConnectedMerchantPayPalStatusChanged.Action);
+          Assert.AreEqual("oauth_application_client_id", notification.ConnectedMerchantPayPalStatusChanged.OAuthApplicationClientId);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForSubscriptionChargedSuccessfully()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY, "my_id");

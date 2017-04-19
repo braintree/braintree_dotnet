@@ -9,6 +9,7 @@ namespace Braintree
         public bool? FailOnDuplicatePaymentMethod { get; set; }
         public string VerificationMerchantAccountId { get; set; }
         public string VerificationAmount { get; set; }
+        public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
 
         public override string ToXml(string root)
         {
@@ -27,7 +28,8 @@ namespace Braintree
                 AddElement("verification-merchant-account-id", VerificationMerchantAccountId).
                 AddElement("verify-card", VerifyCard).
                 AddElement("verification-amount", VerificationAmount).
-                AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod);
+                AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).
+                AddElement("paypal", OptionsPayPal);
         }
     }
 }

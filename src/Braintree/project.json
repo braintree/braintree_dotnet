@@ -6,12 +6,13 @@
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.6.0-*",
+  "version": "3.7.0-*",
   "packOptions": {
     "releaseNotes": "
-* Add async support (thanks, @ejohnsonTKTNET and @ebonilla40!)
-* Update Accept-Encoding and User-Agent headers in dotnet core
-* Add stricter XML processing
+* Add Visa Checkout support
+* Add ConnectedMerchantStatusTransitioned and ConnectedMerchantPayPalStatusChanged Auth webhooks
+* Parse access tokens properly
+* Remove unused dependencies
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for
@@ -38,8 +39,7 @@
       "dependencies": {},
       "frameworkAssemblies": {
         "System.Xml": "4.0.0.0",
-        "System.Net": "4.0.0.0",
-        "System.Web": "4.0.0.0"
+        "System.Net": "4.0.0.0"
       }
     },
     "netstandard1.3": {
@@ -49,7 +49,6 @@
         ]
       },
       "dependencies": {
-        "Microsoft.AspNet.WebUtilities": "1.0.0-rc1-final",
         "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
         "NETStandard.Library": "1.6.0",
         "System.Xml.XPath.XmlDocument": "4.0.1"

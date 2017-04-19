@@ -47,5 +47,13 @@ namespace Braintree.Test
         public const string PayPalBillingAgreement = "fake-paypal-billing-agreement-nonce";
         public const string SEPA = "fake-sepa-bank-account-nonce";
         public const string GatewayRejectedFraud = "fake-gateway-rejected-fraud-nonce";
+        public const string MasterpassAmEx = "fake-masterpass-amex-nonce";
+        public const string MasterpassDiscover = "fake-masterpass-discover-nonce";
+        public const string MasterpassMasterCard = "fake-masterpass-mastercard-nonce";
+        public const string MasterpassVisa = "fake-masterpass-visa-nonce";
+        public const string VisaCheckoutAmEx = "fake-visa-checkout-amex-nonce";
+        public const string VisaCheckoutDiscover = "fake-visa-checkout-discover-nonce";
+        public const string VisaCheckoutMasterCard = "fake-visa-checkout-mastercard-nonce";
+        public const string VisaCheckoutVisa = "fake-visa-checkout-visa-nonce";
     }
 }

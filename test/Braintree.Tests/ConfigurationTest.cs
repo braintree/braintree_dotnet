@@ -121,6 +121,17 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ConfigurationWithAccessToken_ParsesToken()
+        {
+            Configuration configuration = new Configuration {
+                AccessToken = "access_token$development$merchant_id$access_token_id"
+            };
+
+            Assert.AreEqual("merchant_id", configuration.MerchantId);
+            Assert.AreEqual(Environment.DEVELOPMENT, configuration.Environment);
+        }
+
+        [Test]
         public void BaseMerchantURL_ReturnsDevelopmentURL()
         {
             BraintreeService service = new BraintreeService(new Configuration(

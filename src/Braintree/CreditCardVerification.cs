@@ -22,9 +22,11 @@ namespace Braintree
 
     public class CreditCardVerification
     {
+        public virtual decimal? Amount { get; protected set; }
         public virtual string AvsErrorResponseCode { get; protected set; }
         public virtual string AvsPostalCodeResponseCode { get; protected set; }
         public virtual string AvsStreetAddressResponseCode { get; protected set; }
+        public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string CvvResponseCode { get; protected set; }
         public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
@@ -41,9 +43,11 @@ namespace Braintree
         {
             if (node == null) return;
 
+            Amount = node.GetDecimal("amount");
             AvsErrorResponseCode = node.GetString("avs-error-response-code");
             AvsPostalCodeResponseCode = node.GetString("avs-postal-code-response-code");
             AvsStreetAddressResponseCode = node.GetString("avs-street-address-response-code");
+            CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
             GatewayRejectionReason = (TransactionGatewayRejectionReason)CollectionUtil.Find(
                 TransactionGatewayRejectionReason.ALL,

@@ -127,6 +127,14 @@ namespace Braintree
             {
                 return new ResultImpl<VenmoAccount>(response, gateway);
             }
+            else if (response.GetName() == "visa-checkout-card")
+            {
+                return new ResultImpl<VisaCheckoutCard>(response, gateway);
+            }
+            else if (response.GetName() == "masterpass-card")
+            {
+                return new ResultImpl<MasterpassCard>(response, gateway);
+            }
             else
             {
                 return new ResultImpl<UnknownPaymentMethod>(response, gateway);
@@ -162,6 +170,14 @@ namespace Braintree
             else if (response.GetName() == "venmo-account")
             {
                 return new VenmoAccount(response, gateway);
+            }
+            else if (response.GetName() == "visa-checkout-card")
+            {
+                return new VisaCheckoutCard(response, gateway);
+            }
+            else if (response.GetName() == "masterpass-card")
+            {
+                return new MasterpassCard(response, gateway);
             }
             else
             {

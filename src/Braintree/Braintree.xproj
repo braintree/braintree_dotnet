@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.6.0</AssemblyName>
+    <AssemblyName>Braintree-3.7.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -78,6 +78,8 @@
     <Compile Include="CoinbaseDetails.cs" />
     <Compile Include="CollectionUtil.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="ConnectedMerchantPayPalStatusChanged.cs" />
+    <Compile Include="ConnectedMerchantStatusTransitioned.cs" />
     <Compile Include="CreditCard.cs" />
     <Compile Include="CreditCardAddressOptionsRequest.cs" />
     <Compile Include="CreditCardAddressRequest.cs" />
@@ -92,6 +94,8 @@
     <Compile Include="Crypto.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="CustomerGateway.cs" />
+    <Compile Include="CustomerOptionsRequest.cs" />
+    <Compile Include="CustomerOptionsPayPalRequest.cs" />
     <Compile Include="CustomerRequest.cs" />
     <Compile Include="DateRangeNode.cs" />
     <Compile Include="DescriptorRequest.cs" />
@@ -175,6 +179,7 @@
     <Compile Include="PaymentMethodGateway.cs" />
     <Compile Include="PaymentMethodNonceGateway.cs" />
     <Compile Include="PaymentMethodOptionsRequest.cs" />
+    <Compile Include="PaymentMethodOptionsPayPalRequest.cs" />
     <Compile Include="PaymentMethodRequest.cs" />
     <Compile Include="PaymentMethodDeleteRequest.cs" />
     <Compile Include="PaymentMethodGrantRequest.cs" />
@@ -236,11 +241,20 @@
     <Compile Include="UsBankAccountRequest.cs" />
     <Compile Include="UsBankAccountGateway.cs" />
     <Compile Include="IUsBankAccountGateway.cs" />
+    <Compile Include="IbanBankAccount.cs" />
+    <Compile Include="IdealPayment.cs" />
+    <Compile Include="IdealPaymentDetails.cs" />
+    <Compile Include="IdealPaymentGateway.cs" />
+    <Compile Include="IIdealPaymentGateway.cs" />
     <Compile Include="ValidationError.cs" />
     <Compile Include="ValidationErrorCode.cs" />
     <Compile Include="ValidationErrors.cs" />
     <Compile Include="VenmoAccount.cs" />
     <Compile Include="VenmoAccountDetails.cs" />
+    <Compile Include="VisaCheckoutCard.cs" />
+    <Compile Include="VisaCheckoutCardDetails.cs" />
+    <Compile Include="MasterpassCard.cs" />
+    <Compile Include="MasterpassCardDetails.cs" />
     <Compile Include="ModificationRequest.cs" />
     <Compile Include="StringUtil.cs" />
     <Compile Include="MultipleValueOrTextNode.cs" />
@@ -271,7 +285,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
 </Project>

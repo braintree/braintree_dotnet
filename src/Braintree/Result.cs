@@ -124,6 +124,14 @@ namespace Braintree
             {
                 return new UsBankAccount(node) as T;
             }
+            else if (typeof(T) == typeof(VisaCheckoutCard))
+            {
+                return new VisaCheckoutCard(node, gateway) as T;
+            }
+            else if (typeof(T) == typeof(MasterpassCard))
+            {
+                return new MasterpassCard(node, gateway) as T;
+            }
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {
                 return new UnknownPaymentMethod(node) as T;

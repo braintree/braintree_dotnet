@@ -21,7 +21,7 @@
           "type": "platform",
           "version": "1.0.0"
         },
-        "Microsoft.AspNetCore.WebUtilities": "1.0.0"
+        "Microsoft.AspNetCore.WebUtilities": "1.1.1"
       }
     },
     "net452": {
