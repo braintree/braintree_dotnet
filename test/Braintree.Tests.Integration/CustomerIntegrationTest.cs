@@ -778,14 +778,18 @@ namespace Braintree.Tests.Integration
          }
 
         [Test]
-        public void Create_WithPayPalOrderPaymentMethodNonceAndPayeeEmail()
-        {            
+        public void Create_WithPayPalOrderPaymentMethodNonceAndPayPalOptions()
+        {
             string nonce = TestHelper.GenerateOrderPaymentPayPalNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
                 PaymentMethodNonce = nonce,
                 Options = new CustomerOptionsRequest {
                     OptionsPayPal = new CustomerOptionsPayPalRequest {
                         PayeeEmail = "payee@example.com",
+                        OrderId = "order-id",
+                        CustomField = "custom merchant field",
+                        Description = "merchant description",
+                        Amount = 1.23M,
                     }
                 }
             });
@@ -793,7 +797,6 @@ namespace Braintree.Tests.Integration
             var customer = result.Target;
             Assert.AreEqual(1, customer.PayPalAccounts.Length);
             Assert.AreEqual(customer.PayPalAccounts[0].Token, customer.DefaultPaymentMethod.Token);
-               
          }
 
         [Test]

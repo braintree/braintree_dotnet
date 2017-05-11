@@ -87,7 +87,7 @@ namespace Braintree.Tests.Integration
         }
         
         [Test]
-        public void Create_CreatesPayPalAccountWithOrderPaymentNonceAndPayeeEmail()
+        public void Create_CreatesPayPalAccountWithOrderPaymentNonceAndPayPalOptions()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
@@ -99,7 +99,11 @@ namespace Braintree.Tests.Integration
                 PaymentMethodNonce = nonce,
                 Options = new PaymentMethodOptionsRequest {
                     OptionsPayPal = new PaymentMethodOptionsPayPalRequest {
-                        PayeeEmail = "payee@example.com"
+                        PayeeEmail = "payee@example.com",
+                        OrderId = "order-id",
+                        CustomField = "custom merchant field",
+                        Description = "merchant description",
+                        Amount = 1.23M,
                     }
                 }
             };

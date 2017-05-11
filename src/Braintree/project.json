@@ -1,18 +1,15 @@
 {
   "name": "Braintree",
   "description": "Braintree Client Library",
-  "copyright": "Copyright © Braintree, a division of PayPal, Inc. 2016",
+  "copyright": "Copyright © Braintree, a division of PayPal, Inc. 2017",
   "authors": ["Braintree"],
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.7.0-*",
+  "version": "3.8.0-*",
   "packOptions": {
     "releaseNotes": "
-* Add Visa Checkout support
-* Add ConnectedMerchantStatusTransitioned and ConnectedMerchantPayPalStatusChanged Auth webhooks
-* Parse access tokens properly
-* Remove unused dependencies
+* Add support for additional PayPal options when vaulting a PayPal Order
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for

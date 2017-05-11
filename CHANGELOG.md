@@ -1,3 +1,6 @@
+## 3.8.0
+* Add support for additional PayPal options when vaulting a PayPal Order
+
 ## 3.7.0
 * Add Visa Checkout support
 * Add ConnectedMerchantStatusTransitioned and ConnectedMerchantPayPalStatusChanged Auth webhooks
