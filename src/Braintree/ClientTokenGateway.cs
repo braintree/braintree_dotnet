@@ -42,7 +42,7 @@ namespace Braintree
         {
             if (request == null) request = new ClientTokenRequest();
             verifyOptions(request);
-            XmlNode response = await Service.PostAsync(Service.MerchantPath() + "/client_token", request);
+            XmlNode response = await Service.PostAsync(Service.MerchantPath() + "/client_token", request).ConfigureAwait(false);
 
             if (response.Name.Equals("client-token"))
             {

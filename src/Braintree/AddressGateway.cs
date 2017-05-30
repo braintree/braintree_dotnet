@@ -30,7 +30,7 @@ namespace Braintree
 
         public virtual async Task<Result<Address>> CreateAsync(string customerId, AddressRequest request)
         {
-            XmlNode addressXML = await Service.PostAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses", request);
+            XmlNode addressXML = await Service.PostAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses", request).ConfigureAwait(false);
 
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
@@ -44,7 +44,7 @@ namespace Braintree
 
         public virtual async Task<Result<Address>> DeleteAsync(string customerId, string id)
         {
-            XmlNode addressXML = await Service.DeleteAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
+            XmlNode addressXML = await Service.DeleteAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id).ConfigureAwait(false);
 
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }
@@ -68,7 +68,7 @@ namespace Braintree
                 throw new NotFoundException();
             }
 
-            XmlNode addressXML = await Service.GetAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id);
+            XmlNode addressXML = await Service.GetAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id).ConfigureAwait(false);
 
             return new Address(new NodeWrapper(addressXML));
         }
@@ -83,7 +83,7 @@ namespace Braintree
 
         public virtual async Task<Result<Address>> UpdateAsync(string customerId, string id, AddressRequest request)
         {
-            XmlNode addressXML = await Service.PutAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id, request);
+            XmlNode addressXML = await Service.PutAsync(Service.MerchantPath() + "/customers/" + customerId + "/addresses/" + id, request).ConfigureAwait(false);
 
             return new ResultImpl<Address>(new NodeWrapper(addressXML), Gateway);
         }

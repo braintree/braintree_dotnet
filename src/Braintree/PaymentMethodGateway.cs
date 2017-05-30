@@ -23,7 +23,7 @@ namespace Braintree
 
         public async Task<Result<PaymentMethod>> CreateAsync(PaymentMethodRequest request)
         {
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods", request));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods", request).ConfigureAwait(false));
             return ExtractResultFromResponse(response);
         }
 
@@ -46,7 +46,7 @@ namespace Braintree
 
         public async Task<Result<PaymentMethod>> DeleteAsync(string token)
         {
-            var response = new NodeWrapper(await service.DeleteAsync(service.MerchantPath() + "/payment_methods/any/" + token));
+            var response = new NodeWrapper(await service.DeleteAsync(service.MerchantPath() + "/payment_methods/any/" + token).ConfigureAwait(false));
             return new ResultImpl<UnknownPaymentMethod>(response, gateway);
         }
 
@@ -72,7 +72,7 @@ namespace Braintree
             if(token == null || token.Trim().Equals(""))
                 throw new NotFoundException();
 
-            var response = new NodeWrapper(await service.GetAsync(service.MerchantPath() + "/payment_methods/any/" + token));
+            var response = new NodeWrapper(await service.GetAsync(service.MerchantPath() + "/payment_methods/any/" + token).ConfigureAwait(false));
             return ExtractPaymentMethodFromResponse(response);
         }
 

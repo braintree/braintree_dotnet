@@ -27,7 +27,7 @@ namespace Braintree
 
         public virtual async Task<List<AddOn>> AllAsync()
         {
-            var response = new NodeWrapper(await Service.GetAsync(Service.MerchantPath() + "/add_ons"));
+            var response = new NodeWrapper(await Service.GetAsync(Service.MerchantPath() + "/add_ons").ConfigureAwait(false));
 
             var addOns = new List<AddOn>();
             foreach (var node in response.GetList("add-on"))

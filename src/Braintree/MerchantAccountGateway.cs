@@ -26,7 +26,7 @@ namespace Braintree
 
         public virtual async Task<Result<MerchantAccount>> CreateAsync(MerchantAccountRequest request)
         {
-            XmlNode merchantAccountXML = await service.PostAsync(service.MerchantPath() + "/merchant_accounts/create_via_api", request);
+            XmlNode merchantAccountXML = await service.PostAsync(service.MerchantPath() + "/merchant_accounts/create_via_api", request).ConfigureAwait(false);
 
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
@@ -40,7 +40,7 @@ namespace Braintree
 
         public virtual async Task<Result<MerchantAccount>> CreateForCurrencyAsync(MerchantAccountCreateForCurrencyRequest request)
         {
-            XmlNode merchantAccountXML = await service.PostAsync(service.MerchantPath() + "/merchant_accounts/create_for_currency", request);
+            XmlNode merchantAccountXML = await service.PostAsync(service.MerchantPath() + "/merchant_accounts/create_for_currency", request).ConfigureAwait(false);
 
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
@@ -54,7 +54,7 @@ namespace Braintree
 
         public virtual async Task<Result<MerchantAccount>> UpdateAsync(string id, MerchantAccountRequest request)
         {
-            XmlNode merchantAccountXML = await service.PutAsync(service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request);
+            XmlNode merchantAccountXML = await service.PutAsync(service.MerchantPath() + "/merchant_accounts/" + id + "/update_via_api", request).ConfigureAwait(false);
 
             return new ResultImpl<MerchantAccount>(new NodeWrapper(merchantAccountXML), gateway);
         }
@@ -78,7 +78,7 @@ namespace Braintree
                 throw new NotFoundException();
             }
 
-            XmlNode merchantAccountXML = await service.GetAsync(service.MerchantPath() + "/merchant_accounts/" + id);
+            XmlNode merchantAccountXML = await service.GetAsync(service.MerchantPath() + "/merchant_accounts/" + id).ConfigureAwait(false);
 
             return new MerchantAccount(new NodeWrapper(merchantAccountXML));
         }

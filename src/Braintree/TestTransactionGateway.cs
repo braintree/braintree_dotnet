@@ -38,7 +38,7 @@ namespace Braintree
         public virtual async Task<Transaction> SettleAsync(string id)
         {
             CheckEnvironment();
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/settle");
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/settle").ConfigureAwait(false);
             return new Transaction(new NodeWrapper(response), gateway);
         }
 
@@ -52,7 +52,7 @@ namespace Braintree
         public virtual async Task<Transaction> SettlementConfirmAsync(string id)
         {
             CheckEnvironment();
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/settlement_confirm");
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/settlement_confirm").ConfigureAwait(false);
             return new Transaction(new NodeWrapper(response), gateway);
         }
 
@@ -73,7 +73,7 @@ namespace Braintree
         public virtual async Task<Transaction> SettlementDeclineAsync(string id)
         {
             CheckEnvironment();
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/settlement_decline");
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/settlement_decline").ConfigureAwait(false);
             return new Transaction(new NodeWrapper(response), gateway);
         }
     }

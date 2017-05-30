@@ -23,7 +23,7 @@ namespace Braintree
 
         public async Task<Result<PaymentMethodNonce>> CreateAsync(string token)
         {
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/" + token + "/nonces"));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/" + token + "/nonces").ConfigureAwait(false));
 
             return new ResultImpl<PaymentMethodNonce>(response, gateway);
         }
@@ -37,7 +37,7 @@ namespace Braintree
 
         public virtual async Task<PaymentMethodNonce> FindAsync(string nonce)
         {
-            var response = new NodeWrapper(await service.GetAsync(service.MerchantPath() + "/payment_method_nonces/" + nonce));
+            var response = new NodeWrapper(await service.GetAsync(service.MerchantPath() + "/payment_method_nonces/" + nonce).ConfigureAwait(false));
 
             return new PaymentMethodNonce(response, gateway);
         }

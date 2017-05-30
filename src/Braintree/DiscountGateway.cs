@@ -27,7 +27,7 @@ namespace Braintree
 
         public virtual async Task<List<Discount>> AllAsync()
         {
-            var response = new NodeWrapper(await service.GetAsync(service.MerchantPath() + "/discounts"));
+            var response = new NodeWrapper(await service.GetAsync(service.MerchantPath() + "/discounts").ConfigureAwait(false));
 
             var discounts = new List<Discount>();
             foreach (var node in response.GetList("discount"))

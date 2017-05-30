@@ -42,7 +42,7 @@ namespace Braintree
         {
             var request = new TransactionRequest();
 
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/cancel_release", request);
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/cancel_release", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
@@ -69,7 +69,7 @@ namespace Braintree
         {
             var request = new TransactionRequest();
 
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/hold_in_escrow", request);
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/hold_in_escrow", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
@@ -99,7 +99,7 @@ namespace Braintree
         public virtual async Task<Result<Transaction>> CreditAsync(TransactionRequest request)
         {
             request.Type = TransactionType.CREDIT;
-            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", request);
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
@@ -119,7 +119,7 @@ namespace Braintree
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode response = await service.GetAsync(service.MerchantPath() + "/transactions/" + id);
+            XmlNode response = await service.GetAsync(service.MerchantPath() + "/transactions/" + id).ConfigureAwait(false);
 
             return new Transaction(new NodeWrapper(response), gateway);
         }
@@ -132,7 +132,7 @@ namespace Braintree
 
         public virtual async Task<Result<Transaction>> RefundAsync(string id)
         {
-            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions/" + id + "/refund");
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions/" + id + "/refund").ConfigureAwait(false);
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
@@ -146,14 +146,14 @@ namespace Braintree
             return Refund(id, request);
         }
 
-        public virtual async Task<Result<Transaction>> RefundAsync(string id, decimal amount)
+        public virtual Task<Result<Transaction>> RefundAsync(string id, decimal amount)
         {
             var request = new TransactionRefundRequest
             {
                 Amount = amount
             };
 
-            return await RefundAsync(id, request);
+            return RefundAsync(id, request);
         }
 
         public virtual Result<Transaction> Refund(string id, TransactionRefundRequest refundRequest)
@@ -164,7 +164,7 @@ namespace Braintree
 
         public virtual async Task<Result<Transaction>> RefundAsync(string id, TransactionRefundRequest refundRequest)
         {
-            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions/" + id + "/refund", refundRequest);
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions/" + id + "/refund", refundRequest).ConfigureAwait(false);
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
@@ -179,7 +179,7 @@ namespace Braintree
         public virtual async Task<Result<Transaction>> SaleAsync(TransactionRequest request)
         {
             request.Type = TransactionType.SALE;
-            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", request);
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
@@ -197,7 +197,7 @@ namespace Braintree
         {
             var request = new TransactionRequest();
 
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/release_from_escrow", request);
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/release_from_escrow", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
@@ -207,9 +207,9 @@ namespace Braintree
             return SubmitForSettlement(id, 0);
         }
 
-        public virtual async Task<Result<Transaction>> SubmitForSettlementAsync(string id)
+        public virtual Task<Result<Transaction>> SubmitForSettlementAsync(string id)
         {
-            return await SubmitForSettlementAsync(id, 0);
+            return SubmitForSettlementAsync(id, 0);
         }
 
         public virtual Result<Transaction> SubmitForSettlement(string id, decimal amount)
@@ -229,7 +229,7 @@ namespace Braintree
                 Amount = amount
             };
 
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request);
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request).ConfigureAwait(false);
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
@@ -271,7 +271,7 @@ namespace Braintree
 
         public virtual async Task<Result<Transaction>> VoidAsync(string id)
         {
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/void");
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/void").ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
@@ -294,7 +294,7 @@ namespace Braintree
 
         public virtual async Task<ResourceCollection<Transaction>> SearchAsync(TransactionSearchRequest query)
         {
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/transactions/advanced_search_ids", query));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/transactions/advanced_search_ids", query).ConfigureAwait(false));
 
             if (response.GetName() == "search-results")
             {
@@ -317,7 +317,7 @@ namespace Braintree
 
         public virtual async Task<Result<Transaction>> CloneTransactionAsync(string id, TransactionCloneRequest cloneRequest)
         {
-            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions/" + id + "/clone", cloneRequest);
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions/" + id + "/clone", cloneRequest).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }

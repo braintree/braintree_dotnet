@@ -33,7 +33,7 @@ namespace Braintree
 
         public virtual async Task<Result<Subscription>> CreateAsync(SubscriptionRequest request)
         {
-            XmlNode subscriptionXML = await service.PostAsync(service.MerchantPath() + "/subscriptions", request);
+            XmlNode subscriptionXML = await service.PostAsync(service.MerchantPath() + "/subscriptions", request).ConfigureAwait(false);
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
         }
@@ -53,7 +53,7 @@ namespace Braintree
             if(id == null || id.Trim().Equals(""))
                 throw new NotFoundException();
 
-            XmlNode subscriptionXML = await service.GetAsync(service.MerchantPath() + "/subscriptions/" + id);
+            XmlNode subscriptionXML = await service.GetAsync(service.MerchantPath() + "/subscriptions/" + id).ConfigureAwait(false);
 
             return new Subscription(new NodeWrapper(subscriptionXML), gateway);
         }
@@ -67,7 +67,7 @@ namespace Braintree
 
         public virtual async Task<Result<Subscription>> UpdateAsync(string id, SubscriptionRequest request)
         {
-            XmlNode subscriptionXML = await service.PutAsync(service.MerchantPath() + "/subscriptions/" + id, request);
+            XmlNode subscriptionXML = await service.PutAsync(service.MerchantPath() + "/subscriptions/" + id, request).ConfigureAwait(false);
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
         }
@@ -81,7 +81,7 @@ namespace Braintree
 
         public virtual async Task<Result<Subscription>> CancelAsync(string id)
         {
-            XmlNode subscriptionXML = await service.PutAsync(service.MerchantPath() + "/subscriptions/" + id + "/cancel");
+            XmlNode subscriptionXML = await service.PutAsync(service.MerchantPath() + "/subscriptions/" + id + "/cancel").ConfigureAwait(false);
 
             return new ResultImpl<Subscription>(new NodeWrapper(subscriptionXML), gateway);
         }
@@ -111,7 +111,7 @@ namespace Braintree
 
         public virtual async Task<ResourceCollection<Subscription>> SearchAsync(SubscriptionSearchRequest query)
         {
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/subscriptions/advanced_search_ids", query).ConfigureAwait(false));
 
             return new ResourceCollection<Subscription>(response, delegate(string[] ids) {
                 return FetchSubscriptions(query, ids);
@@ -145,7 +145,7 @@ namespace Braintree
         }
 
         private async Task<Result<Transaction>> RetryChargeAsync(SubscriptionTransactionRequest txnRequest) {
-            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", txnRequest);
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", txnRequest).ConfigureAwait(false);
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
@@ -156,8 +156,8 @@ namespace Braintree
             });
         }
 
-        public async Task<Result<Transaction>> RetryChargeAsync(string subscriptionId) {
-            return await RetryChargeAsync(new SubscriptionTransactionRequest
+        public Task<Result<Transaction>> RetryChargeAsync(string subscriptionId) {
+            return RetryChargeAsync(new SubscriptionTransactionRequest
             {
                 SubscriptionId = subscriptionId
             });
@@ -171,8 +171,8 @@ namespace Braintree
             });
         }
 
-        public async Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, decimal amount) {
-            return await RetryChargeAsync(new SubscriptionTransactionRequest
+        public Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, decimal amount) {
+            return RetryChargeAsync(new SubscriptionTransactionRequest
             {
                 SubscriptionId = subscriptionId,
                 Amount = amount
