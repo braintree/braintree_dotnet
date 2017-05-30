@@ -66,9 +66,6 @@
     <Compile Include="ThreeDSecureRequestForTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Braintree\Braintree.xproj">
-      <Project>{D0A473FA-E30B-4AF8-BB78-C1D81C9CAAB5}</Project>
-      <Name>Braintree</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\src\Braintree\Braintree.xproj" />
   </ItemGroup>
 </Project>

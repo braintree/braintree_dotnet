@@ -6,6 +6,7 @@ namespace Braintree
         public virtual bool? IsDefault { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
         public virtual string CustomerId { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get { return PaymentInstrumentType.UNKNOWN; } }
 
         public UnknownPaymentMethod(NodeWrapper node)
         {

@@ -18,6 +18,7 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual Subscription[] Subscriptions { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get { return PaymentInstrumentType.AMEX_EXPRESS_CHECKOUT_CARD; } }
 
         protected internal AmexExpressCheckoutCard(NodeWrapper node, IBraintreeGateway gateway)
         {

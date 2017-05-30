@@ -14,6 +14,7 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual Subscription[] Subscriptions { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get { return PaymentInstrumentType.COINBASE_ACCOUNT; } }
 
         protected internal CoinbaseAccount(NodeWrapper node, IBraintreeGateway gateway)
         {
