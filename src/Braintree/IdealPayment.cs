@@ -26,7 +26,11 @@ namespace Braintree
             OrderId = node.GetString("order-id");
             Issuer = node.GetString("issuer");
             ApprovalUrl = node.GetString("approval-url");
-            IbanBankAccount = new IbanBankAccount(node.GetNode("iban-bank-account"));
+
+            if (node.GetNode("iban-bank-account") != null)
+            {
+                IbanBankAccount = new IbanBankAccount(node.GetNode("iban-bank-account"));
+            }
         }
 
         [Obsolete("Mock Use Only")]

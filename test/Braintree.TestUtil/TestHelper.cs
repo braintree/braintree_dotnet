@@ -23,7 +23,7 @@ namespace Braintree.TestUtil
 
         public static string GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
         {
-            var encodedClientToken = gateway.ClientToken.generate(request);
+            var encodedClientToken = gateway.ClientToken.Generate(request);
             var decodedClientToken = Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
             var unescapedClientToken = Regex.Unescape(decodedClientToken);
             return unescapedClientToken;

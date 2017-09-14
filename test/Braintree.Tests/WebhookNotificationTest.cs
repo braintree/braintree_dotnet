@@ -345,6 +345,42 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForIdealPaymentComplete()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.IDEAL_PAYMENT_COMPLETE, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.IDEAL_PAYMENT_COMPLETE, notification.Kind);
+          IdealPayment idealPayment = notification.IdealPayment;
+
+          Assert.AreEqual("my_id", idealPayment.Id);
+          Assert.AreEqual("COMPLETE", idealPayment.Status);
+          Assert.AreEqual("ORDERABC", idealPayment.OrderId);
+          Assert.AreEqual(10.00m, idealPayment.Amount);
+          Assert.AreEqual("https://example.com", idealPayment.ApprovalUrl);
+          Assert.AreEqual("1234567890", idealPayment.IdealTransactionId);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForIdealPaymentFailed()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.IDEAL_PAYMENT_FAILED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.IDEAL_PAYMENT_FAILED, notification.Kind);
+          IdealPayment idealPayment = notification.IdealPayment;
+
+          Assert.AreEqual("my_id", idealPayment.Id);
+          Assert.AreEqual("FAILED", idealPayment.Status);
+          Assert.AreEqual("ORDERABC", idealPayment.OrderId);
+          Assert.AreEqual(10.00m, idealPayment.Amount);
+          Assert.AreEqual("https://example.com", idealPayment.ApprovalUrl);
+          Assert.AreEqual("1234567890", idealPayment.IdealTransactionId);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForCheck()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CHECK, "");

@@ -19,6 +19,11 @@ namespace Braintree
             }
         }
 
+        public class Dispute
+        {
+            public const string CHARGEBACK = "4023898493988028";
+        }
+
         public class TransactionAmount
         {
             public const decimal AUTHORIZE = 1000;

@@ -64,13 +64,13 @@ namespace :mono do
   end
 
   namespace :test_focus do
-    desc "Test name as Braintree.Tests.PaymentMethodTest.ToXml_IncludesDeviceData"
+    desc "e.g. rake mono:test_focus:unit[Braintree.Tests.PaymentMethodTest.ToXml_IncludesDeviceData]"
     task :unit, [:test_name] do |t, args|
       sh "xbuild Braintree.sln"
       sh "mono test/lib/NUnit-3.4.1/bin/Release/nunit3-console.exe test/Braintree.Tests/bin/Debug/Braintree.Tests.dll --test=#{args[:test_name]}"
     end
 
-    desc "Test name as Braintree.Tests.Integration.PaymentMethodIntegrationTest.Delete_DeletesPayPalAccount"
+    desc "e.g. rake mono:test_focus:integration[Braintree.Tests.Integration.PaymentMethodIntegrationTest.Delete_DeletesPayPalAccount]"
     task :integration, [:test_name] do |t, args|
       sh "xbuild Braintree.sln"
       sh "mono test/lib/NUnit-3.4.1/bin/Release/nunit3-console.exe test/Braintree.Tests.Integration/bin/Debug/Braintree.Tests.Integration.dll --test=#{args[:test_name]}"

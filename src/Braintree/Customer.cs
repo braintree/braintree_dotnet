@@ -34,6 +34,8 @@ namespace Braintree
         public virtual AmexExpressCheckoutCard[] AmexExpressCheckoutCards { get; protected set; }
         public virtual CoinbaseAccount[] CoinbaseAccounts { get; protected set; }
         public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
+        public virtual VisaCheckoutCard[] VisaCheckoutCards { get; protected set; }
+        public virtual MasterpassCard[] MasterpassCards { get; protected set; }
         public virtual UsBankAccount[] UsBankAccounts { get; protected set; }
         public virtual PaymentMethod[] PaymentMethods { get; protected set; }
         public virtual Address[] Addresses { get; protected set; }
@@ -117,6 +119,20 @@ namespace Braintree
                 VenmoAccounts[i] = new VenmoAccount(venmoAccountXmlNodes[i], gateway);
             }
 
+            var visaCheckoutCardsXmlNodes = node.GetList("visa-checkout-cards/visa-checkout-card");
+            VisaCheckoutCards = new VisaCheckoutCard[visaCheckoutCardsXmlNodes.Count];
+            for (int i = 0; i < visaCheckoutCardsXmlNodes.Count; i++)
+            {
+                VisaCheckoutCards[i] = new VisaCheckoutCard(visaCheckoutCardsXmlNodes[i], gateway);
+            }
+
+            var masterpassCardsXmlNodes = node.GetList("masterpass-cards/masterpass-card");
+            MasterpassCards = new MasterpassCard[masterpassCardsXmlNodes.Count];
+            for (int i = 0; i < masterpassCardsXmlNodes.Count; i++)
+            {
+                MasterpassCards[i] = new MasterpassCard(masterpassCardsXmlNodes[i], gateway);
+            }
+
             var usBankAccountXmlNodes = node.GetList("us-bank-accounts/us-bank-account");
             UsBankAccounts = new UsBankAccount[usBankAccountXmlNodes.Count];
             for (int i = 0; i < usBankAccountXmlNodes.Count; i++)
@@ -132,6 +148,8 @@ namespace Braintree
                 + AndroidPayCards.Length
                 + AmexExpressCheckoutCards.Length
                 + VenmoAccounts.Length
+                + VisaCheckoutCards.Length
+                + MasterpassCards.Length
                 + UsBankAccounts.Length
             ];
 
@@ -142,7 +160,9 @@ namespace Braintree
             AndroidPayCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length);
             AmexExpressCheckoutCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length);
             VenmoAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length + AmexExpressCheckoutCards.Length);
-            UsBankAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length + AmexExpressCheckoutCards.Length + VenmoAccounts.Length);
+            VisaCheckoutCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length + AmexExpressCheckoutCards.Length + VenmoAccounts.Length);
+            MasterpassCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length + AmexExpressCheckoutCards.Length + VenmoAccounts.Length + VisaCheckoutCards.Length);
+            UsBankAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + CoinbaseAccounts.Length + AndroidPayCards.Length + AmexExpressCheckoutCards.Length + VenmoAccounts.Length + VisaCheckoutCards.Length + MasterpassCards.Length);
 
             var addressXmlNodes = node.GetList("addresses/address");
             Addresses = new Address[addressXmlNodes.Count];

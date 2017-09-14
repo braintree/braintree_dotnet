@@ -58,38 +58,44 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddOnTest.cs" />
     <Compile Include="AddressTest.cs" />
+    <Compile Include="BraintreeGatewayTest.cs" />
+    <Compile Include="BraintreeServiceTest.cs" />
     <Compile Include="ClientTokenTest.cs" />
     <Compile Include="ConfigurationTest.cs" />
-    <Compile Include="CreditCardTest.cs" />
+    <Compile Include="CredentialsParserTest.cs" />
     <Compile Include="CreditCardRequestTest.cs" />
+    <Compile Include="CreditCardTest.cs" />
     <Compile Include="CreditCardVerificationTest.cs" />
+    <Compile Include="CryptoTest.cs" />
     <Compile Include="CustomerRequestTest.cs" />
     <Compile Include="CustomerTest.cs" />
+    <Compile Include="DisputeGatewayTest.cs" />
+    <Compile Include="DisputeTest.cs" />
+    <Compile Include="DocumentUploadTest.cs" />
+    <Compile Include="EnvironmentTest.cs" />
+    <Compile Include="FacilitatedDetailsTest.cs" />
+    <Compile Include="FacilitatorDetailsTest.cs" />
+    <Compile Include="MerchantAccountTest.cs" />
+    <Compile Include="OAuthTest.cs" />
+    <Compile Include="PaymentMethodNonceTest.cs" />
     <Compile Include="PaymentMethodTest.cs" />
     <Compile Include="QueryStringTest.cs" />
-    <Compile Include="TransactionTest.cs" />
+    <Compile Include="RequestTest.cs" />
+    <Compile Include="ResourceCollectionTest.cs" />
+    <Compile Include="Sha1HasherTest.cs" />
+    <Compile Include="SignatureServiceTest.cs" />
+    <Compile Include="StringUtilTest.cs" />
+    <Compile Include="SubscriptionSearchRequestTest.cs" />
+    <Compile Include="TestTransactionTest.cs" />
     <Compile Include="TransactionCreditCardRequestTest.cs" />
     <Compile Include="TransactionRequestTest.cs" />
+    <Compile Include="TransactionTest.cs" />
     <Compile Include="TransparentRedirectRequestTest.cs" />
     <Compile Include="TrUtilTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
-    <Compile Include="MerchantAccountTest.cs" />
-    <Compile Include="SubscriptionSearchRequestTest.cs" />
-    <Compile Include="RequestTest.cs" />
-    <Compile Include="ResourceCollectionTest.cs" />
-    <Compile Include="BraintreeServiceTest.cs" />
-    <Compile Include="StringUtilTest.cs" />
-    <Compile Include="Sha1HasherTest.cs" />
-    <Compile Include="SignatureServiceTest.cs" />
-    <Compile Include="AddOnTest.cs" />
     <Compile Include="WebhookNotificationTest.cs" />
-    <Compile Include="CryptoTest.cs" />
-    <Compile Include="OAuthTest.cs" />
-    <Compile Include="CredentialsParserTest.cs" />
-    <Compile Include="TestTransactionTest.cs" />
-    <Compile Include="EnvironmentTest.cs" />
-    <Compile Include="BraintreeGatewayTest.cs" />
     <Compile Include="WebProxyTest.cs" />
   </ItemGroup>
   <ItemGroup>

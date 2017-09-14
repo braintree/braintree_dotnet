@@ -28,7 +28,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Generate_GeneratesFingerprintAcceptedByGateway()
         {
-            var encodedClientToken = gateway.ClientToken.generate();
+            var encodedClientToken = gateway.ClientToken.Generate();
             var decodedClientToken = Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
             var clientToken = Regex.Unescape(decodedClientToken);
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);
@@ -55,7 +55,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async() =>
 #endif
         {
-            var encodedClientToken = await gateway.ClientToken.generateAsync();
+            var encodedClientToken = await gateway.ClientToken.GenerateAsync();
             var decodedClientToken = Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
             var clientToken = Regex.Unescape(decodedClientToken);
             var authorizationFingerprint = TestHelper.extractParamFromJson("authorizationFingerprint", clientToken);

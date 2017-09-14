@@ -165,6 +165,16 @@ namespace Braintree
             get { return new DiscountGateway(this); }
         }
 
+        public virtual IDisputeGateway Dispute
+        {
+            get { return new DisputeGateway(this); }
+        }
+
+        public virtual IDocumentUploadGateway DocumentUpload
+        {
+            get { return new DocumentUploadGateway(this); }
+        }
+
         public virtual IMerchantAccountGateway MerchantAccount
         {
             get { return new MerchantAccountGateway(this); }

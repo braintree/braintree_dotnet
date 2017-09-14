@@ -95,6 +95,7 @@ namespace Braintree
         public virtual int? CurrentBillingCycle { get; protected set; }
         public virtual int? DaysPastDue { get; protected set; }
         public virtual Descriptor Descriptor { get; protected set; }
+        public virtual string Description { get; protected set; }
         public virtual List<Discount> Discounts { get; protected set; }
         public virtual int? FailureCount { get; protected set; }
         public virtual DateTime? FirstBillingDate { get; protected set; }
@@ -127,6 +128,7 @@ namespace Braintree
             CurrentBillingCycle = node.GetInteger("current-billing-cycle");
             DaysPastDue = node.GetInteger("days-past-due");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
+            Description = node.GetString("description");
             FailureCount = node.GetInteger("failure-count");
             FirstBillingDate = node.GetDateTime("first-billing-date");
             CreatedAt = node.GetDateTime("created-at");

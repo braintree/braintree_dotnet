@@ -100,6 +100,18 @@ namespace Braintree
             {
                 return new Customer(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(Dispute))
+            {
+                return new Dispute(node) as T;
+            }
+            else if (typeof(T) == typeof(DisputeEvidence))
+            {
+                return new DisputeEvidence(node) as T;
+            }
+            else if (typeof(T) == typeof(DocumentUpload))
+            {
+                return new DocumentUpload(node) as T;
+            }
             else if (typeof(T) == typeof(Transaction))
             {
                 return new Transaction(node, gateway) as T;

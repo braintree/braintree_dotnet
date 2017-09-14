@@ -17,8 +17,12 @@ namespace Braintree
         Task<Subscription> FindAsync(string id);
         Result<Transaction> RetryCharge(string subscriptionId);
         Task<Result<Transaction>> RetryChargeAsync(string subscriptionId);
+        Result<Transaction> RetryCharge(string subscriptionId, bool submitForSettlement);
+        Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, bool submitForSettlement);
         Result<Transaction> RetryCharge(string subscriptionId, decimal amount);
         Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, decimal amount);
+        Result<Transaction> RetryCharge(string subscriptionId, decimal amount, bool submitForSettlement);
+        Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, decimal amount, bool submitForSettlement);
         ResourceCollection<Subscription> Search(SubscriptionSearchRequest query);
         Task<ResourceCollection<Subscription>> SearchAsync(SubscriptionSearchRequest query);
         ResourceCollection<Subscription> Search(SubscriptionGateway.SearchDelegate searchDelegate);

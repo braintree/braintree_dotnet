@@ -2146,6 +2146,38 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Create_WithDescription()
+        {
+            var customerRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            var customer = gateway.Customer.Create(customerRequest).Target;
+
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = customer.PayPalAccounts[0].Token,
+                PlanId = plan.Id,
+                Options = new SubscriptionOptionsRequest 
+                {
+                    PayPal = new SubscriptionOptionsPayPalRequest 
+                    {
+                        Description = "A great product"
+                    }
+                }
+            };
+
+            Result<Subscription> result = gateway.Subscription.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Subscription subscription = result.Target;
+            Assert.AreEqual("A great product", subscription.Description);
+
+            Assert.AreEqual("A great product", subscription.Transactions[0].PayPalDetails.Description);
+        }
+
+        [Test]
         public void Update_WithDescriptor()
         {
             TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
@@ -2181,6 +2213,48 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("ebay.co.uk", subscription.Descriptor.Url);
         }
 
+        [Test]
+        public void Update_WithDescription()
+        {
+            var customerRequest = new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.PayPalFuturePayment
+            };
+            var customer = gateway.Customer.Create(customerRequest).Target;
+
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = customer.PayPalAccounts[0].Token,
+                PlanId = plan.Id,
+                Options = new SubscriptionOptionsRequest 
+                {
+                    PayPal = new SubscriptionOptionsPayPalRequest 
+                    {
+                        Description = "A great product"
+                    }
+                }
+            };
+
+            Result<Subscription> createResult = gateway.Subscription.Create(request);
+
+            SubscriptionRequest updateRequest = new SubscriptionRequest
+            {
+                Options = new SubscriptionOptionsRequest 
+                {
+                    PayPal = new SubscriptionOptionsPayPalRequest 
+                    {
+                        Description = "An incredible product"
+                    }
+                }
+            };
+            Result<Subscription> result = gateway.Subscription.Update(createResult.Target.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Subscription subscription = result.Target;
+            Assert.AreEqual("An incredible product", subscription.Description);
+        }
+        
         [Test]
         public void Create_WithDescriptorValidation()
         {
@@ -2341,6 +2415,63 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        public void RetryCharge_With_SubmitForSettlement()
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+            MakePastDue(subscription, 1);
+
+            Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id, true);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(subscription.Price, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+        }
+
+        [Test]
+#if netcore
+        public async Task RetryChargeAsync_With_SubmitForSettlement()
+#else
+        public void RetryChargeAsync_With_SubmitForSettlement()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Result<Subscription> subscriptionResult = await gateway.Subscription.CreateAsync(request);
+            Subscription subscription = subscriptionResult.Target;
+            MakePastDue(subscription, 1);
+
+            Result<Transaction> result = await gateway.Subscription.RetryChargeAsync(subscription.Id, true);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(subscription.Price, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void RetryCharge_WithAmount()
         {
             SubscriptionRequest request = new SubscriptionRequest
@@ -2391,6 +2522,63 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+        public void RetryCharge_WithAmount_And_SubmitForSettlement()
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Subscription subscription = gateway.Subscription.Create(request).Target;
+            MakePastDue(subscription, 1);
+
+            Result<Transaction> result = gateway.Subscription.RetryCharge(subscription.Id, SandboxValues.TransactionAmount.AUTHORIZE, true);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+        }
+
+        [Test]
+#if netcore
+        public async Task RetryChargeAsync_WithAmount_And_SubmitForSettlement()
+#else
+        public void RetryChargeAsync_WithAmount_And_SubmitForSettlement()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            SubscriptionRequest request = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = PlanFixture.PLAN_WITHOUT_TRIAL.Id
+            };
+
+            Result<Subscription> subscriptionResult = await gateway.Subscription.CreateAsync(request);
+            Subscription subscription = subscriptionResult.Target;
+            MakePastDue(subscription, 1);
+
+            Result<Transaction> result = await gateway.Subscription.RetryChargeAsync(subscription.Id, SandboxValues.TransactionAmount.AUTHORIZE, true);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, transaction.Amount);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
         }
 #if net452
             ).GetAwaiter().GetResult();

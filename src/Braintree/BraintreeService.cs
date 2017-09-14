@@ -13,11 +13,15 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Braintree
 {
     public class BraintreeService
     {
+        private static readonly Encoding encoding = Encoding.UTF8;
+
         public string ApiVersion = "4";
 
         protected Configuration Configuration;
@@ -64,32 +68,32 @@ namespace Braintree
 
         public XmlNode Get(string URL)
         {
-            return GetXmlResponse(URL, "GET", null);
+            return GetXmlResponse(URL, "GET", null, null);
         }
 
         public Task<XmlNode> GetAsync(string URL)
         {
-            return GetXmlResponseAsync(URL, "GET", null);
+            return GetXmlResponseAsync(URL, "GET", null, null);
         }
 
         internal XmlNode Delete(string URL)
         {
-            return GetXmlResponse(URL, "DELETE", null);
+            return GetXmlResponse(URL, "DELETE", null, null);
         }
 
         internal Task<XmlNode> DeleteAsync(string URL)
         {
-            return GetXmlResponseAsync(URL, "DELETE", null);
+            return GetXmlResponseAsync(URL, "DELETE", null, null);
         }
 
         public XmlNode Post(string URL, Request requestBody)
         {
-            return GetXmlResponse(URL, "POST", requestBody);
+            return GetXmlResponse(URL, "POST", requestBody, null);
         }
 
         public Task<XmlNode> PostAsync(string URL, Request requestBody)
         {
-            return GetXmlResponseAsync(URL, "POST", requestBody);
+            return GetXmlResponseAsync(URL, "POST", requestBody, null);
         }
 
         internal XmlNode Post(string URL)
@@ -100,6 +104,16 @@ namespace Braintree
         internal Task<XmlNode> PostAsync(string URL)
         {
             return PostAsync(URL, null);
+        }
+
+        public XmlNode PostMultipart(string URL, Request requestBody, FileStream file)
+        {
+            return GetXmlResponse(URL, "POST", requestBody, file);
+        }
+
+        public Task<XmlNode> PostMultipartAsync(string URL, Request requestBody, FileStream file)
+        {
+            return GetXmlResponseAsync(URL, "POST", requestBody, file);
         }
 
         public XmlNode Put(string URL)
@@ -114,12 +128,12 @@ namespace Braintree
 
         internal XmlNode Put(string URL, Request requestBody)
         {
-            return GetXmlResponse(URL, "PUT", requestBody);
+            return GetXmlResponse(URL, "PUT", requestBody, null);
         }
 
         internal Task<XmlNode> PutAsync(string URL, Request requestBody)
         {
-            return GetXmlResponseAsync(URL, "PUT", requestBody);
+            return GetXmlResponseAsync(URL, "PUT", requestBody, null);
         }
 
 #if netcore
@@ -142,7 +156,7 @@ namespace Braintree
         }
 #endif
 
-        private XmlNode GetXmlResponse(string URL, string method, Request requestBody)
+        private XmlNode GetXmlResponse(string URL, string method, Request requestBody, FileStream file)
         {
 #if netcore
             try
@@ -152,13 +166,28 @@ namespace Braintree
 
                 SetRequestHeaders(request);
 
-                if (requestBody != null)
+                if (requestBody != null && file == null)
                 {
                     var xmlPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
                     var content = xmlPrefix + requestBody.ToXml();
-                    var utf8_string = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(content));
-                    request.Content = new StringContent(utf8_string, Encoding.UTF8, "application/xml");
+                    var utf8_string = encoding.GetString(encoding.GetBytes(content));
+                    request.Content = new StringContent(utf8_string, encoding, "application/xml");
                     request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(utf8_string);
+                }
+
+                if (file != null)
+                {
+                    string formDataBoundary = GenerateMultipartFormBoundary();
+
+                    Dictionary<string, object> postParameters = requestBody.ToDictionary();
+                    postParameters.Add("file", file);
+
+                    byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
+                    var ascii_string = Encoding.ASCII.GetString(formData);
+                    request.Content = new StringContent(ascii_string);
+                    request.Content.Headers.Remove("Content-Type");
+                    request.Content.Headers.TryAddWithoutValidation("Content-Type", MultipartFormContentType(formDataBoundary));
+                    request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(ascii_string);
                 }
 
                 var httpClientHandler = new HttpClientHandler
@@ -198,15 +227,32 @@ namespace Braintree
                 request.Timeout = Configuration.Timeout;
                 request.ReadWriteTimeout = Configuration.Timeout;
 
-                if (requestBody != null)
+                if (requestBody != null && file == null)
                 {
                     var xmlPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-                    byte[] buffer = Encoding.UTF8.GetBytes(xmlPrefix + requestBody.ToXml());
+                    byte[] buffer = encoding.GetBytes(xmlPrefix + requestBody.ToXml());
                     request.ContentType = "application/xml";
                     request.ContentLength = buffer.Length;
                     using (Stream requestStream = request.GetRequestStream())
                     {
                         requestStream.Write(buffer, 0, buffer.Length);
+                    }
+                }
+
+                if (file != null)
+                {
+                    string formDataBoundary = GenerateMultipartFormBoundary();
+                    request.ContentType = MultipartFormContentType(formDataBoundary);
+
+                    Dictionary<string, object> postParameters = requestBody.ToDictionary();
+                    postParameters.Add("file", file);
+
+                    byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
+                    request.ContentLength = formData.Length;
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(formData, 0, formData.Length);
+                        requestStream.Close();
                     }
                 }
 
@@ -234,7 +280,7 @@ namespace Braintree
 #endif
         }
 
-        private async Task<XmlNode> GetXmlResponseAsync(string URL, string method, Request requestBody)
+        private async Task<XmlNode> GetXmlResponseAsync(string URL, string method, Request requestBody, FileStream file)
         {
 #if netcore
             try
@@ -244,13 +290,28 @@ namespace Braintree
 
                 SetRequestHeaders(request);
 
-                if (requestBody != null)
+                if (requestBody != null && file == null)
                 {
                     var xmlPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
                     var content = xmlPrefix + requestBody.ToXml();
-                    var utf8_string = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(content));
-                    request.Content = new StringContent(utf8_string, Encoding.UTF8, "application/xml");
+                    var utf8_string = encoding.GetString(encoding.GetBytes(content));
+                    request.Content = new StringContent(utf8_string, encoding, "application/xml");
                     request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(utf8_string);
+                }
+
+                if (file != null)
+                {
+                    string formDataBoundary = GenerateMultipartFormBoundary();
+
+                    Dictionary<string, object> postParameters = requestBody.ToDictionary();
+                    postParameters.Add("file", file);
+
+                    byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
+                    var ascii_string = Encoding.ASCII.GetString(formData);
+                    request.Content = new StringContent(ascii_string);
+                    request.Content.Headers.Remove("Content-Type");
+                    request.Content.Headers.TryAddWithoutValidation("Content-Type", MultipartFormContentType(formDataBoundary));
+                    request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(ascii_string);
                 }
 
                 var httpClientHandler = new HttpClientHandler
@@ -290,15 +351,32 @@ namespace Braintree
                 request.Timeout = Configuration.Timeout;
                 request.ReadWriteTimeout = Configuration.Timeout;
 
-                if (requestBody != null)
+                if (requestBody != null && file == null)
                 {
                     var xmlPrefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-                    byte[] buffer = Encoding.UTF8.GetBytes(xmlPrefix + requestBody.ToXml());
+                    byte[] buffer = encoding.GetBytes(xmlPrefix + requestBody.ToXml());
                     request.ContentType = "application/xml";
                     request.ContentLength = buffer.Length;
                     using (Stream requestStream = await request.GetRequestStreamAsync().ConfigureAwait(false))
                     {
                         await requestStream.WriteAsync(buffer, 0, buffer.Length);
+                    }
+                }
+
+                if (file != null)
+                {
+                    string formDataBoundary = GenerateMultipartFormBoundary();
+                    request.ContentType = MultipartFormContentType(formDataBoundary);
+
+                    Dictionary<string, object> postParameters = requestBody.ToDictionary();
+                    postParameters.Add("file", file);
+
+                    byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
+                    request.ContentLength = formData.Length;
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(formData, 0, formData.Length);
+                        requestStream.Close();
                     }
                 }
 
@@ -493,11 +571,97 @@ namespace Braintree
                     case (HttpStatusCode) 426:
                         throw new UpgradeRequiredException();
                     default:
-						var exception = new UnexpectedException();
-						exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;
+                    var exception = new UnexpectedException();
+                    exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;
                         throw exception;
                 }
             }
+        }
+
+        private static byte[] GetMultipartFormData(Dictionary<string, object> postParameters, string boundary)
+        {
+            Stream formDataStream = new System.IO.MemoryStream();
+            bool needsCLRF = false;
+
+            foreach (var param in postParameters)
+            {
+                if (needsCLRF)
+                {
+                    formDataStream.Write(encoding.GetBytes("\r\n"), 0, encoding.GetByteCount("\r\n"));
+                }
+                needsCLRF = true;
+
+                if (param.Value is FileStream)
+                {
+                    FileStream fileToUpload = (FileStream)param.Value;
+                    string filename = fileToUpload.Name;
+                    string mimeType = GetMIMEType(filename);
+                    string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
+                            boundary,
+                            param.Key,
+                            filename ?? param.Key,
+                            mimeType ?? "application/octet-stream");
+
+                    formDataStream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
+
+                    byte[] fileData = null;
+                    using (FileStream fs = fileToUpload)
+                    {
+                        var binaryReader = new BinaryReader(fs, encoding);
+                        fileData = binaryReader.ReadBytes((int)fs.Length);
+                    }
+                    formDataStream.Write(fileData, 0, fileData.Length);
+                }
+                else
+                {
+                    string postData = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}",
+                            boundary,
+                            param.Key,
+                            param.Value);
+                    formDataStream.Write(encoding.GetBytes(postData), 0, encoding.GetByteCount(postData));
+                }
+            }
+
+            string footer = "\r\n--" + boundary + "--\r\n";
+            formDataStream.Write(encoding.GetBytes(footer), 0, encoding.GetByteCount(footer));
+
+            formDataStream.Position = 0;
+            byte[] formData = new byte[formDataStream.Length];
+            formDataStream.Read(formData, 0, formData.Length);
+            formDataStream.Dispose();
+
+            return formData;
+        }
+
+        private static readonly Dictionary<string, string> MIMETypesDictionary = new Dictionary<string, string>
+        {
+            {"bmp", "image/bmp"},
+                {"jpe", "image/jpeg"},
+                {"jpeg", "image/jpeg"},
+                {"jpg", "image/jpeg"},
+                {"pdf", "application/pdf"},
+                {"png", "image/png"}
+        };
+
+        public static string GetMIMEType(string fileName)
+        {
+            string extension = Path.GetExtension(fileName).ToLowerInvariant();
+
+            if (extension.Length > 0 && MIMETypesDictionary.ContainsKey(extension.Remove(0, 1)))
+            {
+                return MIMETypesDictionary[extension.Remove(0, 1)];
+            }
+            return "application/octet-stream";
+        }
+
+        public static string GenerateMultipartFormBoundary()
+        {
+            return String.Format("---------------------{0:N}", Guid.NewGuid());
+        }
+
+        public static string MultipartFormContentType(string boundary)
+        {
+            return "multipart/form-data; boundary=" + boundary;
         }
     }
 }

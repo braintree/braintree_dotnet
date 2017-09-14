@@ -75,6 +75,10 @@ namespace Braintree
                 return CheckSampleXml();
             } else if (kind == WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT) {
                 return AccountUpdaterDailyReportSampleXml(id);
+            } else if (kind == WebhookKind.IDEAL_PAYMENT_COMPLETE) {
+                return IdealPaymentCompleteSampleXml(id);
+            } else if (kind == WebhookKind.IDEAL_PAYMENT_FAILED) {
+                return IdealPaymentFailedSampleXml(id);
             } else {
                 return SubscriptionXml(id);
             }
@@ -374,6 +378,34 @@ namespace Braintree
             return Node("account-updater-daily-report",
                     NodeAttr("report-date", TYPE_DATE, "2016-01-14"),
                     Node("report-url", "link-to-csv-report")
+            );
+        }
+
+        private string IdealPaymentCompleteSampleXml(string id) {
+            return Node("ideal-payment",
+                    Node("id", id),
+                    Node("status", "COMPLETE"),
+                    Node("issuer", "ABCISSUER"),
+                    Node("order-id", "ORDERABC"),
+                    Node("currency", "EUR"),
+                    Node("amount", "10.00"),
+                    Node("created-at", "2016-11-29T23:27:34.547Z"),
+                    Node("approval-url", "https://example.com"),
+                    Node("ideal-transaction-id", "1234567890")
+            );
+        }
+
+        private string IdealPaymentFailedSampleXml(string id) {
+            return Node("ideal-payment",
+                    Node("id", id),
+                    Node("status", "FAILED"),
+                    Node("issuer", "ABCISSUER"),
+                    Node("order-id", "ORDERABC"),
+                    Node("currency", "EUR"),
+                    Node("amount", "10.00"),
+                    Node("created-at", "2016-11-29T23:27:34.547Z"),
+                    Node("approval-url", "https://example.com"),
+                    Node("ideal-transaction-id", "1234567890")
             );
         }
 

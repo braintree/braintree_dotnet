@@ -138,6 +138,57 @@ namespace Braintree.Tests.Integration
         }
         
         [Test]
+        public void Create_CreatesPayPalAccountWithPayPalRefreshToken()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PayPalRefreshToken = "PAYPAL_REFRESH_TOKEN"
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
+            Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
+
+            var token = paymentMethodResult.Target.Token;
+            var foundPaypalAccount = gateway.PayPalAccount.Find(token);
+            Assert.IsNotNull(foundPaypalAccount);
+            Assert.IsNotNull(foundPaypalAccount.BillingAgreementId);
+        }
+
+        [Test]
+        public void Create_CreatesPayPalAccountWithPayPalRefreshTokenWithoutUpgrade()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PayPalRefreshToken = "PAYPAL_REFRESH_TOKEN",
+                PayPalVaultWithoutUpgrade = true
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
+            Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
+
+            var token = paymentMethodResult.Target.Token;
+            var foundPaypalAccount = gateway.PayPalAccount.Find(token);
+            Assert.IsNotNull(foundPaypalAccount);
+            Assert.IsNull(foundPaypalAccount.BillingAgreementId);
+        }
+
+        [Test]
         public void Create_CreatesCreditCardWithNonce()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -229,6 +280,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
             Assert.IsInstanceOf(typeof(ApplePayCard), paymentMethodResult.Target);
             ApplePayCard applePayCard = (ApplePayCard) paymentMethodResult.Target;
+            Assert.IsNotNull(applePayCard.Bin);
             Assert.IsNotNull(applePayCard.CardType);
             Assert.IsNotNull(applePayCard.ExpirationMonth);
             Assert.IsNotNull(applePayCard.ExpirationYear);
@@ -1043,7 +1095,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        public void Update_UpdatesTheCoinbaseAccount()
+        public void Update_NoLongerSupportsUpdateWithCoinbaseAccount()
         {
             var customer = gateway.Customer.Create().Target;
             PaymentMethodRequest request = new PaymentMethodRequest()
@@ -1051,20 +1103,9 @@ namespace Braintree.Tests.Integration
                 CustomerId = customer.Id,
                 PaymentMethodNonce = Nonce.Coinbase
             };
-            var coinbaseAccount = gateway.PaymentMethod.Create(request).Target;
-
-            var updateResult = gateway.PaymentMethod.Update(
-                coinbaseAccount.Token,
-                new PaymentMethodRequest
-                {
-                    Options = new PaymentMethodOptionsRequest { MakeDefault = true }
-                });
-
-            Assert.IsTrue(updateResult.IsSuccess());
-            Assert.That(updateResult.Target, Is.InstanceOf(typeof(CoinbaseAccount)));
-
-            var updatedCoinbaseAccount = (CoinbaseAccount)updateResult.Target;
-            Assert.IsTrue(updatedCoinbaseAccount.IsDefault.Value);
+            var paymentMethodResult = gateway.PaymentMethod.Create(request);
+            Assert.IsFalse(paymentMethodResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.PAYMENT_METHOD_NO_LONGER_SUPPORTED, paymentMethodResult.Errors.ForObject("CoinbaseAccount").OnField("Base")[0].Code);
         }
 
         [Test]

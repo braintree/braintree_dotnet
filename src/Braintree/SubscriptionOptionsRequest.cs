@@ -9,6 +9,7 @@ namespace Braintree
         public bool? ReplaceAllAddOnsAndDiscounts { get; set; }
         public bool? RevertSubscriptionOnProrationFailure { get; set; }
         public bool? StartImmediately { get; set; }
+        public SubscriptionOptionsPayPalRequest PayPal { get; set; }
 
         public override string ToXml(string root)
         {
@@ -22,7 +23,8 @@ namespace Braintree
                 AddElement("prorate-charges", ProrateCharges).
                 AddElement("do-not-inherit-add-ons-or-discounts", DoNotInheritAddOnsOrDiscounts).
                 AddElement("revert-subscription-on-proration-failure", RevertSubscriptionOnProrationFailure).
-                AddElement("start-immediately", StartImmediately);
+                AddElement("start-immediately", StartImmediately).
+                AddElement("paypal", PayPal);
         }
     }
 }

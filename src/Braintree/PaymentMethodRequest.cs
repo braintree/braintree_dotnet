@@ -15,6 +15,8 @@ namespace Braintree
         public string ExpirationDate { get; set; }
         public string Number { get; set; }
         public string DeviceData { get; set; }
+        public string PayPalRefreshToken { get; set; }
+        public bool? PayPalVaultWithoutUpgrade { get; set; }
 
         public override string ToXml()
         {
@@ -41,7 +43,9 @@ namespace Braintree
                 AddElement("expiration-date", ExpirationDate).
                 AddElement("expiration-month", ExpirationMonth).
                 AddElement("expiration-year", ExpirationYear).
-                AddElement("number", Number);
+                AddElement("number", Number).
+                AddElement("paypal-refresh-token", PayPalRefreshToken).
+                AddElement("paypal-vault-without-upgrade", PayPalVaultWithoutUpgrade);
         }
     }
 }

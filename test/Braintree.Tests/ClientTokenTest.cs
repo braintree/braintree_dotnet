@@ -19,7 +19,7 @@ namespace Braintree.Tests
             };
             Exception exception = null;
             try {
-                gateway.ClientToken.generate(
+                gateway.ClientToken.Generate(
                     new ClientTokenRequest
                     {
                         Options = new ClientTokenOptionsRequest
@@ -48,7 +48,7 @@ namespace Braintree.Tests
             };
             Exception exception = null;
             try {
-                gateway.ClientToken.generate(
+                gateway.ClientToken.Generate(
                     new ClientTokenRequest
                     {
                         Options = new ClientTokenOptionsRequest
@@ -77,7 +77,7 @@ namespace Braintree.Tests
             };
             Exception exception = null;
             try {
-                gateway.ClientToken.generate(
+                gateway.ClientToken.Generate(
                     new ClientTokenRequest
                     {
                         Options = new ClientTokenOptionsRequest

@@ -4,6 +4,7 @@ namespace Braintree
 {
     public class ApplePayCard : PaymentMethod
     {
+        public virtual string Bin { get; protected set; }
         public virtual string CardType { get; protected set; }
         public virtual string Last4 { get; protected set; }
         public virtual string ExpirationMonth { get; protected set; }
@@ -21,6 +22,7 @@ namespace Braintree
 
         protected internal ApplePayCard(NodeWrapper node, IBraintreeGateway gateway)
         {
+            Bin = node.GetString("bin");
             CardType = node.GetString("card-type");
             Last4 = node.GetString("last-4");
             ExpirationMonth = node.GetString("expiration-month");

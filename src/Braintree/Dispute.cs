@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Braintree
 {
@@ -8,9 +9,12 @@ namespace Braintree
         public static readonly DisputeStatus LOST = new DisputeStatus("lost");
         public static readonly DisputeStatus WON = new DisputeStatus("won");
         public static readonly DisputeStatus UNRECOGNIZED = new DisputeStatus("unrecognized");
+        public static readonly DisputeStatus ACCEPTED = new DisputeStatus("accepted");
+        public static readonly DisputeStatus DISPUTED = new DisputeStatus("disputed");
+        public static readonly DisputeStatus EXPIRED = new DisputeStatus("expired");
 
         public static readonly DisputeStatus[] ALL = {
-            OPEN, LOST, WON, UNRECOGNIZED
+            OPEN, LOST, WON, UNRECOGNIZED, ACCEPTED, DISPUTED, EXPIRED
         };
 
         protected DisputeStatus(string name) : base(name) {}
@@ -55,30 +59,71 @@ namespace Braintree
     public class Dispute
     {
         public virtual decimal? Amount { get; protected set; }
-        public virtual DateTime? ReceivedDate { get; protected set; }
-        public virtual DateTime? ReplyByDate { get; protected set; }
+        public virtual decimal? AmountDisputed { get; protected set; }
+        public virtual decimal? AmountWon { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? DateOpened { get; protected set; }
         public virtual DateTime? DateWon { get; protected set; }
+        public virtual DateTime? ReceivedDate { get; protected set; }
+        public virtual DateTime? ReplyByDate { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual DisputeReason Reason { get; protected set; }
         public virtual DisputeStatus Status { get; protected set; }
         public virtual DisputeKind Kind { get; protected set; }
+        public virtual string CaseNumber { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string Id { get; protected set; }
+        public virtual string ForwardedComments { get; protected set; }
+        public virtual string MerchantAccountId { get; protected set; }
+        public virtual string OriginalDisputeId { get; protected set; }
+        public virtual string ReasonCode { get; protected set; }
+        public virtual string ReasonDescription { get; protected set; }
+        public virtual string ReferenceNumber { get; protected set; }
         public virtual TransactionDetails TransactionDetails { get; protected set; }
+        public virtual DisputeTransaction Transaction { get; protected set; }
+        public List<DisputeStatusHistory> StatusHistory;
+        public List<DisputeEvidence> Evidence;
 
         public Dispute(NodeWrapper node)
         {
             Amount = node.GetDecimal("amount");
-            ReceivedDate = node.GetDateTime("received-date");
-            ReplyByDate = node.GetDateTime("reply-by-date");
+            AmountDisputed = node.GetDecimal("amount-disputed");
+            AmountWon = node.GetDecimal("amount-won");
+            CreatedAt = node.GetDateTime("created-at");
             DateOpened = node.GetDateTime("date-opened");
             DateWon = node.GetDateTime("date-won");
+            ReceivedDate = node.GetDateTime("received-date");
+            ReplyByDate = node.GetDateTime("reply-by-date");
+            UpdatedAt = node.GetDateTime("updated-at");
             Reason = (DisputeReason)CollectionUtil.Find(DisputeReason.ALL, node.GetString("reason"), DisputeReason.GENERAL);
             Status = (DisputeStatus)CollectionUtil.Find(DisputeStatus.ALL, node.GetString("status"), DisputeStatus.UNRECOGNIZED);
             Kind = (DisputeKind)CollectionUtil.Find(DisputeKind.ALL, node.GetString("kind"), DisputeKind.UNRECOGNIZED);
+            CaseNumber = node.GetString("case-number");
             CurrencyIsoCode = node.GetString("currency-iso-code");
             Id = node.GetString("id");
-            TransactionDetails = new TransactionDetails(node.GetNode("transaction"));
+            ForwardedComments = node.GetString("forwarded-comments");
+            MerchantAccountId = node.GetString("merchant-account-id");
+            OriginalDisputeId = node.GetString("original-dispute-id");
+            ReasonCode = node.GetString("reason-code");
+            ReasonDescription = node.GetString("reason-description");
+            ReferenceNumber = node.GetString("reference-number");
+
+            if (node.GetNode("transaction") != null) {
+                TransactionDetails = new TransactionDetails(node.GetNode("transaction"));
+                Transaction = new DisputeTransaction(node.GetNode("transaction"));
+            }
+
+            Evidence = new List<DisputeEvidence>();
+            foreach (var evidenceResponse in node.GetList("evidence/evidence"))
+            {
+                Evidence.Add(new DisputeEvidence(evidenceResponse));
+            }
+
+            StatusHistory = new List<DisputeStatusHistory>();
+            foreach (var historyStatusResponse in node.GetList("status-history/status-history"))
+            {
+                StatusHistory.Add(new DisputeStatusHistory(historyStatusResponse));
+            }
         }
 
         [Obsolete("Mock Use Only")]

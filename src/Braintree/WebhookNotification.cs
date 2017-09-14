@@ -31,6 +31,8 @@ namespace Braintree
         public static readonly WebhookKind DISPUTE_LOST = new WebhookKind("dispute_lost");
         public static readonly WebhookKind DISPUTE_WON = new WebhookKind("dispute_won");
         public static readonly WebhookKind ACCOUNT_UPDATER_DAILY_REPORT = new WebhookKind("account_updater_daily_report");
+        public static readonly WebhookKind IDEAL_PAYMENT_COMPLETE = new WebhookKind("ideal_payment_complete");
+        public static readonly WebhookKind IDEAL_PAYMENT_FAILED = new WebhookKind("ideal_payment_failed");
 
         public static readonly WebhookKind[] ALL = {
             CHECK,
@@ -56,7 +58,9 @@ namespace Braintree
             DISPUTE_OPENED,
             DISPUTE_LOST,
             DISPUTE_WON,
-            ACCOUNT_UPDATER_DAILY_REPORT
+            ACCOUNT_UPDATER_DAILY_REPORT,
+            IDEAL_PAYMENT_COMPLETE,
+            IDEAL_PAYMENT_FAILED
         };
 
         protected WebhookKind(string name) : base(name) {}
@@ -77,6 +81,7 @@ namespace Braintree
         public virtual ConnectedMerchantStatusTransitioned ConnectedMerchantStatusTransitioned { get; protected set; }
         public virtual ConnectedMerchantPayPalStatusChanged ConnectedMerchantPayPalStatusChanged { get; protected set; }
         public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
+        public virtual IdealPayment IdealPayment { get; protected set; }
 
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -133,6 +138,11 @@ namespace Braintree
             if (WrapperNode.GetNode("account-updater-daily-report") != null)
             {
                 AccountUpdaterDailyReport = new AccountUpdaterDailyReport(WrapperNode.GetNode("account-updater-daily-report"));
+            }
+
+            if (WrapperNode.GetNode("ideal-payment") != null)
+            {
+                IdealPayment = new IdealPayment(WrapperNode.GetNode("ideal-payment"));
             }
 
             if (WrapperNode.GetNode("errors") != null)

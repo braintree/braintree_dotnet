@@ -22,10 +22,10 @@ namespace Braintree
             Service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual string generate(ClientTokenRequest request = null)
+        public virtual string Generate(ClientTokenRequest request = null)
         {
             if (request == null) request = new ClientTokenRequest();
-            verifyOptions(request);
+            VerifyOptions(request);
             XmlNode response = Service.Post(Service.MerchantPath() + "/client_token", request);
 
             if (response.Name.Equals("client-token"))
@@ -38,10 +38,16 @@ namespace Braintree
             }
         }
 
-        public virtual async Task<string> generateAsync(ClientTokenRequest request = null)
+        [Obsolete("Use Generate")]
+        public virtual string generate(ClientTokenRequest request = null)
+        {
+            return Generate(request);
+        }
+
+        public virtual async Task<string> GenerateAsync(ClientTokenRequest request = null)
         {
             if (request == null) request = new ClientTokenRequest();
-            verifyOptions(request);
+            VerifyOptions(request);
             XmlNode response = await Service.PostAsync(Service.MerchantPath() + "/client_token", request).ConfigureAwait(false);
 
             if (response.Name.Equals("client-token"))
@@ -54,7 +60,13 @@ namespace Braintree
             }
         }
 
-        private void verifyOptions(ClientTokenRequest request)
+        [Obsolete("Use GenerateAsync")]
+        public virtual Task<string> generateAsync(ClientTokenRequest request = null)
+        {
+            return GenerateAsync(request);
+        }
+
+        private void VerifyOptions(ClientTokenRequest request)
         {
             if (request.Options != null && request.CustomerId == null) {
                 var invalidOptions = new List<string>{};

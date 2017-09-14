@@ -112,6 +112,7 @@ namespace Braintree
                 AddElement("credit-card", CreditCard).
                 AddElement("custom-fields", CustomFields).
                 AddElement("risk-data", RiskData).
+                AddElement("device-data", DeviceData).
                 AddElement("options", Options);
         }
     }

@@ -1,11 +1,17 @@
 #pragma warning disable 1591
 
 using System;
+using System.Collections.Generic;
 
 namespace Braintree
 {
     public abstract class Request
     {
+        public virtual Dictionary<string, object> ToDictionary()
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual string ToXml()
         {
             throw new NotImplementedException();

@@ -75,6 +75,19 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Find_ExposesDetailsForCreditCardNonce()
+        {
+            string nonce = "fake-valid-nonce";
+            PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(nonce);
+            Assert.IsNotNull(foundNonce);
+            Assert.AreEqual(foundNonce.Nonce, nonce);
+            Assert.AreEqual(foundNonce.Type, "CreditCard");
+            Assert.IsNotNull(foundNonce.Details);
+            Assert.AreEqual(foundNonce.Details.CardType, "Visa");
+            Assert.AreEqual(foundNonce.Details.LastTwo, "81");
+        }
+
+        [Test]
         public void Find_ExposesThreeDSecureInfo()
         {
             BraintreeService service = new BraintreeService(gateway.Configuration);

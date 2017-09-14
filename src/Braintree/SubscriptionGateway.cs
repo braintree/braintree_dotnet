@@ -163,6 +163,28 @@ namespace Braintree
             });
         }
 
+        public Result<Transaction> RetryCharge(string subscriptionId, bool submitForSettlement) {
+            return RetryCharge(new SubscriptionTransactionRequest
+            {
+                SubscriptionId = subscriptionId,
+                Options = new SubscriptionTransactionOptionsRequest
+                {
+                    SubmitForSettlement = submitForSettlement
+                }
+            });
+        }
+
+        public Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, bool submitForSettlement) {
+            return RetryChargeAsync(new SubscriptionTransactionRequest
+            {
+                SubscriptionId = subscriptionId,
+                Options = new SubscriptionTransactionOptionsRequest
+                {
+                    SubmitForSettlement = submitForSettlement
+                }
+            });
+        }
+
         public Result<Transaction> RetryCharge(string subscriptionId, decimal amount) {
             return RetryCharge(new SubscriptionTransactionRequest
             {
@@ -176,6 +198,30 @@ namespace Braintree
             {
                 SubscriptionId = subscriptionId,
                 Amount = amount
+            });
+        }
+
+        public Result<Transaction> RetryCharge(string subscriptionId, decimal amount, bool submitForSettlement) {
+            return RetryCharge(new SubscriptionTransactionRequest
+            {
+                SubscriptionId = subscriptionId,
+                Amount = amount,
+                Options = new SubscriptionTransactionOptionsRequest
+                {
+                    SubmitForSettlement = submitForSettlement
+                }
+            });
+        }
+
+        public Task<Result<Transaction>> RetryChargeAsync(string subscriptionId, decimal amount, bool submitForSettlement) {
+            return RetryChargeAsync(new SubscriptionTransactionRequest
+            {
+                SubscriptionId = subscriptionId,
+                Amount = amount,
+                Options = new SubscriptionTransactionOptionsRequest
+                {
+                    SubmitForSettlement = submitForSettlement
+                }
             });
         }
     }

@@ -1045,7 +1045,8 @@ namespace Braintree.Tests.Integration
                 Options = new CreditCardOptionsRequest
                 {
                     VerifyCard = true
-                }
+                },
+                DeviceSessionId = "abc123"
             };
 
             Result<CreditCard> result = gateway.CreditCard.Create(request);
@@ -1057,6 +1058,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(verification);
 
             Assert.IsNotNull(verification.RiskData);
+            Assert.IsNotNull(verification.RiskData.decision);
         }
 
         [Test]

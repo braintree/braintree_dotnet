@@ -1,5 +1,6 @@
 using Braintree.Exceptions;
 using NUnit.Framework;
+using System.Xml;
 
 namespace Braintree.Tests
 {
@@ -91,6 +92,41 @@ namespace Braintree.Tests
                 }
             };
             Assert.IsTrue(request.ToXml().Contains("<skip-advanced-fraud-checking>false</skip-advanced-fraud-checking>"));
+        }
+
+        [Test]
+        public void UnrecognizedValuesAreCategorizedAsSuch()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <id>unrecognized_transaction_id</id>\n" +
+                "  <status>unrecognizable status</status>\n" +
+                "  <type>sale</type>\n" +
+                "  <customer></customer>\n" +
+                "  <billing></billing>\n" +
+                "  <shipping></shipping>\n" +
+                "  <custom-fields/>\n" +
+                "  <gateway-rejection-reason>unrecognizable gateway rejection reason</gateway-rejection-reason>\n" +
+                "  <credit-card></credit-card>\n" +
+                "  <status-history type=\"array\"></status-history>\n" +
+                "  <subscription></subscription>\n" +
+                "  <descriptor></descriptor>\n" +
+                "  <escrow-status>unrecognizable escrow status</escrow-status>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <payment-instrument-type>credit_card</payment-instrument-type>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
+            Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
+            Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
         }
     }
 }

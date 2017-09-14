@@ -6,6 +6,7 @@ namespace Braintree
     {
         public decimal Amount { get; set; }
         public string SubscriptionId { get; set; }
+        public SubscriptionTransactionOptionsRequest Options {get; set;}
 
         public override string ToXml()
         {
@@ -25,6 +26,7 @@ namespace Braintree
                 builder.AddElement("amount", Amount);
 
             builder.AddElement("subscription-id", SubscriptionId);
+            builder.AddElement("options", Options);
             builder.AddElement("type", TransactionType.SALE.ToString().ToLower());
 
             return builder;

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.8.0</AssemblyName>
+    <AssemblyName>Braintree-3.9.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -56,6 +56,7 @@
     <Compile Include="AddModificationRequest.cs" />
     <Compile Include="AddOn.cs" />
     <Compile Include="AddOnsRequest.cs" />
+    <Compile Include="AuthorizationAdjustment.cs" />
     <Compile Include="Address.cs" />
     <Compile Include="AddressGateway.cs" />
     <Compile Include="AddressRequest.cs" />
@@ -101,9 +102,17 @@
     <Compile Include="DescriptorRequest.cs" />
     <Compile Include="Disbursement.cs" />
     <Compile Include="DisbursementDetails.cs" />
-    <Compile Include="Dispute.cs" />
     <Compile Include="Discount.cs" />
     <Compile Include="DiscountsRequest.cs" />
+    <Compile Include="Dispute.cs" />
+    <Compile Include="DisputeEvidence.cs" />
+    <Compile Include="DisputeGateway.cs" />
+    <Compile Include="DisputeStatusHistory.cs" />
+    <Compile Include="DisputeTransaction.cs" />
+    <Compile Include="DisputeSearchRequest.cs" />
+    <Compile Include="DocumentUpload.cs" />
+    <Compile Include="DocumentUploadGateway.cs" />
+    <Compile Include="DocumentUploadRequest.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="EqualityNode.cs" />
@@ -117,6 +126,8 @@
     <Compile Include="Exceptions\TooManyRequestsException.cs" />
     <Compile Include="Exceptions\UnexpectedException.cs" />
     <Compile Include="Exceptions\UpgradeRequiredException.cs" />
+    <Compile Include="FacilitatedDetails.cs" />
+    <Compile Include="FacilitatorDetails.cs" />
     <Compile Include="FundingRequest.cs" />
     <Compile Include="GenericAddressRequest.cs" />
     <Compile Include="Hasher.cs" />
@@ -128,6 +139,8 @@
     <Compile Include="ICreditCardVerificationGateway.cs" />
     <Compile Include="ICustomerGateway.cs" />
     <Compile Include="IDiscountGateway.cs" />
+    <Compile Include="IDisputeGateway.cs" />
+    <Compile Include="IDocumentUploadGateway.cs" />
     <Compile Include="IdsSearchRequest.cs" />
     <Compile Include="IMerchantAccountGateway.cs" />
     <Compile Include="IMerchantGateway.cs" />
@@ -174,6 +187,7 @@
     <Compile Include="PartialMatchNode.cs" />
     <Compile Include="PaymentMethod.cs" />
     <Compile Include="PaymentMethodNonce.cs" />
+    <Compile Include="PaymentMethodNonceDetails.cs" />
     <Compile Include="PaymentMethodAddressRequest.cs" />
     <Compile Include="PaymentMethodAddressOptionsRequest.cs" />
     <Compile Include="PaymentMethodGateway.cs" />
@@ -210,10 +224,12 @@
     <Compile Include="StatusEvent.cs" />
     <Compile Include="Subscription.cs" />
     <Compile Include="SubscriptionGateway.cs" />
+    <Compile Include="SubscriptionOptionsPayPalRequest.cs" />
     <Compile Include="SubscriptionOptionsRequest.cs" />
     <Compile Include="SubscriptionRequest.cs" />
     <Compile Include="SubscriptionSearchRequest.cs" />
     <Compile Include="SubscriptionStatusEvent.cs" />
+    <Compile Include="SubscriptionTransactionOptionsRequest.cs" />
     <Compile Include="SubscriptionTransactionRequest.cs" />
     <Compile Include="TextNode.cs" />
     <Compile Include="Test\Nonce.cs" />

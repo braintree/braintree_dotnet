@@ -120,10 +120,11 @@ namespace Braintree
         public static readonly PaymentInstrumentType US_BANK_ACCOUNT = new PaymentInstrumentType("us_bank_account");
         public static readonly PaymentInstrumentType VISA_CHECKOUT_CARD = new PaymentInstrumentType("visa_checkout_card");
         public static readonly PaymentInstrumentType MASTERPASS_CARD = new PaymentInstrumentType("masterpass_card");
+        public static readonly PaymentInstrumentType IDEAL_PAYMENT = new PaymentInstrumentType("ideal_payment");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
 
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, ANY, UNKNOWN };
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, IDEAL_PAYMENT, ANY, UNKNOWN };
 
         protected PaymentInstrumentType(string name) : base(name) {}
     }
@@ -180,6 +181,7 @@ namespace Braintree
         public virtual TransactionEscrowStatus EscrowStatus { get; protected set; }
         public virtual TransactionStatus Status { get; protected set; }
         public virtual StatusEvent[] StatusHistory { get; protected set; }
+        public virtual List<AuthorizationAdjustment> AuthorizationAdjustments { get; protected set; }
         public virtual string SubscriptionId { get; protected set; }
         public virtual Subscription Subscription { get; protected set; }
         public virtual decimal? TaxAmount { get; protected set; }
@@ -202,6 +204,8 @@ namespace Braintree
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
+        public virtual FacilitatedDetails FacilitatedDetails { get; protected set; }
+        public virtual FacilitatorDetails FacilitatorDetails { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -354,6 +358,12 @@ namespace Braintree
                 Disputes.Add(new Dispute(dispute));
             }
 
+            AuthorizationAdjustments = new List<AuthorizationAdjustment>();
+            foreach (var authorizationAdjustment in node.GetList("authorization-adjustments/authorization-adjustment"))
+            {
+                AuthorizationAdjustments.Add(new AuthorizationAdjustment(authorizationAdjustment));
+            }
+
             var riskDataNode = node.GetNode("risk-data");
             if (riskDataNode != null)
             {
@@ -364,6 +374,18 @@ namespace Braintree
             if (threeDSecureInfoNode != null && !threeDSecureInfoNode.IsEmpty())
             {
                 ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
+            }
+
+            var facilitatedDetailsNode = node.GetNode("facilitated-details");
+            if (facilitatedDetailsNode != null && !facilitatedDetailsNode.IsEmpty())
+            {
+                FacilitatedDetails = new FacilitatedDetails(facilitatedDetailsNode);
+            }
+
+            var facilitatorDetailsNode = node.GetNode("facilitator-details");
+            if (facilitatorDetailsNode != null && !facilitatorDetailsNode.IsEmpty())
+            {
+                FacilitatorDetails = new FacilitatorDetails(facilitatorDetailsNode);
             }
         }
 

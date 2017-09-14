@@ -1,5 +1,4 @@
-﻿#if net452
-
+#if net452
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;

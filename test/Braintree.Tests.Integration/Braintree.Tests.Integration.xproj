@@ -68,6 +68,8 @@
     <Compile Include="CustomerIntegrationTest.cs" />
     <Compile Include="DisbursementIntegrationTest.cs" />
     <Compile Include="DiscountIntegrationTest.cs" />
+    <Compile Include="DisputeIntegrationTest.cs" />
+    <Compile Include="DocumentUploadIntegrationTest.cs" />
     <Compile Include="MerchantAccountIntegrationTest.cs" />
     <Compile Include="MerchantIntegrationTest.cs" />
     <Compile Include="OAuthIntegrationTest.cs" />

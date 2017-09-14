@@ -817,6 +817,91 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
         }
 
+        [Test]
+        public void Create_WithVisaCheckoutCardPaymentMethodNonce()
+        {
+            string nonce = Braintree.Test.Nonce.VisaCheckoutMasterCard;
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+                PaymentMethodNonce = nonce
+            });
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(1, result.Target.PaymentMethods.Length);
+            Assert.AreEqual("VisaCheckoutCard", result.Target.PaymentMethods[0].GetType().Name);
+
+            VisaCheckoutCard visaCheckoutCard = result.Target.VisaCheckoutCards[0];
+            Assert.AreEqual("abc123", visaCheckoutCard.CallId);
+            Assert.IsNotNull(visaCheckoutCard.BillingAddress);
+            Assert.IsNotNull(visaCheckoutCard.Bin);
+            Assert.IsNotNull(visaCheckoutCard.CardType);
+            Assert.IsNotNull(visaCheckoutCard.CardholderName);
+            Assert.IsNotNull(visaCheckoutCard.Commercial);
+            Assert.IsNotNull(visaCheckoutCard.CountryOfIssuance);
+            Assert.IsNotNull(visaCheckoutCard.CreatedAt);
+            Assert.IsNotNull(visaCheckoutCard.CustomerId);
+            Assert.IsNotNull(visaCheckoutCard.CustomerLocation);
+            Assert.IsNotNull(visaCheckoutCard.Debit);
+            Assert.IsNotNull(visaCheckoutCard.IsDefault);
+            Assert.IsNotNull(visaCheckoutCard.DurbinRegulated);
+            Assert.IsNotNull(visaCheckoutCard.ExpirationDate);
+            Assert.IsNotNull(visaCheckoutCard.ExpirationMonth);
+            Assert.IsNotNull(visaCheckoutCard.ExpirationYear);
+            Assert.IsNotNull(visaCheckoutCard.IsExpired);
+            Assert.IsNotNull(visaCheckoutCard.Healthcare);
+            Assert.IsNotNull(visaCheckoutCard.ImageUrl);
+            Assert.IsNotNull(visaCheckoutCard.IssuingBank);
+            Assert.IsNotNull(visaCheckoutCard.LastFour);
+            Assert.IsNotNull(visaCheckoutCard.MaskedNumber);
+            Assert.IsNotNull(visaCheckoutCard.Payroll);
+            Assert.IsNotNull(visaCheckoutCard.Prepaid);
+            Assert.IsNotNull(visaCheckoutCard.ProductId);
+            Assert.IsNotNull(visaCheckoutCard.Subscriptions);
+            Assert.IsNotNull(visaCheckoutCard.Token);
+            Assert.IsNotNull(visaCheckoutCard.UniqueNumberIdentifier);
+            Assert.IsNotNull(visaCheckoutCard.UpdatedAt);
+        }
+
+        [Test]
+        public void Create_WithMasterpassCardPaymentMethodNonce()
+        {
+            string nonce = Braintree.Test.Nonce.MasterpassDiscover;
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+                PaymentMethodNonce = nonce
+            });
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(1, result.Target.PaymentMethods.Length);
+            Assert.AreEqual("MasterpassCard", result.Target.PaymentMethods[0].GetType().Name);
+
+            MasterpassCard masterpassCard = result.Target.MasterpassCards[0];
+            Assert.IsNotNull(masterpassCard.BillingAddress);
+            Assert.IsNotNull(masterpassCard.Bin);
+            Assert.IsNotNull(masterpassCard.CardType);
+            Assert.IsNotNull(masterpassCard.CardholderName);
+            Assert.IsNotNull(masterpassCard.Commercial);
+            Assert.IsNotNull(masterpassCard.CountryOfIssuance);
+            Assert.IsNotNull(masterpassCard.CreatedAt);
+            Assert.IsNotNull(masterpassCard.CustomerId);
+            Assert.IsNotNull(masterpassCard.CustomerLocation);
+            Assert.IsNotNull(masterpassCard.Debit);
+            Assert.IsNotNull(masterpassCard.IsDefault);
+            Assert.IsNotNull(masterpassCard.DurbinRegulated);
+            Assert.IsNotNull(masterpassCard.ExpirationDate);
+            Assert.IsNotNull(masterpassCard.ExpirationMonth);
+            Assert.IsNotNull(masterpassCard.ExpirationYear);
+            Assert.IsNotNull(masterpassCard.IsExpired);
+            Assert.IsNotNull(masterpassCard.Healthcare);
+            Assert.IsNotNull(masterpassCard.ImageUrl);
+            Assert.IsNotNull(masterpassCard.IssuingBank);
+            Assert.IsNotNull(masterpassCard.LastFour);
+            Assert.IsNotNull(masterpassCard.MaskedNumber);
+            Assert.IsNotNull(masterpassCard.Payroll);
+            Assert.IsNotNull(masterpassCard.Prepaid);
+            Assert.IsNotNull(masterpassCard.ProductId);
+            Assert.IsNotNull(masterpassCard.Subscriptions);
+            Assert.IsNotNull(masterpassCard.Token);
+            Assert.IsNotNull(masterpassCard.UniqueNumberIdentifier);
+            Assert.IsNotNull(masterpassCard.UpdatedAt);
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheCustomer()
@@ -1198,18 +1283,18 @@ namespace Braintree.Tests.Integration
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
-            var coinbaseToken = GenerateToken();
+            var paypalToken = GenerateToken();
 
-            var coinbaseCreateRequest = new PaymentMethodRequest
+            var paypalCreateRequest = new PaymentMethodRequest
             {
                 CustomerId = customer.Id,
-                PaymentMethodNonce = Nonce.Coinbase,
-                Token = coinbaseToken
+                PaymentMethodNonce = Nonce.PayPalBillingAgreement,
+                Token = paypalToken
             };
-            PaymentMethod coinbasePaymentMethod = gateway.PaymentMethod.Create(coinbaseCreateRequest).Target;
+            PaymentMethod paypalPaymentMethod = gateway.PaymentMethod.Create(paypalCreateRequest).Target;
 
             customer = gateway.Customer.Find(customer.Id);
-            Assert.AreEqual(customer.DefaultPaymentMethod.Token, coinbaseToken);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, paypalToken);
 
             var venmoToken = GenerateToken();
 
@@ -1224,7 +1309,7 @@ namespace Braintree.Tests.Integration
 
             customer = gateway.Customer.Find(customer.Id);
             Assert.AreNotEqual(customer.DefaultPaymentMethod.Token, venmoToken);
-            Assert.AreEqual(customer.DefaultPaymentMethod.Token, coinbaseToken);
+            Assert.AreEqual(customer.DefaultPaymentMethod.Token, paypalToken);
 
             var updateRequest = new CustomerRequest
             {

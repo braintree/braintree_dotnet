@@ -22,7 +22,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ToXml_Includes_DeviceData()
+        public void ToXml_Includes_CreditCard_DeviceData()
         {
             var request = new CustomerRequest()
             {
@@ -30,6 +30,20 @@ namespace Braintree.Tests
                 {
                     DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"my_fmid\"}"
                 }
+            };
+
+            Assert.IsTrue(request.ToXml().Contains("device_session_id"));
+            Assert.IsTrue(request.ToXml().Contains("my_dsid"));
+            Assert.IsTrue(request.ToXml().Contains("fraud_merchant_id"));
+            Assert.IsTrue(request.ToXml().Contains("my_fmid"));
+        }
+
+        [Test]
+        public void ToXml_Includes_DeviceData()
+        {
+            var request = new CustomerRequest()
+            {
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"my_fmid\"}"
             };
 
             Assert.IsTrue(request.ToXml().Contains("device_session_id"));

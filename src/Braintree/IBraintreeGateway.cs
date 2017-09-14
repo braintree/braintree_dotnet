@@ -63,6 +63,8 @@ namespace Braintree
         ICreditCardVerificationGateway CreditCardVerification { get; }
         ICustomerGateway Customer { get; }
         IDiscountGateway Discount { get; }
+        IDisputeGateway Dispute { get; }
+        IDocumentUploadGateway DocumentUpload { get; }
         Environment Environment { get; set; }
         IMerchantGateway Merchant { get; }
         IMerchantAccountGateway MerchantAccount { get; }

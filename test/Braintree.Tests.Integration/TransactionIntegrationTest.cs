@@ -1471,9 +1471,10 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
+            Assert.AreEqual(TransactionStatus.SETTLED, transaction.Status);
+            Assert.AreEqual(PaymentInstrumentType.IDEAL_PAYMENT, transaction.PaymentInstrumentType);
 
             IdealPaymentDetails idealPaymentDetails = transaction.IdealPaymentDetails;
-            Assert.AreEqual(TransactionStatus.SETTLED, transaction.Status);
             Assert.IsTrue(Regex.IsMatch(idealPaymentDetails.IdealPaymentId, "^idealpayment_\\w{6,}$"));
             Assert.IsTrue(Regex.IsMatch(idealPaymentDetails.IdealTransactionId, "^\\d{16,}$"));
             Assert.IsTrue(idealPaymentDetails.ImageUrl.StartsWith("https://"));
@@ -1734,7 +1735,8 @@ namespace Braintree.Tests.Integration
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
-                }
+                },
+                DeviceSessionId = "abc123"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -1742,6 +1744,7 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Target;
 
             Assert.IsNotNull(transaction.RiskData);
+            Assert.IsNotNull(transaction.RiskData.decision);
         }
 
         [Test]
@@ -1793,11 +1796,15 @@ namespace Braintree.Tests.Integration
                 {
                     CustomerBrowser = "IE6",
                     CustomerIP = "192.168.0.1"
-                }
+                },
+                DeviceSessionId = "abc123"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsNotNull(transaction.RiskData.decision);
+
         }
 
         [Test]
@@ -2920,16 +2927,6 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Transaction;
 
             Assert.AreEqual(TransactionGatewayRejectionReason.FRAUD, transaction.GatewayRejectionReason);
-        }
-
-        [Test]
-        public void UnrecognizedValuesAreCategorizedAsSuch()
-        {
-            Transaction transaction = gateway.Transaction.Find("unrecognized_transaction_id");
-
-            Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
-            Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
-            Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
         }
 
         [Test]
@@ -4431,6 +4428,19 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(dispute.Amount, decimal.Parse("1000.00"));
             Assert.AreEqual(dispute.CurrencyIsoCode, "USD");
             Assert.AreEqual(dispute.Reason, DisputeReason.RETRIEVAL);
+        }
+
+        [Test]
+        public void Find_ExposesAuthorizationAdjustments()
+        {
+            Transaction transaction = gateway.Transaction.Find("authadjustmenttransaction");
+
+            List<AuthorizationAdjustment> authorizationAdjustments = transaction.AuthorizationAdjustments;
+            AuthorizationAdjustment authorizationAdjustment = authorizationAdjustments[0];
+
+            Assert.AreEqual(authorizationAdjustment.Amount, decimal.Parse("-20.00"));
+            Assert.AreEqual(authorizationAdjustment.Success, true);
+            Assert.AreEqual(authorizationAdjustment.Timestamp.Value.Year, DateTime.Now.Year);
         }
 
         [Test]
@@ -6342,6 +6352,61 @@ namespace Braintree.Tests.Integration
             var transactionResult = gateway.Transaction.Sale(request);
             Assert.IsTrue(transactionResult.IsSuccess());
             Assert.AreEqual(transactionResult.Target.BillingAddress.PostalCode, "94107");
+        }
+
+        [Test]
+        public void PaymentMethodGrantIncludesFacilitatedInformation() {
+            var partnerMerchantGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_public_id",
+                PublicKey = "oauth_app_partner_user_public_key",
+                PrivateKey = "oauth_app_partner_user_private_key"
+            };
+            var customerRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/19"
+                }
+            };
+
+            Customer customer = partnerMerchantGateway.Customer.Create(customerRequest).Target;
+            CreditCard creditCard = customer.CreditCards[0];
+            var token = creditCard.Token;
+
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "grant_payment_method");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "grant_payment_method"
+            });
+
+            BraintreeGateway accessTokenGateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+            PaymentMethodGrantRequest optionsRequest = new PaymentMethodGrantRequest()
+            {
+                AllowVaulting = false
+            };
+
+            Result<PaymentMethodNonce> grantResult = accessTokenGateway.PaymentMethod.Grant(token, optionsRequest);
+            var request = new TransactionRequest {
+                Amount = 100M,
+                PaymentMethodNonce = grantResult.Target.Nonce
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Transaction transaction = transactionResult.Target;
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Assert.AreEqual(transaction.FacilitatedDetails.MerchantId, "integration_merchant_id");
+            Assert.AreEqual(transaction.FacilitatedDetails.MerchantName, "14ladders");
+            Assert.AreEqual(transaction.FacilitatedDetails.PaymentMethodNonce, grantResult.Target.Nonce);
+            Assert.AreEqual(transaction.FacilitatorDetails.OauthApplicationClientId, "client_id$development$integration_client_id");
+            Assert.AreEqual(transaction.FacilitatorDetails.OauthApplicationName, "PseudoShop");
+            Assert.AreEqual(transaction.FacilitatorDetails.SourcePaymentMethodToken, token);
         }
     }
 }
