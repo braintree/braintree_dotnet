@@ -1,4 +1,5 @@
 using Braintree.Exceptions;
+using Braintree.Test;
 using Braintree.TestUtil;
 using NUnit.Framework;
 using System.Threading.Tasks;
@@ -109,7 +110,197 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(info.LiabilityShifted, true);
             Assert.AreEqual(info.LiabilityShiftPossible, true);
         }
-        
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinData()
+#else
+        public void FindAsync_ExposesBinData()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactableUnknownIndicators;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
+            Assert.AreEqual(nonce.BinData.Debit, Braintree.CreditCardDebit.UNKNOWN);
+            Assert.AreEqual(nonce.BinData.DurbinRegulated, Braintree.CreditCardDurbinRegulated.UNKNOWN);
+            Assert.AreEqual(nonce.BinData.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
+            Assert.AreEqual(nonce.BinData.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
+            Assert.AreEqual(nonce.BinData.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
+            Assert.AreEqual(nonce.BinData.CountryOfIssuance, "Unknown");
+            Assert.AreEqual(nonce.BinData.IssuingBank, "Unknown");
+            Assert.AreEqual(nonce.BinData.ProductId,"Unknown");
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataPrepaidValue()
+#else
+        public void FindAsync_ExposesBinDataPrepaidValue()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactablePrepaid;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.Prepaid, Braintree.CreditCardPrepaid.YES);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataCommercial()
+#else
+        public void FindAsync_ExposesBinDataCommercial()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactableCommercial;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.Commercial, Braintree.CreditCardCommercial.YES);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataDebit()
+#else
+        public void FindAsync_ExposesBinDataDebit()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactableDebit;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.Debit, Braintree.CreditCardDebit.YES);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataDurbinRegulated()
+#else
+        public void FindAsync_ExposesBinDataDurbinRegulated()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactableDurbinRegulated;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.DurbinRegulated, Braintree.CreditCardDurbinRegulated.YES);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataHealthcare()
+#else
+        public void FindAsync_ExposesBinDataHealthcare()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactableHealthcare;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.Healthcare, Braintree.CreditCardHealthcare.YES);
+            Assert.AreEqual(nonce.BinData.ProductId, "J3");
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataPayroll()
+#else
+        public void FindAsync_ExposesBinDataPayroll()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactablePayroll;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.Payroll, Braintree.CreditCardPayroll.YES);
+            Assert.AreEqual(nonce.BinData.ProductId, "MSA");
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataIssuingBank()
+#else
+        public void FindAsync_ExposesBinDataIssuingBank()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactableIssuingBankNetworkOnly;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.IssuingBank, "NETWORK ONLY");
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataCountryOfIssuance()
+#else
+        public void FindAsync_ExposesBinDataCountryOfIssuance()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactableCountryOfIssuanceUSA;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.CountryOfIssuance, "USA");
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
         [Test]
 #if netcore
         public async Task FindAsync_ExposesThreeDSecureInfo()

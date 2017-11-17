@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.9.0</AssemblyName>
+    <AssemblyName>Braintree-3.10.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -72,6 +72,7 @@
     <Compile Include="ClientTokenOptionsRequest.cs" />
     <Compile Include="CredentialsParser.cs" />
     <Compile Include="BaseCreditCardRequest.cs" />
+    <Compile Include="BinData.cs" />
     <Compile Include="BraintreeGateway.cs" />
     <Compile Include="BraintreeService.cs" />
     <Compile Include="BusinessRequest.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="FacilitatorDetails.cs" />
     <Compile Include="FundingRequest.cs" />
     <Compile Include="GenericAddressRequest.cs" />
+    <Compile Include="GrantedPaymentInstrumentUpdate.cs" />
     <Compile Include="Hasher.cs" />
     <Compile Include="IAddOnGateway.cs" />
     <Compile Include="IAddressGateway.cs" />

@@ -12,6 +12,7 @@ namespace Braintree
         public virtual string ExpirationYear { get; protected set; }
         public virtual string Token { get; protected set; }
         public virtual string LastFour { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
 
         protected internal ApplePayDetails(NodeWrapper node)
         {
@@ -23,6 +24,7 @@ namespace Braintree
             ExpirationYear = node.GetString("expiration-year");
             Token = node.GetString("token");
             LastFour = node.GetString("last-4");
+            ImageUrl = node.GetString("image-url");
         }
 
         [Obsolete("Mock Use Only")]

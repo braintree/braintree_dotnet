@@ -9,6 +9,7 @@ namespace Braintree
         public string CustomField { get; set; }
         public string Description { get; set; }
         public decimal Amount { get; set; }
+        public AddressRequest Shipping { get; set; }
 
         public override string ToXml(string root)
         {
@@ -27,7 +28,8 @@ namespace Braintree
                 AddElement("order-id", OrderId).
                 AddElement("custom-field", CustomField).
                 AddElement("description", Description).
-                AddElement("amount", Amount);
+                AddElement("amount", Amount).
+                AddElement("shipping", Shipping);
         }
     }
 }

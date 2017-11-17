@@ -64,6 +64,7 @@ namespace Braintree
         public string PaymentMethodNonce { get; set; }
         public decimal? ServiceFeeAmount { get; set; }
         public string SharedPaymentMethodToken { get; set; }
+        public string SharedPaymentMethodNonce { get; set; }
         public string SharedCustomerId { get; set; }
         public string SharedShippingAddressId { get; set; }
         public string SharedBillingAddressId { get; set; }
@@ -150,6 +151,7 @@ namespace Braintree
             builder.AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
             builder.AddElement("shared-payment-method-token", SharedPaymentMethodToken);
+            builder.AddElement("shared-payment-method-nonce", SharedPaymentMethodNonce);
             builder.AddElement("shared-customer-id", SharedCustomerId);
             builder.AddElement("shared-shipping-address-id", SharedShippingAddressId);
             builder.AddElement("shared-billing-address-id", SharedBillingAddressId);

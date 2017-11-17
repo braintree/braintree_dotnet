@@ -6,24 +6,16 @@
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.9.0-*",
+  "version": "3.10.0-*",
   "packOptions": {
     "releaseNotes": "
-* Add `IDEAL_PAYMENT` to `PaymentInstrumentType`
-* Improve async for .NET 4.5 (Thanks, @onlyann)
-* Add additional properties to PaymentMethodNonce
-* Add AuthorizationAdjustment class and `AuthorizationAdjustments` to Transaction
-* Coinbase is no longer a supported payment method. `PAYMENT_METHOD_NO_LONGER_SUPPORTED` will be returned for Coinbase operations.
-* Add facilitated transaction information to Transaction if present
-* Add `SubmitForSettlement` for `SubscriptionGateway.RetryCharge`
-* Add `options` -> `paypal` -> `description` for creating and updating subscriptions
-* Add `Dispute` API
-* Add `DocumentUpload` API
-* Add `Bin` to `ApplePayCard`
-* Add `deviceDataCaptured` field to `RiskData`
-* Fix bug where `DeviceData` was not included in `CustomerRequest`
-* Fix bug where `VisaCheckoutCards` and `MasterpassCards` were not included in `Customer`
-* Add support for upgrading a PayPal future payment refresh token to a billing agreement
+* Add GrantedPaymentInstrumentUpdate webhook support
+* Add loginOnly parameter to OAuth connect URL
+* Add ability to create a transaction from a shared nonce
+* Fix spec to expect PayPal transaction to settle immediately after successful capture
+* Add `options` -> `paypal` -> `shipping` for creating & updating customers as well as creating payment methods
+* Add `ImageUrl` to `ApplePayDetails`
+* Add `BinData` to `PaymentMethodNonce`
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for

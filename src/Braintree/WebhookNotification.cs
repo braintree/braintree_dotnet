@@ -33,6 +33,7 @@ namespace Braintree
         public static readonly WebhookKind ACCOUNT_UPDATER_DAILY_REPORT = new WebhookKind("account_updater_daily_report");
         public static readonly WebhookKind IDEAL_PAYMENT_COMPLETE = new WebhookKind("ideal_payment_complete");
         public static readonly WebhookKind IDEAL_PAYMENT_FAILED = new WebhookKind("ideal_payment_failed");
+        public static readonly WebhookKind GRANTED_PAYMENT_INSTRUMENT_UPDATE = new WebhookKind("granted_payment_instrument_update");
 
         public static readonly WebhookKind[] ALL = {
             CHECK,
@@ -60,7 +61,8 @@ namespace Braintree
             DISPUTE_WON,
             ACCOUNT_UPDATER_DAILY_REPORT,
             IDEAL_PAYMENT_COMPLETE,
-            IDEAL_PAYMENT_FAILED
+            IDEAL_PAYMENT_FAILED,
+            GRANTED_PAYMENT_INSTRUMENT_UPDATE
         };
 
         protected WebhookKind(string name) : base(name) {}
@@ -82,6 +84,8 @@ namespace Braintree
         public virtual ConnectedMerchantPayPalStatusChanged ConnectedMerchantPayPalStatusChanged { get; protected set; }
         public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
         public virtual IdealPayment IdealPayment { get; protected set; }
+        public virtual GrantedPaymentInstrumentUpdate GrantedPaymentInstrumentUpdate { get; protected set; }
+
 
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -143,6 +147,11 @@ namespace Braintree
             if (WrapperNode.GetNode("ideal-payment") != null)
             {
                 IdealPayment = new IdealPayment(WrapperNode.GetNode("ideal-payment"));
+            }
+
+            if (WrapperNode.GetNode("granted-payment-instrument-update") != null)
+            {
+                GrantedPaymentInstrumentUpdate = new GrantedPaymentInstrumentUpdate(WrapperNode.GetNode("granted-payment-instrument-update"));
             }
 
             if (WrapperNode.GetNode("errors") != null)

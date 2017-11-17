@@ -85,7 +85,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
         }
-        
+
         [Test]
         public void Create_CreatesPayPalAccountWithOrderPaymentNonceAndPayPalOptions()
         {
@@ -104,6 +104,17 @@ namespace Braintree.Tests.Integration
                         CustomField = "custom merchant field",
                         Description = "merchant description",
                         Amount = 1.23M,
+                        Shipping = new AddressRequest {
+                            Company = "Braintree P.S.",
+                            CountryName = "Mexico",
+                            ExtendedAddress = "Apt 456",
+                            FirstName = "Thomas",
+                            LastName = "Smithy",
+                            Locality = "Braintree",
+                            PostalCode = "54321",
+                            Region = "MA",
+                            StreetAddress = "456 Road"
+                        }
                     }
                 }
             };
@@ -115,7 +126,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
         }
-        
+
         [Test]
         public void Create_CreatesPayPalAccountWithOneTimePaymentNonceFails()
         {
@@ -136,7 +147,7 @@ namespace Braintree.Tests.Integration
                 paymentMethodResult.Errors.ForObject("paypal-account").OnField("base")[0].Code
             );
         }
-        
+
         [Test]
         public void Create_CreatesPayPalAccountWithPayPalRefreshToken()
         {

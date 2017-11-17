@@ -79,6 +79,8 @@ namespace Braintree
                 return IdealPaymentCompleteSampleXml(id);
             } else if (kind == WebhookKind.IDEAL_PAYMENT_FAILED) {
                 return IdealPaymentFailedSampleXml(id);
+            } else if (kind == WebhookKind.GRANTED_PAYMENT_INSTRUMENT_UPDATE) {
+                return GrantedPaymentInstrumentUpdateSampleXml();
             } else {
                 return SubscriptionXml(id);
             }
@@ -406,6 +408,23 @@ namespace Braintree
                     Node("created-at", "2016-11-29T23:27:34.547Z"),
                     Node("approval-url", "https://example.com"),
                     Node("ideal-transaction-id", "1234567890")
+            );
+        }
+
+        private string GrantedPaymentInstrumentUpdateSampleXml() {
+            return Node("granted-payment-instrument-update",
+                    Node("grant-owner-merchant-id", "vczo7jqrpwrsi2px"),
+                    Node("grant-recipient-merchant-id", "cf0i8wgarszuy6hc"),
+                    Node("payment-method-nonce",
+                        Node("nonce", "ee257d98-de40-47e8-96b3-a6954ea7a9a4"),
+                        Node("consumed", TYPE_BOOLEAN, "false"),
+                        Node("locked", TYPE_BOOLEAN, "false")
+                        ),
+                    Node("token", "abc123z"),
+                    Node("updated-fields", TYPE_ARRAY,
+                        Node("item", "expiration-month"),
+                        Node("item", "expiration-year")
+                        )
             );
         }
 

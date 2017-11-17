@@ -1,3 +1,12 @@
+## 3.10.0
+* Add GrantedPaymentInstrumentUpdate webhook support
+* Add loginOnly parameter to OAuth connect URL
+* Add ability to create a transaction from a shared nonce
+* Fix spec to expect PayPal transaction to settle immediately after successful capture
+* Add `options` -> `paypal` -> `shipping` for creating & updating customers as well as creating payment methods
+* Add `ImageUrl` to `ApplePayDetails`
+* Add `BinData` to `PaymentMethodNonce`
+
 ## 3.9.0
 * Add `IDEAL_PAYMENT` to `PaymentInstrumentType`
 * Improve async for .NET 4.5 (Thanks, @onlyann)

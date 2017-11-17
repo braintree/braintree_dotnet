@@ -9,6 +9,7 @@ namespace Braintree
         public virtual string Type { get; protected set; }
         public virtual PaymentMethodNonceDetails Details { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
+        public virtual BinData BinData { get; protected set; }
 
         protected internal PaymentMethodNonce(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -26,6 +27,12 @@ namespace Braintree
             if (threeDSecureInfoNode != null && !threeDSecureInfoNode.IsEmpty())
             {
                 ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
+            }
+
+            var binData = node.GetNode("bin-data");
+            if (binData != null && !binData.IsEmpty())
+            {
+                BinData = new BinData(binData);
             }
         }
 

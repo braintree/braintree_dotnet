@@ -2595,6 +2595,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target.ApplePayDetails.LastFour);
             Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
             Assert.IsNotNull(result.Target.ApplePayDetails.SourceDescription);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ImageUrl);
         }
 
         [Test]
@@ -6161,7 +6162,7 @@ namespace Braintree.Tests.Integration
 
             Result<Transaction> settlementResult = gateway.Transaction.SubmitForSettlement(result.Target.Id);
             Assert.IsTrue(settlementResult.IsSuccess());
-            Assert.AreEqual(TransactionStatus.SETTLING, settlementResult.Target.Status);
+            Assert.AreEqual(TransactionStatus.SETTLED, settlementResult.Target.Status);
         }
 
         [Test]
@@ -6186,54 +6187,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void PayPalTransactionsReturnSettlementDeclinedResponse()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = 1000M,
-                PaymentMethodNonce = Nonce.PayPalFuturePayment,
-                Options = new TransactionOptionsRequest
-                {
-                    SubmitForSettlement = true
-                }
-            };
-
-            var transactionResult = gateway.Transaction.Sale(request);
-            Assert.IsTrue(transactionResult.IsSuccess());
-
-            gateway.TestTransaction.SettlementDecline(transactionResult.Target.Id);
-            Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
-
-            Assert.AreEqual("4001", transaction.ProcessorSettlementResponseCode);
-            Assert.AreEqual(TransactionStatus.SETTLEMENT_DECLINED, transaction.Status);
-            Assert.AreEqual("Settlement Declined", transaction.ProcessorSettlementResponseText);
-        }
-
-        [Test]
-        public void PayPalTransactionsReturnSettlementPendingResponse()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = 1000M,
-                PaymentMethodNonce = Nonce.PayPalFuturePayment,
-                Options = new TransactionOptionsRequest
-                {
-                    SubmitForSettlement = true
-                }
-            };
-
-            var transactionResult = gateway.Transaction.Sale(request);
-            Assert.IsTrue(transactionResult.IsSuccess());
-
-            gateway.TestTransaction.SettlementPending(transactionResult.Target.Id);
-            Transaction transaction = gateway.Transaction.Find(transactionResult.Target.Id);
-
-            Assert.AreEqual("4002", transaction.ProcessorSettlementResponseCode);
-            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
-            Assert.AreEqual("Settlement Pending", transaction.ProcessorSettlementResponseText);
-        }
-
-        [Test]
         public void PayPalTransactionsReturnRequiredFields()
         {
             Transaction transaction = gateway.Transaction.Find("settledtransaction");
@@ -6253,7 +6206,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void SharedVault() {
+        public void SharedVaultWithPaymentMethodToken() {
             var sharerGateway = new BraintreeGateway
             {
                 Environment = Environment.DEVELOPMENT,
@@ -6297,6 +6250,62 @@ namespace Braintree.Tests.Integration
             };
             var transactionResult = gateway.Transaction.Sale(request);
             Assert.IsTrue(transactionResult.IsSuccess());
+        }
+
+        [Test]
+        public void SharedVaultWithPaymentMethodNonce() {
+            var sharerGateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_public_id",
+                PublicKey = "oauth_app_partner_user_public_key",
+                PrivateKey = "oauth_app_partner_user_private_key"
+            };
+            var customerRequest = new CustomerRequest
+            {CreditCard = new CreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/19",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        PostalCode = "94107"
+                }
+            }};
+
+            Customer customer = sharerGateway.Customer.Create(customerRequest).Target;
+            CreditCard card = customer.CreditCards[0];
+            Address billingAddress = card.BillingAddress;
+            Address shippingAddress = customer.Addresses[0];
+
+            BraintreeGateway oauthGateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+            string code = OAuthTestHelper.CreateGrant(oauthGateway, "integration_merchant_id", "shared_vault_transactions");
+            ResultImpl<OAuthCredentials> accessTokenResult = oauthGateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "shared_vault_transactions"
+            });
+
+            string sharedNonce = sharerGateway.PaymentMethodNonce.Create(card.Token).Target.Nonce;
+
+            gateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+            var request = new TransactionRequest {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                SharedPaymentMethodNonce = sharedNonce,
+                SharedCustomerId = customer.Id,
+                SharedShippingAddressId = shippingAddress.Id,
+                SharedBillingAddressId = billingAddress.Id
+            };
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+
+            Transaction transaction = transactionResult.Target;
+            Assert.AreEqual(transaction.FacilitatedDetails.MerchantId, "integration_merchant_id");
+            Assert.AreEqual(transaction.FacilitatedDetails.MerchantName, "14ladders");
+            Assert.AreEqual(transaction.FacilitatedDetails.PaymentMethodNonce, null);
+            Assert.AreEqual(transaction.FacilitatorDetails.OauthApplicationClientId, "client_id$development$integration_client_id");
+            Assert.AreEqual(transaction.FacilitatorDetails.OauthApplicationName, "PseudoShop");
         }
 
 

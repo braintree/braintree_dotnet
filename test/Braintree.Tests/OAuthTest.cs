@@ -45,6 +45,7 @@ namespace Braintree.Tests
                 Scope = "read_write",
                 State = "baz_state",
                 LandingPage = "login",
+                LoginOnly = true,
                 User = new OAuthConnectUrlUserRequest {
                     Country = "USA",
                     Email = "foo@example.com",
@@ -95,6 +96,7 @@ namespace Braintree.Tests
             Assert.AreEqual("read_write", query["scope"]);
             Assert.AreEqual("baz_state", query["state"]);
             Assert.AreEqual("login", query["landing_page"]);
+            Assert.AreEqual("true", query["login_only"]);
 
             Assert.AreEqual("USA", query["user[country]"]);
             Assert.AreEqual("foo@example.com", query["user[email]"]);

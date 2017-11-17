@@ -381,6 +381,25 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForGrantedPaymentInstrumentUpdate()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.GRANTED_PAYMENT_INSTRUMENT_UPDATE, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.GRANTED_PAYMENT_INSTRUMENT_UPDATE, notification.Kind);
+          GrantedPaymentInstrumentUpdate update = notification.GrantedPaymentInstrumentUpdate;
+
+          Assert.AreEqual("vczo7jqrpwrsi2px", update.GrantOwnerMerchantId);
+          Assert.AreEqual("cf0i8wgarszuy6hc", update.GrantRecipientMerchantId);
+          Assert.AreEqual("ee257d98-de40-47e8-96b3-a6954ea7a9a4", update.PaymentMethodNonce);
+          Assert.AreEqual("abc123z", update.Token);
+          Assert.AreEqual("expiration-month", update.UpdatedFields[0]);
+          Assert.AreEqual("expiration-year", update.UpdatedFields[1]);
+          Assert.AreEqual(2, update.UpdatedFields.Count);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForCheck()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CHECK, "");

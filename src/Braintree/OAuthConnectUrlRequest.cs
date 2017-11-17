@@ -8,6 +8,7 @@ namespace Braintree
         public string State { get; set; }
         public string ClientId { get; set; }
         public string LandingPage { get; set; }
+        public bool LoginOnly { get; set; }
         public string[] PaymentMethods { get; set; }
         public OAuthConnectUrlUserRequest User { get; set; }
         public OAuthConnectUrlBusinessRequest Business { get; set; }
@@ -25,6 +26,7 @@ namespace Braintree
             builder.AddTopLevelElement("scope", Scope);
             builder.AddTopLevelElement("state", State);
             builder.AddTopLevelElement("landing_page", LandingPage);
+            builder.AddTopLevelElement("login_only", LoginOnly.ToString().ToLower());
             builder.AddTopLevelElement("client_id", ClientId);
 
             foreach (var paymentMethod in PaymentMethods)
