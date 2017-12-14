@@ -195,7 +195,7 @@ namespace Braintree
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 };
 
-                SetWebProxy(httpClientHandler, URL);
+                SetWebProxy(httpClientHandler, Environment.GatewayURL + URL);
 
                 using (var client = new HttpClient(httpClientHandler))
                 {
@@ -319,7 +319,7 @@ namespace Braintree
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 };
 
-                SetWebProxy(httpClientHandler, URL);
+                SetWebProxy(httpClientHandler, Environment.GatewayURL + URL);
 
                 using (var client = new HttpClient(httpClientHandler))
                 {

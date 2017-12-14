@@ -1,3 +1,8 @@
+## 3.10.1
+* Deprecate `OAuthGateway::ComputeSignature`
+* Fix spec to expect PayPal transactions to move to settling rather than settled
+* Fix absolute Url being passed to `SetWebProxy` in .NET Core
+
 ## 3.10.0
 * Add GrantedPaymentInstrumentUpdate webhook support
 * Add loginOnly parameter to OAuth connect URL

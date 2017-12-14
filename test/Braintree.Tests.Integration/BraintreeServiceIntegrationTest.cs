@@ -1,6 +1,7 @@
 using Braintree.Exceptions;
 using Braintree.TestUtil;
 using NUnit.Framework;
+using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
 {
@@ -69,5 +70,51 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(oauthConfiguration.AccessToken, headers.Split(' ')[1]);
 #endif
         }
+
+#if netcore
+        [Test]
+        public void SetWebProxy_DoesNotThrowUriException()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+            configuration.WebProxy = new WebProxy("http://localhost:3000");
+
+            BraintreeService service = new BraintreeService(configuration);
+            try {
+                service.Get(service.MerchantPath() + "/non-existent-route");
+                Assert.Fail("Should have thrown exception");
+            } catch (System.UriFormatException) {
+                Assert.Fail("Setting WebProxy should not throw a URI exception");
+            } catch (NotFoundException) {
+                // expected
+            }
+        }
+
+        [Test]
+        public async Task SetWebProxyAsync_DoesNotThrowUriException()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+            configuration.WebProxy = new WebProxy("http://localhost:3000");
+
+            BraintreeService service = new BraintreeService(configuration);
+            try {
+                await service.GetAsync(service.MerchantPath() + "/non-existent-route");
+                Assert.Fail("Should have thrown exception");
+            } catch (System.UriFormatException) {
+                Assert.Fail("Setting WebProxy should not throw a URI exception");
+            } catch (NotFoundException) {
+                // expected
+            }
+        }
+#endif
     }
 }

@@ -128,11 +128,6 @@ namespace Braintree.Tests
             Assert.AreEqual("USD", query["business[currency]"]);
             Assert.AreEqual("http://example.com", query["business[website]"]);
             Assert.AreEqual("2010-10", query["business[established_on]"]);
-            Assert.AreEqual(64, query["signature"].ToString().Length);
-
-            var hexRegex = new Regex("^[a-f0-9]+$");
-            Assert.IsTrue(hexRegex.IsMatch(query["signature"].ToString()));
-            Assert.AreEqual("SHA256", query["algorithm"]);
         }
        
         [Test]

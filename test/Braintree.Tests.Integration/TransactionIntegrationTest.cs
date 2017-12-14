@@ -6162,7 +6162,7 @@ namespace Braintree.Tests.Integration
 
             Result<Transaction> settlementResult = gateway.Transaction.SubmitForSettlement(result.Target.Id);
             Assert.IsTrue(settlementResult.IsSuccess());
-            Assert.AreEqual(TransactionStatus.SETTLED, settlementResult.Target.Status);
+            Assert.AreEqual(TransactionStatus.SETTLING, settlementResult.Target.Status);
         }
 
         [Test]
