@@ -33,7 +33,7 @@ namespace Braintree
     {
         private readonly BraintreeService Service;
         private readonly IBraintreeGateway Gateway;
-        private DisputeSearchRequest DisputeSearch { get; set; }        
+        private DisputeSearchRequest DisputeSearch { get; set; }
 
         protected internal DisputeGateway(IBraintreeGateway gateway)
         {
@@ -132,24 +132,34 @@ namespace Braintree
 
         public virtual Result<DisputeEvidence> AddTextEvidence(string disputeId, string content)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = content
+            };
+            return AddTextEvidence(disputeId, textEvidenceRequest);
+        }
+
+        public virtual Result<DisputeEvidence> AddTextEvidence(string disputeId, TextEvidenceRequest textEvidenceRequest)
+        {
+            NotFoundException notFoundException = new NotFoundException(String.Format("Dispute with ID '{0}' not found", disputeId));
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
                 throw notFoundException;
             }
-
-            if (content == null || content.Trim().Equals(""))
+            if (textEvidenceRequest.Content == null || textEvidenceRequest.Content.Trim().Equals(""))
             {
-                throw new ArgumentException("content cannot be empty");
+                throw new ArgumentException("Content cannot be empty");
             }
 
-
-            DisputeAddEvidenceRequest request = new DisputeAddEvidenceRequest();
-            request.Comments = content;
+            int temp;
+            if (textEvidenceRequest.SequenceNumber != null && !int.TryParse(textEvidenceRequest.SequenceNumber, out temp))
+            {
+                throw new ArgumentException("SequenceNumber must be an integer");
+            }
 
             try {
-                XmlNode disputeEvidenceXML = Service.Post(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", request);
+                XmlNode disputeEvidenceXML = Service.Post(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", textEvidenceRequest);
 
                 return new ResultImpl<DisputeEvidence>(new NodeWrapper(disputeEvidenceXML), Gateway);
             } catch (NotFoundException) {
@@ -159,23 +169,34 @@ namespace Braintree
 
         public virtual async Task<Result<DisputeEvidence>> AddTextEvidenceAsync(string disputeId, string content)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = content
+            };
+            return await AddTextEvidenceAsync(disputeId, textEvidenceRequest);
+        }
+
+        public virtual async Task<Result<DisputeEvidence>> AddTextEvidenceAsync(string disputeId, TextEvidenceRequest textEvidenceRequest)
+        {
+            NotFoundException notFoundException = new NotFoundException(String.Format("Dispute with ID '{0}' not found", disputeId));
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
                 throw notFoundException;
             }
-
-            if (content == null || content.Trim().Equals(""))
+            if (textEvidenceRequest.Content == null || textEvidenceRequest.Content.Trim().Equals(""))
             {
-                throw new ArgumentException("content cannot be empty");
+                throw new ArgumentException("Content cannot be empty");
             }
 
-            DisputeAddEvidenceRequest request = new DisputeAddEvidenceRequest();
-            request.Comments = content;
+            int temp;
+            if (textEvidenceRequest.SequenceNumber != null && !int.TryParse(textEvidenceRequest.SequenceNumber, out temp))
+            {
+                throw new ArgumentException("SequenceNumber must be an integer");
+            }
 
             try {
-                XmlNode disputeEvidenceXML = await Service.PostAsync(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", request);
+                XmlNode disputeEvidenceXML = await Service.PostAsync(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", textEvidenceRequest);
 
                 return new ResultImpl<DisputeEvidence>(new NodeWrapper(disputeEvidenceXML), Gateway);
             } catch (NotFoundException) {

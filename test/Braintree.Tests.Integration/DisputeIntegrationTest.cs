@@ -279,7 +279,7 @@ namespace Braintree.Tests.Integration
         public void AddTextEvidence_throwsNotFoundExceptionWhenDisputeNotFound()
         {
             NotFoundException exception = Assert.Throws<NotFoundException>(() => gateway.Dispute.AddTextEvidence("invalid-dispute-id", "some comment"));
-            Assert.AreEqual(exception.Message, "dispute with id 'invalid-dispute-id' not found");
+            Assert.AreEqual(exception.Message, "Dispute with ID 'invalid-dispute-id' not found");
         }
 
         [Test]
@@ -298,7 +298,7 @@ namespace Braintree.Tests.Integration
             }
             catch (NotFoundException exception)
             {
-                Assert.AreEqual(exception.Message, "dispute with id 'invalid-dispute-id' not found");
+                Assert.AreEqual(exception.Message, "Dispute with ID 'invalid-dispute-id' not found");
             }
         }
 #if net452

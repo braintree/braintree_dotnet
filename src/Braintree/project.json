@@ -6,12 +6,13 @@
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.10.1-*",
+  "version": "3.11.0-*",
   "packOptions": {
     "releaseNotes": "
-* Deprecate `OAuthGateway::ComputeSignature`
-* Fix spec to expect PayPal transactions to move to settling rather than settled
-* Fix absolute Url being passed to `SetWebProxy` in .NET Core
+* Change namespacing of Rakefile, so that Mono tests are run with `rake mono:test:all` and Core tests are run with `rake core:test:all`
+* Add support for Level 3 summary parameters `shippingAmount`, `discountAmount`, and `shipsFromPostalCode`
+* Add support for transaction line items
+* Add support for tagged evidence in `DisputeGateway#AddTextEvidence` and `AddTextEvidenceAsync` (Beta release)
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for

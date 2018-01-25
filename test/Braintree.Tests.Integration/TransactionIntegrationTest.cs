@@ -4039,6 +4039,1387 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("B", transaction.CvvResponseCode);
         }
 
+        [Test]
+        public void Sale_WithLevel3SummaryFields_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ShippingAmount = 1.00M,
+                DiscountAmount = 2.00M,
+                ShipsFromPostalCode = "12345",
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1.00, transaction.ShippingAmount);
+            Assert.AreEqual(2.00, transaction.DiscountAmount);
+            Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
+        }
+
+        [Test]
+        public void Sale_WhenDiscountAmountCannotBeNegative()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                DiscountAmount = -2.00M,
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE,
+                result.Errors.ForObject("Transaction").OnField("DiscountAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WhenDiscountAmountIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                DiscountAmount = 2147483647,
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_DISCOUNT_AMOUNT_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").OnField("DiscountAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WhenShippingAmountCannotBeNegative()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ShippingAmount = -1.00M,
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_SHIPPING_AMOUNT_CANNOT_BE_NEGATIVE,
+                result.Errors.ForObject("Transaction").OnField("ShippingAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WhenShippingAmountIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ShippingAmount = 2147483647,
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_SHIPPING_AMOUNT_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").OnField("ShippingAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WhenShipsFromPostalCodeIsTooLong()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ShipsFromPostalCode = "12345678901",
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_SHIPS_FROM_POSTAL_CODE_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").OnField("ShipsFromPostalCode")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WhenShipsFromPostalCodeInvalidCharacters()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ShipsFromPostalCode = "1$345",
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_SHIPS_FROM_POSTAL_CODE_INVALID_CHARACTERS,
+                result.Errors.ForObject("Transaction").OnField("ShipsFromPostalCode")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsZero()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 45.15M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+
+            List<TransactionLineItem> lineItems = transaction.GetLineItems();
+            Assert.AreEqual(0, lineItems.Count);
+        }
+
+        [Test]
+        public void Sale_WithLineItemsSingleOnlyRequiredFields()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 45.15M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        TotalAmount = 45.15,
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+
+            List<TransactionLineItem> lineItems = transaction.GetLineItems();
+            Assert.AreEqual(1, lineItems.Count);
+
+            TransactionLineItem lineItem = lineItems[0];
+            Assert.AreEqual(1.0232, lineItem.Quantity);
+            Assert.AreEqual("Name #1", lineItem.Name);
+            Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
+            Assert.AreEqual(45.1232, lineItem.UnitAmount);
+            Assert.AreEqual(45.15, lineItem.TotalAmount);
+        }
+
+        [Test]
+        public void Sale_WithLineItemsSingle()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 45.15M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        Description = "Description #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitTaxAmount = 1.23,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                        Url = "https://example.com/products/23434",
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+
+            List<TransactionLineItem> lineItems = transaction.GetLineItems();
+            Assert.AreEqual(1, lineItems.Count);
+
+            TransactionLineItem lineItem = lineItems[0];
+            Assert.AreEqual(1.0232, lineItem.Quantity);
+            Assert.AreEqual("Name #1", lineItem.Name);
+            Assert.AreEqual("Description #1", lineItem.Description);
+            Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
+            Assert.AreEqual(45.1232, lineItem.UnitAmount);
+            Assert.AreEqual(1.23, lineItem.UnitTaxAmount);
+            Assert.AreEqual("gallon", lineItem.UnitOfMeasure);
+            Assert.AreEqual(1.02, lineItem.DiscountAmount);
+            Assert.AreEqual(45.15, lineItem.TotalAmount);
+            Assert.AreEqual("23434", lineItem.ProductCode);
+            Assert.AreEqual("9SAASSD8724", lineItem.CommodityCode);
+            Assert.AreEqual("https://example.com/products/23434", lineItem.Url);
+        }
+
+        [Test]
+        public void Sale_WithLineItemsMultiple()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        Description = "Description #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 2.02,
+                        Name = "Name #2",
+                        Description = "Description #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 5,
+                        UnitOfMeasure = "gallon",
+                        TotalAmount = 45.15,
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+
+            List<TransactionLineItem> lineItems = transaction.GetLineItems();
+            Assert.AreEqual(2, lineItems.Count);
+
+            TransactionLineItem lineItem1 = null;
+            for (int i = 0; i < lineItems.Count; i++) {
+                TransactionLineItem lineItem = lineItems[i];
+                if (lineItem.Name.Equals("Name #1")) {
+                    lineItem1 = lineItem;
+                    break;
+                }
+            }
+            if (lineItem1 == null) {
+                Assert.Fail("TransactionLineItem with name \"Name #1\" not returned.");
+            }
+            Assert.AreEqual(1.0232, lineItem1.Quantity);
+            Assert.AreEqual("Name #1", lineItem1.Name);
+            Assert.AreEqual("Description #1", lineItem1.Description);
+            Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem1.Kind);
+            Assert.AreEqual(45.1232, lineItem1.UnitAmount);
+            Assert.AreEqual("gallon", lineItem1.UnitOfMeasure);
+            Assert.AreEqual(1.02, lineItem1.DiscountAmount);
+            Assert.AreEqual(45.15, lineItem1.TotalAmount);
+            Assert.AreEqual("23434", lineItem1.ProductCode);
+            Assert.AreEqual("9SAASSD8724", lineItem1.CommodityCode);
+
+            TransactionLineItem lineItem2 = null;
+            for (int i = 0; i < lineItems.Count; i++) {
+                TransactionLineItem lineItem = lineItems[i];
+                if (lineItem.Name.Equals("Name #2")) {
+                    lineItem2 = lineItem;
+                    break;
+                }
+            }
+            if (lineItem2 == null) {
+                Assert.Fail("TransactionLineItem with name \"Name #2\" not returned.");
+            }
+            Assert.AreEqual(2.02, lineItem2.Quantity);
+            Assert.AreEqual("Name #2", lineItem2.Name);
+            Assert.AreEqual("Description #2", lineItem2.Description);
+            Assert.AreEqual(TransactionLineItemKind.CREDIT, lineItem2.Kind);
+            Assert.AreEqual(5, lineItem2.UnitAmount);
+            Assert.AreEqual("gallon", lineItem2.UnitOfMeasure);
+            Assert.AreEqual(45.15, lineItem2.TotalAmount);
+            Assert.AreEqual(null, lineItem2.DiscountAmount);
+            Assert.AreEqual(null, lineItem2.ProductCode);
+            Assert.AreEqual(null, lineItem2.CommodityCode);
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorCommodityCodeIsTooLong()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "0123456789123",
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_COMMODITY_CODE_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("CommodityCode")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorDescriptionIsTooLong()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        Description = "This is a line item description which is far too long. Like, way too long to be practical. We don't like how long this line item description is.",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_DESCRIPTION_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("Description")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorDiscountAmountIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 2147483648,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("DiscountAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorDiscountAmountMustBeGreaterThanZero()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 0,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_MUST_BE_GREATER_THAN_ZERO,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("DiscountAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorKindIsRequired()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_KIND_IS_REQUIRED,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("Kind")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorNameIsRequired()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_NAME_IS_REQUIRED,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("Name")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorNameIsTooLong()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 3505,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "123456789012345678901234567890123456",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_NAME_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("Name")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorProductCodeIsTooLong()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 3505,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "123456789012345678901234567890123456",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_PRODUCT_CODE_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("ProductCode")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorQuantityIsRequired()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 3505,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_QUANTITY_IS_REQUIRED,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("Quantity")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorQuantityIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 2147483648,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_QUANTITY_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("Quantity")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorTotalAmountIsRequired()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_TOTAL_AMOUNT_IS_REQUIRED,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("TotalAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorTotalAmountIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 2147483648,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_TOTAL_AMOUNT_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("TotalAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorTotalAmountMustBeGreaterThanZero()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = -2,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_TOTAL_AMOUNT_MUST_BE_GREATER_THAN_ZERO,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("TotalAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUnitAmountIsRequired()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_AMOUNT_IS_REQUIRED,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUnitAmountIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 2147483648,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_AMOUNT_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUnitAmountMustBeGreaterThanZero()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = -2,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_AMOUNT_MUST_BE_GREATER_THAN_ZERO,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUnitOfMeasureIsTooLong()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "1234567890123",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_OF_MEASURE_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitOfMeasure")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUnitTaxAmountFormatIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.0122,
+                        UnitTaxAmount = 2.012,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_FORMAT_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitTaxAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUnitTaxAmountIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitTaxAmount = 1.23,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.0122,
+                        UnitTaxAmount = 2147483648,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitTaxAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUnitTaxAmountMustBeGreaterThanZero()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.0122,
+                        UnitTaxAmount = -1.23,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02,
+                        TotalAmount = 45.15,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_MUST_BE_GREATER_THAN_ZERO,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitTaxAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorTooManyLineItems()
+        {
+            var lineItems = new TransactionLineItemRequest[250];
+            for (int i = 0; i < 250; i++) {
+                lineItems[i] = new TransactionLineItemRequest
+                {
+                    Quantity = 2.02,
+                    Name = "Line item #" + i,
+                    LineItemKind = TransactionLineItemKind.CREDIT,
+                    UnitAmount = 5,
+                    UnitOfMeasure = "gallon",
+                    TotalAmount = 10.1,
+                };
+            }
+
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = lineItems,
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_TOO_MANY_LINE_ITEMS,
+                result.Errors.ForObject("Transaction").OnField("LineItems")[0].Code
+            );
+        }
+
         #pragma warning disable 0618
         [Test]    
         public void ConfirmTransparentRedirect_CreatesTheTransaction()

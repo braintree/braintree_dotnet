@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Braintree</RootNamespace>
-    <AssemblyName>Braintree-3.10.1</AssemblyName>
+    <AssemblyName>Braintree-3.11.0</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -158,6 +158,7 @@
     <Compile Include="ISubscriptionGateway.cs" />
     <Compile Include="ITestTransactionGateway.cs" />
     <Compile Include="ITransactionGateway.cs" />
+    <Compile Include="ITransactionLineItemGateway.cs" />
     <Compile Include="ITransparentRedirectGateway.cs" />
     <Compile Include="IWebhookNotificationGateway.cs" />
     <Compile Include="IWebhookTestingGateway.cs" />
@@ -233,6 +234,7 @@
     <Compile Include="SubscriptionStatusEvent.cs" />
     <Compile Include="SubscriptionTransactionOptionsRequest.cs" />
     <Compile Include="SubscriptionTransactionRequest.cs" />
+    <Compile Include="TextEvidenceRequest.cs" />
     <Compile Include="TextNode.cs" />
     <Compile Include="Test\Nonce.cs" />
     <Compile Include="ThreeDSecureInfo.cs" />
@@ -240,6 +242,9 @@
     <Compile Include="Transaction.cs" />
     <Compile Include="TransactionDetails.cs" />
     <Compile Include="TransactionGateway.cs" />
+    <Compile Include="TransactionLineItem.cs" />
+    <Compile Include="TransactionLineItemGateway.cs" />
+    <Compile Include="TransactionLineItemRequest.cs" />
     <Compile Include="TransactionOptionsRequest.cs" />
     <Compile Include="TransactionThreeDSecurePassThruRequest.cs" />
     <Compile Include="TransactionOptionsPayPalRequest.cs" />

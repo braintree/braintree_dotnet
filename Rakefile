@@ -15,7 +15,7 @@ task :clean do
   sh "rm -rf test/Braintree.Tests.Integration/obj"
 end
 
-namespace :dotnet do
+namespace :core do
   task :compile => :clean do
     sh "dotnet restore src/Braintree && dotnet build -f netstandard1.3 src/Braintree"
 

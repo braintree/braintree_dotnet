@@ -1,0 +1,6 @@
+FROM microsoft/dotnet:1.0.1-sdk-projectjson
+
+RUN apt-get update
+RUN apt-get -y install rake
+
+WORKDIR /braintree-dotnet

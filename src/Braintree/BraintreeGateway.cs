@@ -225,6 +225,11 @@ namespace Braintree
             get { return new TransactionGateway(this); }
         }
 
+        public virtual ITransactionLineItemGateway TransactionLineItem
+        {
+            get { return new TransactionLineItemGateway(this); }
+        }
+
         public virtual ITransparentRedirectGateway TransparentRedirect
         {
             get { return new TransparentRedirectGateway(this); }

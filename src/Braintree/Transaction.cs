@@ -206,6 +206,9 @@ namespace Braintree
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
         public virtual FacilitatedDetails FacilitatedDetails { get; protected set; }
         public virtual FacilitatorDetails FacilitatorDetails { get; protected set; }
+        public virtual decimal? DiscountAmount { get; protected set; }
+        public virtual decimal? ShippingAmount { get; protected set; }
+        public virtual string ShipsFromPostalCode { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -387,6 +390,10 @@ namespace Braintree
             {
                 FacilitatorDetails = new FacilitatorDetails(facilitatorDetailsNode);
             }
+
+            DiscountAmount = node.GetDecimal("discount-amount");
+            ShippingAmount = node.GetDecimal("shipping-amount");
+            ShipsFromPostalCode = node.GetString("ships-from-postal-code");
         }
 
         /// <summary>
@@ -509,6 +516,24 @@ namespace Braintree
         public bool IsDisbursed()
         {
           return DisbursementDetails.IsValid();
+        }
+
+        /// <summary>
+        /// Returns the list of <see cref="TransactionLineItem"/>s associated with this transaction
+        /// </summary>
+        /// <returns>
+        /// The list of <see cref="TransactionLineItem"/>s associated with this transaction
+        /// </returns>
+        /// <example>
+        /// The list of <see cref="TransactionLineItem"/>s can be retrieved from the transaction directly:
+        /// <code>
+        ///     Transaction transaction = gateway.Transaction.Find("transactionId");
+        ///     List&lt;TransactionLineItem&gt; lineItems = transaction.GetLineItems();
+        /// </code>
+        /// </example>
+        public virtual List<TransactionLineItem> GetLineItems()
+        {
+            return Gateway.TransactionLineItem.FindAll(Id);
         }
     }
 }

@@ -80,6 +80,7 @@ namespace Braintree
         ISubscriptionGateway Subscription { get; }
         ITestTransactionGateway TestTransaction { get; }
         ITransactionGateway Transaction { get; }
+        ITransactionLineItemGateway TransactionLineItem { get; }
         ITransparentRedirectGateway TransparentRedirect { get; }
         IWebhookNotificationGateway WebhookNotification { get; }
         IWebhookTestingGateway WebhookTesting { get; }

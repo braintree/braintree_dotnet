@@ -1,3 +1,9 @@
+## 3.11.0
+* Change namespacing of Rakefile, so that Mono tests are run with `rake mono:test:all` and Core tests are run with `rake core:test:all`
+* Add support for Level 3 summary parameters `shippingAmount`, `discountAmount`, and `shipsFromPostalCode`
+* Add support for transaction line items
+* Add support for tagged evidence in `DisputeGateway#AddTextEvidence` and `AddTextEvidenceAsync` (Beta release)
+
 ## 3.10.1
 * Deprecate `OAuthGateway::ComputeSignature`
 * Fix spec to expect PayPal transactions to move to settling rather than settled

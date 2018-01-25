@@ -128,5 +128,29 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
             Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
         }
+
+        [Test]
+        public void DeserializesLevel3SummaryFieldsFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <shipping-amount>1.00</shipping-amount>\n" +
+                "  <discount-amount>2.00</discount-amount>\n" +
+                "  <ships-from-postal-code>12345</ships-from-postal-code>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <subscription></subscription>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual(1.00M, transaction.ShippingAmount);
+            Assert.AreEqual(2.00M, transaction.DiscountAmount);
+            Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
+        }
     }
 }
