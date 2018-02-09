@@ -4233,11 +4233,11 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
-                        TotalAmount = 45.15,
+                        UnitAmount = 45.1232M,
+                        TotalAmount = 45.15M,
                     }
                 }
             };
@@ -4251,11 +4251,145 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1, lineItems.Count);
 
             TransactionLineItem lineItem = lineItems[0];
-            Assert.AreEqual(1.0232, lineItem.Quantity);
+            Assert.AreEqual(1.0232M, lineItem.Quantity);
             Assert.AreEqual("Name #1", lineItem.Name);
             Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
-            Assert.AreEqual(45.1232, lineItem.UnitAmount);
-            Assert.AreEqual(45.15, lineItem.TotalAmount);
+            Assert.AreEqual(45.1232M, lineItem.UnitAmount);
+            Assert.AreEqual(45.15M, lineItem.TotalAmount);
+        }
+
+        [Test]
+        public void Sale_WithLineItemsSingleZeroAmounts()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 45.15M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232M,
+                        Name = "Name #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232M,
+                        TotalAmount = 45.15M,
+                        DiscountAmount = 0,
+                        TaxAmount = 0,
+                        UnitTaxAmount = 0,
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+
+            List<TransactionLineItem> lineItems = transaction.GetLineItems();
+            Assert.AreEqual(1, lineItems.Count);
+
+            TransactionLineItem lineItem = lineItems[0];
+            Assert.AreEqual(1.0232M, lineItem.Quantity);
+            Assert.AreEqual("Name #1", lineItem.Name);
+            Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
+            Assert.AreEqual(45.1232M, lineItem.UnitAmount);
+            Assert.AreEqual(45.15M, lineItem.TotalAmount);
+            Assert.AreEqual(0, lineItem.DiscountAmount);
+            Assert.AreEqual(0, lineItem.TaxAmount);
+            Assert.AreEqual(0, lineItem.UnitTaxAmount);
+        }
+
+        [Test]
+        public void Sale_WithLineItemsSingleQuantities()
+        {
+            var quantities = new decimal[] { 1, 1.2M, 1.23M, 1.234M, 1.2345M };
+            for (var i = 0; i < quantities.Length; i++)
+            {
+                var request = new TransactionRequest
+                {
+                    Amount = 45.15M,
+                    CreditCard = new TransactionCreditCardRequest
+                    {
+                        Number = SandboxValues.CreditCardNumber.VISA,
+                        ExpirationDate = "05/2009",
+                    },
+                    LineItems = new TransactionLineItemRequest[]
+                    {
+                        new TransactionLineItemRequest
+                        {
+                            Quantity = quantities[i],
+                            Name = "Name #1",
+                            LineItemKind = TransactionLineItemKind.DEBIT,
+                            UnitAmount = 45.1232M,
+                            TotalAmount = 45.15M,
+                        }
+                    }
+                };
+
+                Result<Transaction> result = gateway.Transaction.Sale(request);
+                Assert.IsTrue(result.IsSuccess());
+
+                Transaction transaction = result.Target;
+
+                List<TransactionLineItem> lineItems = transaction.GetLineItems();
+                Assert.AreEqual(1, lineItems.Count);
+
+                TransactionLineItem lineItem = lineItems[0];
+                Assert.AreEqual(quantities[i], lineItem.Quantity);
+                Assert.AreEqual("Name #1", lineItem.Name);
+                Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
+                Assert.AreEqual(45.1232M, lineItem.UnitAmount);
+                Assert.AreEqual(45.15M, lineItem.TotalAmount);
+            }
+        }
+
+        [Test]
+        public void Sale_WithLineItemsSingleUnitAmounts()
+        {
+            var unitAmounts = new decimal[] { 1, 1.2M, 1.23M, 1.234M, 1.2345M };
+            for (var i = 0; i < unitAmounts.Length; i++)
+            {
+                var request = new TransactionRequest
+                {
+                    Amount = 45.15M,
+                    CreditCard = new TransactionCreditCardRequest
+                    {
+                        Number = SandboxValues.CreditCardNumber.VISA,
+                        ExpirationDate = "05/2009",
+                    },
+                    LineItems = new TransactionLineItemRequest[]
+                    {
+                        new TransactionLineItemRequest
+                        {
+                            Quantity = 1.0232M,
+                            Name = "Name #1",
+                            LineItemKind = TransactionLineItemKind.DEBIT,
+                            UnitAmount = unitAmounts[i],
+                            TotalAmount = 45.15M,
+                        }
+                    }
+                };
+
+                Result<Transaction> result = gateway.Transaction.Sale(request);
+                Assert.IsTrue(result.IsSuccess());
+
+                Transaction transaction = result.Target;
+
+                List<TransactionLineItem> lineItems = transaction.GetLineItems();
+                Assert.AreEqual(1, lineItems.Count);
+
+                TransactionLineItem lineItem = lineItems[0];
+                Assert.AreEqual(1.0232M, lineItem.Quantity);
+                Assert.AreEqual("Name #1", lineItem.Name);
+                Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
+                Assert.AreEqual(unitAmounts[i], lineItem.UnitAmount);
+                Assert.AreEqual(45.15M, lineItem.TotalAmount);
+            }
         }
 
         [Test]
@@ -4273,15 +4407,16 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         Description = "Description #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
-                        UnitTaxAmount = 1.23,
+                        UnitAmount = 45.1232M,
+                        UnitTaxAmount = 1.23M,
+                        TaxAmount = 1.33M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                         Url = "https://example.com/products/23434",
@@ -4298,15 +4433,16 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1, lineItems.Count);
 
             TransactionLineItem lineItem = lineItems[0];
-            Assert.AreEqual(1.0232, lineItem.Quantity);
+            Assert.AreEqual(1.0232M, lineItem.Quantity);
             Assert.AreEqual("Name #1", lineItem.Name);
             Assert.AreEqual("Description #1", lineItem.Description);
             Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
-            Assert.AreEqual(45.1232, lineItem.UnitAmount);
-            Assert.AreEqual(1.23, lineItem.UnitTaxAmount);
+            Assert.AreEqual(45.1232M, lineItem.UnitAmount);
+            Assert.AreEqual(1.23M, lineItem.UnitTaxAmount);
+            Assert.AreEqual(1.33M, lineItem.TaxAmount);
             Assert.AreEqual("gallon", lineItem.UnitOfMeasure);
-            Assert.AreEqual(1.02, lineItem.DiscountAmount);
-            Assert.AreEqual(45.15, lineItem.TotalAmount);
+            Assert.AreEqual(1.02M, lineItem.DiscountAmount);
+            Assert.AreEqual(45.15M, lineItem.TotalAmount);
             Assert.AreEqual("23434", lineItem.ProductCode);
             Assert.AreEqual("9SAASSD8724", lineItem.CommodityCode);
             Assert.AreEqual("https://example.com/products/23434", lineItem.Url);
@@ -4327,26 +4463,26 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         Description = "Description #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 2.02,
+                        Quantity = 2.02M,
                         Name = "Name #2",
                         Description = "Description #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
                         UnitAmount = 5,
                         UnitOfMeasure = "gallon",
-                        TotalAmount = 45.15,
+                        TotalAmount = 45.15M,
                     }
                 }
             };
@@ -4370,14 +4506,14 @@ namespace Braintree.Tests.Integration
             if (lineItem1 == null) {
                 Assert.Fail("TransactionLineItem with name \"Name #1\" not returned.");
             }
-            Assert.AreEqual(1.0232, lineItem1.Quantity);
+            Assert.AreEqual(1.0232M, lineItem1.Quantity);
             Assert.AreEqual("Name #1", lineItem1.Name);
             Assert.AreEqual("Description #1", lineItem1.Description);
             Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem1.Kind);
-            Assert.AreEqual(45.1232, lineItem1.UnitAmount);
+            Assert.AreEqual(45.1232M, lineItem1.UnitAmount);
             Assert.AreEqual("gallon", lineItem1.UnitOfMeasure);
-            Assert.AreEqual(1.02, lineItem1.DiscountAmount);
-            Assert.AreEqual(45.15, lineItem1.TotalAmount);
+            Assert.AreEqual(1.02M, lineItem1.DiscountAmount);
+            Assert.AreEqual(45.15M, lineItem1.TotalAmount);
             Assert.AreEqual("23434", lineItem1.ProductCode);
             Assert.AreEqual("9SAASSD8724", lineItem1.CommodityCode);
 
@@ -4392,13 +4528,13 @@ namespace Braintree.Tests.Integration
             if (lineItem2 == null) {
                 Assert.Fail("TransactionLineItem with name \"Name #2\" not returned.");
             }
-            Assert.AreEqual(2.02, lineItem2.Quantity);
+            Assert.AreEqual(2.02M, lineItem2.Quantity);
             Assert.AreEqual("Name #2", lineItem2.Name);
             Assert.AreEqual("Description #2", lineItem2.Description);
             Assert.AreEqual(TransactionLineItemKind.CREDIT, lineItem2.Kind);
             Assert.AreEqual(5, lineItem2.UnitAmount);
             Assert.AreEqual("gallon", lineItem2.UnitOfMeasure);
-            Assert.AreEqual(45.15, lineItem2.TotalAmount);
+            Assert.AreEqual(45.15M, lineItem2.TotalAmount);
             Assert.AreEqual(null, lineItem2.DiscountAmount);
             Assert.AreEqual(null, lineItem2.ProductCode);
             Assert.AreEqual(null, lineItem2.CommodityCode);
@@ -4419,25 +4555,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "0123456789123",
                     }
@@ -4468,26 +4604,26 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         Description = "This is a line item description which is far too long. Like, way too long to be practical. We don't like how long this line item description is.",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4518,25 +4654,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
                         DiscountAmount = 2147483648,
-                        TotalAmount = 45.15,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4553,7 +4689,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithLineItemsValidationErrorDiscountAmountMustBeGreaterThanZero()
+        public void Sale_WithLineItemsValidationErrorDiscountAmountCannotBeNegative()
         {
             var request = new TransactionRequest
             {
@@ -4567,25 +4703,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 0,
-                        TotalAmount = 45.15,
+                        DiscountAmount = -2,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4596,7 +4732,7 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_MUST_BE_GREATER_THAN_ZERO,
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE,
                 result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("DiscountAmount")[0].Code
             );
         }
@@ -4616,24 +4752,24 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4664,24 +4800,24 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4702,7 +4838,7 @@ namespace Braintree.Tests.Integration
         {
             var request = new TransactionRequest
             {
-                Amount = 3505,
+                Amount = 35.05M,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -4712,25 +4848,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "123456789012345678901234567890123456",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4751,7 +4887,7 @@ namespace Braintree.Tests.Integration
         {
             var request = new TransactionRequest
             {
-                Amount = 3505,
+                Amount = 35.05M,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -4761,25 +4897,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "123456789012345678901234567890123456",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4800,7 +4936,7 @@ namespace Braintree.Tests.Integration
         {
             var request = new TransactionRequest
             {
-                Amount = 3505,
+                Amount = 35.05M,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
@@ -4810,13 +4946,13 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4824,10 +4960,10 @@ namespace Braintree.Tests.Integration
                     {
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4858,13 +4994,13 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4873,10 +5009,10 @@ namespace Braintree.Tests.Integration
                         Quantity = 2147483648,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4907,24 +5043,24 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
+                        DiscountAmount = 1.02M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -4955,24 +5091,24 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
+                        DiscountAmount = 1.02M,
                         TotalAmount = 2147483648,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
@@ -5004,24 +5140,24 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
+                        DiscountAmount = 1.02M,
                         TotalAmount = -2,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
@@ -5053,24 +5189,24 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -5101,25 +5237,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
                         UnitAmount = 2147483648,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -5150,25 +5286,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
                         UnitAmount = -2,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -5199,25 +5335,25 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.0232,
+                        Quantity = 1.0232M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "1234567890123",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -5230,56 +5366,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(
                 ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_OF_MEASURE_IS_TOO_LONG,
                 result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitOfMeasure")[0].Code
-            );
-        }
-
-        [Test]
-        public void Sale_WithLineItemsValidationErrorUnitTaxAmountFormatIsInvalid()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = 35.05M,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
-                },
-                LineItems = new TransactionLineItemRequest[]
-                {
-                    new TransactionLineItemRequest
-                    {
-                        Quantity = 1.2322,
-                        Name = "Name #1",
-                        LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
-                        UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
-                        ProductCode = "23434",
-                        CommodityCode = "9SAASSD8724",
-                    },
-                    new TransactionLineItemRequest
-                    {
-                        Quantity = 1.2322,
-                        Name = "Name #2",
-                        LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.0122,
-                        UnitTaxAmount = 2.012,
-                        UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
-                        ProductCode = "23434",
-                        CommodityCode = "9SAASSD8724",
-                    },
-                },
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-
-            Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_FORMAT_IS_INVALID,
-                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitTaxAmount")[0].Code
             );
         }
 
@@ -5298,27 +5384,27 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.2322,
+                        Quantity = 1.2322M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
-                        UnitTaxAmount = 1.23,
+                        UnitAmount = 45.1232M,
+                        UnitTaxAmount = 1.23M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.2322,
+                        Quantity = 1.2322M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.0122,
+                        UnitAmount = 45.0122M,
                         UnitTaxAmount = 2147483648,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -5335,7 +5421,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithLineItemsValidationErrorUnitTaxAmountMustBeGreaterThanZero()
+        public void Sale_WithLineItemsValidationErrorUnitTaxAmountCannotBeNegative()
         {
             var request = new TransactionRequest
             {
@@ -5349,26 +5435,26 @@ namespace Braintree.Tests.Integration
                 {
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.2322,
+                        Quantity = 1.2322M,
                         Name = "Name #1",
                         LineItemKind = TransactionLineItemKind.DEBIT,
-                        UnitAmount = 45.1232,
+                        UnitAmount = 45.1232M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
                     new TransactionLineItemRequest
                     {
-                        Quantity = 1.2322,
+                        Quantity = 1.2322M,
                         Name = "Name #2",
                         LineItemKind = TransactionLineItemKind.CREDIT,
-                        UnitAmount = 45.0122,
-                        UnitTaxAmount = -1.23,
+                        UnitAmount = 45.0122M,
+                        UnitTaxAmount = -1.23M,
                         UnitOfMeasure = "gallon",
-                        DiscountAmount = 1.02,
-                        TotalAmount = 45.15,
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
                         ProductCode = "23434",
                         CommodityCode = "9SAASSD8724",
                     },
@@ -5379,8 +5465,86 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_MUST_BE_GREATER_THAN_ZERO,
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_CANNOT_BE_NEGATIVE,
                 result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_1").OnField("UnitTaxAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorTaxAmountIsTooLarge()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322M,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.0122M,
+                        UnitTaxAmount = 1.23M,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02M,
+                        TaxAmount = 2147483648,
+                        TotalAmount = 45.15M,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_TAX_AMOUNT_IS_TOO_LARGE,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_0").OnField("TaxAmount")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorTaxAmountCannotBeNegative()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.2322M,
+                        Name = "Name #2",
+                        LineItemKind = TransactionLineItemKind.CREDIT,
+                        UnitAmount = 45.0122M,
+                        UnitTaxAmount = 1.23M,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02M,
+                        TaxAmount = -1.23M,
+                        TotalAmount = 45.15M,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_TAX_AMOUNT_CANNOT_BE_NEGATIVE,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_0").OnField("TaxAmount")[0].Code
             );
         }
 
@@ -5391,12 +5555,12 @@ namespace Braintree.Tests.Integration
             for (int i = 0; i < 250; i++) {
                 lineItems[i] = new TransactionLineItemRequest
                 {
-                    Quantity = 2.02,
+                    Quantity = 2.02M,
                     Name = "Line item #" + i,
                     LineItemKind = TransactionLineItemKind.CREDIT,
                     UnitAmount = 5,
                     UnitOfMeasure = "gallon",
-                    TotalAmount = 10.1,
+                    TotalAmount = 10.1M,
                 };
             }
 

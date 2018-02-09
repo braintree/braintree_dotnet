@@ -85,6 +85,7 @@ namespace Braintree
         public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
         public virtual IdealPayment IdealPayment { get; protected set; }
         public virtual GrantedPaymentInstrumentUpdate GrantedPaymentInstrumentUpdate { get; protected set; }
+        public virtual string SourceMerchantId { get; protected set; }
 
 
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
@@ -93,6 +94,11 @@ namespace Braintree
             Kind = (WebhookKind)CollectionUtil.Find(WebhookKind.ALL, node.GetString("kind"), WebhookKind.UNRECOGNIZED);
 
             NodeWrapper WrapperNode = node.GetNode("subject");
+
+            if (node.GetString("source-merchant-id") != null)
+            {
+                SourceMerchantId = node.GetString("source-merchant-id");
+            }
 
             if (WrapperNode.GetNode("api-error-response") != null)
             {

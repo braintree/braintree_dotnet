@@ -16,7 +16,7 @@ task :clean do
 end
 
 namespace :core do
-  task :compile => :clean do
+  task :compile => [:clean, "sanity:test"] do
     sh "dotnet restore src/Braintree && dotnet build -f netstandard1.3 src/Braintree"
 
     sh "dotnet restore test/Braintree.TestUtil && dotnet build -f netcoreapp1.0 test/Braintree.TestUtil"
@@ -43,7 +43,7 @@ namespace :core do
 end
 
 namespace :mono do
-  task :compile => :clean do
+  task :compile => [:clean, "sanity:test"] do
     sh "xbuild Braintree.sln"
   end
 
@@ -75,6 +75,13 @@ namespace :mono do
       sh "xbuild Braintree.sln"
       sh "mono test/lib/NUnit-3.4.1/bin/Release/nunit3-console.exe test/Braintree.Tests.Integration/bin/Debug/Braintree.Tests.Integration.dll --test=#{args[:test_name]}"
     end
+  end
+end
+
+namespace :sanity do
+  desc "run sanity tests"
+  task :test do
+    sh "(! grep -rnw . --include=\*.cs -e double && echo 'PASS') || (echo 'FAIL: Use decimal instead of double for amounts and quantities for more reliable precision.' && exit 1)"
   end
 end
 

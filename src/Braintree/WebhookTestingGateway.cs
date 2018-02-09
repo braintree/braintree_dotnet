@@ -16,19 +16,23 @@ namespace Braintree
             service = new BraintreeService(gateway.Configuration);
         }
 
-        public virtual Dictionary<string, string> SampleNotification(WebhookKind kind, string id)
+        public virtual Dictionary<string, string> SampleNotification(WebhookKind kind, string id, string sourceMerchantId = null)
         {
             var response = new Dictionary<string, string>();
-            string payload = BuildPayload(kind, id);
+            string payload = BuildPayload(kind, id, sourceMerchantId);
             response["bt_payload"] = payload;
             response["bt_signature"] = BuildSignature(payload);
             return response;
         }
 
-        private string BuildPayload(WebhookKind kind, string id)
+        private string BuildPayload(WebhookKind kind, string id, string sourceMerchantId)
         {
             var currentTime = DateTime.Now.ToUniversalTime().ToString("u");
-            var payload = string.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind><subject>{2}</subject></notification>", currentTime, kind, SubjectSampleXml(kind, id));
+            var sourceMerchantIdXml = "";
+            if (sourceMerchantId != null) {
+                sourceMerchantIdXml = string.Format("<source-merchant-id>{0}</source-merchant-id>", sourceMerchantId);
+            }
+            var payload = string.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind>{2}<subject>{3}</subject></notification>", currentTime, kind, sourceMerchantIdXml, SubjectSampleXml(kind, id));
             return Convert.ToBase64String(Encoding.GetEncoding(0).GetBytes(payload)) + '\n';
         }
 

@@ -9,7 +9,7 @@ namespace Braintree
     /// A collection of Validation Errors returned by the Braintree Gateway
     /// </summary>
     /// <example>
-    /// For more information about Validation Errors, see <a href="http://www.braintreepayments.com/gateway/validation-errors" target="_blank">http://www.braintreepaymentsolutions.com/gateway/validation-errors</a>
+    /// For more information about Validation Errors, see <a href="https://developers.braintreepayments.com/reference/general/validation-errors/overview/dotnet" target="_blank">https://developers.braintreepayments.com/reference/general/validation-errors/overview/dotnet</a>
     /// </example>
     public class ValidationErrors
     {

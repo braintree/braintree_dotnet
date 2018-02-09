@@ -23,6 +23,7 @@ namespace Braintree
         public virtual decimal? UnitTaxAmount { get; protected set; }
         public virtual decimal? TotalAmount { get; protected set; }
         public virtual decimal? DiscountAmount { get; protected set; }
+        public virtual decimal? TaxAmount { get; protected set; }
         public virtual string UnitOfMeasure { get; protected set; }
         public virtual string ProductCode { get; protected set; }
         public virtual string CommodityCode { get; protected set; }
@@ -38,6 +39,7 @@ namespace Braintree
             UnitTaxAmount = node.GetDecimal("unit-tax-amount");
             TotalAmount = node.GetDecimal("total-amount");
             DiscountAmount = node.GetDecimal("discount-amount");
+            TaxAmount = node.GetDecimal("tax-amount");
             UnitOfMeasure = node.GetString("unit-of-measure");
             ProductCode = node.GetString("product-code");
             CommodityCode = node.GetString("commodity-code");

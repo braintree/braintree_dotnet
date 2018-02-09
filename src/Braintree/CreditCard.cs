@@ -123,8 +123,8 @@ namespace Braintree
     /// <code>
     ///     CreditCard creditCard = gateway.CreditCard.Find("token");
     /// </code>
-    /// For more information about Credit Cards, see <a href="http://www.braintreepayments.com/gateway/credit-card-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/credit-card-api</a><br />
-    /// For more information about Credit Card Verifications, see <a href="http://www.braintreepayments.com/gateway/credit-card-verification-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/credit-card-verification-api</a>
+    /// For more information about Credit Cards, see <a href="https://developers.braintreepayments.com/reference/response/credit-card/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/credit-card/dotnet</a><br />
+    /// For more information about Credit Card Verifications, see <a href="https://developers.braintreepayments.com/reference/response/credit-card-verification/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/credit-card-verification/dotnet</a>
     /// </example>
     public class CreditCard : PaymentMethod
     {

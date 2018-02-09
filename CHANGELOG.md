@@ -1,3 +1,10 @@
+## 3.12.0
+* Add support for `TaxAmount` field on transaction LineItems
+* Deprecate TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_MUST_BE_GREATER_THAN_ZERO error in favor of TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE.
+* Deprecate TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_MUST_BE_GREATER_THAN_ZERO error in favor of TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_CANNOT_BE_NEGATIVE.
+* Fix bug in `TransactionLineItemRequest` to use decimal, rather than double, for currency amount field. This is a backwards incompatible bug fix.
+* Add `SourceMerchantId` property to `WebhookNotification`s if present
+
 ## 3.11.0
 * Change namespacing of Rakefile, so that Mono tests are run with `rake mono:test:all` and Core tests are run with `rake core:test:all`
 * Add support for Level 3 summary parameters `shippingAmount`, `discountAmount`, and `shipsFromPostalCode`

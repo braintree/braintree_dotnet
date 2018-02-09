@@ -137,7 +137,7 @@ namespace Braintree
     /// <code>
     ///     Transaction transaction = gateway.Transaction.Find("transactionId");
     /// </code>
-    /// For more information about Transactions, see <a href="http://www.braintreepayments.com/gateway/transaction-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/transaction-api</a>
+    /// For more information about Transactions, see <a href="https://developers.braintreepayments.com/reference/response/transaction/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/transaction/dotnet</a>
     /// </example>
     public class Transaction
     {

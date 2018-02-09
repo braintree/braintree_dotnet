@@ -14,27 +14,23 @@ namespace Braintree
     /// {
     ///     Quantity = 5,
     ///     Name = "Water bottle",
-    ///     LineItemKind = TransactionLineItemKind.CREDIT,
-    ///     UnitAmount = SandboxValues.TransactionAmount.AUTHORIZE,
-    ///     TotalAmount = SandboxValues.TransactionAmount.AUTHORIZE,
-    ///     CreditCard = new CreditCardRequest
-    ///     {
-    ///         Number = SandboxValues.CreditCardNumber.VISA,
-    ///         ExpirationDate = "05/2009",
-    ///     }
+    ///     LineItemKind = TransactionLineItemKind.DEBIT,
+    ///     UnitAmount = 2.00M,
+    ///     TotalAmount = 10.00M
     /// };
     /// </code>
     /// </example>
     public class TransactionLineItemRequest : Request
     {
-        public virtual double? Quantity { get; set; }
+        public virtual decimal? Quantity { get; set; }
         public virtual string Name { get; set; }
         public virtual string Description { get; set; }
         public virtual TransactionLineItemKind LineItemKind { get; set; }
-        public virtual double? UnitAmount { get; set; }
-        public virtual double? UnitTaxAmount { get; set; }
-        public virtual double? TotalAmount { get; set; }
-        public virtual double? DiscountAmount { get; set; }
+        public virtual decimal? UnitAmount { get; set; }
+        public virtual decimal? UnitTaxAmount { get; set; }
+        public virtual decimal? TotalAmount { get; set; }
+        public virtual decimal? DiscountAmount { get; set; }
+        public virtual decimal? TaxAmount { get; set; }
         public virtual string UnitOfMeasure { get; set; }
         public virtual string ProductCode { get; set; }
         public virtual string CommodityCode { get; set; }
@@ -64,6 +60,7 @@ namespace Braintree
             builder.AddElement("unit-tax-amount", UnitTaxAmount);
             builder.AddElement("total-amount", TotalAmount);
             builder.AddElement("discount-amount", DiscountAmount);
+            builder.AddElement("tax-amount", TaxAmount);
             builder.AddElement("unit-of-measure", UnitOfMeasure);
             builder.AddElement("product-code", ProductCode);
             builder.AddElement("commodity-code", CommodityCode);
