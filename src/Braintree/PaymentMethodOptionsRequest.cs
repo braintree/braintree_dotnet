@@ -10,6 +10,7 @@ namespace Braintree
         public string VerificationMerchantAccountId { get; set; }
         public string VerificationAmount { get; set; }
         public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
+        public UsBankAccountVerificationMethod UsBankAccountVerificationMethod { get; set; }
 
         public override string ToXml(string root)
         {
@@ -27,6 +28,7 @@ namespace Braintree
                 AddElement("make-default", MakeDefault).
                 AddElement("verification-merchant-account-id", VerificationMerchantAccountId).
                 AddElement("verify-card", VerifyCard).
+                AddElement("us-bank-account-verification-method", UsBankAccountVerificationMethod).
                 AddElement("verification-amount", VerificationAmount).
                 AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).
                 AddElement("paypal", OptionsPayPal);

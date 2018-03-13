@@ -82,6 +82,7 @@
     <Compile Include="TestTransactionIntegrationTest.cs" />
     <Compile Include="TransactionIntegrationTest.cs" />
     <Compile Include="TransparentRedirectRequestIntegrationTest.cs" />
+    <Compile Include="UsBankAccountVerificationIntegrationTest.cs" />
     <Compile Include="UsBankIntegrationTest.cs" />
     <Compile Include="IdealPaymentIntegrationTest.cs" />
     <Compile Include="VisaCheckoutIntegrationTest.cs" />

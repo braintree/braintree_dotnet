@@ -94,6 +94,7 @@
     <Compile Include="TransactionTest.cs" />
     <Compile Include="TransparentRedirectRequestTest.cs" />
     <Compile Include="TrUtilTest.cs" />
+    <Compile Include="UsBankAccountVerificationTest.cs" />
     <Compile Include="ValidationErrorsTest.cs" />
     <Compile Include="WebhookNotificationTest.cs" />
     <Compile Include="WebProxyTest.cs" />

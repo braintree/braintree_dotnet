@@ -67,6 +67,8 @@ namespace Braintree
                 return ConnectedMerchantPayPalStatusChangedSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_DECLINED) {
                 return PartnerMerchantDeclinedSampleXml(id);
+            } else if (kind == WebhookKind.OAUTH_ACCESS_REVOKED) {
+                return OAuthAccessRevokedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_OPENED) {
                 return DisputeOpenedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_LOST) {
@@ -377,6 +379,12 @@ namespace Braintree
         private string PartnerMerchantDeclinedSampleXml(string id) {
             return Node("partner-merchant",
                     Node("partner-merchant-id", "abc123")
+            );
+        }
+
+        private string OAuthAccessRevokedSampleXml(string id) {
+            return Node("oauth-application-revocation",
+                    Node("merchant-id", "abc123")
             );
         }
 

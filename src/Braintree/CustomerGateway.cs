@@ -33,6 +33,21 @@ namespace Braintree
             return new Customer(new NodeWrapper(customerXML), gateway);
         }
 
+        public virtual Customer Find(string Id, string AssociationFilterId)
+        {
+            if(Id == null || Id.Trim().Equals(""))
+                throw new NotFoundException();
+
+            if(AssociationFilterId == null || AssociationFilterId.Trim().Equals(""))
+                throw new NotFoundException();
+
+            string queryParams = "?association_filter_id=" + AssociationFilterId;
+
+            XmlNode customerXML = service.Get(service.MerchantPath() + "/customers/" + Id + queryParams);
+
+            return new Customer(new NodeWrapper(customerXML), gateway);
+        }
+
         public virtual async Task<Customer> FindAsync(string Id)
         {
             if(Id == null || Id.Trim().Equals(""))

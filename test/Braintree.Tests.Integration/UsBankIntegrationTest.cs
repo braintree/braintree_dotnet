@@ -36,7 +36,10 @@ namespace Braintree.Tests.Integration
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
-                PaymentMethodNonce = nonce
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest {
+                  VerificationMerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID
+                }
             };
             Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
             Assert.IsTrue(paymentMethodResult.IsSuccess());
@@ -48,7 +51,7 @@ namespace Braintree.Tests.Integration
             usBankAccount = usBankAccountGateway.Find(usBankAccount.Token);
 
             Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
-            Assert.AreEqual("1234", usBankAccount.Last4);
+            Assert.AreEqual("0000", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
@@ -76,13 +79,19 @@ namespace Braintree.Tests.Integration
             var request = new PaymentMethodRequest
             {
                 CustomerId = result.Target.Id,
-                PaymentMethodNonce = nonce
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest {
+                  VerificationMerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID
+                }
             };
             Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
             Assert.IsTrue(paymentMethodResult.IsSuccess());
 
             Assert.IsInstanceOf(typeof(UsBankAccount), paymentMethodResult.Target);
             UsBankAccount usBankAccount = (UsBankAccount) paymentMethodResult.Target;
+
+            Assert.IsTrue(usBankAccount.IsVerified);
+            Assert.AreEqual(1, usBankAccount.Verifications.Count);
 
             var transactionRequest = new TransactionRequest
             {
@@ -107,5 +116,81 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
         }
 
+        [Test]
+        public void CompliantMerchant_FailsToTransactUnverifiedToken()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration2_merchant_id",
+                PublicKey = "integration2_public_key",
+                PrivateKey = "integration2_private_key"
+            };
+
+            Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customerResult.IsSuccess());
+
+            string nonce = TestHelper.GenerateValidUsBankAccountNonce(gateway);
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customerResult.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest {
+                  VerificationMerchantAccountId = "another_us_bank_merchant_account"
+                }
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            Assert.IsInstanceOf(typeof(UsBankAccount), paymentMethodResult.Target);
+            UsBankAccount usBankAccount = (UsBankAccount) paymentMethodResult.Target;
+
+            Assert.IsFalse(usBankAccount.IsVerified);
+            Assert.AreEqual(0, usBankAccount.Verifications.Count);
+
+            var transactionRequest = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = "another_us_bank_merchant_account"
+            };
+
+            UsBankAccountGateway usBankAccountGateway = new UsBankAccountGateway(gateway);
+            Result<Transaction> transactionResult = usBankAccountGateway.Sale(usBankAccount.Token, transactionRequest);
+
+            Assert.IsFalse(transactionResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_US_BANK_ACCOUNT_MUST_BE_VERIFIED,
+                transactionResult.Errors.ForObject("transaction").OnField("payment-method-token")[0].Code);
+        }
+
+        [Test]
+        public void CompliantMerchant_FailsToTransactNonPlaidNonce()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration2_merchant_id",
+                PublicKey = "integration2_public_key",
+                PrivateKey = "integration2_private_key"
+            };
+
+            Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customerResult.IsSuccess());
+
+            var transactionRequest = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CustomerId = customerResult.Target.Id,
+                MerchantAccountId = "another_us_bank_merchant_account",
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway),
+            };
+
+            Result<Transaction> transactionResult = gateway.Transaction.Sale(transactionRequest);
+
+            Assert.IsFalse(transactionResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_US_BANK_ACCOUNT_NONCE_MUST_BE_PLAID_VERIFIED,
+                transactionResult.Errors.ForObject("transaction").OnField("payment-method-nonce")[0].Code);
+        }
     }
 }

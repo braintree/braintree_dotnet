@@ -1357,7 +1357,7 @@ namespace Braintree.Tests.Integration
 
             UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
             Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
-            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("0000", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
@@ -1393,7 +1393,7 @@ namespace Braintree.Tests.Integration
 
             UsBankAccountDetails usBankAccountDetails = transaction.UsBankAccountDetails;
             Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
-            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("0000", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
@@ -1424,7 +1424,7 @@ namespace Braintree.Tests.Integration
 
             usBankAccountDetails = transaction.UsBankAccountDetails;
             Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
-            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("0000", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
@@ -2713,6 +2713,26 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithVenmoAccountNonceAndProfileId()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_VENMO_ACCOUNT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = Nonce.VenmoAccount,
+                Options = new TransactionOptionsRequest
+                {
+                    Venmo = new TransactionOptionsVenmoRequest
+                    {
+                        ProfileId = "integration_venmo_merchant_public_id"
+                    }
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
         public void Sale_WithUsBankAccountNonce()
         {
             var request = new TransactionRequest
@@ -2735,7 +2755,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNull(usBankAccountDetails.Token);
 
             Assert.AreEqual("021000021", usBankAccountDetails.RoutingNumber);
-            Assert.AreEqual("1234", usBankAccountDetails.Last4);
+            Assert.AreEqual("0000", usBankAccountDetails.Last4);
             Assert.AreEqual("checking", usBankAccountDetails.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));

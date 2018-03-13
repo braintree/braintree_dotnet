@@ -160,6 +160,12 @@ namespace Braintree
             get { return new CreditCardVerificationGateway(this); }
         }
 
+        public virtual IUsBankAccountVerificationGateway UsBankAccountVerification
+        {
+            get { return new UsBankAccountVerificationGateway(this); }
+        }
+
+
         public virtual IDiscountGateway Discount
         {
             get { return new DiscountGateway(this); }

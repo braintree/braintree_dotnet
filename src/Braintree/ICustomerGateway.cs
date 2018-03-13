@@ -19,6 +19,7 @@ namespace Braintree
         Result<Customer> Delete(string Id);
         Task<Result<Customer>> DeleteAsync(string Id);
         Customer Find(string Id);
+        Customer Find(string Id, string AssociationFilterId);
         Task<Customer> FindAsync(string Id);
         ResourceCollection<Customer> Search(CustomerSearchRequest query);
         Task<ResourceCollection<Customer>> SearchAsync(CustomerSearchRequest query);

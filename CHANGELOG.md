@@ -1,9 +1,16 @@
+## 3.13.0
+* Add support for `association_filter_id` in `Customer#find`
+* Add support for `OAUTH_ACCESS_REVOKED` in `WebhookNotification`s
+* Add support for US Bank Account verifications via `PaymentMethod#create`, `PaymentMethod#update`, and `Transaction#create`
+* Add support for US Bank Account verification search
+
 ## 3.12.0
 * Add support for `TaxAmount` field on transaction LineItems
 * Deprecate TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_MUST_BE_GREATER_THAN_ZERO error in favor of TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE.
 * Deprecate TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_MUST_BE_GREATER_THAN_ZERO error in favor of TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_CANNOT_BE_NEGATIVE.
 * Fix bug in `TransactionLineItemRequest` to use decimal, rather than double, for currency amount field. This is a backwards incompatible bug fix.
 * Add `SourceMerchantId` property to `WebhookNotification`s if present
+* Add support for `profile_id` in Transaction#create options for VenmoAccounts
 
 ## 3.11.0
 * Change namespacing of Rakefile, so that Mono tests are run with `rake mono:test:all` and Core tests are run with `rake core:test:all`

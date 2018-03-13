@@ -52,8 +52,10 @@ namespace Braintree.TestUtil
                 },
                 ""account_type"": ""checking"",
                 ""routing_number"": ""021000021"",
-                ""account_number"": ""567891234"",
-                ""account_holder_name"": ""Dan Schulman"",
+                ""account_number"": ""1000000000"",
+                ""ownership_type"": ""personal"",
+                ""first_name"": ""Dan"",
+                ""last_name"": ""Schulman"",
                 ""ach_mandate"": {
                     ""text"": ""cl mandate text""
                 }
@@ -63,7 +65,7 @@ namespace Braintree.TestUtil
             var request = new HttpRequestMessage(new HttpMethod("POST"), url);
             byte[] buffer = Encoding.UTF8.GetBytes(postData);
             request.Content = new StringContent(postData, Encoding.UTF8, "application/json");
-            request.Headers.Add("Braintree-Version", "2015-11-01");
+            request.Headers.Add("Braintree-Version", "2016-10-07");
             request.Headers.Add("Authorization", "Bearer " + accessToken);
 
             var httpClientHandler = new HttpClientHandler{};
@@ -76,7 +78,7 @@ namespace Braintree.TestUtil
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
             string responseBody = reader.ReadToEnd();
 #else
-            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPost ""{url}""";
+            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2016-10-07"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPOST ""{url}""";
             Process process = new Process {
                 StartInfo = new ProcessStartInfo {
                     FileName = "curl",
@@ -170,7 +172,7 @@ namespace Braintree.TestUtil
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
             string responseBody = reader.ReadToEnd();
 #else
-            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPost ""{url}""";
+            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPOST ""{url}""";
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo

@@ -316,6 +316,17 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForOAuthAccessRevocation()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.OAUTH_ACCESS_REVOKED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.OAUTH_ACCESS_REVOKED, notification.Kind);
+          Assert.AreEqual("abc123", notification.OAuthAccessRevocation.MerchantId);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForAConnectedMerchantStatusTransitioned()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CONNECTED_MERCHANT_STATUS_TRANSITIONED, "my_id");
