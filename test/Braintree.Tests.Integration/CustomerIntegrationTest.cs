@@ -852,7 +852,7 @@ namespace Braintree.Tests.Integration
             };
 
             Customer customer = gateway.Customer.Create(createRequest).Target;
-            Assert.IsTrue(customer.CreditCards[0].IsVenmoSdk.Value);
+            Assert.IsFalse(customer.CreditCards[0].IsVenmoSdk.Value);
         }
 
         [Test]

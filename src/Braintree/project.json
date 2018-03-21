@@ -6,13 +6,11 @@
   "dependencies": { },
   "buildOptions": {
   },
-  "version": "3.13.0-*",
+  "version": "3.14.0-*",
   "packOptions": {
     "releaseNotes": "
-* Add support for `association_filter_id` in `Customer#find`
-* Add support for `OAUTH_ACCESS_REVOKED` in `WebhookNotification`s
-* Add support for US Bank Account verifications via `PaymentMethod#create`, `PaymentMethod#update`, and `Transaction#create`
-* Add support for US Bank Account verification search
+* Add `PayerId` accessor in `PayPalAccount`
+* Add support for searching disputes by `effectiveDate`, `disbursementDate`, and `customerId`
     ",
     "summary": "
     The Braintree .NET Client Library will allow you to take payments securely for

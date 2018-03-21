@@ -143,7 +143,7 @@ namespace Braintree.Tests.Integration
 
             CreditCard creditCard = result.Target;
             Assert.AreEqual("1111", creditCard.LastFour);
-            Assert.IsTrue(creditCard.IsVenmoSdk.Value);
+            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
         }
 
         [Test]
@@ -237,7 +237,7 @@ namespace Braintree.Tests.Integration
             CreditCard card = result.Target;
 
             Assert.IsTrue(result.IsSuccess());
-            Assert.IsTrue(card.IsVenmoSdk.Value);
+            Assert.IsFalse(card.IsVenmoSdk.Value);
         }
 
         [Test]

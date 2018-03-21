@@ -810,31 +810,52 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Search_OnDisputeDate()
         {
-            DateTime disputeDate = DateTime.Parse("2014-03-01");
+            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 100M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.Dispute.CHARGEBACK,
+                    ExpirationDate = "05/2012",
+                    Token = creditCardToken
+                },
+            };
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            DateTime disputeDate = transaction.Disputes[0].ReceivedDate.Value;
             DateTime threeDaysEarlier = disputeDate.AddDays(-3);
             DateTime oneDayEarlier = disputeDate.AddDays(-1);
             DateTime oneDayLater = disputeDate.AddDays(1);
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
-                Id.Is("disputedtransaction").
+                Id.Is(transaction.Id).
                 DisputeDate.Between(oneDayEarlier, oneDayLater);
 
-            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+            for(int i = 0; i < 60; i++) {
+                System.Threading.Thread.Sleep(1000);
+
+                if(gateway.Transaction.Search(searchRequest).MaximumCount > 0) {
+                    Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+                    break;
+                }
+            }
 
             searchRequest = new TransactionSearchRequest().
-                Id.Is("2disputetransaction").
+                Id.Is(transaction.Id).
                 DisputeDate.GreaterThanOrEqualTo(oneDayEarlier);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
-                Id.Is("disputedtransaction").
+                Id.Is(transaction.Id).
                 DisputeDate.LessThanOrEqualTo(oneDayLater);
 
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
-                Id.Is("disputedtransaction").
+                Id.Is(transaction.Id).
                 DisputeDate.Between(threeDaysEarlier, oneDayEarlier);
 
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
@@ -3983,7 +4004,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
 
             Transaction transaction = result.Target;
-            Assert.IsTrue(transaction.CreditCard.IsVenmoSdk.Value);
+            Assert.IsFalse(transaction.CreditCard.IsVenmoSdk.Value);
         }
 
         [Test]

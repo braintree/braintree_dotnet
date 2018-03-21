@@ -1,3 +1,7 @@
+## 3.14.0
+* Add `PayerId` accessor in `PayPalAccount`
+* Add support for searching disputes by `effectiveDate`, `disbursementDate`, and `customerId`
+
 ## 3.13.0
 * Add support for `association_filter_id` in `Customer#find`
 * Add support for `OAUTH_ACCESS_REVOKED` in `WebhookNotification`s

@@ -720,7 +720,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Search_dateRangeReturnsDispute()
+        public void Search_receivedDateRangeReturnsDispute()
         {
             DateTime startDate = DateTime.Parse("2014-03-03");
             DateTime endDate = DateTime.Parse("2014-03-05");
@@ -737,6 +737,78 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2014", disputes[0].ReceivedDate.Value.Year.ToString());
             Assert.AreEqual("3", disputes[0].ReceivedDate.Value.Month.ToString());
             Assert.AreEqual("4", disputes[0].ReceivedDate.Value.Day.ToString());
+        }
+
+        [Test]
+        public void Search_disbursementDateRangeReturnsDispute()
+        {
+            DateTime startDate = DateTime.Parse("2014-03-03");
+            DateTime endDate = DateTime.Parse("2014-03-05");
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                DisbursementDate.Between(startDate, endDate);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.AreEqual(1, disputes.Count);
+            Assert.AreEqual("2014", disputes[0].StatusHistory[0].DisbursementDate.Value.Year.ToString());
+            Assert.AreEqual("3", disputes[0].StatusHistory[0].DisbursementDate.Value.Month.ToString());
+            Assert.AreEqual("5", disputes[0].StatusHistory[0].DisbursementDate.Value.Day.ToString());
+        }
+
+        [Test]
+        public void Search_effectiveDateRangeReturnsDispute()
+        {
+            DateTime startDate = DateTime.Parse("2014-03-03");
+            DateTime endDate = DateTime.Parse("2014-03-05");
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                EffectiveDate.Between(startDate, endDate);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.AreEqual(1, disputes.Count);
+            Assert.AreEqual("2014", disputes[0].StatusHistory[0].EffectiveDate.Value.Year.ToString());
+            Assert.AreEqual("3", disputes[0].StatusHistory[0].EffectiveDate.Value.Month.ToString());
+            Assert.AreEqual("4", disputes[0].StatusHistory[0].EffectiveDate.Value.Day.ToString());
+        }
+
+        [Test]
+        public void Search_byCustomerIdReturnsDispute()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest {});
+
+            string customerId = result.Target.Id;
+
+            TransactionRequest transactionRequest = new TransactionRequest
+            {
+                Amount = 100M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.Dispute.CHARGEBACK,
+                    ExpirationDate = "05/2012",
+                },
+                CustomerId = customerId
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(transactionRequest).Target;
+
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                CustomerId.Is(customerId);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.AreEqual(1, disputes.Count);
         }
 
         public Dispute createSampleDispute(){
