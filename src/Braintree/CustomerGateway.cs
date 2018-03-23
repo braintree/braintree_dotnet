@@ -110,27 +110,6 @@ namespace Braintree
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), gateway);
         }
 
-        [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
-        public virtual Result<Customer> ConfirmTransparentRedirect(string queryString)
-        {
-            var trRequest = new TransparentRedirectRequest(queryString, service);
-            XmlNode node = service.Post(service.MerchantPath() + "/customers/all/confirm_transparent_redirect_request", trRequest);
-
-            return new ResultImpl<Customer>(new NodeWrapper(node), gateway);
-        }
-
-        [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual string TransparentRedirectURLForCreate()
-        {
-            return service.BaseMerchantURL() + "/customers/all/create_via_transparent_redirect_request";
-        }
-
-        [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual string TransparentRedirectURLForUpdate()
-        {
-            return service.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
-        }
-
         public virtual ResourceCollection<Customer> All()
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/customers/advanced_search_ids"));

@@ -49,8 +49,7 @@ namespace Braintree
             return gateway.Environment.GatewayURL+"/oauth/connect?"+queryString;
         }
 
-        [Obsolete("This method will be made internal in a future version")]
-        public string ComputeSignature(string message)
+        internal string ComputeSignature(string message)
         {
             byte[] key = SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(gateway.ClientSecret));
             byte[] signatureBytes = new HMACSHA256(key).ComputeHash(Encoding.UTF8.GetBytes(message));

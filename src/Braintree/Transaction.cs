@@ -152,7 +152,7 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual CreditCard CreditCard { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
-        public virtual Customer Customer { get; protected set; }
+        public virtual CustomerDetails CustomerDetails { get; protected set; }
         public virtual string CvvResponseCode { get; protected set; }
         public virtual Descriptor Descriptor { get; protected set; }
         public virtual List<Discount> Discounts { get; protected set; }
@@ -171,8 +171,6 @@ namespace Braintree
         public virtual string PurchaseOrderNumber { get; protected set; }
         public virtual bool? Recurring { get; protected set; }
         public virtual string RefundedTransactionId { get; protected set; }
-        [Obsolete("Use Transaction.RefundIds")]
-        public virtual string RefundId { get; protected set; }
         public virtual List<string> RefundIds { get; protected set; }
         public virtual List<string> PartialSettlementTransactionIds { get; protected set; }
         public virtual string AuthorizedTransactionId { get; protected set; }
@@ -183,7 +181,7 @@ namespace Braintree
         public virtual StatusEvent[] StatusHistory { get; protected set; }
         public virtual List<AuthorizationAdjustment> AuthorizationAdjustments { get; protected set; }
         public virtual string SubscriptionId { get; protected set; }
-        public virtual Subscription Subscription { get; protected set; }
+        public virtual SubscriptionDetails SubscriptionDetails { get; protected set; }
         public virtual decimal? TaxAmount { get; protected set; }
         public virtual bool? TaxExempt { get; protected set; }
         public virtual TransactionType Type { get; protected set; }
@@ -266,10 +264,6 @@ namespace Braintree
             Recurring = node.GetBoolean("recurring");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
 
-            #pragma warning disable 0618
-            RefundId = node.GetString("refund-id");
-            #pragma warning restore 0618
-
             RefundIds = node.GetStrings("refund-ids/*");
             PartialSettlementTransactionIds = node.GetStrings("partial-settlement-transaction-ids/*");
             AuthorizedTransactionId = node.GetString("authorized-transaction-id");
@@ -280,8 +274,8 @@ namespace Braintree
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
-            Subscription = new Subscription(node.GetNode("subscription"), gateway);
-            Customer = new Customer(node.GetNode("customer"), gateway);
+            SubscriptionDetails = new SubscriptionDetails(node.GetNode("subscription"));
+            CustomerDetails = new CustomerDetails(node.GetNode("customer"), gateway);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
@@ -458,9 +452,9 @@ namespace Braintree
         /// </example>
         public virtual Customer GetVaultCustomer()
         {
-            if (Customer.Id == null) return null;
+            if (CustomerDetails == null || CustomerDetails.Id == null) return null;
 
-            return new CustomerGateway(Gateway).Find(Customer.Id);
+            return new CustomerGateway(Gateway).Find(CustomerDetails.Id);
         }
 
         /// <summary>
@@ -485,7 +479,7 @@ namespace Braintree
         {
             if (BillingAddress.Id == null) return null;
 
-            return new AddressGateway(Gateway).Find(Customer.Id, BillingAddress.Id);
+            return new AddressGateway(Gateway).Find(CustomerDetails.Id, BillingAddress.Id);
         }
 
         /// <summary>
@@ -510,7 +504,7 @@ namespace Braintree
         {
             if (ShippingAddress.Id == null) return null;
 
-            return new AddressGateway(Gateway).Find(Customer.Id, ShippingAddress.Id);
+            return new AddressGateway(Gateway).Find(CustomerDetails.Id, ShippingAddress.Id);
         }
 
         public bool IsDisbursed()

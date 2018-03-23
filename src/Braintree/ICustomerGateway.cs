@@ -11,7 +11,6 @@ namespace Braintree
     {
         ResourceCollection<Customer> All();
         Task<ResourceCollection<Customer>> AllAsync();
-        Result<Customer> ConfirmTransparentRedirect(string queryString);
         Result<Customer> Create();
         Task<Result<Customer>> CreateAsync();
         Result<Customer> Create(CustomerRequest request);
@@ -23,8 +22,6 @@ namespace Braintree
         Task<Customer> FindAsync(string Id);
         ResourceCollection<Customer> Search(CustomerSearchRequest query);
         Task<ResourceCollection<Customer>> SearchAsync(CustomerSearchRequest query);
-        string TransparentRedirectURLForCreate();
-        string TransparentRedirectURLForUpdate();
         Result<Customer> Update(string Id, CustomerRequest request);
         Task<Result<Customer>> UpdateAsync(string Id, CustomerRequest request);
     }

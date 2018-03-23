@@ -12,7 +12,30 @@ namespace Braintree.Tests.Integration
     [TestFixture]
     public class DocumentUploadIntegrationTest
     {
-        private static string LARGE_FILE_PATH = "test/fixtures/large_file.png"; 
+#if netcore
+        private static string BT_LOGO_PATH = "../../../../../test/fixtures/bt_logo.png";
+#else
+        private static string BT_LOGO_PATH = "test/fixtures/bt_logo.png";
+#endif
+
+#if netcore
+        private static string LARGE_FILE_PATH = "../../../../../test/fixtures/large_file.png";
+#else
+        private static string LARGE_FILE_PATH = "test/fixtures/large_file.png";
+#endif
+
+#if netcore
+        private static string MALFORMED_FILE_PATH = "../../../../../test/fixtures/malformed_pdf.pdf";
+#else
+        private static string MALFORMED_FILE_PATH = "test/fixtures/malformed_pdf.pdf";
+#endif
+
+#if netcore
+        private static string GIF_EXTENSION_FILE_PATH = "../../../../../test/fixtures/gif_extension_bt_logo.gif";
+#else
+        private static string GIF_EXTENSION_FILE_PATH = "test/fixtures/gif_extension_bt_logo.gif";
+#endif
+
         private BraintreeGateway gateway;
 
         [SetUp]
@@ -39,7 +62,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Create_returnsSuccessfulWithValidRequest()
         {
-			FileStream fs = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+			FileStream fs = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
 			DocumentUploadRequest request = new DocumentUploadRequest();
 			request.File = fs;
 			request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
@@ -60,7 +83,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            FileStream fs = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = fs;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
@@ -80,7 +103,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Create_throwsWithEmptyKind()
         {
-            FileStream fs = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = fs;
             ArgumentException nullException = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
@@ -96,7 +119,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            FileStream fs = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = fs;
             try
@@ -152,7 +175,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Create_returnsErrorWithUnsupportedFileType()
         {
-            FileStream fs = new FileStream("test/fixtures/gif_extension_bt_logo.gif", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(GIF_EXTENSION_FILE_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = fs;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
@@ -172,7 +195,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            FileStream fs = new FileStream("test/fixtures/gif_extension_bt_logo.gif", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(GIF_EXTENSION_FILE_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = fs;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
@@ -190,7 +213,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Create_returnsErrorWithMalformedFile()
         {
-            FileStream fs = new FileStream("test/fixtures/malformed_pdf.pdf", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(MALFORMED_FILE_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = fs;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
@@ -210,7 +233,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            FileStream fs = new FileStream("test/fixtures/malformed_pdf.pdf", FileMode.Open, FileAccess.Read);
+            FileStream fs = new FileStream(MALFORMED_FILE_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = fs;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 

@@ -304,7 +304,7 @@ namespace Braintree.Tests.Integration
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-            
+
             CreditCardRequest trParams = new CreditCardRequest { CustomerId = customer.Id };
 
             CreditCardRequest request = new CreditCardRequest
@@ -321,8 +321,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
-            Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
             Assert.AreEqual("John Doe", card.CardholderName);
@@ -366,9 +366,9 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
 
-            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            CreditCard card = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
         #pragma warning restore 0618
@@ -398,9 +398,9 @@ namespace Braintree.Tests.Integration
                 CustomerId = customer.Id,
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
 
-            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            CreditCard card = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
         #pragma warning restore 0618
@@ -425,8 +425,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
-            Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(
@@ -883,8 +883,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
-            CreditCard updatedCreditCard = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
+            string queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.TransparentRedirect.Url, service);
+            CreditCard updatedCreditCard = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
 
             Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
@@ -920,8 +920,8 @@ namespace Braintree.Tests.Integration
                 CardholderName = "Joe Cool"
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
-            Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
             Assert.AreEqual("Joe Cool", card.CardholderName);

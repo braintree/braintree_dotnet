@@ -11,6 +11,12 @@ namespace Braintree.Tests.Integration
     [TestFixture]
     public class DisputeIntegrationTest
     {
+#if netcore
+        private static string BT_LOGO_PATH = "../../../../../test/fixtures/bt_logo.png";
+#else
+        private static string BT_LOGO_PATH = "test/fixtures/bt_logo.png";
+#endif
+
         private BraintreeGateway gateway;
 
         [SetUp]
@@ -848,7 +854,7 @@ namespace Braintree.Tests.Integration
         }
 
         public DocumentUpload createSampleDocumentUpload() {
-            FileStream file = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = file;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT;
@@ -857,7 +863,7 @@ namespace Braintree.Tests.Integration
         }
 
         public async Task<DocumentUpload> createSampleDocumentUploadAsync() {
-            FileStream file = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = file;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT;

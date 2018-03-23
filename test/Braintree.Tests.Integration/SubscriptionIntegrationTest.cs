@@ -198,8 +198,8 @@ namespace Braintree.Tests.Integration
             Subscription subscription = result.Target;
             Transaction transaction = subscription.Transactions[0];
 
-            Assert.AreEqual(subscription.BillingPeriodStartDate, transaction.Subscription.BillingPeriodStartDate);
-            Assert.AreEqual(subscription.BillingPeriodEndDate, transaction.Subscription.BillingPeriodEndDate);
+            Assert.AreEqual(subscription.BillingPeriodStartDate, transaction.SubscriptionDetails.BillingPeriodStartDate);
+            Assert.AreEqual(subscription.BillingPeriodEndDate, transaction.SubscriptionDetails.BillingPeriodEndDate);
         }
 
         [Test]

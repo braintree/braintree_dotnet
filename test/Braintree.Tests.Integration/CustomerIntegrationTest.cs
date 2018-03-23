@@ -1036,8 +1036,8 @@ namespace Braintree.Tests.Integration
                 LastName = "Doe"
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
-            Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
@@ -1074,8 +1074,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
-            Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
@@ -1113,8 +1113,8 @@ namespace Braintree.Tests.Integration
                 LastName = "Doe"
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate(), service);
-            Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
@@ -1172,8 +1172,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate(), service);
-            Customer updatedCustomer = gateway.Customer.ConfirmTransparentRedirect(queryString).Target;
+            string queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.TransparentRedirect.Url, service);
+            Customer updatedCustomer = gateway.TransparentRedirect.ConfirmCustomer(queryString).Target;
             CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
 
             Address updatedAddress = gateway.Address.Find(customer.Id, address.Id);

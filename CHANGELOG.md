@@ -1,3 +1,18 @@
+## 4.0.0
+
+### Backwards incompatible changes
+
+* Remove non-CLS compliant `generate` and `generateAsync` methods from `ClientTokenGateway`. Use `Generate` or `GenerateAsync`.
+* Add `SubscriptionDetails` class and change `Transaction.Subscription` property to `Transaction.SubscriptionDetails`.
+* Add `CustomerDetails` class and change `Transaction.Customer` property to `Transaction.CustomerDetails`.
+* Remove `RefundId` from `Transaction`. Use `RefundIds` instead.
+* Remove `TransparentRedirectURLForCreate`, `TransparentRedirectURLForUpdate`, and `ConfirmTransparentRedirect` from `CreditCardGateway`, `CustomerGateway`, and `TransactionGateway`. Use `gateway.TransparentRedirect.Url` or `gateway.TransparentRedirect.Confirm()` instead.
+* Remove `CUSTOMER_ID_IS_INVAILD`, `TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_MUST_BE_GREATER_THAN_ZERO`, and `TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_MUST_BE_GREATER_THAN_ZERO`, and `TRANSACTION_MERCHANT_ACCOUNT_NAME_IS_INVALID`. Use `CUSTOMER_ID_IS_INVALID`, `TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE`, `TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_CANNOT_BE_NEGATIVE`, or `TRANSACTION_MERCHANT_ACCOUNT_ID_IS_INVALID` instead.
+* If an `AccessToken` and `Environment` are specified in `Configuration`, an exception will be thrown if the environment does not match the access token's environment.
+* For `RangeNode` decimal values passed to `SearchCriteria`, use `.ToString(InvariantCulture)` to prevent localization issues (https://github.com/braintree/braintree_dotnet/issues/68).
+* Change `OAuthGateway.ComputeSignature` to be an internal method.
+* Migrate the xproj build files to MSBuild csproj build files and update Dockerfile images for support.
+
 ## 3.14.0
 * Add `PayerId` accessor in `PayPalAccount`
 * Add support for searching disputes by `effectiveDate`, `disbursementDate`, and `customerId`
@@ -504,7 +519,7 @@
 * Allow merchant account to be specified when creating transactions
 * Allow creating a transaction with a vault customer and new credit card
 * Allow existing billing address to be updated when updating credit card
-* **Backwards incomaptible change**: CreditCardRequest.BillingAddress has changed from type AddressRequest to CreditCardAddressRequest
+* **Backwards incompatible change**: CreditCardRequest.BillingAddress has changed from type AddressRequest to CreditCardAddressRequest
 
 ## 2.0.0
 

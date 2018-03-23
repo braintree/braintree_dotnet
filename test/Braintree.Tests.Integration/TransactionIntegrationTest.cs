@@ -3,8 +3,10 @@ using Braintree.Test;
 using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
-using System.Text.RegularExpressions;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
@@ -110,7 +112,7 @@ namespace Braintree.Tests.Integration
                 CustomerEmail.Is("smith@example.com").
                 CustomerFax.Is("5551231234").
                 CustomerFirstName.Is("Tom").
-                CustomerId.Is(transaction.Customer.Id).
+                CustomerId.Is(transaction.CustomerDetails.Id).
                 CustomerLastName.Is("Smith").
                 CustomerPhone.Is("5551231234").
                 CustomerWebsite.Is("http://example.com").
@@ -224,7 +226,7 @@ namespace Braintree.Tests.Integration
                 CustomerEmail.Is("smith@example.com").
                 CustomerFax.Is("5551231234").
                 CustomerFirstName.Is("Tom").
-                CustomerId.Is(transaction.Customer.Id).
+                CustomerId.Is(transaction.CustomerDetails.Id).
                 CustomerLastName.Is("Smith").
                 CustomerPhone.Is("5551231234").
                 CustomerWebsite.Is("http://example.com").
@@ -1275,7 +1277,47 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
-        [Test]       
+        [Test]
+        public void Search_DecimalAmountUsesInvariantCultureFormattingWithToString()
+        {
+#if netcore
+            var originalCulture = CultureInfo.CurrentCulture;
+            try {
+                CultureInfo.CurrentCulture = new CultureInfo("da-DK");
+#else
+            var originalCulture = Thread.CurrentThread.CurrentCulture;
+            try {
+                Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo("da-DK");
+#endif
+
+                var request = new TransactionRequest
+                {
+                    Amount = 10.33M,
+                    CreditCard = new TransactionCreditCardRequest
+                    {
+                        Number = SandboxValues.CreditCardNumber.VISA,
+                        ExpirationDate = "05/2020"
+                    }
+                };
+
+                Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+                var searchRequest = new TransactionSearchRequest().
+                    Id.Is(transaction.Id).
+                    Amount.Is(transaction.Amount);
+
+                ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+                Assert.AreEqual(1, collection.MaximumCount);
+            } finally {
+#if netcore
+                CultureInfo.CurrentCulture = originalCulture;
+#else
+                Thread.CurrentThread.CurrentCulture = originalCulture;
+#endif
+            }
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
@@ -1967,7 +2009,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("John Doe", creditCard.CardholderName);
 
             Assert.IsNull(transaction.GetVaultCustomer());
-            Customer customer = transaction.Customer;
+            CustomerDetails customer = transaction.CustomerDetails;
             Assert.AreEqual("Dan", customer.FirstName);
             Assert.AreEqual("Smith", customer.LastName);
             Assert.AreEqual("Braintree", customer.Company);
@@ -2141,7 +2183,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(paymentToken, creditCard.Token);
             Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
 
-            Customer customer = transaction.Customer;
+            CustomerDetails customer = transaction.CustomerDetails;
             Assert.AreEqual(customerId, customer.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
         }
@@ -2247,7 +2289,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(creditCard.Token);
             Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
 
-            Customer customer = transaction.Customer;
+            CustomerDetails customer = transaction.CustomerDetails;
             Assert.IsNotNull(customer.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
         }
@@ -2281,7 +2323,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(creditCard.Token);
             Assert.AreEqual("05/2009", transaction.GetVaultCreditCard().ExpirationDate);
 
-            Customer customer = transaction.Customer;
+            CustomerDetails customer = transaction.CustomerDetails;
             Assert.IsNotNull(customer.Id);
             Assert.AreEqual("Jane", transaction.GetVaultCustomer().FirstName);
         }
@@ -2315,7 +2357,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNull(creditCard.Token);
             Assert.IsNull(transaction.GetVaultCreditCard());
 
-            Customer customer = transaction.Customer;
+            CustomerDetails customer = transaction.CustomerDetails;
             Assert.IsNull(customer.Id);
             Assert.IsNull(transaction.GetVaultCustomer());
         }
@@ -5651,8 +5693,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
-            Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
@@ -5697,8 +5739,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Transaction.TransparentRedirectURLForCreate(), service);
-            Result<Transaction> result = gateway.Transaction.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
@@ -6887,7 +6929,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(transaction.Amount, refund.Amount);
 
             Transaction firstTransaction = gateway.Transaction.Find(transaction.Id);
-            Assert.AreEqual(refund.Id, firstTransaction.RefundId);
+            Assert.AreEqual(refund.Id, firstTransaction.RefundIds[0]);
             Assert.AreEqual(firstTransaction.Id, refund.RefundedTransactionId);
         }
         #pragma warning restore 0618
@@ -6938,7 +6980,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(transaction.Amount, refund.Amount);
 
             Transaction firstTransaction = await gateway.Transaction.FindAsync(transaction.Id);
-            Assert.AreEqual(refund.Id, firstTransaction.RefundId);
+            Assert.AreEqual(refund.Id, firstTransaction.RefundIds[0]);
             Assert.AreEqual(firstTransaction.Id, refund.RefundedTransactionId);
         }
 #if net452
@@ -7323,7 +7365,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("1111", creditCard.LastFour);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
 
-            Assert.AreEqual("Dan", cloneTransaction.Customer.FirstName);
+            Assert.AreEqual("Dan", cloneTransaction.CustomerDetails.FirstName);
             Assert.AreEqual("Carl", cloneTransaction.BillingAddress.FirstName);
             Assert.AreEqual("Andrew", cloneTransaction.ShippingAddress.FirstName);
 
@@ -7392,7 +7434,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("1111", creditCard.LastFour);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
 
-            Assert.AreEqual("Dan", cloneTransaction.Customer.FirstName);
+            Assert.AreEqual("Dan", cloneTransaction.CustomerDetails.FirstName);
             Assert.AreEqual("Carl", cloneTransaction.BillingAddress.FirstName);
             Assert.AreEqual("Andrew", cloneTransaction.ShippingAddress.FirstName);
         }
