@@ -74,7 +74,7 @@ namespace Braintree.Tests
 #endif
 
         [Test]
-        public void AddFileEvidence_nullOrEmptyDisputeIdThrowsNotFoundException()
+        public void AddFileEvidenceWithRequest_nullOrEmptyDisputeIdThrowsNotFoundException()
         {
             NotFoundException nullException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence(null, "evidence"));
             Assert.AreEqual(nullException.Message, "dispute with id '' not found");
@@ -120,7 +120,7 @@ namespace Braintree.Tests
         [Test]
         public void AddFileEvidence_nullOrEmptyDocumentUploadIdThrowsNotFoundException()
         {
-            NotFoundException nullException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence("dispute", null));
+            NotFoundException nullException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence("dispute", null as string));
             Assert.AreEqual(nullException.Message, "document with id '' not found");
 
             NotFoundException emptyException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence("dispute", " "));
@@ -138,7 +138,7 @@ namespace Braintree.Tests
         {
             try
             {
-                await disputeGateway.AddFileEvidenceAsync("dispute", null);
+                await disputeGateway.AddFileEvidenceAsync("dispute", null as string);
                 Assert.Fail("Expected NotFoundException.");
             }
             catch (NotFoundException exception)
@@ -237,7 +237,7 @@ namespace Braintree.Tests
             TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest()
             {
                 Content = "content",
-                Tag = "Tag",
+                Category = "Category",
                 SequenceNumber = "four"
             };
             ArgumentException nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", textEvidenceRequest));
@@ -246,7 +246,7 @@ namespace Braintree.Tests
             textEvidenceRequest = new TextEvidenceRequest()
             {
                 Content = "content",
-                Tag = "Tag",
+                Category = "Category",
                 SequenceNumber = "4.5"
             };
             nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", textEvidenceRequest));
@@ -331,7 +331,7 @@ namespace Braintree.Tests
             TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest()
             {
                 Content = "content",
-                Tag = "Tag",
+                Category = "Category",
                 SequenceNumber = "four"
             };
             try
@@ -347,7 +347,7 @@ namespace Braintree.Tests
             textEvidenceRequest = new TextEvidenceRequest()
             {
                 Content = "content",
-                Tag = "Tag",
+                Category = "Category",
                 SequenceNumber = "4.5"
             };
             try

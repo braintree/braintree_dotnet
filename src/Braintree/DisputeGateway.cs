@@ -78,7 +78,7 @@ namespace Braintree
             }
         }
 
-        public virtual Result<DisputeEvidence> AddFileEvidence(string disputeId, string documentUploadId)
+        public virtual Result<DisputeEvidence> AddFileEvidence(string disputeId, FileEvidenceRequest request)
         {
             NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
 
@@ -87,13 +87,10 @@ namespace Braintree
                 throw notFoundException;
             }
 
-            if (documentUploadId == null || documentUploadId.Trim().Equals(""))
+            if (request.DocumentUploadId == null || request.DocumentUploadId.Trim().Equals(""))
             {
-                throw new NotFoundException(String.Format("document with id '{0}' not found", documentUploadId));
+                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentUploadId));
             }
-
-            DisputeAddEvidenceRequest request = new DisputeAddEvidenceRequest();
-            request.DocumentUploadId = documentUploadId;
 
             try {
                 XmlNode disputeEvidenceXML = Service.Post(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", request);
@@ -104,7 +101,12 @@ namespace Braintree
             }
         }
 
-        public virtual async Task<Result<DisputeEvidence>> AddFileEvidenceAsync(string disputeId, string documentUploadId)
+        public virtual Result<DisputeEvidence> AddFileEvidence(string disputeId, string documentUploadId)
+        {
+            return AddFileEvidence(disputeId, new FileEvidenceRequest { DocumentUploadId = documentUploadId });
+        }
+
+        public virtual async Task<Result<DisputeEvidence>> AddFileEvidenceAsync(string disputeId, FileEvidenceRequest request)
         {
             NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
 
@@ -113,13 +115,10 @@ namespace Braintree
                 throw notFoundException;
             }
 
-            if (documentUploadId == null || documentUploadId.Trim().Equals(""))
+            if (request.DocumentUploadId == null || request.DocumentUploadId.Trim().Equals(""))
             {
-                throw new NotFoundException(String.Format("document with id '{0}' not found", documentUploadId));
+                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentUploadId));
             }
-
-            DisputeAddEvidenceRequest request = new DisputeAddEvidenceRequest();
-            request.DocumentUploadId = documentUploadId;
 
             try {
                 XmlNode disputeEvidenceXML = await Service.PostAsync(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", request).ConfigureAwait(false);
@@ -128,6 +127,11 @@ namespace Braintree
             } catch (NotFoundException) {
                 throw notFoundException;
             }
+        }
+
+        public virtual async Task<Result<DisputeEvidence>> AddFileEvidenceAsync(string disputeId, string documentUploadId)
+        {
+            return await AddFileEvidenceAsync(disputeId, new FileEvidenceRequest { DocumentUploadId = documentUploadId });
         }
 
         public virtual Result<DisputeEvidence> AddTextEvidence(string disputeId, string content)

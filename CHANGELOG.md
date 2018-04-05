@@ -1,3 +1,9 @@
+## Unreleased
+
+## 4.1.0
+
+* Add support for VCR compelling evidence dispute representment
+
 ## 4.0.0
 
 ### Backwards incompatible changes

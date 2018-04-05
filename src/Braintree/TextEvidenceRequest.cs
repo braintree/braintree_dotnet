@@ -1,5 +1,7 @@
 #pragma warning disable 1591
 
+using System;
+
 namespace Braintree
 {
     /// <summary>
@@ -11,7 +13,7 @@ namespace Braintree
     ///  var textEvidenceRequest = new TextEvidenceRequest
     ///  {
     ///      Content = "UPS-45676",
-    ///      Tag = "CARRIER_NAME",
+    ///      Category = "CARRIER_NAME",
     ///      SequenceNumber = "0",
     /// };
     /// </code>
@@ -19,7 +21,20 @@ namespace Braintree
     public class TextEvidenceRequest : Request
     {
         public string Content { get; set; }
-        public string Tag { get; set; }
+
+        [ObsoleteAttribute("Please use Category instead")]
+        public string Tag
+        {
+            get { return _category; }
+            set { this._category = value; }
+        }
+
+        public string Category
+        {
+            get { return _category; }
+            set { this._category = value; }
+        }
+
         public string SequenceNumber { get; set; }
 
         public override string ToXml()
@@ -46,8 +61,10 @@ namespace Braintree
         {
             return new RequestBuilder(root).
                 AddElement("comments", Content).
-                AddElement("category", Tag).
+                AddElement("category", Category).
                 AddElement("sequence-number", SequenceNumber);
         }
+
+        private string _category;
     }
 }

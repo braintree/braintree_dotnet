@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Text.RegularExpressions;
+using System.Linq;
 using System.IO;
 
 namespace Braintree.Tests.Integration
@@ -141,6 +142,32 @@ namespace Braintree.Tests.Integration
 
             DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
 
+            Assert.Null(evidence.Category);
+
+            Assert.NotNull(foundEvidence);
+        }
+
+        [Test]
+        public void AddFileEvidence_addsEvidenceWithCategory()
+        {
+            DocumentUpload document = createSampleDocumentUpload();
+            Dispute dispute = createSampleDispute();
+
+            var fileEvidenceRequest = new FileEvidenceRequest
+            {
+                DocumentUploadId = document.Id,
+                Category = "GENERAL",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddFileEvidence(dispute.Id, fileEvidenceRequest).Target;
+
+            Assert.NotNull(evidence);
+
+            DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
+
+            Assert.NotNull(evidence.Category);
+            Assert.AreEqual(evidence.Category, "GENERAL");
+
             Assert.NotNull(foundEvidence);
         }
 
@@ -243,18 +270,49 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        public void AddTextEvidence_addsTextEvidence()
+        public void AddFileEvidence_failsToAddEvidenceWithUnSupportedCategory()
         {
+            DocumentUpload document = createSampleDocumentUpload();
             Dispute dispute = createSampleDispute();
+            FileEvidenceRequest request = new FileEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                DocumentUploadId = document.Id,
+            };
+            var result = gateway.Dispute.AddFileEvidence(dispute.Id, request);
 
-            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, "my text evidence").Target;
+            Assert.IsFalse(result.IsSuccess());
 
-            Assert.NotNull(evidence.Id);
-            Assert.NotNull(evidence.CreatedAt);
-            Assert.AreEqual("my text evidence", evidence.Comment);
-            Assert.Null(evidence.SentToProcessorAt);
-            Assert.Null(evidence.Url);
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
         }
+
+        [Test]
+#if netcore
+        public async Task AddFileEvidenceAsync_failsToAddEvidenceWithUnsupportedCategory()
+#else
+        public void AddFileEvidenceAsync_failsToAddEvidenceWithUnsupportedCategory()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            DocumentUpload document = await createSampleDocumentUploadAsync();
+            Dispute dispute = await createSampleDisputeAsync();
+
+            FileEvidenceRequest request = new FileEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                DocumentUploadId = document.Id,
+            };
+            var result = await gateway.Dispute.AddFileEvidenceAsync(dispute.Id, request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
 #if netcore
@@ -275,6 +333,71 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("my text evidence", evidence.Comment);
             Assert.Null(evidence.SentToProcessorAt);
             Assert.Null(evidence.Url);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+        public void AddTextEvidence_addsEvidenceWithCateogry()
+        {
+            Dispute dispute = createSampleDispute();
+            var textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = "my content",
+                Category = "DEVICE_ID",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, textEvidenceRequest).Target;
+
+            Assert.NotNull(evidence);
+
+            DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
+
+            Assert.NotNull(evidence.Category);
+            Assert.AreEqual(evidence.Category, "DEVICE_ID");
+
+            Assert.NotNull(foundEvidence);
+        }
+
+        [Test]
+        public void AddTextEvidence_failsToAddEvidenceWithUnSupportedCategory()
+        {
+            Dispute dispute = createSampleDispute();
+            TextEvidenceRequest request = new TextEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                Content = "evidence",
+            };
+            var result = gateway.Dispute.AddTextEvidence(dispute.Id, request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
+        }
+
+        [Test]
+#if netcore
+        public async Task AddTextEvidenceAsync_failsToAddEvidenceWithUnSupportedCategory()
+#else
+        public void AddTextEvidenceAsync_failsToAddEvidenceWithUnSupportedCategory()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Dispute dispute = await createSampleDisputeAsync();
+
+            TextEvidenceRequest request = new TextEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                Content = "evidence",
+            };
+            var result = await gateway.Dispute.AddTextEvidenceAsync(dispute.Id, request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
         }
 #if net452
             ).GetAwaiter().GetResult();
@@ -402,6 +525,36 @@ namespace Braintree.Tests.Integration
 
             Dispute finalizedDispute = gateway.Dispute.Find(dispute.Id).Target;
             Assert.AreEqual(DisputeStatus.DISPUTED, finalizedDispute.Status);
+        }
+
+        [Test]
+        public void Finalize_whenThereAreValidationErrorsDoesNotSucceed()
+        {
+            Dispute dispute = createSampleDispute();
+            var textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = "my content",
+                Category = "DEVICE_ID",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, textEvidenceRequest).Target;
+
+            var result = gateway.Dispute.Finalize(dispute.Id);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual
+                (
+                    new HashSet<ValidationErrorCode>
+                    {
+                        ValidationErrorCode.DISPUTE_DIGITAL_GOODS_MISSING_EVIDENCE,
+                        ValidationErrorCode.DISPUTE_DIGITAL_GOODS_MISSING_DOWNLOAD_DATE
+                    },
+                    new HashSet<ValidationErrorCode>(result.Errors.ForObject("Dispute").OnField("Dispute").Select(error => error.Code))
+                );
+            Dispute finalizedDispute = gateway.Dispute.Find(dispute.Id).Target;
+            Assert.AreNotEqual(DisputeStatus.DISPUTED, finalizedDispute.Status);
+            Assert.AreEqual(DisputeStatus.OPEN, finalizedDispute.Status);
         }
 
         [Test]
