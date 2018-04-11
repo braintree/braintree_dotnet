@@ -15,7 +15,7 @@ namespace Braintree
     /// </example>
     public class FileEvidenceRequest : Request
     {
-        public string DocumentUploadId { get; set; }
+        public string DocumentId { get; set; }
         public string Category { get; set; }
 
         public override string ToXml()
@@ -41,7 +41,7 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
-                AddElement("document-upload-id", DocumentUploadId).
+                AddElement("document-upload-id", DocumentId).
                 AddElement("category", Category);
         }
 

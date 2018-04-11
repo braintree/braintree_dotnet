@@ -155,7 +155,7 @@ namespace Braintree.Tests.Integration
 
             var fileEvidenceRequest = new FileEvidenceRequest
             {
-                DocumentUploadId = document.Id,
+                DocumentId = document.Id,
                 Category = "GENERAL",
             };
 
@@ -277,7 +277,7 @@ namespace Braintree.Tests.Integration
             FileEvidenceRequest request = new FileEvidenceRequest
             {
                 Category = "NOTAREALCATEGORY",
-                DocumentUploadId = document.Id,
+                DocumentId = document.Id,
             };
             var result = gateway.Dispute.AddFileEvidence(dispute.Id, request);
 
@@ -301,7 +301,7 @@ namespace Braintree.Tests.Integration
             FileEvidenceRequest request = new FileEvidenceRequest
             {
                 Category = "NOTAREALCATEGORY",
-                DocumentUploadId = document.Id,
+                DocumentId = document.Id,
             };
             var result = await gateway.Dispute.AddFileEvidenceAsync(dispute.Id, request);
 

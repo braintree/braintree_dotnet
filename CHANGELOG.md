@@ -1,5 +1,10 @@
 ## Unreleased
 
+## 4.1.1
+
+* Add dispute error code DISPUTE_VALID_EVIDENCE_REQUIRED_TO_FINALIZE
+* Fix incorrectly named FileEvidenceRequest.DocumentId parameter
+
 ## 4.1.0
 
 * Add support for VCR compelling evidence dispute representment

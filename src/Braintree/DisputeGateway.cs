@@ -12,15 +12,15 @@ namespace Braintree
     class DisputeAddEvidenceRequest : Request
     {
         public string Comments { get; set; }
-        public string DocumentUploadId { get; set; }
+        public string DocumentId { get; set; }
 
         public override string ToXml()
         {
             if (Comments != null) {
                 return RequestBuilder.BuildXMLElement("comments", Comments);
             }
-            if (DocumentUploadId != null) {
-                return RequestBuilder.BuildXMLElement("document-upload-id", DocumentUploadId);
+            if (DocumentId != null) {
+                return RequestBuilder.BuildXMLElement("document-upload-id", DocumentId);
             }
             return "";
         }
@@ -87,9 +87,9 @@ namespace Braintree
                 throw notFoundException;
             }
 
-            if (request.DocumentUploadId == null || request.DocumentUploadId.Trim().Equals(""))
+            if (request.DocumentId == null || request.DocumentId.Trim().Equals(""))
             {
-                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentUploadId));
+                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentId));
             }
 
             try {
@@ -103,7 +103,7 @@ namespace Braintree
 
         public virtual Result<DisputeEvidence> AddFileEvidence(string disputeId, string documentUploadId)
         {
-            return AddFileEvidence(disputeId, new FileEvidenceRequest { DocumentUploadId = documentUploadId });
+            return AddFileEvidence(disputeId, new FileEvidenceRequest { DocumentId = documentUploadId });
         }
 
         public virtual async Task<Result<DisputeEvidence>> AddFileEvidenceAsync(string disputeId, FileEvidenceRequest request)
@@ -115,9 +115,9 @@ namespace Braintree
                 throw notFoundException;
             }
 
-            if (request.DocumentUploadId == null || request.DocumentUploadId.Trim().Equals(""))
+            if (request.DocumentId == null || request.DocumentId.Trim().Equals(""))
             {
-                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentUploadId));
+                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentId));
             }
 
             try {
@@ -131,7 +131,7 @@ namespace Braintree
 
         public virtual async Task<Result<DisputeEvidence>> AddFileEvidenceAsync(string disputeId, string documentUploadId)
         {
-            return await AddFileEvidenceAsync(disputeId, new FileEvidenceRequest { DocumentUploadId = documentUploadId });
+            return await AddFileEvidenceAsync(disputeId, new FileEvidenceRequest { DocumentId = documentUploadId });
         }
 
         public virtual Result<DisputeEvidence> AddTextEvidence(string disputeId, string content)
