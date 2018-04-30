@@ -29,7 +29,7 @@ namespace Braintree.TestUtil
             return unescapedClientToken;
         }
 
-        public static string GenerateValidUsBankAccountNonce(BraintreeGateway gateway)
+        public static string GenerateValidUsBankAccountNonce(BraintreeGateway gateway, string accountNumber = "1000000000")
         {
             var clientToken = GenerateDecodedClientToken(gateway);
             var def =  new {
@@ -52,7 +52,7 @@ namespace Braintree.TestUtil
                 },
                 ""account_type"": ""checking"",
                 ""routing_number"": ""021000021"",
-                ""account_number"": ""1000000000"",
+                ""account_number"": """ + accountNumber + @""",
                 ""ownership_type"": ""personal"",
                 ""first_name"": ""Dan"",
                 ""last_name"": ""Schulman"",

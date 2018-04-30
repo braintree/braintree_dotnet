@@ -22,6 +22,12 @@ namespace Braintree
             service = new BraintreeService(gateway.Configuration);
         }
 
+        public virtual Result<UsBankAccountVerification> ConfirmMicroTransferAmounts(string Id, UsBankAccountVerificationConfirmRequest request)
+        {
+            var response = new NodeWrapper(service.Put(service.MerchantPath() + "/us_bank_account_verifications/" + Id + "/confirm_micro_transfer_amounts", request));
+            return new ResultImpl<UsBankAccountVerification>(response, gateway);
+        }
+
         public virtual UsBankAccountVerification Find(string Id)
         {
             if (Id == null || Id.Trim().Equals(""))

@@ -136,6 +136,10 @@ namespace Braintree
             {
                 return new UsBankAccount(node) as T;
             }
+            else if (typeof(T) == typeof(UsBankAccountVerification))
+            {
+                return new UsBankAccountVerification(node) as T;
+            }
             else if (typeof(T) == typeof(VisaCheckoutCard))
             {
                 return new VisaCheckoutCard(node, gateway) as T;

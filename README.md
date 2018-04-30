@@ -7,7 +7,7 @@ The Braintree .NET library provides integration access to the Braintree Gateway.
 
 ## Dependencies
 
-* .NET Core 1.0 or .NET Framework 4.5.2+
+* .NET Core 1.0, .NET Core 2.0, or .NET Framework 4.5.2+
 
 ## Quick Start Example
 

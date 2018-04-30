@@ -1,5 +1,9 @@
 ## Unreleased
 
+## 4.2.0
+
+* Add support for US Bank Account verifications API
+
 ## 4.1.1
 
 * Add dispute error code DISPUTE_VALID_EVIDENCE_REQUIRED_TO_FINALIZE

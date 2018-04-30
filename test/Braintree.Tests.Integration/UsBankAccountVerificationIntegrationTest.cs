@@ -2,6 +2,7 @@ using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Braintree.Tests.Integration
 {
@@ -20,6 +21,164 @@ namespace Braintree.Tests.Integration
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
+        }
+
+        [Test]
+        public void SuccessfullyConfirmSettled_MicroTransferVerification()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration2_merchant_id",
+                PublicKey = "integration2_public_key",
+                PrivateKey = "integration2_private_key"
+            };
+
+            Result<Customer> customer = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customer.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Target.Id,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway, "1000000000"),
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerificationMerchantAccountId = MerchantAccountIDs.ANOTHER_US_BANK_MERCHANT_ACCOUNT_ID,
+                    UsBankAccountVerificationMethod = UsBankAccountVerificationMethod.MICRO_TRANSFERS
+                }
+            };
+
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            UsBankAccount usBankAccount = (UsBankAccount) result.Target;
+
+            Assert.IsNotNull(usBankAccount.Token);
+            UsBankAccountVerification verification = usBankAccount.Verifications[0];
+
+            Assert.AreEqual(UsBankAccountVerificationMethod.MICRO_TRANSFERS, verification.VerificationMethod);
+            Assert.AreEqual(UsBankAccountVerificationStatus.PENDING, verification.Status);
+
+            var confirmRequest = new UsBankAccountVerificationConfirmRequest
+            {
+                DepositAmounts = new int[] { 17, 29 }
+            };
+
+            var confirmResult = gateway.UsBankAccountVerification.ConfirmMicroTransferAmounts(verification.Id, confirmRequest);
+
+            Assert.IsTrue(confirmResult.IsSuccess());
+
+            verification = (UsBankAccountVerification) confirmResult.Target;
+
+            Assert.AreEqual(UsBankAccountVerificationStatus.VERIFIED, verification.Status);
+
+            usBankAccount = (UsBankAccount) gateway.PaymentMethod.Find(verification.UsBankAccount.Token);
+
+            Assert.IsTrue(usBankAccount.IsVerified);
+        }
+
+        [Test]
+        public void SuccessfullyConfirmUnsettled_MicroTransferVerification()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration2_merchant_id",
+                PublicKey = "integration2_public_key",
+                PrivateKey = "integration2_private_key"
+            };
+
+            Result<Customer> customer = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customer.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Target.Id,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway, "1000000001"),
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerificationMerchantAccountId = MerchantAccountIDs.ANOTHER_US_BANK_MERCHANT_ACCOUNT_ID,
+                    UsBankAccountVerificationMethod = UsBankAccountVerificationMethod.MICRO_TRANSFERS
+                }
+            };
+
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            UsBankAccount usBankAccount = (UsBankAccount) result.Target;
+
+            Assert.IsNotNull(usBankAccount.Token);
+            UsBankAccountVerification verification = usBankAccount.Verifications[0];
+
+            Assert.AreEqual(UsBankAccountVerificationMethod.MICRO_TRANSFERS, verification.VerificationMethod);
+            Assert.AreEqual(UsBankAccountVerificationStatus.PENDING, verification.Status);
+
+            var confirmRequest = new UsBankAccountVerificationConfirmRequest
+            {
+                DepositAmounts = new int[] { 17, 29 }
+            };
+
+            var confirmResult = gateway.UsBankAccountVerification.ConfirmMicroTransferAmounts(verification.Id, confirmRequest);
+
+            Assert.IsTrue(confirmResult.IsSuccess());
+
+            verification = (UsBankAccountVerification) confirmResult.Target;
+
+            Assert.AreEqual(UsBankAccountVerificationStatus.PENDING, verification.Status);
+        }
+
+        [Test]
+        public void MultipleAttemptConfirm_MicroTransferVerification()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration2_merchant_id",
+                PublicKey = "integration2_public_key",
+                PrivateKey = "integration2_private_key"
+            };
+
+            Result<Customer> customer = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customer.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Target.Id,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway, "1000000000"),
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerificationMerchantAccountId = MerchantAccountIDs.ANOTHER_US_BANK_MERCHANT_ACCOUNT_ID,
+                    UsBankAccountVerificationMethod = UsBankAccountVerificationMethod.MICRO_TRANSFERS
+                }
+            };
+
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            UsBankAccount usBankAccount = (UsBankAccount) result.Target;
+
+            Assert.IsNotNull(usBankAccount.Token);
+            UsBankAccountVerification verification = usBankAccount.Verifications[0];
+
+            Assert.AreEqual(UsBankAccountVerificationMethod.MICRO_TRANSFERS, verification.VerificationMethod);
+            Assert.AreEqual(UsBankAccountVerificationStatus.PENDING, verification.Status);
+
+            var confirmRequest = new UsBankAccountVerificationConfirmRequest
+            {
+                DepositAmounts = new int[] { 1, 1 }
+            };
+
+            for(int i = 0; i < 4; i++)
+            {
+                var r = gateway.UsBankAccountVerification.ConfirmMicroTransferAmounts(verification.Id, confirmRequest);
+                Assert.IsFalse(r.IsSuccess());
+                Assert.AreEqual(
+                    ValidationErrorCode.US_BANK_ACCOUNT_VERIFICATION_AMOUNTS_DO_NOT_MATCH,
+                    r.Errors.ForObject("us-bank-account-verification").OnField("base")[0].Code);
+            }
+
+            var confirmResult = gateway.UsBankAccountVerification.ConfirmMicroTransferAmounts(verification.Id, confirmRequest);
+            Assert.IsFalse(confirmResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.US_BANK_ACCOUNT_VERIFICATION_TOO_MANY_CONFIRMATION_ATTEMPTS,
+                confirmResult.Errors.ForObject("us-bank-account-verification").OnField("base")[0].Code);
         }
 
         [Test]

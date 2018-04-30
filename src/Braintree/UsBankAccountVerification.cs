@@ -11,10 +11,11 @@ namespace Braintree
         public static readonly UsBankAccountVerificationStatus PROCESSOR_DECLINED = new UsBankAccountVerificationStatus("processor_declined");
         public static readonly UsBankAccountVerificationStatus UNRECOGNIZED = new UsBankAccountVerificationStatus("unrecognized");
         public static readonly UsBankAccountVerificationStatus VERIFIED = new UsBankAccountVerificationStatus("verified");
+        public static readonly UsBankAccountVerificationStatus PENDING = new UsBankAccountVerificationStatus("pending");
 
 
         public static readonly UsBankAccountVerificationStatus[] ALL = {
-            FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, VERIFIED
+            FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, VERIFIED, PENDING
         };
 
         protected UsBankAccountVerificationStatus(string name) : base(name) {}
@@ -25,10 +26,11 @@ namespace Braintree
         public static readonly UsBankAccountVerificationMethod INDEPENDENT_CHECK = new UsBankAccountVerificationMethod("independent_check");
         public static readonly UsBankAccountVerificationMethod NETWORK_CHECK = new UsBankAccountVerificationMethod("network_check");
         public static readonly UsBankAccountVerificationMethod TOKENIZED_CHECK = new UsBankAccountVerificationMethod("tokenized_check");
+        public static readonly UsBankAccountVerificationMethod MICRO_TRANSFERS = new UsBankAccountVerificationMethod("micro_transfers");
         public static readonly UsBankAccountVerificationMethod UNRECOGNIZED = new UsBankAccountVerificationMethod("unrecognized");
 
         public static readonly UsBankAccountVerificationMethod[] ALL = {
-            INDEPENDENT_CHECK, NETWORK_CHECK, TOKENIZED_CHECK
+            INDEPENDENT_CHECK, NETWORK_CHECK, TOKENIZED_CHECK, MICRO_TRANSFERS
         };
 
         protected UsBankAccountVerificationMethod(string name) : base(name) {}
