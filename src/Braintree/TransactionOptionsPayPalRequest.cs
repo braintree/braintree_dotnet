@@ -6,6 +6,7 @@ namespace Braintree
     {
         public string Description { get; set; }
         public string CustomField { get; set; }
+        public string PayeeId { get; set; }
         public string PayeeEmail { get; set; }
         public Dictionary<string, string> SupplementaryData { get; set; }
 
@@ -29,6 +30,7 @@ namespace Braintree
             var builder = new RequestBuilder(root).
                 AddElement("description", Description).
                 AddElement("custom-field", CustomField).
+                AddElement("payee-id", PayeeId).
                 AddElement("payee-email", PayeeEmail);
 
             if(SupplementaryData.Count != 0) builder.AddElement("supplementary-data", SupplementaryData);

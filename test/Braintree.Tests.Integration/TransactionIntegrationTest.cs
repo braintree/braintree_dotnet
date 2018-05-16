@@ -2050,6 +2050,26 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithTransactionSourceAsRecurringFirst()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                TransactionSource = "recurring_first"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsTrue(transaction.Recurring.Value);
+        }
+
+        [Test]
         public void Sale_WithTransactionSourceAsRecurring()
         {
             var request = new TransactionRequest
@@ -2070,6 +2090,26 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithTransactionSourceAsMerchant()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                TransactionSource = "merchant"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsFalse(transaction.Recurring.Value);
+        }
+
+        [Test]
         public void Sale_WithTransactionSourceAsMoto()
         {
             var request = new TransactionRequest
@@ -2087,6 +2127,25 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Target;
             Assert.IsTrue(result.IsSuccess());
             Assert.IsFalse(transaction.Recurring.Value);
+        }
+
+        [Test]
+        public void Sale_WithTransactionSourceInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                TransactionSource = "invalid_value"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_TRANSACTION_SOURCE_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Transaction-Source")[0].Code);
         }
 
         [Test]
@@ -7540,6 +7599,85 @@ namespace Braintree.Tests.Integration
             };
             Result<Transaction> result = gateway.Transaction.Credit(request);
             Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void CreateTransaction_WithPayeeId()
+        {
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                PayPalAccount = new TransactionPayPalRequest()
+                {
+                    PayeeId = "fake-payee-id"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("fake-payee-id", result.Target.PayPalDetails.PayeeId);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
+        public void CreateTransaction_WithPayeeIdInOptionsParams()
+        {
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                PayPalAccount = new TransactionPayPalRequest()
+                {
+                },
+                Options = new TransactionOptionsRequest()
+                {
+                    PayeeId = "fake-payee-id"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("fake-payee-id", result.Target.PayPalDetails.PayeeId);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
+        public void CreateTransaction_WithPayeeIdInOptionsPaypal()
+        {
+            var nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest()
+                {
+                    PayPal = new TransactionOptionsPayPalRequest()
+                    {
+                        PayeeId = "fake-payee-id"
+                    }
+                }
+            };
+
+            var result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("fake-payee-id", result.Target.PayPalDetails.PayeeId);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]

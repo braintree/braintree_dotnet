@@ -1,7 +1,8 @@
-## Unreleased
+## 4.3.0
+* Fix CreditCard not correctly identifying Union Pay card type
+* Allow payee ID to be passed in options params for transaction create
 
 ## 4.2.0
-
 * Add support for US Bank Account verifications API
 
 ## 4.1.1

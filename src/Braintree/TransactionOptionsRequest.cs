@@ -11,6 +11,7 @@ namespace Braintree
         public bool? StoreShippingAddressInVault { get; set; }
         public bool? SubmitForSettlement { get; set; }
         public string VenmoSdkSession { get; set; }
+        public string PayeeId { get; set; }
         public string PayeeEmail { get; set; }
         public bool? SkipAdvancedFraudChecking { get; set; }
         public bool? SkipAvs { get; set; }
@@ -40,6 +41,7 @@ namespace Braintree
                 AddElement("store-shipping-address-in-vault", StoreShippingAddressInVault).
                 AddElement("submit-for-settlement", SubmitForSettlement).
                 AddElement("venmo-sdk-session", VenmoSdkSession).
+                AddElement("payee-id", PayeeId).
                 AddElement("payee-email", PayeeEmail).
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).
                 AddElement("skip-avs", SkipAvs).
