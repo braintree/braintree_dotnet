@@ -1,3 +1,7 @@
+## 4.4.0
+* Add `MerchantId` to `ConnectedMerchantStatusTransitioned` and `ConnectedMerchantPayPalStatusChanged`, and `OauthApplicationClientId` to OAuthAccessRevocation webhooks
+* Fix webhook testing sample xml for dispute webhooks to include `amount-won` and `amount-disputed`
+
 ## 4.3.0
 * Fix CreditCard not correctly identifying Union Pay card type
 * Allow payee ID to be passed in options params for transaction create

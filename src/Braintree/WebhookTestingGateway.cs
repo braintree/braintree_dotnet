@@ -241,6 +241,8 @@ namespace Braintree
             return Node("dispute",
                     Node("id", id),
                     Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
                     NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
                     NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
                     Node("currency-iso-code", "USD"),
@@ -259,6 +261,8 @@ namespace Braintree
             return Node("dispute",
                     Node("id", id),
                     Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
                     NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
                     NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
                     Node("currency-iso-code", "USD"),
@@ -277,6 +281,8 @@ namespace Braintree
             return Node("dispute",
                     Node("id", id),
                     Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
                     NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
                     NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
                     Node("currency-iso-code", "USD"),
@@ -384,7 +390,8 @@ namespace Braintree
 
         private string OAuthAccessRevokedSampleXml(string id) {
             return Node("oauth-application-revocation",
-                    Node("merchant-id", "abc123")
+                    Node("merchant-id", id),
+                    Node("oauth-application-client-id", "oauth_application_client_id")
             );
         }
 
