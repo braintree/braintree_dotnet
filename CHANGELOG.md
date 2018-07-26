@@ -1,3 +1,7 @@
+## 4.5.0
+* Add Samsung Pay support
+* Add `processor_response_code` and `processor_response_text` to authorization adjustments subfield in transaction response.
+
 ## 4.4.0
 * Add `MerchantId` to `ConnectedMerchantStatusTransitioned` and `ConnectedMerchantPayPalStatusChanged`, and `OauthApplicationClientId` to OAuthAccessRevocation webhooks
 * Fix webhook testing sample xml for dispute webhooks to include `amount-won` and `amount-disputed`

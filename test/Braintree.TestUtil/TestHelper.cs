@@ -489,7 +489,7 @@ namespace Braintree.TestUtil
             AddTopLevelElement("credit_card[expiration_month]", "11").
             AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/credit_cards.json", builder.ToQueryString());
+            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/credit_cards", builder.ToQueryString());
 
 #if netcore
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
@@ -499,9 +499,7 @@ namespace Braintree.TestUtil
 
             string responseBody = reader.ReadToEnd();
 
-            Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
-            Match match = regex.Match(responseBody);
-            return match.Groups["nonce"].Value;
+            return extractParamFromJson("nonce", responseBody);
         }
 
         public static string GenerateUnlockedNonce(BraintreeGateway gateway)

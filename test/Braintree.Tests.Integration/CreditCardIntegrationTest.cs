@@ -26,7 +26,20 @@ namespace Braintree.Tests.Integration
             };
             service = new BraintreeService(gateway.Configuration);
         }
-        
+
+        public void AdvancedFraudSetup()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "advanced_fraud_integration_merchant_id",
+                PublicKey = "advanced_fraud_integration_public_key",
+                PrivateKey = "advanced_fraud_integration_private_key"
+            };
+
+            service = new BraintreeService(gateway.Configuration);
+        }
+
         [Test]
         public void Create_CreatesCreditCardForGivenCustomerId()
         {
@@ -1034,6 +1047,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void VerifyValidCreditCardWithVerificationRiskData()
         {
+            AdvancedFraudSetup();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
             {

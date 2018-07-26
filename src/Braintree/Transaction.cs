@@ -120,6 +120,7 @@ namespace Braintree
         public static readonly PaymentInstrumentType US_BANK_ACCOUNT = new PaymentInstrumentType("us_bank_account");
         public static readonly PaymentInstrumentType VISA_CHECKOUT_CARD = new PaymentInstrumentType("visa_checkout_card");
         public static readonly PaymentInstrumentType MASTERPASS_CARD = new PaymentInstrumentType("masterpass_card");
+        public static readonly PaymentInstrumentType SAMSUNG_PAY_CARD = new PaymentInstrumentType("samsung_pay_card");
         public static readonly PaymentInstrumentType IDEAL_PAYMENT = new PaymentInstrumentType("ideal_payment");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
@@ -199,6 +200,7 @@ namespace Braintree
         public virtual IdealPaymentDetails IdealPaymentDetails { get; protected set; }
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
         public virtual MasterpassCardDetails MasterpassCardDetails { get; protected set; }
+        public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
@@ -330,6 +332,11 @@ namespace Braintree
             if (masterpassNode != null)
             {
                 MasterpassCardDetails = new MasterpassCardDetails(masterpassNode);
+            }
+            var samsungPayNode = node.GetNode("samsung-pay-card");
+            if (samsungPayNode != null)
+            {
+                SamsungPayCardDetails = new SamsungPayCardDetails(samsungPayNode);
             }
 
             BillingAddress = new Address(node.GetNode("billing"));

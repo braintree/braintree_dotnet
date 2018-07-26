@@ -31,6 +31,19 @@ namespace Braintree.Tests.Integration
             service = new BraintreeService(gateway.Configuration);
         }
 
+        public void AdvancedFraudSetup()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "advanced_fraud_integration_merchant_id",
+                PublicKey = "advanced_fraud_integration_public_key",
+                PrivateKey = "advanced_fraud_integration_private_key"
+            };
+
+            service = new BraintreeService(gateway.Configuration);
+        }
+
         [Test]
         public void Search_OnAllTextFields()
         {
@@ -1791,6 +1804,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_ReturnsSuccessfulResponseWithRiskData()
         {
+            AdvancedFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -1847,6 +1861,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_WithRiskData()
         {
+            AdvancedFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -4111,6 +4126,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_WithAdvancedFraudCheckingSkipped()
         {
+            AdvancedFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -4129,7 +4145,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
 
             Transaction transaction = result.Target;
-            Assert.Null(transaction.RiskData.id);
+            Assert.Null(transaction.RiskData);
         }
 
         [Test]
@@ -6129,6 +6145,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(authorizationAdjustment.Amount, decimal.Parse("-20.00"));
             Assert.AreEqual(authorizationAdjustment.Success, true);
             Assert.AreEqual(authorizationAdjustment.Timestamp.Value.Year, DateTime.Now.Year);
+            Assert.AreEqual(authorizationAdjustment.ProcessorResponseCode, "1000");
+            Assert.AreEqual(authorizationAdjustment.ProcessorResponseText, "Approved");
         }
 
         [Test]

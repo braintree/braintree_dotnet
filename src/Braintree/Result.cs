@@ -148,6 +148,10 @@ namespace Braintree
             {
                 return new MasterpassCard(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(SamsungPayCard))
+            {
+                return new SamsungPayCard(node, gateway) as T;
+            }
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {
                 return new UnknownPaymentMethod(node) as T;
