@@ -1,6 +1,5 @@
 using Braintree.Exceptions;
 using NUnit.Framework;
-using System;
 using System.Xml;
 
 namespace Braintree.Tests
@@ -128,62 +127,6 @@ namespace Braintree.Tests
             Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
             Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
             Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
-        }
-
-        [Test]
-        public void DeserializesLevel3SummaryFieldsFromXml()
-        {
-            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<transaction>\n" +
-                "  <shipping-amount>1.00</shipping-amount>\n" +
-                "  <discount-amount>2.00</discount-amount>\n" +
-                "  <ships-from-postal-code>12345</ships-from-postal-code>\n" +
-                "  <disbursement-details></disbursement-details>\n" +
-                "  <subscription></subscription>\n" +
-                "</transaction>\n";
-
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            XmlNode newNode = doc.DocumentElement;
-            var node = new NodeWrapper(newNode);
-
-            Transaction transaction = new Transaction(node, gateway);
-
-            Assert.AreEqual(1.00M, transaction.ShippingAmount);
-            Assert.AreEqual(2.00M, transaction.DiscountAmount);
-            Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
-        }
-
-        [Test]
-        public void DeserializesAuthorizationAdjustmentsFromXml()
-        {
-            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-                "<transaction>\n" +
-                "  <authorization-adjustments>\n" +
-                "    <authorization-adjustment>\n" +
-                "      <amount>10.00</amount>\n" +
-                "      <success>true</success>\n" +
-                "      <timestamp>2018-05-16T12:00:00+00:00</timestamp>\n" +
-                "      <processor-response-code>1000</processor-response-code>\n" +
-                "      <processor-response-text>Approved</processor-response-text>\n" +
-                "    </authorization-adjustment>\n" +
-                "  </authorization-adjustments>\n" +
-                "  <disbursement-details></disbursement-details>\n" +
-                "  <subscription></subscription>\n" +
-                "</transaction>\n";
-
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-            XmlNode newNode = doc.DocumentElement;
-            var node = new NodeWrapper(newNode);
-
-            Transaction transaction = new Transaction(node, gateway);
-
-            Assert.AreEqual(10.00M, transaction.AuthorizationAdjustments[0].Amount);
-            Assert.AreEqual(true, transaction.AuthorizationAdjustments[0].Success);
-            Assert.AreEqual(DateTime.Parse("5/16/18 12:00:00 PM"), transaction.AuthorizationAdjustments[0].Timestamp);
-            Assert.AreEqual("1000", transaction.AuthorizationAdjustments[0].ProcessorResponseCode);
-            Assert.AreEqual("Approved", transaction.AuthorizationAdjustments[0].ProcessorResponseText);
         }
     }
 }

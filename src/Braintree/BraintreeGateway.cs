@@ -160,12 +160,6 @@ namespace Braintree
             get { return new CreditCardVerificationGateway(this); }
         }
 
-        public virtual IUsBankAccountVerificationGateway UsBankAccountVerification
-        {
-            get { return new UsBankAccountVerificationGateway(this); }
-        }
-
-
         public virtual IDiscountGateway Discount
         {
             get { return new DiscountGateway(this); }
@@ -229,11 +223,6 @@ namespace Braintree
         public virtual ITransactionGateway Transaction
         {
             get { return new TransactionGateway(this); }
-        }
-
-        public virtual ITransactionLineItemGateway TransactionLineItem
-        {
-            get { return new TransactionLineItemGateway(this); }
         }
 
         public virtual ITransparentRedirectGateway TransparentRedirect

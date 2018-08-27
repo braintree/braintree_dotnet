@@ -10,7 +10,6 @@ namespace Braintree
         public virtual string Token { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
         public virtual string DebugId { get; protected set; }
-        public virtual string PayeeId { get; protected set; }
         public virtual string PayeeEmail { get; protected set; }
         public virtual string CustomField { get; protected set; }
         public virtual string PayerId { get; protected set; }
@@ -32,7 +31,6 @@ namespace Braintree
             Token = node.GetString("token");
             ImageUrl = node.GetString("image-url");
             DebugId = node.GetString("debug-id");
-            PayeeId = node.GetString("payee-id");
             PayeeEmail = node.GetString("payee-email");
             CustomField = node.GetString("custom-field");
             PayerId = node.GetString("payer-id");

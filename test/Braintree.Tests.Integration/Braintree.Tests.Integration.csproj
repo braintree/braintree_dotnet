@@ -1,19 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-<<<<<<< HEAD
     <TargetFrameworks>net452;netcoreapp1.0</TargetFrameworks>
-=======
-    <TargetFrameworks>net452;netcoreapp1.0;netcoreapp2.0</TargetFrameworks>
->>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
     <AssemblyName>Braintree.Tests.Integration</AssemblyName>
     <PackageId>Braintree.Tests.Integration</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-<<<<<<< HEAD
     <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
-=======
->>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -23,7 +16,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< HEAD
     <ProjectReference Include="..\..\src\Braintree\Braintree.csproj" />
     <ProjectReference Include="..\Braintree.Tests\Braintree.Tests.csproj" />
     <ProjectReference Include="..\Braintree.TestUtil\Braintree.TestUtil.csproj" />
@@ -34,18 +26,6 @@
     <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
     <PackageReference Include="NUnit" Version="3.4.1" />
     <PackageReference Include="NUnit.Runners" Version="3.4.1" />
-=======
-    <ProjectReference Include="../../src/Braintree/Braintree.csproj" />
-    <ProjectReference Include="../Braintree.Tests/Braintree.Tests.csproj" />
-    <ProjectReference Include="../Braintree.TestUtil/Braintree.TestUtil.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
-    <PackageReference Include="NUnit" Version="3.9.0" />
-    <PackageReference Include="NUnit.Console" Version="3.8.0" />
->>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
@@ -64,10 +44,4 @@
     <DefineConstants>$(DefineConstants);netcore</DefineConstants>
   </PropertyGroup>
 
-<<<<<<< HEAD
-=======
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
-    <DefineConstants>$(DefineConstants);netcore</DefineConstants>
-  </PropertyGroup>
->>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
 </Project>

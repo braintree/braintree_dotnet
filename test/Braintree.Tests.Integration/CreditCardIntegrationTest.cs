@@ -26,20 +26,7 @@ namespace Braintree.Tests.Integration
             };
             service = new BraintreeService(gateway.Configuration);
         }
-
-        public void AdvancedFraudSetup()
-        {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "advanced_fraud_integration_merchant_id",
-                PublicKey = "advanced_fraud_integration_public_key",
-                PrivateKey = "advanced_fraud_integration_private_key"
-            };
-
-            service = new BraintreeService(gateway.Configuration);
-        }
-
+        
         [Test]
         public void Create_CreatesCreditCardForGivenCustomerId()
         {
@@ -156,7 +143,7 @@ namespace Braintree.Tests.Integration
 
             CreditCard creditCard = result.Target;
             Assert.AreEqual("1111", creditCard.LastFour);
-            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
+            Assert.IsTrue(creditCard.IsVenmoSdk.Value);
         }
 
         [Test]
@@ -250,7 +237,7 @@ namespace Braintree.Tests.Integration
             CreditCard card = result.Target;
 
             Assert.IsTrue(result.IsSuccess());
-            Assert.IsFalse(card.IsVenmoSdk.Value);
+            Assert.IsTrue(card.IsVenmoSdk.Value);
         }
 
         [Test]
@@ -317,7 +304,7 @@ namespace Braintree.Tests.Integration
         public void ConfirmTransparentRedirectCreate_CreatesTheCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
+            
             CreditCardRequest trParams = new CreditCardRequest { CustomerId = customer.Id };
 
             CreditCardRequest request = new CreditCardRequest
@@ -334,8 +321,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
             Assert.AreEqual("John Doe", card.CardholderName);
@@ -379,9 +366,9 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
 
-            CreditCard card = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
+            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
         #pragma warning restore 0618
@@ -411,9 +398,9 @@ namespace Braintree.Tests.Integration
                 CustomerId = customer.Id,
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
 
-            CreditCard card = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
+            CreditCard card = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
             Assert.IsTrue(card.IsDefault.Value);
         }
         #pragma warning restore 0618
@@ -438,8 +425,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForCreate(), service);
+            Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(
@@ -896,8 +883,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.TransparentRedirect.Url, service);
-            CreditCard updatedCreditCard = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
+            string queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
+            CreditCard updatedCreditCard = gateway.CreditCard.ConfirmTransparentRedirect(queryString).Target;
 
             Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
             Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
@@ -933,8 +920,8 @@ namespace Braintree.Tests.Integration
                 CardholderName = "Joe Cool"
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.CreditCard.TransparentRedirectURLForUpdate(), service);
+            Result<CreditCard> result = gateway.CreditCard.ConfirmTransparentRedirect(queryString);
             Assert.IsTrue(result.IsSuccess());
             CreditCard card = result.Target;
             Assert.AreEqual("Joe Cool", card.CardholderName);
@@ -1047,7 +1034,6 @@ namespace Braintree.Tests.Integration
         [Test]
         public void VerifyValidCreditCardWithVerificationRiskData()
         {
-            AdvancedFraudSetup();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
             {

@@ -9,9 +9,6 @@ namespace Braintree
         public virtual string Comment { get; protected set; }
         public virtual string Id { get; protected set; }
         public virtual string Url { get; protected set; }
-        public virtual string Tag { get; protected set; }
-        public virtual string Category { get; protected set; }
-        public virtual string SequenceNumber { get; protected set; }
 
         public DisputeEvidence(NodeWrapper node)
         {
@@ -20,10 +17,6 @@ namespace Braintree
             Comment = node.GetString("comment");
             Id = node.GetString("id");
             Url = node.GetString("url");
-            Tag = node.GetString("tag");
-
-            Category = node.GetString("category");
-            SequenceNumber = node.GetString("sequence-number");
         }
 
         [Obsolete("Mock Use Only")]

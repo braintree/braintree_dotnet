@@ -23,6 +23,24 @@ namespace Braintree.Tests
             service = new BraintreeService(gateway.Configuration);
         }
 
+        #pragma warning disable 0618
+        [Test]
+        public void TransparentRedirectURLForCreate_ReturnsCorrectValue()
+        {
+            Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request",
+                    gateway.CreditCard.TransparentRedirectURLForCreate());
+        }
+        #pragma warning restore 0618
+
+        #pragma warning disable 0618
+        [Test]
+        public void TransparentRedirectURLForUpdate_ReturnsCorrectValue()
+        {
+            Assert.AreEqual(service.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request",
+                    gateway.CreditCard.TransparentRedirectURLForUpdate());
+        }
+        #pragma warning restore 0618
+
         [Test]
         public void TrData_ReturnsValidTrDataHash()
         {

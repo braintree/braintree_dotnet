@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using System.Xml;
 
 namespace Braintree.Tests
 {
@@ -38,29 +37,12 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ToXml_IncludesPaymentMethodNonce()
+        public void ToXml_InludesPaymentMethodNonce()
         {
             TransactionRequest request = new TransactionRequest();
             request.PaymentMethodNonce = "1232131232";
 
             Assert.IsTrue(request.ToXml().Contains("1232131232"));
-        }
-
-        [Test]
-        public void ToXml_Includes_Level3SummaryData()
-        {
-            TransactionRequest request = new TransactionRequest();
-            request.ShippingAmount = 1.00M;
-            request.DiscountAmount = 2.00M;
-            request.ShipsFromPostalCode = "12345";
-
-            string xml = request.ToXml();
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xml);
-
-            Assert.AreEqual("1.00", doc.GetElementsByTagName("shipping-amount")[0].InnerXml);
-            Assert.AreEqual("2.00", doc.GetElementsByTagName("discount-amount")[0].InnerXml);
-            Assert.AreEqual("12345", doc.GetElementsByTagName("ships-from-postal-code")[0].InnerXml);
         }
     }
 }

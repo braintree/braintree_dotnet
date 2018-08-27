@@ -101,17 +101,7 @@ namespace Braintree
             }
             if (value is decimal)
             {
-                var format = "F2";
-                if (name == "quantity")
-                {
-                    format = "0.####";
-                }
-                else if (name == "unit-amount")
-                {
-                    format = "0.00##";
-                }
-
-                return FormatAsXml(name, ((decimal) value).ToString(format, System.Globalization.CultureInfo.InvariantCulture));
+                return FormatAsXml(name, ((decimal) value).ToString("F2", System.Globalization.CultureInfo.InvariantCulture));
             }
 
             return FormatAsXml(name, value.ToString());

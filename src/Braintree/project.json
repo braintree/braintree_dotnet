@@ -1,0 +1,61 @@
+{
+  "name": "Braintree",
+  "description": "Braintree Client Library",
+  "copyright": "Copyright © Braintree, a division of PayPal, Inc. 2017",
+  "authors": ["Braintree"],
+  "dependencies": { },
+  "buildOptions": {
+  },
+  "version": "3.10.1-*",
+  "packOptions": {
+    "releaseNotes": "
+* Deprecate `OAuthGateway::ComputeSignature`
+* Fix spec to expect PayPal transactions to move to settling rather than settled
+* Fix absolute Url being passed to `SetWebProxy` in .NET Core
+    ",
+    "summary": "
+    The Braintree .NET Client Library will allow you to take payments securely for
+    your application, especially when paired with a Javascript(browser) or Android/Apple(mobile app)
+    frontend. This app offers an SDK for all payment-centric calls to your Braintree account.
+    ",
+    "tags": [
+      "braintree", "paypal", "venmo", "intenational",
+      "payments", "gateway", "currencies", "money",
+      "visa", "mastercard", "bitcoin", "maestro",
+      "apple pay", "android pay", "amex", "jcb",
+      "diners club", "discover","american express"
+    ],
+    "owners": ["Braintree"],
+    "projectUrl": "https://github.com/braintree/braintree_dotnet"
+  },
+  "frameworks": {
+    "net452": {
+      "buildOptions": {
+        "define": [
+          "net452"
+        ]
+      },
+      "dependencies": {},
+      "frameworkAssemblies": {
+        "System.Xml": "4.0.0.0",
+        "System.Net": "4.0.0.0"
+      }
+    },
+    "netstandard1.3": {
+      "buildOptions": {
+        "define": [
+          "netcore"
+        ]
+      },
+      "dependencies": {
+        "Microsoft.AspNetCore.Http.Abstractions": "1.0.0",
+        "NETStandard.Library": "1.6.0",
+        "System.Xml.XPath.XmlDocument": "4.0.1"
+      },
+      "imports": [
+        "dnxcore50",
+        "portable-net45+win7"
+      ]
+    }
+  }
+}

@@ -4,7 +4,6 @@ namespace Braintree
 {
     public class DisputeStatusHistory
     {
-        public virtual DateTime? DisbursementDate { get; protected set; }
         public virtual DateTime? EffectiveDate { get; protected set; }
         public virtual DateTime? Timestamp { get; protected set; }
         public virtual DisputeStatus Status { get; protected set; }
@@ -12,7 +11,6 @@ namespace Braintree
         public DisputeStatusHistory(NodeWrapper node)
         {
             EffectiveDate = node.GetDateTime("effective-date");
-            DisbursementDate = node.GetDateTime("disbursement-date");
             Timestamp = node.GetDateTime("timestamp");
             Status = (DisputeStatus)CollectionUtil.Find(DisputeStatus.ALL, node.GetString("status"), DisputeStatus.UNRECOGNIZED);
         }

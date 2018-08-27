@@ -46,7 +46,7 @@ namespace Braintree.Tests.Integration
                 };
 
                 string queryString = TestHelper.QueryStringForTR(trParams, request, service.BaseMerchantURL() + "/test/maintenance", service);
-                gateway.TransparentRedirect.ConfirmCustomer(queryString);
+                gateway.Customer.ConfirmTransparentRedirect(queryString);
             } catch (Exception localException) {
                 exception = localException;
             }
@@ -79,8 +79,8 @@ namespace Braintree.Tests.Integration
                     LastName = "Doe"
                 };
 
-                string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-                gateway.TransparentRedirect.ConfirmCustomer(queryString);
+                string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
+                gateway.Customer.ConfirmTransparentRedirect(queryString);
             } catch (Exception localException) {
                 exception = localException;
             }

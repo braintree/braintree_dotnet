@@ -144,18 +144,7 @@ namespace Braintree.Tests
         public void ParseResponseStream_DoNotParseExternalEntities()
         {
 #if netcore
-            Type xmlDocType = typeof(XmlDocument);
-            PropertyInfo xmlResolverProperty = xmlDocType.GetProperty("XmlResolver");
-            if (xmlResolverProperty == null) {
-                Assert.Throws<System.Xml.XmlException>(() =>  service.StringToXmlNode("<!DOCTYPE foo [  <!ELEMENT foo ANY > <!ENTITY xxe SYSTEM \"file:///etc/passwd\" >]><foo>&xxe;</foo>"));
-            } else if (xmlResolverProperty != null) {
-                var tempFilePath = System.IO.Path.GetTempFileName();
-                System.IO.File.WriteAllText(tempFilePath, "Hello World!");
-                Assert.IsTrue(System.IO.File.Exists(tempFilePath));
-                Assert.IsTrue(new System.IO.FileInfo(tempFilePath).Length > 0);
-                var rootNode = service.StringToXmlNode("<!DOCTYPE foo [  <!ELEMENT foo ANY > <!ENTITY xxe SYSTEM \"file://" + tempFilePath.Replace("\\", "//") + "\" >]><foo>&xxe;</foo>");
-                Assert.IsEmpty(rootNode.InnerText);
-            }
+            Assert.Throws<System.Xml.XmlException>(() =>  service.StringToXmlNode("<!DOCTYPE foo [  <!ELEMENT foo ANY > <!ENTITY xxe SYSTEM \"file:///etc/passwd\" >]><foo>&xxe;</foo>"));
 #else
             var tempFilePath = System.IO.Path.GetTempFileName();
             System.IO.File.WriteAllText(tempFilePath, "Hello World!");
