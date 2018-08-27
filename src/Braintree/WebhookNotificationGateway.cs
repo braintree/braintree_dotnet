@@ -48,6 +48,12 @@ namespace Braintree
 
         private void ValidateSignature(string signature, string payload)
         {
+            if (signature == null) {
+                throw new InvalidSignatureException ("signature cannot be null");
+            }
+            if (payload == null)  {
+                throw new InvalidSignatureException ("payload cannot be null");
+            }
             var match = Regex.Match (payload, @"[^A-Za-z0-9+=/\n]");
             if (match.Success)
             {

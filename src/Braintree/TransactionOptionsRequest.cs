@@ -11,6 +11,7 @@ namespace Braintree
         public bool? StoreShippingAddressInVault { get; set; }
         public bool? SubmitForSettlement { get; set; }
         public string VenmoSdkSession { get; set; }
+        public string PayeeId { get; set; }
         public string PayeeEmail { get; set; }
         public bool? SkipAdvancedFraudChecking { get; set; }
         public bool? SkipAvs { get; set; }
@@ -18,6 +19,7 @@ namespace Braintree
         public TransactionOptionsPayPalRequest PayPal { get; set; }
         public TransactionOptionsThreeDSecureRequest ThreeDSecure { get; set; }
         public TransactionOptionsAmexRewardsRequest AmexRewards { get; set; }
+        public TransactionOptionsVenmoRequest Venmo { get; set; }
 
         public override string ToXml(string root)
         {
@@ -39,13 +41,15 @@ namespace Braintree
                 AddElement("store-shipping-address-in-vault", StoreShippingAddressInVault).
                 AddElement("submit-for-settlement", SubmitForSettlement).
                 AddElement("venmo-sdk-session", VenmoSdkSession).
+                AddElement("payee-id", PayeeId).
                 AddElement("payee-email", PayeeEmail).
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).
                 AddElement("skip-avs", SkipAvs).
                 AddElement("skip-cvv", SkipCvv).
                 AddElement("three-d-secure", ThreeDSecure).
                 AddElement("paypal", PayPal).
-                AddElement("amex-rewards", AmexRewards);
+                AddElement("amex-rewards", AmexRewards).
+                AddElement("venmo", Venmo);
         }
     }
 }

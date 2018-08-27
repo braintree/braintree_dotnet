@@ -471,7 +471,7 @@ namespace Braintree
             {
                 var doc = new XmlDocument();
 #if netcore
-                // Do not need to set XmlResolver property for netcore
+                // XmlResolver property defaults to null
 #else
                 doc.XmlResolver = null;
 #endif

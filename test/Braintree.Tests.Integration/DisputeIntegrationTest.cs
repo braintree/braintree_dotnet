@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.Text.RegularExpressions;
+using System.Linq;
 using System.IO;
 
 namespace Braintree.Tests.Integration
@@ -11,6 +12,12 @@ namespace Braintree.Tests.Integration
     [TestFixture]
     public class DisputeIntegrationTest
     {
+#if netcore
+        private static string BT_LOGO_PATH = "../../../../../test/fixtures/bt_logo.png";
+#else
+        private static string BT_LOGO_PATH = "test/fixtures/bt_logo.png";
+#endif
+
         private BraintreeGateway gateway;
 
         [SetUp]
@@ -135,6 +142,32 @@ namespace Braintree.Tests.Integration
 
             DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
 
+            Assert.Null(evidence.Category);
+
+            Assert.NotNull(foundEvidence);
+        }
+
+        [Test]
+        public void AddFileEvidence_addsEvidenceWithCategory()
+        {
+            DocumentUpload document = createSampleDocumentUpload();
+            Dispute dispute = createSampleDispute();
+
+            var fileEvidenceRequest = new FileEvidenceRequest
+            {
+                DocumentId = document.Id,
+                Category = "GENERAL",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddFileEvidence(dispute.Id, fileEvidenceRequest).Target;
+
+            Assert.NotNull(evidence);
+
+            DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
+
+            Assert.NotNull(evidence.Category);
+            Assert.AreEqual(evidence.Category, "GENERAL");
+
             Assert.NotNull(foundEvidence);
         }
 
@@ -237,18 +270,49 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        public void AddTextEvidence_addsTextEvidence()
+        public void AddFileEvidence_failsToAddEvidenceWithUnSupportedCategory()
         {
+            DocumentUpload document = createSampleDocumentUpload();
             Dispute dispute = createSampleDispute();
+            FileEvidenceRequest request = new FileEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                DocumentId = document.Id,
+            };
+            var result = gateway.Dispute.AddFileEvidence(dispute.Id, request);
 
-            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, "my text evidence").Target;
+            Assert.IsFalse(result.IsSuccess());
 
-            Assert.NotNull(evidence.Id);
-            Assert.NotNull(evidence.CreatedAt);
-            Assert.AreEqual("my text evidence", evidence.Comment);
-            Assert.Null(evidence.SentToProcessorAt);
-            Assert.Null(evidence.Url);
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
         }
+
+        [Test]
+#if netcore
+        public async Task AddFileEvidenceAsync_failsToAddEvidenceWithUnsupportedCategory()
+#else
+        public void AddFileEvidenceAsync_failsToAddEvidenceWithUnsupportedCategory()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            DocumentUpload document = await createSampleDocumentUploadAsync();
+            Dispute dispute = await createSampleDisputeAsync();
+
+            FileEvidenceRequest request = new FileEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                DocumentId = document.Id,
+            };
+            var result = await gateway.Dispute.AddFileEvidenceAsync(dispute.Id, request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
 #if netcore
@@ -276,10 +340,75 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        public void AddTextEvidence_addsEvidenceWithCateogry()
+        {
+            Dispute dispute = createSampleDispute();
+            var textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = "my content",
+                Category = "DEVICE_ID",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, textEvidenceRequest).Target;
+
+            Assert.NotNull(evidence);
+
+            DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
+
+            Assert.NotNull(evidence.Category);
+            Assert.AreEqual(evidence.Category, "DEVICE_ID");
+
+            Assert.NotNull(foundEvidence);
+        }
+
+        [Test]
+        public void AddTextEvidence_failsToAddEvidenceWithUnSupportedCategory()
+        {
+            Dispute dispute = createSampleDispute();
+            TextEvidenceRequest request = new TextEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                Content = "evidence",
+            };
+            var result = gateway.Dispute.AddTextEvidence(dispute.Id, request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
+        }
+
+        [Test]
+#if netcore
+        public async Task AddTextEvidenceAsync_failsToAddEvidenceWithUnSupportedCategory()
+#else
+        public void AddTextEvidenceAsync_failsToAddEvidenceWithUnSupportedCategory()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Dispute dispute = await createSampleDisputeAsync();
+
+            TextEvidenceRequest request = new TextEvidenceRequest
+            {
+                Category = "NOTAREALCATEGORY",
+                Content = "evidence",
+            };
+            var result = await gateway.Dispute.AddTextEvidenceAsync(dispute.Id, request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DISPUTE_CAN_ONLY_CREATE_EVIDENCE_WITH_VALID_CATEGORY, result.Errors.ForObject("Dispute").OnField("Evidence")[0].Code);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void AddTextEvidence_throwsNotFoundExceptionWhenDisputeNotFound()
         {
             NotFoundException exception = Assert.Throws<NotFoundException>(() => gateway.Dispute.AddTextEvidence("invalid-dispute-id", "some comment"));
-            Assert.AreEqual(exception.Message, "dispute with id 'invalid-dispute-id' not found");
+            Assert.AreEqual(exception.Message, "Dispute with ID 'invalid-dispute-id' not found");
         }
 
         [Test]
@@ -298,7 +427,7 @@ namespace Braintree.Tests.Integration
             }
             catch (NotFoundException exception)
             {
-                Assert.AreEqual(exception.Message, "dispute with id 'invalid-dispute-id' not found");
+                Assert.AreEqual(exception.Message, "Dispute with ID 'invalid-dispute-id' not found");
             }
         }
 #if net452
@@ -396,6 +525,36 @@ namespace Braintree.Tests.Integration
 
             Dispute finalizedDispute = gateway.Dispute.Find(dispute.Id).Target;
             Assert.AreEqual(DisputeStatus.DISPUTED, finalizedDispute.Status);
+        }
+
+        [Test]
+        public void Finalize_whenThereAreValidationErrorsDoesNotSucceed()
+        {
+            Dispute dispute = createSampleDispute();
+            var textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = "my content",
+                Category = "DEVICE_ID",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, textEvidenceRequest).Target;
+
+            var result = gateway.Dispute.Finalize(dispute.Id);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual
+                (
+                    new HashSet<ValidationErrorCode>
+                    {
+                        ValidationErrorCode.DISPUTE_DIGITAL_GOODS_MISSING_EVIDENCE,
+                        ValidationErrorCode.DISPUTE_DIGITAL_GOODS_MISSING_DOWNLOAD_DATE
+                    },
+                    new HashSet<ValidationErrorCode>(result.Errors.ForObject("Dispute").OnField("Dispute").Select(error => error.Code))
+                );
+            Dispute finalizedDispute = gateway.Dispute.Find(dispute.Id).Target;
+            Assert.AreNotEqual(DisputeStatus.DISPUTED, finalizedDispute.Status);
+            Assert.AreEqual(DisputeStatus.OPEN, finalizedDispute.Status);
         }
 
         [Test]
@@ -720,7 +879,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Search_dateRangeReturnsDispute()
+        public void Search_receivedDateRangeReturnsDispute()
         {
             DateTime startDate = DateTime.Parse("2014-03-03");
             DateTime endDate = DateTime.Parse("2014-03-05");
@@ -737,6 +896,78 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2014", disputes[0].ReceivedDate.Value.Year.ToString());
             Assert.AreEqual("3", disputes[0].ReceivedDate.Value.Month.ToString());
             Assert.AreEqual("4", disputes[0].ReceivedDate.Value.Day.ToString());
+        }
+
+        [Test]
+        public void Search_disbursementDateRangeReturnsDispute()
+        {
+            DateTime startDate = DateTime.Parse("2014-03-03");
+            DateTime endDate = DateTime.Parse("2014-03-05");
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                DisbursementDate.Between(startDate, endDate);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.AreEqual(1, disputes.Count);
+            Assert.AreEqual("2014", disputes[0].StatusHistory[0].DisbursementDate.Value.Year.ToString());
+            Assert.AreEqual("3", disputes[0].StatusHistory[0].DisbursementDate.Value.Month.ToString());
+            Assert.AreEqual("5", disputes[0].StatusHistory[0].DisbursementDate.Value.Day.ToString());
+        }
+
+        [Test]
+        public void Search_effectiveDateRangeReturnsDispute()
+        {
+            DateTime startDate = DateTime.Parse("2014-03-03");
+            DateTime endDate = DateTime.Parse("2014-03-05");
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                EffectiveDate.Between(startDate, endDate);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.AreEqual(1, disputes.Count);
+            Assert.AreEqual("2014", disputes[0].StatusHistory[0].EffectiveDate.Value.Year.ToString());
+            Assert.AreEqual("3", disputes[0].StatusHistory[0].EffectiveDate.Value.Month.ToString());
+            Assert.AreEqual("4", disputes[0].StatusHistory[0].EffectiveDate.Value.Day.ToString());
+        }
+
+        [Test]
+        public void Search_byCustomerIdReturnsDispute()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest {});
+
+            string customerId = result.Target.Id;
+
+            TransactionRequest transactionRequest = new TransactionRequest
+            {
+                Amount = 100M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.Dispute.CHARGEBACK,
+                    ExpirationDate = "05/2012",
+                },
+                CustomerId = customerId
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(transactionRequest).Target;
+
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                CustomerId.Is(customerId);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.AreEqual(1, disputes.Count);
         }
 
         public Dispute createSampleDispute(){
@@ -776,7 +1007,7 @@ namespace Braintree.Tests.Integration
         }
 
         public DocumentUpload createSampleDocumentUpload() {
-            FileStream file = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = file;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT;
@@ -785,7 +1016,7 @@ namespace Braintree.Tests.Integration
         }
 
         public async Task<DocumentUpload> createSampleDocumentUploadAsync() {
-            FileStream file = new FileStream("test/fixtures/bt_logo.png", FileMode.Open, FileAccess.Read);
+            FileStream file = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.File = file;
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT;

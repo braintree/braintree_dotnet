@@ -29,7 +29,7 @@ namespace Braintree.TestUtil
             return unescapedClientToken;
         }
 
-        public static string GenerateValidUsBankAccountNonce(BraintreeGateway gateway)
+        public static string GenerateValidUsBankAccountNonce(BraintreeGateway gateway, string accountNumber = "1000000000")
         {
             var clientToken = GenerateDecodedClientToken(gateway);
             var def =  new {
@@ -52,8 +52,10 @@ namespace Braintree.TestUtil
                 },
                 ""account_type"": ""checking"",
                 ""routing_number"": ""021000021"",
-                ""account_number"": ""567891234"",
-                ""account_holder_name"": ""Dan Schulman"",
+                ""account_number"": """ + accountNumber + @""",
+                ""ownership_type"": ""personal"",
+                ""first_name"": ""Dan"",
+                ""last_name"": ""Schulman"",
                 ""ach_mandate"": {
                     ""text"": ""cl mandate text""
                 }
@@ -63,7 +65,7 @@ namespace Braintree.TestUtil
             var request = new HttpRequestMessage(new HttpMethod("POST"), url);
             byte[] buffer = Encoding.UTF8.GetBytes(postData);
             request.Content = new StringContent(postData, Encoding.UTF8, "application/json");
-            request.Headers.Add("Braintree-Version", "2015-11-01");
+            request.Headers.Add("Braintree-Version", "2016-10-07");
             request.Headers.Add("Authorization", "Bearer " + accessToken);
 
             var httpClientHandler = new HttpClientHandler{};
@@ -76,7 +78,7 @@ namespace Braintree.TestUtil
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
             string responseBody = reader.ReadToEnd();
 #else
-            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPost ""{url}""";
+            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2016-10-07"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPOST ""{url}""";
             Process process = new Process {
                 StartInfo = new ProcessStartInfo {
                     FileName = "curl",
@@ -170,7 +172,7 @@ namespace Braintree.TestUtil
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
             string responseBody = reader.ReadToEnd();
 #else
-            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPost ""{url}""";
+            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2015-11-01"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPOST ""{url}""";
             Process process = new Process
             {
                 StartInfo = new ProcessStartInfo
@@ -487,7 +489,7 @@ namespace Braintree.TestUtil
             AddTopLevelElement("credit_card[expiration_month]", "11").
             AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/credit_cards.json", builder.ToQueryString());
+            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/credit_cards", builder.ToQueryString());
 
 #if netcore
             StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
@@ -497,9 +499,7 @@ namespace Braintree.TestUtil
 
             string responseBody = reader.ReadToEnd();
 
-            Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
-            Match match = regex.Match(responseBody);
-            return match.Groups["nonce"].Value;
+            return extractParamFromJson("nonce", responseBody);
         }
 
         public static string GenerateUnlockedNonce(BraintreeGateway gateway)

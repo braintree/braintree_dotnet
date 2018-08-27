@@ -14,7 +14,18 @@ namespace Braintree
 
     public class Configuration
     {
-        public Environment Environment { get; set; }
+        private Environment _Environment;
+        public Environment Environment {
+            get {
+                return this._Environment;
+            }
+            set {
+                if (this.Environment != null && this.AccessToken != null && this.Environment != value) {
+                    throw new ConfigurationException("AccessToken Environment does not match Environment passed in Config");
+                }
+                this._Environment = value;
+            }
+        }
         private string _AccessToken;
         public string AccessToken {
             get {
@@ -22,6 +33,9 @@ namespace Braintree
             }
             set {
                 CredentialsParser parser = new CredentialsParser(value);
+                if (this.Environment != null && parser.Environment != this.Environment) {
+                    throw new ConfigurationException("AccessToken Environment does not match Environment passed in Config");
+                }
                 this.MerchantId = parser.MerchantId;
                 this._AccessToken = parser.AccessToken;
                 this.Environment = parser.Environment;

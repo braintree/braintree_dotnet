@@ -1,3 +1,66 @@
+## 4.5.0
+* Add Samsung Pay support
+* Add `processor_response_code` and `processor_response_text` to authorization adjustments subfield in transaction response.
+
+## 4.4.0
+* Add `MerchantId` to `ConnectedMerchantStatusTransitioned` and `ConnectedMerchantPayPalStatusChanged`, and `OauthApplicationClientId` to OAuthAccessRevocation webhooks
+* Fix webhook testing sample xml for dispute webhooks to include `amount-won` and `amount-disputed`
+
+## 4.3.0
+* Fix CreditCard not correctly identifying Union Pay card type
+* Allow payee ID to be passed in options params for transaction create
+
+## 4.2.0
+* Add support for US Bank Account verifications API
+
+## 4.1.1
+
+* Add dispute error code DISPUTE_VALID_EVIDENCE_REQUIRED_TO_FINALIZE
+* Fix incorrectly named FileEvidenceRequest.DocumentId parameter
+
+## 4.1.0
+
+* Add support for VCR compelling evidence dispute representment
+
+## 4.0.0
+
+### Backwards incompatible changes
+
+* Remove non-CLS compliant `generate` and `generateAsync` methods from `ClientTokenGateway`. Use `Generate` or `GenerateAsync`.
+* Add `SubscriptionDetails` class and change `Transaction.Subscription` property to `Transaction.SubscriptionDetails`.
+* Add `CustomerDetails` class and change `Transaction.Customer` property to `Transaction.CustomerDetails`.
+* Remove `RefundId` from `Transaction`. Use `RefundIds` instead.
+* Remove `TransparentRedirectURLForCreate`, `TransparentRedirectURLForUpdate`, and `ConfirmTransparentRedirect` from `CreditCardGateway`, `CustomerGateway`, and `TransactionGateway`. Use `gateway.TransparentRedirect.Url` or `gateway.TransparentRedirect.Confirm()` instead.
+* Remove `CUSTOMER_ID_IS_INVAILD`, `TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_MUST_BE_GREATER_THAN_ZERO`, and `TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_MUST_BE_GREATER_THAN_ZERO`, and `TRANSACTION_MERCHANT_ACCOUNT_NAME_IS_INVALID`. Use `CUSTOMER_ID_IS_INVALID`, `TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE`, `TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_CANNOT_BE_NEGATIVE`, or `TRANSACTION_MERCHANT_ACCOUNT_ID_IS_INVALID` instead.
+* If an `AccessToken` and `Environment` are specified in `Configuration`, an exception will be thrown if the environment does not match the access token's environment.
+* For `RangeNode` decimal values passed to `SearchCriteria`, use `.ToString(InvariantCulture)` to prevent localization issues (https://github.com/braintree/braintree_dotnet/issues/68).
+* Change `OAuthGateway.ComputeSignature` to be an internal method.
+* Migrate the xproj build files to MSBuild csproj build files and update Dockerfile images for support.
+
+## 3.14.0
+* Add `PayerId` accessor in `PayPalAccount`
+* Add support for searching disputes by `effectiveDate`, `disbursementDate`, and `customerId`
+
+## 3.13.0
+* Add support for `association_filter_id` in `Customer#find`
+* Add support for `OAUTH_ACCESS_REVOKED` in `WebhookNotification`s
+* Add support for US Bank Account verifications via `PaymentMethod#create`, `PaymentMethod#update`, and `Transaction#create`
+* Add support for US Bank Account verification search
+
+## 3.12.0
+* Add support for `TaxAmount` field on transaction LineItems
+* Deprecate TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_MUST_BE_GREATER_THAN_ZERO error in favor of TRANSACTION_LINE_ITEM_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE.
+* Deprecate TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_MUST_BE_GREATER_THAN_ZERO error in favor of TRANSACTION_LINE_ITEM_UNIT_TAX_AMOUNT_CANNOT_BE_NEGATIVE.
+* Fix bug in `TransactionLineItemRequest` to use decimal, rather than double, for currency amount field. This is a backwards incompatible bug fix.
+* Add `SourceMerchantId` property to `WebhookNotification`s if present
+* Add support for `profile_id` in Transaction#create options for VenmoAccounts
+
+## 3.11.0
+* Change namespacing of Rakefile, so that Mono tests are run with `rake mono:test:all` and Core tests are run with `rake core:test:all`
+* Add support for Level 3 summary parameters `shippingAmount`, `discountAmount`, and `shipsFromPostalCode`
+* Add support for transaction line items
+* Add support for tagged evidence in `DisputeGateway#AddTextEvidence` and `AddTextEvidenceAsync` (Beta release)
+
 ## 3.10.1
 * Deprecate `OAuthGateway::ComputeSignature`
 * Fix spec to expect PayPal transactions to move to settling rather than settled
@@ -480,7 +543,7 @@
 * Allow merchant account to be specified when creating transactions
 * Allow creating a transaction with a vault customer and new credit card
 * Allow existing billing address to be updated when updating credit card
-* **Backwards incomaptible change**: CreditCardRequest.BillingAddress has changed from type AddressRequest to CreditCardAddressRequest
+* **Backwards incompatible change**: CreditCardRequest.BillingAddress has changed from type AddressRequest to CreditCardAddressRequest
 
 ## 2.0.0
 

@@ -136,6 +136,10 @@ namespace Braintree
             {
                 return new UsBankAccount(node) as T;
             }
+            else if (typeof(T) == typeof(UsBankAccountVerification))
+            {
+                return new UsBankAccountVerification(node) as T;
+            }
             else if (typeof(T) == typeof(VisaCheckoutCard))
             {
                 return new VisaCheckoutCard(node, gateway) as T;
@@ -143,6 +147,10 @@ namespace Braintree
             else if (typeof(T) == typeof(MasterpassCard))
             {
                 return new MasterpassCard(node, gateway) as T;
+            }
+            else if (typeof(T) == typeof(SamsungPayCard))
+            {
+                return new SamsungPayCard(node, gateway) as T;
             }
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {

@@ -9,6 +9,7 @@ namespace Braintree
         public virtual string Token { get; protected set; }
         public virtual bool? IsDefault { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
+        public virtual string PayerId { get; protected set; }
         public virtual string CustomerId { get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
@@ -21,6 +22,7 @@ namespace Braintree
             Token = node.GetString("token");
             IsDefault = node.GetBoolean("default");
             ImageUrl = node.GetString("image-url");
+            PayerId = node.GetString("payer-id");
             CustomerId = node.GetString("customer-id");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");

@@ -9,6 +9,8 @@ namespace Braintree
         public virtual decimal? Amount { get; protected set; }
         public virtual bool? Success { get; protected set; }
         public virtual DateTime? Timestamp { get; protected set; }
+        public virtual string ProcessorResponseCode { get; protected set; }
+        public virtual string ProcessorResponseText { get; protected set; }
 
         public AuthorizationAdjustment(NodeWrapper node)
         {
@@ -18,6 +20,8 @@ namespace Braintree
             Amount = node.GetDecimal("amount");
             Success = node.GetBoolean("success");
             Timestamp = node.GetDateTime("timestamp");
+            ProcessorResponseCode = node.GetString("processor-response-code");
+            ProcessorResponseText = node.GetString("processor-response-text");
         }
 
         [Obsolete("Mock Use Only")]

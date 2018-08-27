@@ -23,12 +23,6 @@ namespace Braintree
             service = new BraintreeService(gateway.Configuration);
         }
 
-        [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual string TransparentRedirectURLForCreate()
-        {
-            return service.BaseMerchantURL() + "/transactions/all/create_via_transparent_redirect_request";
-        }
-
         public virtual Result<Transaction> CancelRelease(string id)
         {
             var request = new TransactionRequest();
@@ -45,15 +39,6 @@ namespace Braintree
             XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/cancel_release", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
-        }
-
-        [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
-        public virtual Result<Transaction> ConfirmTransparentRedirect(string queryString)
-        {
-            var trRequest = new TransparentRedirectRequest(queryString, service);
-            XmlNode node = service.Post(service.MerchantPath() + "/transactions/all/confirm_transparent_redirect_request", trRequest);
-
-            return new ResultImpl<Transaction>(new NodeWrapper(node), gateway);
         }
 
         public virtual Result<Transaction> HoldInEscrow(string id)

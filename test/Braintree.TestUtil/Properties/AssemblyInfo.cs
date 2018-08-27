@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Braintree")]
 [assembly: AssemblyProduct("Braintree Payment Gateway Client API Test Utilities")]
-[assembly: AssemblyCopyright("Copyright © Braintree, a division of PayPal, Inc. 2017")]
+[assembly: AssemblyCopyright("Copyright © Braintree, a division of PayPal, Inc. 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
