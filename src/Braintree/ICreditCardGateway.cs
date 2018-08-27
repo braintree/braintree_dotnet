@@ -10,7 +10,6 @@ namespace Braintree
     /// </summary>
     public interface ICreditCardGateway
     {
-        Result<CreditCard> ConfirmTransparentRedirect(string queryString);
         Result<CreditCard> Create(CreditCardRequest request);
         Task<Result<CreditCard>> CreateAsync(CreditCardRequest request);
         void Delete(string token);
@@ -21,8 +20,6 @@ namespace Braintree
         CreditCard Find(string token);
         Task<CreditCard> FindAsync(string token);
         CreditCard FromNonce(string nonce);
-        string TransparentRedirectURLForCreate();
-        string TransparentRedirectURLForUpdate();
         Result<CreditCard> Update(string token, CreditCardRequest request);
         Task<Result<CreditCard>> UpdateAsync(string token, CreditCardRequest request);
     }

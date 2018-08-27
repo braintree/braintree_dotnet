@@ -195,7 +195,12 @@ namespace Braintree.Tests.Integration
         {
             var createRequest = new CustomerRequest
             {
-                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway)
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway),
+                CreditCard = new CreditCardRequest {
+                  Options = new CreditCardOptionsRequest {
+                    VerificationMerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID
+                  }
+                }
             };
             Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
             Customer customer = gateway.Customer.Find(createdCustomer.Id);
@@ -208,7 +213,7 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(1, customer.PaymentMethods.Length);
             Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
-            Assert.AreEqual("1234", usBankAccount.Last4);
+            Assert.AreEqual("0000", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
@@ -287,6 +292,118 @@ namespace Braintree.Tests.Integration
         public void Find_RaisesIfIdIsInvalid()
         {
             Assert.Throws<NotFoundException>(() => gateway.Customer.Find("DOES_NOT_EXIST_999"));
+        }
+
+        [Test]
+        public void Find_FindsCustomerWithAllFilterableAssociationsFilteredOut()
+        {
+            string id = Guid.NewGuid().ToString();
+            var customFields = new Dictionary<string, string>();
+            customFields.Add("store_me", "a custom value");
+
+            var createRequest = new CustomerRequest
+            {
+                Id = id,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                CustomFields = customFields,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        FirstName = "Mike",
+                        LastName = "Smith",
+                        Company = "Smith Co.",
+                        StreetAddress = "1 W Main St",
+                        Locality = "Chicago",
+                        Region = "IL",
+                        PostalCode = "60622",
+                        CountryName = "United States of America"
+                    }
+                }
+            };
+
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            Customer customer = gateway.Customer.Find(createdCustomer.Id, "customernoassociations");
+
+            Assert.AreEqual(0, customer.CreditCards.Length);
+            Assert.AreEqual(0, customer.PaymentMethods.Length);
+            Assert.AreEqual(0, customer.Addresses.Length);
+            Assert.IsEmpty(customer.CustomFields);
+        }
+
+        [Test]
+        public void Find_FindsCustomerWithNestedFilterableAssociationsFilteredOut()
+        {
+            string id = Guid.NewGuid().ToString();
+            var customFields = new Dictionary<string, string>();
+            customFields.Add("store_me", "a custom value");
+
+            var createRequest = new CustomerRequest
+            {
+                Id = id,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                CustomFields = customFields,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    BillingAddress = new CreditCardAddressRequest()
+                    {
+                        FirstName = "Mike",
+                        LastName = "Smith",
+                        Company = "Smith Co.",
+                        StreetAddress = "1 W Main St",
+                        Locality = "Chicago",
+                        Region = "IL",
+                        PostalCode = "60622",
+                        CountryName = "United States of America"
+                    }
+                }
+            };
+
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+            CreditCard creditCard = createdCustomer.CreditCards[0];
+            TestPlan plan = PlanFixture.PLAN_WITHOUT_TRIAL;
+            SubscriptionRequest subscriptionRequest = new SubscriptionRequest
+            {
+                PaymentMethodToken = creditCard.Token,
+                PlanId = plan.Id
+            };
+            Subscription subscription = gateway.Subscription.Create(subscriptionRequest).Target;
+
+            Customer customer = gateway.Customer.Find(createdCustomer.Id, "customertoplevelassociations");
+
+            Assert.AreEqual(1, customer.CreditCards.Length);
+            Assert.AreEqual(0, customer.CreditCards[0].Subscriptions.Length);
+            Assert.AreEqual(1, customer.PaymentMethods.Length);
+            Assert.AreEqual(1, customer.Addresses.Length);
+            Assert.AreEqual("a custom value", customer.CustomFields["store_me"]);
+        }
+
+        [Test]
+        public void Find_RaisesIfAssociationFilterIdIsInvalid()
+        {
+            string id = Guid.NewGuid().ToString();
+
+            var createRequest = new CustomerRequest
+            {
+                Id = id,
+                FirstName = "Michael",
+                LastName = "Angelo",
+            };
+
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+
+            Assert.Throws<NotFoundException>(() => gateway.Customer.Find(createdCustomer.Id, null));
+            Assert.Throws<NotFoundException>(() => gateway.Customer.Find(createdCustomer.Id, ""));
         }
 
         [Test]
@@ -735,7 +852,7 @@ namespace Braintree.Tests.Integration
             };
 
             Customer customer = gateway.Customer.Create(createRequest).Target;
-            Assert.IsTrue(customer.CreditCards[0].IsVenmoSdk.Value);
+            Assert.IsFalse(customer.CreditCards[0].IsVenmoSdk.Value);
         }
 
         [Test]
@@ -804,14 +921,19 @@ namespace Braintree.Tests.Integration
         {
             string nonce = TestHelper.GenerateValidUsBankAccountNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
-                PaymentMethodNonce = nonce
+                PaymentMethodNonce = nonce,
+                CreditCard = new CreditCardRequest {
+                  Options = new CreditCardOptionsRequest {
+                    VerificationMerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID
+                  }
+                }
             });
             Assert.IsTrue(result.IsSuccess());
             UsBankAccount usBankAccount = result.Target.UsBankAccounts[0];
 
             Assert.AreEqual(1, result.Target.PaymentMethods.Length);
             Assert.AreEqual("021000021", usBankAccount.RoutingNumber);
-            Assert.AreEqual("1234", usBankAccount.Last4);
+            Assert.AreEqual("0000", usBankAccount.Last4);
             Assert.AreEqual("checking", usBankAccount.AccountType);
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
@@ -914,8 +1036,8 @@ namespace Braintree.Tests.Integration
                 LastName = "Doe"
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
-            Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
@@ -952,8 +1074,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForCreate(), service);
-            Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
@@ -991,8 +1113,8 @@ namespace Braintree.Tests.Integration
                 LastName = "Doe"
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.Customer.TransparentRedirectURLForUpdate(), service);
-            Result<Customer> result = gateway.Customer.ConfirmTransparentRedirect(queryString);
+            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
+            Result<Customer> result = gateway.TransparentRedirect.ConfirmCustomer(queryString);
             Assert.IsTrue(result.IsSuccess());
             Customer customer = result.Target;
             Assert.AreEqual("John", customer.FirstName);
@@ -1050,8 +1172,8 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            string queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.Customer.TransparentRedirectURLForUpdate(), service);
-            Customer updatedCustomer = gateway.Customer.ConfirmTransparentRedirect(queryString).Target;
+            string queryString = TestHelper.QueryStringForTR(trParams, new CustomerRequest(), gateway.TransparentRedirect.Url, service);
+            Customer updatedCustomer = gateway.TransparentRedirect.ConfirmCustomer(queryString).Target;
             CreditCard updatedCreditCard = gateway.CreditCard.Find(creditCard.Token);
 
             Address updatedAddress = gateway.Address.Find(customer.Id, address.Id);

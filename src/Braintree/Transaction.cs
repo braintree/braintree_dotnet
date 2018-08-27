@@ -120,6 +120,7 @@ namespace Braintree
         public static readonly PaymentInstrumentType US_BANK_ACCOUNT = new PaymentInstrumentType("us_bank_account");
         public static readonly PaymentInstrumentType VISA_CHECKOUT_CARD = new PaymentInstrumentType("visa_checkout_card");
         public static readonly PaymentInstrumentType MASTERPASS_CARD = new PaymentInstrumentType("masterpass_card");
+        public static readonly PaymentInstrumentType SAMSUNG_PAY_CARD = new PaymentInstrumentType("samsung_pay_card");
         public static readonly PaymentInstrumentType IDEAL_PAYMENT = new PaymentInstrumentType("ideal_payment");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
@@ -137,7 +138,7 @@ namespace Braintree
     /// <code>
     ///     Transaction transaction = gateway.Transaction.Find("transactionId");
     /// </code>
-    /// For more information about Transactions, see <a href="http://www.braintreepayments.com/gateway/transaction-api" target="_blank">http://www.braintreepaymentsolutions.com/gateway/transaction-api</a>
+    /// For more information about Transactions, see <a href="https://developers.braintreepayments.com/reference/response/transaction/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/transaction/dotnet</a>
     /// </example>
     public class Transaction
     {
@@ -152,7 +153,7 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual CreditCard CreditCard { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
-        public virtual Customer Customer { get; protected set; }
+        public virtual CustomerDetails CustomerDetails { get; protected set; }
         public virtual string CvvResponseCode { get; protected set; }
         public virtual Descriptor Descriptor { get; protected set; }
         public virtual List<Discount> Discounts { get; protected set; }
@@ -171,8 +172,6 @@ namespace Braintree
         public virtual string PurchaseOrderNumber { get; protected set; }
         public virtual bool? Recurring { get; protected set; }
         public virtual string RefundedTransactionId { get; protected set; }
-        [Obsolete("Use Transaction.RefundIds")]
-        public virtual string RefundId { get; protected set; }
         public virtual List<string> RefundIds { get; protected set; }
         public virtual List<string> PartialSettlementTransactionIds { get; protected set; }
         public virtual string AuthorizedTransactionId { get; protected set; }
@@ -183,7 +182,7 @@ namespace Braintree
         public virtual StatusEvent[] StatusHistory { get; protected set; }
         public virtual List<AuthorizationAdjustment> AuthorizationAdjustments { get; protected set; }
         public virtual string SubscriptionId { get; protected set; }
-        public virtual Subscription Subscription { get; protected set; }
+        public virtual SubscriptionDetails SubscriptionDetails { get; protected set; }
         public virtual decimal? TaxAmount { get; protected set; }
         public virtual bool? TaxExempt { get; protected set; }
         public virtual TransactionType Type { get; protected set; }
@@ -201,11 +200,15 @@ namespace Braintree
         public virtual IdealPaymentDetails IdealPaymentDetails { get; protected set; }
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
         public virtual MasterpassCardDetails MasterpassCardDetails { get; protected set; }
+        public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
         public virtual FacilitatedDetails FacilitatedDetails { get; protected set; }
         public virtual FacilitatorDetails FacilitatorDetails { get; protected set; }
+        public virtual decimal? DiscountAmount { get; protected set; }
+        public virtual decimal? ShippingAmount { get; protected set; }
+        public virtual string ShipsFromPostalCode { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -263,10 +266,6 @@ namespace Braintree
             Recurring = node.GetBoolean("recurring");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
 
-            #pragma warning disable 0618
-            RefundId = node.GetString("refund-id");
-            #pragma warning restore 0618
-
             RefundIds = node.GetStrings("refund-ids/*");
             PartialSettlementTransactionIds = node.GetStrings("partial-settlement-transaction-ids/*");
             AuthorizedTransactionId = node.GetString("authorized-transaction-id");
@@ -277,8 +276,8 @@ namespace Braintree
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
             CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
-            Subscription = new Subscription(node.GetNode("subscription"), gateway);
-            Customer = new Customer(node.GetNode("customer"), gateway);
+            SubscriptionDetails = new SubscriptionDetails(node.GetNode("subscription"));
+            CustomerDetails = new CustomerDetails(node.GetNode("customer"), gateway);
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
             Descriptor = new Descriptor(node.GetNode("descriptor"));
@@ -334,6 +333,11 @@ namespace Braintree
             {
                 MasterpassCardDetails = new MasterpassCardDetails(masterpassNode);
             }
+            var samsungPayNode = node.GetNode("samsung-pay-card");
+            if (samsungPayNode != null)
+            {
+                SamsungPayCardDetails = new SamsungPayCardDetails(samsungPayNode);
+            }
 
             BillingAddress = new Address(node.GetNode("billing"));
             ShippingAddress = new Address(node.GetNode("shipping"));
@@ -387,6 +391,10 @@ namespace Braintree
             {
                 FacilitatorDetails = new FacilitatorDetails(facilitatorDetailsNode);
             }
+
+            DiscountAmount = node.GetDecimal("discount-amount");
+            ShippingAmount = node.GetDecimal("shipping-amount");
+            ShipsFromPostalCode = node.GetString("ships-from-postal-code");
         }
 
         /// <summary>
@@ -451,9 +459,9 @@ namespace Braintree
         /// </example>
         public virtual Customer GetVaultCustomer()
         {
-            if (Customer.Id == null) return null;
+            if (CustomerDetails == null || CustomerDetails.Id == null) return null;
 
-            return new CustomerGateway(Gateway).Find(Customer.Id);
+            return new CustomerGateway(Gateway).Find(CustomerDetails.Id);
         }
 
         /// <summary>
@@ -478,7 +486,7 @@ namespace Braintree
         {
             if (BillingAddress.Id == null) return null;
 
-            return new AddressGateway(Gateway).Find(Customer.Id, BillingAddress.Id);
+            return new AddressGateway(Gateway).Find(CustomerDetails.Id, BillingAddress.Id);
         }
 
         /// <summary>
@@ -503,12 +511,30 @@ namespace Braintree
         {
             if (ShippingAddress.Id == null) return null;
 
-            return new AddressGateway(Gateway).Find(Customer.Id, ShippingAddress.Id);
+            return new AddressGateway(Gateway).Find(CustomerDetails.Id, ShippingAddress.Id);
         }
 
         public bool IsDisbursed()
         {
           return DisbursementDetails.IsValid();
+        }
+
+        /// <summary>
+        /// Returns the list of <see cref="TransactionLineItem"/>s associated with this transaction
+        /// </summary>
+        /// <returns>
+        /// The list of <see cref="TransactionLineItem"/>s associated with this transaction
+        /// </returns>
+        /// <example>
+        /// The list of <see cref="TransactionLineItem"/>s can be retrieved from the transaction directly:
+        /// <code>
+        ///     Transaction transaction = gateway.Transaction.Find("transactionId");
+        ///     List&lt;TransactionLineItem&gt; lineItems = transaction.GetLineItems();
+        /// </code>
+        /// </example>
+        public virtual List<TransactionLineItem> GetLineItems()
+        {
+            return Gateway.TransactionLineItem.FindAll(Id);
         }
     }
 }

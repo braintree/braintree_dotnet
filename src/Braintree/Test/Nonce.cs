@@ -55,5 +55,9 @@ namespace Braintree.Test
         public const string VisaCheckoutDiscover = "fake-visa-checkout-discover-nonce";
         public const string VisaCheckoutMasterCard = "fake-visa-checkout-mastercard-nonce";
         public const string VisaCheckoutVisa = "fake-visa-checkout-visa-nonce";
+        public const string SamsungPayVisa = "tokensam_fake_visa";
+        public const string SamsungPayMasterCard = "tokensam_fake_mastercard";
+        public const string SamsungPayAmEx = "tokensam_fake_american_express";
+        public const string SamsungPayDiscover = "tokensam_fake_discover";
     }
 }

@@ -33,6 +33,21 @@ namespace Braintree
             return new Customer(new NodeWrapper(customerXML), gateway);
         }
 
+        public virtual Customer Find(string Id, string AssociationFilterId)
+        {
+            if(Id == null || Id.Trim().Equals(""))
+                throw new NotFoundException();
+
+            if(AssociationFilterId == null || AssociationFilterId.Trim().Equals(""))
+                throw new NotFoundException();
+
+            string queryParams = "?association_filter_id=" + AssociationFilterId;
+
+            XmlNode customerXML = service.Get(service.MerchantPath() + "/customers/" + Id + queryParams);
+
+            return new Customer(new NodeWrapper(customerXML), gateway);
+        }
+
         public virtual async Task<Customer> FindAsync(string Id)
         {
             if(Id == null || Id.Trim().Equals(""))
@@ -93,27 +108,6 @@ namespace Braintree
             XmlNode customerXML = await service.PutAsync(service.MerchantPath() + "/customers/" + Id, request).ConfigureAwait(false);
 
             return new ResultImpl<Customer>(new NodeWrapper(customerXML), gateway);
-        }
-
-        [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
-        public virtual Result<Customer> ConfirmTransparentRedirect(string queryString)
-        {
-            var trRequest = new TransparentRedirectRequest(queryString, service);
-            XmlNode node = service.Post(service.MerchantPath() + "/customers/all/confirm_transparent_redirect_request", trRequest);
-
-            return new ResultImpl<Customer>(new NodeWrapper(node), gateway);
-        }
-
-        [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual string TransparentRedirectURLForCreate()
-        {
-            return service.BaseMerchantURL() + "/customers/all/create_via_transparent_redirect_request";
-        }
-
-        [Obsolete("Use gateway.TransparentRedirect.Url")]
-        public virtual string TransparentRedirectURLForUpdate()
-        {
-            return service.BaseMerchantURL() + "/customers/all/update_via_transparent_redirect_request";
         }
 
         public virtual ResourceCollection<Customer> All()

@@ -13,7 +13,6 @@ namespace Braintree
         Task<Result<Transaction>> CancelReleaseAsync(string id);
         Result<Transaction> CloneTransaction(string id, TransactionCloneRequest cloneRequest);
         Task<Result<Transaction>> CloneTransactionAsync(string id, TransactionCloneRequest cloneRequest);
-        Result<Transaction> ConfirmTransparentRedirect(string queryString);
         Result<Transaction> Credit(TransactionRequest request);
         Task<Result<Transaction>> CreditAsync(TransactionRequest request);
         string CreditTrData(TransactionRequest trData, string redirectURL);
@@ -42,7 +41,6 @@ namespace Braintree
         Task<Result<Transaction>> SubmitForSettlementAsync(string id, decimal amount);
         Result<Transaction> SubmitForSettlement(string id, TransactionRequest request);
         Result<Transaction> UpdateDetails(string id, TransactionRequest request);
-        string TransparentRedirectURLForCreate();
         Result<Transaction> Void(string id);
         Task<Result<Transaction>> VoidAsync(string id);
     }

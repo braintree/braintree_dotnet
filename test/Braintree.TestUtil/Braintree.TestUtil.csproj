@@ -1,7 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+<<<<<<< HEAD
     <TargetFrameworks>net452;netcoreapp1.0</TargetFrameworks>
+=======
+    <TargetFrameworks>net452;netcoreapp1.0;netcoreapp2.0</TargetFrameworks>
+>>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
     <AssemblyName>Braintree.TestUtil</AssemblyName>
     <PackageId>Braintree.TestUtil</PackageId>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
@@ -14,12 +18,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <ProjectReference Include="..\..\src\Braintree\Braintree.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.4.1" />
     <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
+=======
+    <ProjectReference Include="../../src/Braintree/Braintree.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit" Version="3.9.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
+>>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
@@ -37,4 +50,11 @@
     <DefineConstants>$(DefineConstants);netcore</DefineConstants>
   </PropertyGroup>
 
+<<<<<<< HEAD
+=======
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
+    <DefineConstants>$(DefineConstants);netcore</DefineConstants>
+  </PropertyGroup>
+
+>>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
 </Project>

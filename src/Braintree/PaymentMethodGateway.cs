@@ -135,6 +135,10 @@ namespace Braintree
             {
                 return new ResultImpl<MasterpassCard>(response, gateway);
             }
+            else if (response.GetName() == "samsung-pay-card")
+            {
+                return new ResultImpl<SamsungPayCard>(response, gateway);
+            }
             else
             {
                 return new ResultImpl<UnknownPaymentMethod>(response, gateway);
@@ -178,6 +182,10 @@ namespace Braintree
             else if (response.GetName() == "masterpass-card")
             {
                 return new MasterpassCard(response, gateway);
+            }
+            else if (response.GetName() == "samsung-pay-card")
+            {
+                return new SamsungPayCard(response, gateway);
             }
             else
             {

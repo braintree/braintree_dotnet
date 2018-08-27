@@ -74,7 +74,7 @@ namespace Braintree.Tests
 #endif
 
         [Test]
-        public void AddFileEvidence_nullOrEmptyDisputeIdThrowsNotFoundException()
+        public void AddFileEvidenceWithRequest_nullOrEmptyDisputeIdThrowsNotFoundException()
         {
             NotFoundException nullException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence(null, "evidence"));
             Assert.AreEqual(nullException.Message, "dispute with id '' not found");
@@ -120,7 +120,7 @@ namespace Braintree.Tests
         [Test]
         public void AddFileEvidence_nullOrEmptyDocumentUploadIdThrowsNotFoundException()
         {
-            NotFoundException nullException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence("dispute", null));
+            NotFoundException nullException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence("dispute", null as string));
             Assert.AreEqual(nullException.Message, "document with id '' not found");
 
             NotFoundException emptyException = Assert.Throws<NotFoundException>(() => disputeGateway.AddFileEvidence("dispute", " "));
@@ -138,7 +138,7 @@ namespace Braintree.Tests
         {
             try
             {
-                await disputeGateway.AddFileEvidenceAsync("dispute", null);
+                await disputeGateway.AddFileEvidenceAsync("dispute", null as string);
                 Assert.Fail("Expected NotFoundException.");
             }
             catch (NotFoundException exception)
@@ -165,10 +165,10 @@ namespace Braintree.Tests
         public void AddTextEvidence_nullOrEmptyDisputeIdThrowsNotFoundException()
         {
             NotFoundException nullException = Assert.Throws<NotFoundException>(() => disputeGateway.AddTextEvidence(null, "evidence"));
-            Assert.AreEqual(nullException.Message, "dispute with id '' not found");
+            Assert.AreEqual(nullException.Message, "Dispute with ID '' not found");
 
             NotFoundException emptyException = Assert.Throws<NotFoundException>(() => disputeGateway.AddTextEvidence(" ", "evidence"));
-            Assert.AreEqual(emptyException.Message, "dispute with id ' ' not found");
+            Assert.AreEqual(emptyException.Message, "Dispute with ID ' ' not found");
         }
 
         [Test]
@@ -187,7 +187,7 @@ namespace Braintree.Tests
             }
             catch (NotFoundException exception)
             {
-                Assert.AreEqual(exception.Message, "dispute with id '' not found");
+                Assert.AreEqual(exception.Message, "Dispute with ID '' not found");
             }
 
             try
@@ -197,7 +197,7 @@ namespace Braintree.Tests
             }
             catch (NotFoundException exception)
             {
-                Assert.AreEqual(exception.Message, "dispute with id ' ' not found");
+                Assert.AreEqual(exception.Message, "Dispute with ID ' ' not found");
             }
         }
 #if net452
@@ -208,40 +208,156 @@ namespace Braintree.Tests
         [Test]
         public void AddTextEvidence_nullOrEmptyContentThrowsArgumentException()
         {
-            ArgumentException nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", null));
-            Assert.AreEqual(nullException.Message, "content cannot be empty");
+            string Content = null;
+            ArgumentException nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", Content));
+            Assert.AreEqual(nullException.Message, "Content cannot be empty");
 
-            ArgumentException emptyException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", " "));
-            Assert.AreEqual(emptyException.Message, "content cannot be empty");
+            Content = " ";
+            nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", Content));
+            Assert.AreEqual(nullException.Message, "Content cannot be empty");
+
+            TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = null
+            };
+            nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", textEvidenceRequest));
+            Assert.AreEqual(nullException.Message, "Content cannot be empty");
+
+            textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = " "
+            };
+            nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", textEvidenceRequest));
+            Assert.AreEqual(nullException.Message, "Content cannot be empty");
+        }
+
+        [Test]
+        public void AddTextEvidence_nonIntegerSequenceNumberThrowsArgumentException()
+        {
+            TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = "content",
+                Category = "Category",
+                SequenceNumber = "four"
+            };
+            ArgumentException nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", textEvidenceRequest));
+            Assert.AreEqual(nullException.Message, "SequenceNumber must be an integer");
+
+            textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = "content",
+                Category = "Category",
+                SequenceNumber = "4.5"
+            };
+            nullException = Assert.Throws<ArgumentException>(() => disputeGateway.AddTextEvidence("dispute", textEvidenceRequest));
+            Assert.AreEqual(nullException.Message, "SequenceNumber must be an integer");
         }
 
         [Test]
 #if netcore
-        public async Task AddTextEvidence_nullOrEmptyContentThrowsArgumentExceptionAsync()
+        public async Task AddTextEvidenceAsync_nullOrEmptyContentThrowsArgumentExceptionAsync()
 #else
-        public void AddTextEvidence_nullOrEmptyContentThrowsArgumentExceptionAsync()
+        public void AddTextEvidenceAsync_nullOrEmptyContentThrowsArgumentExceptionAsync()
         {
             Task.Run(async () =>
 #endif
         {
+            string Content = null;
             try
             {
-                await disputeGateway.AddTextEvidenceAsync("dispute", null);
+                await disputeGateway.AddTextEvidenceAsync("dispute", Content);
                 Assert.Fail("Expected NotFoundException.");
             }
             catch (ArgumentException exception)
             {
-                Assert.AreEqual(exception.Message, "content cannot be empty");
+                Assert.AreEqual(exception.Message, "Content cannot be empty");
             }
 
+            Content = " ";
             try
             {
-                await disputeGateway.AddTextEvidenceAsync("dispute", " ");
+                await disputeGateway.AddTextEvidenceAsync("dispute", Content);
                 Assert.Fail("Expected NotFoundException.");
             }
             catch (ArgumentException exception)
             {
-                Assert.AreEqual(exception.Message, "content cannot be empty");
+                Assert.AreEqual(exception.Message, "Content cannot be empty");
+            }
+
+            TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = null
+            };
+            try
+            {
+                await disputeGateway.AddTextEvidenceAsync("dispute", textEvidenceRequest);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (ArgumentException exception)
+            {
+                Assert.AreEqual(exception.Message, "Content cannot be empty");
+            }
+
+            textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = " "
+            };
+            try
+            {
+                await disputeGateway.AddTextEvidenceAsync("dispute", textEvidenceRequest);
+                Assert.Fail("Expected NotFoundException.");
+            }
+            catch (ArgumentException exception)
+            {
+                Assert.AreEqual(exception.Message, "Content cannot be empty");
+            }
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+
+
+        [Test]
+#if netcore
+        public async Task AddTextEvidenceAsync_nonIntegerSequenceNumberThrowsArgumentExceptionAsync()
+#else
+        public void AddTextEvidenceAsync_nonIntegerSequenceNumberThrowsArgumentExceptionAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TextEvidenceRequest textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = "content",
+                Category = "Category",
+                SequenceNumber = "four"
+            };
+            try
+            {
+                await disputeGateway.AddTextEvidenceAsync("dispute", textEvidenceRequest);
+                Assert.Fail("Expected ArgumentException.");
+            }
+            catch (ArgumentException exception)
+            {
+                Assert.AreEqual(exception.Message, "SequenceNumber must be an integer");
+            }
+
+            textEvidenceRequest = new TextEvidenceRequest()
+            {
+                Content = "content",
+                Category = "Category",
+                SequenceNumber = "4.5"
+            };
+            try
+            {
+                await disputeGateway.AddTextEvidenceAsync("dispute", textEvidenceRequest);
+                Assert.Fail("Expected ArgumentException.");
+            }
+            catch (ArgumentException exception)
+            {
+                Assert.AreEqual(exception.Message, "SequenceNumber must be an integer");
             }
         }
 #if net452

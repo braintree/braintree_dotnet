@@ -13,11 +13,5 @@ namespace Braintree
     {
         string Generate(ClientTokenRequest request = null);
         Task<string> GenerateAsync(ClientTokenRequest request = null);
-
-        [Obsolete("Use Generate")]
-        string generate(ClientTokenRequest request = null);
-
-        [Obsolete("Use GenerateAsync")]
-        Task<string> generateAsync(ClientTokenRequest request = null);
     }
 }

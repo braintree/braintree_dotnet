@@ -31,7 +31,7 @@ namespace Braintree
 
         public static Environment ParseEnvironment(string environment)
         {
-            switch (environment)
+            switch (environment.ToLowerInvariant())
             {
                 case "integration":
                 case "development":
