@@ -24,6 +24,18 @@ namespace Braintree
             service = new BraintreeService(gateway.Configuration);
         }
 
+        [Obsolete("Use gateway.TransparentRedirect.Url")]
+        public virtual string TransparentRedirectURLForCreate()
+        {
+            return service.BaseMerchantURL() + "/payment_methods/all/create_via_transparent_redirect_request";
+        }
+
+        [Obsolete("Use gateway.TransparentRedirect.Url")]
+        public virtual string TransparentRedirectURLForUpdate()
+        {
+            return service.BaseMerchantURL() + "/payment_methods/all/update_via_transparent_redirect_request";
+        }
+
         public virtual Result<CreditCard> Create(CreditCardRequest request)
         {
             XmlNode creditCardXML = service.Post(service.MerchantPath() + "/payment_methods", request);
@@ -34,6 +46,15 @@ namespace Braintree
         public virtual async Task<Result<CreditCard>> CreateAsync(CreditCardRequest request)
         {
             XmlNode creditCardXML = await service.PostAsync(service.MerchantPath() + "/payment_methods", request).ConfigureAwait(false);
+
+            return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
+        }
+
+        [Obsolete("Use gateway.TransparentRedirect.Confirm()")]
+        public virtual Result<CreditCard> ConfirmTransparentRedirect(string queryString)
+        {
+            TransparentRedirectRequest trRequest = new TransparentRedirectRequest(queryString, service);
+            XmlNode creditCardXML = service.Post(service.MerchantPath() + "/payment_methods/all/confirm_transparent_redirect_request", trRequest);
 
             return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
         }

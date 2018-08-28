@@ -6,6 +6,6 @@ namespace Braintree
 {
     public interface IWebhookTestingGateway
     {
-        Dictionary<string, string> SampleNotification(WebhookKind kind, string id, string sourceMerchantId = null);
+        Dictionary<string, string> SampleNotification(WebhookKind kind, string id);
     }
 }

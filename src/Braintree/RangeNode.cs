@@ -15,26 +15,18 @@ namespace Braintree
         }
 
         public T GreaterThanOrEqualTo(object min) {
-            Parent.AddRangeCriteria(Name, new SearchCriteria("min", NormalizedStringValueOfObject(min)));
+            Parent.AddRangeCriteria(Name, new SearchCriteria("min", min.ToString()));
             return Parent;
         }
 
         public T Is(object value) {
-            Parent.AddCriteria(Name, new SearchCriteria("is", NormalizedStringValueOfObject(value)));
+            Parent.AddCriteria(Name, new SearchCriteria("is", value.ToString()));
             return Parent;
         }
 
         public T LessThanOrEqualTo(object max) {
-            Parent.AddRangeCriteria(Name, new SearchCriteria("max", NormalizedStringValueOfObject(max)));
+            Parent.AddRangeCriteria(Name, new SearchCriteria("max", max.ToString()));
             return Parent;
-        }
-
-        internal static string NormalizedStringValueOfObject(object value) {
-            if (value is decimal) {
-                return ((decimal) value).ToString(System.Globalization.CultureInfo.InvariantCulture);
-            } else {
-                return value.ToString();
-            }
         }
     }
 }

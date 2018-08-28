@@ -31,20 +31,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void Verify_ThrowsErrorOnNullSignature()
-        {
-            InvalidSignatureException exception = Assert.Throws<InvalidSignatureException>(() => gateway.WebhookNotification.Parse(null, "payload"));
-            Assert.AreEqual(exception.Message, "signature cannot be null");
-        }
-
-        [Test]
-        public void Verify_ThrowsErrorOnNullPayload()
-        {
-            InvalidSignatureException exception = Assert.Throws<InvalidSignatureException>(() => gateway.WebhookNotification.Parse("signature", null));
-            Assert.AreEqual(exception.Message, "payload cannot be null");
-        }
-
-        [Test]
         public void Verify_ThrowsErrorOnInvalidChallenge()
         {
             InvalidChallengeException exception = Assert.Throws<InvalidChallengeException>(() => gateway.WebhookNotification.Verify("bad challenge"));
@@ -61,17 +47,6 @@ namespace Braintree.Tests
             Assert.AreEqual(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, notification.Kind);
             Assert.AreEqual("my_id", notification.Subscription.Id);
             TestHelper.AreDatesEqual(DateTime.Now.ToUniversalTime(), notification.Timestamp.Value);
-            Assert.Null(notification.SourceMerchantId);
-        }
-
-        [Test]
-        public void SampleNotification_CanIncludeSourceMerchantId()
-        {
-            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_WENT_PAST_DUE, "my_id", "my_source_merchant_id");
-
-            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
-
-            Assert.AreEqual("my_source_merchant_id", notification.SourceMerchantId);
         }
 
         [Test]
@@ -316,18 +291,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SampleNotification_ReturnsANotificationForOAuthAccessRevocation()
-        {
-          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.OAUTH_ACCESS_REVOKED, "my_id");
-
-          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
-
-          Assert.AreEqual(WebhookKind.OAUTH_ACCESS_REVOKED, notification.Kind);
-          Assert.AreEqual("my_id", notification.OAuthAccessRevocation.MerchantId);
-          Assert.AreEqual("oauth_application_client_id", notification.OAuthAccessRevocation.OAuthApplicationClientId);
-        }
-
-        [Test]
         public void SampleNotification_ReturnsANotificationForAConnectedMerchantStatusTransitioned()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CONNECTED_MERCHANT_STATUS_TRANSITIONED, "my_id");
@@ -336,7 +299,6 @@ namespace Braintree.Tests
 
           Assert.AreEqual(WebhookKind.CONNECTED_MERCHANT_STATUS_TRANSITIONED, notification.Kind);
           Assert.AreEqual("my_id", notification.ConnectedMerchantStatusTransitioned.MerchantPublicId);
-          Assert.AreEqual("my_id", notification.ConnectedMerchantStatusTransitioned.MerchantId);
           Assert.AreEqual("new_status", notification.ConnectedMerchantStatusTransitioned.Status);
           Assert.AreEqual("oauth_application_client_id", notification.ConnectedMerchantStatusTransitioned.OAuthApplicationClientId);
         }
@@ -350,7 +312,6 @@ namespace Braintree.Tests
 
           Assert.AreEqual(WebhookKind.CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED, notification.Kind);
           Assert.AreEqual("my_id", notification.ConnectedMerchantPayPalStatusChanged.MerchantPublicId);
-          Assert.AreEqual("my_id", notification.ConnectedMerchantPayPalStatusChanged.MerchantId);
           Assert.AreEqual("link", notification.ConnectedMerchantPayPalStatusChanged.Action);
           Assert.AreEqual("oauth_application_client_id", notification.ConnectedMerchantPayPalStatusChanged.OAuthApplicationClientId);
         }

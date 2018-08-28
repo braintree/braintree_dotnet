@@ -121,55 +121,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ConfigurationWithAccessToken_ThrowsErrorOnMismatchedEnvironment()
-        {
-            Assert.Throws<ConfigurationException>(() => new Configuration {
-                Environment = Environment.PRODUCTION,
-                AccessToken = "access_token$development$merchant_id$access_token_id"
-            });
-        }
-
-        [Test]
-        public void ConfigurationWithAccessToken_ThrowsErrorOnMismatchedEnvironmentWithAccessTokenPassedFirst()
-        {
-            Assert.Throws<ConfigurationException>(() => new Configuration {
-                AccessToken = "access_token$development$merchant_id$access_token_id",
-                Environment = Environment.PRODUCTION
-            });
-        }
-
-        [Test]
-        public void ConfigurationWithAccessToken_ThrowsErrorOnMismatchedEnvironmentIfEnvironmentSetDifferently()
-        {
-            Configuration configuration = new Configuration {
-                AccessToken = "access_token$development$merchant_id$access_token_id"
-            };
-
-            Assert.Throws<ConfigurationException>(() => configuration.Environment = Environment.PRODUCTION);
-        }
-
-        [Test]
-        public void ConfigurationWithAccessToken_AllowsEnvironmentToBeSetIfMatchesAccessToken()
-        {
-            Configuration configuration = new Configuration {
-                AccessToken = "access_token$production$merchant_id$access_token_id",
-                Environment = Environment.PRODUCTION
-            };
-            Assert.AreEqual(Environment.PRODUCTION, configuration.Environment);
-            configuration.Environment = Environment.PRODUCTION;
-            Assert.AreEqual(Environment.PRODUCTION, configuration.Environment);
-
-            configuration = new Configuration {
-                Environment = Environment.PRODUCTION,
-                AccessToken = "access_token$production$merchant_id$access_token_id"
-            };
-            Assert.AreEqual(Environment.PRODUCTION, configuration.Environment);
-            configuration.Environment = Environment.PRODUCTION;
-            configuration.AccessToken = "access_token$production$merchant_id$access_token_id";
-            Assert.AreEqual(Environment.PRODUCTION, configuration.Environment);
-        }
-
-        [Test]
         public void ConfigurationWithAccessToken_ParsesToken()
         {
             Configuration configuration = new Configuration {

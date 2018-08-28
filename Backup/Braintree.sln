@@ -1,12 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-<<<<<<< HEAD
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
-=======
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
->>>>>>> parent of 14618db... Pull down from origin
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{095889D2-1E9E-4398-B34D-161882DFD842}"
 EndProject
@@ -21,31 +16,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{590A8271-8
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Braintree.Tests", "test\Braintree.Tests\Braintree.Tests.xproj", "{60234E7B-1181-4EFF-96EE-624B4524D788}"
 EndProject
-<<<<<<< HEAD
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Braintree.TestUtil", "test\Braintree.TestUtil\Braintree.TestUtil.csproj", "{43B67537-F368-4734-B00A-57D8D33D3656}"
-<<<<<<< Updated upstream
-=======
-=======
-VisualStudioVersion = 15.0.26114.2
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{095889D2-1E9E-4398-B34D-161882DFD842}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{590A8271-85CB-4143-A18F-6B9F0A100C79}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree", "src\Braintree\Braintree.csproj", "{D3B18341-ABC6-4F6C-A5E3-F37B72EAA1FA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree.Tests", "test\Braintree.Tests\Braintree.Tests.csproj", "{3A50B63A-B8A7-4A73-B528-CA635FB684EE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree.Tests.Integration", "test\Braintree.Tests.Integration\Braintree.Tests.Integration.csproj", "{C09BEC51-0D79-4665-8341-4DC32A711BAE}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Braintree.TestUtil", "test\Braintree.TestUtil\Braintree.TestUtil.csproj", "{4016AE7D-C030-42E3-9495-D996015FCB37}"
->>>>>>> 789b7d65d1ca639e1e6bb760fc2f07e2433b0293
-=======
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Braintree.Tests.Integration", "test\Braintree.Tests.Integration\Braintree.Tests.Integration.xproj", "{EA74DAFD-7B57-4A74-942B-1674F4596662}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Braintree.TestUtil", "test\Braintree.TestUtil\Braintree.TestUtil.xproj", "{43B67537-F368-4734-B00A-57D8D33D3656}"
->>>>>>> parent of 14618db... Pull down from origin
->>>>>>> Stashed changes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

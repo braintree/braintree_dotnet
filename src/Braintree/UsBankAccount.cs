@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Braintree
 {
@@ -15,13 +14,9 @@ namespace Braintree
         public virtual string CustomerId { get; protected set; }
         public virtual AchMandate AchMandate { get; protected set; }
         public virtual bool? IsDefault { get; protected set; }
-        public virtual bool? IsVerified { get; protected set; }
-        public virtual List<UsBankAccountVerification> Verifications { get; protected set; }
 
         protected internal UsBankAccount(NodeWrapper node)
         {
-            if (node == null) return;
-
             RoutingNumber = node.GetString("routing-number");
             Last4 = node.GetString("last-4");
             AccountType = node.GetString("account-type");
@@ -32,15 +27,6 @@ namespace Braintree
             CustomerId = node.GetString("customer-id");
             AchMandate = new AchMandate(node.GetNode("ach-mandate"));
             IsDefault = node.GetBoolean("default");
-            IsVerified = node.GetBoolean("verified");
-
-            Verifications = new List<UsBankAccountVerification>();
-            if (node.GetNode("verifications") != null)
-            {
-                foreach (var n in node.GetNode("verifications").GetList("us-bank-account-verification")) {
-                    Verifications.Add(new UsBankAccountVerification(n));
-                }
-            }
         }
 
         [Obsolete("Mock Use Only")]

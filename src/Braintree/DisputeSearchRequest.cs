@@ -36,14 +36,6 @@ namespace Braintree
             }
         }
 
-        public TextNode<DisputeSearchRequest> CustomerId
-        {
-            get
-            {
-                return new TextNode<DisputeSearchRequest>("customer_id", this);
-            }
-        }
-
         public MultipleValueNode<DisputeSearchRequest, DisputeKind> DisputeKind
         {
             get
@@ -81,22 +73,6 @@ namespace Braintree
             get
             {
                 return new DateRangeNode<DisputeSearchRequest>("received_date", this);
-            }
-        }
-
-        public DateRangeNode<DisputeSearchRequest> DisbursementDate
-        {
-            get
-            {
-                return new DateRangeNode<DisputeSearchRequest>("disbursement_date", this);
-            }
-        }
-
-        public DateRangeNode<DisputeSearchRequest> EffectiveDate
-        {
-            get
-            {
-                return new DateRangeNode<DisputeSearchRequest>("effective_date", this);
             }
         }
 

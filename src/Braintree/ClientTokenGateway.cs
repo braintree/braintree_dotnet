@@ -38,6 +38,12 @@ namespace Braintree
             }
         }
 
+        [Obsolete("Use Generate")]
+        public virtual string generate(ClientTokenRequest request = null)
+        {
+            return Generate(request);
+        }
+
         public virtual async Task<string> GenerateAsync(ClientTokenRequest request = null)
         {
             if (request == null) request = new ClientTokenRequest();
@@ -52,6 +58,12 @@ namespace Braintree
             {
                 throw new ArgumentException(response.SelectSingleNode("message").InnerText);
             }
+        }
+
+        [Obsolete("Use GenerateAsync")]
+        public virtual Task<string> generateAsync(ClientTokenRequest request = null)
+        {
+            return GenerateAsync(request);
         }
 
         private void VerifyOptions(ClientTokenRequest request)

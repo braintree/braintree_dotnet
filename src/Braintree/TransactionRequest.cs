@@ -79,11 +79,7 @@ namespace Braintree
             }
         }
 
-        public RiskDataRequest RiskData { get; set; }
-        public decimal? DiscountAmount { get; set; }
-        public decimal? ShippingAmount { get; set; }
-        public string ShipsFromPostalCode { get; set; }
-        public TransactionLineItemRequest[] LineItems { get; set; }
+	    public RiskDataRequest RiskData { get; set; }
 
         public TransactionRequest()
         {
@@ -162,13 +158,6 @@ namespace Braintree
             if (_threeDSecureTransaction)
                 builder.AddElement("three-d-secure-token", ThreeDSecureToken ?? "");
             builder.AddElement("risk-data", RiskData);
-            if (ShippingAmount.HasValue)
-                builder.AddElement("shipping-amount", ShippingAmount);
-            if (DiscountAmount.HasValue)
-                builder.AddElement("discount-amount", DiscountAmount);
-            builder.AddElement("ships-from-postal-code", ShipsFromPostalCode);
-            if (LineItems != null)
-                builder.AddElement("line-items", LineItems);
             return builder;
         }
     }

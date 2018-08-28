@@ -5,9 +5,6 @@ namespace Braintree
     public class ConnectedMerchantPayPalStatusChanged
     {
         public virtual string MerchantPublicId { get; private set; }
-        public virtual string MerchantId {
-            get { return MerchantPublicId; }
-        }
         public virtual string OAuthApplicationClientId { get; private set; }
         public virtual string Action { get; private set; }
 

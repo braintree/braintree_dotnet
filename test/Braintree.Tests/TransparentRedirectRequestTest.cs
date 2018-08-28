@@ -8,27 +8,17 @@ namespace Braintree.Tests
     [TestFixture]
     public class TransparentRedirectRequestTest
     {
-        private BraintreeGateway gateway;
         private BraintreeService service;
 
         [SetUp]
         public void Setup()
         {
-            gateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "integration_merchant_id",
-                PublicKey = "integration_public_key",
-                PrivateKey = "integration_private_key"
-            };
-            service = new BraintreeService(gateway.Configuration);
-        }
-
-        [Test]
-        public void TransparentRedirectURL_ReturnsCorrectValue()
-        {
-            Assert.AreEqual(service.BaseMerchantURL() + "/transparent_redirect_requests",
-                    gateway.TransparentRedirect.Url);
+            service = new BraintreeService(new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            ));
         }
 
         [Test]

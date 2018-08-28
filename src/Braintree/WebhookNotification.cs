@@ -10,7 +10,6 @@ namespace Braintree
         public static readonly WebhookKind PARTNER_MERCHANT_CONNECTED = new WebhookKind("partner_merchant_connected");
         public static readonly WebhookKind PARTNER_MERCHANT_DISCONNECTED = new WebhookKind("partner_merchant_disconnected");
         public static readonly WebhookKind PARTNER_MERCHANT_DECLINED = new WebhookKind("partner_merchant_declined");
-        public static readonly WebhookKind OAUTH_ACCESS_REVOKED = new WebhookKind("oauth_access_revoked");
         public static readonly WebhookKind CONNECTED_MERCHANT_STATUS_TRANSITIONED = new WebhookKind("connected_merchant_status_transitioned");
         public static readonly WebhookKind CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED = new WebhookKind("connected_merchant_paypal_status_changed");
         public static readonly WebhookKind SUBSCRIPTION_CANCELED = new WebhookKind("subscription_canceled");
@@ -41,7 +40,6 @@ namespace Braintree
             PARTNER_MERCHANT_CONNECTED,
             PARTNER_MERCHANT_DISCONNECTED,
             PARTNER_MERCHANT_DECLINED,
-            OAUTH_ACCESS_REVOKED,
             CONNECTED_MERCHANT_STATUS_TRANSITIONED,
             CONNECTED_MERCHANT_PAYPAL_STATUS_CHANGED,
             SUBSCRIPTION_CANCELED,
@@ -82,13 +80,11 @@ namespace Braintree
         public virtual Disbursement Disbursement { get; protected set; }
         public virtual Dispute Dispute { get; protected set; }
         public virtual PartnerMerchant PartnerMerchant { get; protected set; }
-        public virtual OAuthAccessRevocation OAuthAccessRevocation { get; protected set; }
         public virtual ConnectedMerchantStatusTransitioned ConnectedMerchantStatusTransitioned { get; protected set; }
         public virtual ConnectedMerchantPayPalStatusChanged ConnectedMerchantPayPalStatusChanged { get; protected set; }
         public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
         public virtual IdealPayment IdealPayment { get; protected set; }
         public virtual GrantedPaymentInstrumentUpdate GrantedPaymentInstrumentUpdate { get; protected set; }
-        public virtual string SourceMerchantId { get; protected set; }
 
 
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
@@ -97,11 +93,6 @@ namespace Braintree
             Kind = (WebhookKind)CollectionUtil.Find(WebhookKind.ALL, node.GetString("kind"), WebhookKind.UNRECOGNIZED);
 
             NodeWrapper WrapperNode = node.GetNode("subject");
-
-            if (node.GetString("source-merchant-id") != null)
-            {
-                SourceMerchantId = node.GetString("source-merchant-id");
-            }
 
             if (WrapperNode.GetNode("api-error-response") != null)
             {
@@ -136,11 +127,6 @@ namespace Braintree
             if (WrapperNode.GetNode("partner-merchant") != null)
             {
                 PartnerMerchant = new PartnerMerchant(WrapperNode.GetNode("partner-merchant"));
-            }
-
-            if (WrapperNode.GetNode("oauth-application-revocation") != null)
-            {
-                OAuthAccessRevocation = new OAuthAccessRevocation(WrapperNode.GetNode("oauth-application-revocation"));
             }
 
             if (WrapperNode.GetNode("connected-merchant-status-transitioned") != null)

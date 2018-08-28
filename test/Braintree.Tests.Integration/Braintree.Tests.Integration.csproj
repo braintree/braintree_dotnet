@@ -1,11 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net452;netcoreapp1.0;netcoreapp2.0</TargetFrameworks>
+    <TargetFrameworks>net452;netcoreapp1.0</TargetFrameworks>
     <AssemblyName>Braintree.Tests.Integration</AssemblyName>
     <PackageId>Braintree.Tests.Integration</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <RuntimeFrameworkVersion Condition=" '$(TargetFramework)' == 'netcoreapp1.0' ">1.0.4</RuntimeFrameworkVersion>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -15,16 +16,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/Braintree/Braintree.csproj" />
-    <ProjectReference Include="../Braintree.Tests/Braintree.Tests.csproj" />
-    <ProjectReference Include="../Braintree.TestUtil/Braintree.TestUtil.csproj" />
+    <ProjectReference Include="..\..\src\Braintree\Braintree.csproj" />
+    <ProjectReference Include="..\Braintree.Tests\Braintree.Tests.csproj" />
+    <ProjectReference Include="..\Braintree.TestUtil\Braintree.TestUtil.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.9.0" />
-    <PackageReference Include="NUnit" Version="3.9.0" />
-    <PackageReference Include="NUnit.Console" Version="3.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0-preview-20170106-08" />
+    <PackageReference Include="dotnet-test-nunit" Version="3.4.0-beta-2" />
+    <PackageReference Include="NUnit" Version="3.4.1" />
+    <PackageReference Include="NUnit.Runners" Version="3.4.1" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net452' ">
@@ -43,7 +44,4 @@
     <DefineConstants>$(DefineConstants);netcore</DefineConstants>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.0' ">
-    <DefineConstants>$(DefineConstants);netcore</DefineConstants>
-  </PropertyGroup>
 </Project>
