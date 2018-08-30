@@ -1,3 +1,6 @@
+## unreleased
+* Allow environemnt parsing to be case insensitive (#75)
+
 ## 4.5.0
 * Add Samsung Pay support
 * Add `processor_response_code` and `processor_response_text` to authorization adjustments subfield in transaction response.

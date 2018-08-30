@@ -29,9 +29,14 @@ namespace Braintree
             return string.Format("http://{0}:{1}", host, port);
         }
 
+        /// <summary>
+        /// Generates a configured Environment for use in a Braintree Gateway; targeted by Environment name.
+        /// </summary>
+        /// <param name="environment">The name of the target Environment (not case-sensitive)</param>
+        /// <returns>A new configured instance of a Braintree Environment</returns>
         public static Environment ParseEnvironment(string environment)
         {
-            switch (environment)
+            switch (environment.ToLowerInvariant())
             {
                 case "integration":
                 case "development":

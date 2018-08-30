@@ -36,6 +36,62 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ParseEnvironmentAllCaps_ReturnsSandbox()
+        {
+            Environment environment = Environment.ParseEnvironment("SANDBOX");
+            Assert.AreEqual(environment, Environment.SANDBOX);
+        }
+
+        [Test]
+        public void ParseEnvironmentAllCaps_ReturnsDevelopment()
+        {
+            Environment environment = Environment.ParseEnvironment("DEVELOPMENT");
+            Assert.AreEqual(environment, Environment.DEVELOPMENT);
+        }
+
+        [Test]
+        public void ParseEnvironmentAllCaps_ReturnsQA()
+        {
+            Environment environment = Environment.ParseEnvironment("QA");
+            Assert.AreEqual(environment, Environment.QA);
+        }
+
+        [Test]
+        public void ParseEnvironmentAllCaps_ReturnsProduction()
+        {
+            Environment environment = Environment.ParseEnvironment("PRODUCTION");
+            Assert.AreEqual(environment, Environment.PRODUCTION);
+        }
+
+        [Test]
+        public void ParseEnvironmentPascalCase_ReturnsSandbox()
+        {
+            Environment environment = Environment.ParseEnvironment("SandBox");
+            Assert.AreEqual(environment, Environment.SANDBOX);
+        }
+
+        [Test]
+        public void ParseEnvironmentPascalCase_ReturnsDevelopment()
+        {
+            Environment environment = Environment.ParseEnvironment("DeVeLopMent");
+            Assert.AreEqual(environment, Environment.DEVELOPMENT);
+        }
+
+        [Test]
+        public void ParseEnvironmentPascalCase_ReturnsQA()
+        {
+            Environment environment = Environment.ParseEnvironment("Qa");
+            Assert.AreEqual(environment, Environment.QA);
+        }
+
+        [Test]
+        public void ParseEnvironmentPascalCase_ReturnsProduction()
+        {
+            Environment environment = Environment.ParseEnvironment("ProDuction");
+            Assert.AreEqual(environment, Environment.PRODUCTION);
+        }
+
+        [Test]
         public void ParseEnvironment_ThrowsException()
         {
             Exception exception = null;
