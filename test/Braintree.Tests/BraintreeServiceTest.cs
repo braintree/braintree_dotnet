@@ -13,6 +13,7 @@ using System.IO.Compression;
 using System.Reflection;
 using System.Text;
 using System.Xml;
+using System.Collections.Generic;
 
 namespace Braintree.Tests
 {
@@ -165,7 +166,35 @@ namespace Braintree.Tests
             Assert.IsEmpty(rootNode.InnerText);
 #endif
         }
+
+#if netcore
+        [Test]
+        public void GetHttpRequest_returnsHttpRequestSetupForBraintree()
+        {
+            var request = service.GetHttpRequest("https://www.example.com", "POST");
+
+            Assert.AreEqual(HttpMethod.Post, request.Method);
+            Assert.AreEqual("https://www.example.com/", request.RequestUri.ToString());
+            var keepAliveValues = request.Headers.GetValues("Keep-Alive").GetEnumerator();
+            keepAliveValues.MoveNext();
+            Assert.AreEqual("false", keepAliveValues.Current);
+        }
+#else
+        [Test]
+        public void GetHttpRequest_returnsAHttpRequestSetupForBraintree()
+        {
+            configuration.WebProxy = new WebProxy(new Uri("http://localhost:3000"));
+            BraintreeService service = new BraintreeService(configuration);
+            var request = service.GetHttpRequest("https://www.example.com", "POST");
+
+            Assert.AreEqual(configuration.WebProxy, request.Proxy);
+            Assert.AreEqual("POST", request.Method.ToString());
+            Assert.AreEqual("https://www.example.com/", request.RequestUri.ToString());
+            Assert.IsFalse(request.KeepAlive);
+            Assert.AreEqual(configuration.Timeout, request.Timeout);
+            Assert.AreEqual(configuration.Timeout, request.ReadWriteTimeout);
+        }
+#endif
     }
 }
-
 #pragma warning restore CS0618

@@ -86,6 +86,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(foundNonce.Details);
             Assert.AreEqual(foundNonce.Details.CardType, "Visa");
             Assert.AreEqual(foundNonce.Details.LastTwo, "81");
+            Assert.AreEqual(foundNonce.Details.LastFour, "1881");
         }
 
         [Test]

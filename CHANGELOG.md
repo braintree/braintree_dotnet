@@ -1,5 +1,11 @@
-## unreleased
+## 4.6.0
 * Allow environemnt parsing to be case insensitive (#75)
+* Add `LastFour` to `PaymentMethodNonceDetails`
+* Add subscription charged unsuccessfully sample webhook to webhook testing gateway
+* Fix dispute results in transactions not showing the correct status sometimes
+* Add `network_transaction_id` as new field on subfield transaction response.
+* Add support for `ExternalVaultRequest` for TransactionRequest
+* Add support for `LocalPaymentCompleted` webhook notifications.
 
 ## 4.5.0
 * Add Samsung Pay support

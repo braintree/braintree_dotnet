@@ -185,5 +185,25 @@ namespace Braintree.Tests
             Assert.AreEqual("1000", transaction.AuthorizationAdjustments[0].ProcessorResponseCode);
             Assert.AreEqual("Approved", transaction.AuthorizationAdjustments[0].ProcessorResponseText);
         }
+
+        [Test]
+        public void DeserializesNetworkTransactionIdFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <network-transaction-id>123456789012345</network-transaction-id>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <subscription></subscription>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual("123456789012345", transaction.NetworkTransactionId);
+        }
     }
 }

@@ -42,6 +42,9 @@ namespace Braintree.Tests.Integration
 
             Dispute finalizedDispute = gateway.Dispute.Find(dispute.Id).Target;
             Assert.AreEqual(DisputeStatus.ACCEPTED, finalizedDispute.Status);
+
+            Dispute disputeFromTransaction = gateway.Transaction.Find(dispute.Transaction.Id).Disputes[0];
+            Assert.AreEqual(DisputeStatus.ACCEPTED, disputeFromTransaction.Status);
         }
 
         [Test]

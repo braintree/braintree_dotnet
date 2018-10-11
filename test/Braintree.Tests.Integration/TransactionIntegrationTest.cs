@@ -339,6 +339,32 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Search_PaymentInstrumentTypeIsEloCreditCard()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.ADYEN_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5066991111111118",
+                    ExpirationDate = "10/2020",
+                    CVV = "737"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                PaymentInstrumentType.Is("CreditCardDetail");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(collection.FirstItem.PaymentInstrumentType, PaymentInstrumentType.CREDIT_CARD);
+        }
+
+        [Test]
         public void Search_PaymentInstrumentTypeIsPayPal()
         {
             TransactionRequest request = new TransactionRequest
@@ -1364,6 +1390,42 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithEloCardType()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.ADYEN_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5066991111111118",
+                    ExpirationDate = "10/2020",
+                    CVV = "737"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("506699", creditCard.Bin);
+            Assert.AreEqual("1118", creditCard.LastFour);
+            Assert.AreEqual("10", creditCard.ExpirationMonth);
+            Assert.AreEqual("2020", creditCard.ExpirationYear);
+            Assert.AreEqual("10/2020", creditCard.ExpirationDate);
+        }
+
+
+        [Test]
 #if netcore
         public async Task SaleAsync_ReturnsSuccessfulResponse()
 #else
@@ -1644,13 +1706,14 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_CANNOT_SUBMIT_FOR_PARTIAL_SETTLEMENT, partialSettlementResult2.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
 
-        [Test]       
+        [Test]
         public void Sale_ReturnsUnsuccessfulResponseForPartialSettlementWithUnacceptedPaymentInstrumentType()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                PaymentMethodNonce = Nonce.AndroidPay
+                MerchantAccountId = MerchantAccountIDs.FAKE_VENMO_ACCOUNT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = Nonce.VenmoAccount
             };
 
             Result<Transaction> authorizationResult = gateway.Transaction.Sale(request);
@@ -4198,7 +4261,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithLevel3SummaryFields_ReturnsSuccessfulResponse()
+        public void Sale_WithVisaReturnsNetworkTransactionIdentifier()
         {
             var request = new TransactionRequest
             {
@@ -4208,22 +4271,37 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ShippingAmount = 1.00M,
-                DiscountAmount = 2.00M,
-                ShipsFromPostalCode = "12345",
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(1.00, transaction.ShippingAmount);
-            Assert.AreEqual(2.00, transaction.DiscountAmount);
-            Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
+            Assert.IsNotNull(transaction.NetworkTransactionId);
         }
 
         [Test]
-        public void Sale_WhenDiscountAmountCannotBeNegative()
+        public void Sale_WithNonVisaDoesNotReturnNetworkTransactionIdentifier()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsNull(transaction.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Sale_VisaWithExternalVaultStatus_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
             {
@@ -4233,16 +4311,283 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                DiscountAmount = -2.00M,
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "will_vault",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsNotNull(transaction.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Sale_NonVisaWithExternalVaultStatus_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "will_vault",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsNull(transaction.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Sale_NonVisaWithNullExternalVaultPreviousNetworkTransactionId_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "will_vault",
+                    PreviousNetworkTransactionId = null,
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsNull(transaction.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Sale_WithExternalVaultPreviousNetworkTransactionId_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "vaulted",
+                    PreviousNetworkTransactionId = "123456789012345",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsNotNull(transaction.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Sale_WithExternalVaultStatusVaultedWithoutPreviousNetworkTransactionId_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "vaulted",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsNotNull(transaction.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Sale_WithExternalVault_ValidationErrorPaymentInstrumentIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodToken = "token",
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "vaulted",
+                    PreviousNetworkTransactionId = "123456789012345",
+                }
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE,
-                result.Errors.ForObject("Transaction").OnField("DiscountAmount")[0].Code
+                ValidationErrorCode.TRANSACTION_PAYMENT_INSTRUMENT_WITH_EXTERNAL_VAULT_IS_INVALID,
+                result.Errors.ForObject("Transaction").OnField("ExternalVault")[0].Code
             );
         }
+
+        [Test]
+        public void Sale_WithExternalVault_ValidationErrorStatusIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "bad value",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_STATUS_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("Status")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithExternalVault_ValidationErrorStatusWithPreviousNetworkTransactionIdIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "will_vault",
+                    PreviousNetworkTransactionId = "123456789012345",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_STATUS_WITH_PREVIOUS_NETWORK_TRANSACTION_ID_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("Status")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithExternalVault_ValidationErrorPreviousNetworkTransactionIdIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "vaulted",
+                    PreviousNetworkTransactionId = "bad value",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_PREVIOUS_NETWORK_TRANSACTION_ID_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("PreviousNetworkTransactionId")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithExternalVault_ValidationErrorCardTypeIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                },
+                ExternalVault = new ExternalVaultRequest
+                {
+                    Status = "vaulted",
+                    PreviousNetworkTransactionId = "123456789012345",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_CARD_TYPE_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("PreviousNetworkTransactionId")[0].Code
+            );
+        }
+
+     [Test]
+     public void Sale_WithLevel3SummaryFields_ReturnsSuccessfulResponse()
+     {
+         var request = new TransactionRequest
+         {
+             Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+             CreditCard = new TransactionCreditCardRequest
+             {
+                 Number = SandboxValues.CreditCardNumber.VISA,
+                 ExpirationDate = "05/2009",
+             },
+             ShippingAmount = 1.00M,
+             DiscountAmount = 2.00M,
+             ShipsFromPostalCode = "12345",
+         };
+
+         Result<Transaction> result = gateway.Transaction.Sale(request);
+         Assert.IsTrue(result.IsSuccess());
+         Transaction transaction = result.Target;
+
+         Assert.AreEqual(1.00, transaction.ShippingAmount);
+         Assert.AreEqual(2.00, transaction.DiscountAmount);
+         Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
+     }
+
+      [Test]
+      public void Sale_WhenDiscountAmountCannotBeNegative()
+      {
+          var request = new TransactionRequest
+          {
+              Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+              CreditCard = new TransactionCreditCardRequest
+              {
+                  Number = SandboxValues.CreditCardNumber.VISA,
+                  ExpirationDate = "05/2009",
+              },
+              DiscountAmount = -2.00M,
+          };
+
+          Result<Transaction> result = gateway.Transaction.Sale(request);
+          Assert.IsFalse(result.IsSuccess());
+          Assert.AreEqual(
+              ValidationErrorCode.TRANSACTION_DISCOUNT_AMOUNT_CANNOT_BE_NEGATIVE,
+              result.Errors.ForObject("Transaction").OnField("DiscountAmount")[0].Code
+          );
+      }
 
         [Test]
         public void Sale_WhenDiscountAmountIsTooLarge()

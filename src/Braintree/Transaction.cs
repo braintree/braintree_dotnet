@@ -209,6 +209,7 @@ namespace Braintree
         public virtual decimal? DiscountAmount { get; protected set; }
         public virtual decimal? ShippingAmount { get; protected set; }
         public virtual string ShipsFromPostalCode { get; protected set; }
+        public virtual string NetworkTransactionId { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -395,6 +396,8 @@ namespace Braintree
             DiscountAmount = node.GetDecimal("discount-amount");
             ShippingAmount = node.GetDecimal("shipping-amount");
             ShipsFromPostalCode = node.GetString("ships-from-postal-code");
+
+            NetworkTransactionId = node.GetString("network-transaction-id");
         }
 
         /// <summary>

@@ -90,6 +90,7 @@ namespace Braintree
         public static readonly CreditCardCardType UNION_PAY = new CreditCardCardType("UnionPay");
         public static readonly CreditCardCardType DINERS_CLUB_INTERNATIONAL = new CreditCardCardType("Diners Club");
         public static readonly CreditCardCardType DISCOVER = new CreditCardCardType("Discover");
+        public static readonly CreditCardCardType ELO = new CreditCardCardType("Elo");
         public static readonly CreditCardCardType JCB = new CreditCardCardType("JCB");
         public static readonly CreditCardCardType LASER = new CreditCardCardType("Laser");
         public static readonly CreditCardCardType UK_MAESTRO = new CreditCardCardType("UK Maestro");
@@ -103,7 +104,7 @@ namespace Braintree
 
         public static readonly CreditCardCardType[] ALL = {
             AMEX, CARTE_BLANCHE, CHINA_UNION_PAY, DINERS_CLUB_INTERNATIONAL, DISCOVER,
-            JCB, LASER, UK_MAESTRO, MAESTRO, MASTER_CARD, SOLO, SWITCH, VISA, UNKNOWN
+            ELO, JCB, LASER, UK_MAESTRO, MAESTRO, MASTER_CARD, SOLO, SWITCH, VISA, UNKNOWN
         };
 
         protected CreditCardCardType(string name) : base(name) {}

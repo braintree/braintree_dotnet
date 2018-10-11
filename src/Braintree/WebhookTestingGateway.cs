@@ -77,6 +77,8 @@ namespace Braintree
                 return DisputeWonSampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY) {
                 return SubscriptionChargedSuccessfullySampleXml(id);
+            } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_UNSUCCESSFULLY) {
+                return SubscriptionChargedUnsuccessfullySampleXml(id);
             } else if (kind == WebhookKind.CHECK) {
                 return CheckSampleXml();
             } else if (kind == WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT) {
@@ -87,6 +89,8 @@ namespace Braintree
                 return IdealPaymentFailedSampleXml(id);
             } else if (kind == WebhookKind.GRANTED_PAYMENT_INSTRUMENT_UPDATE) {
                 return GrantedPaymentInstrumentUpdateSampleXml();
+            } else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
+                return LocalPaymentCompletedSampleXml();
             } else {
                 return SubscriptionXml(id);
             }
@@ -333,6 +337,29 @@ namespace Braintree
             );
         }
 
+        private string SubscriptionChargedUnsuccessfullySampleXml(string id)
+        {
+            return Node("subscription",
+                    Node("id", id),
+                    Node("transactions",
+                        Node("transaction",
+                            Node("id", id),
+                            Node("amount", "49.99"),
+                            Node("status", "failed"),
+                            Node("disbursement-details"),
+                            Node("billing"),
+                            Node("credit-card"),
+                            Node("customer"),
+                            Node("descriptor"),
+                            Node("shipping"),
+                            Node("subscription")
+                        )
+                    ),
+                    NodeAttr("add_ons", TYPE_ARRAY),
+                    NodeAttr("discounts", TYPE_ARRAY)
+            );
+        }
+
         private string CheckSampleXml()
         {
             return NodeAttr("check", TYPE_BOOLEAN, "true");
@@ -444,6 +471,13 @@ namespace Braintree
                         Node("item", "expiration-month"),
                         Node("item", "expiration-year")
                         )
+            );
+        }
+
+        private static string LocalPaymentCompletedSampleXml() {
+            return Node("local-payment",
+                    Node("payment-id", "a-payment-id"),
+                    Node("payer-id", "a-payer-id")
             );
         }
 

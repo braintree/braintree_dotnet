@@ -4,20 +4,22 @@ namespace Braintree
 {
     public class Environment
     {
-        public static Environment DEVELOPMENT = new Environment("development", DevelopmentUrl(), "http://auth.venmo.dev:9292");
-        public static Environment QA = new Environment("qa", "https://gateway.qa.braintreepayments.com", "https://auth.qa.venmo.com");
-        public static Environment SANDBOX = new Environment("sandbox", "https://api.sandbox.braintreegateway.com:443", "https://auth.sandbox.venmo.com");
-        public static Environment PRODUCTION = new Environment("production", "https://api.braintreegateway.com:443", "https://auth.venmo.com");
+        public static Environment DEVELOPMENT = new Environment("development", DevelopmentUrl(), "http://auth.venmo.dev:9292", "http://graphql.bt.local:8080/graphql");
+        public static Environment QA = new Environment("qa", "https://gateway.qa.braintreepayments.com", "https://auth.qa.venmo.com", "https://payments-qa.dev.braintree-api.com/graphql");
+        public static Environment SANDBOX = new Environment("sandbox", "https://api.sandbox.braintreegateway.com:443", "https://auth.sandbox.venmo.com", "https://payments.sandbox.braintree-api.com/graphql");
+        public static Environment PRODUCTION = new Environment("production", "https://api.braintreegateway.com:443", "https://auth.venmo.com", "https://payments.braintree-api.com/graphql");
 
         public string GatewayURL { get; private set; }
         public string AuthURL { get; private set; }
         public string EnvironmentName { get; private set; }
+        public string GraphQLUrl { get; private set; }
 
-        public Environment(string environmentName, string gatewayUrl, string authUrl)
+        public Environment(string environmentName, string gatewayUrl, string authUrl, string graphQLUrl)
         {
             this.GatewayURL = gatewayUrl;
             this.AuthURL = authUrl;
             this.EnvironmentName = environmentName;
+            this.GraphQLUrl = graphQLUrl;
         }
 
         private static string DevelopmentUrl()

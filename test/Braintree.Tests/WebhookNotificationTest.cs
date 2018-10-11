@@ -372,6 +372,22 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForSubscriptionChargedUnsuccessfully()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_CHARGED_UNSUCCESSFULLY, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.SUBSCRIPTION_CHARGED_UNSUCCESSFULLY, notification.Kind);
+          Assert.AreEqual("my_id", notification.Subscription.Id);
+          Assert.AreEqual(1, notification.Subscription.Transactions.Count);
+
+          Transaction transaction = notification.Subscription.Transactions[0];
+          Assert.AreEqual(TransactionStatus.FAILED, transaction.Status);
+          Assert.AreEqual(49.99m, transaction.Amount);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForAccountUpdaterDailyReport()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT, "my_id");
@@ -436,6 +452,20 @@ namespace Braintree.Tests
           Assert.AreEqual("expiration-month", update.UpdatedFields[0]);
           Assert.AreEqual("expiration-year", update.UpdatedFields[1]);
           Assert.AreEqual(2, update.UpdatedFields.Count);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForLocalPaymentCompleted()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.LOCAL_PAYMENT_COMPLETED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.LOCAL_PAYMENT_COMPLETED, notification.Kind);
+          LocalPaymentCompleted localPayment = notification.LocalPaymentCompleted;
+
+          Assert.AreEqual("a-payment-id", localPayment.PaymentId);
+          Assert.AreEqual("a-payer-id", localPayment.PayerId);
         }
 
         [Test]

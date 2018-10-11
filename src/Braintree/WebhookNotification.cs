@@ -35,6 +35,7 @@ namespace Braintree
         public static readonly WebhookKind IDEAL_PAYMENT_COMPLETE = new WebhookKind("ideal_payment_complete");
         public static readonly WebhookKind IDEAL_PAYMENT_FAILED = new WebhookKind("ideal_payment_failed");
         public static readonly WebhookKind GRANTED_PAYMENT_INSTRUMENT_UPDATE = new WebhookKind("granted_payment_instrument_update");
+        public static readonly WebhookKind LOCAL_PAYMENT_COMPLETED = new WebhookKind("local_payment_completed");
 
         public static readonly WebhookKind[] ALL = {
             CHECK,
@@ -64,7 +65,8 @@ namespace Braintree
             ACCOUNT_UPDATER_DAILY_REPORT,
             IDEAL_PAYMENT_COMPLETE,
             IDEAL_PAYMENT_FAILED,
-            GRANTED_PAYMENT_INSTRUMENT_UPDATE
+            GRANTED_PAYMENT_INSTRUMENT_UPDATE,
+            LOCAL_PAYMENT_COMPLETED
         };
 
         protected WebhookKind(string name) : base(name) {}
@@ -89,6 +91,7 @@ namespace Braintree
         public virtual IdealPayment IdealPayment { get; protected set; }
         public virtual GrantedPaymentInstrumentUpdate GrantedPaymentInstrumentUpdate { get; protected set; }
         public virtual string SourceMerchantId { get; protected set; }
+        public virtual LocalPaymentCompleted LocalPaymentCompleted { get; protected set; }
 
 
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
@@ -176,6 +179,11 @@ namespace Braintree
             if (WrapperNode.GetNode("message") != null)
             {
                 Message = WrapperNode.GetString("message");
+            }
+
+            if (WrapperNode.GetNode("local-payment") != null)
+            {
+                LocalPaymentCompleted = new LocalPaymentCompleted(WrapperNode.GetNode("local-payment"));
             }
         }
 

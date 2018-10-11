@@ -3,15 +3,20 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2018</Copyright>
-    <VersionPrefix>4.5.0</VersionPrefix>
+    <VersionPrefix>4.6.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <TargetFrameworks>net452;netstandard1.3</TargetFrameworks>
     <AssemblyName>Braintree</AssemblyName>
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      * Add Samsung Pay support
-      * Add `processor_response_code` and `processor_response_text` to authorization adjustments subfield in transaction response.
+      * Allow environemnt parsing to be case insensitive (#75)
+      * Add `LastFour` to `PaymentMethodNonceDetails`
+      * Add subscription charged unsuccessfully sample webhook to webhook testing gateway
+      * Fix dispute results in transactions not showing the correct status sometimes
+      * Add `network_transaction_id` as new field on subfield transaction response.
+      * Add support for `ExternalVaultRequest` for TransactionRequest
+      * Add support for `LocalPaymentCompleted` webhook notifications.
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.3' ">$(PackageTargetFallback);dnxcore50;portable-net45+win7</PackageTargetFallback>
@@ -41,6 +46,10 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <DefineConstants>$(DefineConstants);netcore</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.0.2" />

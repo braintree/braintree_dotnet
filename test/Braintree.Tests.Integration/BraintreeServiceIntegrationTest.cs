@@ -13,7 +13,7 @@ namespace Braintree.Tests.Integration
         {
             Assert.Throws<AuthenticationException>(() => new BraintreeService(new Configuration(Environment.SANDBOX, "dummy", "dummy", "dummy")).Get("/merchants/not_our_merchant_id"));
         }
-        
+
         [Test]
         public void ProductionSSLCertificateSuccessful()
         {

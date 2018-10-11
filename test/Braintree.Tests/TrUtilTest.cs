@@ -23,7 +23,7 @@ namespace Braintree.Tests
         public void IncludesApiVersion()
         {
             string tr_data = TrUtil.BuildTrData(new TransactionRequest(), "example.com", service);
-            TestHelper.AssertIncludes("api_version=4", tr_data);
+            TestHelper.AssertIncludes("api_version=5", tr_data);
         }
 
         [Test]

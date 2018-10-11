@@ -84,6 +84,7 @@ namespace Braintree
         public decimal? ShippingAmount { get; set; }
         public string ShipsFromPostalCode { get; set; }
         public TransactionLineItemRequest[] LineItems { get; set; }
+        public ExternalVaultRequest ExternalVault { get; set; }
 
         public TransactionRequest()
         {
@@ -169,6 +170,8 @@ namespace Braintree
             builder.AddElement("ships-from-postal-code", ShipsFromPostalCode);
             if (LineItems != null)
                 builder.AddElement("line-items", LineItems);
+            if (ExternalVault != null)
+                builder.AddElement("external-vault", ExternalVault);
             return builder;
         }
     }

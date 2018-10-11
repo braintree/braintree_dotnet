@@ -168,5 +168,10 @@ namespace Braintree
                 throw new ConfigurationException("ClientSecret must not be passed when constructing BraintreeGateway");
             }
         }
+
+        public string GetGraphQLUrl()
+        {
+            return Environment.GraphQLUrl;
+        }
     }
 }
