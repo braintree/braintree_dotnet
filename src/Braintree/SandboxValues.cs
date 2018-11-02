@@ -11,6 +11,11 @@ namespace Braintree
             public const string AMEX = "371449635392376";
             public const string FRAUD = "4000111111111511";
 
+            public class FailsVerification
+            {
+                public const string VISA = "4000111111111115";
+            }
+
             public class AmexPayWithPoints
             {
                 public const string SUCCESS = "371260714673002";
@@ -28,6 +33,7 @@ namespace Braintree
         {
             public const decimal AUTHORIZE = 1000;
             public const decimal DECLINE = 2000;
+            public const decimal HARD_DECLINE = 2015;
             public const decimal FAILED = 3000;
         }
 

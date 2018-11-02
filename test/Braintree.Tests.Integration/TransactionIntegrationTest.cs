@@ -405,26 +405,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Search_PaymentInstrumentTypeIsEuropeBankAccount()
-        {
-            TransactionRequest request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                PaymentMethodNonce = Nonce.Transactable
-            };
-
-            Transaction transaction = gateway.Transaction.Sale(request).Target;
-
-            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
-                Id.Is(transaction.Id).
-                PaymentInstrumentType.Is("EuropeBankAccountDetail");
-
-            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
-
-            Assert.AreEqual(0, collection.MaximumCount);
-        }
-
-        [Test]
         public void Search_OnCreatedUsing()
         {
             TransactionRequest request = new TransactionRequest
@@ -1376,6 +1356,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
@@ -1411,6 +1392,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
@@ -1451,6 +1433,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, transaction.ProcessorResponseType);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
@@ -1490,6 +1474,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
@@ -1526,6 +1511,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
@@ -1557,6 +1543,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
@@ -1859,6 +1846,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
@@ -1908,6 +1896,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
             Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
@@ -2980,8 +2969,42 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(2000.00, transaction.Amount);
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
+            Assert.AreEqual(ProcessorResponseType.SOFT_DECLINED, transaction.ProcessorResponseType);
             Assert.AreEqual("2000", transaction.ProcessorResponseCode);
             Assert.AreEqual("2000 : Do Not Honor", transaction.AdditionalProcessorResponse);
+            Assert.IsNotNull(transaction.ProcessorResponseText);
+            Assert.IsNull(transaction.VoiceReferralNumber);
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+        }
+
+        [Test]
+        public void Sale_HardDeclined()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.HARD_DECLINE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(2015.00, transaction.Amount);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
+            Assert.AreEqual(ProcessorResponseType.HARD_DECLINED, transaction.ProcessorResponseType);
+            Assert.AreEqual("2015", transaction.ProcessorResponseCode);
+            Assert.AreEqual("2015 : Transaction Not Allowed", transaction.AdditionalProcessorResponse);
             Assert.IsNotNull(transaction.ProcessorResponseText);
             Assert.IsNull(transaction.VoiceReferralNumber);
 
@@ -6121,6 +6144,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1000.00, transaction.Amount);
             Assert.AreEqual(TransactionType.SALE, transaction.Type);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
             Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
 
@@ -6480,7 +6504,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Find_ExposesAuthorizationAdjustments()
+        public void Find_ExposesAuthorizationAdjustmentsApproved()
         {
             Transaction transaction = gateway.Transaction.Find("authadjustmenttransaction");
 
@@ -6492,6 +6516,39 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(authorizationAdjustment.Timestamp.Value.Year, DateTime.Now.Year);
             Assert.AreEqual(authorizationAdjustment.ProcessorResponseCode, "1000");
             Assert.AreEqual(authorizationAdjustment.ProcessorResponseText, "Approved");
+            Assert.AreEqual(ProcessorResponseType.APPROVED, authorizationAdjustment.ProcessorResponseType);
+        }
+
+        [Test]
+        public void Find_ExposesAuthorizationAdjustmentsSoftDeclined()
+        {
+            Transaction transaction = gateway.Transaction.Find("authadjustmenttransactionsoftdeclined");
+
+            List<AuthorizationAdjustment> authorizationAdjustments = transaction.AuthorizationAdjustments;
+            AuthorizationAdjustment authorizationAdjustment = authorizationAdjustments[0];
+
+            Assert.AreEqual(decimal.Parse("-20.00"), authorizationAdjustment.Amount);
+            Assert.AreEqual(false, authorizationAdjustment.Success);
+            Assert.AreEqual(DateTime.Now.Year, authorizationAdjustment.Timestamp.Value.Year);
+            Assert.AreEqual("3000", authorizationAdjustment.ProcessorResponseCode);
+            Assert.AreEqual("Processor Network Unavailable - Try Again", authorizationAdjustment.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.SOFT_DECLINED, authorizationAdjustment.ProcessorResponseType);
+        }
+
+        [Test]
+        public void Find_ExposesAuthorizationAdjustmentsHardDeclined()
+        {
+            Transaction transaction = gateway.Transaction.Find("authadjustmenttransactionharddeclined");
+
+            List<AuthorizationAdjustment> authorizationAdjustments = transaction.AuthorizationAdjustments;
+            AuthorizationAdjustment authorizationAdjustment = authorizationAdjustments[0];
+
+            Assert.AreEqual(decimal.Parse("-20.00"), authorizationAdjustment.Amount);
+            Assert.AreEqual(false, authorizationAdjustment.Success);
+            Assert.AreEqual(DateTime.Now.Year, authorizationAdjustment.Timestamp.Value.Year);
+            Assert.AreEqual("2015", authorizationAdjustment.ProcessorResponseCode);
+            Assert.AreEqual("Transaction Not Allowed", authorizationAdjustment.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.HARD_DECLINED, authorizationAdjustment.ProcessorResponseType);
         }
 
         [Test]

@@ -1,3 +1,7 @@
+## 4.7.0
+* Add `AuthorizationExpiresAt` to `Transaction`
+* Add `ProcessorResponseType` to `Transaction`, `AuthorizationAdjustment`, and `CreditCardVerification`
+
 ## 4.6.0
 * Allow environemnt parsing to be case insensitive (#75)
 * Add `LastFour` to `PaymentMethodNonceDetails`

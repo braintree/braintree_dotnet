@@ -51,6 +51,41 @@ namespace Braintree.Tests.Integration
             CreditCardVerification verification = result.Target;
             Assert.AreEqual(verification.MerchantAccountId,
                             MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+
+        [Test]
+        public void Create_ReturnsUnsuccessfulResponse()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.FailsVerification.VISA,
+                    ExpirationDate = "05/2009",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "3000.00"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            CreditCardVerification verification = result.CreditCardVerification;
+            Assert.AreEqual("2000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Do Not Honor", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.SOFT_DECLINED, verification.ProcessorResponseType);
         }
 
         [Test]

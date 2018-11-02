@@ -31,6 +31,7 @@ namespace Braintree
         public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
         public virtual string ProcessorResponseText { get; protected set; }
+        public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual VerificationStatus Status { get; protected set; }
         public virtual string Id { get; protected set; }
@@ -56,6 +57,7 @@ namespace Braintree
             );
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
             MerchantAccountId = node.GetString("merchant-account-id");
             Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
             Id = node.GetString("id");

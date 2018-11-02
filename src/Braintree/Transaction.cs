@@ -163,6 +163,7 @@ namespace Braintree
         public virtual string OrderId { get; protected set; }
         public virtual string PlanId { get; protected set; }
         public virtual string ProcessorAuthorizationCode { get; protected set; }
+        public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
         public virtual string ProcessorResponseText { get; protected set; }
         public virtual string ProcessorSettlementResponseCode { get; protected set; }
@@ -210,6 +211,7 @@ namespace Braintree
         public virtual decimal? ShippingAmount { get; protected set; }
         public virtual string ShipsFromPostalCode { get; protected set; }
         public virtual string NetworkTransactionId { get; protected set; }
+        public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -259,6 +261,7 @@ namespace Braintree
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
             ProcessorSettlementResponseCode = node.GetString("processor-settlement-response-code");
             ProcessorSettlementResponseText = node.GetString("processor-settlement-response-text");
             AdditionalProcessorResponse = node.GetString("additional-processor-response");
@@ -398,6 +401,8 @@ namespace Braintree
             ShipsFromPostalCode = node.GetString("ships-from-postal-code");
 
             NetworkTransactionId = node.GetString("network-transaction-id");
+
+            AuthorizationExpiresAt = node.GetDateTime("authorization-expires-at");
         }
 
         /// <summary>

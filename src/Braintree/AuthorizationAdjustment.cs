@@ -11,6 +11,7 @@ namespace Braintree
         public virtual DateTime? Timestamp { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
         public virtual string ProcessorResponseText { get; protected set; }
+        public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
 
         public AuthorizationAdjustment(NodeWrapper node)
         {
@@ -22,6 +23,7 @@ namespace Braintree
             Timestamp = node.GetDateTime("timestamp");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
+            ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
         }
 
         [Obsolete("Mock Use Only")]
