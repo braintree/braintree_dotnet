@@ -4,6 +4,8 @@ namespace Braintree
     {
         public string PayeeId { get; set; }
         public string PayeeEmail { get; set; }
+        public string PayerId { get; set; }
+        public string PaymentId { get; set; }
 
         public override string ToXml()
         {

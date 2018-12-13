@@ -1531,7 +1531,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Update_AcceptsPayPalOrderPaymentMethodNonceAndPayeeEmail()
+        public void Update_AcceptsPayPalOrderPaymentMethodNonceAndPayPalOptions()
         {
             var create = new CustomerRequest
             {
@@ -1550,7 +1550,11 @@ namespace Braintree.Tests.Integration
                 PaymentMethodNonce = paymentMethodNonce,
                 Options = new CustomerOptionsRequest {
                     OptionsPayPal = new CustomerOptionsPayPalRequest {
-                        PayeeEmail = "payee@example.com"
+                        PayeeEmail = "payee@example.com",
+                        OrderId = "order-id",
+                        CustomField = "custom merchant field",
+                        Description = "merchant description",
+                        Amount = 1.23M,
                     }
                 }
             };

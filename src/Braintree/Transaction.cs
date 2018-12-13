@@ -68,6 +68,7 @@ namespace Braintree
     {
         public static readonly TransactionIndustryType LODGING = new TransactionIndustryType("lodging");
         public static readonly TransactionIndustryType TRAVEL_AND_CRUISE = new TransactionIndustryType("travel_cruise");
+        public static readonly TransactionIndustryType TRAVEL_AND_FLIGHT = new TransactionIndustryType("travel_flight");
 
         protected TransactionIndustryType(string name) : base(name) {}
     }

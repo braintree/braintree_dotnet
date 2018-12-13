@@ -296,6 +296,34 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void UseStaticHttpClient_DefaultsToFalse()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            Assert.AreEqual(false, configuration.UseStaticHttpClient);
+        }
+
+        [Test]
+        public void UseStaticHttpClient_ReturnsTheSetValue()
+        {
+            Configuration configuration = new Configuration(
+                Environment.DEVELOPMENT,
+                "integration_merchant_id",
+                "integration_public_key",
+                "integration_private_key"
+            );
+
+            configuration.UseStaticHttpClient = true;
+
+            Assert.AreEqual(true, configuration.UseStaticHttpClient);
+        }
+
+        [Test]
         public void HttpRequestMessageFactory_ReturnsDefaultIfNotSpecified()
         {
             Configuration configuration = new Configuration(

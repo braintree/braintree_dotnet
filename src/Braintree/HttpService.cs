@@ -20,6 +20,11 @@ namespace Braintree
     public class HttpService
     {
         protected static readonly Encoding encoding = Encoding.UTF8;
+#if netcore
+        protected static HttpClient staticClient = new HttpClient(new HttpClientHandler {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+        }, false);
+#endif
 
         protected Configuration Configuration;
 
@@ -88,45 +93,61 @@ namespace Braintree
             return request;
         }
 
+        public string GetHttpResponseWithClient(HttpClient client, HttpRequestMessage request) {
+            var response = client.SendAsync(request).GetAwaiter().GetResult();
+            if (response.StatusCode != (HttpStatusCode) 422)
+            {
+                ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+            }
+
+            return ParseResponseStream(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
+        }
+
+        public async Task<string> GetHttpResponseWithClientAsync(HttpClient client, HttpRequestMessage request) {
+            var response = client.SendAsync(request).GetAwaiter().GetResult();
+            if (response.StatusCode != (HttpStatusCode) 422)
+            {
+                ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+            }
+
+            return await ParseResponseStreamAsync(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
+        }
+
         public string GetHttpResponse(HttpRequestMessage request) {
-            var httpClientHandler = new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            };
-
-            SetWebProxy(httpClientHandler, request.RequestUri);
-
-            using (var client = new HttpClient(httpClientHandler))
-            {
-                client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
-                var response = client.SendAsync(request).GetAwaiter().GetResult();
-                if (response.StatusCode != (HttpStatusCode) 422)
+            if (Configuration.UseStaticHttpClient == true) {
+                return GetHttpResponseWithClient(staticClient, request);
+            } else {
+                var httpClientHandler = new HttpClientHandler
                 {
-                    ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
-                }
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                };
 
-                return ParseResponseStream(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
+                SetWebProxy(httpClientHandler, request.RequestUri);
+
+                using (var client = new HttpClient(httpClientHandler))
+                {
+                    client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
+                    return GetHttpResponseWithClient(client, request);
+                }
             }
         }
 
         public async Task<string> GetHttpResponseAsync(HttpRequestMessage request) {
-            var httpClientHandler = new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-            };
-
-            SetWebProxy(httpClientHandler, request.RequestUri);
-
-            using (var client = new HttpClient(httpClientHandler))
-            {
-                client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
-                var response = client.SendAsync(request).GetAwaiter().GetResult();
-                if (response.StatusCode != (HttpStatusCode) 422)
+            if (Configuration.UseStaticHttpClient == true) {
+                return await GetHttpResponseWithClientAsync(staticClient, request);
+            } else {
+                var httpClientHandler = new HttpClientHandler
                 {
-                    ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
-                }
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                };
 
-                return await ParseResponseStreamAsync(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
+                SetWebProxy(httpClientHandler, request.RequestUri);
+
+                using (var client = new HttpClient(httpClientHandler))
+                {
+                    client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
+                    return await GetHttpResponseWithClientAsync(client, request);
+                }
             }
         }
 #else

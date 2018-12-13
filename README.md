@@ -68,6 +68,21 @@ namespace BraintreeExample
 }
 ```
 
+## Static HTTP Client
+
+In .NET core, if your integration does not require a Web Proxy or a custom Timeout setting, you can optimize your integration by re-using the same HTTP client instance.
+
+```csharp
+var gateway = new BraintreeGateway
+{
+    Environment = Braintree.Environment.SANDBOX,
+    MerchantId = "the_merchant_id",
+    PublicKey = "a_public_key",
+    PrivateKey = "a_private_key"
+};
+gateway.Configuration.UseStaticHttpClient = true;
+```
+
 ## Documentation
 
 * [Official documentation](https://developers.braintreepayments.com/dotnet/sdk/server/overview)

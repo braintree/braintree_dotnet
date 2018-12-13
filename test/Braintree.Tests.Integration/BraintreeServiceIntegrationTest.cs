@@ -1,6 +1,7 @@
 using Braintree.Exceptions;
 using Braintree.TestUtil;
 using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
@@ -114,6 +115,39 @@ namespace Braintree.Tests.Integration
             } catch (NotFoundException) {
                 // expected
             }
+        }
+
+        [Test]
+        public void BraintreeGateway_canMakeMultipleRequestsWithStaticClient()
+        {
+            var gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+            gateway.Configuration.UseStaticHttpClient = true;
+
+            string id = Guid.NewGuid().ToString();
+            var createRequest = new CustomerRequest
+            {
+                Id = id,
+            };
+
+            Customer createdCustomer = gateway.Customer.Create(createRequest).Target;
+
+            var updateRequest = new CustomerRequest
+            {
+                FirstName = "First"
+            };
+
+            gateway.Customer.Update(id, updateRequest);
+
+            Customer customer = gateway.Customer.Find(createdCustomer.Id);
+
+            Assert.AreEqual(id, customer.Id);
+            Assert.AreEqual("First", customer.FirstName);
         }
 #endif
     }

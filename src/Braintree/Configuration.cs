@@ -59,6 +59,11 @@ namespace Braintree
             get { return timeout == 0 ? 60000 : timeout; }
             set { timeout = value; }
         }
+        private bool useStaticHttpClient;
+        public bool UseStaticHttpClient {
+            get { return useStaticHttpClient ? true : false; }
+            set { useStaticHttpClient = value; }
+        }
 
         public Configuration()
         {

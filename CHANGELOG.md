@@ -1,3 +1,9 @@
+## 4.8.0
+* Allow PayPal payment ID and payer ID to be passed during transaction create
+* Add `travel_flight` support to industry-specific data
+* Add `fraudServiceProvider` field to `RiskData`
+* Add `UseStaticHttpClient` to configuration to reuse the same http client instance in each request
+
 ## 4.7.0
 * Add `AuthorizationExpiresAt` to `Transaction`
 * Add `ProcessorResponseType` to `Transaction`, `AuthorizationAdjustment`, and `CreditCardVerification`

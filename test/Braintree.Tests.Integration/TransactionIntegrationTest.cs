@@ -1873,6 +1873,7 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(transaction.RiskData);
             Assert.IsNotNull(transaction.RiskData.decision);
+            Assert.IsNotNull(transaction.RiskData.fraudServiceProvider);
         }
 
         [Test]
@@ -1934,6 +1935,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
             Assert.IsNotNull(transaction.RiskData.decision);
+            Assert.IsNotNull(transaction.RiskData.fraudServiceProvider);
 
         }
 
@@ -4170,6 +4172,128 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithTravelFlightIndustryData_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                },
+                Industry = new IndustryRequest
+                {
+                    IndustryType = TransactionIndustryType.TRAVEL_AND_FLIGHT,
+                    IndustryData = new IndustryDataRequest
+                    {
+                        PassengerFirstName = "John",
+                        PassengerLastName = "Doe",
+                        PassengerMiddleInitial = "M",
+                        PassengerTitle = "Mr.",
+                        IssuedDate = new DateTime(2018, 1, 1),
+                        TravelAgencyName = "Expedia",
+                        TravelAgencyCode = "12345678",
+                        TicketNumber = "ticket-number",
+                        IssuingCarrierCode = "AA",
+                        CustomerCode = "customer-code",
+                        FareAmount = 7000M,
+                        FeeAmount = 1000M,
+                        TaxAmount = 2000M,
+                        RestrictedTicket = false,
+                        Legs = new IndustryDataLegRequest[]
+                        {
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0001",
+                                ExchangeTicket = "ET0001",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA100",
+                                DepartureDate = new DateTime(2018, 1, 2),
+                                DepartureAirportCode = "MDW",
+                                DepartureTime = "08:00",
+                                ArrivalAirportCode = "ATX",
+                                ArrivalTime = "10:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            },
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0002",
+                                ExchangeTicket = "ET0002",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA200",
+                                DepartureDate = new DateTime(2018, 1, 3),
+                                DepartureAirportCode = "ATX",
+                                DepartureTime = "12:00",
+                                ArrivalAirportCode = "MDW",
+                                ArrivalTime = "14:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            }
+                        }
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Sale_WithTravelFlightIndustryDataValidation_ReturnsValidationErrorResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                },
+                Industry = new IndustryRequest
+                {
+                    IndustryType = TransactionIndustryType.TRAVEL_AND_FLIGHT,
+                    IndustryData = new IndustryDataRequest
+                    {
+                        FareAmount = -1.23M,
+                        Legs = new IndustryDataLegRequest[]
+                        {
+                            new IndustryDataLegRequest
+                            {
+                                FareAmount = -1.23M,
+                            },
+                        },
+                    },
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.INDUSTRY_DATA_TRAVEL_FLIGHT_FARE_AMOUNT_CANNOT_BE_NEGATIVE,
+                result.Errors.ForObject("Transaction").ForObject("Industry").OnField("FareAmount")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.INDUSTRY_DATA_LEG_TRAVEL_FLIGHT_FARE_AMOUNT_CANNOT_BE_NEGATIVE,
+                result.Errors.ForObject("Transaction").ForObject("Industry").ForObject("Legs").ForObject("index_0").OnField("FareAmount")[0].Code
+            );
+        }
+
+        [Test]
         public void Sale_WithVenmoSdkPaymentMethodCode()
         {
             var request = new TransactionRequest
@@ -4443,10 +4567,21 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_WithExternalVault_ValidationErrorPaymentInstrumentIsInvalid()
         {
+            CustomerRequest customerRequest = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    CardholderName = "Fred Jones",
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12"
+                }
+            };
+
+            CreditCard creditCard = gateway.Customer.Create(customerRequest).Target.CreditCards[0];
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                PaymentMethodToken = "token",
+                PaymentMethodToken = creditCard.Token,
                 ExternalVault = new ExternalVaultRequest
                 {
                     Status = "vaulted",
@@ -8019,6 +8154,25 @@ namespace Braintree.Tests.Integration
             };
             Result<Transaction> result = gateway.Transaction.Credit(request);
             Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void CreateTransaction_WithLocalPaymentWebhookContent()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PayPalAccount = new TransactionPayPalRequest()
+                {
+                    PaymentId = "PAY-1234",
+                    PayerId = "PAYER-123"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual("PAY-1234", result.Target.PayPalDetails.PaymentId);
+            Assert.AreEqual("PAYER-123", result.Target.PayPalDetails.PayerId);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
 
         [Test]
