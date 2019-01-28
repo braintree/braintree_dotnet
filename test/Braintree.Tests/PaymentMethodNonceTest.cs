@@ -51,6 +51,39 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ParsesNodeCorrectlyWithVenmoDetails()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<payment-method-nonce>" +
+                "  <type>VenmoAccount</type>" +
+                "  <nonce>fake-venmo-account-nonce</nonce>" +
+                "  <description></description>" +
+                "  <consumed type=\"boolean\">false</consumed>" +
+                "  <details>" +
+                "    <last-two>99</last-two>" +
+                "    <username>venmojoe</username>" +
+                "    <venmo-user-id>Venmo-Joe-1</venmo-user-id>" +
+                "  </details>" +
+                "</payment-method-nonce>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
+
+            Assert.IsNotNull(result.Target);
+            Assert.AreEqual("fake-venmo-account-nonce", result.Target.Nonce);
+            Assert.AreEqual("VenmoAccount", result.Target.Type);
+            Assert.IsNotNull(result.Target.Details);
+            Assert.AreEqual("99", result.Target.Details.LastTwo);
+            Assert.AreEqual("venmojoe", result.Target.Details.Username);
+            Assert.AreEqual("Venmo-Joe-1", result.Target.Details.VenmoUserId);
+        }
+
+        [Test]
         public void ParsesNodeCorrectlyWithBinData()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +

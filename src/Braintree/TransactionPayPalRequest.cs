@@ -32,6 +32,8 @@ namespace Braintree
             var builder = new RequestBuilder(root);
             builder.AddElement("payee-id", PayeeId);
             builder.AddElement("payee-email", PayeeEmail);
+            builder.AddElement("payer-id", PayerId);
+            builder.AddElement("payment-id", PaymentId);
             return builder;
         }
     }

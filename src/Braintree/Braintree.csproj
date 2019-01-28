@@ -3,17 +3,18 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2018</Copyright>
-    <VersionPrefix>4.8.0</VersionPrefix>
+    <VersionPrefix>4.9.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <TargetFrameworks>net452;netstandard1.3</TargetFrameworks>
     <AssemblyName>Braintree</AssemblyName>
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      * Allow PayPal payment ID and payer ID to be passed during transaction create
-      * Add `travel_flight` support to industry-specific data
-      * Add `fraudServiceProvider` field to `RiskData`
-      * Add `UseStaticHttpClient` to configuration to reuse the same http client instance in each request
+      * Add Error indicating pdf uploads too long for dispute evidence.
+      * Add `bin` field to `PaymentMethodNonceDetails`
+      * Fix creating transaction from local payment webhook data
+      * Add `GrantedPaymentMethodRevoked` webhook response objects
+      * Add `Username` and `VenmoUserId` to `PaymentMethodNonceDetails`.
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.3' ">$(PackageTargetFallback);dnxcore50;portable-net45+win7</PackageTargetFallback>

@@ -62,6 +62,18 @@ namespace Braintree.Tests
             Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_IS_TOO_LARGE, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
         }
 
+        [Test]
+        public void Constructor_documentUploadCanMapFileIsTooLongResponse()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(FILE_IS_TOO_LONG_RESPONSE);
+
+            var result = new ResultImpl<DocumentUpload>(new NodeWrapper(doc.DocumentElement), gateway);
+
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_IS_TOO_LONG, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
+        }
+
         private String FILE_TYPE_IS_INVALID_RESPONSE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
             + "<api-error-response>\n"
             + "  <errors>\n"
@@ -135,6 +147,31 @@ namespace Braintree.Tests
             + "    <merchant-id>integration_merchant_id</merchant-id>\n"
             + "  </params>\n"
             + "  <message>File size is limited to 4 MB.</message>\n"
+            + "</api-error-response>";
+
+        private String FILE_IS_TOO_LONG_RESPONSE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            + "<api-error-response>\n"
+            + "  <errors>\n"
+            + "    <errors type=\"array\"/>\n"
+            + "    <document-upload>\n"
+            + "      <errors type=\"array\">\n"
+            + "        <error>\n"
+            + "          <code>84905</code>\n"
+            + "          <attribute type=\"symbol\">file</attribute>\n"
+            + "          <message>PDF page length is limited to 50 pages</message>\n"
+            + "        </error>\n"
+            + "      </errors>\n"
+            + "    </document-upload>\n"
+            + "  </errors>\n"
+            + "  <params>\n"
+            + "    <document-upload>\n"
+            + "      <kind>identity_document</kind>\n"
+            + "    </document-upload>\n"
+            + "    <controller>document_uploads</controller>\n"
+            + "    <action>create</action>\n"
+            + "    <merchant-id>integration_merchant_id</merchant-id>\n"
+            + "  </params>\n"
+            + "  <message>PDF page length is limited to 50 pages</message>\n"
             + "</api-error-response>";
     }
 }

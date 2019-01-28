@@ -74,6 +74,7 @@ namespace Braintree.Tests.Integration
 
 #if netcore
         [Test]
+        [Ignore("unpend when proxy setup can be created")]
         public void SetWebProxy_DoesNotThrowUriException()
         {
             Configuration configuration = new Configuration(
@@ -96,6 +97,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when proxy setup can be created")]
         public async Task SetWebProxyAsync_DoesNotThrowUriException()
         {
             Configuration configuration = new Configuration(

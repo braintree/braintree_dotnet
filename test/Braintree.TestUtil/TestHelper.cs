@@ -14,12 +14,21 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using Newtonsoft.Json;
 using Params = System.Collections.Generic.Dictionary<string, object>;
+using Response = System.Collections.Generic.Dictionary<string, string>;
 using System.Diagnostics;
 
 namespace Braintree.TestUtil
 {
     public class TestHelper
     {
+        public static Response SampleNotificationFromXml(BraintreeGateway gateway, string xml)
+        {
+            var response = new Response();
+            var service = new BraintreeService(gateway.Configuration);
+            response["bt_payload"] = xml;
+            response["bt_signature"] = string.Format("{0}|{1}", service.PublicKey, new Sha1Hasher().HmacHash(service.PrivateKey, xml).Trim().ToLower());
+            return response;
+        }
 
         public static string GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
         {

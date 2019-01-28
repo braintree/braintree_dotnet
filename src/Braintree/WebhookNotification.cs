@@ -35,6 +35,7 @@ namespace Braintree
         public static readonly WebhookKind IDEAL_PAYMENT_COMPLETE = new WebhookKind("ideal_payment_complete");
         public static readonly WebhookKind IDEAL_PAYMENT_FAILED = new WebhookKind("ideal_payment_failed");
         public static readonly WebhookKind GRANTED_PAYMENT_INSTRUMENT_UPDATE = new WebhookKind("granted_payment_instrument_update");
+        public static readonly WebhookKind GRANTED_PAYMENT_METHOD_REVOKED = new WebhookKind("granted_payment_method_revoked");
         public static readonly WebhookKind LOCAL_PAYMENT_COMPLETED = new WebhookKind("local_payment_completed");
 
         public static readonly WebhookKind[] ALL = {
@@ -66,6 +67,7 @@ namespace Braintree
             IDEAL_PAYMENT_COMPLETE,
             IDEAL_PAYMENT_FAILED,
             GRANTED_PAYMENT_INSTRUMENT_UPDATE,
+            GRANTED_PAYMENT_METHOD_REVOKED,
             LOCAL_PAYMENT_COMPLETED
         };
 
@@ -90,6 +92,7 @@ namespace Braintree
         public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
         public virtual IdealPayment IdealPayment { get; protected set; }
         public virtual GrantedPaymentInstrumentUpdate GrantedPaymentInstrumentUpdate { get; protected set; }
+        public virtual RevokedPaymentMethodMetadata RevokedPaymentMethodMetadata { get; protected set; }
         public virtual string SourceMerchantId { get; protected set; }
         public virtual LocalPaymentCompleted LocalPaymentCompleted { get; protected set; }
 
@@ -169,6 +172,11 @@ namespace Braintree
             if (WrapperNode.GetNode("granted-payment-instrument-update") != null)
             {
                 GrantedPaymentInstrumentUpdate = new GrantedPaymentInstrumentUpdate(WrapperNode.GetNode("granted-payment-instrument-update"));
+            }
+
+            if (Kind == WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED)
+            {
+                RevokedPaymentMethodMetadata = new RevokedPaymentMethodMetadata(WrapperNode, gateway);
             }
 
             if (WrapperNode.GetNode("errors") != null)

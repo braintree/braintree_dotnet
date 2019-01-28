@@ -1,3 +1,10 @@
+## 4.9.0
+* Add Error indicating pdf uploads too long for dispute evidence.
+* Add `bin` field to `PaymentMethodNonceDetails`
+* Fix creating transaction from local payment webhook data
+* Add `GrantedPaymentMethodRevoked` webhook response objects
+* Add `Username` and `VenmoUserId` to `PaymentMethodNonceDetails`.
+
 ## 4.8.0
 * Allow PayPal payment ID and payer ID to be passed during transaction create
 * Add `travel_flight` support to industry-specific data
