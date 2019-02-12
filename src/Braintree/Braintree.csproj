@@ -5,7 +5,7 @@
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2018</Copyright>
     <VersionPrefix>4.9.0</VersionPrefix>
     <Authors>Braintree</Authors>
-    <TargetFrameworks>net452;netstandard1.3</TargetFrameworks>
+    <TargetFrameworks>net452;netstandard2.0;netstandard1.3</TargetFrameworks>
     <AssemblyName>Braintree</AssemblyName>
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
@@ -17,8 +17,7 @@
       * Add `Username` and `VenmoUserId` to `PaymentMethodNonceDetails`.
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
-    <PackageTargetFallback Condition=" '$(TargetFramework)' == 'netstandard1.3' ">$(PackageTargetFallback);dnxcore50;portable-net45+win7</PackageTargetFallback>
-    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">1.6.0</NetStandardImplicitPackageVersion>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
@@ -45,13 +44,16 @@
     <DefineConstants>$(DefineConstants);netcore</DefineConstants>
   </PropertyGroup>
 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);netcore</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
-    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="1.0.2" />
-    <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.0.1" />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard1.3' ">
+    <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
 
   <PropertyGroup>
