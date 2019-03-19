@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
-    public class ResourceCollection<T> : System.Collections.IEnumerable where T : class
+    public class ResourceCollection<T> : IEnumerable<T> where T : class
     {
         public delegate List<T> PagingDelegate(string[] ids);
 
@@ -32,10 +32,15 @@ namespace Braintree
 
         public System.Collections.IEnumerator GetEnumerator()
         {
-            foreach(var batchIds in BatchIds(Ids, PageSize))
+            return (this as IEnumerable<T>).GetEnumerator();
+        }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        {
+            foreach (var batchIds in BatchIds(Ids, PageSize))
             {
                 List<T> items = NextPage(batchIds.ToArray());
-                foreach(T item in items)
+                foreach (T item in items)
                 {
                     yield return item;
                 }
