@@ -1,5 +1,6 @@
 ## Unreleased
   * Cross compile for netstandard 2.0
+  * ResourceCollection<T> now implements IEnumerable<T>
 
 ## 4.9.0
 * Add Error indicating pdf uploads too long for dispute evidence.
