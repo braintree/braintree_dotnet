@@ -34,7 +34,10 @@ namespace Braintree
         public static readonly WebhookKind ACCOUNT_UPDATER_DAILY_REPORT = new WebhookKind("account_updater_daily_report");
         public static readonly WebhookKind IDEAL_PAYMENT_COMPLETE = new WebhookKind("ideal_payment_complete");
         public static readonly WebhookKind IDEAL_PAYMENT_FAILED = new WebhookKind("ideal_payment_failed");
+        // NEXT_MAJOR_VERSION remove GRANTED_PAYMENT_INSTRUMENT_UPDATE
         public static readonly WebhookKind GRANTED_PAYMENT_INSTRUMENT_UPDATE = new WebhookKind("granted_payment_instrument_update");
+        public static readonly WebhookKind GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD = new WebhookKind("grantor_updated_granted_payment_method");
+        public static readonly WebhookKind RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD = new WebhookKind("recipient_updated_granted_payment_method");
         public static readonly WebhookKind GRANTED_PAYMENT_METHOD_REVOKED = new WebhookKind("granted_payment_method_revoked");
         public static readonly WebhookKind LOCAL_PAYMENT_COMPLETED = new WebhookKind("local_payment_completed");
 
@@ -66,7 +69,11 @@ namespace Braintree
             ACCOUNT_UPDATER_DAILY_REPORT,
             IDEAL_PAYMENT_COMPLETE,
             IDEAL_PAYMENT_FAILED,
+            // NEXT_MAJOR_VERSION remove GRANTED_PAYMENT_INSTRUMENT_UPDATE. Kind is not sent by Braintree Gateway.
+            // Kind will either be GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD or RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD.
             GRANTED_PAYMENT_INSTRUMENT_UPDATE,
+            GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD,
+            RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD,
             GRANTED_PAYMENT_METHOD_REVOKED,
             LOCAL_PAYMENT_COMPLETED
         };

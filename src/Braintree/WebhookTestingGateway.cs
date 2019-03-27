@@ -88,6 +88,11 @@ namespace Braintree
             } else if (kind == WebhookKind.IDEAL_PAYMENT_FAILED) {
                 return IdealPaymentFailedSampleXml(id);
             } else if (kind == WebhookKind.GRANTED_PAYMENT_INSTRUMENT_UPDATE) {
+                // NEXT_MAJOR_VERSION remove GRANTED_PAYMENT_INSTRUMENT_UPDATE branch
+                return GrantedPaymentInstrumentUpdateSampleXml();
+            } else if (kind == WebhookKind.GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD) {
+                return GrantedPaymentInstrumentUpdateSampleXml();
+            } else if (kind == WebhookKind.RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD) {
                 return GrantedPaymentInstrumentUpdateSampleXml();
             } else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
                 return LocalPaymentCompletedSampleXml();

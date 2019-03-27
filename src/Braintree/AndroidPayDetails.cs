@@ -17,6 +17,16 @@ namespace Braintree
         public virtual string CardType { get; protected set; }
         public virtual string Last4 { get; protected set; }
         public virtual string Token { get; protected set; }
+        public virtual string Prepaid { get; protected set; }
+        public virtual string Healthcare { get; protected set; }
+        public virtual string Debit { get; protected set; }
+        public virtual string DurbinRegulated { get; protected set; }
+        public virtual string Commercial { get; protected set; }
+        public virtual string Payroll { get; protected set; }
+        public virtual string IssuingBank { get; protected set; }
+        public virtual string CountryOfIssuance { get; protected set; }
+        public virtual string ProductId { get; protected set; }
+        public virtual string GlobalId { get; protected set; }
 
         protected internal AndroidPayDetails(NodeWrapper node)
         {
@@ -33,6 +43,16 @@ namespace Braintree
             CardType = node.GetString("virtual-card-type");
             Last4 = node.GetString("virtual-card-last-4");
             Token = node.GetString("token");
+            Prepaid = node.GetString("prepaid");
+            Healthcare = node.GetString("healthcare");
+            Debit = node.GetString("debit");
+            DurbinRegulated = node.GetString("durbin-regulated");
+            Commercial = node.GetString("commercial");
+            Payroll = node.GetString("payroll");
+            IssuingBank = node.GetString("issuing-bank");
+            CountryOfIssuance = node.GetString("country-of-issuance");
+            ProductId = node.GetString("product-id");
+            GlobalId = node.GetString("global-id");
         }
 
         [Obsolete("Mock Use Only")]

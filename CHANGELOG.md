@@ -1,6 +1,28 @@
-## Unreleased
-  * Cross compile for netstandard 2.0
-  * ResourceCollection<T> now implements IEnumerable<T>
+## 4.10.0
+* Deprecate `GRANTED_PAYMENT_INSTRUMENT_UPDATE` and add `GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD` and `RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD`
+* Add `Prepaid` field to `ApplePayDetails`
+* Add `Healthcare` field to `ApplePayDetails`
+* Add `Debit` field to `ApplePayDetails`
+* Add `DurbinRegulated` field to `ApplePayDetails`
+* Add `Commercial` field to `ApplePayDetails`
+* Add `Payroll` field to `ApplePayDetails`
+* Add `IssuingBank` field to `ApplePayDetails`
+* Add `CountryOfIssuance` field to `ApplePayDetails`
+* Add `ProductId` field to `ApplePayDetails`
+* Add `Bin` field to `ApplePayDetails`
+* Add `GlobalId` field to `ApplePayDetails`
+* Add `Prepaid` field to `AndroidPayDetails`
+* Add `Healthcare` field to `AndroidPayDetails`
+* Add `Debit` field to `AndroidPayDetails`
+* Add `DurbinRegulated` field to `AndroidPayDetails`
+* Add `Commercial` field to `AndroidPayDetails`
+* Add `Payroll` field to `AndroidPayDetails`
+* Add `IssuingBank` field to `AndroidPayDetails`
+* Add `CountryOfIssuance` field to `AndroidPayDetails`
+* Add `ProductId` field to `AndroidPayDetails`
+* Add `GlobalId` field to `AndroidPayDetails`
+* Cross compile for netstandard 2.0
+* ResourceCollection<T> now implements IEnumerable<T>
 
 ## 4.9.0
 * Add Error indicating pdf uploads too long for dispute evidence.
