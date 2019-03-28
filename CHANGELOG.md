@@ -1,3 +1,6 @@
+## 4.10.1
+* Update release notes
+
 ## 4.10.0
 * Deprecate `GRANTED_PAYMENT_INSTRUMENT_UPDATE` and add `GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD` and `RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD`
 * Add `Prepaid` field to `ApplePayDetails`
