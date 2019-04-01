@@ -298,5 +298,96 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(token, verification.CreditCard.Token);
             Assert.AreEqual(postalCode, verification.BillingAddress.PostalCode);
         }
+
+        [Test]
+        public void Create_WithAccountTypeCredit()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    AccountType = "credit",
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.CreditCard.AccountType, "credit");
+        }
+
+        [Test]
+        public void Create_WithAccountTypeDebit()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    AccountType = "debit",
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.CreditCard.AccountType, "debit");
+        }
+
+        [Test]
+        public void Create_HandlesErrorAccountTypeInvalid()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    AccountType = "ach",
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.VERIFICATION_OPTIONS_ACCOUNT_TYPE_IS_INVALID,
+                            result.Errors.ForObject("Verification").ForObject("Options").OnField("AccountType")[0].Code);
+        }
+
+        [Test]
+        public void Create_HandlesErrorAccountTypeNotSupported()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    AccountType = "credit",
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.VERIFICATION_OPTIONS_ACCOUNT_TYPE_NOT_SUPPORTED,
+                            result.Errors.ForObject("Verification").ForObject("Options").OnField("AccountType")[0].Code);
+        }
     }
 }

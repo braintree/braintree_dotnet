@@ -9,6 +9,7 @@ namespace Braintree
         public bool? FailOnDuplicatePaymentMethod { get; set; }
         public string VerificationMerchantAccountId { get; set; }
         public string VerificationAmount { get; set; }
+        public string VerificationAccountType { get; set; }
         public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
         public UsBankAccountVerificationMethod UsBankAccountVerificationMethod { get; set; }
 
@@ -27,6 +28,7 @@ namespace Braintree
             return new RequestBuilder(root).
                 AddElement("make-default", MakeDefault).
                 AddElement("verification-merchant-account-id", VerificationMerchantAccountId).
+                AddElement("verification-account-type", VerificationAccountType).
                 AddElement("verify-card", VerifyCard).
                 AddElement("us-bank-account-verification-method", UsBankAccountVerificationMethod).
                 AddElement("verification-amount", VerificationAmount).

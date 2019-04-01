@@ -577,7 +577,7 @@ namespace Braintree.Tests.Integration
             string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
             gateway.CreditCard.FromNonce(nonce);
 
-            Exception exception = null; 
+            Exception exception = null;
             try {
                 gateway.CreditCard.FromNonce(nonce);
             } catch (Exception tempException) {
@@ -997,7 +997,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        
+
         public void CheckDuplicateCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1482,6 +1482,173 @@ namespace Braintree.Tests.Integration
           };
           Result<CreditCard> result = gateway.CreditCard.Create(request);
           Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Create_WithAccountTypeCredit()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "05/12",
+                CVV = "123",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "credit",
+                },
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+            Assert.AreEqual("credit", creditCard.Verification.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Create_WithAccountTypeDebit()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "05/12",
+                CVV = "123",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "debit",
+                },
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+            Assert.AreEqual("debit", creditCard.Verification.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Create_WithErrorAccountTypeIsInvalid()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "05/12",
+                CVV = "123",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "ach",
+                },
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
+            Assert.IsFalse(result.IsSuccess());
+            StringAssert.Contains("Verification account type must be either `credit` or `debit`", result.Message);
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_ACCOUNT_TYPE_IS_INVALID,
+                result.Errors.ForObject("CreditCard").ForObject("Options").OnField("VerificationAccountType")[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_WithErrorAccountTypeNotSupported()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/12",
+                CVV = "123",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationAccountType = "credit",
+                },
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
+            Assert.IsFalse(result.IsSuccess());
+            StringAssert.Contains("Merchant account does not support verification account type", result.Message);
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_ACCOUNT_TYPE_NOT_SUPPORTED,
+                result.Errors.ForObject("CreditCard").ForObject("Options").OnField("VerificationAccountType")[0].Code
+            );
+        }
+
+        [Test]
+        public void Update_WithAccountTypeCredit()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "05/12",
+                CVV = "123",
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "12/05",
+                CVV = "321",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "credit",
+                },
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest).Target;
+            Assert.AreEqual("credit", creditCard.Verification.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Update_WithAccountTypeDebit()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "05/12",
+                CVV = "123",
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "12/05",
+                CVV = "321",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "debit",
+                },
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest).Target;
+            Assert.AreEqual("debit", creditCard.Verification.CreditCard.AccountType);
         }
     }
 }

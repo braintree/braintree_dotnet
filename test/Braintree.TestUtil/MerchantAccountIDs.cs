@@ -11,5 +11,6 @@ namespace Braintree.TestUtil
         public static string US_BANK_MERCHANT_ACCOUNT_ID = "us_bank_merchant_account";
         public static string ANOTHER_US_BANK_MERCHANT_ACCOUNT_ID = "another_us_bank_merchant_account";
         public static string ADYEN_MERCHANT_ACCOUNT_ID = "adyen_ma";
+        public static string BRAZIL_MERCHANT_ACCOUNT_ID = "hiper_brl";
     }
 }

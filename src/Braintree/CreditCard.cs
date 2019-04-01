@@ -159,6 +159,7 @@ namespace Braintree
         public virtual CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
         public virtual CreditCardVerification Verification { get; protected set; }
+        public virtual string AccountType { get; protected set; }
 
         private string _CountryOfIssuance;
 
@@ -258,6 +259,7 @@ namespace Braintree
             Debit = (CreditCardDebit)CollectionUtil.Find(CreditCardDebit.ALL, node.GetString("debit"), CreditCardDebit.UNKNOWN);
             Commercial = (CreditCardCommercial)CollectionUtil.Find(CreditCardCommercial.ALL, node.GetString("commercial"), CreditCardCommercial.UNKNOWN);
             Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, node.GetString("healthcare"), CreditCardHealthcare.UNKNOWN);
+            AccountType = node.GetString("account-type");
             _CountryOfIssuance = node.GetString("country-of-issuance");
             _IssuingBank = node.GetString("issuing-bank");
             _ProductId = node.GetString("product-id");

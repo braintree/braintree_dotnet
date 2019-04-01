@@ -1024,6 +1024,32 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(masterpassCard.UpdatedAt);
         }
 
+        [Test]
+        public void Create_WithAccountTypeCredit()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerifyCard = true,
+                        VerificationMerchantAccountId = "hiper_brl",
+                        VerificationAccountType = "credit",
+                    }
+                }
+            };
+
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            Assert.AreEqual("credit", customer.CreditCards[0].Verification.CreditCard.AccountType);
+        }
+
         #pragma warning disable 0618
         [Test]
         public void ConfirmTransparentRedirect_CreatesTheCustomer()

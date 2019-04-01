@@ -20,6 +20,7 @@ namespace Braintree
         public TransactionOptionsThreeDSecureRequest ThreeDSecure { get; set; }
         public TransactionOptionsAmexRewardsRequest AmexRewards { get; set; }
         public TransactionOptionsVenmoRequest Venmo { get; set; }
+        public TransactionOptionsCreditCardRequest CreditCard { get; set; }
 
         public override string ToXml(string root)
         {
@@ -48,6 +49,7 @@ namespace Braintree
                 AddElement("skip-cvv", SkipCvv).
                 AddElement("three-d-secure", ThreeDSecure).
                 AddElement("paypal", PayPal).
+                AddElement("credit-card", CreditCard).
                 AddElement("amex-rewards", AmexRewards).
                 AddElement("venmo", Venmo);
         }

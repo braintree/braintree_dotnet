@@ -15,7 +15,7 @@ namespace Braintree.Tests.Integration
     public class PaymentMethodIntegrationTest
     {
         private BraintreeGateway gateway;
-        private BraintreeGateway partnerMerchantGateway; 
+        private BraintreeGateway partnerMerchantGateway;
         private BraintreeGateway oauthGateway;
 
         [SetUp]
@@ -43,7 +43,7 @@ namespace Braintree.Tests.Integration
                 "client_secret$development$integration_client_secret"
             );
         }
-        
+
         [Test]
         public void Create_CreatesPayPalAccountWithFuturePaymentNonce()
         {
@@ -64,7 +64,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
         }
-        
+
         [Test]
         public void Create_CreatesPayPalAccountWithOrderPaymentNonce()
         {
@@ -222,7 +222,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOf(typeof(CreditCard), paymentMethodResult.Target);
         }
-        
+
         [Test]
 #if netcore
         public async Task CreateAsync_CreatesCreditCardWithNonce()
@@ -276,7 +276,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethodResult.Target.Token);
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
         }
-        
+
         [Test]
         public void Create_CreatesApplePayCardWithNonce()
         {
@@ -487,7 +487,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethodResult.Target.Token);
             Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
         }
-        
+
         [Test]
         public void Create_CanMakeDefaultAndSetToken()
         {
@@ -649,7 +649,7 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(paypalResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS, paypalResult.Errors.DeepAll().First().Code);
         }
-        
+
         [Test]
         public void Create_AllowsPassingBillingAddressOutsideTheNonce()
         {
@@ -687,7 +687,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(foundCreditCard);
             Assert.AreEqual("123 Abc Way", foundCreditCard.BillingAddress.StreetAddress);
         }
-        
+
         [Test]
         public void Create_OverridesTheBillingAddressInTheNonce()
         {
@@ -766,7 +766,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(foundCreditCard);
             Assert.AreEqual("456 Xyz Way", foundCreditCard.BillingAddress.StreetAddress);
         }
-        
+
         [Test]
         public void Create_IgnoresPassedBillingAddressParamsForPayPal()
         {
@@ -823,7 +823,7 @@ namespace Braintree.Tests.Integration
             var foundPaypalAccount = gateway.PayPalAccount.Find(token);
             Assert.IsNotNull(foundPaypalAccount);
         }
-        
+
         [Test]
         public void Delete_DeletesCreditCard()
         {
@@ -1265,7 +1265,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2011", updatedCreditCard.ExpirationYear);
             Assert.AreEqual("07/2011", updatedCreditCard.ExpirationDate);
         }
-        
+
         [Test]
         public void Update_VerifiesTheUpdateIfOptionsVerifyCardIsTrue()
         {
@@ -1329,7 +1329,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(VerificationStatus.PROCESSOR_DECLINED, updateResult.CreditCardVerification.Status);
             Assert.IsNull(updateResult.CreditCardVerification.GatewayRejectionReason);
         }
-        
+
         [Test]
         public void Update_CanUpdateTheBillingAddress()
         {
@@ -1445,7 +1445,7 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(gateway.CreditCard.Find(card1.Token).IsDefault.Value);
             Assert.IsTrue(gateway.CreditCard.Find(card2.Token).IsDefault.Value);
         }
-        
+
         [Test]
         public void Update_UpdatesPayPalAccountToken()
         {
@@ -1564,6 +1564,77 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("92906", ((int)updatedResult.Errors.DeepAll().First().Code).ToString());
         }
 
+        [Test]
+        public void Update_UpdatesCreditCardWithAccountTypeCredit()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "05/2012"
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    CVV = "456",
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "06/2013",
+                    Options = new PaymentMethodOptionsRequest()
+                    {
+                        VerifyCard = true,
+                        VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                        VerificationAccountType = "credit",
+                    },
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOf(typeof(CreditCard)));
+
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("credit", updatedCreditCard.Verification.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Update_UpdatesCreditCardWithAccountTypeDebit()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.HIPER,
+                ExpirationDate = "05/2012"
+            }).Target;
+
+            var updateResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    CVV = "456",
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "06/2013",
+                    Options = new PaymentMethodOptionsRequest()
+                    {
+                        VerifyCard = true,
+                        VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                        VerificationAccountType = "debit",
+                    },
+                });
+
+            Assert.IsTrue(updateResult.IsSuccess());
+            Assert.That(updateResult.Target, Is.InstanceOf(typeof(CreditCard)));
+
+            var updatedCreditCard = (CreditCard)updateResult.Target;
+            Assert.AreEqual("debit", updatedCreditCard.Verification.CreditCard.AccountType);
+        }
 
         [Test]
         public void PaymentMethodGrantAndRevoke()
@@ -1592,6 +1663,142 @@ namespace Braintree.Tests.Integration
 
             Result<PaymentMethod> revokeResult = accessTokenGateway.PaymentMethod.Revoke(token);
             Assert.IsTrue(revokeResult.IsSuccess());
+        }
+
+        [Test]
+        public void Create_CreatesWithAccountTypeCredit()
+        {
+            string nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", SandboxValues.CreditCardNumber.HIPER },
+                    { "expiration_date", "05/2012" }
+                },
+                isCreditCard : true
+            );
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+            Console.WriteLine("after customer create");
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "credit",
+                },
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            var creditCard = (CreditCard)paymentMethodResult.Target;
+            Assert.AreEqual("credit", creditCard.Verification.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Create_CreatesWithAccountTypeDebit()
+        {
+            string nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", SandboxValues.CreditCardNumber.HIPER },
+                    { "expiration_date", "05/2012" }
+                },
+                isCreditCard : true
+            );
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "debit",
+                },
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            var creditCard = (CreditCard)paymentMethodResult.Target;
+            Assert.AreEqual("debit", creditCard.Verification.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Create_CreatesWithErrorAccountTypeInvalid()
+        {
+            string nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", SandboxValues.CreditCardNumber.HIPER },
+                    { "expiration_date", "05/2012" }
+                },
+                isCreditCard : true
+            );
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationAccountType = "ach",
+                },
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsFalse(paymentMethodResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_ACCOUNT_TYPE_IS_INVALID,
+                paymentMethodResult.Errors.ForObject("CreditCard").ForObject("Options").OnField("VerificationAccountType")[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_CreatesWithErrorAccountTypeNotSupported()
+        {
+            string nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", SandboxValues.CreditCardNumber.VISA },
+                    { "expiration_date", "05/2012" }
+                },
+                isCreditCard : true
+            );
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationAccountType = "credit",
+                },
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsFalse(paymentMethodResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_ACCOUNT_TYPE_NOT_SUPPORTED,
+                paymentMethodResult.Errors.ForObject("CreditCard").ForObject("Options").OnField("VerificationAccountType")[0].Code
+            );
         }
     }
 }

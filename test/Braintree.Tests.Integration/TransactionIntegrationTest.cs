@@ -2668,7 +2668,7 @@ namespace Braintree.Tests.Integration
         {
             var request = new TransactionRequest
             {
-                MerchantAccountId = "adyen_ma",
+                MerchantAccountId = "heartland_ma",
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
@@ -4713,6 +4713,147 @@ namespace Braintree.Tests.Integration
                 ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_CARD_TYPE_IS_INVALID,
                 result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("PreviousNetworkTransactionId")[0].Code
             );
+        }
+
+        [Test]
+        public void Sale_HiperWithAccountTypeCredit_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    CreditCard = new TransactionOptionsCreditCardRequest
+                    {
+                        AccountType = "credit"
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual("credit", transaction.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Sale_HiperWithAccountTypeDebit_ReturnsSuccessfulResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    CreditCard = new TransactionOptionsCreditCardRequest
+                    {
+                        AccountType = "debit"
+                    },
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual("debit", transaction.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Sale_HiperWithAccountType_ReturnsErrorAccountTypeInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    CreditCard = new TransactionOptionsCreditCardRequest
+                    {
+                        AccountType = "ach"
+                    }
+                }
+            };
+
+          Result<Transaction> result = gateway.Transaction.Sale(request);
+          Assert.IsFalse(result.IsSuccess());
+          Assert.AreEqual(
+              ValidationErrorCode.TRANSACTION_OPTIONS_CREDIT_CARD_ACCOUNT_TYPE_IS_INVALID,
+              result.Errors.ForObject("Transaction").ForObject("Options").ForObject("CreditCard").OnField("AccountType")[0].Code
+          );
+        }
+
+        [Test]
+        public void Sale_HiperWithAccountType_ReturnsErrorAccountTypeNotSupported()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    CreditCard = new TransactionOptionsCreditCardRequest
+                    {
+                        AccountType = "credit"
+                    }
+                }
+            };
+
+          Result<Transaction> result = gateway.Transaction.Sale(request);
+          Assert.IsFalse(result.IsSuccess());
+          Assert.AreEqual(
+              result.Errors.ForObject("Transaction").ForObject("Options").ForObject("CreditCard").OnField("AccountType")[0].Code,
+              ValidationErrorCode.TRANSACTION_OPTIONS_CREDIT_CARD_ACCOUNT_TYPE_NOT_SUPPORTED
+          );
+        }
+
+        [Test]
+        public void Sale_HiperWithAccountType_ReturnsErrorAccountDebitDoesNotSupportAuths()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    CreditCard = new TransactionOptionsCreditCardRequest
+                    {
+                        AccountType = "debit"
+                    }
+                }
+            };
+
+          Result<Transaction> result = gateway.Transaction.Sale(request);
+          Assert.IsFalse(result.IsSuccess());
+          Assert.AreEqual(
+              result.Errors.ForObject("Transaction").ForObject("Options").ForObject("CreditCard").OnField("AccountType")[0].Code,
+              ValidationErrorCode.TRANSACTION_OPTIONS_CREDIT_CARD_ACCOUNT_TYPE_DEBIT_DOES_NOT_SUPPORT_AUTHS
+          );
         }
 
      [Test]
