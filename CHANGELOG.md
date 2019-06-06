@@ -1,4 +1,24 @@
+## 4.12.0
+
+- Add `token_issuance` gateway rejected status to support Venmo transactions
+- Add `payment_method_nonce` field to `LocalPaymentCompleted` webhook
+- Add `transaction` field to `LocalPaymentCompleted` webhook
+- Add `LocalPaymentDetails` to transactions
+- Add `RoomTax` field to `IndustryDataRequest`
+- Add `NoShow` field to `IndustryDataRequest`
+- Add `AdvancedDeposit` field to `IndustryDataRequest`
+- Add `FireSafe` field to `IndustryDataRequest`
+- Add `PropertyPhone` field to `IndustryDataRequest`
+- Add `AdditionalChargeRequest` class and add `AdditionalCharges` field to `IndustryDataRequest`
+- Add `PostalCodeIsRequiredForCardBrandAndProcessor` to validation errors
+- Resolve an issue when building the project in some configurations
+- Add `RefundFromTransactionFeeAmount` field to `PayPalDetails`
+- Add `RefundFromTransactionFeeCurrencyIsoCode` field to `PayPalDetails`
+- Add `RevokedAt` field to `PayPalAccount`
+- Add support for `PAYMENT_METHOD_REVOKED_BY_CUSTOMER` webhook
+
 ## 4.11.0
+
 - Add `AccountType` field to `Transaction`, `CreditCard`, `PaymentMethod`, and `CreditCardVerification`
 
 ## 4.10.1
@@ -6,6 +26,7 @@
 - Resolve an issue with `PackageReleaseNotes` in `Braintree.csproj` that prevented building the project
 
 ## 4.10.0
+
 - Deprecate `GRANTED_PAYMENT_INSTRUMENT_UPDATE` and add `GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD` and `RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD`
 - Add `Prepaid` field to `ApplePayDetails`
 - Add `Healthcare` field to `ApplePayDetails`

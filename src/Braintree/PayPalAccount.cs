@@ -14,6 +14,7 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual Subscription[] Subscriptions { get; protected set; }
+        public virtual DateTime? RevokedAt { get; protected set; }
 
         protected internal PayPalAccount(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -33,6 +34,8 @@ namespace Braintree
             {
                 Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
+
+            RevokedAt = node.GetDateTime("revoked-at");
         }
 
         [Obsolete("Mock Use Only")]

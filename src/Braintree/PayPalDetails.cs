@@ -22,6 +22,8 @@ namespace Braintree
         public virtual string RefundId { get; protected set; }
         public virtual string TransactionFeeAmount { get; protected set; }
         public virtual string TransactionFeeCurrencyIsoCode { get; protected set; }
+        public virtual string RefundFromTransactionFeeAmount { get; protected set; }
+        public virtual string RefundFromTransactionFeeCurrencyIsoCode { get; protected set; }
         public virtual string Description { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
@@ -44,6 +46,8 @@ namespace Braintree
             RefundId = node.GetString("refund-id");
             TransactionFeeAmount = node.GetString("transaction-fee-amount");
             TransactionFeeCurrencyIsoCode = node.GetString("transaction-fee-currency-iso-code");
+            RefundFromTransactionFeeAmount = node.GetString("refund-from-transaction-fee-amount");
+            RefundFromTransactionFeeCurrencyIsoCode = node.GetString("refund-from-transaction-fee-currency-iso-code");
             Description = node.GetString("description");
         }
 

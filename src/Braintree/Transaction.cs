@@ -14,10 +14,11 @@ namespace Braintree
         public static readonly TransactionGatewayRejectionReason DUPLICATE = new TransactionGatewayRejectionReason("duplicate");
         public static readonly TransactionGatewayRejectionReason FRAUD = new TransactionGatewayRejectionReason("fraud");
         public static readonly TransactionGatewayRejectionReason THREE_D_SECURE = new TransactionGatewayRejectionReason("three_d_secure");
+        public static readonly TransactionGatewayRejectionReason TOKEN_ISSUANCE = new TransactionGatewayRejectionReason("token_issuance");
         public static readonly TransactionGatewayRejectionReason UNRECOGNIZED = new TransactionGatewayRejectionReason("unrecognized");
 
         public static readonly TransactionGatewayRejectionReason[] ALL = {
-            APPLICATION_INCOMPLETE, AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, UNRECOGNIZED
+            APPLICATION_INCOMPLETE, AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, TOKEN_ISSUANCE, UNRECOGNIZED
         };
 
         protected TransactionGatewayRejectionReason(string name) : base(name) {}
@@ -122,11 +123,14 @@ namespace Braintree
         public static readonly PaymentInstrumentType VISA_CHECKOUT_CARD = new PaymentInstrumentType("visa_checkout_card");
         public static readonly PaymentInstrumentType MASTERPASS_CARD = new PaymentInstrumentType("masterpass_card");
         public static readonly PaymentInstrumentType SAMSUNG_PAY_CARD = new PaymentInstrumentType("samsung_pay_card");
+        public static readonly PaymentInstrumentType LOCAL_PAYMENT = new PaymentInstrumentType("local_payment");
+        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+        // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
         public static readonly PaymentInstrumentType IDEAL_PAYMENT = new PaymentInstrumentType("ideal_payment");
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
 
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, IDEAL_PAYMENT, ANY, UNKNOWN };
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, IDEAL_PAYMENT, LOCAL_PAYMENT, ANY, UNKNOWN };
 
         protected PaymentInstrumentType(string name) : base(name) {}
     }
@@ -196,9 +200,12 @@ namespace Braintree
         public virtual AndroidPayDetails AndroidPayDetails { get; protected set; }
         public virtual AmexExpressCheckoutDetails AmexExpressCheckoutDetails { get; protected set; }
         public virtual PayPalDetails PayPalDetails { get; protected set; }
+        public virtual LocalPaymentDetails LocalPaymentDetails { get; protected set; }
         public virtual CoinbaseDetails CoinbaseDetails { get; protected set; }
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
         public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
+        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+        // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
         public virtual IdealPaymentDetails IdealPaymentDetails { get; protected set; }
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
         public virtual MasterpassCardDetails MasterpassCardDetails { get; protected set; }
@@ -280,18 +287,43 @@ namespace Braintree
             TaxAmount = node.GetDecimal("tax-amount");
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
-            CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);
-            SubscriptionDetails = new SubscriptionDetails(node.GetNode("subscription"));
-            CustomerDetails = new CustomerDetails(node.GetNode("customer"), gateway);
+            var creditCardNode = node.GetNode("credit-card");
+            if (creditCardNode != null)
+            {
+                CreditCard = new CreditCard(creditCardNode, gateway);
+            }
+            var subscriptionNode = node.GetNode("subscription");
+            if (subscriptionNode != null)
+            {
+                SubscriptionDetails = new SubscriptionDetails(subscriptionNode);
+            }
+            var customerNode = node.GetNode("customer");
+            if (customerNode != null)
+            {
+                CustomerDetails = new CustomerDetails(customerNode, gateway);
+            }
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
-            Descriptor = new Descriptor(node.GetNode("descriptor"));
+            var descriptorNode = node.GetNode("descriptor");
+            if (descriptorNode != null)
+            {
+                Descriptor = new Descriptor(descriptorNode);
+            }
             ServiceFeeAmount = node.GetDecimal("service-fee-amount");
-            DisbursementDetails = new DisbursementDetails(node.GetNode("disbursement-details"));
+            var disbursementDetailsNode = node.GetNode("disbursement-details");
+            if (disbursementDetailsNode != null)
+            {
+                DisbursementDetails = new DisbursementDetails(disbursementDetailsNode);
+            }
             var paypalNode = node.GetNode("paypal");
             if (paypalNode != null)
             {
                 PayPalDetails = new PayPalDetails(paypalNode);
+            }
+            var localPaymentNode = node.GetNode("local-payment");
+            if (localPaymentNode != null)
+            {
+                LocalPaymentDetails = new LocalPaymentDetails(localPaymentNode);
             }
             var coinbaseNode = node.GetNode("coinbase-account");
             if (coinbaseNode != null)
@@ -323,6 +355,8 @@ namespace Braintree
             {
                 UsBankAccountDetails = new UsBankAccountDetails(usBankAccountNode);
             }
+            // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+            // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
             var idealPaymentNode = node.GetNode("ideal-payment");
             if (idealPaymentNode != null)
             {
@@ -344,8 +378,16 @@ namespace Braintree
                 SamsungPayCardDetails = new SamsungPayCardDetails(samsungPayNode);
             }
 
-            BillingAddress = new Address(node.GetNode("billing"));
-            ShippingAddress = new Address(node.GetNode("shipping"));
+            var billingAddressNode = node.GetNode("billing");
+            if (billingAddressNode != null)
+            {
+                BillingAddress = new Address(billingAddressNode);
+            }
+            var shippingAddressNode = node.GetNode("shipping");
+            if (shippingAddressNode != null)
+            {
+                ShippingAddress = new Address(shippingAddressNode);
+            }
 
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");

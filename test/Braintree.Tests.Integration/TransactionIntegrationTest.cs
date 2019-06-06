@@ -385,6 +385,30 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Search_PaymentInstrumentTypeIsLocalPayment()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.LocalPayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                PaymentInstrumentType.Is("LocalPaymentDetail");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(collection.FirstItem.PaymentInstrumentType, PaymentInstrumentType.LOCAL_PAYMENT);
+        }
+
+        [Test]
         public void Search_PaymentInstrumentTypeIsApplePay()
         {
             TransactionRequest request = new TransactionRequest
@@ -1576,55 +1600,6 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_PAYMENT_METHOD_NONCE_UNKNOWN, result.Errors.ForObject("Transaction").OnField("PaymentMethodNonce")[0].Code);
-        }
-
-        [Test]
-        public void Sale_ReturnsSuccessfulResponseWithIdealPayment()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                MerchantAccountId = "ideal_merchant_account",
-                PaymentMethodNonce = TestHelper.GenerateValidIdealPaymentId(gateway),
-                OrderId = "ABC123",
-                Options = new TransactionOptionsRequest
-                {
-                    SubmitForSettlement = true
-                }
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-            Assert.AreEqual(TransactionStatus.SETTLED, transaction.Status);
-            Assert.AreEqual(PaymentInstrumentType.IDEAL_PAYMENT, transaction.PaymentInstrumentType);
-
-            IdealPaymentDetails idealPaymentDetails = transaction.IdealPaymentDetails;
-            Assert.IsTrue(Regex.IsMatch(idealPaymentDetails.IdealPaymentId, "^idealpayment_\\w{6,}$"));
-            Assert.IsTrue(Regex.IsMatch(idealPaymentDetails.IdealTransactionId, "^\\d{16,}$"));
-            Assert.IsTrue(idealPaymentDetails.ImageUrl.StartsWith("https://"));
-            Assert.IsNotNull(idealPaymentDetails.MaskedIban);
-            Assert.IsNotNull(idealPaymentDetails.Bic);
-        }
-
-        [Test]
-        public void Sale_ReturnsFailureResponseWithNotCompleteIdealPayment()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = 3.00m,
-                MerchantAccountId = "ideal_merchant_account",
-                PaymentMethodNonce = TestHelper.GenerateValidIdealPaymentId(gateway, 3.00m),
-                OrderId = "ABC123",
-                Options = new TransactionOptionsRequest
-                {
-                    SubmitForSettlement = true
-                }
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_IDEAL_PAYMENT_NOT_COMPLETE, result.Errors.ForObject("Transaction").OnField("PaymentMethodNonce")[0].Code);
         }
 
         [Test]
@@ -3191,6 +3166,24 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_GatewayRejectedForTokenIssuance()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_VENMO_ACCOUNT_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = Nonce.GatewayRejectedTokenIssuance
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            TestContext.WriteLine(transaction.GatewayRejectionReason);
+            Assert.AreEqual(TransactionGatewayRejectionReason.TOKEN_ISSUANCE, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
         public void Sale_WithCustomFields()
         {
             TransactionRequest request = new TransactionRequest
@@ -4081,7 +4074,25 @@ namespace Braintree.Tests.Integration
                         FolioNumber = "aaa",
                         CheckInDate = "2014-07-07",
                         CheckOutDate = "2014-08-08",
-                        RoomRate = "239.00"
+                        RoomRate = 239.00M,
+                        RoomTax = 35.00M,
+                        NoShow = false,
+                        AdvancedDeposit = false,
+                        FireSafe = true,
+                        PropertyPhone = "1112223345",
+                        AdditionalCharges = new IndustryDataAdditionalChargeRequest[]
+                        {
+                            new IndustryDataAdditionalChargeRequest
+                            {
+                                AdditionalChargeKind = IndustryDataAdditionalChargeKind.MINI_BAR,
+                                Amount = 33.78M
+                            },
+                            new IndustryDataAdditionalChargeRequest
+                            {
+                                AdditionalChargeKind = IndustryDataAdditionalChargeKind.OTHER,
+                                Amount = 200.11M
+                            }
+                        }
                     }
                 }
             };
@@ -4109,7 +4120,14 @@ namespace Braintree.Tests.Integration
                         FolioNumber = "aaa",
                         CheckInDate = "2014-07-07",
                         CheckOutDate = "2014-06-06",
-                        RoomRate = "239.00"
+                        AdditionalCharges = new IndustryDataAdditionalChargeRequest[]
+                        {
+                            new IndustryDataAdditionalChargeRequest
+                            {
+                                AdditionalChargeKind = IndustryDataAdditionalChargeKind.OTHER,
+                                Amount = 0M
+                            }
+                        }
                     }
                 }
             };
@@ -4120,6 +4138,11 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(
                 ValidationErrorCode.INDUSTRY_DATA_LODGING_CHECK_OUT_DATE_MUST_FOLLOW_CHECK_IN_DATE,
                 result.Errors.ForObject("Transaction").ForObject("Industry").OnField("CheckOutDate")[0].Code
+            );
+
+            Assert.AreEqual(
+                ValidationErrorCode.INDUSTRY_DATA_ADDITIONAL_CHARGE_AMOUNT_MUST_BE_GREATER_THAN_ZERO,
+                result.Errors.ForObject("Transaction").ForObject("Industry").ForObject("AdditionalCharges").ForObject("index_0").OnField("Amount")[0].Code
             );
         }
 
@@ -8313,6 +8336,25 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void CreateTransaction_WithLocalPaymentNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.LocalPayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.PaymentId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.PayerId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.FundingSource);
+        }
+
+        [Test]
         public void CreateTransaction_WithLocalPaymentWebhookContent()
         {
             TransactionRequest request = new TransactionRequest
@@ -8699,6 +8741,8 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.PayPalDetails.RefundId);
             Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeAmount);
             Assert.IsNotNull(transaction.PayPalDetails.TransactionFeeCurrencyIsoCode);
+            Assert.IsNotNull(transaction.PayPalDetails.RefundFromTransactionFeeAmount);
+            Assert.IsNotNull(transaction.PayPalDetails.RefundFromTransactionFeeCurrencyIsoCode);
         }
 
         [Test]

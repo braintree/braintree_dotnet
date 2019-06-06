@@ -131,6 +131,41 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void RecognizesTokenIssuanceGatewayRejectReason()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <id></id>\n" +
+                "  <status></status>\n" +
+                "  <type>sale</type>\n" +
+                "  <customer></customer>\n" +
+                "  <billing></billing>\n" +
+                "  <shipping></shipping>\n" +
+                "  <custom-fields/>\n" +
+                "  <gateway-rejection-reason>token_issuance</gateway-rejection-reason>\n" +
+                "  <credit-card></credit-card>\n" +
+                "  <status-history type=\"array\"></status-history>\n" +
+                "  <subscription></subscription>\n" +
+                "  <descriptor></descriptor>\n" +
+                "  <escrow-status></escrow-status>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <payment-instrument-type>credit_card</payment-instrument-type>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.TOKEN_ISSUANCE, transaction.GatewayRejectionReason);
+            Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
+            Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
+        }
+
+        [Test]
         public void DeserializesLevel3SummaryFieldsFromXml()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

@@ -83,8 +83,12 @@ namespace Braintree
                 return CheckSampleXml();
             } else if (kind == WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT) {
                 return AccountUpdaterDailyReportSampleXml(id);
+                // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+                // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
             } else if (kind == WebhookKind.IDEAL_PAYMENT_COMPLETE) {
                 return IdealPaymentCompleteSampleXml(id);
+                // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+                // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
             } else if (kind == WebhookKind.IDEAL_PAYMENT_FAILED) {
                 return IdealPaymentFailedSampleXml(id);
             } else if (kind == WebhookKind.GRANTED_PAYMENT_INSTRUMENT_UPDATE) {
@@ -94,6 +98,8 @@ namespace Braintree
                 return GrantedPaymentInstrumentUpdateSampleXml();
             } else if (kind == WebhookKind.RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD) {
                 return GrantedPaymentInstrumentUpdateSampleXml();
+            } else if (kind == WebhookKind.PAYMENT_METHOD_REVOKED_BY_CUSTOMER) {
+                return PaymentMethodRevokedByCustomerSampleXml(id);
             } else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
                 return LocalPaymentCompletedSampleXml();
             } else {
@@ -102,6 +108,7 @@ namespace Braintree
         }
 
         private static readonly string TYPE_DATE = "type=\"date\"";
+        private static readonly string TYPE_DATE_TIME = "type=\"datetime\"";
         private static readonly string TYPE_ARRAY = "type=\"array\"";
         private static readonly string TYPE_SYMBOL = "type=\"symbol\"";
         private static readonly string NIL_TRUE = "nil=\"true\"";
@@ -434,6 +441,7 @@ namespace Braintree
             );
         }
 
+        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
         private string IdealPaymentCompleteSampleXml(string id) {
             return Node("ideal-payment",
                     Node("id", id),
@@ -448,6 +456,7 @@ namespace Braintree
             );
         }
 
+        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
         private string IdealPaymentFailedSampleXml(string id) {
             return Node("ideal-payment",
                     Node("id", id),
@@ -479,10 +488,36 @@ namespace Braintree
             );
         }
 
+        private static string PaymentMethodRevokedByCustomerSampleXml(string id) {
+            return Node("paypal-account",
+                    Node("billing-agreement-id", "a-billing-agreement-id"),
+                    NodeAttr("created-at", TYPE_DATE_TIME, "2019-01-01T12:00:00Z"),
+                    Node("customer-id", "a-customer-id"),
+                    NodeAttr("default", TYPE_BOOLEAN, "true"),
+                    Node("email", "name@email.com"),
+                    Node("global-id", "cGF5bWVudG1ldGhvZF9jaDZieXNz"),
+                    Node("image-url", "https://assets.braintreegateway.com/payment_method_logo/paypal.png?environment=test"),
+                    Node("token", id),
+                    NodeAttr("updated-at", TYPE_DATE_TIME, "2019-01-02T12:00:00Z"),
+                    Node("is-channel-initiated", NIL_TRUE, ""),
+                    Node("payer-id", "a-payer-id"),
+                    Node("payer-info", NIL_TRUE, ""),
+                    Node("limited-use-order-id", NIL_TRUE, ""),
+                    NodeAttr("revoked-at", TYPE_DATE_TIME, "2019-01-02T12:00:00Z")
+                );
+        }
+
         private static string LocalPaymentCompletedSampleXml() {
             return Node("local-payment",
                     Node("payment-id", "a-payment-id"),
-                    Node("payer-id", "a-payer-id")
+                    Node("payer-id", "a-payer-id"),
+                    Node("payment-method-nonce", "ee257d98-de40-47e8-96b3-a6954ea7a9a4"),
+                    Node("transaction",
+                        Node("id", "1"),
+                        Node("status", "authorizing"),
+                        Node("amount", "10.00"),
+                        Node("order-id", "order1234")
+                        )
             );
         }
 

@@ -9,7 +9,8 @@ namespace Braintree
         public string FolioNumber { get; set; }
         public string CheckInDate { get; set; }
         public string CheckOutDate { get; set; }
-        public string RoomRate { get; set; }
+        public Decimal RoomRate { get; set; }
+        public decimal? RoomTax { get; set; }
 
         public string TravelPackage { get; set; }
         public string DepartureDate { get; set; }
@@ -31,7 +32,13 @@ namespace Braintree
         public decimal? FeeAmount { get; set; }
         public decimal? TaxAmount { get; set; }
         public bool? RestrictedTicket { get; set; }
+        public bool? NoShow { get; set; }
+        public bool? AdvancedDeposit { get; set; }
+        public bool? FireSafe { get; set; }
+        public string PropertyPhone { get; set; }
+
         public IndustryDataLegRequest[] Legs { get; set; }
+        public IndustryDataAdditionalChargeRequest[] AdditionalCharges { get; set; }
 
         public override string ToXml()
         {
@@ -59,7 +66,6 @@ namespace Braintree
                 AddElement("lodging-check-in-date", LodgingCheckInDate).
                 AddElement("lodging-check-out-date", LodgingCheckOutDate).
                 AddElement("lodging-name", LodgingName).
-                AddElement("room-rate", RoomRate).
                 AddElement("passenger-first-name", PassengerFirstName).
                 AddElement("passenger-last-name", PassengerLastName).
                 AddElement("passenger-middle-initial", PassengerMiddleInitial).
@@ -68,8 +74,13 @@ namespace Braintree
                 AddElement("travel-agency-code", TravelAgencyCode).
                 AddElement("ticket-number", TicketNumber).
                 AddElement("issuing-carrier-code", IssuingCarrierCode).
-                AddElement("customer-code", CustomerCode);
+                AddElement("customer-code", CustomerCode).
+                AddElement("property-phone", PropertyPhone);
 
+            if (RoomRate != null)
+                builder.AddElement("room-rate", RoomRate.ToString());
+            if (RoomTax != null)
+                builder.AddElement("room-tax", RoomTax.ToString());
             if (IssuedDate != null)
                 builder.AddElement("issued-date", IssuedDate);
             if (FareAmount != null)
@@ -80,8 +91,16 @@ namespace Braintree
                 builder.AddElement("tax-amount", TaxAmount);
             if (RestrictedTicket != null)
                 builder.AddElement("restricted-ticket", RestrictedTicket);
+            if (NoShow != null)
+                builder.AddElement("no-show", NoShow);
+            if (AdvancedDeposit != null)
+                builder.AddElement("advanced-deposit", AdvancedDeposit);
+            if (FireSafe != null)
+                builder.AddElement("fire-safe", FireSafe);
             if (Legs != null)
                 builder.AddElement("legs", Legs);
+            if (AdditionalCharges != null)
+                builder.AddElement("additional-charges", AdditionalCharges);
             return builder;
         }
     }

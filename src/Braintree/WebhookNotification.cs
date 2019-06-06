@@ -32,6 +32,8 @@ namespace Braintree
         public static readonly WebhookKind DISPUTE_LOST = new WebhookKind("dispute_lost");
         public static readonly WebhookKind DISPUTE_WON = new WebhookKind("dispute_won");
         public static readonly WebhookKind ACCOUNT_UPDATER_DAILY_REPORT = new WebhookKind("account_updater_daily_report");
+        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+        // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
         public static readonly WebhookKind IDEAL_PAYMENT_COMPLETE = new WebhookKind("ideal_payment_complete");
         public static readonly WebhookKind IDEAL_PAYMENT_FAILED = new WebhookKind("ideal_payment_failed");
         // NEXT_MAJOR_VERSION remove GRANTED_PAYMENT_INSTRUMENT_UPDATE
@@ -39,6 +41,7 @@ namespace Braintree
         public static readonly WebhookKind GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD = new WebhookKind("grantor_updated_granted_payment_method");
         public static readonly WebhookKind RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD = new WebhookKind("recipient_updated_granted_payment_method");
         public static readonly WebhookKind GRANTED_PAYMENT_METHOD_REVOKED = new WebhookKind("granted_payment_method_revoked");
+        public static readonly WebhookKind PAYMENT_METHOD_REVOKED_BY_CUSTOMER = new WebhookKind("payment_method_revoked_by_customer");
         public static readonly WebhookKind LOCAL_PAYMENT_COMPLETED = new WebhookKind("local_payment_completed");
 
         public static readonly WebhookKind[] ALL = {
@@ -67,6 +70,8 @@ namespace Braintree
             DISPUTE_LOST,
             DISPUTE_WON,
             ACCOUNT_UPDATER_DAILY_REPORT,
+            // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+            // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
             IDEAL_PAYMENT_COMPLETE,
             IDEAL_PAYMENT_FAILED,
             // NEXT_MAJOR_VERSION remove GRANTED_PAYMENT_INSTRUMENT_UPDATE. Kind is not sent by Braintree Gateway.
@@ -75,6 +80,7 @@ namespace Braintree
             GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD,
             RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD,
             GRANTED_PAYMENT_METHOD_REVOKED,
+            PAYMENT_METHOD_REVOKED_BY_CUSTOMER,
             LOCAL_PAYMENT_COMPLETED
         };
 
@@ -97,6 +103,8 @@ namespace Braintree
         public virtual ConnectedMerchantStatusTransitioned ConnectedMerchantStatusTransitioned { get; protected set; }
         public virtual ConnectedMerchantPayPalStatusChanged ConnectedMerchantPayPalStatusChanged { get; protected set; }
         public virtual AccountUpdaterDailyReport AccountUpdaterDailyReport { get; protected set; }
+        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+        // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
         public virtual IdealPayment IdealPayment { get; protected set; }
         public virtual GrantedPaymentInstrumentUpdate GrantedPaymentInstrumentUpdate { get; protected set; }
         public virtual RevokedPaymentMethodMetadata RevokedPaymentMethodMetadata { get; protected set; }
@@ -171,6 +179,8 @@ namespace Braintree
                 AccountUpdaterDailyReport = new AccountUpdaterDailyReport(WrapperNode.GetNode("account-updater-daily-report"));
             }
 
+            // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
+            // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
             if (WrapperNode.GetNode("ideal-payment") != null)
             {
                 IdealPayment = new IdealPayment(WrapperNode.GetNode("ideal-payment"));
@@ -181,7 +191,7 @@ namespace Braintree
                 GrantedPaymentInstrumentUpdate = new GrantedPaymentInstrumentUpdate(WrapperNode.GetNode("granted-payment-instrument-update"));
             }
 
-            if (Kind == WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED)
+            if (Kind == WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED || Kind == WebhookKind.PAYMENT_METHOD_REVOKED_BY_CUSTOMER)
             {
                 RevokedPaymentMethodMetadata = new RevokedPaymentMethodMetadata(WrapperNode, gateway);
             }
@@ -198,7 +208,7 @@ namespace Braintree
 
             if (WrapperNode.GetNode("local-payment") != null)
             {
-                LocalPaymentCompleted = new LocalPaymentCompleted(WrapperNode.GetNode("local-payment"));
+                LocalPaymentCompleted = new LocalPaymentCompleted(WrapperNode.GetNode("local-payment"), gateway);
             }
         }
 

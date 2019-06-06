@@ -63,6 +63,8 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
             Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
             Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
+            PayPalAccount paypalAccount = (PayPalAccount) paymentMethodResult.Target;
+            Assert.IsNull(paypalAccount.RevokedAt);
         }
 
         [Test]

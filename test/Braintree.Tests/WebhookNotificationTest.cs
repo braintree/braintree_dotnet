@@ -401,42 +401,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SampleNotification_ReturnsANotificationForIdealPaymentComplete()
-        {
-          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.IDEAL_PAYMENT_COMPLETE, "my_id");
-
-          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
-
-          Assert.AreEqual(WebhookKind.IDEAL_PAYMENT_COMPLETE, notification.Kind);
-          IdealPayment idealPayment = notification.IdealPayment;
-
-          Assert.AreEqual("my_id", idealPayment.Id);
-          Assert.AreEqual("COMPLETE", idealPayment.Status);
-          Assert.AreEqual("ORDERABC", idealPayment.OrderId);
-          Assert.AreEqual(10.00m, idealPayment.Amount);
-          Assert.AreEqual("https://example.com", idealPayment.ApprovalUrl);
-          Assert.AreEqual("1234567890", idealPayment.IdealTransactionId);
-        }
-
-        [Test]
-        public void SampleNotification_ReturnsANotificationForIdealPaymentFailed()
-        {
-          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.IDEAL_PAYMENT_FAILED, "my_id");
-
-          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
-
-          Assert.AreEqual(WebhookKind.IDEAL_PAYMENT_FAILED, notification.Kind);
-          IdealPayment idealPayment = notification.IdealPayment;
-
-          Assert.AreEqual("my_id", idealPayment.Id);
-          Assert.AreEqual("FAILED", idealPayment.Status);
-          Assert.AreEqual("ORDERABC", idealPayment.OrderId);
-          Assert.AreEqual(10.00m, idealPayment.Amount);
-          Assert.AreEqual("https://example.com", idealPayment.ApprovalUrl);
-          Assert.AreEqual("1234567890", idealPayment.IdealTransactionId);
-        }
-
-        [Test]
         public void SampleNotification_ReturnsANotificationForGrantorUpdatedGrantedPaymentMethod()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD, "my_id");
@@ -603,6 +567,22 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForPaymentMethodRevokedByCustomer()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PAYMENT_METHOD_REVOKED_BY_CUSTOMER, "my_payment_method_token");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.PAYMENT_METHOD_REVOKED_BY_CUSTOMER, notification.Kind);
+          RevokedPaymentMethodMetadata metadata = notification.RevokedPaymentMethodMetadata;
+
+          Assert.AreEqual("my_payment_method_token", metadata.Token);
+          Assert.IsTrue(metadata.RevokedPaymentMethod is PayPalAccount);
+          PayPalAccount paypalAccount = (PayPalAccount) metadata.RevokedPaymentMethod;
+          Assert.IsNotNull(paypalAccount.RevokedAt);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForLocalPaymentCompleted()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.LOCAL_PAYMENT_COMPLETED, "my_id");
@@ -614,6 +594,8 @@ namespace Braintree.Tests
 
           Assert.AreEqual("a-payment-id", localPayment.PaymentId);
           Assert.AreEqual("a-payer-id", localPayment.PayerId);
+          Assert.AreEqual("ee257d98-de40-47e8-96b3-a6954ea7a9a4", localPayment.PaymentMethodNonce);
+          Assert.NotNull(localPayment.Transaction);
         }
 
         [Test]
