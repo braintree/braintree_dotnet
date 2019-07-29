@@ -42,12 +42,12 @@ namespace :core do
   end
 
   namespace :test_focus do
-    desc "e.g. rake core2:test_focus:unit[ToXml_IncludesDeviceData]"
+    desc "e.g. rake core:test_focus:unit[ToXml_IncludesDeviceData]"
     task :unit, [:test_name] => [:compile] do |t, args|
       sh "dotnet test #{use_verbose_mode} --filter Name~#{args[:test_name]} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp1.0"
     end
 
-    desc "e.g. rake core2:test_focus:integration[Delete_DeletesPayPalAccount]"
+    desc "e.g. rake core:test_focus:integration[Delete_DeletesPayPalAccount]"
     task :integration, [:test_name] => [:compile] do |t, args|
       sh "dotnet test #{use_verbose_mode} --filter Name~#{args[:test_name]} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp1.0"
     end

@@ -119,12 +119,16 @@ namespace Braintree.Tests.Integration
             PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(nonce);
             ThreeDSecureInfo info = foundNonce.ThreeDSecureInfo;
 
-            Assert.AreEqual(foundNonce.Nonce, nonce);
-            Assert.AreEqual(foundNonce.Type, "CreditCard");
-            Assert.AreEqual(info.Enrolled, "Y");
-            Assert.AreEqual(info.Status, "authenticate_successful");
-            Assert.AreEqual(info.LiabilityShifted, true);
-            Assert.AreEqual(info.LiabilityShiftPossible, true);
+            Assert.AreEqual(nonce, foundNonce.Nonce);
+            Assert.AreEqual("CreditCard", foundNonce.Type);
+            Assert.AreEqual("Y", info.Enrolled);
+            Assert.AreEqual("authenticate_successful", info.Status);
+            Assert.IsTrue(info.LiabilityShifted);
+            Assert.IsTrue(info.LiabilityShiftPossible);
+            Assert.AreEqual("test_cavv", info.Cavv);
+            Assert.AreEqual("test_eci", info.EciFlag);
+            Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
+            Assert.AreEqual("test_xid", info.Xid);
         }
 
         [Test]

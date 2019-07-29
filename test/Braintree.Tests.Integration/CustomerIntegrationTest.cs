@@ -868,6 +868,34 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Create_WithThreeDSecureNonce()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
+                CreditCard = new CreditCardRequest{
+                    PaymentMethodNonce = Nonce.ThreeDSecureVisaFullAuthentication,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerifyCard = true,
+                    }
+                }
+            });
+            Assert.IsTrue(result.IsSuccess());
+            var customer = result.Target;
+
+            var verification = customer.CreditCards[0].Verification;
+
+            Assert.AreEqual("Y", verification.ThreeDSecureInfo.Enrolled);
+            Assert.AreEqual("cavv_value", verification.ThreeDSecureInfo.Cavv);
+            Assert.AreEqual("05", verification.ThreeDSecureInfo.EciFlag);
+            Assert.AreEqual("authenticate_successful", verification.ThreeDSecureInfo.Status);
+            Assert.AreEqual("1.0.2", verification.ThreeDSecureInfo.ThreeDSecureVersion);
+            Assert.AreEqual("xid_value", verification.ThreeDSecureInfo.Xid);
+            Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShifted);
+            Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShiftPossible);
+        }
+
+        [Test]
         public void Create_WithPayPalPaymentMethodNonce()
         {            
             string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);

@@ -17,8 +17,9 @@ namespace Braintree.Test
         public const string AmexExpressCheckout = "fake-amex-express-checkout-nonce";
         public const string AbstractTransactable = "fake-abstract-transactable-nonce";
         public const string Coinbase = "fake-coinbase-nonce";
-        public const string LocalPayment = "fake-local-payment-nonce";
+        public const string LocalPayment = "fake-local-payment-method-nonce";
         public const string VenmoAccount = "fake-venmo-account-nonce";
+        public const string ThreeDSecureVisaFullAuthentication = "fake-three-d-secure-visa-full-authentication-nonce";
         public const string TransactableVisa = "fake-valid-visa-nonce";
         public const string TransactableAmEx = "fake-valid-amex-nonce";
         public const string TransactableMasterCard = "fake-valid-mastercard-nonce";

@@ -280,6 +280,38 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Create_CreatesCreditCardWithThreeDSecureNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest()
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.ThreeDSecureVisaFullAuthentication,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true
+                },
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            CreditCard creditCard = (CreditCard) paymentMethodResult.Target;
+            CreditCardVerification verification = creditCard.Verification;
+
+            Assert.AreEqual("Y", verification.ThreeDSecureInfo.Enrolled);
+            Assert.AreEqual("cavv_value", verification.ThreeDSecureInfo.Cavv);
+            Assert.AreEqual("05", verification.ThreeDSecureInfo.EciFlag);
+            Assert.AreEqual("authenticate_successful", verification.ThreeDSecureInfo.Status);
+            Assert.AreEqual("1.0.2", verification.ThreeDSecureInfo.ThreeDSecureVersion);
+            Assert.AreEqual("xid_value", verification.ThreeDSecureInfo.Xid);
+            Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShifted);
+            Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShiftPossible);
+        }
+
+        [Test]
         public void Create_CreatesApplePayCardWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());

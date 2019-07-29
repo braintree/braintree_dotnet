@@ -112,6 +112,7 @@ namespace Braintree
     public class PaymentInstrumentType : Enumeration
     {
         public static readonly PaymentInstrumentType PAYPAL_ACCOUNT = new PaymentInstrumentType("paypal_account");
+        public static readonly PaymentInstrumentType PAYPAL_HERE = new PaymentInstrumentType("paypal_here");
         public static readonly PaymentInstrumentType EUROPE_BANK_ACCOUNT= new PaymentInstrumentType("europe_bank_account");
         public static readonly PaymentInstrumentType CREDIT_CARD = new PaymentInstrumentType("credit_card");
         public static readonly PaymentInstrumentType COINBASE_ACCOUNT= new PaymentInstrumentType("coinbase_account");
@@ -130,7 +131,7 @@ namespace Braintree
         public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
         public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
 
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, IDEAL_PAYMENT, LOCAL_PAYMENT, ANY, UNKNOWN };
+        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, PAYPAL_HERE, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, IDEAL_PAYMENT, LOCAL_PAYMENT, ANY, UNKNOWN };
 
         protected PaymentInstrumentType(string name) : base(name) {}
     }
@@ -174,6 +175,8 @@ namespace Braintree
         public virtual string ProcessorSettlementResponseCode { get; protected set; }
         public virtual string ProcessorSettlementResponseText { get; protected set; }
         public virtual string AdditionalProcessorResponse { get; protected set; }
+        public virtual string NetworkResponseCode { get; protected set; }
+        public virtual string NetworkResponseText { get; protected set; }
         public virtual string VoiceReferralNumber { get; protected set; }
         public virtual string PurchaseOrderNumber { get; protected set; }
         public virtual bool? Recurring { get; protected set; }
@@ -200,6 +203,7 @@ namespace Braintree
         public virtual AndroidPayDetails AndroidPayDetails { get; protected set; }
         public virtual AmexExpressCheckoutDetails AmexExpressCheckoutDetails { get; protected set; }
         public virtual PayPalDetails PayPalDetails { get; protected set; }
+        public virtual PayPalHereDetails PayPalHereDetails { get; protected set; }
         public virtual LocalPaymentDetails LocalPaymentDetails { get; protected set; }
         public virtual CoinbaseDetails CoinbaseDetails { get; protected set; }
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
@@ -272,6 +276,8 @@ namespace Braintree
             ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
             ProcessorSettlementResponseCode = node.GetString("processor-settlement-response-code");
             ProcessorSettlementResponseText = node.GetString("processor-settlement-response-text");
+            NetworkResponseCode = node.GetString("network-response-code");
+            NetworkResponseText = node.GetString("network-response-text");
             AdditionalProcessorResponse = node.GetString("additional-processor-response");
             VoiceReferralNumber = node.GetString("voice-referral-number");
             PurchaseOrderNumber = node.GetString("purchase-order-number");
@@ -319,6 +325,11 @@ namespace Braintree
             if (paypalNode != null)
             {
                 PayPalDetails = new PayPalDetails(paypalNode);
+            }
+            var paypalHereNode = node.GetNode("paypal-here");
+            if (paypalHereNode != null)
+            {
+                PayPalHereDetails = new PayPalHereDetails(paypalHereNode);
             }
             var localPaymentNode = node.GetNode("local-payment");
             if (localPaymentNode != null)

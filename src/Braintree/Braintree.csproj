@@ -1,31 +1,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
+<Import Project="vsmac.props" />
 
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2018</Copyright>
-    <VersionPrefix>4.12.0</VersionPrefix>
+    <VersionPrefix>4.13.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <TargetFrameworks>net452;netstandard2.0;netstandard1.3</TargetFrameworks>
     <AssemblyName>Braintree</AssemblyName>
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Add `token_issuance` gateway rejected status to support Venmo transactions
-      - Add `payment_method_nonce` field to `LocalPaymentCompleted` webhook
-      - Add `transaction` field to `LocalPaymentCompleted` webhook
-      - Add `LocalPaymentDetails` to transactions
-      - Add `RoomTax` field to `IndustryDataRequest`
-      - Add `NoShow` field to `IndustryDataRequest`
-      - Add `AdvancedDeposit` field to `IndustryDataRequest`
-      - Add `FireSafe` field to `IndustryDataRequest`
-      - Add `PropertyPhone` field to `IndustryDataRequest`
-      - Add `AdditionalChargeRequest` class and add `AdditionalCharges` field to `IndustryDataRequest`
-      - Add `PostalCodeIsRequiredForCardBrandAndProcessor` to validation errors
-      - Resolve an issue when building the project in some configurations
-      - Add `RefundFromTransactionFeeAmount` field to `PayPalDetails`
-      - Add `RefundFromTransactionFeeCurrencyIsoCode` field to `PayPalDetails`
-      - Add `RevokedAt` field to `PayPalAccount`
-      - Add support for `PAYMENT_METHOD_REVOKED_BY_CUSTOMER` webhook
+- Add `PayPalHereDetails` to transactions
+- Add `CaptureId` to `LocalPaymentDetails`
+- Add `RefundId` to `LocalPaymentDetails`
+- Add `DebugId` to `LocalPaymentDetails`
+- Add `RefundFromTransactionFeeAmount` to `LocalPaymentDetails`
+- Add `RefundFromTransactionFeeCurrencyIsoCode` to `LocalPaymentDetails`
+- Add `TransactionFeeAmount` to `LocalPaymentDetails`
+- Add `TransactionFeeCurrencyIsoCode` to `LocalPaymentDetails`
+- Add `Cavv`, `Xid`, `DsTransactionId`, `EciFlag`, and `ThreeDSecureVersion` to `ThreeDSecureInfo`
+- Add `ThreeDSecureVersion`, `AuthenticationResponse`, `DirectoryResponse`, `CavvAlgorithm`, and `DsTransactionId` to 3DS pass thru fields
+- Add `PayerInfo` to `PaymentMethodNonceDetails` class
+- Add `NetworkResponseCode` and `NetworkResponseText` fields to `Transaction` and `CreditCardVerification`
+- Add `ThreeDSecureInfo` to `CreditCardVerification`
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">1.6.0</NetStandardImplicitPackageVersion>
@@ -44,6 +42,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Net" />
     <Reference Include="System" />
+    <Reference Include="System.IO" />
+    <Reference Include="System.Runtime" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
@@ -66,13 +67,4 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' Or '$(TargetFramework)' == 'netstandard1.3' ">
     <PackageReference Include="System.Xml.XPath.XmlDocument" Version="4.3.0" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <!--
-    <AssemblyOriginatorKeyFile>../../../braintreeSgKey.snk</AssemblyOriginatorKeyFile>
-    <SignAssembly>true</SignAssembly>
-    <PublicSign Condition="'$(OS)' != 'Windows_NT'">true</PublicSign>
-    -->
-  </PropertyGroup>
-
 </Project>

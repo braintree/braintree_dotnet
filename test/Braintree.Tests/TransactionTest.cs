@@ -240,5 +240,27 @@ namespace Braintree.Tests
 
             Assert.AreEqual("123456789012345", transaction.NetworkTransactionId);
         }
+
+        [Test]
+        public void DeserializesNetworkResponseCodeAndTextFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <network-response-code>00</network-response-code>\n" +
+                "  <network-response-text>Approved</network-response-text>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <subscription></subscription>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual("00", transaction.NetworkResponseCode);
+            Assert.AreEqual("Approved", transaction.NetworkResponseText);
+        }
     }
 }

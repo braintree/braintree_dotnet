@@ -32,6 +32,8 @@ namespace Braintree
         public virtual string ProcessorResponseCode { get; protected set; }
         public virtual string ProcessorResponseText { get; protected set; }
         public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
+        public virtual string NetworkResponseCode { get; protected set; }
+        public virtual string NetworkResponseText { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual VerificationStatus Status { get; protected set; }
         public virtual string Id { get; protected set; }
@@ -39,6 +41,7 @@ namespace Braintree
         public virtual CreditCard CreditCard { get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
+        public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
 
         public CreditCardVerification(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -58,6 +61,8 @@ namespace Braintree
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
+            NetworkResponseCode = node.GetString("network-response-code");
+            NetworkResponseText = node.GetString("network-response-text");
             MerchantAccountId = node.GetString("merchant-account-id");
             Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
             Id = node.GetString("id");
@@ -70,6 +75,13 @@ namespace Braintree
             {
                 RiskData = new RiskData(riskDataNode);
             }
+
+            var threeDSecureInfoNode = node.GetNode("three-d-secure-info");
+            if (threeDSecureInfoNode != null && !threeDSecureInfoNode.IsEmpty())
+            {
+                ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
+            }
+
         }
         
         [Obsolete("Mock Use Only")]

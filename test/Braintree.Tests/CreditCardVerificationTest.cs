@@ -36,6 +36,8 @@ namespace Braintree.Tests
             builder.Append("    <processor-response-code>2000</processor-response-code>");
             builder.Append("    <avs-street-address-response-code>I</avs-street-address-response-code>");
             builder.Append("    <processor-response-text>Do Not Honor</processor-response-text>");
+            builder.Append("    <network-response-code>05</network-response-code>");
+            builder.Append("    <network-response-text>Do not Honor</network-response-text>");
             builder.Append("    <cvv-response-code>M</cvv-response-code>");
             builder.Append("  </verification>");
             builder.Append("  <errors>");
@@ -56,6 +58,8 @@ namespace Braintree.Tests
             Assert.AreEqual("I", verification.AvsStreetAddressResponseCode);
             Assert.AreEqual("Do Not Honor", verification.ProcessorResponseText);
             Assert.AreEqual("M", verification.CvvResponseCode);
+            Assert.AreEqual("05", verification.NetworkResponseCode);
+            Assert.AreEqual("Do not Honor", verification.NetworkResponseText);
         }
 
         [Test]

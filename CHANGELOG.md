@@ -1,3 +1,18 @@
+## 4.13.0
+- Add `PayPalHereDetails` to transactions
+- Add `CaptureId` to `LocalPaymentDetails`
+- Add `RefundId` to `LocalPaymentDetails`
+- Add `DebugId` to `LocalPaymentDetails`
+- Add `RefundFromTransactionFeeAmount` to `LocalPaymentDetails`
+- Add `RefundFromTransactionFeeCurrencyIsoCode` to `LocalPaymentDetails`
+- Add `TransactionFeeAmount` to `LocalPaymentDetails`
+- Add `TransactionFeeCurrencyIsoCode` to `LocalPaymentDetails`
+- Add `Cavv`, `Xid`, `DsTransactionId`, `EciFlag`, and `ThreeDSecureVersion` to `ThreeDSecureInfo`
+- Add `ThreeDSecureVersion`, `AuthenticationResponse`, `DirectoryResponse`, `CavvAlgorithm`, and `DsTransactionId` to 3DS pass thru fields
+- Add `PayerInfo` to `PaymentMethodNonceDetails` class
+- Add `NetworkResponseCode` and `NetworkResponseText` fields to `Transaction` and `CreditCardVerification`
+- Add `ThreeDSecureInfo` to `CreditCardVerification`
+
 ## 4.12.0
 
 - Add `token_issuance` gateway rejected status to support Venmo transactions

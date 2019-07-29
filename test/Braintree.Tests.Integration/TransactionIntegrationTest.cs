@@ -1395,6 +1395,30 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_ReturnsSuccessfulResponseWithNetworkResponseCodeText()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual("XX", transaction.NetworkResponseCode);
+            Assert.AreEqual("sample network response text", transaction.NetworkResponseText);
+        }
+
+        [Test]
         public void Sale_WithEloCardType()
         {
             var request = new TransactionRequest
@@ -2562,6 +2586,14 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Target;
 
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual("Y", transaction.ThreeDSecureInfo.Enrolled);
+            Assert.AreEqual("test_cavv", transaction.ThreeDSecureInfo.Cavv);
+            Assert.AreEqual("test_eci", transaction.ThreeDSecureInfo.EciFlag);
+            Assert.AreEqual("authenticate_successful", transaction.ThreeDSecureInfo.Status);
+            Assert.AreEqual("1.0.2", transaction.ThreeDSecureInfo.ThreeDSecureVersion);
+            Assert.AreEqual("test_xid", transaction.ThreeDSecureInfo.Xid);
+            Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShifted);
+            Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShiftPossible);
         }
 
         [Test]
@@ -2629,6 +2661,10 @@ namespace Braintree.Tests.Integration
                     EciFlag = "02",
                     Cavv = "some_cavv",
                     Xid = "some_xid",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2"
                 }
             };
 
@@ -2637,7 +2673,35 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
         }
+        [Test]
+        public void Sale_WithThreeDSecurePassThruForVersion2()
+        {
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2029",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "2.1.0",
+                    DsTransactionId = "ds_transaction_id_value"
+                }
+            };
 
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
         [Test]
         public void Sale_ErrorWithThreeDSecurePassThruWhenMerchantAccountDoesNotSupportCardType()
         {
@@ -2655,6 +2719,10 @@ namespace Braintree.Tests.Integration
                     EciFlag = "02",
                     Cavv = "some_cavv",
                     Xid = "some_xid",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2",
                 }
             };
 
@@ -2681,6 +2749,10 @@ namespace Braintree.Tests.Integration
                     EciFlag = "",
                     Cavv = "some_cavv",
                     Xid = "some_xid",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2",
                 }
             };
 
@@ -2707,6 +2779,10 @@ namespace Braintree.Tests.Integration
                     EciFlag = "05",
                     Cavv = "",
                     Xid = "",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2",
                 }
             };
 
@@ -2733,6 +2809,10 @@ namespace Braintree.Tests.Integration
                     EciFlag = "bad_eci_flag",
                     Cavv = "some_cavv",
                     Xid = "some_xid",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2",
                 }
             };
 
@@ -2740,6 +2820,128 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Target;
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_ECI_FLAG_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Eci-Flag")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithInvalidThreeDSecureVersion()
+        {
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "invalid",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_THREE_D_SECURE_VERSION_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Three-D-Secure-Version")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithThreeDSecurePassThruWhenAuthenticationResponseIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                // Currently we only validate some of the pass thru fields if processor is Adyen.
+                MerchantAccountId = MerchantAccountIDs.ADYEN_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                    AuthenticationResponse = "",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_AUTHENTICATION_RESPONSE_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Authentication-Response")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithThreeDSecurePassThruWhenDirectoryResponseIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                // Currently we only validate some of the pass thru fields if processor is Adyen.
+                MerchantAccountId = MerchantAccountIDs.ADYEN_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                    AuthenticationResponse = "authenticate_successful",
+                    DirectoryResponse = "",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_DIRECTORY_RESPONSE_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Directory-Response")[0].Code);
+        }
+        [Test]
+        public void Sale_ErrorWithThreeDSecureCavvAlgorithmIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                // Currently we only validate some of the pass thru fields if processor is Adyen.
+                MerchantAccountId = MerchantAccountIDs.ADYEN_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                    AuthenticationResponse = "authenticate_successful",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "INVALID",
+                    ThreeDSecureVersion = "1.0.2",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_PASS_THRU_CAVV_ALGORITHM_IS_INVALID, result.Errors.ForObject("Transaction").ForObject("Three-D-Secure-Pass-Thru").OnField("Cavv-Algorithm")[0].Code);
         }
 
         [Test]
@@ -4073,9 +4275,9 @@ namespace Braintree.Tests.Integration
                     {
                         FolioNumber = "aaa",
                         CheckInDate = "2014-07-07",
-                        CheckOutDate = "2014-08-08",
-                        RoomRate = 239.00M,
-                        RoomTax = 35.00M,
+                        CheckOutDate = "2014-07-11",
+                        RoomRate = 170.00M,
+                        RoomTax = 30.00M,
                         NoShow = false,
                         AdvancedDeposit = false,
                         FireSafe = true,
@@ -4085,12 +4287,12 @@ namespace Braintree.Tests.Integration
                             new IndustryDataAdditionalChargeRequest
                             {
                                 AdditionalChargeKind = IndustryDataAdditionalChargeKind.MINI_BAR,
-                                Amount = 33.78M
+                                Amount = 50.00M
                             },
                             new IndustryDataAdditionalChargeRequest
                             {
                                 AdditionalChargeKind = IndustryDataAdditionalChargeKind.OTHER,
-                                Amount = 200.11M
+                                Amount = 150.00M
                             }
                         }
                     }
@@ -6755,10 +6957,15 @@ namespace Braintree.Tests.Integration
             Transaction transaction = gateway.Transaction.Find("threedsecuredtransaction");
 
             ThreeDSecureInfo info = transaction.ThreeDSecureInfo;
-            Assert.AreEqual(info.Enrolled, "Y");
-            Assert.AreEqual(info.Status, "authenticate_successful");
-            Assert.AreEqual(info.LiabilityShifted, true);
-            Assert.AreEqual(info.LiabilityShiftPossible, true);
+            Assert.AreEqual("Y", info.Enrolled);
+            Assert.AreEqual("authenticate_successful", info.Status);
+            Assert.IsTrue(info.LiabilityShifted);
+            Assert.IsTrue(info.LiabilityShiftPossible);
+            Assert.AreEqual("somebase64value", info.Cavv);
+            Assert.AreEqual("07", info.EciFlag);
+            Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
+            Assert.AreEqual("xidvalue", info.Xid);
+            Assert.AreEqual("dstxnid", info.DsTransactionId);
         }
 
         [Test]
@@ -8352,6 +8559,36 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target.LocalPaymentDetails.PaymentId);
             Assert.IsNotNull(result.Target.LocalPaymentDetails.PayerId);
             Assert.IsNotNull(result.Target.LocalPaymentDetails.FundingSource);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.CaptureId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.DebugId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.TransactionFeeAmount);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.TransactionFeeCurrencyIsoCode);
+        }
+
+        [Test]
+        public void RefundLocalPaymentTransaction()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.LocalPayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            result = gateway.Transaction.Refund(result.Target.Id);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.PaymentId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.PayerId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.FundingSource);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.RefundId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.DebugId);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.RefundFromTransactionFeeAmount);
+            Assert.IsNotNull(result.Target.LocalPaymentDetails.RefundFromTransactionFeeCurrencyIsoCode);
         }
 
         [Test]
@@ -8956,6 +9193,38 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(transaction.FacilitatorDetails.OauthApplicationClientId, "client_id$development$integration_client_id");
             Assert.AreEqual(transaction.FacilitatorDetails.OauthApplicationName, "PseudoShop");
             Assert.AreEqual(transaction.FacilitatorDetails.SourcePaymentMethodToken, token);
+        }
+        [Test]
+        public void PayPalHereParseAttributesForAuthCapture() {
+            Transaction transaction = gateway.Transaction.Find("paypal_here_auth_capture_id");
+            Assert.AreEqual(transaction.PaymentInstrumentType, PaymentInstrumentType.PAYPAL_HERE);
+
+            Assert.IsNotNull(transaction.PayPalHereDetails);
+            Assert.IsNotNull(transaction.PayPalHereDetails.AuthorizationId);
+            Assert.IsNotNull(transaction.PayPalHereDetails.CaptureId);
+            Assert.IsNotNull(transaction.PayPalHereDetails.InvoiceId);
+            Assert.IsNotNull(transaction.PayPalHereDetails.Last4);
+            Assert.IsNotNull(transaction.PayPalHereDetails.PaymentType);
+            Assert.IsNotNull(transaction.PayPalHereDetails.TransactionFeeAmount);
+            Assert.IsNotNull(transaction.PayPalHereDetails.TransactionFeeCurrencyIsoCode);
+            Assert.IsNotNull(transaction.PayPalHereDetails.TransactionInitiationDate);
+            Assert.IsNotNull(transaction.PayPalHereDetails.TransactionUpdatedDate);
+        }
+
+        [Test]
+        public void PayPalHereParseAttributesForSale() {
+            Transaction transaction = gateway.Transaction.Find("paypal_here_sale_id");
+
+            Assert.IsNotNull(transaction.PayPalHereDetails);
+            Assert.IsNotNull(transaction.PayPalHereDetails.PaymentId);
+        }
+
+        [Test]
+        public void PayPalHereParseAttributesForRefund() {
+            Transaction transaction = gateway.Transaction.Find("paypal_here_refund_id");
+
+            Assert.IsNotNull(transaction.PayPalHereDetails);
+            Assert.IsNotNull(transaction.PayPalHereDetails.RefundId);
         }
     }
 }
