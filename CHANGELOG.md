@@ -1,3 +1,6 @@
+# 4.14.0
+- Add `GraphQLClient` instance to `BraintreeGateway` class
+
 ## 4.13.0
 - Add `PayPalHereDetails` to transactions
 - Add `CaptureId` to `LocalPaymentDetails`

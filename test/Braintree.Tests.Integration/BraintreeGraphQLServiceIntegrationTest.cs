@@ -98,6 +98,7 @@ mutation CreateClientToken($input: CreateClientTokenInput!) {
             var clientToken = createClientToken["clientToken"];
             Assert.IsInstanceOf<string>(clientToken);
         }
+
         [Test]
         public void SmokeTestQueryGraphQLWithVariables_isUnsuccessful_andReturnsParsableErrors()
         {

@@ -88,7 +88,7 @@ namespace Braintree
         {
             var request = GetGraphQLHttpRequest(definition, variables);
             var response = await GetHttpResponseAsync(request);
-            var result = JsonConvert.DeserializeObject<GraphQLResponse>(response);
+            var result = JsonConvert.DeserializeObject<GraphQLResponse>(response, new JsonConverter[] {new GraphQLResponse.Deserializer()});
 
             ThrowExceptionIfGraphQLErrorResponseHasError(result);
 

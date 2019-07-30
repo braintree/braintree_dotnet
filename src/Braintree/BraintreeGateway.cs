@@ -100,34 +100,42 @@ namespace Braintree
 
         public Configuration Configuration { get; set; }
 
+        public GraphQLClient GraphQLClient { get; set; }
+
         public BraintreeGateway()
         {
             Configuration = new Configuration();
+            GraphQLClient = new GraphQLClient(Configuration);
         }
 
         public BraintreeGateway(Environment environment, string merchantId, string publicKey, string privateKey)
         {
             Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
+            GraphQLClient = new GraphQLClient(Configuration);
         }
 
         public BraintreeGateway(string environment, string merchantId, string publicKey, string privateKey)
         {
             Configuration = new Configuration(Environment.ParseEnvironment(environment), merchantId, publicKey, privateKey);
+            GraphQLClient = new GraphQLClient(Configuration);
         }
 
         public BraintreeGateway(string accessToken)
         {
             Configuration = new Configuration(accessToken);
+            GraphQLClient = new GraphQLClient(Configuration);
         }
 
         public BraintreeGateway(string clientId, string clientSecret)
         {
             Configuration = new Configuration(clientId, clientSecret);
+            GraphQLClient = new GraphQLClient(Configuration);
         }
 
         public BraintreeGateway(Configuration configuration)
         {
             Configuration = configuration;
+            GraphQLClient = new GraphQLClient(Configuration);
         }
 
         public virtual IClientTokenGateway ClientToken
