@@ -36,6 +36,31 @@ namespace Braintree
             }
         }
 
+        protected internal PaymentMethodNonce(dynamic paymentMethodNonce)
+        {
+            IsDefault = paymentMethodNonce["default"];
+            Nonce = paymentMethodNonce.nonce;
+            Type = paymentMethodNonce.type;
+
+            var details = paymentMethodNonce.details;
+            if (details != null)
+            {
+                Details = new PaymentMethodNonceDetails(details);
+            }
+
+            var threeDSecureInfo = paymentMethodNonce.threeDSecureInfo;
+            if (threeDSecureInfo != null)
+            {
+               ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfo);
+           }
+
+            var binData = paymentMethodNonce.binData;
+            if (binData != null)
+            {
+               BinData = new BinData(binData);
+            }
+        }
+
         [Obsolete("Mock Use Only")]
         protected internal PaymentMethodNonce() { }
     }

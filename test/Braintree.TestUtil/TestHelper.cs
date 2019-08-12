@@ -266,10 +266,16 @@ namespace Braintree.TestUtil
             return keyValue;
         }
 
+        public static string GenerateAuthorizationFingerprint(BraintreeGateway gateway, string customerId = null) {
+            var clientTokenRequest = customerId == null ? null : new ClientTokenRequest { CustomerId = customerId };
+            var clientToken = GenerateDecodedClientToken(gateway, clientTokenRequest);
+
+            return extractParamFromJson("authorizationFingerprint", clientToken);
+        }
+
         public static string GetNonceForPayPalAccount(BraintreeGateway gateway, Params paypalAccountDetails)
         {
-            var clientToken = GenerateDecodedClientToken(gateway);
-            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             var builder = new RequestBuilder();
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint);
             foreach (var param in paypalAccountDetails)
@@ -288,11 +294,7 @@ namespace Braintree.TestUtil
 
         public static string GetNonceForNewCreditCard(BraintreeGateway gateway, Params creditCardDetails, string customerId = null)
         {
-            var clientToken = GenerateDecodedClientToken(
-                gateway,
-                customerId == null ? null : new ClientTokenRequest { CustomerId = customerId });
-
-            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway, customerId);
 
             var builder = new RequestBuilder();
             builder.
@@ -320,8 +322,7 @@ namespace Braintree.TestUtil
 
         public static string GetNonceForNewPaymentMethod(BraintreeGateway gateway, Params @params, bool isCreditCard)
         {
-            var clientToken = GenerateDecodedClientToken(gateway);
-            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
 
             var paymentMethodType = isCreditCard ? "credit_card" : "paypal_account";
             var paymentMethodTypePlural = paymentMethodType + "s";
@@ -349,17 +350,8 @@ namespace Braintree.TestUtil
 
         public static string GenerateUnlockedNonce(BraintreeGateway gateway, string creditCardNumber, string customerId)
         {
-            var clientToken = "";
-            if (customerId == null) {
-                clientToken = GenerateDecodedClientToken(gateway);
-            } else {
-                clientToken = GenerateDecodedClientToken(gateway, new ClientTokenRequest
-                {
-                    CustomerId = customerId
-                }
-                );
-            }
-            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway, customerId);
+
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
             AddTopLevelElement("shared_customer_identifier_type", "testing").
@@ -389,8 +381,7 @@ namespace Braintree.TestUtil
 
         public static string GenerateOneTimePayPalNonce(BraintreeGateway gateway)
         {
-            var clientToken = GenerateDecodedClientToken(gateway);
-            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
                 AddTopLevelElement("shared_customer_identifier_type", "testing").
@@ -416,8 +407,7 @@ namespace Braintree.TestUtil
 
         public static string GenerateFuturePaymentPayPalNonce(BraintreeGateway gateway)
         {
-            var clientToken = GenerateDecodedClientToken(gateway);
-            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
                 AddTopLevelElement("shared_customer_identifier_type", "testing").
@@ -443,8 +433,7 @@ namespace Braintree.TestUtil
 
         public static string GenerateOrderPaymentPayPalNonce(BraintreeGateway gateway)
         {
-            var clientToken = GenerateDecodedClientToken(gateway);
-            var authorizationFingerprint = extractParamFromJson("authorizationFingerprint", clientToken);
+            var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             RequestBuilder builder = new RequestBuilder("");
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
                 AddTopLevelElement("shared_customer_identifier_type", "testing").

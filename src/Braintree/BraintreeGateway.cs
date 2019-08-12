@@ -229,6 +229,11 @@ namespace Braintree
             get { return new SubscriptionGateway(this); }
         }
 
+        public virtual IThreeDSecureGateway ThreeDSecure
+        {
+            get { return new ThreeDSecureGateway(this); }
+        }
+
         public virtual ITestTransactionGateway TestTransaction
         {
             get { return new TestTransactionGateway(this); }

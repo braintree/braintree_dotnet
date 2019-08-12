@@ -27,6 +27,22 @@ namespace Braintree
             }
         }
 
+        protected internal PaymentMethodNonceDetails(dynamic details)
+        {
+            Bin = details.bin;
+            CardType = details.cardType;
+            LastTwo = details.lastTwo;
+            LastFour = details.lastFour;
+            Username = details.username;
+            VenmoUserId = details.venmoUserId;
+
+            var payerInfo = details.payerInfo;
+            if (payerInfo != null)
+            {
+                PayerInfo = new PaymentMethodNonceDetailsPayerInfo(payerInfo);
+            }
+        }
+
         [Obsolete("Mock Use Only")]
         protected internal PaymentMethodNonceDetails() { }
     }

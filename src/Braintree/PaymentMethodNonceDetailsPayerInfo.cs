@@ -19,6 +19,15 @@ namespace Braintree
             CountryCode = node.GetString("country-code");
         }
 
+        protected internal PaymentMethodNonceDetailsPayerInfo(dynamic info)
+        {
+            Email = info.email;
+            FirstName = info.firstName;
+            LastName = info.lastName;
+            PayerId = info.payerId;
+            CountryCode = info.countryCode;
+        }
+
         [Obsolete("Mock Use Only")]
         protected internal PaymentMethodNonceDetailsPayerInfo() { }
     }

@@ -30,6 +30,22 @@ namespace Braintree
             ThreeDSecureVersion = node.GetString("three-d-secure-version");
         }
 
+        public ThreeDSecureInfo(dynamic info)
+        {
+            if (info == null)
+                return;
+
+            Enrolled = info.enrolled;
+            Status = info.status;
+            LiabilityShifted = info.liabilityShifted;
+            LiabilityShiftPossible = info.liabilityShiftPossible;
+            Cavv = info.cavv;
+            Xid = info.xid;
+            DsTransactionId = info.dsTransactionId;
+            EciFlag = info.eciFlag;
+            ThreeDSecureVersion = info.threeDSecureVersion;
+        }
+
         [Obsolete("Mock Use Only")]
         protected internal ThreeDSecureInfo() { }
     }

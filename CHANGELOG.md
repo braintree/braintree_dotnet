@@ -1,3 +1,6 @@
+# 4.15.0
+- Add `ThreeDSecureLookup` (beta)
+
 # 4.14.0
 - Add `GraphQLClient` instance to `BraintreeGateway` class
 
@@ -38,6 +41,10 @@
 ## 4.11.0
 
 - Add `AccountType` field to `Transaction`, `CreditCard`, `PaymentMethod`, and `CreditCardVerification`
+- Add `RefundFromTransactionFeeAmount` field to `PayPalDetails`
+- Add `RefundFromTransactionFeeCurrencyIsoCode` field to `PayPalDetails`
+- Add `RevokedAt` field to `PayPalAccount`
+- Add support for `PAYMENT_METHOD_REVOKED_BY_CUSTOMER` webhook
 
 ## 4.10.1
 

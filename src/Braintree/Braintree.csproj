@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2018</Copyright>
-    <VersionPrefix>4.14.0</VersionPrefix>
+    <VersionPrefix>4.15.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <TargetFrameworks>net452;netstandard2.0;netstandard1.3</TargetFrameworks>
     <AssemblyName>Braintree</AssemblyName>
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-- Add `GraphQLClient` instance to `BraintreeGateway` class
+- Add `ThreeDSecureLookup` (beta)
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">1.6.0</NetStandardImplicitPackageVersion>
