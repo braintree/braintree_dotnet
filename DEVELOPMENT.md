@@ -18,7 +18,7 @@ make core2
 
 ## Running tests
 
-The unit specs can be run by anyone on any system, but the integration specs are meant to be run against a local development server of our gateway code. These integration specs are not meant for public consumption and will likely fail if run on your system. To run unit tests use rake (`rake mono:test:unit` or `rake dotnet:test:unit`) or run the unit tests manually. Here is an example of how to run unit tests using the dotnet CLI tool from within /test/Braintree.Tests:
+The unit specs can be run by anyone on any system, but the integration specs are meant to be run against a local development server of our gateway code. These integration specs are not meant for public consumption and will likely fail if run on your system. To run unit tests use rake (`rake mono:test:unit`, `rake core:test:unit` or `rake core2:test:unit`) or run the unit tests manually. Here is an example of how to run unit tests using the dotnet CLI tool from within /test/Braintree.Tests:
 
 #### On Mac OS X or Unix-like environment
 ```

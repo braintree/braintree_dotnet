@@ -4668,14 +4668,14 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithNonVisaDoesNotReturnNetworkTransactionIdentifier()
+        public void Sale_WithAmexDoesNotReturnNetworkTransactionIdentifier()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    Number = SandboxValues.CreditCardNumber.AMEX,
                     ExpirationDate = "05/2009",
                 },
             };
@@ -4711,14 +4711,14 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_NonVisaWithExternalVaultStatus_ReturnsSuccessfulResponse()
+        public void Sale_AmexWithExternalVaultStatus_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    Number = SandboxValues.CreditCardNumber.AMEX,
                     ExpirationDate = "05/2009",
                 },
                 ExternalVault = new ExternalVaultRequest
@@ -4734,14 +4734,14 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_NonVisaWithNullExternalVaultPreviousNetworkTransactionId_ReturnsSuccessfulResponse()
+        public void Sale_AmexWithNullExternalVaultPreviousNetworkTransactionId_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    Number = SandboxValues.CreditCardNumber.AMEX,
                     ExpirationDate = "05/2009",
                 },
                 ExternalVault = new ExternalVaultRequest
@@ -4889,32 +4889,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithExternalVault_ValidationErrorPreviousNetworkTransactionIdIsInvalid()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
-                },
-                ExternalVault = new ExternalVaultRequest
-                {
-                    Status = "vaulted",
-                    PreviousNetworkTransactionId = "bad value",
-                }
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_PREVIOUS_NETWORK_TRANSACTION_ID_IS_INVALID,
-                result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("PreviousNetworkTransactionId")[0].Code
-            );
-        }
-
-        [Test]
         public void Sale_WithExternalVault_ValidationErrorCardTypeIsInvalid()
         {
             var request = new TransactionRequest
@@ -4922,7 +4896,7 @@ namespace Braintree.Tests.Integration
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 CreditCard = new TransactionCreditCardRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    Number = SandboxValues.CreditCardNumber.AMEX,
                     ExpirationDate = "05/2009",
                 },
                 ExternalVault = new ExternalVaultRequest
@@ -5078,6 +5052,28 @@ namespace Braintree.Tests.Integration
           Assert.AreEqual(
               result.Errors.ForObject("Transaction").ForObject("Options").ForObject("CreditCard").OnField("AccountType")[0].Code,
               ValidationErrorCode.TRANSACTION_OPTIONS_CREDIT_CARD_ACCOUNT_TYPE_DEBIT_DOES_NOT_SUPPORT_AUTHS
+          );
+        }
+
+        [Test]
+        public void Sale_ReturnsErrorAmountNotSupportedByProcessor()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 0.20M,
+                MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.HIPER,
+                    ExpirationDate = "05/2009",
+                },
+            };
+
+          Result<Transaction> result = gateway.Transaction.Sale(request);
+          Assert.IsFalse(result.IsSuccess());
+          Assert.AreEqual(
+              result.Errors.ForObject("Transaction").OnField("Amount")[0].Code,
+              ValidationErrorCode.TRANSACTION_AMOUNT_NOT_SUPPORTED_BY_PROCESSOR
           );
         }
 

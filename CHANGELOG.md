@@ -1,7 +1,12 @@
-# 4.15.0
+## 4.16.0
+- Add `ProcessorComments` to Disputes
+- Deprecate `ForwardedComments`
+- Add `AMOUNT_NOT_SUPPORTED_BY_PROCESSOR` to validation errors
+
+## 4.15.0
 - Add `ThreeDSecureLookup` (beta)
 
-# 4.14.0
+## 4.14.0
 - Add `GraphQLClient` instance to `BraintreeGateway` class
 
 ## 4.13.0

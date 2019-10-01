@@ -73,7 +73,10 @@ namespace Braintree
         public virtual string CaseNumber { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string Id { get; protected set; }
+        [ObsoleteAttribute("This method will be removed in favor of ProcessorComments", false)]
         public virtual string ForwardedComments { get; protected set; }
+        // NEXT_MAJOR_VERSION remove ForwardedComments attribute as it never returned anything anyway.
+        public virtual string ProcessorComments { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual string OriginalDisputeId { get; protected set; }
         public virtual string ReasonCode { get; protected set; }
@@ -101,7 +104,7 @@ namespace Braintree
             CaseNumber = node.GetString("case-number");
             CurrencyIsoCode = node.GetString("currency-iso-code");
             Id = node.GetString("id");
-            ForwardedComments = node.GetString("forwarded-comments");
+            ProcessorComments = node.GetString("processor-comments");
             MerchantAccountId = node.GetString("merchant-account-id");
             OriginalDisputeId = node.GetString("original-dispute-id");
             ReasonCode = node.GetString("reason-code");

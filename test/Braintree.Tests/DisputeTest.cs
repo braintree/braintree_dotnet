@@ -63,7 +63,7 @@ namespace Braintree.Tests
                 Node("case-number", "CASE-12345"),
                 NodeAttr("created-at", TYPE_DATE, "2017-06-16"),
                 Node("currency-iso-code", "USD"),
-                Node("forwarded-comments", "Forwarded comments"),
+                Node("processor-comments", "Processor comments"),
                 Node("kind", "chargeback"),
                 Node("merchant-account-id", "abc123"),
                 Node("reason", "fraud"),
@@ -117,7 +117,7 @@ namespace Braintree.Tests
                 Node("case-number", "CASE-12345"),
                 NodeAttr("created-at", TYPE_DATE, "2017-06-16"),
                 Node("currency-iso-code", "USD"),
-                Node("forwarded-comments", "Forwarded comments"),
+                Node("processor-comments", "Processor comments"),
                 Node("kind", "chargeback"),
                 Node("merchant-account-id", "abc123"),
                 Node("reason", "fraud"),
@@ -195,7 +195,7 @@ namespace Braintree.Tests
             Assert.AreEqual(95m, result.AmountWon);
             Assert.AreEqual("CASE-12345", result.CaseNumber);
             Assert.AreEqual(DateTime.Parse("2017-06-16"), result.CreatedAt);
-            Assert.AreEqual("Forwarded comments", result.ForwardedComments);
+            Assert.AreEqual("Processor comments", result.ProcessorComments);
             Assert.AreEqual("abc123", result.MerchantAccountId);
             Assert.AreEqual("original_dispute_id", result.OriginalDisputeId);
             Assert.AreEqual("83", result.ReasonCode);
