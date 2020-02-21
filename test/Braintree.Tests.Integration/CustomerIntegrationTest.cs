@@ -95,6 +95,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("IL", customer.Addresses[0].Region);
             Assert.AreEqual("60622", customer.Addresses[0].PostalCode);
             Assert.AreEqual("United States of America", customer.Addresses[0].CountryName);
+            Assert.IsNotNull(customer.GraphQLId);
         }
 
         [Test]

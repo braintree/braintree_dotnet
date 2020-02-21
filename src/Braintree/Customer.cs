@@ -25,6 +25,7 @@ namespace Braintree
         public virtual string Phone { get; protected set; }
         public virtual string Fax { get; protected set; }
         public virtual string Website { get; protected set; }
+        public virtual string GraphQLId { get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual CreditCard[] CreditCards { get; protected set; }
@@ -67,6 +68,7 @@ namespace Braintree
             Phone = node.GetString("phone");
             Fax = node.GetString("fax");
             Website = node.GetString("website");
+            GraphQLId = node.GetString("global-id");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
 

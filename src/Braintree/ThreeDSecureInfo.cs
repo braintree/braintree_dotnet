@@ -13,6 +13,7 @@ namespace Braintree
         public virtual string DsTransactionId { get; protected set; }
         public virtual string EciFlag { get; protected set; }
         public virtual string ThreeDSecureVersion { get; protected set; }
+        public virtual string ThreeDSecureAuthenticationId { get; protected set; }
 
         public ThreeDSecureInfo(NodeWrapper node)
         {
@@ -28,6 +29,7 @@ namespace Braintree
             DsTransactionId = node.GetString("ds-transaction-id");
             EciFlag = node.GetString("eci-flag");
             ThreeDSecureVersion = node.GetString("three-d-secure-version");
+            ThreeDSecureAuthenticationId = node.GetString("three-d-secure-authentication-id");
         }
 
         public ThreeDSecureInfo(dynamic info)
@@ -44,6 +46,7 @@ namespace Braintree
             DsTransactionId = info.dsTransactionId;
             EciFlag = info.eciFlag;
             ThreeDSecureVersion = info.threeDSecureVersion;
+            ThreeDSecureAuthenticationId = info.threeDSecureAuthenticationId;
         }
 
         [Obsolete("Mock Use Only")]

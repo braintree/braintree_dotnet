@@ -18,6 +18,7 @@ namespace Braintree
         public virtual string Bin { get; protected set; }
         public virtual bool? IsDefault { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
+        public virtual bool? IsNetworkTokenized { get; protected set; }
         public virtual string CustomerId { get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
@@ -42,6 +43,7 @@ namespace Braintree
             CustomerId = node.GetString("customer-id");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
+            IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];

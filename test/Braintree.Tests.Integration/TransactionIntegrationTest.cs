@@ -2561,6 +2561,162 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithThreeDSecureAuthenticationId()
+        {
+            var three_d_secure_authentication_id = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009"
+            });
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureAuthenticationId = three_d_secure_authentication_id,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.AreEqual("Y", transaction.ThreeDSecureInfo.Enrolled);
+            Assert.AreEqual("test_cavv", transaction.ThreeDSecureInfo.Cavv);
+            Assert.AreEqual("test_eci", transaction.ThreeDSecureInfo.EciFlag);
+            Assert.AreEqual("authenticate_successful", transaction.ThreeDSecureInfo.Status);
+            Assert.AreEqual("1.0.2", transaction.ThreeDSecureInfo.ThreeDSecureVersion);
+            Assert.AreEqual("test_xid", transaction.ThreeDSecureInfo.Xid);
+            Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShifted);
+            Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShiftPossible);
+        }
+
+        [Test]
+        public void Sale_ErrorPaymentMethodDoesNotMatchWithThreeDSecureAuthenticationId()
+        {
+            var three_d_secure_authentication_id = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009",
+            });
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureAuthenticationId = three_d_secure_authentication_id,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TRANSACTION_PAYMENT_METHOD_DOES_NOT_MATCH_THREE_D_SECURE_AUTHENTICATION_PAYMENT_METHOD, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Authentication-Id")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithMismatchThreeDSecureNonceAndThreeDSecureAuthenticationId()
+        {
+            var three_d_secure_authentication_id = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009",
+            });
+
+            CreditCardRequest creditCardRequest = new CreditCardRequest
+            {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2020"
+            };
+            string nonce = TestHelper.Generate3DSNonce(service, creditCardRequest);
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                ThreeDSecureAuthenticationId = three_d_secure_authentication_id,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_AUTHENTICATION_ID_DOES_NOT_MATCH_NONCE_THREE_D_SECURE_AUTHENTICATION, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Authentication-Id")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithBogusThreeDSecureAuthenticationId()
+        {
+            string three_d_secure_authentication_id = "foo";
+
+            var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureAuthenticationId = three_d_secure_authentication_id,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_AUTHENTICATION_ID_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Authentication-Id")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ErrorWithThreeDAuthenticationIdAndThreeDSecurePassThru()
+        {
+            var three_d_secure_authentication_id = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009",
+            });
+
+           var request = new TransactionRequest
+            {
+                MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ThreeDSecureAuthenticationId = three_d_secure_authentication_id,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                {
+                    EciFlag = "02",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                    AuthenticationResponse = "authentication_response_value",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    ThreeDSecureVersion = "1.0.2"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Transaction transaction = result.Target;
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_AUTHENTICATION_ID_WITH_THREE_D_SECURE_PASS_THRU_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Authentication-Id")[0].Code);
+        }
+
+        [Test]
         public void Sale_WithThreeDSecureToken()
         {
             var three_d_secure_token = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
@@ -2673,6 +2829,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
         }
+
         [Test]
         public void Sale_WithThreeDSecurePassThruForVersion2()
         {
@@ -2702,6 +2859,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
         }
+
         [Test]
         public void Sale_ErrorWithThreeDSecurePassThruWhenMerchantAccountDoesNotSupportCardType()
         {
@@ -3010,6 +3168,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayDetails.Commercial);
             Assert.IsNotNull(androidPayDetails.Payroll);
             Assert.IsNotNull(androidPayDetails.ProductId);
+            Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
         }
 
         [Test]
@@ -3041,6 +3200,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayDetails.ExpirationMonth);
             Assert.IsNotNull(androidPayDetails.ExpirationYear);
             Assert.IsNotNull(androidPayDetails.GoogleTransactionId);
+            Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
         }
 
         [Test]
@@ -6906,6 +7066,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(transaction.Id, foundTransaction.Id);
             Assert.AreEqual(TransactionStatus.AUTHORIZED, foundTransaction.Status);
             Assert.AreEqual("05/2008", foundTransaction.CreditCard.ExpirationDate);
+            Assert.IsNotNull(transaction.GraphQLId);
         }
 
         [Test]
@@ -7305,6 +7466,85 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void SubmitForSettlement_WithLevel2Data()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                PurchaseOrderNumber = "ABC123",
+                TaxAmount = 1.12M,
+                TaxExempt = true
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+        }
+
+        [Test]
+        public void SubmitForSettlement_WithLevel3Data()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                PurchaseOrderNumber = "ABC123",
+                TaxAmount = 1.12M,
+                TaxExempt = true,
+                ShippingAmount = 1.00M,
+                DiscountAmount = 2.00M,
+                ShipsFromPostalCode = "12345",
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1.0232M,
+                        Name = "Name #1",
+                        Description = "Description #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.1232M,
+                        UnitTaxAmount = 1.23M,
+                        TaxAmount = 1.33M,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                        Url = "https://example.com/products/23434",
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+        }
+
+
+        [Test]
         public void SubmitForSettlement_WithDescriptor()
         {
             TransactionRequest request = new TransactionRequest
@@ -7358,7 +7598,7 @@ namespace Braintree.Tests.Integration
 
             TransactionRequest submitForSettlementRequest = new TransactionRequest
             {
-                PurchaseOrderNumber = "111"
+                SharedCustomerId = "invalid",
             };
 
             Assert.Throws<AuthorizationException>(() => gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest));
@@ -7829,7 +8069,7 @@ namespace Braintree.Tests.Integration
 
             TransactionRequest submitForSettlementRequest = new TransactionRequest
             {
-                PurchaseOrderNumber = "111",
+                SharedCustomerId = "invalid",
                 Amount = decimal.Parse("50.00")
             };
 
@@ -8047,6 +8287,129 @@ namespace Braintree.Tests.Integration
             ).GetAwaiter().GetResult();
         }
 #endif
+
+        [Test]
+        public void Refund_WithSoftDecline()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = decimal.Parse("9000.00"),
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2048.00"));
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_SOFT_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+#if netcore
+        public async Task RefundAsync_WithSoftDecline()
+#else
+        public void RefundAsync_WithSoftDecline()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = decimal.Parse("9000.00"),
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            await gateway.TestTransaction.SettleAsync(transaction.Id);
+
+            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2048.00"));
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_SOFT_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+        public void Refund_WithHardDecline()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = decimal.Parse("9000.00"),
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2009.00"));
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_HARD_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+#if netcore
+        public async Task RefundAsync_WithHardDecline()
+#else
+        public void RefundAsync_WithHardDecline()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = decimal.Parse("9000.00"),
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            await gateway.TestTransaction.SettleAsync(transaction.Id);
+
+            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2009.00"));
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_HARD_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
 
         [Test]
         public void Refund_WithOrderId()

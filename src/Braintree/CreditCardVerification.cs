@@ -36,6 +36,7 @@ namespace Braintree
         public virtual string NetworkResponseText { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual VerificationStatus Status { get; protected set; }
+        public virtual string GraphQLId { get; protected set; }
         public virtual string Id { get; protected set; }
         public virtual Address BillingAddress { get; protected set; }
         public virtual CreditCard CreditCard { get; protected set; }
@@ -65,6 +66,7 @@ namespace Braintree
             NetworkResponseText = node.GetString("network-response-text");
             MerchantAccountId = node.GetString("merchant-account-id");
             Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
+            GraphQLId = node.GetString("global-id");
             Id = node.GetString("id");
             BillingAddress = new Address(node.GetNode("billing"));
             CreditCard = new CreditCard(node.GetNode("credit-card"), gateway);

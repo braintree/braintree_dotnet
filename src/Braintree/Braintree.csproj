@@ -4,16 +4,20 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2018</Copyright>
-    <VersionPrefix>4.16.0</VersionPrefix>
+    <VersionPrefix>4.17.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <TargetFrameworks>net452;netstandard2.0;netstandard1.3</TargetFrameworks>
     <AssemblyName>Braintree</AssemblyName>
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-- Add `ProcessorComments` to Disputes
-- Deprecate `ForwardedComments`
-- Add `AMOUNT_NOT_SUPPORTED_BY_PROCESSOR` to validation errors
+      - Add `RefundAuthHardDeclined` and `RefundAuthSoftDeclined` to validation errors
+      - Add `PROCESSOR_DOES_NOT_SUPPORT_MOTO_FOR_CARD_TYPE` to validation errors
+      - Add `isNetworkTokenized` to `AndroidPayCard` and `AndroidPayDetails`
+      - Add GraphQL ID to `CreditCardVerification`, `Customer`, `Dispute`, and `Transaction`
+      - Fix issue where GraphQL errors from transaction fee reports could not be parsed
+      - Add `ThreeDSecureAuthenticationId` to `ThreeDSecureInfo`
+      - Add `ThreeDSecureAuthenticationId` support to Transaction.Sale
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">1.6.0</NetStandardImplicitPackageVersion>

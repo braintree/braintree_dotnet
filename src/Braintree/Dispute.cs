@@ -72,6 +72,7 @@ namespace Braintree
         public virtual DisputeKind Kind { get; protected set; }
         public virtual string CaseNumber { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
+        public virtual string GraphQLId { get; protected set; }
         public virtual string Id { get; protected set; }
         [ObsoleteAttribute("This method will be removed in favor of ProcessorComments", false)]
         public virtual string ForwardedComments { get; protected set; }
@@ -103,6 +104,7 @@ namespace Braintree
             Kind = (DisputeKind)CollectionUtil.Find(DisputeKind.ALL, node.GetString("kind"), DisputeKind.UNRECOGNIZED);
             CaseNumber = node.GetString("case-number");
             CurrencyIsoCode = node.GetString("currency-iso-code");
+            GraphQLId = node.GetString("global-id");
             Id = node.GetString("id");
             ProcessorComments = node.GetString("processor-comments");
             MerchantAccountId = node.GetString("merchant-account-id");

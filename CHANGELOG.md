@@ -1,3 +1,12 @@
+## 4.17.0
+- Add `RefundAuthHardDeclined` and `RefundAuthSoftDeclined` to validation errors
+- Add `PROCESSOR_DOES_NOT_SUPPORT_MOTO_FOR_CARD_TYPE` to validation errors
+- Add `isNetworkTokenized` to `AndroidPayCard` and `AndroidPayDetails`
+- Add GraphQL ID to `CreditCardVerification`, `Customer`, `Dispute`, and `Transaction`
+- Fix issue where GraphQL errors from transaction fee reports could not be parsed
+- Add `ThreeDSecureAuthenticationId` to `ThreeDSecureInfo`
+- Add `ThreeDSecureAuthenticationId` support to Transaction.Sale
+
 ## 4.16.0
 - Add `ProcessorComments` to Disputes
 - Deprecate `ForwardedComments`

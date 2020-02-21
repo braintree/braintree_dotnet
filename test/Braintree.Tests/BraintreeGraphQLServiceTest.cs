@@ -23,7 +23,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_WhenErrorClassIsAuthentication_ThrowsAuthenitcationException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "AUTHENTICATION");
 
             GraphQLError error = new GraphQLError();
@@ -39,7 +39,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsAuthorization_throwsAuthorizationException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "AUTHORIZATION");
 
             GraphQLError error = new GraphQLError();
@@ -55,7 +55,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsNotFound_throwsNotFoundException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "NOT_FOUND");
 
             GraphQLError error = new GraphQLError();
@@ -71,7 +71,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsUnsupportedClient_throwsUnsupportedClientException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "UNSUPPORTED_CLIENT");
 
             GraphQLError error = new GraphQLError();
@@ -87,7 +87,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsResourceLimit_throwsTooManyRequestsException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "RESOURCE_LIMIT");
 
             GraphQLError error = new GraphQLError();
@@ -103,7 +103,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsInternal_throwsServerException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "INTERNAL");
 
             GraphQLError error = new GraphQLError();
@@ -119,7 +119,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsBraintreeServiceAvailability_throwsDownForMaintanceException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "SERVICE_AVAILABILITY");
 
             GraphQLError error = new GraphQLError();
@@ -135,7 +135,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsUnknown_throwsUnexpectedException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "UNKNOWN");
 
             GraphQLError error = new GraphQLError();
@@ -151,7 +151,7 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsNotMapped_throwsUnexpectedException()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass","FOO");
 
             GraphQLError error = new GraphQLError();
@@ -167,7 +167,7 @@ namespace Braintree.Tests
         [Test]
         public void DoNotThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsValidation()
         {
-            Dictionary<string, string> extensions = new Dictionary<string, string>();
+            Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "VALIDATION");
 
             GraphQLError error = new GraphQLError();
@@ -183,9 +183,9 @@ namespace Braintree.Tests
         [Test]
         public void ThrowExceptionIfGraphQLErrorResponseHasErrors_whenValidationAndNotFoundErrorClassesExist_throwsNotFoundException()
         {
-            Dictionary<string, string> validationExtensions = new Dictionary<string, string>();
+            Dictionary<string, object> validationExtensions = new Dictionary<string, object>();
             validationExtensions.Add("errorClass", "VALIDATION");
-            Dictionary<string, string> notFoundExtensions = new Dictionary<string, string>();
+            Dictionary<string, object> notFoundExtensions = new Dictionary<string, object>();
             notFoundExtensions.Add("errorClass", "NOT_FOUND");
 
             GraphQLError validationError = new GraphQLError();

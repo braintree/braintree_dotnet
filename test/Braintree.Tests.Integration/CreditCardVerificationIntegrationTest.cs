@@ -90,6 +90,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
             Assert.AreEqual("XX", verification.NetworkResponseCode);
             Assert.AreEqual("sample network response text", verification.NetworkResponseText);
+            Assert.IsNotNull(verification.GraphQLId);
         }
 
         [Test]

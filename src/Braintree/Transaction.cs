@@ -165,6 +165,7 @@ namespace Braintree
         public virtual List<Discount> Discounts { get; protected set; }
         public virtual List<Dispute> Disputes { get; protected set; }
         public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
+        public virtual string GraphQLId { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual string OrderId { get; protected set; }
         public virtual string PlanId { get; protected set; }
@@ -253,6 +254,7 @@ namespace Braintree
                 PaymentInstrumentType.UNKNOWN
             );
             Channel = node.GetString("channel");
+            GraphQLId = node.GetString("global-id");
             OrderId = node.GetString("order-id");
             Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
             EscrowStatus = (TransactionEscrowStatus)CollectionUtil.Find(

@@ -462,7 +462,7 @@ namespace Braintree.TestUtil
             string url = "/three_d_secure/create_verification/" + merchantAccountId;
             NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + url, request));
             Assert.IsTrue(response.IsSuccess());
-            return response.GetString("three-d-secure-token");
+            return response.GetString("three-d-secure-authentication-id");
         }
 
         public static string Generate3DSNonce(BraintreeService service, CreditCardRequest request)

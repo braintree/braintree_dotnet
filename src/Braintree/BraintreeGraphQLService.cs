@@ -47,7 +47,7 @@ namespace Braintree
     public class GraphQLError
     {
         public string message { get; set; }
-        public Dictionary<string, string> extensions { get; set; }
+        public Dictionary<string, object> extensions { get; set; }
     }
 
     public class BraintreeGraphQLService : HttpService
@@ -151,7 +151,7 @@ namespace Braintree
                     throw new UnexpectedException();
                 }
 
-                switch (error.extensions["errorClass"]) {
+                switch ((string)error.extensions["errorClass"]) {
                     case "VALIDATION":
                         continue;
                     case "AUTHENTICATION":

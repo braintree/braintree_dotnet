@@ -675,6 +675,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("open_dispute", dispute.Id);
             Assert.AreEqual(DisputeStatus.OPEN, dispute.Status);
             Assert.AreEqual("open_disputed_transaction", dispute.Transaction.Id);
+            Assert.IsNotNull(dispute.GraphQLId);
         }
 #if net452
             ).GetAwaiter().GetResult();
@@ -878,7 +879,7 @@ namespace Braintree.Tests.Integration
             {
                 disputes.Add(d);
             }
-            Assert.AreEqual(2, disputes.Count);
+            Assert.IsTrue(disputes.Count >= 2);
         }
 
         [Test]

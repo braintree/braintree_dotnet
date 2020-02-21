@@ -180,32 +180,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Create_CreatesPayPalAccountWithPayPalRefreshTokenWithoutUpgrade()
-        {
-            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
-            Assert.IsTrue(result.IsSuccess());
-
-            string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
-            var request = new PaymentMethodRequest
-            {
-                CustomerId = result.Target.Id,
-                PayPalRefreshToken = "PAYPAL_REFRESH_TOKEN",
-                PayPalVaultWithoutUpgrade = true
-            };
-            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
-
-            Assert.IsTrue(paymentMethodResult.IsSuccess());
-            Assert.IsNotNull(paymentMethodResult.Target.Token);
-            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
-            Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
-
-            var token = paymentMethodResult.Target.Token;
-            var foundPaypalAccount = gateway.PayPalAccount.Find(token);
-            Assert.IsNotNull(foundPaypalAccount);
-            Assert.IsNull(foundPaypalAccount.BillingAgreementId);
-        }
-
-        [Test]
         public void Create_CreatesCreditCardWithNonce()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -375,6 +349,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayCard.CreatedAt);
             Assert.IsNotNull(androidPayCard.UpdatedAt);
             Assert.IsNotNull(androidPayCard.Subscriptions);
+            Assert.IsFalse(androidPayCard.IsNetworkTokenized);
         }
 
         [Test]
@@ -410,6 +385,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayCard.CreatedAt);
             Assert.IsNotNull(androidPayCard.UpdatedAt);
             Assert.IsNotNull(androidPayCard.Subscriptions);
+            Assert.IsTrue(androidPayCard.IsNetworkTokenized);
         }
 
         [Test]

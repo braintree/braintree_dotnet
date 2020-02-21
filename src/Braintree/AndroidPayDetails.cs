@@ -9,6 +9,7 @@ namespace Braintree
         public virtual string ExpirationYear { get; protected set; }
         public virtual string GoogleTransactionId { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
+        public virtual bool? IsNetworkTokenized { get; protected set; }
         public virtual string SourceCardLast4 { get; protected set; }
         public virtual string SourceCardType { get; protected set; }
         public virtual string SourceDescription { get; protected set; }
@@ -53,6 +54,7 @@ namespace Braintree
             CountryOfIssuance = node.GetString("country-of-issuance");
             ProductId = node.GetString("product-id");
             GlobalId = node.GetString("global-id");
+            IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
         }
 
         [Obsolete("Mock Use Only")]
