@@ -1,3 +1,6 @@
+# unreleased
+- Add `FromNonceAsync` method to `CreditCardGateway` (#97 thanks @ronnieoverby)
+
 ## 4.17.0
 - Add `RefundAuthHardDeclined` and `RefundAuthSoftDeclined` to validation errors
 - Add `PROCESSOR_DOES_NOT_SUPPORT_MOTO_FOR_CARD_TYPE` to validation errors

@@ -20,6 +20,7 @@ namespace Braintree
         CreditCard Find(string token);
         Task<CreditCard> FindAsync(string token);
         CreditCard FromNonce(string nonce);
+        Task<CreditCard> FromNonceAsync(string nonce);
         Result<CreditCard> Update(string token, CreditCardRequest request);
         Task<Result<CreditCard>> UpdateAsync(string token, CreditCardRequest request);
     }

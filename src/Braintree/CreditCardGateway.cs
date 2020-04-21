@@ -121,13 +121,32 @@ namespace Braintree
 
         public virtual CreditCard FromNonce(string nonce)
         {
-            if(nonce == null || nonce.Trim().Equals(""))
+            if (nonce == null || nonce.Trim().Equals(""))
                 throw new NotFoundException();
 
-            try {
+            try
+            {
                 XmlNode creditCardXML = service.Get(service.MerchantPath() + "/payment_methods/from_nonce/" + nonce);
                 return new CreditCard(new NodeWrapper(creditCardXML), gateway);
-            } catch (NotFoundException) {
+            }
+            catch (NotFoundException)
+            {
+                throw new NotFoundException("Payment method with nonce " + nonce + " locked, consumed or not found");
+            }
+        }
+
+        public virtual async Task<CreditCard> FromNonceAsync(string nonce)
+        {
+            if (nonce == null || nonce.Trim().Equals(""))
+                throw new NotFoundException();
+
+            try
+            {
+                XmlNode creditCardXML = await service.GetAsync(service.MerchantPath() + "/payment_methods/from_nonce/" + nonce).ConfigureAwait(false);
+                return new CreditCard(new NodeWrapper(creditCardXML), gateway);
+            }
+            catch (NotFoundException)
+            {
                 throw new NotFoundException("Payment method with nonce " + nonce + " locked, consumed or not found");
             }
         }
