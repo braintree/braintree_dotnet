@@ -104,13 +104,13 @@ namespace Braintree
         }
 
         public async Task<string> GetHttpResponseWithClientAsync(HttpClient client, HttpRequestMessage request) {
-            var response = client.SendAsync(request).GetAwaiter().GetResult();
+            var response = await client.SendAsync(request);
             if (response.StatusCode != (HttpStatusCode) 422)
             {
                 ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
             }
 
-            return await ParseResponseStreamAsync(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
+            return await ParseResponseStreamAsync(await response.Content.ReadAsStreamAsync());
         }
 
         public string GetHttpResponse(HttpRequestMessage request) {
