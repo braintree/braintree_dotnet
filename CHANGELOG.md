@@ -1,5 +1,6 @@
-## Unreleased
-  * Fix blocking in HttpService for .net core async methods
+# unreleased
+- Add `FromNonceAsync` method to `CreditCardGateway` (#97 thanks @ronnieoverby)
+- Fix blocking in HttpService for .net core async methods
 
 ## 4.17.0
 - Add `RefundAuthHardDeclined` and `RefundAuthSoftDeclined` to validation errors

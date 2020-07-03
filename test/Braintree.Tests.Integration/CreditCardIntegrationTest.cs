@@ -556,6 +556,25 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task FromNonceAsync_ExchangesANonceForACreditCard()
+#else
+        public void FromNonceAsync_ExchangesANonceForACreditCard()
+        {
+            Task.Run(async () =>
+#endif
+        {
+          Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+          string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
+          CreditCard card = await gateway.CreditCard.FromNonceAsync(nonce);
+          Assert.AreEqual("401288******1881", card.MaskedNumber);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void FromNonce_ReturnsErrorWhenProvidedNoncePointingToUnlockedSharedCard()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -570,6 +589,32 @@ namespace Braintree.Tests.Integration
             StringAssert.Contains("not found", exception.Message);
             Assert.IsInstanceOf(typeof(NotFoundException), exception);
         }
+
+        [Test]
+#if netcore
+        public async Task FromNonceAsync_ReturnsErrorWhenProvidedNoncePointingToUnlockedSharedCard()
+#else
+        public void FromNonceAsync_ReturnsErrorWhenProvidedNoncePointingToUnlockedSharedCard()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Exception exception = null;
+            try {
+                await gateway.CreditCard.FromNonceAsync(nonce);
+            } catch (Exception tempException) {
+                exception = tempException;
+            }
+
+            Assert.IsNotNull(exception);
+            StringAssert.Contains("not found", exception.Message);
+            Assert.IsInstanceOf(typeof(NotFoundException), exception);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
 
         [Test]
         public void FromNonce_ReturnsErrorWhenProvidedConsumedNonce()
@@ -589,6 +634,33 @@ namespace Braintree.Tests.Integration
             Assert.IsInstanceOf(typeof(NotFoundException), exception);
         }
 
+        [Test]
+#if netcore
+        public async Task FromNonceAsync_ReturnsErrorWhenProvidedConsumedNonce()
+#else
+        public void FromNonceAsync_ReturnsErrorWhenProvidedConsumedNonce()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway, "4012888888881881", customer.Id);
+            await gateway.CreditCard.FromNonceAsync(nonce);
+
+            Exception exception = null;
+            try {
+                await gateway.CreditCard.FromNonceAsync(nonce);
+            } catch (Exception tempException) {
+                exception = tempException;
+            }
+            StringAssert.Contains("consumed", exception.Message);
+            Assert.IsNotNull(exception);
+            Assert.IsInstanceOf(typeof(NotFoundException), exception);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
         [Test]
         public void Update_UpdatesCreditCardByToken()
         {
