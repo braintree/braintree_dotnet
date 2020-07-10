@@ -7,6 +7,7 @@ namespace Braintree
         public string PaymentMethodNonce { get; set; }
         public PaymentMethodOptionsRequest Options { get; set; }
         public PaymentMethodAddressRequest BillingAddress { get; set; }
+        public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
         public string BillingAddressId { get; set; }
         public string CardholderName { get; set; }
         public string CVV { get; set; }
@@ -46,6 +47,7 @@ namespace Braintree
                 AddElement("expiration-year", ExpirationYear).
                 AddElement("number", Number).
                 AddElement("paypal-refresh-token", PayPalRefreshToken).
+                AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru).
                 // NEXT_MAJOR_VERSION remove this element as it's been ignored in the gateway
                 AddElement("paypal-vault-without-upgrade", PayPalVaultWithoutUpgrade);
         }

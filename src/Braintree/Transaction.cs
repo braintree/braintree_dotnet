@@ -225,6 +225,7 @@ namespace Braintree
         public virtual string ShipsFromPostalCode { get; protected set; }
         public virtual string NetworkTransactionId { get; protected set; }
         public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
+        public virtual string RetrievalReferenceNumber { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -459,6 +460,8 @@ namespace Braintree
             NetworkTransactionId = node.GetString("network-transaction-id");
 
             AuthorizationExpiresAt = node.GetDateTime("authorization-expires-at");
+
+            RetrievalReferenceNumber = node.GetString("retrieval-reference-number");
         }
 
         /// <summary>

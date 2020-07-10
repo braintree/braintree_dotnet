@@ -75,6 +75,12 @@ namespace Braintree
                 return DisputeLostSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_WON) {
                 return DisputeWonSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_ACCEPTED) {
+                return DisputeAcceptedSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_DISPUTED) {
+                return DisputeDisputedSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_EXPIRED) {
+                return DisputeExpiredSampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY) {
                 return SubscriptionChargedSuccessfullySampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_UNSUCCESSFULLY) {
@@ -311,6 +317,66 @@ namespace Braintree
                     ),
                     NodeAttr("date-opened", TYPE_DATE, "2014-03-21"),
                     NodeAttr("date-won", TYPE_DATE, "2014-03-22")
+            );
+        }
+
+        private string DisputeAcceptedSampleXml(string id) {
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
+                    Node("status", "accepted"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21")
+            );
+        }
+
+        private string DisputeDisputedSampleXml(string id) {
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
+                    Node("status", "disputed"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21")
+            );
+        }
+
+        private string DisputeExpiredSampleXml(string id) {
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
+                    Node("status", "expired"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21")
             );
         }
 

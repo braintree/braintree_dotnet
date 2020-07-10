@@ -2,7 +2,7 @@
 
 namespace Braintree
 {
-    public class TransactionThreeDSecurePassThruRequest : Request
+    public class ThreeDSecurePassThruRequest : Request
     {
         public string EciFlag { get; set; }
         public string Cavv { get; set; }

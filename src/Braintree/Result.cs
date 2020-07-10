@@ -160,6 +160,10 @@ namespace Braintree
             {
                 return new PaymentMethodNonce(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(AuthenticationInsightResponse))
+            {
+                return new AuthenticationInsightResponse(node) as T;
+            }
             else if (typeof(T) == typeof(OAuthCredentials))
             {
                 return new OAuthCredentials(node) as T;

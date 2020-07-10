@@ -2,6 +2,20 @@
 
 namespace Braintree
 {
+    public class ShippingMethod : Enumeration
+    {
+        public static readonly ShippingMethod SAME_DAY = new ShippingMethod("same_day");
+        public static readonly ShippingMethod NEXT_DAY = new ShippingMethod("next_day");
+        public static readonly ShippingMethod PRIORITY = new ShippingMethod("priority");
+        public static readonly ShippingMethod GROUND = new ShippingMethod("ground");
+        public static readonly ShippingMethod ELECTRONIC = new ShippingMethod("electronic");
+        public static readonly ShippingMethod SHIP_TO_STORE = new ShippingMethod("ship_to_store");
+
+        public static readonly ShippingMethod[] ALL = { SAME_DAY, NEXT_DAY, PRIORITY, GROUND, ELECTRONIC, SHIP_TO_STORE };
+
+        protected ShippingMethod(string name) : base(name) {}
+    }
+
     /// <summary>
     /// A class for building requests to manipulate <see cref="Address"/> records in the vault.
     /// </summary>
@@ -31,11 +45,13 @@ namespace Braintree
         public string ExtendedAddress { get; set; }
         public string Locality { get; set; }
         public string Region { get; set; }
+        public string PhoneNumber { get; set; }
         public string PostalCode { get; set; }
         public string CountryCodeAlpha2 { get; set; }
         public string CountryCodeAlpha3 { get; set; }
         public string CountryCodeNumeric { get; set; }
         public string CountryName { get; set; }
+        public ShippingMethod ShippingMethod { get; set; }
 
         public override string ToXml()
         {
@@ -67,11 +83,13 @@ namespace Braintree
                 AddElement("extended-address", ExtendedAddress).
                 AddElement("locality", Locality).
                 AddElement("region", Region).
+                AddElement("phone-number", PhoneNumber).
                 AddElement("postal-code", PostalCode).
                 AddElement("country-code-alpha2", CountryCodeAlpha2).
                 AddElement("country-code-alpha3", CountryCodeAlpha3).
                 AddElement("country-code-numeric", CountryCodeNumeric).
-                AddElement("country-name", CountryName);
+                AddElement("country-name", CountryName).
+                AddElement("shipping-method", ShippingMethod);
         }
     }
 }

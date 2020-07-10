@@ -139,7 +139,6 @@ namespace Braintree
                     request.Content.Headers.TryAddWithoutValidation("Content-Type", MultipartFormContentType(formDataBoundary));
                     request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(ascii_string);
                 }
-
                 var response = GetHttpResponse(request);
 
                 return StringToXmlNode(response);

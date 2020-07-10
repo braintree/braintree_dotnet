@@ -74,6 +74,8 @@ namespace Braintree
             request.Headers.Add("Accept-Encoding", "gzip");
             request.Headers.Add("User-Agent", "Braintree .NET " + typeof(BraintreeService).GetTypeInfo().Assembly.GetName().Version.ToString());
             request.Headers.Add("Keep-Alive", "false");
+            // NET Core sends Expect:100-Continue by default which causes sporadic API errors. This setting turns off this default behavior.
+            request.Headers.ExpectContinue = false;
         }
 #else
         public virtual void SetRequestHeaders(HttpWebRequest request)
@@ -81,6 +83,8 @@ namespace Braintree
             request.Headers.Add("Authorization", GetAuthorizationHeader());
             request.Headers.Add("Accept-Encoding", "gzip");
             request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
+            // NET Framework sends Expect:100-Continue by default which causes sporadic API errors. This setting turns off this default behavior.
+            request.ServicePoint.Expect100Continue = false;
         }
 #endif
 
@@ -89,7 +93,6 @@ namespace Braintree
             var request = Configuration.HttpRequestMessageFactory(new HttpMethod(method), URL);
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(GetAuthorizationSchema(), GetAuthorizationHeader());
             SetRequestHeaders(request);
-
             return request;
         }
 
@@ -123,7 +126,6 @@ namespace Braintree
                 };
 
                 SetWebProxy(httpClientHandler, request.RequestUri);
-
                 using (var client = new HttpClient(httpClientHandler))
                 {
                     client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
@@ -156,8 +158,8 @@ namespace Braintree
             ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | ((SecurityProtocolType) SecurityProtocolTypeTls12);
 
             var request = Configuration.HttpWebRequestFactory(URL);
-            SetRequestHeaders(request);
             SetRequestProxy(request);
+            SetRequestHeaders(request);
             request.Method = method;
             request.KeepAlive = false;
             request.Timeout = Configuration.Timeout;

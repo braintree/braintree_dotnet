@@ -4,6 +4,10 @@ def use_verbose_mode
   ENV["USE_VERBOSE_MODE"] ? " -v n" : ""
 end
 
+def verbose_core
+  "--logger:'console;verbosity=detailed'"
+end
+
 task :clean do
   sh "rm -rf src/Braintree/bin"
   sh "rm -rf src/Braintree/obj"
@@ -29,27 +33,27 @@ namespace :core do
   desc "run tests"
   namespace :test do
     task :unit => [:compile] do
-      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp1.0"
+      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp1.0 #{verbose_core}"
     end
 
     task :integration => [:compile] do
-      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp1.0"
+      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp1.0 #{verbose_core}"
     end
 
     task :all => [:compile] do
-      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp1.0 && dotnet test test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp1.0"
+      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp1.0 #{verbose_core} && dotnet test test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp1.0 #{verbose_core}"
     end
   end
 
   namespace :test_focus do
     desc "e.g. rake core:test_focus:unit[ToXml_IncludesDeviceData]"
     task :unit, [:test_name] => [:compile] do |t, args|
-      sh "dotnet test #{use_verbose_mode} --filter Name~#{args[:test_name]} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp1.0"
+      sh "dotnet test #{use_verbose_mode} --filter FullyQualifiedName~#{args[:test_name]} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp1.0 #{verbose_core}"
     end
 
     desc "e.g. rake core:test_focus:integration[Delete_DeletesPayPalAccount]"
     task :integration, [:test_name] => [:compile] do |t, args|
-      sh "dotnet test #{use_verbose_mode} --filter Name~#{args[:test_name]} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp1.0"
+      sh "dotnet test #{use_verbose_mode} --filter FullyQualifiedName~#{args[:test_name]} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp1.0 #{verbose_core}"
     end
   end
 end
@@ -68,27 +72,27 @@ namespace :core2 do
   desc "run tests"
   namespace :test do
     task :unit => [:compile] do
-      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp2.0"
+      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp2.0 #{verbose_core}"
     end
 
     task :integration => [:compile] do
-      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp2.0"
+      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp2.0 #{verbose_core}"
     end
 
     task :all => [:compile] do
-      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp2.0 && dotnet test test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp2.0"
+      sh "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp2.0 #{verbose_core} && dotnet test test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp2.0 #{verbose_core}"
     end
   end
 
   namespace :test_focus do
     desc "e.g. rake core2:test_focus:unit[ToXml_IncludesDeviceData]"
     task :unit, [:test_name] => [:compile] do |t, args|
-      sh "dotnet test #{use_verbose_mode} --filter Name~#{args[:test_name]} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp2.0"
+      sh "dotnet test #{use_verbose_mode} --filter FullyQualifiedName~#{args[:test_name]} test/Braintree.Tests/Braintree.Tests.csproj -f netcoreapp2.0 #{verbose_core}"
     end
 
     desc "e.g. rake core2:test_focus:integration[Delete_DeletesPayPalAccount]"
     task :integration, [:test_name] => [:compile] do |t, args|
-      sh "dotnet test #{use_verbose_mode} --filter Name~#{args[:test_name]} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp2.0"
+      sh "dotnet test #{use_verbose_mode} --filter FullyQualifiedName~#{args[:test_name]} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj -f netcoreapp2.0 #{verbose_core}"
     end
   end
 end
@@ -115,14 +119,14 @@ namespace :mono do
   end
 
   namespace :test_focus do
-    desc "e.g. rake mono:test_focus:unit[Braintree.Tests.PaymentMethodTest.ToXml_IncludesDeviceData]"
+    desc "e.g. rake mono:test_focus:unit[PaymentMethodTest.ToXml_IncludesDeviceData]"
     task :unit, [:test_name] => [:compile] do |t, args|
-      sh "mono test/lib/NUnit-3.4.1/bin/Release/nunit3-console.exe test/Braintree.Tests/bin/Debug/net452/Braintree.Tests.dll --test=#{args[:test_name]}"
+      sh "mono test/lib/NUnit-3.4.1/bin/Release/nunit3-console.exe test/Braintree.Tests/bin/Debug/net452/Braintree.Tests.dll --test=Braintree.Tests.#{args[:test_name]}"
     end
 
-    desc "e.g. rake mono:test_focus:integration[Braintree.Tests.Integration.PaymentMethodIntegrationTest.Delete_DeletesPayPalAccount]"
+    desc "e.g. rake mono:test_focus:integration[PaymentMethodIntegrationTest.Delete_DeletesPayPalAccount]"
     task :integration, [:test_name] => [:compile] do |t, args|
-      sh "mono test/lib/NUnit-3.4.1/bin/Release/nunit3-console.exe test/Braintree.Tests.Integration/bin/Debug/net452/Braintree.Tests.Integration.dll --test=#{args[:test_name]}"
+      sh "mono test/lib/NUnit-3.4.1/bin/Release/nunit3-console.exe test/Braintree.Tests.Integration/bin/Debug/net452/Braintree.Tests.Integration.dll --test=Braintree.Tests.Integration.#{args[:test_name]}"
     end
   end
 end

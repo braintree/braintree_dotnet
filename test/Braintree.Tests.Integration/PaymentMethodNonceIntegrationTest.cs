@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Braintree.Tests.Integration
 {
     [TestFixture]
-    public class PaymentMethodNonceTest
+    public class PaymentMethodNonceIntegrationTest
     {
         private BraintreeGateway gateway;
 
@@ -356,6 +356,96 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+#if netcore
+        public async Task CreateAsync_ReturnsAuthenticationInsightWithRBI()
+#else
+        public void CreateAsync_ReturnsAuthenticationInsightWithRBI()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            AuthenticationInsightResponse authInsight = await RequestAuthInsight("india_visa_credit", "india_three_d_secure_merchant_account", 50);
+
+            Assert.AreEqual("rbi", authInsight.RegulationEnvironment);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_ReturnsAuthenticationInsightWithPSD2()
+#else
+        public void CreateAsync_ReturnsAuthenticationInsightWithPSD2()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            AuthenticationInsightResponse authInsight = await RequestAuthInsight("european_visa_credit", "european_three_d_secure_merchant_account");
+
+            Assert.AreEqual("psd2", authInsight.RegulationEnvironment);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_ReturnsAuthenticationInsightWithUnregulated()
+#else
+        public void CreateAsync_ReturnsAuthenticationInsightWithUnregulated()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            AuthenticationInsightResponse authInsight = await RequestAuthInsight("india_visa_credit", "european_three_d_secure_merchant_account");
+
+            Assert.AreEqual("unregulated", authInsight.RegulationEnvironment);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_ReturnsAuthenticationInsightWithSCARequired()
+#else
+        public void CreateAsync_ReturnsAuthenticationInsightWithSCARequired()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            AuthenticationInsightResponse authInsight = await RequestAuthInsight("india_visa_credit", "india_three_d_secure_merchant_account", 5000);
+
+            Assert.AreEqual("sca_required", authInsight.ScaIndicator);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_ReturnsAuthenticationInsightWithSCAIndicatorUnavailable()
+#else
+        public void CreateAsync_ReturnsAuthenticationInsightWithSCAIndicatorUnavailable()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            AuthenticationInsightResponse authInsight = await RequestAuthInsight("india_visa_credit", "india_three_d_secure_merchant_account");
+
+            Assert.AreEqual("unavailable", authInsight.ScaIndicator);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Find_ExposesNullThreeDSecureInfoIfBlank()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -369,6 +459,24 @@ namespace Braintree.Tests.Integration
         public void Find_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
             Assert.Throws<NotFoundException>(() => gateway.PaymentMethodNonce.Find("notarealnonce"));
+        }
+
+        public async Task<AuthenticationInsightResponse> RequestAuthInsight(string paymentMethodToken, string merchantAccountId, decimal amount = -1)
+        {
+            BraintreeService service = new BraintreeService(gateway.Configuration);
+            AuthenticationInsightOptionsRequest options = new AuthenticationInsightOptionsRequest{};
+
+            PaymentMethodNonceRequest paymentMethodNonceRequest = new PaymentMethodNonceRequest
+            {
+                AuthenticationInsight = true,
+                MerchantAccountId = merchantAccountId,
+                AuthenticationInsightOptions = options,
+            };
+            if(amount > 0)
+                paymentMethodNonceRequest.AuthenticationInsightOptions.Amount = amount;
+
+            Result<PaymentMethodNonce> nonce = await gateway.PaymentMethodNonce.CreateAsync(paymentMethodToken, paymentMethodNonceRequest);
+            return nonce.Target.AuthenticationInsight;
         }
     }
 }

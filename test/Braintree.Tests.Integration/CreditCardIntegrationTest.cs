@@ -1585,6 +1585,68 @@ namespace Braintree.Tests.Integration
           Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShifted);
           Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShiftPossible);
         }
+        
+        [Test]
+        public void CreateCreditCardWithInvalidThreeDSecurePassThruParams()
+        {
+          Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+          ThreeDSecurePassThruRequest passThruRequestWithoutThreeDSecureVersion = new ThreeDSecurePassThruRequest()
+          {
+              EciFlag = "05",
+              Cavv = "some_cavv",
+              Xid = "some_xid",
+              AuthenticationResponse = "Y",
+              DirectoryResponse = "Y",
+              CavvAlgorithm = "2",
+              DsTransactionId = "some_ds_transaction_id"
+          };
+          CreditCardRequest request = new CreditCardRequest
+          {
+            CustomerId = customer.Id,
+            PaymentMethodNonce = Nonce.Transactable,
+            ThreeDSecurePassThru = passThruRequestWithoutThreeDSecureVersion,
+            Options = new CreditCardOptionsRequest()
+            {
+                VerifyCard = true
+            },
+          };
+ 
+          Result<CreditCard> result = gateway.CreditCard.Create(request);
+          Assert.IsFalse(result.IsSuccess());
+          Assert.AreEqual(
+            ValidationErrorCode.VERIFICATION_THREE_D_SECURE_THREE_D_SECURE_VERSION_IS_REQUIRED,
+            result.Errors.ForObject("Verification").OnField("ThreeDSecureVersion")[0].Code
+          );
+        }
+
+        [Test]
+        public void CreateCreditCardWithThreeDSecurePassThruParams()
+        {
+          Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+          CreditCardRequest request = new CreditCardRequest
+          {
+            CustomerId = customer.Id,
+            PaymentMethodNonce = Nonce.Transactable,
+            ThreeDSecurePassThru = new ThreeDSecurePassThruRequest()
+            {
+                EciFlag = "05",
+                Cavv = "some_cavv",
+                Xid = "some_xid",
+                ThreeDSecureVersion = "2.2.1",
+                AuthenticationResponse = "Y",
+                DirectoryResponse = "Y",
+                CavvAlgorithm = "2",
+                DsTransactionId = "some_ds_transaction_id"
+            },
+            Options = new CreditCardOptionsRequest()
+            {
+                VerifyCard = true
+            },
+          };
+
+          Result<CreditCard> result = gateway.CreditCard.Create(request);
+          Assert.IsTrue(result.IsSuccess());
+        }
 
         [Test]
         public void Create_WithAccountTypeCredit()
@@ -1684,6 +1746,87 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(
                 ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_ACCOUNT_TYPE_NOT_SUPPORTED,
                 result.Errors.ForObject("CreditCard").ForObject("Options").OnField("VerificationAccountType")[0].Code
+            );
+        }
+        
+        [Test]
+        public void UpdateCreditCardWithThreeDSecurePassThruParams()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.Transactable,
+            };
+            ThreeDSecurePassThruRequest passThruRequestWithThreeDSecureVersion = new ThreeDSecurePassThruRequest()
+            {
+                EciFlag = "05",
+                Cavv = "some_cavv",
+                Xid = "some_xid",
+                ThreeDSecureVersion = "2.2.0",
+                AuthenticationResponse = "Y",
+                DirectoryResponse = "Y",
+                CavvAlgorithm = "2",
+                DsTransactionId = "some_ds_transaction_id"
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.Transactable,
+                ThreeDSecurePassThru = passThruRequestWithThreeDSecureVersion,
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                }
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest);
+            Assert.IsTrue(result.IsSuccess());
+        }
+        
+        [Test]
+        public void updateCreditCardWithInvalidThreeDSecurePassThruParams()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.Transactable,
+            };
+            ThreeDSecurePassThruRequest passThruRequestWithoutThreeDSecureVersion = new ThreeDSecurePassThruRequest()
+            {
+                EciFlag = "05",
+                Cavv = "some_cavv",
+                Xid = "some_xid",
+                AuthenticationResponse = "Y",
+                DirectoryResponse = "Y",
+                CavvAlgorithm = "2",
+                DsTransactionId = "some_ds_transaction_id"
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.Transactable,
+                ThreeDSecurePassThru = passThruRequestWithoutThreeDSecureVersion,
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerifyCard = true,
+                },
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.VERIFICATION_THREE_D_SECURE_THREE_D_SECURE_VERSION_IS_REQUIRED,
+                result.Errors.ForObject("Verification").OnField("ThreeDSecureVersion")[0].Code
             );
         }
 

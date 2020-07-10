@@ -242,5 +242,29 @@ namespace Braintree.Tests
             Assert.AreEqual("06", threeDSecureInfo.EciFlag);
             Assert.AreEqual("2.0.1", threeDSecureInfo.ThreeDSecureVersion);
         }
+
+        [Test]
+        public void ParseAuthenticationInsights()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<payment-method-nonce>" +
+                "  <authentication-insight>" +
+                "    <regulation-environment>bar</regulation-environment>" +
+                "    <sca-indicator>foo</sca-indicator>" +
+                "  </authentication-insight>" +
+                "</payment-method-nonce>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
+
+            Assert.IsNotNull(result.Target);
+            Assert.AreEqual("foo", result.Target.AuthenticationInsight.ScaIndicator);
+            Assert.AreEqual("bar", result.Target.AuthenticationInsight.RegulationEnvironment);
+        }
     }
 }

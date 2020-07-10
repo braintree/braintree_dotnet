@@ -10,6 +10,7 @@ namespace Braintree
         public virtual PaymentMethodNonceDetails Details { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
         public virtual BinData BinData { get; protected set; }
+        public virtual AuthenticationInsightResponse AuthenticationInsight { get; protected set; }
 
         protected internal PaymentMethodNonce(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -27,6 +28,12 @@ namespace Braintree
             if (threeDSecureInfoNode != null && !threeDSecureInfoNode.IsEmpty())
             {
                 ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
+            }
+
+            var authenticationInsight = node.GetNode("authentication-insight");
+            if (authenticationInsight != null && !authenticationInsight.IsEmpty())
+            {
+                AuthenticationInsight = new AuthenticationInsightResponse(authenticationInsight);
             }
 
             var binData = node.GetNode("bin-data");

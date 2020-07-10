@@ -4,20 +4,37 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2018</Copyright>
-    <VersionPrefix>4.17.0</VersionPrefix>
+    <VersionPrefix>4.18.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <TargetFrameworks>net452;netstandard2.0;netstandard1.3</TargetFrameworks>
     <AssemblyName>Braintree</AssemblyName>
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Add `RefundAuthHardDeclined` and `RefundAuthSoftDeclined` to validation errors
-      - Add `PROCESSOR_DOES_NOT_SUPPORT_MOTO_FOR_CARD_TYPE` to validation errors
-      - Add `isNetworkTokenized` to `AndroidPayCard` and `AndroidPayDetails`
-      - Add GraphQL ID to `CreditCardVerification`, `Customer`, `Dispute`, and `Transaction`
-      - Fix issue where GraphQL errors from transaction fee reports could not be parsed
-      - Add `ThreeDSecureAuthenticationId` to `ThreeDSecureInfo`
-      - Add `ThreeDSecureAuthenticationId` support to Transaction.Sale
+      - Add `ThreeDSecurePassThru` to `CreditCard.create()`, `CreditCard.update()`, `Customer.create()`, `Customer.update()`, `PaymentMethod.create()` and `PaymentMethod.update()`
+      - Add ThreeDSecure test payment method nonces
+      - Add test `AuthenticationId`s
+      - Add `DISPUTE_ACCEPTED`, `DISPUTE_DISPUTED`, and `DISPUTE_EXPIRED` webhook constants
+      - Add Authentication Insight to `PaymentMethodNonce.Create`
+      - Add `DOCUMENT_UPLOAD_FILE_IS_EMPTY` error code
+      - Add `RetrievalReferenceNumber` to `Transaction`
+      - Remove `Expect:100-Continue` header from requests to stop sporadic failed requests.
+      - Add `FromNonceAsync` method to `CreditCardGateway` (#97 thanks @ronnieoverby)
+      - Add `NetworkTransactionId` to `CreditCardVerification`
+      - Fix blocking in HttpService for .NET Core async methods (#100 thanks @roblascelles)
+      - Add `ProductSku` to `TransactionRequest`
+      - Add `PhoneNumber` and `ShippingMethod` to `AddressRequest`
+      - Add `CustomerDeviceId`, `CustomerLocationZip`, and `CustomerTenure` to `RiskDataRequest`
+      - Add validation error codes:
+        - `TRANSACTION_PRODUCT_SKU_IS_INVALID`
+        - `TRANSACTION_SHIPPING_PHONE_NUMBER_IS_INVALID`
+        - `TRANSACTION_BILLING_PHONE_NUMBER_IS_INVALID`
+        - `RISK_DATA_CUSTOMER_BROWSER_IS_TOO_LONG`
+        - `RISK_DATA_CUSTOMER_DEVICE_ID_IS_TOO_LONG`
+        - `RISK_DATA_CUSTOMER_LOCATION_ZIP_INVALID_CHARACTERS`
+        - `RISK_DATA_CUSTOMER_LOCATION_ZIP_IS_INVALID`
+        - `RISK_DATA_CUSTOMER_LOCATION_ZIP_IS_TOO_LONG`
+        - `RISK_DATA_CUSTOMER_TENURE_IS_TOO_LONG`
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard2.0' ">1.6.0</NetStandardImplicitPackageVersion>

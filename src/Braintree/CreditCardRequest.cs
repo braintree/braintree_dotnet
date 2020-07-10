@@ -29,6 +29,7 @@ namespace Braintree
     {
         public string CustomerId { get; set; }
         public CreditCardAddressRequest BillingAddress { get; set; }
+        public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
         public string BillingAddressId { get; set; }
         public string DeviceData { get; set; }
         public string DeviceSessionId { get; set; }
@@ -68,6 +69,7 @@ namespace Braintree
                 AddElement("options", Options).
                 AddElement("payment-method-nonce", PaymentMethodNonce).
                 AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode).
+                AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru).
                 AddElement("token", Token);
         }
     }

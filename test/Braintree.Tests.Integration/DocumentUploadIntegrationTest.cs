@@ -25,6 +25,12 @@ namespace Braintree.Tests.Integration
 #endif
 
 #if netcore
+        private static string EMPTY_FILE_PATH = "../../../../../test/fixtures/empty_file.png";
+#else
+        private static string EMPTY_FILE_PATH = "test/fixtures/empty_file.png";
+#endif
+
+#if netcore
         private static string TOO_LONG_FILE_PATH = "../../../../../test/fixtures/too_long.pdf";
 #else
         private static string TOO_LONG_FILE_PATH = "test/fixtures/too_long.pdf";
@@ -298,6 +304,50 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_IS_TOO_LARGE, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+        public void Create_returnsErrorWhenFileIsEmpty()
+        {
+            using(StreamWriter writetext = new StreamWriter(new FileStream(EMPTY_FILE_PATH, FileMode.OpenOrCreate, FileAccess.ReadWrite)))
+            {
+            }
+            FileStream fs = new FileStream(EMPTY_FILE_PATH, FileMode.Open, FileAccess.Read);
+            DocumentUploadRequest request = new DocumentUploadRequest();
+            request.File = fs;
+            request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
+            var result = gateway.DocumentUpload.Create(request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_IS_EMPTY, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
+        }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_returnsErrorWhenFileIsEmpty()
+#else
+        public void CreateAsync_returnsErrorWhenFileIsEmpty()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            using(StreamWriter writetext = new StreamWriter(new FileStream(EMPTY_FILE_PATH, FileMode.OpenOrCreate, FileAccess.ReadWrite)))
+            {
+            }
+            FileStream fs = new FileStream(EMPTY_FILE_PATH, FileMode.Open, FileAccess.Read);
+            DocumentUploadRequest request = new DocumentUploadRequest();
+            request.File = fs;
+            request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
+            var result = await gateway.DocumentUpload.CreateAsync(request);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_IS_EMPTY, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
         }
 #if net452
             ).GetAwaiter().GetResult();

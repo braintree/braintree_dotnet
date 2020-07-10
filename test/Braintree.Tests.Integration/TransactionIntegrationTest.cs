@@ -1925,7 +1925,10 @@ namespace Braintree.Tests.Integration
                 RiskData = new RiskDataRequest()
                 {
                     CustomerBrowser = "IE6",
-                    CustomerIP = "192.168.0.1"
+                    CustomerDeviceId = "customer_device_id_012",
+                    CustomerIP = "192.168.0.1",
+                    CustomerLocationZip = "91244",
+                    CustomerTenure = 20
                 },
                 DeviceSessionId = "abc123"
             };
@@ -1936,6 +1939,38 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.RiskData.decision);
             Assert.IsNotNull(transaction.RiskData.fraudServiceProvider);
 
+        }
+
+        [Test]
+        public void Sale_FailureResponseWithInvalidRiskData()
+        {
+            AdvancedFraudSetup();
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "10/10"
+                },
+                RiskData = new RiskDataRequest()
+                {
+                    CustomerBrowser = "IE6",
+                    CustomerDeviceId = "customer_device_id_012",
+                    CustomerIP = "192.168.0.1",
+                    CustomerLocationZip = "912$4",
+                    CustomerTenure = 20
+                },
+                DeviceSessionId = "abc123"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.RISK_DATA_CUSTOMER_LOCATION_ZIP_INVALID_CHARACTERS,
+                result.Errors.ForObject("Transaction").ForObject("RiskData").OnField("CustomerLocationZip")[0].Code
+            );
         }
 
         [Test]
@@ -1999,6 +2034,7 @@ namespace Braintree.Tests.Integration
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
                 Channel = "MyShoppingCartProvider",
                 OrderId = "123",
+                ProductSku = "productsku01",
                 Recurring = true,
                 CreditCard = new TransactionCreditCardRequest
                 {
@@ -2041,11 +2077,13 @@ namespace Braintree.Tests.Integration
                     ExtendedAddress = "Apt 2F",
                     Locality = "Bartlett",
                     Region = "MA",
+                    PhoneNumber = "122-555-1236",
                     PostalCode = "60103",
                     CountryName = "Mexico",
                     CountryCodeAlpha2 = "MX",
                     CountryCodeAlpha3 = "MEX",
-                    CountryCodeNumeric = "484"
+                    CountryCodeNumeric = "484",
+                    ShippingMethod = ShippingMethod.ELECTRONIC
                 }
             };
 
@@ -2214,6 +2252,25 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_TRANSACTION_SOURCE_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Transaction-Source")[0].Code);
+        }
+
+        [Test]
+        public void Sale_WithProductSkuInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ProductSku = "product$ku!"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PRODUCT_SKU_IS_INVALID, result.Errors.ForObject("Transaction").OnField("ProductSku")[0].Code);
         }
 
         [Test]
@@ -2698,7 +2755,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -2812,7 +2869,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -2842,7 +2899,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2029",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -2872,7 +2929,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -2902,7 +2959,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "",
                     Cavv = "some_cavv",
@@ -2932,7 +2989,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "05",
                     Cavv = "",
@@ -2962,7 +3019,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "bad_eci_flag",
                     Cavv = "some_cavv",
@@ -2992,7 +3049,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -3023,7 +3080,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -3054,7 +3111,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -3084,7 +3141,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                ThreeDSecurePassThru = new TransactionThreeDSecurePassThruRequest
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest
                 {
                     EciFlag = "02",
                     Cavv = "some_cavv",
@@ -3501,14 +3558,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_GatewayRejectedForFraud()
         {
-            BraintreeGateway processingRulesGateway = new BraintreeGateway
-            {
-                Environment = Environment.DEVELOPMENT,
-                MerchantId = "processing_rules_merchant_id",
-                PublicKey = "processing_rules_public_key",
-                PrivateKey = "processing_rules_private_key"
-            };
-
+            AdvancedFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3520,7 +3570,7 @@ namespace Braintree.Tests.Integration
                 }
             };
 
-            Result<Transaction> result = processingRulesGateway.Transaction.Sale(request);
+            Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Transaction transaction = result.Transaction;
 
@@ -3730,14 +3780,16 @@ namespace Braintree.Tests.Integration
                     CountryName = "zzzzzz",
                     CountryCodeAlpha2 = "zz",
                     CountryCodeAlpha3 = "zzz",
-                    CountryCodeNumeric = "000"
+                    CountryCodeNumeric = "000",
+                    PhoneNumber = "122-555-1237-123456"
                 },
                 ShippingAddress = new AddressRequest
                 {
                     CountryName = "zzzzz",
                     CountryCodeAlpha2 = "zz",
                     CountryCodeAlpha3 = "zzz",
-                    CountryCodeNumeric = "000"
+                    CountryCodeNumeric = "000",
+                    PhoneNumber = "122-555-1236-123456"
                 }
             };
 
@@ -3748,6 +3800,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNull(result.CreditCardVerification);
 
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_AMOUNT_IS_REQUIRED, result.Errors.ForObject("Transaction").OnField("Amount")[0].Code);
+
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
                 result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryCodeAlpha2")[0].Code
@@ -3763,6 +3816,31 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(
                 ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
                 result.Errors.ForObject("Transaction").ForObject("Billing").OnField("CountryName")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_BILLING_PHONE_NUMBER_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("Billing").OnField("PhoneNumber")[0].Code
+            );
+
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA2_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("Transaction").ForObject("Shipping").OnField("CountryCodeAlpha2")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_ALPHA3_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("Transaction").ForObject("Shipping").OnField("CountryCodeAlpha3")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_CODE_NUMERIC_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("Transaction").ForObject("Shipping").OnField("CountryCodeNumeric")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.ADDRESS_COUNTRY_NAME_IS_NOT_ACCEPTED,
+                result.Errors.ForObject("Transaction").ForObject("Shipping").OnField("CountryName")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_SHIPPING_PHONE_NUMBER_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("Shipping").OnField("PhoneNumber")[0].Code
             );
 
             Dictionary<string, string> parameters = result.Parameters;
@@ -4805,6 +4883,26 @@ namespace Braintree.Tests.Integration
 
             Transaction transaction = result.Target;
             Assert.AreEqual("B", transaction.CvvResponseCode);
+        }
+
+        [Test]
+        public void Sale_DeserializesRetrievalReferenceNumber()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsNotNull(transaction.RetrievalReferenceNumber);
         }
 
         [Test]

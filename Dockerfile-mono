@@ -17,4 +17,4 @@ RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian
 RUN apt-get update
 RUN apt-get -y install dotnet-sdk-2.0.0
 
-WORKDIR /braintree-dotnet
+WORKDIR /home/admin/bt/braintree-dotnet

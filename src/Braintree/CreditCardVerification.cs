@@ -34,6 +34,7 @@ namespace Braintree
         public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
         public virtual string NetworkResponseCode { get; protected set; }
         public virtual string NetworkResponseText { get; protected set; }
+        public virtual string NetworkTransactionId { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual VerificationStatus Status { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
@@ -64,6 +65,7 @@ namespace Braintree
             ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
             NetworkResponseCode = node.GetString("network-response-code");
             NetworkResponseText = node.GetString("network-response-text");
+            NetworkTransactionId = node.GetString("network-transaction-id");
             MerchantAccountId = node.GetString("merchant-account-id");
             Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
             GraphQLId = node.GetString("global-id");
@@ -83,7 +85,6 @@ namespace Braintree
             {
                 ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
             }
-
         }
         
         [Obsolete("Mock Use Only")]

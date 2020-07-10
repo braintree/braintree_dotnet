@@ -1,6 +1,28 @@
-# unreleased
+# 4.18.0
+- Add `ThreeDSecurePassThru` to `CreditCard.create()`, `CreditCard.update()`, `Customer.create()`, `Customer.update()`, `PaymentMethod.create()` and `PaymentMethod.update()`
+- Add ThreeDSecure test payment method nonces
+- Add test `AuthenticationId`s
+- Add `DISPUTE_ACCEPTED`, `DISPUTE_DISPUTED`, and `DISPUTE_EXPIRED` webhook constants
+- Add Authentication Insight to `PaymentMethodNonce.Create`
+- Add `DOCUMENT_UPLOAD_FILE_IS_EMPTY` error code
+- Add `RetrievalReferenceNumber` to `Transaction`
+- Remove `Expect:100-Continue` header from requests to stop sporadic failed requests.
 - Add `FromNonceAsync` method to `CreditCardGateway` (#97 thanks @ronnieoverby)
+- Add `NetworkTransactionId` to `CreditCardVerification`
 - Fix blocking in HttpService for .NET Core async methods (#100 thanks @roblascelles)
+- Add `ProductSku` to `TransactionRequest`
+- Add `PhoneNumber` and `ShippingMethod` to `AddressRequest`
+- Add `CustomerDeviceId`, `CustomerLocationZip`, and `CustomerTenure` to `RiskDataRequest`
+- Add validation error codes:
+  - `TRANSACTION_PRODUCT_SKU_IS_INVALID`
+  - `TRANSACTION_SHIPPING_PHONE_NUMBER_IS_INVALID`
+  - `TRANSACTION_BILLING_PHONE_NUMBER_IS_INVALID`
+  - `RISK_DATA_CUSTOMER_BROWSER_IS_TOO_LONG`
+  - `RISK_DATA_CUSTOMER_DEVICE_ID_IS_TOO_LONG`
+  - `RISK_DATA_CUSTOMER_LOCATION_ZIP_INVALID_CHARACTERS`
+  - `RISK_DATA_CUSTOMER_LOCATION_ZIP_IS_INVALID`
+  - `RISK_DATA_CUSTOMER_LOCATION_ZIP_IS_TOO_LONG`
+  - `RISK_DATA_CUSTOMER_TENURE_IS_TOO_LONG`
 
 ## 4.17.0
 - Add `RefundAuthHardDeclined` and `RefundAuthSoftDeclined` to validation errors

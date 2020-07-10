@@ -426,5 +426,53 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(ValidationErrorCode.VERIFICATION_OPTIONS_ACCOUNT_TYPE_NOT_SUPPORTED,
                             result.Errors.ForObject("Verification").ForObject("Options").OnField("AccountType")[0].Code);
         }
+
+        [Test]
+        public void Create_WithVisaReturnsNetworkTransactionIdentifier()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+
+            Assert.IsNotNull(verification.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Create_WithMasterCardReturnsNetworkTransactionIdentifier()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+
+            Assert.IsNotNull(verification.NetworkTransactionId);
+        }
     }
 }

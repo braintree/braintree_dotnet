@@ -40,6 +40,7 @@ namespace Braintree
         public string FraudMerchantId { get; set; }
         public string Channel { get; set; }
         public string OrderId { get; set; }
+        public string ProductSku { get; set; }
         public bool? Recurring { get; set; }
         public string TransactionSource { get; set; }
         public string MerchantAccountId { get; set; }
@@ -55,7 +56,7 @@ namespace Braintree
         public TransactionType Type { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
         public TransactionOptionsRequest Options { get; set; }
-        public TransactionThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
+        public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
         public string PaymentMethodToken { get; set; }
         public string CustomerId { get; set; }
         public string ShippingAddressId { get; set; }
@@ -125,6 +126,7 @@ namespace Braintree
             builder.AddElement("device-data", DeviceData);
             builder.AddElement("customer-id", CustomerId);
             builder.AddElement("order-id", OrderId);
+            builder.AddElement("product-sku", ProductSku);
             builder.AddElement("channel", Channel);
             builder.AddElement("device-session-id", DeviceSessionId);
             builder.AddElement("fraud-merchant-id", FraudMerchantId);

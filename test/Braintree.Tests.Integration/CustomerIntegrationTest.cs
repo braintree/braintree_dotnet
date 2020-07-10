@@ -645,6 +645,92 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Create_CreateCustomerWithInvalidThreeDSecurePassThruParams() {
+            ThreeDSecurePassThruRequest passThruParamsWithoutThreeDSecureVersion = new ThreeDSecurePassThruRequest()
+            {
+                EciFlag = "05",
+                Cavv = "some_cavv",
+                Xid = "some_xid",
+                AuthenticationResponse = "Y",
+                DirectoryResponse = "Y",
+                CavvAlgorithm = "2",
+                DsTransactionId = "some_ds_transaction_id"
+            };
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/25",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    ThreeDSecurePassThru = passThruParamsWithoutThreeDSecureVersion,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerifyCard = true
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.VERIFICATION_THREE_D_SECURE_THREE_D_SECURE_VERSION_IS_REQUIRED,
+                result.Errors.ForObject("Verification").OnField("ThreeDSecureVersion")[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_CreateCustomerWithThreeDSecurePassThruParams()
+        {
+            ThreeDSecurePassThruRequest passThruParamsWithThreeDSecureVersion = new ThreeDSecurePassThruRequest()
+            {
+                EciFlag = "05",
+                Cavv = "some_cavv",
+                Xid = "some_xid",
+                ThreeDSecureVersion = "1.0.2",
+                AuthenticationResponse = "Y",
+                DirectoryResponse = "Y",
+                CavvAlgorithm = "2",
+                DsTransactionId = "some_ds_transaction_id"
+            };
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/25",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    ThreeDSecurePassThru = passThruParamsWithThreeDSecureVersion,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerifyCard = true
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
         public void Create_CreateCustomerWithCreditCard()
         {
             var createRequest = new CustomerRequest()
@@ -1531,6 +1617,94 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
         }
 
+        [Test]
+        public void Update_UpdateCustomerWithInvalidThreeDSecurePassThruParams()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Joe",
+                LastName = "Shmo",
+            };
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            ThreeDSecurePassThruRequest passThruParamsWithoutThreeDSecureVersion = new ThreeDSecurePassThruRequest()
+            {
+                EciFlag = "05",
+                Cavv = "some_cavv",
+                Xid = "some_xid",
+                AuthenticationResponse = "Y",
+                DirectoryResponse = "Y",
+                CavvAlgorithm = "2",
+                DsTransactionId = "some_ds_transaction_id"
+            };
+
+            var updateRequest = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/25",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    ThreeDSecurePassThru = passThruParamsWithoutThreeDSecureVersion,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerifyCard = true
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Update(customer.Id, updateRequest);
+
+            Assert.IsFalse(result.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.VERIFICATION_THREE_D_SECURE_THREE_D_SECURE_VERSION_IS_REQUIRED,
+                result.Errors.ForObject("Verification").OnField("ThreeDSecureVersion")[0].Code
+            );
+        }
+
+        [Test]
+        public void Update_UpdateCustomerWithThreeDSecurePassThruParams()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Joe",
+                LastName = "Shmo",
+            };
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            ThreeDSecurePassThruRequest passThruParamsWithThreeDSecureVersion = new ThreeDSecurePassThruRequest()
+            {
+                EciFlag = "05",
+                Cavv = "some_cavv",
+                Xid = "some_xid",
+                AuthenticationResponse = "Y",
+                ThreeDSecureVersion = "1.2.2",
+                DirectoryResponse = "Y",
+                CavvAlgorithm = "2",
+                DsTransactionId = "some_ds_transaction_id"
+            };
+
+            var updateRequest = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/25",
+                    CVV = "123",
+                    CardholderName = "Michael Angelo",
+                    ThreeDSecurePassThru = passThruParamsWithThreeDSecureVersion,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerifyCard = true
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Update(customer.Id, updateRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+        }
+ 
         [Test]
         public void Update_AcceptsNestedBillingAddressId()
         {

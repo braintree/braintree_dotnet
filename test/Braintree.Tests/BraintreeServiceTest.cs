@@ -55,6 +55,7 @@ namespace Braintree.Tests
             Assert.AreEqual(expectedUserAgent, request.Headers.UserAgent.ToString());
             Assert.AreEqual("gzip", request.Headers.AcceptEncoding.ToString());
             Assert.AreEqual("application/xml", request.Headers.Accept.ToString());
+            Assert.IsFalse(request.Headers.ExpectContinue);
 #else
             var request = configuration.HttpWebRequestFactory("http://localhost:3000");
             service.SetRequestHeaders(request);
@@ -62,6 +63,7 @@ namespace Braintree.Tests
             Assert.AreEqual(expectedUserAgent, request.Headers.Get("User-Agent"));
             Assert.AreEqual("gzip", request.Headers.Get("Accept-Encoding"));
             Assert.AreEqual("application/xml", request.Headers.Get("Accept"));
+            Assert.IsFalse(request.ServicePoint.Expect100Continue);
 #endif
         }
 
@@ -178,6 +180,7 @@ namespace Braintree.Tests
             var keepAliveValues = request.Headers.GetValues("Keep-Alive").GetEnumerator();
             keepAliveValues.MoveNext();
             Assert.AreEqual("false", keepAliveValues.Current);
+            Assert.IsFalse(request.Headers.ExpectContinue);
         }
 #else
         [Test]
@@ -193,6 +196,7 @@ namespace Braintree.Tests
             Assert.IsFalse(request.KeepAlive);
             Assert.AreEqual(configuration.Timeout, request.Timeout);
             Assert.AreEqual(configuration.Timeout, request.ReadWriteTimeout);
+            Assert.IsFalse(request.ServicePoint.Expect100Continue);
         }
 #endif
     }

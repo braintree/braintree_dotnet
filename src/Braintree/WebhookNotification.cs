@@ -31,6 +31,9 @@ namespace Braintree
         public static readonly WebhookKind DISPUTE_OPENED = new WebhookKind("dispute_opened");
         public static readonly WebhookKind DISPUTE_LOST = new WebhookKind("dispute_lost");
         public static readonly WebhookKind DISPUTE_WON = new WebhookKind("dispute_won");
+        public static readonly WebhookKind DISPUTE_ACCEPTED = new WebhookKind("dispute_accepted");
+        public static readonly WebhookKind DISPUTE_DISPUTED = new WebhookKind("dispute_disputed");
+        public static readonly WebhookKind DISPUTE_EXPIRED = new WebhookKind("dispute_expired");
         public static readonly WebhookKind ACCOUNT_UPDATER_DAILY_REPORT = new WebhookKind("account_updater_daily_report");
         // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
         // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
@@ -69,6 +72,9 @@ namespace Braintree
             DISPUTE_OPENED,
             DISPUTE_LOST,
             DISPUTE_WON,
+            DISPUTE_ACCEPTED,
+            DISPUTE_DISPUTED,
+            DISPUTE_EXPIRED,
             ACCOUNT_UPDATER_DAILY_REPORT,
             // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
             // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.

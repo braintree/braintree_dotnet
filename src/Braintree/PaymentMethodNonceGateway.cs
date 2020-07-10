@@ -21,9 +21,9 @@ namespace Braintree
             return new ResultImpl<PaymentMethodNonce>(response, gateway);
         }
 
-        public async Task<Result<PaymentMethodNonce>> CreateAsync(string token)
+        public async Task<Result<PaymentMethodNonce>> CreateAsync(string token, PaymentMethodNonceRequest request=null)
         {
-            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/" + token + "/nonces").ConfigureAwait(false));
+            var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/" + token + "/nonces", request).ConfigureAwait(false));
 
             return new ResultImpl<PaymentMethodNonce>(response, gateway);
         }
