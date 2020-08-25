@@ -59,7 +59,7 @@ namespace Braintree.Tests.Integration
             var visas = new List<IDictionary<string,string>>();
             foreach (var row in result.Target.Records)
             {
-                if (CreditCardCardType.VISA.ToString().Equals(row["card_type"]))
+                if (CreditCardCardType.VISA.GetDescription().Equals(row["card_type"]))
                 {
                     visas.Add(row);
                 }
@@ -101,7 +101,7 @@ namespace Braintree.Tests.Integration
             var mastercards = new List<IDictionary<string,string>>();
             foreach (var row in result.Target.Records)
             {
-                if (CreditCardCardType.MASTER_CARD.ToString().Equals(row["card_type"]))
+                if (CreditCardCardType.MASTER_CARD.GetDescription().Equals(row["card_type"]))
                 {
                     mastercards.Add(row);
                 }
@@ -177,7 +177,7 @@ namespace Braintree.Tests.Integration
                 }
             }
 
-            Assert.AreEqual(1, customValues.Count);
+            Assert.IsTrue(customValues.Count >= 1);
         }
 
         [Test]

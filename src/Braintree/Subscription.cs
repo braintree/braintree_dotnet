@@ -2,77 +2,66 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Braintree
 {
     /// <summary>
     /// The available duration units for <see cref="Subscription"/>
     /// </summary>
-    public class SubscriptionDurationUnit : Enumeration
+    public enum SubscriptionDurationUnit
     {
         /// <summary>
         /// A duration unit used for subscription periods measured in days
         /// </summary>
-        public static readonly SubscriptionDurationUnit DAY = new SubscriptionDurationUnit("day");
+        [Description("day")] DAY,
         /// <summary>
         /// A duration unit used for subscription periods measured in months
         /// </summary>
-        public static readonly SubscriptionDurationUnit MONTH = new SubscriptionDurationUnit("month");
+        [Description("month")] MONTH,
         /// <summary>
         /// A placeholder for unrecognized duration units, implemented for future compatibility
         /// </summary>
-        public static readonly SubscriptionDurationUnit UNRECOGNIZED = new SubscriptionDurationUnit("unrecognized");
-
-        public static readonly SubscriptionDurationUnit[] ALL = { DAY, MONTH };
-
-        protected SubscriptionDurationUnit(string name) : base(name) {}
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
     /// <summary>
     /// The possible statuses for <see cref="Subscription"/>
     /// </summary>
-    public class SubscriptionStatus : Enumeration
+    public enum SubscriptionStatus
     {
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active and in good standing
         /// </summary>
-        public static readonly SubscriptionStatus ACTIVE = new SubscriptionStatus("Active");
+        [Description("Active")] ACTIVE,
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> has been canceled and will not be billed
         /// </summary>
-        public static readonly SubscriptionStatus CANCELED = new SubscriptionStatus("Canceled");
+        [Description("Canceled")] CANCELED,
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> has reached the end of the specified billing cycles
         /// </summary>
-        public static readonly SubscriptionStatus EXPIRED = new SubscriptionStatus("Expired");
+        [Description("Expired")] EXPIRED,
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently active but past due
         /// </summary>
-        public static readonly SubscriptionStatus PAST_DUE = new SubscriptionStatus("Past Due");
+        [Description("Past Due")] PAST_DUE,
         /// <summary>
         /// Indicates that the <see cref="Subscription"/> is currently pending
         /// </summary>
-        public static readonly SubscriptionStatus PENDING = new SubscriptionStatus("Pending");
+        [Description("Pending")] PENDING,
         /// <summary>
         /// A placeholder for unrecognized subscription statuses, implemented for future compatibility
         /// </summary>
-        public static readonly SubscriptionStatus UNRECOGNIZED = new SubscriptionStatus("Unrecognized");
-
-        public static readonly SubscriptionStatus[] STATUSES = {ACTIVE, CANCELED, EXPIRED, PAST_DUE, PENDING};
-
-        protected SubscriptionStatus(string name) : base(name) {}
+        [Description("Unrecognized")] UNRECOGNIZED
     }
 
-    public class SubscriptionSource : Enumeration
+    public enum SubscriptionSource
     {
-        public static readonly SubscriptionSource API = new SubscriptionSource("api");
-        public static readonly SubscriptionSource CONTROL_PANEL = new SubscriptionSource("control_panel");
-        public static readonly SubscriptionSource RECURRING = new SubscriptionSource("recurring");
-        public static readonly SubscriptionSource UNRECOGNIZED = new SubscriptionSource("unrecognized");
-
-        public static readonly SubscriptionSource[] ALL = { API, CONTROL_PANEL, RECURRING, UNRECOGNIZED };
-
-        protected SubscriptionSource(string name) : base(name) {}
+        [Description("api")] API,
+        [Description("control_panel")] CONTROL_PANEL,
+        [Description("recurring")] RECURRING,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
     /// <summary>
@@ -143,7 +132,7 @@ namespace Braintree
             PaidThroughDate = node.GetDateTime("paid-through-date");
             PlanId = node.GetString("plan-id");
             Price = node.GetDecimal("price");
-            Status = (SubscriptionStatus)CollectionUtil.Find(SubscriptionStatus.STATUSES, node.GetString("status"), SubscriptionStatus.UNRECOGNIZED);
+            Status = node.GetEnum("status", SubscriptionStatus.UNRECOGNIZED);
             List<NodeWrapper> statusNodes = node.GetList("status-history/status-event");
             StatusHistory = new SubscriptionStatusEvent[statusNodes.Count];
             for (int i = 0; i < statusNodes.Count; i++)
@@ -152,10 +141,7 @@ namespace Braintree
             }
             HasTrialPeriod = node.GetBoolean("trial-period");
             TrialDuration = node.GetInteger("trial-duration");
-            var trialDurationUnitStr = node.GetString("trial-duration-unit");
-            if (trialDurationUnitStr != null) {
-                TrialDurationUnit = (SubscriptionDurationUnit)CollectionUtil.Find(SubscriptionDurationUnit.ALL, trialDurationUnitStr, SubscriptionDurationUnit.UNRECOGNIZED);
-            }
+            TrialDurationUnit = node.GetEnum("trial-duration-unit", SubscriptionDurationUnit.UNRECOGNIZED);
             MerchantAccountId = node.GetString("merchant-account-id");
 
             AddOns = new List<AddOn> ();

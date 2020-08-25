@@ -62,18 +62,6 @@ namespace Braintree
         public RiskDataRequest RiskData { get; set; }
         public CustomerOptionsRequest Options { get; set; }
 
-        public override string Kind()
-        {
-            if (CustomerId == null)
-            {
-                return TransparentRedirectGateway.CREATE_CUSTOMER;
-            }
-            else
-            {
-                return TransparentRedirectGateway.UPDATE_CUSTOMER;
-            }
-        }
-
         public override string ToXml()
         {
             return ToXml("customer");

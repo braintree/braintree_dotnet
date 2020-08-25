@@ -21,9 +21,7 @@ namespace Braintree
     {
         protected static readonly Encoding encoding = Encoding.UTF8;
 #if netcore
-        protected static HttpClient staticClient = new HttpClient(new HttpClientHandler {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-        }, false);
+        protected HttpClient httpClient;
 #endif
 
         protected Configuration Configuration;
@@ -66,6 +64,21 @@ namespace Braintree
         public HttpService(Configuration configuration)
         {
             Configuration = configuration;
+#if netcore
+            var httpClientHandler = new HttpClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+            };
+
+            if (Configuration.WebProxy != null)
+            {
+                httpClientHandler.UseProxy = true;
+                httpClientHandler.Proxy = Configuration.WebProxy;
+            }
+
+            httpClient = new HttpClient(httpClientHandler, false);
+            httpClient.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
+#endif
         }
 
 #if netcore
@@ -96,9 +109,9 @@ namespace Braintree
             return request;
         }
 
-        public string GetHttpResponseWithClient(HttpClient client, HttpRequestMessage request) {
-            var response = client.SendAsync(request).GetAwaiter().GetResult();
-            if (response.StatusCode != (HttpStatusCode) 422)
+        public string GetHttpResponse(HttpRequestMessage request) {
+            var response = httpClient.SendAsync(request).GetAwaiter().GetResult();
+            if (response.StatusCode != (HttpStatusCode)422)
             {
                 ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
             }
@@ -106,51 +119,14 @@ namespace Braintree
             return ParseResponseStream(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
         }
 
-        public async Task<string> GetHttpResponseWithClientAsync(HttpClient client, HttpRequestMessage request) {
-            var response = await client.SendAsync(request);
-            if (response.StatusCode != (HttpStatusCode) 422)
+        public async Task<string> GetHttpResponseAsync(HttpRequestMessage request) {
+            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+            if (response.StatusCode != (HttpStatusCode)422)
             {
                 ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
             }
 
-            return await ParseResponseStreamAsync(await response.Content.ReadAsStreamAsync());
-        }
-
-        public string GetHttpResponse(HttpRequestMessage request) {
-            if (Configuration.UseStaticHttpClient == true) {
-                return GetHttpResponseWithClient(staticClient, request);
-            } else {
-                var httpClientHandler = new HttpClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                };
-
-                SetWebProxy(httpClientHandler, request.RequestUri);
-                using (var client = new HttpClient(httpClientHandler))
-                {
-                    client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
-                    return GetHttpResponseWithClient(client, request);
-                }
-            }
-        }
-
-        public async Task<string> GetHttpResponseAsync(HttpRequestMessage request) {
-            if (Configuration.UseStaticHttpClient == true) {
-                return await GetHttpResponseWithClientAsync(staticClient, request);
-            } else {
-                var httpClientHandler = new HttpClientHandler
-                {
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                };
-
-                SetWebProxy(httpClientHandler, request.RequestUri);
-
-                using (var client = new HttpClient(httpClientHandler))
-                {
-                    client.Timeout = TimeSpan.FromMilliseconds(Configuration.Timeout);
-                    return await GetHttpResponseWithClientAsync(client, request);
-                }
-            }
+            return await ParseResponseStreamAsync(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
         }
 #else
         public HttpWebRequest GetHttpRequest(string URL, string method) {
@@ -197,7 +173,7 @@ namespace Braintree
             try {
                 using (var response = (HttpWebResponse) await request.GetResponseAsync().ConfigureAwait(false))
                 {
-                    return await ParseResponseStreamAsync(GetResponseStream(response));
+                    return await ParseResponseStreamAsync(GetResponseStream(response)).ConfigureAwait(false);
                 }
             }
             catch (WebException e)
@@ -208,7 +184,7 @@ namespace Braintree
 
                     if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
                     {
-                        return await ParseResponseStreamAsync(GetResponseStream((HttpWebResponse) e.Response));
+                        return await ParseResponseStreamAsync(GetResponseStream((HttpWebResponse) e.Response)).ConfigureAwait(false);
                     }
 
                     ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
@@ -219,21 +195,7 @@ namespace Braintree
         }
 #endif
 
-#if netcore
-        protected void SetWebProxy(HttpClientHandler httpClientHandler, Uri URL)
-        {
-            var proxy = GetWebProxy();
-            bool useProxy = false;
-
-            if (proxy != null && !proxy.IsBypassed(URL))
-            {
-                useProxy = true;
-                httpClientHandler.Proxy = proxy;
-            }
-
-            httpClientHandler.UseProxy = useProxy;
-        }
-#else
+#if net452
         protected void SetRequestProxy(WebRequest request)
         {
             var proxy = GetWebProxy();
@@ -339,22 +301,26 @@ namespace Braintree
         {
             if (httpStatusCode != HttpStatusCode.OK && httpStatusCode != HttpStatusCode.Created)
             {
-                switch (httpStatusCode)
+                switch ((int) httpStatusCode)
                 {
-                    case HttpStatusCode.Unauthorized:
+                    case 401:
                         throw new AuthenticationException();
-                    case HttpStatusCode.Forbidden:
+                    case 403:
                         throw new AuthorizationException(message);
-                    case HttpStatusCode.NotFound:
+                    case 404:
                         throw new NotFoundException();
-                    case HttpStatusCode.InternalServerError:
-                        throw new ServerException();
-                    case HttpStatusCode.ServiceUnavailable:
-                        throw new DownForMaintenanceException();
-                    case (HttpStatusCode) 429:
-                        throw new TooManyRequestsException();
-                    case (HttpStatusCode) 426:
+                    case 408:
+                        throw new RequestTimeoutException();
+                    case 426:
                         throw new UpgradeRequiredException();
+                    case 429:
+                        throw new TooManyRequestsException();
+                    case 500:
+                        throw new ServerException();
+                    case 503:
+                        throw new ServiceUnavailableException();
+                    case 504:
+                        throw new GatewayTimeoutException();
                     default:
                     var exception = new UnexpectedException();
                     exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;

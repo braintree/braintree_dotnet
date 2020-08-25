@@ -2,138 +2,96 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class TransactionGatewayRejectionReason : Enumeration
+    public enum TransactionGatewayRejectionReason
     {
-        public static readonly TransactionGatewayRejectionReason APPLICATION_INCOMPLETE = new TransactionGatewayRejectionReason("application_incomplete");
-        public static readonly TransactionGatewayRejectionReason AVS = new TransactionGatewayRejectionReason("avs");
-        public static readonly TransactionGatewayRejectionReason AVS_AND_CVV = new TransactionGatewayRejectionReason("avs_and_cvv");
-        public static readonly TransactionGatewayRejectionReason CVV = new TransactionGatewayRejectionReason("cvv");
-        public static readonly TransactionGatewayRejectionReason DUPLICATE = new TransactionGatewayRejectionReason("duplicate");
-        public static readonly TransactionGatewayRejectionReason FRAUD = new TransactionGatewayRejectionReason("fraud");
-        public static readonly TransactionGatewayRejectionReason THREE_D_SECURE = new TransactionGatewayRejectionReason("three_d_secure");
-        public static readonly TransactionGatewayRejectionReason TOKEN_ISSUANCE = new TransactionGatewayRejectionReason("token_issuance");
-        public static readonly TransactionGatewayRejectionReason UNRECOGNIZED = new TransactionGatewayRejectionReason("unrecognized");
-
-        public static readonly TransactionGatewayRejectionReason[] ALL = {
-            APPLICATION_INCOMPLETE, AVS, AVS_AND_CVV, CVV, DUPLICATE, FRAUD, THREE_D_SECURE, TOKEN_ISSUANCE, UNRECOGNIZED
-        };
-
-        protected TransactionGatewayRejectionReason(string name) : base(name) {}
+        [Description("application_incomplete")] APPLICATION_INCOMPLETE,
+        [Description("avs")] AVS,
+        [Description("avs_and_cvv")] AVS_AND_CVV,
+        [Description("cvv")] CVV,
+        [Description("duplicate")] DUPLICATE,
+        [Description("fraud")] FRAUD,
+        [Description("risk_threshold")] RISK_THRESHOLD,
+        [Description("three_d_secure")] THREE_D_SECURE,
+        [Description("token_issuance")] TOKEN_ISSUANCE,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public class TransactionEscrowStatus : Enumeration
+    public enum TransactionEscrowStatus
     {
-        public static readonly TransactionEscrowStatus HOLD_PENDING = new TransactionEscrowStatus("hold_pending");
-        public static readonly TransactionEscrowStatus HELD = new TransactionEscrowStatus("held");
-        public static readonly TransactionEscrowStatus RELEASE_PENDING = new TransactionEscrowStatus("release_pending");
-        public static readonly TransactionEscrowStatus RELEASED = new TransactionEscrowStatus("released");
-        public static readonly TransactionEscrowStatus REFUNDED = new TransactionEscrowStatus("refunded");
-        public static readonly TransactionEscrowStatus UNRECOGNIZED = new TransactionEscrowStatus("unrecognized");
-
-        public static readonly TransactionEscrowStatus[] ALL = {
-            HELD, HOLD_PENDING, RELEASE_PENDING, RELEASED, REFUNDED, UNRECOGNIZED
-        };
-
-        protected TransactionEscrowStatus(string name) : base(name) {}
+        [Description("hold_pending")] HOLD_PENDING,
+        [Description("held")] HELD,
+        [Description("release_pending")] RELEASE_PENDING,
+        [Description("released")] RELEASED,
+        [Description("refunded")] REFUNDED,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public class TransactionStatus : Enumeration
+    public enum TransactionStatus
     {
-        public static readonly TransactionStatus AUTHORIZATION_EXPIRED = new TransactionStatus("authorization_expired");
-        public static readonly TransactionStatus AUTHORIZED = new TransactionStatus("authorized");
-        public static readonly TransactionStatus AUTHORIZING = new TransactionStatus("authorizing");
-        public static readonly TransactionStatus FAILED = new TransactionStatus("failed");
-        public static readonly TransactionStatus GATEWAY_REJECTED = new TransactionStatus("gateway_rejected");
-        public static readonly TransactionStatus PROCESSOR_DECLINED = new TransactionStatus("processor_declined");
-        public static readonly TransactionStatus SETTLED = new TransactionStatus("settled");
-        public static readonly TransactionStatus SETTLING = new TransactionStatus("settling");
-        public static readonly TransactionStatus SUBMITTED_FOR_SETTLEMENT = new TransactionStatus("submitted_for_settlement");
-        public static readonly TransactionStatus VOIDED = new TransactionStatus("voided");
-        public static readonly TransactionStatus UNRECOGNIZED = new TransactionStatus("unrecognized");
-        public static readonly TransactionStatus SETTLEMENT_CONFIRMED = new TransactionStatus("settlement_confirmed");
-        public static readonly TransactionStatus SETTLEMENT_DECLINED = new TransactionStatus("settlement_declined");
-        public static readonly TransactionStatus SETTLEMENT_PENDING = new TransactionStatus("settlement_pending");
-
-        public static readonly TransactionStatus[] ALL = {
-            AUTHORIZATION_EXPIRED, AUTHORIZED, AUTHORIZING, FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED,
-            SETTLED, SETTLEMENT_CONFIRMED, SETTLEMENT_DECLINED, SETTLEMENT_PENDING, SETTLING, SUBMITTED_FOR_SETTLEMENT, VOIDED, UNRECOGNIZED
-        };
-
-        protected TransactionStatus(string name) : base(name) {}
+        [Description("authorization_expired")] AUTHORIZATION_EXPIRED,
+        [Description("authorized")] AUTHORIZED,
+        [Description("authorizing")] AUTHORIZING,
+        [Description("failed")] FAILED,
+        [Description("gateway_rejected")] GATEWAY_REJECTED,
+        [Description("processor_declined")] PROCESSOR_DECLINED,
+        [Description("settled")] SETTLED,
+        [Description("settling")] SETTLING,
+        [Description("submitted_for_settlement")] SUBMITTED_FOR_SETTLEMENT,
+        [Description("voided")] VOIDED,
+        [Description("unrecognized")] UNRECOGNIZED,
+        [Description("settlement_confirmed")] SETTLEMENT_CONFIRMED,
+        [Description("settlement_declined")] SETTLEMENT_DECLINED,
+        [Description("settlement_pending")] SETTLEMENT_PENDING
     }
 
-    public class TransactionIndustryType : Enumeration
+    public enum TransactionIndustryType
     {
-        public static readonly TransactionIndustryType LODGING = new TransactionIndustryType("lodging");
-        public static readonly TransactionIndustryType TRAVEL_AND_CRUISE = new TransactionIndustryType("travel_cruise");
-        public static readonly TransactionIndustryType TRAVEL_AND_FLIGHT = new TransactionIndustryType("travel_flight");
-
-        protected TransactionIndustryType(string name) : base(name) {}
+        [Description("lodging")] LODGING,
+        [Description("travel_cruise")] TRAVEL_AND_CRUISE,
+        [Description("travel_flight")] TRAVEL_AND_FLIGHT
     }
 
-    public class TransactionSource : Enumeration
+    public enum TransactionSource
     {
-        public static readonly TransactionSource API = new TransactionSource("api");
-        public static readonly TransactionSource CONTROL_PANEL = new TransactionSource("control_panel");
-        public static readonly TransactionSource RECURRING = new TransactionSource("recurring");
-        public static readonly TransactionSource UNRECOGNIZED = new TransactionSource("unrecognized");
-
-        public static readonly TransactionSource[] ALL = { API, CONTROL_PANEL, RECURRING, UNRECOGNIZED };
-
-        protected TransactionSource(string name) : base(name) {}
+        [Description("api")] API,
+        [Description("control_panel")] CONTROL_PANEL,
+        [Description("recurring")] RECURRING,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public class TransactionType : Enumeration
+    public enum TransactionType
     {
-        public static readonly TransactionType CREDIT = new TransactionType("credit");
-        public static readonly TransactionType SALE = new TransactionType("sale");
-        public static readonly TransactionType UNRECOGNIZED = new TransactionType("unrecognized");
-
-        public static readonly TransactionType[] ALL = { CREDIT, SALE, UNRECOGNIZED };
-
-        protected TransactionType(string name) : base(name) {}
+        [Description("credit")] CREDIT,
+        [Description("sale")] SALE,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public class TransactionCreatedUsing : Enumeration
+    public enum TransactionCreatedUsing
     {
-        public static readonly TransactionCreatedUsing FULL_INFORMATION = new TransactionCreatedUsing("full_information");
-        public static readonly TransactionCreatedUsing TOKEN = new TransactionCreatedUsing("token");
-        public static readonly TransactionCreatedUsing UNRECOGNIZED = new TransactionCreatedUsing("unrecognized");
-
-        public static readonly TransactionCreatedUsing[] ALL = { FULL_INFORMATION, TOKEN, UNRECOGNIZED };
-
-        protected TransactionCreatedUsing(string name) : base(name) {}
+        [Description("full_information")] FULL_INFORMATION,
+        [Description("token")] TOKEN,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-
-    public class PaymentInstrumentType : Enumeration
+    public enum PaymentInstrumentType
     {
-        public static readonly PaymentInstrumentType PAYPAL_ACCOUNT = new PaymentInstrumentType("paypal_account");
-        public static readonly PaymentInstrumentType PAYPAL_HERE = new PaymentInstrumentType("paypal_here");
-        public static readonly PaymentInstrumentType EUROPE_BANK_ACCOUNT= new PaymentInstrumentType("europe_bank_account");
-        public static readonly PaymentInstrumentType CREDIT_CARD = new PaymentInstrumentType("credit_card");
-        public static readonly PaymentInstrumentType COINBASE_ACCOUNT= new PaymentInstrumentType("coinbase_account");
-        public static readonly PaymentInstrumentType APPLE_PAY_CARD = new PaymentInstrumentType("apple_pay_card");
-        public static readonly PaymentInstrumentType ANDROID_PAY_CARD = new PaymentInstrumentType("android_pay_card");
-        public static readonly PaymentInstrumentType AMEX_EXPRESS_CHECKOUT_CARD = new PaymentInstrumentType("amex_express_checkout_card");
-        public static readonly PaymentInstrumentType VENMO_ACCOUNT = new PaymentInstrumentType("venmo_account");
-        public static readonly PaymentInstrumentType US_BANK_ACCOUNT = new PaymentInstrumentType("us_bank_account");
-        public static readonly PaymentInstrumentType VISA_CHECKOUT_CARD = new PaymentInstrumentType("visa_checkout_card");
-        public static readonly PaymentInstrumentType MASTERPASS_CARD = new PaymentInstrumentType("masterpass_card");
-        public static readonly PaymentInstrumentType SAMSUNG_PAY_CARD = new PaymentInstrumentType("samsung_pay_card");
-        public static readonly PaymentInstrumentType LOCAL_PAYMENT = new PaymentInstrumentType("local_payment");
-        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
-        // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
-        public static readonly PaymentInstrumentType IDEAL_PAYMENT = new PaymentInstrumentType("ideal_payment");
-        public static readonly PaymentInstrumentType ANY = new PaymentInstrumentType("any");
-        public static readonly PaymentInstrumentType UNKNOWN = new PaymentInstrumentType("unknown");
-
-        public static readonly PaymentInstrumentType[] ALL = { PAYPAL_ACCOUNT, PAYPAL_HERE, EUROPE_BANK_ACCOUNT, CREDIT_CARD, COINBASE_ACCOUNT, ANDROID_PAY_CARD, APPLE_PAY_CARD, AMEX_EXPRESS_CHECKOUT_CARD, VENMO_ACCOUNT, US_BANK_ACCOUNT, VISA_CHECKOUT_CARD, MASTERPASS_CARD, IDEAL_PAYMENT, LOCAL_PAYMENT, ANY, UNKNOWN };
-
-        protected PaymentInstrumentType(string name) : base(name) {}
+        [Description("paypal_account")] PAYPAL_ACCOUNT,
+        [Description("paypal_here")] PAYPAL_HERE,
+        [Description("credit_card")] CREDIT_CARD,
+        [Description("apple_pay_card")] APPLE_PAY_CARD,
+        [Description("android_pay_card")] ANDROID_PAY_CARD,
+        [Description("amex_express_checkout_card")] AMEX_EXPRESS_CHECKOUT_CARD,
+        [Description("venmo_account")] VENMO_ACCOUNT,
+        [Description("us_bank_account")] US_BANK_ACCOUNT,
+        [Description("visa_checkout_card")] VISA_CHECKOUT_CARD,
+        [Description("samsung_pay_card")] SAMSUNG_PAY_CARD,
+        [Description("local_payment")] LOCAL_PAYMENT,
+        [Description("any")] ANY,
+        [Description("unknown")] UNKNOWN
     }
 
     /// <summary>
@@ -169,6 +127,7 @@ namespace Braintree
         public virtual string MerchantAccountId { get; protected set; }
         public virtual string OrderId { get; protected set; }
         public virtual string PlanId { get; protected set; }
+        public virtual bool? ProcessedWithNetworkToken { get; protected set; }
         public virtual string ProcessorAuthorizationCode { get; protected set; }
         public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
@@ -202,18 +161,12 @@ namespace Braintree
         public virtual DisbursementDetails DisbursementDetails { get; protected set; }
         public virtual ApplePayDetails ApplePayDetails { get; protected set; }
         public virtual AndroidPayDetails AndroidPayDetails { get; protected set; }
-        public virtual AmexExpressCheckoutDetails AmexExpressCheckoutDetails { get; protected set; }
         public virtual PayPalDetails PayPalDetails { get; protected set; }
         public virtual PayPalHereDetails PayPalHereDetails { get; protected set; }
         public virtual LocalPaymentDetails LocalPaymentDetails { get; protected set; }
-        public virtual CoinbaseDetails CoinbaseDetails { get; protected set; }
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
         public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
-        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
-        // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
-        public virtual IdealPaymentDetails IdealPaymentDetails { get; protected set; }
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
-        public virtual MasterpassCardDetails MasterpassCardDetails { get; protected set; }
         public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
@@ -244,25 +197,13 @@ namespace Braintree
             AvsErrorResponseCode = node.GetString("avs-error-response-code");
             AvsPostalCodeResponseCode = node.GetString("avs-postal-code-response-code");
             AvsStreetAddressResponseCode = node.GetString("avs-street-address-response-code");
-            GatewayRejectionReason = (TransactionGatewayRejectionReason)CollectionUtil.Find(
-                TransactionGatewayRejectionReason.ALL,
-                node.GetString("gateway-rejection-reason"),
-                TransactionGatewayRejectionReason.UNRECOGNIZED
-            );
-            PaymentInstrumentType = (PaymentInstrumentType)CollectionUtil.Find(
-                PaymentInstrumentType.ALL,
-                node.GetString("payment-instrument-type"),
-                PaymentInstrumentType.UNKNOWN
-            );
+            GatewayRejectionReason = node.GetEnum("gateway-rejection-reason", TransactionGatewayRejectionReason.UNRECOGNIZED);
+            PaymentInstrumentType = node.GetEnum("payment-instrument-type", PaymentInstrumentType.UNKNOWN);
             Channel = node.GetString("channel");
             GraphQLId = node.GetString("global-id");
             OrderId = node.GetString("order-id");
-            Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
-            EscrowStatus = (TransactionEscrowStatus)CollectionUtil.Find(
-                    TransactionEscrowStatus.ALL,
-                    node.GetString("escrow-status"),
-                    TransactionEscrowStatus.UNRECOGNIZED
-            );
+            Status = node.GetEnum("status", TransactionStatus.UNRECOGNIZED);
+            EscrowStatus = node.GetEnum("escrow-status", TransactionEscrowStatus.UNRECOGNIZED);
 
             List<NodeWrapper> statusNodes = node.GetList("status-history/status-event");
             StatusHistory = new StatusEvent[statusNodes.Count];
@@ -271,12 +212,13 @@ namespace Braintree
                 StatusHistory[i] = new StatusEvent(statusNodes[i]);
             }
 
-            Type = (TransactionType)CollectionUtil.Find(TransactionType.ALL, node.GetString("type"), TransactionType.UNRECOGNIZED);
+            Type = node.GetEnum("type", TransactionType.UNRECOGNIZED);
             MerchantAccountId = node.GetString("merchant-account-id");
+            ProcessedWithNetworkToken = node.GetBoolean("processed-with-network-token");
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
-            ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
+            ProcessorResponseType = node.GetEnum("processor-response-type", ProcessorResponseType.UNRECOGNIZED);
             ProcessorSettlementResponseCode = node.GetString("processor-settlement-response-code");
             ProcessorSettlementResponseText = node.GetString("processor-settlement-response-text");
             NetworkResponseCode = node.GetString("network-response-code");
@@ -339,11 +281,6 @@ namespace Braintree
             {
                 LocalPaymentDetails = new LocalPaymentDetails(localPaymentNode);
             }
-            var coinbaseNode = node.GetNode("coinbase-account");
-            if (coinbaseNode != null)
-            {
-                CoinbaseDetails = new CoinbaseDetails(coinbaseNode);
-            }
             var applePayNode = node.GetNode("apple-pay");
             if (applePayNode != null)
             {
@@ -353,11 +290,6 @@ namespace Braintree
             if (androidPayNode != null)
             {
                 AndroidPayDetails = new AndroidPayDetails(androidPayNode);
-            }
-            var amexExpressCheckoutNode = node.GetNode("amex-express-checkout-card");
-            if (amexExpressCheckoutNode != null)
-            {
-                AmexExpressCheckoutDetails = new AmexExpressCheckoutDetails(amexExpressCheckoutNode);
             }
             var venmoAccountNode = node.GetNode("venmo-account");
             if (venmoAccountNode != null)
@@ -369,22 +301,10 @@ namespace Braintree
             {
                 UsBankAccountDetails = new UsBankAccountDetails(usBankAccountNode);
             }
-            // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
-            // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
-            var idealPaymentNode = node.GetNode("ideal-payment");
-            if (idealPaymentNode != null)
-            {
-                IdealPaymentDetails = new IdealPaymentDetails(idealPaymentNode);
-            }
             var visaCheckoutNode = node.GetNode("visa-checkout-card");
             if (visaCheckoutNode != null)
             {
                 VisaCheckoutCardDetails = new VisaCheckoutCardDetails(visaCheckoutNode);
-            }
-            var masterpassNode = node.GetNode("masterpass-card");
-            if (masterpassNode != null)
-            {
-                MasterpassCardDetails = new MasterpassCardDetails(masterpassNode);
             }
             var samsungPayNode = node.GetNode("samsung-pay-card");
             if (samsungPayNode != null)

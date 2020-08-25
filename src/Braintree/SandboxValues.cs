@@ -12,6 +12,7 @@ namespace Braintree
             public const string HIPER = "6370950000000005";
             public const string HIPERCARD = "6062820524845321";
             public const string FRAUD = "4000111111111511";
+            public const string RISK_THRESHOLD = "4111130000000003";
 
             public class FailsVerification
             {

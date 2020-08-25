@@ -76,10 +76,6 @@ namespace Braintree
             {
                 return new AndroidPayCard(node, gateway) as T;
             }
-            else if (typeof(T) == typeof(AmexExpressCheckoutCard))
-            {
-                return new AmexExpressCheckoutCard(node, gateway) as T;
-            }
             else if (typeof(T) == typeof(CreditCard))
             {
                 return new CreditCard(node, gateway) as T;
@@ -87,10 +83,6 @@ namespace Braintree
             else if (typeof(T) == typeof(CreditCardVerification))
             {
                 return new CreditCardVerification(node, gateway) as T;
-            }
-            else if (typeof(T) == typeof(CoinbaseAccount))
-            {
-                return new CoinbaseAccount(node, gateway) as T;
             }
             else if (typeof(T) == typeof(VenmoAccount))
             {
@@ -143,10 +135,6 @@ namespace Braintree
             else if (typeof(T) == typeof(VisaCheckoutCard))
             {
                 return new VisaCheckoutCard(node, gateway) as T;
-            }
-            else if (typeof(T) == typeof(MasterpassCard))
-            {
-                return new MasterpassCard(node, gateway) as T;
             }
             else if (typeof(T) == typeof(SamsungPayCard))
             {

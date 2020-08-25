@@ -194,7 +194,7 @@ namespace Braintree.Tests.Integration
             CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
                 CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD).
                 Ids.IncludedIn(verification1.Id, verification2.Id).
-                Status.IncludedIn(verification1.Status);
+                Status.IncludedIn(verification1.Status.Value);
 
             ResourceCollection<CreditCardVerification> collection = gateway.CreditCardVerification.Search(searchRequest);
 
@@ -245,7 +245,7 @@ namespace Braintree.Tests.Integration
             CreditCardVerificationSearchRequest searchRequest = new CreditCardVerificationSearchRequest().
                 CreditCardCardType.IncludedIn(CreditCardCardType.VISA, CreditCardCardType.MASTER_CARD).
                 Ids.IncludedIn(verification1.Id, verification2.Id).
-                Status.IncludedIn(verification1.Status);
+                Status.IncludedIn(verification1.Status.Value);
 
             ResourceCollection<CreditCardVerification> collection = await gateway.CreditCardVerification.SearchAsync(searchRequest);
 

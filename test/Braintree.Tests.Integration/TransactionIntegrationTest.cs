@@ -1297,7 +1297,7 @@ namespace Braintree.Tests.Integration
         {
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Amount.Is(-5);
-            Assert.Throws<DownForMaintenanceException>(() => gateway.Transaction.Search(searchRequest));
+            Assert.Throws<UnexpectedException>(() => gateway.Transaction.Search(searchRequest));
         }
 
         [Test]      
@@ -3261,34 +3261,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithAmexExpressCheckoutCardNonce()
-        {
-            TransactionRequest request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
-                PaymentMethodNonce = Nonce.AmexExpressCheckout
-            };
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-
-            Assert.IsNotNull(result.Target.AmexExpressCheckoutDetails);
-
-            Assert.IsInstanceOf(typeof(AmexExpressCheckoutDetails), result.Target.AmexExpressCheckoutDetails);
-            AmexExpressCheckoutDetails amexExpressCheckoutDetails = result.Target.AmexExpressCheckoutDetails;
-
-            Assert.IsNull(amexExpressCheckoutDetails.Token);
-            Assert.IsNotNull(amexExpressCheckoutDetails.CardType);
-            Assert.IsNotNull(amexExpressCheckoutDetails.Bin);
-            Assert.IsNotNull(amexExpressCheckoutDetails.ExpirationMonth);
-            Assert.IsNotNull(amexExpressCheckoutDetails.ExpirationYear);
-            Assert.IsNotNull(amexExpressCheckoutDetails.CardMemberNumber);
-            Assert.IsNotNull(amexExpressCheckoutDetails.CardMemberExpiryDate);
-            Assert.IsNotNull(amexExpressCheckoutDetails.ImageUrl);
-            Assert.IsNotNull(amexExpressCheckoutDetails.SourceDescription);
-        }
-
-        [Test]
         public void Sale_WithVenmoAccountNonce()
         {
             var request = new TransactionRequest
@@ -3575,6 +3547,28 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Transaction;
 
             Assert.AreEqual(TransactionGatewayRejectionReason.FRAUD, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForRiskThresholds()
+        {
+            AdvancedFraudSetup();
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.RISK_THRESHOLD,
+                    ExpirationDate = "05/2017",
+                    CVV = "333"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.RISK_THRESHOLD, transaction.GatewayRejectionReason);
         }
 
         [Test]
@@ -4416,40 +4410,6 @@ namespace Braintree.Tests.Integration
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-
-            Assert.AreEqual("123*123456789012345678", transaction.Descriptor.Name);
-            Assert.AreEqual("3334445555", transaction.Descriptor.Phone);
-            Assert.AreEqual("ebay.com", transaction.Descriptor.Url);
-        }
-
-        [Test]
-        public void ConfirmTransparentRedirect_SpecifyingDescriptor()
-        {
-            TransactionRequest trParams = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                Type = TransactionType.SALE,
-                Descriptor = new DescriptorRequest
-                {
-                  Name = "123*123456789012345678",
-                  Phone = "3334445555",
-                  Url = "ebay.com"
-                }
-            };
-
-            TransactionRequest request = new TransactionRequest
-            {
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
@@ -6880,88 +6840,6 @@ namespace Braintree.Tests.Integration
             );
         }
 
-        #pragma warning disable 0618
-        [Test]    
-        public void ConfirmTransparentRedirect_CreatesTheTransaction()
-        {
-            TransactionRequest trParams = new TransactionRequest
-            {
-                Type = TransactionType.SALE
-            };
-
-            TransactionRequest request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                },
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    CountryName = "United States of America",
-                    CountryCodeAlpha2 = "US",
-                    CountryCodeAlpha3 = "USA",
-                    CountryCodeNumeric = "840"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-
-            Assert.AreEqual(1000.00, transaction.Amount);
-            Assert.AreEqual(TransactionType.SALE, transaction.Type);
-            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
-            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
-            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
-            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
-
-            CreditCard creditCard = transaction.CreditCard;
-            Assert.AreEqual("411111", creditCard.Bin);
-            Assert.AreEqual("1111", creditCard.LastFour);
-            Assert.AreEqual("05", creditCard.ExpirationMonth);
-            Assert.AreEqual("2009", creditCard.ExpirationYear);
-            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
-
-            Address address = transaction.BillingAddress;
-            Assert.AreEqual("US", address.CountryCodeAlpha2);
-            Assert.AreEqual("USA", address.CountryCodeAlpha3);
-            Assert.AreEqual("840", address.CountryCodeNumeric);
-            Assert.AreEqual("United States of America", address.CountryName);
-        }
-        #pragma warning restore 0618
-
-        #pragma warning disable 0618
-        [Test]
-        public void ConfirmTransparentRedirect_SpecifyingMerchantAccountId()
-        {
-            TransactionRequest trParams = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                Type = TransactionType.SALE,
-                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
-            };
-
-            TransactionRequest request = new TransactionRequest
-            {
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-
-            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
-        }
-        #pragma warning restore 0618
-
         [Test]
         public void Credit_WithValidParams()
         {
@@ -8406,9 +8284,14 @@ namespace Braintree.Tests.Integration
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             gateway.TestTransaction.Settle(transaction.Id);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2048.00"));
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2046.00"));
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_SOFT_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+            Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
+            Assert.AreEqual("2046", result.Transaction.ProcessorResponseCode);
+            Assert.AreEqual("Declined", result.Transaction.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.SOFT_DECLINED, result.Transaction.ProcessorResponseType);
+            Assert.AreEqual("2046 : Declined", result.Transaction.AdditionalProcessorResponse);
         }
 
         [Test]
@@ -8438,9 +8321,14 @@ namespace Braintree.Tests.Integration
             Transaction transaction = saleResult.Target;
             await gateway.TestTransaction.SettleAsync(transaction.Id);
 
-            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2048.00"));
+            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2046.00"));
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_SOFT_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+            Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
+            Assert.AreEqual("2046", result.Transaction.ProcessorResponseCode);
+            Assert.AreEqual("Declined", result.Transaction.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.SOFT_DECLINED, result.Transaction.ProcessorResponseType);
+            Assert.AreEqual("2046 : Declined", result.Transaction.AdditionalProcessorResponse);
         }
 #if net452
             ).GetAwaiter().GetResult();
@@ -8469,7 +8357,12 @@ namespace Braintree.Tests.Integration
 
             Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2009.00"));
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_HARD_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+            Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
+            Assert.AreEqual("2009", result.Transaction.ProcessorResponseCode);
+            Assert.AreEqual("No Such Issuer", result.Transaction.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.HARD_DECLINED, result.Transaction.ProcessorResponseType);
+            Assert.AreEqual("2009 : No Such Issuer", result.Transaction.AdditionalProcessorResponse);
         }
 
         [Test]
@@ -8501,7 +8394,12 @@ namespace Braintree.Tests.Integration
 
             Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2009.00"));
             Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_REFUND_AUTH_HARD_DECLINED, result.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+            Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
+            Assert.AreEqual("2009", result.Transaction.ProcessorResponseCode);
+            Assert.AreEqual("No Such Issuer", result.Transaction.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.HARD_DECLINED, result.Transaction.ProcessorResponseType);
+            Assert.AreEqual("2009 : No Such Issuer", result.Transaction.AdditionalProcessorResponse);
         }
 #if net452
             ).GetAwaiter().GetResult();
@@ -9682,6 +9580,32 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(transaction.PayPalHereDetails);
             Assert.IsNotNull(transaction.PayPalHereDetails.RefundId);
+        }
+
+        [Test]
+        public void Sale_NetworkTokenizedTransaction() {
+            var request = new TransactionRequest {
+                Amount = 100,
+                PaymentMethodToken = "network_tokenized_credit_card"
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+            Assert.IsTrue(transaction.ProcessedWithNetworkToken);
+        }
+
+        [Test]
+        public void Sale_NonNetworkTokenizedTransaction() {
+            var request = new TransactionRequest {
+                Amount = 100,
+                PaymentMethodNonce = Nonce.TransactableVisa
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+            Assert.IsFalse(transaction.ProcessedWithNetworkToken);
         }
     }
 }

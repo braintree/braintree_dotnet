@@ -20,16 +20,18 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
-            Service = new BraintreeService(gateway.Configuration);
+            Service = gateway.Service;
         }
 
         public virtual Result<DocumentUpload> Create(DocumentUploadRequest request)
         {
-            if (request.DocumentKind == null) {
+            if (request.DocumentKind == null)
+            {
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.File == null) {
+            if (request.File == null)
+            {
                 throw new ArgumentException("File must not be null");
             }
 
@@ -40,11 +42,13 @@ namespace Braintree
 
         public virtual async Task<Result<DocumentUpload>> CreateAsync(DocumentUploadRequest request)
         {
-            if (request.DocumentKind == null) {
+            if (request.DocumentKind == null)
+            {
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.File == null) {
+            if (request.File == null)
+            {
                 throw new ArgumentException("File must not be null");
             }
 

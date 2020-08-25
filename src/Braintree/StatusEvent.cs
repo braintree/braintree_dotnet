@@ -18,9 +18,9 @@ namespace Braintree
                 return;
 
             Amount = node.GetDecimal("amount");
-            Status = (TransactionStatus)CollectionUtil.Find(TransactionStatus.ALL, node.GetString("status"), TransactionStatus.UNRECOGNIZED);
+            Status = node.GetEnum("status", TransactionStatus.UNRECOGNIZED);
             Timestamp = node.GetDateTime("timestamp");
-            Source = (TransactionSource)CollectionUtil.Find(TransactionSource.ALL, node.GetString("transaction-source"), TransactionSource.UNRECOGNIZED);
+            Source = node.GetEnum("transaction-source", TransactionSource.UNRECOGNIZED);
             User = node.GetString("user");
         }
 

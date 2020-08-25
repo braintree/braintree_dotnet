@@ -21,7 +21,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public virtual Result<CreditCard> Create(CreditCardRequest request)
@@ -170,7 +170,7 @@ namespace Braintree
 
         public virtual async Task<Result<CreditCard>> UpdateAsync(string token, CreditCardRequest request)
         {
-            XmlNode creditCardXML = await service.PutAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token, request);
+            XmlNode creditCardXML = await service.PutAsync(service.MerchantPath() + "/payment_methods/credit_card/" + token, request).ConfigureAwait(false);
 
             return new ResultImpl<CreditCard>(new NodeWrapper(creditCardXML), gateway);
         }

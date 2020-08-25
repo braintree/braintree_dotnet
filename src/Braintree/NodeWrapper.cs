@@ -203,5 +203,15 @@ namespace Braintree
 
             return formParameters;
         }
+
+        public virtual T GetEnum<T>(string str, T defaultValue) where T : struct, Enum
+        {
+            return EnumHelper.FindEnum(GetString(str), defaultValue);
+        }
+
+        public virtual T? GetEnum<T>(string str, T? defaultValue = null) where T : struct, Enum
+        {
+            return EnumHelper.FindEnum(GetString(str), defaultValue);
+        }
     }
 }

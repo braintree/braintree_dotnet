@@ -26,10 +26,6 @@ namespace Braintree
             {
                 return new AndroidPayCard(response, gateway);
             }
-            else if (response.GetName() == "coinbase-account")
-            {
-                return new CoinbaseAccount(response, gateway);
-            }
             else if (response.GetName() == "venmo-account")
             {
                 return new VenmoAccount(response, gateway);
@@ -37,10 +33,6 @@ namespace Braintree
             else if (response.GetName() == "visa-checkout-card")
             {
                 return new VisaCheckoutCard(response, gateway);
-            }
-            else if (response.GetName() == "masterpass-card")
-            {
-                return new MasterpassCard(response, gateway);
             }
             else if (response.GetName() == "samsung-pay-card")
             {

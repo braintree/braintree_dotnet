@@ -37,7 +37,7 @@ namespace Braintree
         public string PlanId { get; set; }
         public decimal? Price { get; set; }
         public int TrialDuration { get; set; }
-        public SubscriptionDurationUnit TrialDurationUnit { get; set; }
+        public SubscriptionDurationUnit? TrialDurationUnit { get; set; }
         public string MerchantAccountId { get; set; }
 
         public override string ToXml()
@@ -69,7 +69,10 @@ namespace Braintree
                     {
                         builder.AddElement("trial-duration", TrialDuration.ToString());
                     }
-                    builder.AddElement("trial-duration-unit", TrialDurationUnit.ToString().ToLower());
+                    if (TrialDurationUnit != null)
+                    {
+                        builder.AddElement("trial-duration-unit", TrialDurationUnit.GetDescription());
+                    }
                 }
             }
             builder.AddElement("merchant-account-id", MerchantAccountId);

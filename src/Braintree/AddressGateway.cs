@@ -18,7 +18,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
-            Service = new BraintreeService(gateway.Configuration);
+            Service = gateway.Service;
         }
 
         public virtual Result<Address> Create(string customerId, AddressRequest request)

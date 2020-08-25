@@ -14,7 +14,7 @@ namespace Braintree
             EffectiveDate = node.GetDateTime("effective-date");
             DisbursementDate = node.GetDateTime("disbursement-date");
             Timestamp = node.GetDateTime("timestamp");
-            Status = (DisputeStatus)CollectionUtil.Find(DisputeStatus.ALL, node.GetString("status"), DisputeStatus.UNRECOGNIZED);
+            Status = node.GetEnum("status", DisputeStatus.UNRECOGNIZED);
         }
 
         [Obsolete("Mock Use Only")]

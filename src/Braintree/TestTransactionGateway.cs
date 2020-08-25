@@ -17,7 +17,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         private void CheckEnvironment()

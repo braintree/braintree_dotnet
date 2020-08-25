@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Braintree.Tests.Integration
 {
     [TestFixture]
-    public class MerchantAccountTest
+    public class MerchantAccountIntegrationTest
     {
         private BraintreeGateway gateway;
 
@@ -622,7 +622,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(MerchantAccountStatus.ACTIVE, merchantAccount.Status);
             Assert.IsTrue(merchantAccount.IsDefault);
         }
-
+        // this is part of Marketplace and shouldn't be removed unless we're removing all Marketplace code
         private MerchantAccountRequest deprecatedCreateRequest(string id)
         {
             return new MerchantAccountRequest

@@ -66,7 +66,6 @@ namespace Braintree.Tests
                     new NodeWrapper(doc).GetNode("//verification")
             );
 
-            Assert.AreEqual(null, verification.Status);
             Assert.AreEqual(null, verification.ProcessorResponseCode);
             Assert.AreEqual(null, verification.ProcessorResponseText);
         }

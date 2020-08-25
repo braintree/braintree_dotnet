@@ -11,7 +11,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public UsBankAccount Find(string token)

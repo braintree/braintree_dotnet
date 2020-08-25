@@ -1,0 +1,27 @@
+SRCSRV: ini ------------------------------------------------
+VERSION=2
+SRCSRV: variables ------------------------------------------
+RAWURL=https://raw.github.com/nunit/nunit/c933a883ea25263ec575a654dae69fa38000edd9/%var2%
+SRCSRVVERCTRL=https
+SRCSRVTRG=%RAWURL%
+SRCSRV: source files ---------------------------------------
+d:\a\1\s\src\nunitframework\fakes.cs*src/NUnitFramework/Fakes.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\commandlinetests.cs*src/NUnitFramework/nunitlite.tests/CommandLineTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\createtestfiltertests.cs*src/NUnitFramework/nunitlite.tests/CreateTestFilterTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\defaultoptionsprovidertests.cs*src/NUnitFramework/nunitlite.tests/DefaultOptionsProviderTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\extendedtextwrappertests.cs*src/NUnitFramework/nunitlite.tests/ExtendedTextWrapperTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\makerunsettingstests.cs*src/NUnitFramework/nunitlite.tests/MakeRunSettingsTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\nunit2xmloutputwritertests.cs*src/NUnitFramework/nunitlite.tests/NUnit2XmlOutputWriterTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\outputspecificationtests.cs*src/NUnitFramework/nunitlite.tests/OutputSpecificationTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\program.cs*src/NUnitFramework/nunitlite.tests/Program.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\schematests.cs*src/NUnitFramework/nunitlite.tests/SchemaTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\teamcityeventlistenertests.cs*src/NUnitFramework/nunitlite.tests/TeamCityEventListenerTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\testnameparsertests.cs*src/NUnitFramework/nunitlite.tests/TestNameParserTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\testselectionparsertests.cs*src/NUnitFramework/nunitlite.tests/TestSelectionParserTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\textuireporttests.cs*src/NUnitFramework/nunitlite.tests/TextUIReportTests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\textuitests.cs*src/NUnitFramework/nunitlite.tests/TextUITests.cs
+d:\a\1\s\src\nunitframework\nunitlite.tests\tokenizertests.cs*src/NUnitFramework/nunitlite.tests/TokenizerTests.cs
+d:\a\1\s\src\nunitframework\schematestutils.cs*src/NUnitFramework/SchemaTestUtils.cs
+d:\a\1\s\src\nunitframework\testbuilder.cs*src/NUnitFramework/TestBuilder.cs
+d:\a\1\s\src\nunitframework\testfile.cs*src/NUnitFramework/TestFile.cs
+SRCSRV: end ------------------------------------------------

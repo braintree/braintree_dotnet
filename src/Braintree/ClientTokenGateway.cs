@@ -19,7 +19,7 @@ namespace Braintree
         protected internal ClientTokenGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            Service = new BraintreeService(gateway.Configuration);
+            Service = gateway.Service;
         }
 
         public virtual string Generate(ClientTokenRequest request = null)

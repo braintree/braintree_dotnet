@@ -1,59 +1,41 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class DisputeStatus : Enumeration
+    public enum DisputeStatus
     {
-        public static readonly DisputeStatus OPEN = new DisputeStatus("open");
-        public static readonly DisputeStatus LOST = new DisputeStatus("lost");
-        public static readonly DisputeStatus WON = new DisputeStatus("won");
-        public static readonly DisputeStatus UNRECOGNIZED = new DisputeStatus("unrecognized");
-        public static readonly DisputeStatus ACCEPTED = new DisputeStatus("accepted");
-        public static readonly DisputeStatus DISPUTED = new DisputeStatus("disputed");
-        public static readonly DisputeStatus EXPIRED = new DisputeStatus("expired");
-
-        public static readonly DisputeStatus[] ALL = {
-            OPEN, LOST, WON, UNRECOGNIZED, ACCEPTED, DISPUTED, EXPIRED
-        };
-
-        protected DisputeStatus(string name) : base(name) {}
+        [Description("open")] OPEN,
+        [Description("lost")] LOST,
+        [Description("won")] WON,
+        [Description("unrecognized")] UNRECOGNIZED,
+        [Description("accepted")] ACCEPTED,
+        [Description("disputed")] DISPUTED,
+        [Description("expired")] EXPIRED
     }
 
-    public class DisputeKind : Enumeration
+    public enum DisputeKind
     {
-        public static readonly DisputeKind CHARGEBACK = new DisputeKind("chargeback");
-        public static readonly DisputeKind PRE_ARBITRATION = new DisputeKind("pre_arbitration");
-        public static readonly DisputeKind RETRIEVAL = new DisputeKind("retrieval");
-        public static readonly DisputeKind UNRECOGNIZED = new DisputeKind("unrecognized");
-
-        public static readonly DisputeKind[] ALL = {
-            CHARGEBACK, PRE_ARBITRATION, RETRIEVAL, UNRECOGNIZED
-        };
-
-        protected DisputeKind(string name) : base(name) {}
+        [Description("chargeback")] CHARGEBACK,
+        [Description("pre_arbitration")] PRE_ARBITRATION,
+        [Description("retrieval")] RETRIEVAL,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public class DisputeReason : Enumeration
+    public enum DisputeReason
     {
-        public static readonly DisputeReason CANCELLED_RECURRING_TRANSACTION = new DisputeReason("cancelled_recurring_transaction");
-        public static readonly DisputeReason CREDIT_NOT_PROCESSED = new DisputeReason("credit_not_processed");
-        public static readonly DisputeReason DUPLICATE = new DisputeReason("duplicate");
-        public static readonly DisputeReason FRAUD = new DisputeReason("fraud");
-        public static readonly DisputeReason GENERAL = new DisputeReason("general");
-        public static readonly DisputeReason INVALID_ACCOUNT = new DisputeReason("invalid_account");
-        public static readonly DisputeReason NOT_RECOGNIZED = new DisputeReason("not_recognized");
-        public static readonly DisputeReason PRODUCT_NOT_RECEIVED = new DisputeReason("product_not_received");
-        public static readonly DisputeReason PRODUCT_UNSATISFACTORY = new DisputeReason("product_unsatisfactory");
-        public static readonly DisputeReason TRANSACTION_AMOUNT_DIFFERS = new DisputeReason("transaction_amount_differs");
-        public static readonly DisputeReason RETRIEVAL = new DisputeReason("retrieval");
-
-
-        public static readonly DisputeReason[] ALL = {
-          CANCELLED_RECURRING_TRANSACTION, CREDIT_NOT_PROCESSED, DUPLICATE, FRAUD, GENERAL, INVALID_ACCOUNT, NOT_RECOGNIZED, PRODUCT_NOT_RECEIVED, PRODUCT_UNSATISFACTORY, TRANSACTION_AMOUNT_DIFFERS, RETRIEVAL
-        };
-
-        protected DisputeReason(string name) : base(name) {}
+        [Description("cancelled_recurring_transaction")] CANCELLED_RECURRING_TRANSACTION,
+        [Description("credit_not_processed")] CREDIT_NOT_PROCESSED,
+        [Description("duplicate")] DUPLICATE,
+        [Description("fraud")] FRAUD,
+        [Description("general")] GENERAL,
+        [Description("invalid_account")] INVALID_ACCOUNT,
+        [Description("not_recognized")] NOT_RECOGNIZED,
+        [Description("product_not_received")] PRODUCT_NOT_RECEIVED,
+        [Description("product_unsatisfactory")] PRODUCT_UNSATISFACTORY,
+        [Description("transaction_amount_differs")] TRANSACTION_AMOUNT_DIFFERS,
+        [Description("retrieval")] RETRIEVAL
     }
 
     public class Dispute
@@ -74,9 +56,6 @@ namespace Braintree
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
         public virtual string Id { get; protected set; }
-        [ObsoleteAttribute("This method will be removed in favor of ProcessorComments", false)]
-        public virtual string ForwardedComments { get; protected set; }
-        // NEXT_MAJOR_VERSION remove ForwardedComments attribute as it never returned anything anyway.
         public virtual string ProcessorComments { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual string OriginalDisputeId { get; protected set; }
@@ -99,9 +78,9 @@ namespace Braintree
             ReceivedDate = node.GetDateTime("received-date");
             ReplyByDate = node.GetDateTime("reply-by-date");
             UpdatedAt = node.GetDateTime("updated-at");
-            Reason = (DisputeReason)CollectionUtil.Find(DisputeReason.ALL, node.GetString("reason"), DisputeReason.GENERAL);
-            Status = (DisputeStatus)CollectionUtil.Find(DisputeStatus.ALL, node.GetString("status"), DisputeStatus.UNRECOGNIZED);
-            Kind = (DisputeKind)CollectionUtil.Find(DisputeKind.ALL, node.GetString("kind"), DisputeKind.UNRECOGNIZED);
+            Reason = node.GetEnum("reason", DisputeReason.GENERAL);
+            Status = node.GetEnum("status", DisputeStatus.UNRECOGNIZED);
+            Kind = node.GetEnum("kind", DisputeKind.UNRECOGNIZED);
             CaseNumber = node.GetString("case-number");
             CurrencyIsoCode = node.GetString("currency-iso-code");
             GraphQLId = node.GetString("global-id");

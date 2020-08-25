@@ -4,7 +4,7 @@ namespace Braintree
 {
     public class FundingRequest : Request
     {
-        public FundingDestination Destination { get; set; }
+        public FundingDestination? Destination { get; set; }
         public string Email { get; set; }
         public string MobilePhone { get; set; }
         public string RoutingNumber { get; set; }
@@ -34,7 +34,7 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
-                AddElement("destination", Destination).
+                AddElement("destination", Destination.GetDescription()).
                 AddElement("email", Email).
                 AddElement("mobile-phone", MobilePhone).
                 AddElement("routing-number", RoutingNumber).

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Braintree.Tests.Integration
 {
     [TestFixture]
-    public class PlanTest
+    public class PlanIntegrationTest
     {
         private BraintreeGateway gateway;
         private BraintreeService service;

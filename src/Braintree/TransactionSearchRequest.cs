@@ -97,11 +97,11 @@ namespace Braintree
                 return new DateRangeNode<TransactionSearchRequest>("created-at", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest, TransactionCreatedUsing> CreatedUsing
+        public EnumMultipleValueNode<TransactionSearchRequest, TransactionCreatedUsing> CreatedUsing
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest, TransactionCreatedUsing>("created-using", this);
+                return new EnumMultipleValueNode<TransactionSearchRequest, TransactionCreatedUsing>("created-using", this);
             }
         }
         public TextNode<TransactionSearchRequest> CreditCardCardholderName
@@ -139,11 +139,11 @@ namespace Braintree
                 return new PartialMatchNode<TransactionSearchRequest>("credit-card-number", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCardType> CreditCardCardType
+        public EnumMultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCardType> CreditCardCardType
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCardType>("credit-card-card-type", this);
+                return new EnumMultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCardType>("credit-card-card-type", this);
             }
         }
         public MultipleValueNode<TransactionSearchRequest, String> PaymentInstrumentType
@@ -153,11 +153,11 @@ namespace Braintree
                 return new MultipleValueNode<TransactionSearchRequest, String>("payment-instrument-type", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCustomerLocation> CreditCardCustomerLocation
+        public EnumMultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCustomerLocation> CreditCardCustomerLocation
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCustomerLocation>("credit-card-customer-location", this);
+                return new EnumMultipleValueNode<TransactionSearchRequest, Braintree.CreditCardCustomerLocation>("credit-card-customer-location", this);
             }
         }
         public TextNode<TransactionSearchRequest> Currency
@@ -405,11 +405,11 @@ namespace Braintree
                 return new TextNode<TransactionSearchRequest>("shipping-street-address", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest, TransactionStatus> Status
+        public EnumMultipleValueNode<TransactionSearchRequest, TransactionStatus> Status
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest, TransactionStatus>("status", this);
+                return new EnumMultipleValueNode<TransactionSearchRequest, TransactionStatus>("status", this);
             }
         }
         public DateRangeNode<TransactionSearchRequest> SubmittedForSettlementAt
@@ -419,18 +419,18 @@ namespace Braintree
                 return new DateRangeNode<TransactionSearchRequest>("submitted-for-settlement-at", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest, TransactionSource> Source
+        public EnumMultipleValueNode<TransactionSearchRequest, TransactionSource> Source
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest, TransactionSource>("source", this);
+                return new EnumMultipleValueNode<TransactionSearchRequest, TransactionSource>("source", this);
             }
         }
-        public MultipleValueNode<TransactionSearchRequest, TransactionType> Type
+        public EnumMultipleValueNode<TransactionSearchRequest, TransactionType> Type
         {
             get
             {
-                return new MultipleValueNode<TransactionSearchRequest, TransactionType>("type", this);
+                return new EnumMultipleValueNode<TransactionSearchRequest, TransactionType>("type", this);
             }
         }
         public DateRangeNode<TransactionSearchRequest> VoidedAt

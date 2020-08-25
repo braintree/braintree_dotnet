@@ -10,7 +10,7 @@ namespace Braintree
         public PlanGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public virtual List<Plan> All()

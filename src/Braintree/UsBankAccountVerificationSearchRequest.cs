@@ -84,19 +84,19 @@ namespace Braintree
             }
         }
 
-        public MultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationStatus> Status
+        public EnumMultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationStatus> Status
         {
             get
             {
-                return new MultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationStatus>("status", this);
+                return new EnumMultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationStatus>("status", this);
             }
         }
 
-        public MultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationMethod> VerificationMethod
+        public EnumMultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationMethod> VerificationMethod
         {
             get
             {
-                return new MultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationMethod>("verification-method", this);
+                return new EnumMultipleValueNode<UsBankAccountVerificationSearchRequest, UsBankAccountVerificationMethod>("verification-method", this);
             }
         }
     }

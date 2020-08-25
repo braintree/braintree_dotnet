@@ -19,3 +19,4 @@ tags
 .vs/
 **/*.lock.json
 large_file.png
+test/fixtures/empty_file.png

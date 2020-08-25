@@ -44,11 +44,11 @@ namespace Braintree
             }
         }
 
-        public MultipleValueNode<DisputeSearchRequest, DisputeKind> DisputeKind
+        public EnumMultipleValueNode<DisputeSearchRequest, DisputeKind> DisputeKind
         {
             get
             {
-                return new MultipleValueNode<DisputeSearchRequest, DisputeKind>("kind", this);
+                return new EnumMultipleValueNode<DisputeSearchRequest, DisputeKind>("kind", this);
             }
         }
 
@@ -60,11 +60,11 @@ namespace Braintree
             }
         }
 
-        public MultipleValueNode<DisputeSearchRequest, DisputeReason> DisputeReason
+        public EnumMultipleValueNode<DisputeSearchRequest, DisputeReason> DisputeReason
         {
             get
             {
-                return new MultipleValueNode<DisputeSearchRequest, DisputeReason>("reason", this);
+                return new EnumMultipleValueNode<DisputeSearchRequest, DisputeReason>("reason", this);
             }
         }
 
@@ -116,11 +116,11 @@ namespace Braintree
             }
         }
 
-        public MultipleValueNode<DisputeSearchRequest, DisputeStatus> DisputeStatus
+        public EnumMultipleValueNode<DisputeSearchRequest, DisputeStatus> DisputeStatus
         {
             get
             {
-                return new MultipleValueNode<DisputeSearchRequest, DisputeStatus>("status", this);
+                return new EnumMultipleValueNode<DisputeSearchRequest, DisputeStatus>("status", this);
             }
         }
 

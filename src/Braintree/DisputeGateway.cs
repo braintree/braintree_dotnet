@@ -39,7 +39,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             Gateway = gateway;
-            Service = new BraintreeService(gateway.Configuration);
+            Service = gateway.Service;
         }
 
         public virtual Result<Dispute> Accept(string disputeId)
@@ -131,7 +131,7 @@ namespace Braintree
 
         public virtual async Task<Result<DisputeEvidence>> AddFileEvidenceAsync(string disputeId, string documentUploadId)
         {
-            return await AddFileEvidenceAsync(disputeId, new FileEvidenceRequest { DocumentId = documentUploadId });
+            return await AddFileEvidenceAsync(disputeId, new FileEvidenceRequest { DocumentId = documentUploadId }).ConfigureAwait(false);
         }
 
         public virtual Result<DisputeEvidence> AddTextEvidence(string disputeId, string content)
@@ -177,7 +177,7 @@ namespace Braintree
             {
                 Content = content
             };
-            return await AddTextEvidenceAsync(disputeId, textEvidenceRequest);
+            return await AddTextEvidenceAsync(disputeId, textEvidenceRequest).ConfigureAwait(false);
         }
 
         public virtual async Task<Result<DisputeEvidence>> AddTextEvidenceAsync(string disputeId, TextEvidenceRequest textEvidenceRequest)
@@ -200,7 +200,7 @@ namespace Braintree
             }
 
             try {
-                XmlNode disputeEvidenceXML = await Service.PostAsync(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", textEvidenceRequest);
+                XmlNode disputeEvidenceXML = await Service.PostAsync(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence", textEvidenceRequest).ConfigureAwait(false);
 
                 return new ResultImpl<DisputeEvidence>(new NodeWrapper(disputeEvidenceXML), Gateway);
             } catch (NotFoundException) {
@@ -306,7 +306,7 @@ namespace Braintree
             }
 
             try {
-                XmlNode disputeXML = await Service.DeleteAsync(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence/" + evidenceId);
+                XmlNode disputeXML = await Service.DeleteAsync(Service.MerchantPath() + "/disputes/" + disputeId + "/evidence/" + evidenceId).ConfigureAwait(false);
 
                 return new ResultImpl<Dispute>(new NodeWrapper(disputeXML), Gateway);
             } catch (NotFoundException) {

@@ -24,13 +24,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void TrData_ReturnsValidTrDataHash()
-        {
-            string trData = gateway.TrData(new CreditCardRequest(), "http://example.com");
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
-        }
-
-        [Test]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             Assert.Throws<NotFoundException>(() => gateway.CreditCard.Find(" "));

@@ -1,3 +1,0 @@
-
-# No funny business...
-AmazingTest

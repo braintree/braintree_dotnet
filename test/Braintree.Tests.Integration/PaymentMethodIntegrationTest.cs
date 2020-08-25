@@ -459,39 +459,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Create_CreatesAmexExpressCheckoutCardWithNonce()
-        {
-            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
-            Assert.IsTrue(result.IsSuccess());
-
-            var request = new PaymentMethodRequest
-            {
-                CustomerId = result.Target.Id,
-                PaymentMethodNonce = Nonce.AmexExpressCheckout
-            };
-            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
-
-            Assert.IsTrue(paymentMethodResult.IsSuccess());
-            Assert.IsNotNull(paymentMethodResult.Target.Token);
-            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
-            Assert.IsInstanceOf(typeof(AmexExpressCheckoutCard), paymentMethodResult.Target);
-            AmexExpressCheckoutCard amexExpressCheckoutCard = (AmexExpressCheckoutCard) paymentMethodResult.Target;
-
-            Assert.IsNotNull(amexExpressCheckoutCard.CardType);
-            Assert.IsNotNull(amexExpressCheckoutCard.Bin);
-            Assert.IsNotNull(amexExpressCheckoutCard.ExpirationMonth);
-            Assert.IsNotNull(amexExpressCheckoutCard.ExpirationYear);
-            Assert.IsNotNull(amexExpressCheckoutCard.CardMemberNumber);
-            Assert.IsNotNull(amexExpressCheckoutCard.CardMemberExpiryDate);
-            Assert.IsNotNull(amexExpressCheckoutCard.ImageUrl);
-            Assert.IsNotNull(amexExpressCheckoutCard.SourceDescription);
-            Assert.IsNotNull(amexExpressCheckoutCard.IsDefault);
-            Assert.IsNotNull(amexExpressCheckoutCard.CreatedAt);
-            Assert.IsNotNull(amexExpressCheckoutCard.UpdatedAt);
-            Assert.IsNotNull(amexExpressCheckoutCard.Subscriptions);
-        }
-
-        [Test]
         public void Create_CreatesVenmoAccountWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -1283,20 +1250,6 @@ namespace Braintree.Tests.Integration
             ).GetAwaiter().GetResult();
         }
 #endif
-
-        [Test]
-        public void Update_NoLongerSupportsUpdateWithCoinbaseAccount()
-        {
-            var customer = gateway.Customer.Create().Target;
-            PaymentMethodRequest request = new PaymentMethodRequest()
-            {
-                CustomerId = customer.Id,
-                PaymentMethodNonce = Nonce.Coinbase
-            };
-            var paymentMethodResult = gateway.PaymentMethod.Create(request);
-            Assert.IsFalse(paymentMethodResult.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.PAYMENT_METHOD_NO_LONGER_SUPPORTED, paymentMethodResult.Errors.ForObject("CoinbaseAccount").OnField("Base")[0].Code);
-        }
 
         [Test]
         public void Update_CreatesNewBillingAddressByDefault()

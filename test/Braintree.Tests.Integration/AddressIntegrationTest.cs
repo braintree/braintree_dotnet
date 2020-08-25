@@ -312,7 +312,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        public void Update_ReturnsAnErrorResult_ForInconsistenCountry()
+        public void Update_ReturnsAnErrorResult_ForInconsistentCountry()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 

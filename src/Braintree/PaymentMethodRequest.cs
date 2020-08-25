@@ -17,8 +17,6 @@ namespace Braintree
         public string Number { get; set; }
         public string DeviceData { get; set; }
         public string PayPalRefreshToken { get; set; }
-        // NEXT_MAJOR_VERSION remove this attribute as it's been ignored in the gateway
-        public bool? PayPalVaultWithoutUpgrade { get; set; }
 
         public override string ToXml()
         {
@@ -47,9 +45,7 @@ namespace Braintree
                 AddElement("expiration-year", ExpirationYear).
                 AddElement("number", Number).
                 AddElement("paypal-refresh-token", PayPalRefreshToken).
-                AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru).
-                // NEXT_MAJOR_VERSION remove this element as it's been ignored in the gateway
-                AddElement("paypal-vault-without-upgrade", PayPalVaultWithoutUpgrade);
+                AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
         }
     }
 }

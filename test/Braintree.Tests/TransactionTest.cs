@@ -26,51 +26,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SaleTrData_ReturnsValidTrDataHash()
-        {
-            string trData = gateway.Transaction.SaleTrData(new TransactionRequest(), "http://example.com");
-            Assert.IsTrue(trData.Contains("sale"));
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
-        }
-
-        [Test]
-        public void CreditTrData_ReturnsValidTrDataHash()
-        {
-            string trData = gateway.Transaction.CreditTrData(new TransactionRequest(), "http://example.com");
-            Assert.IsTrue(trData.Contains("credit"));
-            Assert.IsTrue(TrUtil.IsTrDataValid(trData, service));
-        }
-
-        [Test]
-        public void TrData_QueryStringParams()
-        {
-            string trData = gateway.Transaction.SaleTrData(new TransactionRequest {
-                Options = new TransactionOptionsRequest
-                {
-                    StoreInVault = true,
-                    AddBillingAddressToPaymentMethod = true,
-                    StoreShippingAddressInVault = true,
-                    SubmitForSettlement = true
-                }
-            }, "http://example.com");
-            Assert.IsTrue(trData.Contains("store_in_vault"));
-            Assert.IsTrue(trData.Contains("add_billing_address_to_payment_method"));
-            Assert.IsTrue(trData.Contains("store_shipping_address_in_vault"));
-            Assert.IsTrue(trData.Contains("submit_for_settlement"));
-
-            trData = gateway.Transaction.SaleTrData(new TransactionRequest {
-                Options = new TransactionOptionsRequest
-                {
-                }
-            }, "http://example.com");
-            Assert.IsFalse(trData.Contains("store_in_vault"));
-            Assert.IsFalse(trData.Contains("add_billing_address_to_payment_method"));
-            Assert.IsFalse(trData.Contains("store_shipping_address_in_vault"));
-            Assert.IsFalse(trData.Contains("submit_for_settlement"));
-
-        }
-
-        [Test]
         public void Find_FindsErrorsOutOnWhitespaceIds()
         {
             Assert.Throws<NotFoundException>(() => gateway.Transaction.Find(" "));

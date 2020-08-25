@@ -53,7 +53,7 @@ namespace Braintree
         public TransactionPayPalRequest PayPalAccount { get; set; }
         public decimal? TaxAmount { get; set; }
         public bool? TaxExempt { get; set; }
-        public TransactionType Type { get; set; }
+        public TransactionType? Type { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
         public TransactionOptionsRequest Options { get; set; }
         public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
@@ -91,11 +91,6 @@ namespace Braintree
         public TransactionRequest()
         {
             CustomFields = new Dictionary<string, string>();
-        }
-
-        public override string Kind()
-        {
-            return TransparentRedirectGateway.CREATE_TRANSACTION;
         }
 
         public override string ToXml()
@@ -144,7 +139,7 @@ namespace Braintree
             builder.AddElement("merchant-account-id", MerchantAccountId);
             if (ServiceFeeAmount.HasValue) builder.AddElement("service-fee-amount", ServiceFeeAmount);
 
-            if (Type != null) builder.AddElement("type", Type.ToString().ToLower());
+            if (Type != null) builder.AddElement("type", Type.GetDescription());
 
             if (CustomFields.Count != 0) builder.AddElement("custom-fields", CustomFields);
 

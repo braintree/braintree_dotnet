@@ -2,112 +2,79 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class CreditCardCustomerLocation : Enumeration
+
+    public enum CreditCardCustomerLocation
     {
-        public static readonly CreditCardCustomerLocation US = new CreditCardCustomerLocation("us");
-        public static readonly CreditCardCustomerLocation INTERNATIONAL = new CreditCardCustomerLocation("international");
-        public static readonly CreditCardCustomerLocation UNRECOGNIZED = new CreditCardCustomerLocation("unrecognized");
-
-        public static readonly CreditCardCustomerLocation[] ALL = {US, INTERNATIONAL};
-
-        protected CreditCardCustomerLocation(string name) : base(name) {}
+        [Description("us")] US,
+        [Description("international")] INTERNATIONAL,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public class CreditCardPrepaid : Enumeration
+    public enum CreditCardPrepaid
     {
-        public static readonly CreditCardPrepaid YES = new CreditCardPrepaid("Yes");
-        public static readonly CreditCardPrepaid NO = new CreditCardPrepaid("No");
-        public static readonly CreditCardPrepaid UNKNOWN = new CreditCardPrepaid("Unknown");
-
-        public static readonly CreditCardPrepaid[] ALL = {YES, NO, UNKNOWN};
-
-        protected CreditCardPrepaid(string name) : base(name) {}
+        [Description("Yes")] YES,
+        [Description("No")] NO,
+        [Description("Unknown")] UNKNOWN
     }
 
-    public class CreditCardPayroll : Enumeration
+    public enum CreditCardPayroll
     {
-        public static readonly CreditCardPayroll YES = new CreditCardPayroll("Yes");
-        public static readonly CreditCardPayroll NO = new CreditCardPayroll("No");
-        public static readonly CreditCardPayroll UNKNOWN = new CreditCardPayroll("Unknown");
-
-        public static readonly CreditCardPayroll[] ALL = {YES, NO, UNKNOWN};
-
-        protected CreditCardPayroll(string name) : base(name) {}
+        [Description("Yes")] YES,
+        [Description("No")] NO,
+        [Description("Unknown")] UNKNOWN
     }
 
-    public class CreditCardDebit : Enumeration
+    public enum CreditCardDebit
     {
-        public static readonly CreditCardDebit YES = new CreditCardDebit("Yes");
-        public static readonly CreditCardDebit NO = new CreditCardDebit("No");
-        public static readonly CreditCardDebit UNKNOWN = new CreditCardDebit("Unknown");
-
-        public static readonly CreditCardDebit[] ALL = {YES, NO, UNKNOWN};
-
-        protected CreditCardDebit(string name) : base(name) {}
+        [Description("Yes")] YES,
+        [Description("No")] NO,
+        [Description("Unknown")] UNKNOWN
     }
 
-    public class CreditCardCommercial : Enumeration
+    public enum CreditCardCommercial
     {
-        public static readonly CreditCardCommercial YES = new CreditCardCommercial("Yes");
-        public static readonly CreditCardCommercial NO = new CreditCardCommercial("No");
-        public static readonly CreditCardCommercial UNKNOWN = new CreditCardCommercial("Unknown");
-
-        public static readonly CreditCardCommercial[] ALL = {YES, NO, UNKNOWN};
-
-        protected CreditCardCommercial(string name) : base(name) {}
+        [Description("Yes")] YES,
+        [Description("No")] NO,
+        [Description("Unknown")] UNKNOWN
     }
 
-    public class CreditCardHealthcare : Enumeration
+    public enum CreditCardHealthcare
     {
-        public static readonly CreditCardHealthcare YES = new CreditCardHealthcare("Yes");
-        public static readonly CreditCardHealthcare NO = new CreditCardHealthcare("No");
-        public static readonly CreditCardHealthcare UNKNOWN = new CreditCardHealthcare("Unknown");
-
-        public static readonly CreditCardHealthcare[] ALL = {YES, NO, UNKNOWN};
-
-        protected CreditCardHealthcare(string name) : base(name) {}
+        [Description("Yes")] YES,
+        [Description("No")] NO,
+        [Description("Unknown")] UNKNOWN
     }
 
-    public class CreditCardDurbinRegulated : Enumeration
+    public enum CreditCardDurbinRegulated
     {
-        public static readonly CreditCardDurbinRegulated YES = new CreditCardDurbinRegulated("Yes");
-        public static readonly CreditCardDurbinRegulated NO = new CreditCardDurbinRegulated("No");
-        public static readonly CreditCardDurbinRegulated UNKNOWN = new CreditCardDurbinRegulated("Unknown");
-
-        public static readonly CreditCardDurbinRegulated[] ALL = {YES, NO, UNKNOWN};
-
-        protected CreditCardDurbinRegulated(string name) : base(name) {}
+        [Description("Yes")] YES,
+        [Description("No")] NO,
+        [Description("Unknown")] UNKNOWN
     }
 
-    public class CreditCardCardType : Enumeration
+    public enum CreditCardCardType
     {
-        public static readonly CreditCardCardType AMEX = new CreditCardCardType("American Express");
-        public static readonly CreditCardCardType CARTE_BLANCHE = new CreditCardCardType("Carte Blanche");
-        public static readonly CreditCardCardType CHINA_UNION_PAY = new CreditCardCardType("China UnionPay");
-        public static readonly CreditCardCardType UNION_PAY = new CreditCardCardType("UnionPay");
-        public static readonly CreditCardCardType DINERS_CLUB_INTERNATIONAL = new CreditCardCardType("Diners Club");
-        public static readonly CreditCardCardType DISCOVER = new CreditCardCardType("Discover");
-        public static readonly CreditCardCardType ELO = new CreditCardCardType("Elo");
-        public static readonly CreditCardCardType JCB = new CreditCardCardType("JCB");
-        public static readonly CreditCardCardType LASER = new CreditCardCardType("Laser");
-        public static readonly CreditCardCardType UK_MAESTRO = new CreditCardCardType("UK Maestro");
-        public static readonly CreditCardCardType MAESTRO = new CreditCardCardType("Maestro");
-        public static readonly CreditCardCardType MASTER_CARD = new CreditCardCardType("MasterCard");
-        public static readonly CreditCardCardType SOLO = new CreditCardCardType("Solo");
-        public static readonly CreditCardCardType SWITCH = new CreditCardCardType("Switch");
-        public static readonly CreditCardCardType VISA = new CreditCardCardType("Visa");
-        public static readonly CreditCardCardType UNKNOWN = new CreditCardCardType("Unknown");
-        public static readonly CreditCardCardType UNRECOGNIZED = new CreditCardCardType("Unrecognized");
-
-        public static readonly CreditCardCardType[] ALL = {
-            AMEX, CARTE_BLANCHE, CHINA_UNION_PAY, DINERS_CLUB_INTERNATIONAL, DISCOVER,
-            ELO, JCB, LASER, UK_MAESTRO, MAESTRO, MASTER_CARD, SOLO, SWITCH, VISA, UNKNOWN
-        };
-
-        protected CreditCardCardType(string name) : base(name) {}
+        [Description("American Express")] AMEX,
+        [Description("Carte Blanche")] CARTE_BLANCHE,
+        [Description("China UnionPay")] CHINA_UNION_PAY,
+        [Description("UnionPay")] UNION_PAY,
+        [Description("Diners Club")] DINERS_CLUB_INTERNATIONAL,
+        [Description("Discover")] DISCOVER,
+        [Description("Elo")] ELO,
+        [Description("JCB")] JCB,
+        [Description("Laser")] LASER,
+        [Description("UK Maestro")] UK_MAESTRO,
+        [Description("Maestro")] MAESTRO,
+        [Description("MasterCard")] MASTER_CARD,
+        [Description("Solo")] SOLO,
+        [Description("Switch")] SWITCH,
+        [Description("Visa")] VISA,
+        [Description("Unknown")] UNKNOWN,
+        [Description("Unrecognized")] UNRECOGNIZED
     }
 
     /// <summary>
@@ -142,6 +109,7 @@ namespace Braintree
         public virtual bool? IsDefault { get; protected set; }
         public virtual bool? IsVenmoSdk { get; protected set; }
         public virtual bool? IsExpired { get; protected set; }
+        public virtual bool? IsNetworkTokenized { get; protected set; }
         public virtual CreditCardCustomerLocation CustomerLocation { get; protected set; }
         public virtual string LastFour { get; protected set; }
         public virtual string UniqueNumberIdentifier { get; protected set; }
@@ -239,26 +207,27 @@ namespace Braintree
 
             Bin = node.GetString("bin");
             CardholderName = node.GetString("cardholder-name");
-            CardType = (CreditCardCardType)CollectionUtil.Find(CreditCardCardType.ALL, node.GetString("card-type"), CreditCardCardType.UNRECOGNIZED);
+            CardType = node.GetEnum("card-type", CreditCardCardType.UNRECOGNIZED);
             CustomerId = node.GetString("customer-id");
             IsDefault = node.GetBoolean("default");
             IsVenmoSdk = node.GetBoolean("venmo-sdk");
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");
             IsExpired = node.GetBoolean("expired");
-            CustomerLocation = (CreditCardCustomerLocation)CollectionUtil.Find(CreditCardCustomerLocation.ALL, node.GetString("customer-location"), CreditCardCustomerLocation.UNRECOGNIZED);
+            IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
+            CustomerLocation = node.GetEnum("customer-location", CreditCardCustomerLocation.UNRECOGNIZED);
             LastFour = node.GetString("last-4");
             UniqueNumberIdentifier = node.GetString("unique-number-identifier");
             Token = node.GetString("token");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
             BillingAddress = new Address(node.GetNode("billing-address"));
-            Prepaid = (CreditCardPrepaid)CollectionUtil.Find(CreditCardPrepaid.ALL, node.GetString("prepaid"), CreditCardPrepaid.UNKNOWN);
-            Payroll = (CreditCardPayroll)CollectionUtil.Find(CreditCardPayroll.ALL, node.GetString("payroll"), CreditCardPayroll.UNKNOWN);
-            DurbinRegulated = (CreditCardDurbinRegulated)CollectionUtil.Find(CreditCardDurbinRegulated.ALL, node.GetString("durbin-regulated"), CreditCardDurbinRegulated.UNKNOWN);
-            Debit = (CreditCardDebit)CollectionUtil.Find(CreditCardDebit.ALL, node.GetString("debit"), CreditCardDebit.UNKNOWN);
-            Commercial = (CreditCardCommercial)CollectionUtil.Find(CreditCardCommercial.ALL, node.GetString("commercial"), CreditCardCommercial.UNKNOWN);
-            Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, node.GetString("healthcare"), CreditCardHealthcare.UNKNOWN);
+            Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
+            Payroll = node.GetEnum("payroll", CreditCardPayroll.UNKNOWN);
+            DurbinRegulated = node.GetEnum("durbin-regulated", CreditCardDurbinRegulated.UNKNOWN);
+            Debit = node.GetEnum("debit", CreditCardDebit.UNKNOWN);
+            Commercial = node.GetEnum("commercial", CreditCardCommercial.UNKNOWN);
+            Healthcare = node.GetEnum("healthcare", CreditCardHealthcare.UNKNOWN);
             AccountType = node.GetString("account-type");
             _CountryOfIssuance = node.GetString("country-of-issuance");
             _IssuingBank = node.GetString("issuing-bank");

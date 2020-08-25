@@ -120,7 +120,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void BraintreeGateway_canMakeMultipleRequestsWithStaticClient()
+        public void BraintreeGateway_makesMultipleRequestsWithStaticClient()
         {
             var gateway = new BraintreeGateway
             {
@@ -129,7 +129,6 @@ namespace Braintree.Tests.Integration
                 PublicKey = "integration_public_key",
                 PrivateKey = "integration_private_key"
             };
-            gateway.Configuration.UseStaticHttpClient = true;
 
             string id = Guid.NewGuid().ToString();
             var createRequest = new CustomerRequest

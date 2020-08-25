@@ -25,7 +25,7 @@ namespace Braintree.Tests
         {
             Assert.Throws<NotFoundException>(() => gateway.MerchantAccount.Find(" "));
         }
-
+        // this is part of Marketplace and shouldn't be removed unless we're removing all Marketplace code
         private MerchantAccountRequest deprecatedCreateRequest(string id)
         {
             return new MerchantAccountRequest

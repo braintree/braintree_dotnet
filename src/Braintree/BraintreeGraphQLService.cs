@@ -87,7 +87,7 @@ namespace Braintree
         public async Task<GraphQLResponse> QueryGraphQLAsync(string definition, Dictionary<string, object> variables)
         {
             var request = GetGraphQLHttpRequest(definition, variables);
-            var response = await GetHttpResponseAsync(request);
+            var response = await GetHttpResponseAsync(request).ConfigureAwait(false);
             var result = JsonConvert.DeserializeObject<GraphQLResponse>(response, new JsonConverter[] {new GraphQLResponse.Deserializer()});
 
             ThrowExceptionIfGraphQLErrorResponseHasError(result);
@@ -167,7 +167,7 @@ namespace Braintree
                     case "INTERNAL":
                         throw new ServerException();
                     case "SERVICE_AVAILABILITY":
-                        throw new DownForMaintenanceException();
+                        throw new ServiceUnavailableException();
                     case "UNKNOWN":
                     default:
                         throw new UnexpectedException();

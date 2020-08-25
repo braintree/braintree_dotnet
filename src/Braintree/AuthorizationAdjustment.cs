@@ -23,7 +23,7 @@ namespace Braintree
             Timestamp = node.GetDateTime("timestamp");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
-            ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
+            ProcessorResponseType = node.GetEnum("processor-response-type", ProcessorResponseType.UNRECOGNIZED);
         }
 
         [Obsolete("Mock Use Only")]

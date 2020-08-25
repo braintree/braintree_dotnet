@@ -74,11 +74,11 @@ namespace Braintree
                 return new RangeNode<SubscriptionSearchRequest>("created-at", this);
             }
         }
-        public MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus> Status
+        public EnumMultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus> Status
         {
             get
             {
-                return new MultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus>("status", this);
+                return new EnumMultipleValueNode<SubscriptionSearchRequest, SubscriptionStatus>("status", this);
             }
         }
         public TextNode<SubscriptionSearchRequest> TransactionId

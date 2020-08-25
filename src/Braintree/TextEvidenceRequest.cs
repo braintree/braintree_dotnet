@@ -22,13 +22,6 @@ namespace Braintree
     {
         public string Content { get; set; }
 
-        [ObsoleteAttribute("Please use Category instead")]
-        public string Tag
-        {
-            get { return _category; }
-            set { this._category = value; }
-        }
-
         public string Category
         {
             get { return _category; }

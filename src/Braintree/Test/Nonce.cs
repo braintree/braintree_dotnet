@@ -14,9 +14,7 @@ namespace Braintree.Test
         public const string AndroidPayVisa = "fake-android-pay-visa-nonce";
         public const string AndroidPayMasterCard = "fake-android-pay-mastercard-nonce";
         public const string AndroidPayAmEx = "fake-android-pay-amex-nonce";
-        public const string AmexExpressCheckout = "fake-amex-express-checkout-nonce";
         public const string AbstractTransactable = "fake-abstract-transactable-nonce";
-        public const string Coinbase = "fake-coinbase-nonce";
         public const string LocalPayment = "fake-local-payment-method-nonce";
         public const string VenmoAccount = "fake-venmo-account-nonce";
         public const string ThreeDSecureVisaFullAuthentication = "fake-three-d-secure-visa-full-authentication-nonce";
@@ -60,13 +58,8 @@ namespace Braintree.Test
         public const string LuhnInvalid = "fake-luhn-invalid-nonce";
         public const string PayPalFuturePaymentRefreshToken = "fake-paypal-future-refresh-token-nonce";
         public const string PayPalBillingAgreement = "fake-paypal-billing-agreement-nonce";
-        public const string SEPA = "fake-sepa-bank-account-nonce";
         public const string GatewayRejectedFraud = "fake-gateway-rejected-fraud-nonce";
         public const string GatewayRejectedTokenIssuance = "fake-token-issuance-error-venmo-account-nonce";
-        public const string MasterpassAmEx = "fake-masterpass-amex-nonce";
-        public const string MasterpassDiscover = "fake-masterpass-discover-nonce";
-        public const string MasterpassMasterCard = "fake-masterpass-mastercard-nonce";
-        public const string MasterpassVisa = "fake-masterpass-visa-nonce";
         public const string VisaCheckoutAmEx = "fake-visa-checkout-amex-nonce";
         public const string VisaCheckoutDiscover = "fake-visa-checkout-discover-nonce";
         public const string VisaCheckoutMasterCard = "fake-visa-checkout-mastercard-nonce";

@@ -16,7 +16,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;
-            this.service = new BraintreeService(gateway.Configuration);
+            this.service = gateway.Service;
         }
 
         public virtual WebhookNotification Parse(string signature, string payload)

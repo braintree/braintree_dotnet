@@ -1,6 +1,10 @@
 using Braintree;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using NUnit.Framework;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 #if netcore
@@ -12,7 +16,6 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
-using Newtonsoft.Json;
 using Params = System.Collections.Generic.Dictionary<string, object>;
 using Response = System.Collections.Generic.Dictionary<string, string>;
 using System.Diagnostics;
@@ -44,31 +47,49 @@ namespace Braintree.TestUtil
             var def =  new {
                 braintree_api = new {
                     url = "",
-                    access_token = ""
+                    access_token = "",
+                    port = "",
                 }
             };
             var config = JsonConvert.DeserializeAnonymousType(clientToken, def);
-            var url = config.braintree_api.url + "/tokens";
+            var url = config.braintree_api.url + "/graphql";
             var accessToken = config.braintree_api.access_token;
-            string postData = @"
-            {
-                ""type"": ""us_bank_account"",
-                ""billing_address"": {
-                    ""street_address"": ""123 Ave"",
-                    ""region"": ""CA"",
-                    ""locality"": ""San Francisco"",
-                    ""postal_code"": ""94112""
-                },
-                ""account_type"": ""checking"",
-                ""routing_number"": ""021000021"",
-                ""account_number"": """ + accountNumber + @""",
-                ""ownership_type"": ""personal"",
-                ""first_name"": ""Dan"",
-                ""last_name"": ""Schulman"",
-                ""ach_mandate"": {
-                    ""text"": ""cl mandate text""
-                }
-            }";
+
+            string query = @"
+                mutation tokenizeUsBankAccount($input: TokenizeUsBankAccountInput!) {
+                    tokenizeUsBankAccount(input: $input) {
+                        paymentMethod {
+                            id
+                        }
+                    }
+                }";
+
+            var variables = new Dictionary<string, object> {
+                {"input", new Dictionary<string, object> {
+                    {"usBankAccount", new Dictionary<string, object> {
+                        {"accountNumber", accountNumber},
+                        {"routingNumber", "021000021"},
+                        {"accountType", "CHECKING"},
+                        {"billingAddress", new Dictionary<string, object> {
+                            {"streetAddress", "123 Ave"},
+                            {"city", "San Francisco"},
+                            {"state", "CA"},
+                            {"zipCode", "94112"}
+                        }},
+                        {"individualOwner", new Dictionary<string, object> {
+                            {"firstName", "Dan"},
+                            {"lastName", "Schulman"}
+                        }},
+                        {"achMandate", "cl mandate text"}
+                    }}
+                }}
+            };
+
+            Dictionary<string, object> body = new Dictionary<string, object>();
+            body["query"] = query;
+            body["variables"] = variables;
+
+            string postData = JsonConvert.SerializeObject(body, Newtonsoft.Json.Formatting.None);
 
 #if netcore
             var request = new HttpRequestMessage(new HttpMethod("POST"), url);
@@ -105,13 +126,18 @@ namespace Braintree.TestUtil
             responseBodyBuilder.Append(process.StandardOutput.ReadToEnd());
             string responseBody = responseBodyBuilder.ToString();
 #endif
+
             var resDef =  new {
                 data = new {
-                    id = "",
+                    tokenizeUsBankAccount = new {
+                        paymentMethod = new {
+                            id = "",
+                        }
+                    }
                 }
             };
             var json = JsonConvert.DeserializeAnonymousType(responseBody, resDef);
-            return json.data.id;
+            return json.data.tokenizeUsBankAccount.paymentMethod.id;
         }
 
         public static string GenerateInvalidUsBankAccountNonce()
@@ -131,64 +157,6 @@ namespace Braintree.TestUtil
         public static int CompareModificationsById(Modification left, Modification right)
         {
             return left.Id.CompareTo(right.Id);
-        }
-
-        public static string QueryStringForTR(Request trParams, Request req, string postURL, BraintreeService service)
-        {
-#if netcore
-            string trData = TrUtil.BuildTrData(trParams, "http://example.com", service);
-            string postData = "tr_data=" + WebUtility.UrlEncode(trData) + "&";
-            postData += req.ToQueryString();
-
-            var request = new HttpRequestMessage(new HttpMethod("POST"), postURL);
-
-            request.Headers.Add("KeepAlive", "false");
-            request.Headers.Add("Accept", "application/json");
-            byte[] buffer = Encoding.UTF8.GetBytes(postData);
-            request.Content = new StringContent(postData, Encoding.UTF8, "application/x-www-form-urlencoded");
-            request.Content.Headers.Add("Content-Length", buffer.Length.ToString());
-            var httpClientHandler = new HttpClientHandler
-            {
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
-                AllowAutoRedirect = false,
-            };
-
-            HttpResponseMessage response;
-
-            using (var client = new HttpClient(httpClientHandler))
-            {
-                response = client.SendAsync(request).GetAwaiter().GetResult();
-            }
-            
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
-            string responseBody = reader.ReadToEnd();
-            string query = response.Headers.Location.Query;
-            return query;
-#else
-            string trData = TrUtil.BuildTrData(trParams, "http://example.com", service);
-            string postData = "tr_data=" + HttpUtility.UrlEncode(trData, Encoding.UTF8) + "&";
-            postData += req.ToQueryString();
-
-            var request = WebRequest.Create(postURL) as HttpWebRequest;
-
-            request.Method = "POST";
-            request.KeepAlive = false;
-            request.AllowAutoRedirect = false;
-
-            byte[] buffer = Encoding.UTF8.GetBytes(postData);
-            request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = buffer.Length;
-            Stream requestStream = request.GetRequestStream();
-            requestStream.Write(buffer, 0, buffer.Length);
-            requestStream.Close();
-
-            var response = request.GetResponse() as HttpWebResponse;
-            string query = new Uri(response.GetResponseHeader("Location")).Query;
-
-            response.Close();
-
-            return query;
-#endif
         }
 
         public static void AreDatesEqual(DateTime expected, DateTime actual)
@@ -370,6 +338,7 @@ namespace Braintree.TestUtil
 #endif
 
             string responseBody = reader.ReadToEnd();
+            reader.Close();
 
             return extractParamFromJson("nonce", responseBody);
         }
@@ -399,6 +368,7 @@ namespace Braintree.TestUtil
 #endif
 
             string responseBody = reader.ReadToEnd();
+            reader.Close();
 
             Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
             Match match = regex.Match(responseBody);
@@ -425,6 +395,7 @@ namespace Braintree.TestUtil
 #endif
 
             string responseBody = reader.ReadToEnd();
+            reader.Close();
 
             Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
             Match match = regex.Match(responseBody);
@@ -451,6 +422,7 @@ namespace Braintree.TestUtil
 #endif
 
             string responseBody = reader.ReadToEnd();
+            reader.Close();
 
             Regex regex = new Regex("nonce\":\"(?<nonce>[a-f0-9\\-]+)\"");
             Match match = regex.Match(responseBody);

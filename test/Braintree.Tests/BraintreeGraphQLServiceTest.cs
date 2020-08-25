@@ -117,7 +117,7 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsBraintreeServiceAvailability_throwsDownForMaintanceException()
+        public void ThrowExceptionIfGraphQLErrorResponseHasError_whenErrorClassIsBraintreeServiceAvailability_throwsServiceUnavailableException()
         {
             Dictionary<string, object> extensions = new Dictionary<string, object>();
             extensions.Add("errorClass", "SERVICE_AVAILABILITY");
@@ -129,7 +129,7 @@ namespace Braintree.Tests
             response.errors = new List<GraphQLError>();
             response.errors.Add(error);
 
-            Assert.Throws<DownForMaintenanceException> (() => BraintreeGraphQLService.ThrowExceptionIfGraphQLErrorResponseHasError(response));
+            Assert.Throws<ServiceUnavailableException> (() => BraintreeGraphQLService.ThrowExceptionIfGraphQLErrorResponseHasError(response));
         }
 
         [Test]

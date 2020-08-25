@@ -13,7 +13,7 @@ namespace Braintree
         protected internal WebhookTestingGateway(BraintreeGateway gateway)
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public virtual Dictionary<string, string> SampleNotification(WebhookKind kind, string id, string sourceMerchantId = null)
@@ -89,17 +89,6 @@ namespace Braintree
                 return CheckSampleXml();
             } else if (kind == WebhookKind.ACCOUNT_UPDATER_DAILY_REPORT) {
                 return AccountUpdaterDailyReportSampleXml(id);
-                // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
-                // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
-            } else if (kind == WebhookKind.IDEAL_PAYMENT_COMPLETE) {
-                return IdealPaymentCompleteSampleXml(id);
-                // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
-                // DEPRECATED If you're looking to accept iDEAL as a payment method contact accounts@braintreepayments.com for a solution.
-            } else if (kind == WebhookKind.IDEAL_PAYMENT_FAILED) {
-                return IdealPaymentFailedSampleXml(id);
-            } else if (kind == WebhookKind.GRANTED_PAYMENT_INSTRUMENT_UPDATE) {
-                // NEXT_MAJOR_VERSION remove GRANTED_PAYMENT_INSTRUMENT_UPDATE branch
-                return GrantedPaymentInstrumentUpdateSampleXml();
             } else if (kind == WebhookKind.GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD) {
                 return GrantedPaymentInstrumentUpdateSampleXml();
             } else if (kind == WebhookKind.RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD) {
@@ -504,36 +493,6 @@ namespace Braintree
             return Node("account-updater-daily-report",
                     NodeAttr("report-date", TYPE_DATE, "2016-01-14"),
                     Node("report-url", "link-to-csv-report")
-            );
-        }
-
-        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
-        private string IdealPaymentCompleteSampleXml(string id) {
-            return Node("ideal-payment",
-                    Node("id", id),
-                    Node("status", "COMPLETE"),
-                    Node("issuer", "ABCISSUER"),
-                    Node("order-id", "ORDERABC"),
-                    Node("currency", "EUR"),
-                    Node("amount", "10.00"),
-                    Node("created-at", "2016-11-29T23:27:34.547Z"),
-                    Node("approval-url", "https://example.com"),
-                    Node("ideal-transaction-id", "1234567890")
-            );
-        }
-
-        // NEXT_MAJOR_VERSION Remove this class as legacy Ideal has been removed/disabled in the Braintree Gateway
-        private string IdealPaymentFailedSampleXml(string id) {
-            return Node("ideal-payment",
-                    Node("id", id),
-                    Node("status", "FAILED"),
-                    Node("issuer", "ABCISSUER"),
-                    Node("order-id", "ORDERABC"),
-                    Node("currency", "EUR"),
-                    Node("amount", "10.00"),
-                    Node("created-at", "2016-11-29T23:27:34.547Z"),
-                    Node("approval-url", "https://example.com"),
-                    Node("ideal-transaction-id", "1234567890")
             );
         }
 

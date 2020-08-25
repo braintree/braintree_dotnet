@@ -102,40 +102,48 @@ namespace Braintree
 
         public GraphQLClient GraphQLClient { get; set; }
 
+        public BraintreeService Service { get; }
+
         public BraintreeGateway()
         {
             Configuration = new Configuration();
             GraphQLClient = new GraphQLClient(Configuration);
+            Service = new BraintreeService(Configuration);
         }
 
         public BraintreeGateway(Environment environment, string merchantId, string publicKey, string privateKey)
         {
             Configuration = new Configuration(environment, merchantId, publicKey, privateKey);
             GraphQLClient = new GraphQLClient(Configuration);
+            Service = new BraintreeService(Configuration);
         }
 
         public BraintreeGateway(string environment, string merchantId, string publicKey, string privateKey)
         {
             Configuration = new Configuration(Environment.ParseEnvironment(environment), merchantId, publicKey, privateKey);
             GraphQLClient = new GraphQLClient(Configuration);
+            Service = new BraintreeService(Configuration);
         }
 
         public BraintreeGateway(string accessToken)
         {
             Configuration = new Configuration(accessToken);
             GraphQLClient = new GraphQLClient(Configuration);
+            Service = new BraintreeService(Configuration);
         }
 
         public BraintreeGateway(string clientId, string clientSecret)
         {
             Configuration = new Configuration(clientId, clientSecret);
             GraphQLClient = new GraphQLClient(Configuration);
+            Service = new BraintreeService(Configuration);
         }
 
         public BraintreeGateway(Configuration configuration)
         {
             Configuration = configuration;
             GraphQLClient = new GraphQLClient(Configuration);
+            Service = new BraintreeService(Configuration);
         }
 
         public virtual IClientTokenGateway ClientToken
@@ -247,16 +255,6 @@ namespace Braintree
         public virtual ITransactionLineItemGateway TransactionLineItem
         {
             get { return new TransactionLineItemGateway(this); }
-        }
-
-        public virtual ITransparentRedirectGateway TransparentRedirect
-        {
-            get { return new TransparentRedirectGateway(this); }
-        }
-
-        public virtual string TrData(Request trData, string redirectURL)
-        {
-            return TrUtil.BuildTrData(trData, redirectURL, new BraintreeService(Configuration));
         }
 
         public virtual IWebhookNotificationGateway WebhookNotification

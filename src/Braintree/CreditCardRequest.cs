@@ -40,16 +40,6 @@ namespace Braintree
         public string VenmoSdkPaymentMethodCode { get; set; }
         public string Token { get; set; }
 
-        public override string Kind()
-        {
-            if (PaymentMethodToken == null)
-            {
-                return TransparentRedirectGateway.CREATE_PAYMENT_METHOD;
-            }
-
-            return TransparentRedirectGateway.UPDATE_PAYMENT_METHOD;
-        }
-
         public override string ToQueryString(string root)
         {
             return BuildRequest(root).

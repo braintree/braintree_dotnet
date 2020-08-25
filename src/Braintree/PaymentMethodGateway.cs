@@ -12,7 +12,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;
-            this.service = new BraintreeService(gateway.Configuration);
+            this.service = gateway.Service;
         }
 
         public Result<PaymentMethod> Create(PaymentMethodRequest request)
@@ -35,7 +35,7 @@ namespace Braintree
 
         public async Task<Result<PaymentMethod>> UpdateAsync(string token, PaymentMethodRequest request)
         {
-            var response = new NodeWrapper(await service.PutAsync(service.MerchantPath() + "/payment_methods/any/" + token, request));
+            var response = new NodeWrapper(await service.PutAsync(service.MerchantPath() + "/payment_methods/any/" + token, request).ConfigureAwait(false));
             return ExtractResultFromResponse(response);
         }
 
@@ -115,14 +115,6 @@ namespace Braintree
             {
                 return new ResultImpl<AndroidPayCard>(response, gateway);
             }
-            else if (response.GetName() == "amex-express-checkout-card")
-            {
-                return new ResultImpl<AmexExpressCheckoutCard>(response, gateway);
-            }
-            else if (response.GetName() == "coinbase-account")
-            {
-                return new ResultImpl<CoinbaseAccount>(response, gateway);
-            }
             else if (response.GetName() == "venmo-account")
             {
                 return new ResultImpl<VenmoAccount>(response, gateway);
@@ -130,10 +122,6 @@ namespace Braintree
             else if (response.GetName() == "visa-checkout-card")
             {
                 return new ResultImpl<VisaCheckoutCard>(response, gateway);
-            }
-            else if (response.GetName() == "masterpass-card")
-            {
-                return new ResultImpl<MasterpassCard>(response, gateway);
             }
             else if (response.GetName() == "samsung-pay-card")
             {

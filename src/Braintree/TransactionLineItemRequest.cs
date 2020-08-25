@@ -25,7 +25,7 @@ namespace Braintree
         public virtual decimal? Quantity { get; set; }
         public virtual string Name { get; set; }
         public virtual string Description { get; set; }
-        public virtual TransactionLineItemKind LineItemKind { get; set; }
+        public virtual TransactionLineItemKind? LineItemKind { get; set; }
         public virtual decimal? UnitAmount { get; set; }
         public virtual decimal? UnitTaxAmount { get; set; }
         public virtual decimal? TotalAmount { get; set; }
@@ -55,7 +55,7 @@ namespace Braintree
             builder.AddElement("quantity", Quantity);
             builder.AddElement("name", Name);
             builder.AddElement("description", Description);
-            builder.AddElement("kind", LineItemKind);
+            builder.AddElement("kind", LineItemKind.GetDescription());
             builder.AddElement("unit-amount", UnitAmount);
             builder.AddElement("unit-tax-amount", UnitTaxAmount);
             builder.AddElement("total-amount", TotalAmount);

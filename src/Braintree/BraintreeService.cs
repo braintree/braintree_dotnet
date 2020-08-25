@@ -19,7 +19,7 @@ namespace Braintree
 {
     public class BraintreeService : HttpService
     {
-        public string ApiVersion = "5";
+        public string ApiVersion = "6";
 
         public BraintreeService(Configuration configuration) : base(configuration) { }
 
@@ -217,7 +217,7 @@ namespace Braintree
                     request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(ascii_string);
                 }
 
-                var response = await GetHttpResponseAsync(request);
+                var response = await GetHttpResponseAsync(request).ConfigureAwait(false);
 
                 return StringToXmlNode(response);
             }
@@ -236,7 +236,7 @@ namespace Braintree
                 request.ContentLength = buffer.Length;
                 using (Stream requestStream = await request.GetRequestStreamAsync().ConfigureAwait(false))
                 {
-                    await requestStream.WriteAsync(buffer, 0, buffer.Length);
+                    await requestStream.WriteAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
                 }
             }
 
@@ -257,7 +257,7 @@ namespace Braintree
                 }
             }
 
-            var response = await GetHttpResponseAsync(request);
+            var response = await GetHttpResponseAsync(request).ConfigureAwait(false);
 
             return StringToXmlNode(response);
 #endif

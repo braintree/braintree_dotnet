@@ -20,7 +20,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public virtual Result<Transaction> CancelRelease(string id)
@@ -57,20 +57,6 @@ namespace Braintree
             XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/hold_in_escrow", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
-        }
-
-        public virtual string SaleTrData(TransactionRequest trData, string redirectURL)
-        {
-            trData.Type = TransactionType.SALE;
-
-            return TrUtil.BuildTrData(trData, redirectURL, service);
-        }
-
-        public virtual string CreditTrData(TransactionRequest trData, string redirectURL)
-        {
-            trData.Type = TransactionType.CREDIT;
-
-            return TrUtil.BuildTrData(trData, redirectURL, service);
         }
 
         public virtual Result<Transaction> Credit(TransactionRequest request)
@@ -273,7 +259,7 @@ namespace Braintree
             }
             else
             {
-                throw new DownForMaintenanceException();
+                throw new UnexpectedException();
             }
         }
 
@@ -289,7 +275,7 @@ namespace Braintree
             }
             else
             {
-                throw new DownForMaintenanceException();
+                throw new UnexpectedException();
             }
         }
 
@@ -324,7 +310,7 @@ namespace Braintree
             }
             else
             {
-                throw new DownForMaintenanceException();
+                throw new UnexpectedException();
             }
         }
     }

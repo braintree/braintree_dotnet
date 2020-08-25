@@ -81,10 +81,8 @@ namespace Braintree
         ITestTransactionGateway TestTransaction { get; }
         ITransactionGateway Transaction { get; }
         ITransactionLineItemGateway TransactionLineItem { get; }
-        ITransparentRedirectGateway TransparentRedirect { get; }
         IWebhookNotificationGateway WebhookNotification { get; }
         IWebhookTestingGateway WebhookTesting { get; }
-
-        string TrData(Request trData, string redirectURL);
+        BraintreeService Service { get; }
     }
 }

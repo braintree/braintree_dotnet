@@ -1,11 +1,7 @@
-using Braintree.Exceptions;
 using NUnit.Framework;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
 using System.IO;
-using System.Text.RegularExpressions;
-using System.Text;
 
 namespace Braintree.Tests.Integration
 {

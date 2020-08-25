@@ -1,46 +1,34 @@
 #pragma warning disable 1591
 
 using System;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class UsBankAccountVerificationStatus : Enumeration
+    public enum UsBankAccountVerificationStatus
     {
-        public static readonly UsBankAccountVerificationStatus FAILED = new UsBankAccountVerificationStatus("failed");
-        public static readonly UsBankAccountVerificationStatus GATEWAY_REJECTED = new UsBankAccountVerificationStatus("gateway_rejected");
-        public static readonly UsBankAccountVerificationStatus PROCESSOR_DECLINED = new UsBankAccountVerificationStatus("processor_declined");
-        public static readonly UsBankAccountVerificationStatus UNRECOGNIZED = new UsBankAccountVerificationStatus("unrecognized");
-        public static readonly UsBankAccountVerificationStatus VERIFIED = new UsBankAccountVerificationStatus("verified");
-        public static readonly UsBankAccountVerificationStatus PENDING = new UsBankAccountVerificationStatus("pending");
-
-
-        public static readonly UsBankAccountVerificationStatus[] ALL = {
-            FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, VERIFIED, PENDING
-        };
-
-        protected UsBankAccountVerificationStatus(string name) : base(name) {}
+        [Description("failed")] FAILED,
+        [Description("gateway_rejected")] GATEWAY_REJECTED,
+        [Description("processor_declined")] PROCESSOR_DECLINED,
+        [Description("unrecognized")] UNRECOGNIZED,
+        [Description("verified")] VERIFIED,
+        [Description("pending")] PENDING
     }
 
-    public class UsBankAccountVerificationMethod : Enumeration
+    public enum UsBankAccountVerificationMethod
     {
-        public static readonly UsBankAccountVerificationMethod INDEPENDENT_CHECK = new UsBankAccountVerificationMethod("independent_check");
-        public static readonly UsBankAccountVerificationMethod NETWORK_CHECK = new UsBankAccountVerificationMethod("network_check");
-        public static readonly UsBankAccountVerificationMethod TOKENIZED_CHECK = new UsBankAccountVerificationMethod("tokenized_check");
-        public static readonly UsBankAccountVerificationMethod MICRO_TRANSFERS = new UsBankAccountVerificationMethod("micro_transfers");
-        public static readonly UsBankAccountVerificationMethod UNRECOGNIZED = new UsBankAccountVerificationMethod("unrecognized");
-
-        public static readonly UsBankAccountVerificationMethod[] ALL = {
-            INDEPENDENT_CHECK, NETWORK_CHECK, TOKENIZED_CHECK, MICRO_TRANSFERS
-        };
-
-        protected UsBankAccountVerificationMethod(string name) : base(name) {}
+        [Description("independent_check")] INDEPENDENT_CHECK,
+        [Description("network_check")] NETWORK_CHECK,
+        [Description("tokenized_check")] TOKENIZED_CHECK,
+        [Description("micro_transfers")] MICRO_TRANSFERS,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
     public class UsBankAccountVerification
     {
         public virtual UsBankAccountVerificationMethod VerificationMethod { get; protected set; }
         public virtual DateTime? VerificationDeterminedAt { get; protected set; }
-        public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
+        public virtual TransactionGatewayRejectionReason? GatewayRejectionReason { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
         public virtual string ProcessorResponseText { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
@@ -53,21 +41,13 @@ namespace Braintree
         {
             if (node == null) return;
 
-            VerificationMethod = (UsBankAccountVerificationMethod)CollectionUtil.Find(
-                UsBankAccountVerificationMethod.ALL,
-                node.GetString("verification-method"),
-                UsBankAccountVerificationMethod.UNRECOGNIZED
-            );
+            VerificationMethod = node.GetEnum("verification-method", UsBankAccountVerificationMethod.UNRECOGNIZED);
             VerificationDeterminedAt = node.GetDateTime("verification-determined-at");
             GatewayRejectionReason = null;
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
             MerchantAccountId = node.GetString("merchant-account-id");
-            Status = (UsBankAccountVerificationStatus)CollectionUtil.Find(
-                UsBankAccountVerificationStatus.ALL,
-                node.GetString("status"),
-                UsBankAccountVerificationStatus.UNRECOGNIZED
-            );
+            Status = node.GetEnum("status", UsBankAccountVerificationStatus.UNRECOGNIZED);
             Id = node.GetString("id");
 
             UsBankAccount = new UsBankAccount(node.GetNode("us-bank-account"));

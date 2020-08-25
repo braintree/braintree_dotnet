@@ -20,7 +20,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasAccessTokenOrKeys();
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public virtual List<TransactionLineItem> FindAll(string id)
@@ -41,7 +41,7 @@ namespace Braintree
             }
             else
             {
-                throw new DownForMaintenanceException();
+                throw new UnexpectedException();
             }
         }
     }

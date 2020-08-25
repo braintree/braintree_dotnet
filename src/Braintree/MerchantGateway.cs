@@ -10,7 +10,7 @@ namespace Braintree
         public MerchantGateway(BraintreeGateway gateway)
         {
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public ResultImpl<Merchant> Create(MerchantRequest request)

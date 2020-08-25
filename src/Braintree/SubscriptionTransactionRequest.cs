@@ -27,7 +27,7 @@ namespace Braintree
 
             builder.AddElement("subscription-id", SubscriptionId);
             builder.AddElement("options", Options);
-            builder.AddElement("type", TransactionType.SALE.ToString().ToLower());
+            builder.AddElement("type", TransactionType.SALE.GetDescription());
 
             return builder;
         }

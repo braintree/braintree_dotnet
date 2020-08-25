@@ -15,12 +15,7 @@ namespace Braintree
 
         protected internal MerchantAccountFundingDetails(NodeWrapper node)
         {
-            Destination = (FundingDestination)CollectionUtil.Find(
-                FundingDestination.ALL, 
-                node.GetString("destination"), 
-                FundingDestination.UNRECOGNIZED
-            );
-
+            Destination = node.GetEnum("destination", FundingDestination.UNRECOGNIZED);
             RoutingNumber = node.GetString("routing-number");
             AccountNumberLast4 = node.GetString("account-number-last-4");
             Email = node.GetString("email");

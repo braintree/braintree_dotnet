@@ -14,7 +14,7 @@ namespace Braintree
         {
             gateway.Configuration.AssertHasClientCredentials();
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public ResultImpl<OAuthCredentials> CreateTokenFromCode(OAuthCredentialsRequest request)

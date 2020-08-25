@@ -1,35 +1,28 @@
 using System;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class FundingDestination : Enumeration
+    public enum FundingDestination
     {
-        public static readonly FundingDestination BANK = new FundingDestination("bank");
-        public static readonly FundingDestination MOBILE_PHONE = new FundingDestination("mobile_phone");
-        public static readonly FundingDestination EMAIL = new FundingDestination("email");
-        public static readonly FundingDestination UNRECOGNIZED = new FundingDestination("unrecognized");
-
-        public static readonly FundingDestination[] ALL = { BANK, MOBILE_PHONE, EMAIL, UNRECOGNIZED };
-
-        protected FundingDestination(string name) : base(name) {}
+        [Description("bank")] BANK,
+        [Description("mobile_phone")] MOBILE_PHONE,
+        [Description("email")] EMAIL,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public class MerchantAccountStatus : Enumeration
+    public enum MerchantAccountStatus
     {
-        public static readonly MerchantAccountStatus PENDING = new MerchantAccountStatus("pending");
-        public static readonly MerchantAccountStatus ACTIVE = new MerchantAccountStatus("active");
-        public static readonly MerchantAccountStatus SUSPENDED = new MerchantAccountStatus("suspended");
-
-        public static readonly MerchantAccountStatus[] ALL = { PENDING, ACTIVE, SUSPENDED };
-
-        protected MerchantAccountStatus(string name) : base(name) {}
+        [Description("pending")] PENDING,
+        [Description("active")] ACTIVE,
+        [Description("suspended")] SUSPENDED
     }
 
     public class MerchantAccount
     {
       public virtual string Id { get; protected set; }
       public virtual string CurrencyIsoCode { get; protected set; }
-      public virtual MerchantAccountStatus Status { get; protected set; }
+      public virtual MerchantAccountStatus? Status { get; protected set; }
       public virtual MerchantAccount MasterMerchantAccount { get; protected set; }
       public virtual MerchantAccountIndividualDetails IndividualDetails { get; protected set; }
       public virtual MerchantAccountBusinessDetails BusinessDetails { get; protected set; }
@@ -52,7 +45,7 @@ namespace Braintree
 
         Id = node.GetString("id");
         CurrencyIsoCode = node.GetString("currency-iso-code");
-        Status = (MerchantAccountStatus) CollectionUtil.Find(MerchantAccountStatus.ALL, node.GetString("status"), null);
+        Status = node.GetEnum<MerchantAccountStatus>("status");
         IsDefault = node.GetBoolean("default");
 
         NodeWrapper masterNode = node.GetNode("master-merchant-account");

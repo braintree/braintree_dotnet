@@ -23,12 +23,12 @@ namespace Braintree
 
         public async Task<GraphQLResponse> QueryAsync(string definition)
         {
-            return await QueryAsync(definition, null);
+            return await QueryAsync(definition, null).ConfigureAwait(false);
         }
 
         public async Task<GraphQLResponse> QueryAsync(string definition, Dictionary<string, object> variables)
         {
-            return await service.QueryGraphQLAsync(definition, variables);
+            return await service.QueryGraphQLAsync(definition, variables).ConfigureAwait(false);
         }
     }
 }

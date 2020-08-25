@@ -32,11 +32,11 @@ namespace Braintree
                 return new PartialMatchNode<CreditCardVerificationSearchRequest>("credit-card-number", this);
             }
         }
-        public MultipleValueNode<CreditCardVerificationSearchRequest, CreditCardCardType> CreditCardCardType
+        public EnumMultipleValueNode<CreditCardVerificationSearchRequest, CreditCardCardType> CreditCardCardType
         {
             get
             {
-                return new MultipleValueNode<CreditCardVerificationSearchRequest, CreditCardCardType>("credit-card-card-type", this);
+                return new EnumMultipleValueNode<CreditCardVerificationSearchRequest, CreditCardCardType>("credit-card-card-type", this);
             }
         }
         public MultipleValueNode<CreditCardVerificationSearchRequest, string> Ids
@@ -81,11 +81,11 @@ namespace Braintree
                 return new TextNode<CreditCardVerificationSearchRequest>("customer-email", this);
             }
         }
-        public MultipleValueNode<CreditCardVerificationSearchRequest, VerificationStatus> Status
+        public EnumMultipleValueNode<CreditCardVerificationSearchRequest, VerificationStatus> Status
         {
             get
             {
-                return new MultipleValueNode<CreditCardVerificationSearchRequest, VerificationStatus>("status", this);
+                return new EnumMultipleValueNode<CreditCardVerificationSearchRequest, VerificationStatus>("status", this);
             }
         }
     }

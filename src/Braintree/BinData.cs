@@ -67,12 +67,12 @@ namespace Braintree
             if (node == null)
                 return;
 
-            Commercial = (CreditCardCommercial)CollectionUtil.Find(CreditCardCommercial.ALL, node.GetString("commercial"), CreditCardCommercial.UNKNOWN);
-            Debit = (CreditCardDebit)CollectionUtil.Find(CreditCardDebit.ALL, node.GetString("debit"), CreditCardDebit.UNKNOWN);
-            DurbinRegulated = (CreditCardDurbinRegulated)CollectionUtil.Find(CreditCardDurbinRegulated.ALL, node.GetString("durbin-regulated"), CreditCardDurbinRegulated.UNKNOWN);
-            Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, node.GetString("healthcare"), CreditCardHealthcare.UNKNOWN);
-            Payroll = (CreditCardPayroll)CollectionUtil.Find(CreditCardPayroll.ALL, node.GetString("payroll"), CreditCardPayroll.UNKNOWN);
-            Prepaid = (CreditCardPrepaid)CollectionUtil.Find(CreditCardPrepaid.ALL, node.GetString("prepaid"), CreditCardPrepaid.UNKNOWN);
+            Commercial = node.GetEnum("commercial", CreditCardCommercial.UNKNOWN);
+            Debit = node.GetEnum("debit", CreditCardDebit.UNKNOWN);
+            DurbinRegulated = node.GetEnum("durbin-regulated", CreditCardDurbinRegulated.UNKNOWN);
+            Healthcare = node.GetEnum("healthcare", CreditCardHealthcare.UNKNOWN);
+            Payroll = node.GetEnum("payroll", CreditCardPayroll.UNKNOWN);
+            Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
             _CountryOfIssuance = node.GetString("country-of-issuance");
             _IssuingBank = node.GetString("issuing-bank");
             _ProductId = node.GetString("product-id");
@@ -83,12 +83,12 @@ namespace Braintree
             if (bin == null)
                 return;
 
-            Commercial = (CreditCardCommercial)CollectionUtil.Find(CreditCardCommercial.ALL, (string)bin.commercial, CreditCardCommercial.UNKNOWN);
-            Debit = (CreditCardDebit)CollectionUtil.Find(CreditCardDebit.ALL, (string)bin.debit, CreditCardDebit.UNKNOWN);
-            DurbinRegulated = (CreditCardDurbinRegulated)CollectionUtil.Find(CreditCardDurbinRegulated.ALL, (string)bin.durbinRegulated, CreditCardDurbinRegulated.UNKNOWN);
-            Healthcare = (CreditCardHealthcare)CollectionUtil.Find(CreditCardHealthcare.ALL, (string)bin.healthcare, CreditCardHealthcare.UNKNOWN);
-            Payroll = (CreditCardPayroll)CollectionUtil.Find(CreditCardPayroll.ALL, (string)bin.payroll, CreditCardPayroll.UNKNOWN);
-            Prepaid = (CreditCardPrepaid)CollectionUtil.Find(CreditCardPrepaid.ALL, (string)bin.prepaid, CreditCardPrepaid.UNKNOWN);
+            Commercial = EnumHelper.FindEnum((string)bin.commercial, CreditCardCommercial.UNKNOWN);
+            Debit = EnumHelper.FindEnum((string)bin.debit, CreditCardDebit.UNKNOWN);
+            DurbinRegulated = EnumHelper.FindEnum((string)bin.durbinRegulated, CreditCardDurbinRegulated.UNKNOWN);
+            Healthcare = EnumHelper.FindEnum((string)bin.healthcare, CreditCardHealthcare.UNKNOWN);
+            Payroll = EnumHelper.FindEnum((string)bin.payroll, CreditCardPayroll.UNKNOWN);
+            Prepaid = EnumHelper.FindEnum((string)bin.prepaid, CreditCardPrepaid.UNKNOWN);
             _CountryOfIssuance = bin.countryOfIssuance;
             _IssuingBank = bin.issuingBank;
             _ProductId = bin.productId;

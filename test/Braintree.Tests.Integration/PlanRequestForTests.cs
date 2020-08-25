@@ -14,7 +14,7 @@ namespace Braintree.Tests
         public decimal? Price { get; set; }
         public bool? TrialPeriod { get; set; }
         public int? TrialDuration { get; set; }
-        public PlanDurationUnit TrialDurationUnit { get; set; }
+        public PlanDurationUnit? TrialDurationUnit { get; set; }
         public List<AddOn> AddOns { get; set; }
         public List<Discount> Discounts { get; set; }
 
@@ -42,7 +42,10 @@ namespace Braintree.Tests
             builder.AddElement("price", Price);
             builder.AddElement("trial-period", TrialPeriod);
             builder.AddElement("trial-duration", TrialDuration);
-            builder.AddElement("trial-duration-unit", TrialDurationUnit);
+            if (TrialDurationUnit != null)
+            {
+                builder.AddElement("trial-duration-unit", TrialDurationUnit.GetDescription());
+            }
             builder.AddElement("add-ons", AddOns);
             builder.AddElement("discounts", Discounts);
             return builder;

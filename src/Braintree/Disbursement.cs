@@ -1,17 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class DisbursementType : Enumeration
+    public enum DisbursementType
     {
-        public static readonly DisbursementType UNKNOWN = new DisbursementType("unknown");
-        public static readonly DisbursementType CREDIT = new DisbursementType("credit");
-        public static readonly DisbursementType DEBIT = new DisbursementType("debit");
-
-        public static readonly DisbursementType[] ALL = {UNKNOWN, CREDIT, DEBIT};
-
-        protected DisbursementType(string name) : base(name) {}
+        [Description("unknown")] UNKNOWN,
+        [Description("credit")] CREDIT,
+        [Description("debit")] DEBIT
     }
 
     public class Disbursement
@@ -35,11 +32,7 @@ namespace Braintree
             Amount = node.GetDecimal("amount");
             ExceptionMessage = node.GetString("exception-message");
             DisbursementDate = node.GetDateTime("disbursement-date");
-            DisbursementType = (DisbursementType)CollectionUtil.Find(
-                    DisbursementType.ALL,
-                    node.GetString("disbursement-type"),
-                    DisbursementType.UNKNOWN
-                    );
+            DisbursementType = node.GetEnum("disbursement-type", DisbursementType.UNKNOWN);
             FollowUpAction = node.GetString("follow-up-action");
             MerchantAccount = new MerchantAccount(node.GetNode("merchant-account"));
             TransactionIds = new List<string>();

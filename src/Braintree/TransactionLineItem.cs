@@ -1,16 +1,13 @@
 using System;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class TransactionLineItemKind : Enumeration
+    public enum TransactionLineItemKind
     {
-        public static readonly TransactionLineItemKind CREDIT = new TransactionLineItemKind("credit");
-        public static readonly TransactionLineItemKind DEBIT = new TransactionLineItemKind("debit");
-        public static readonly TransactionLineItemKind UNRECOGNIZED = new TransactionLineItemKind("unrecognized");
-
-        public static readonly TransactionLineItemKind[] ALL = { CREDIT, DEBIT, UNRECOGNIZED };
-
-        protected TransactionLineItemKind(string name) : base(name) {}
+        [Description("credit")] CREDIT,
+        [Description("debit")] DEBIT,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
     public class TransactionLineItem
@@ -34,7 +31,7 @@ namespace Braintree
             Quantity = node.GetDecimal("quantity");
             Name = node.GetString("name");
             Description = node.GetString("description");
-            Kind = (TransactionLineItemKind) CollectionUtil.Find(TransactionLineItemKind.ALL, node.GetString("kind"), TransactionLineItemKind.UNRECOGNIZED);
+            Kind = node.GetEnum("kind", TransactionLineItemKind.UNRECOGNIZED);
             UnitAmount = node.GetDecimal("unit-amount");
             UnitTaxAmount = node.GetDecimal("unit-tax-amount");
             TotalAmount = node.GetDecimal("total-amount");

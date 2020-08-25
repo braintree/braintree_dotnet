@@ -15,7 +15,6 @@ namespace Braintree
         Task<Result<Transaction>> CloneTransactionAsync(string id, TransactionCloneRequest cloneRequest);
         Result<Transaction> Credit(TransactionRequest request);
         Task<Result<Transaction>> CreditAsync(TransactionRequest request);
-        string CreditTrData(TransactionRequest trData, string redirectURL);
         Transaction Find(string id);
         Task<Transaction> FindAsync(string id);
         Result<Transaction> HoldInEscrow(string id);
@@ -30,7 +29,6 @@ namespace Braintree
         Task<Result<Transaction>> ReleaseFromEscrowAsync(string id);
         Result<Transaction> Sale(TransactionRequest request);
         Task<Result<Transaction>> SaleAsync(TransactionRequest request);
-        string SaleTrData(TransactionRequest trData, string redirectURL);
         ResourceCollection<Transaction> Search(TransactionSearchRequest query);
         Task<ResourceCollection<Transaction>> SearchAsync(TransactionSearchRequest query);
         Result<Transaction> SubmitForPartialSettlement(string id, TransactionRequest request);

@@ -1,23 +1,18 @@
 #pragma warning disable 1591
 
 using System;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class VerificationStatus : Enumeration
+
+    public enum VerificationStatus
     {
-        public static readonly VerificationStatus FAILED = new VerificationStatus("failed");
-        public static readonly VerificationStatus GATEWAY_REJECTED = new VerificationStatus("gateway_rejected");
-        public static readonly VerificationStatus PROCESSOR_DECLINED = new VerificationStatus("processor_declined");
-        public static readonly VerificationStatus UNRECOGNIZED = new VerificationStatus("unrecognized");
-        public static readonly VerificationStatus VERIFIED = new VerificationStatus("verified");
-
-
-        public static readonly VerificationStatus[] ALL = {
-            FAILED, GATEWAY_REJECTED, PROCESSOR_DECLINED, VERIFIED
-        };
-
-        protected VerificationStatus(string name) : base(name) {}
+        [Description("gateway_rejected")] GATEWAY_REJECTED,
+        [Description("failed")] FAILED,
+        [Description("processor_declined")] PROCESSOR_DECLINED,
+        [Description("unrecognized")] UNRECOGNIZED,
+        [Description("verified")] VERIFIED
     }
 
     public class CreditCardVerification
@@ -28,7 +23,7 @@ namespace Braintree
         public virtual string AvsStreetAddressResponseCode { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string CvvResponseCode { get; protected set; }
-        public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
+        public virtual TransactionGatewayRejectionReason? GatewayRejectionReason { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
         public virtual string ProcessorResponseText { get; protected set; }
         public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
@@ -36,7 +31,7 @@ namespace Braintree
         public virtual string NetworkResponseText { get; protected set; }
         public virtual string NetworkTransactionId { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
-        public virtual VerificationStatus Status { get; protected set; }
+        public virtual VerificationStatus? Status { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
         public virtual string Id { get; protected set; }
         public virtual Address BillingAddress { get; protected set; }
@@ -55,19 +50,15 @@ namespace Braintree
             AvsStreetAddressResponseCode = node.GetString("avs-street-address-response-code");
             CurrencyIsoCode = node.GetString("currency-iso-code");
             CvvResponseCode = node.GetString("cvv-response-code");
-            GatewayRejectionReason = (TransactionGatewayRejectionReason)CollectionUtil.Find(
-                TransactionGatewayRejectionReason.ALL,
-                node.GetString("gateway-rejection-reason"),
-                null
-            );
+            GatewayRejectionReason = node.GetEnum<TransactionGatewayRejectionReason>("gateway-rejection-reason");
             ProcessorResponseCode = node.GetString("processor-response-code");
             ProcessorResponseText = node.GetString("processor-response-text");
-            ProcessorResponseType = (ProcessorResponseType)CollectionUtil.Find(ProcessorResponseType.ALL, node.GetString("processor-response-type"), ProcessorResponseType.UNRECOGNIZED);
+            ProcessorResponseType = node.GetEnum("processor-response-type", ProcessorResponseType.UNRECOGNIZED);
             NetworkResponseCode = node.GetString("network-response-code");
             NetworkResponseText = node.GetString("network-response-text");
             NetworkTransactionId = node.GetString("network-transaction-id");
             MerchantAccountId = node.GetString("merchant-account-id");
-            Status = (VerificationStatus)CollectionUtil.Find(VerificationStatus.ALL, node.GetString("status"), VerificationStatus.UNRECOGNIZED);
+            Status = node.GetEnum("status", VerificationStatus.UNRECOGNIZED);
             GraphQLId = node.GetString("global-id");
             Id = node.GetString("id");
             BillingAddress = new Address(node.GetNode("billing"));
@@ -85,6 +76,7 @@ namespace Braintree
             {
                 ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfoNode);
             }
+            NetworkTransactionId = node.GetString("network-transaction-id");
         }
         
         [Obsolete("Mock Use Only")]

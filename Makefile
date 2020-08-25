@@ -1,23 +1,17 @@
-.PHONY: console mono core core2 build build-mono build-core build-core2
+.PHONY: console mono build build-mono build-core3
 
-console: core2
+console: core3
 
 mono: build-mono
 	docker run -it -v="$(PWD):/home/admin/bt/braintree-dotnet" --net="host" braintree-dotnet-mono /bin/bash -l
 
-core: build-core
-	docker run -it -v="$(PWD):/home/admin/bt/braintree-dotnet" --net="host" braintree-dotnet-core /bin/bash -l -c "dotnet restore;bash"
+core3: build-core3
+	docker run -it -v="$(PWD):/home/admin/bt/braintree-dotnet" --net="host" braintree-dotnet-core3 /bin/bash -l -c "dotnet restore;bash"
 
-core2: build-core2
-	docker run -it -v="$(PWD):/home/admin/bt/braintree-dotnet" --net="host" braintree-dotnet-core2 /bin/bash -l -c "dotnet restore;bash"
-
-build: build-mono build-core
+build: build-mono build-core3
 
 build-mono:
 	docker build -t braintree-dotnet-mono -f Dockerfile-mono .
 
-build-core:
-	docker build -t braintree-dotnet-core -f Dockerfile-core .
-
-build-core2:
-	docker build -t braintree-dotnet-core2 -f Dockerfile-core2 .
+build-core3:
+	docker build -t braintree-dotnet-core3 -f Dockerfile-core3 .

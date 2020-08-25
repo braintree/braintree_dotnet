@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Braintree
 {
-    public class PlanDurationUnit : Enumeration
+    public enum PlanDurationUnit
     {
-        public static readonly PlanDurationUnit DAY = new PlanDurationUnit("day");
-        public static readonly PlanDurationUnit MONTH = new PlanDurationUnit("month");
-        public static readonly PlanDurationUnit UNRECOGNIZED = new PlanDurationUnit("unrecognized");
-        public static readonly PlanDurationUnit[] ALL = { DAY, MONTH };
-        protected PlanDurationUnit(string name) : base(name) {}
+        [Description("day")] DAY,
+        [Description("month")] MONTH,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
     public class Plan
@@ -41,11 +40,7 @@ namespace Braintree
             Price = node.GetDecimal("price");
             TrialPeriod = node.GetBoolean("trial-period");
             TrialDuration = node.GetInteger("trial-duration");
-            string trialDurationUnitStr = node.GetString("trial-duration-unit");
-            if (trialDurationUnitStr != null)
-            {
-                TrialDurationUnit = (PlanDurationUnit) CollectionUtil.Find(PlanDurationUnit.ALL, trialDurationUnitStr, PlanDurationUnit.UNRECOGNIZED);
-            }
+            TrialDurationUnit = node.GetEnum("trial-duration-unit", PlanDurationUnit.UNRECOGNIZED);
             AddOns = new List<AddOn> ();
             foreach (var addOnResponse in node.GetList("add-ons/add-on"))
             {

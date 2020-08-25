@@ -1,4 +1,86 @@
-# 4.18.0
+## 5.0.0
+- Add `RequestTimeoutException` and `GatewayTimeoutException`
+- Add `RISK_THRESHOLD` to GatewayRejectionReason constants
+- Add `processedWithNetworkToken` to `Transaction`
+- Add `isNetworkTokenized` to `CreditCard`
+Breaking changes:
+- Drop support for .NET Core versions less than 2.1 (v1.0, v1.3, v2.0, etc)
+- Drop .NET Standard 1.3 from `TargetFrameworks`
+- Remove deprecated `TransparentRedirect`, `iDEAL`, `Coinbase`, and `IbanAccount` classes
+- Remove deprecated SEPA mandate and Europe Bank Account error codes, test payment method nonces, and payment intrument types
+- Remove `ForwardedComments` from `Dispute`
+- Remove `PayPalVaultWithoutUpgrade` from `PaymentMethodRequest`
+- Remove deprecated validation error codes:
+  - `SEPA_BANK_ACCOUNT_ACCOUNT_HOLDER_NAME_IS_REQUIRED`
+  - `SEPA_BANK_ACCOUNT_BIC_IS_REQUIRED`
+  - `SEPA_BANK_ACCOUNT_IBAN_IS_REQUIRED`
+  - `SEPA_MANDATE_ACCOUNT_HOLDER_NAME_IS_REQUIRED`
+  - `SEPA_MANDATE_BIC_INVALID_CHARACTER`
+  - `SEPA_MANDATE_BIC_IS_REQUIRED`
+  - `SEPA_MANDATE_BIC_LENGTH_IS_INVALID`
+  - `SEPA_MANDATE_BIC_UNSUPPORTED_COUNTRY`
+  - `SEPA_MANDATE_BILLING_ADDRESS_CONFLICT`
+  - `SEPA_MANDATE_BILLING_ADDRESS_ID_IS_INVALID`
+  - `SEPA_MANDATE_IBAN_INVALID_CHARACTER`
+  - `SEPA_MANDATE_IBAN_INVALID_FORMAT`
+  - `SEPA_MANDATE_IBAN_IS_REQUIRED`
+  - `SEPA_MANDATE_IBAN_UNSUPPORTED_COUNTRY`
+  - `SEPA_MANDATE_LOCALE_IS_UNSUPPORTED`
+  - `SEPA_MANDATE_TYPE_IS_REQUIRED`
+  - `TRANSACTION_AMOUNT_DOES_NOT_MATCH_IDEAL_PAYMENT_AMOUNT`
+  - `TRANSACTION_IDEAL_PAYMENT_NOT_COMPLETE`
+  - `TRANSACTION_IDEAL_PAYMENTS_CANNOT_BE_VAULTED`
+  - `TRANSACTION_MERCHANT_ACCOUNT_DOES_NOT_MATCH_IDEAL_PAYMENT_MERCHANT_ACCOUNT`
+  - `TRANSACTION_ORDER_ID_DOES_NOT_MATCH_IDEAL_PAYMENT_ORDER_ID`
+  - `TRANSACTION_ORDER_ID_IS_REQUIRED_WITH_IDEAL_PAYMENT`
+- Remove deprecated webhook kinds:
+  - `GRANTED_PAYMENT_INSTRUMENT_UPDATE`
+  - `IDEAL_PAYMENT_COMPLETE`
+  - `IDEAL_PAYMENT_FAILED`
+- Rename `DownForMaintenanceException` to `ServiceUnavailableException`
+- Transaction searches and Transaction Line Items FindAll calls throw `UnexpectedException` instead of `DownForMaintenance` when search response yields unexpected results
+- Remove `UseStaticHttpClient` configuration option for .NET Core integrations
+- Remove `MasterpassCard` payment method
+- Remove `AmexExpressCheckoutCard` payment method
+- Bump API version to support declined refund objects
+- Convert custom `Enumeration` subclasses to C# `Enum` types (fixes #86):
+  - `CreditCardCardType`
+  - `CreditCardCommercial`
+  - `CreditCardCustomerLocation`
+  - `CreditCardDebit`
+  - `CreditCardDurbinRegulated`
+  - `CreditCardHealthcare`
+  - `CreditCardPayroll`
+  - `CreditCardPrepaid`
+  - `DisbursementType`
+  - `DisputeKind`
+  - `DisputeReason`
+  - `DisputeStatus`
+  - `DocumentUploadKind`
+  - `FundingDestination`
+  - `IndustryDataAdditionalChargeKind`
+  - `MerchantAccountStatus`
+  - `PaymentInstrumentType`
+  - `PlanDurationUnit`
+  - `ProcessorResponseType`
+  - `ShippingMethod`
+  - `SubscriptionDurationUnit`
+  - `SubscriptionSource`
+  - `SubscriptionStatus`
+  - `TransactionCreatedUsing`
+  - `TransactionEscrowStatus`
+  - `TransactionGatewayRejectionReason`
+  - `TransactionIndustryType`
+  - `TransactionLineItemKind`
+  - `TransactionSource`
+  - `TransactionStatus`
+  - `TransactionType`
+  - `UsBankAccountVerificationMethod`
+  - `UsBankAccountVerificationStatus`
+  - `VerificationStatus`
+  - `WebhookKind`
+
+## 4.18.0
 - Add `ThreeDSecurePassThru` to `CreditCard.create()`, `CreditCard.update()`, `Customer.create()`, `Customer.update()`, `PaymentMethod.create()` and `PaymentMethod.update()`
 - Add ThreeDSecure test payment method nonces
 - Add test `AuthenticationId`s

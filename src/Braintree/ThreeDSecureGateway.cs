@@ -21,7 +21,7 @@ namespace Braintree
         public ThreeDSecureGateway(BraintreeGateway gateway)
         {
             this.gateway = gateway;
-            service = new BraintreeService(gateway.Configuration);
+            service = gateway.Service;
         }
 
         public ThreeDSecureLookupResponse Lookup(ThreeDSecureLookupRequest lookupRequest)

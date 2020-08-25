@@ -112,6 +112,30 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ThrowExceptionIfErrorStatusCodeIsUnauthorized()
+        {
+            Assert.Throws<AuthenticationException>(() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 401, null));
+        }
+
+        [Test]
+        public void ThrowExceptionIfErrorStatusCodeIsForbidden()
+        {
+            Assert.Throws<AuthorizationException>(() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 403, null));
+        }
+
+        [Test]
+        public void ThrowExceptionIfErrorStatusCodeIsNotFound()
+        {
+            Assert.Throws<NotFoundException>(() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 404, null));
+        }
+
+        [Test]
+        public void ThrowExceptionIfErrorStatusCodeIsRequestTimeout()
+        {
+            Assert.Throws<RequestTimeoutException>(() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 408, null));
+        }
+
+        [Test]
         public void ThrowExceptionIfErrorStatusCodeIsUpgradeRequired()
         {
             Assert.Throws<UpgradeRequiredException>(() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 426, null));
@@ -124,9 +148,21 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void ThrowExceptionIfErrorStatusCodeIsDownForMaintenance()
+        public void ThrowExceptionIfErrorStatusCodeIsInternalServerError()
         {
-            Assert.Throws<DownForMaintenanceException> (() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 503, null));
+            Assert.Throws<ServerException>(() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 500, null));
+        }
+ 
+        [Test]
+        public void ThrowExceptionIfErrorStatusCodeIsServiceUnavailable()
+        {
+            Assert.Throws<ServiceUnavailableException> (() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 503, null));
+        }
+
+        [Test]
+        public void ThrowExceptionIfErrorStatusCodeIsGatewayTimeout()
+        {
+            Assert.Throws<GatewayTimeoutException> (() => BraintreeService.ThrowExceptionIfErrorStatusCode((HttpStatusCode) 504, null));
         }
 
         [Test]

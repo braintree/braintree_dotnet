@@ -313,143 +313,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
         }
 
-        #pragma warning disable 0618
-        [Test]
-        public void ConfirmTransparentRedirectCreate_CreatesTheCreditCard()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            CreditCardRequest trParams = new CreditCardRequest { CustomerId = customer.Id };
-
-            CreditCardRequest request = new CreditCardRequest
-            {
-                CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    CountryName = "Greece",
-                    CountryCodeAlpha2 = "GR",
-                    CountryCodeAlpha3 = "GRC",
-                    CountryCodeNumeric = "300"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
-            Assert.IsTrue(result.IsSuccess());
-            CreditCard card = result.Target;
-            Assert.AreEqual("John Doe", card.CardholderName);
-            Assert.AreEqual("510510", card.Bin);
-            Assert.AreEqual("05", card.ExpirationMonth);
-            Assert.AreEqual("2012", card.ExpirationYear);
-            Assert.AreEqual("05/2012", card.ExpirationDate);
-            Assert.AreEqual("5100", card.LastFour);
-            Assert.IsTrue(card.Token != null);
-
-            Address billingAddress = card.BillingAddress;
-            Assert.AreEqual("Greece", billingAddress.CountryName);
-            Assert.AreEqual("GR", billingAddress.CountryCodeAlpha2);
-            Assert.AreEqual("GRC", billingAddress.CountryCodeAlpha3);
-            Assert.AreEqual("300", billingAddress.CountryCodeNumeric);
-        }
-        #pragma warning restore 0618
-
-        #pragma warning disable 0618
-        [Test]
-        public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInTRParams()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            CreditCardRequest request = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12"
-            };
-
-            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
-            Assert.IsTrue(creditCard.IsDefault.Value);
-
-            CreditCardRequest trParams = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                Options = new CreditCardOptionsRequest
-                {
-                    MakeDefault = true
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-
-            CreditCard card = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
-            Assert.IsTrue(card.IsDefault.Value);
-        }
-        #pragma warning restore 0618
-
-        #pragma warning disable 0618
-        [Test]
-        public void ConfirmTransparentRedirectCreate_CreatesTheCreditCardObservingMakeDefaultInRequest()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            CreditCardRequest request = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
-                Options = new CreditCardOptionsRequest
-                {
-                    MakeDefault = true
-                }
-            };
-
-            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
-            Assert.IsTrue(creditCard.IsDefault.Value);
-
-            CreditCardRequest trParams = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-
-            CreditCard card = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
-            Assert.IsTrue(card.IsDefault.Value);
-        }
-        #pragma warning restore 0618
-
-        #pragma warning disable 0618
-        [Test]
-        public void ConfirmTransparentRedirectCreate_WithErrors()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            CreditCardRequest trParams = new CreditCardRequest { CustomerId = customer.Id };
-
-            CreditCardRequest request = new CreditCardRequest
-            {
-                CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    CountryName = "Greece",
-                    CountryCodeAlpha2 = "MX"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
-            Assert.IsFalse(result.IsSuccess());
-
-            Assert.AreEqual(
-                ValidationErrorCode.ADDRESS_INCONSISTENT_COUNTRY,
-                result.Errors.ForObject("CreditCard").ForObject("BillingAddress").OnField("Base")[0].Code
-            );
-        }
-        #pragma warning restore 0618
-
         [Test]
         public void Find_FindsCreditCardByToken()
         {
@@ -929,91 +792,6 @@ namespace Braintree.Tests.Integration
                 updateResult.Errors.ForObject("Customer").ForObject("CreditCard").OnField("Number")[0].Code
             );
         }
-
-        #pragma warning disable 0618
-        [Test]
-        public void Update_UpdatesExistingBillingAddressWhenUpdateExistingIsTrueViaTransparentRedirect()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            var request = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    FirstName = "John"
-                }
-            };
-
-            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
-
-            CreditCardRequest trParams = new CreditCardRequest
-            {
-                PaymentMethodToken = creditCard.Token,
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    Options = new CreditCardAddressOptionsRequest
-                    {
-                        UpdateExisting = true
-                    }
-                }
-            };
-
-            CreditCardRequest updateRequest = new CreditCardRequest
-            {
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    LastName = "Jones"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, updateRequest, gateway.TransparentRedirect.Url, service);
-            CreditCard updatedCreditCard = gateway.TransparentRedirect.ConfirmCreditCard(queryString).Target;
-
-            Assert.AreEqual("John", updatedCreditCard.BillingAddress.FirstName);
-            Assert.AreEqual("Jones", updatedCreditCard.BillingAddress.LastName);
-            Assert.AreEqual(creditCard.BillingAddress.Id, updatedCreditCard.BillingAddress.Id);
-        }
-        #pragma warning restore 0618
-
-        #pragma warning disable 0618
-        [Test]
-        public void UpdateViaTransparentRedirect()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-            CreditCardRequest createRequest = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                CardholderName = "John Doe",
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    PostalCode = "44444"
-                }
-            };
-            CreditCard createdCard = gateway.CreditCard.Create(createRequest).Target;
-
-            CreditCardRequest trParams = new CreditCardRequest
-            {
-                PaymentMethodToken = createdCard.Token
-            };
-
-            CreditCardRequest request = new CreditCardRequest
-            {
-                CardholderName = "Joe Cool"
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<CreditCard> result = gateway.TransparentRedirect.ConfirmCreditCard(queryString);
-            Assert.IsTrue(result.IsSuccess());
-            CreditCard card = result.Target;
-            Assert.AreEqual("Joe Cool", card.CardholderName);
-            Assert.AreEqual("44444", card.BillingAddress.PostalCode);
-        }
-        #pragma warning restore 0618
 
         [Test]
         public void Delete_DeletesTheCreditCard()
@@ -1894,6 +1672,31 @@ namespace Braintree.Tests.Integration
 
             CreditCard creditCard = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest).Target;
             Assert.AreEqual("debit", creditCard.Verification.CreditCard.AccountType);
+        }
+
+        [Test]
+        public void Find_WithNetworkTokenizedCard()
+        {
+            CreditCard creditCard = gateway.CreditCard.Find("network_tokenized_credit_card");
+            Assert.IsTrue(creditCard.IsNetworkTokenized);
+        }
+
+        [Test]
+        public void Find_WithNonNetworkTokenizedCard()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/12",
+                CVV = "123"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+            CreditCard savedCreditCard = gateway.CreditCard.Find(creditCard.Token);
+            Assert.IsFalse(savedCreditCard.IsNetworkTokenized);
         }
     }
 }
