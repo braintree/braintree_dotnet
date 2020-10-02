@@ -87,6 +87,9 @@ namespace Braintree
         public string ShipsFromPostalCode { get; set; }
         public TransactionLineItemRequest[] LineItems { get; set; }
         public ExternalVaultRequest ExternalVault { get; set; }
+        // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
+        public TransactionAndroidPayCardRequest AndroidPayCard { get; set; }
+        public TransactionApplePayCardRequest ApplePayCard { get; set; }
 
         public TransactionRequest()
         {
@@ -171,6 +174,10 @@ namespace Braintree
                 builder.AddElement("line-items", LineItems);
             if (ExternalVault != null)
                 builder.AddElement("external-vault", ExternalVault);
+            if (AndroidPayCard != null)
+                builder.AddElement("android-pay-card", AndroidPayCard);
+            if (ApplePayCard != null)
+                builder.AddElement("apple-pay-card", ApplePayCard);
             return builder;
         }
     }

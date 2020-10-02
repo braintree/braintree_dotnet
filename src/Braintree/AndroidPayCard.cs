@@ -2,6 +2,7 @@ using System;
 
 namespace Braintree
 {
+    // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
     public class AndroidPayCard : PaymentMethod
     {
         public virtual string CardType { get; protected set; }

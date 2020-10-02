@@ -25,6 +25,8 @@ namespace Braintree
         public virtual string RefundFromTransactionFeeAmount { get; protected set; }
         public virtual string RefundFromTransactionFeeCurrencyIsoCode { get; protected set; }
         public virtual string Description { get; protected set; }
+        public virtual string ImplicitlyVaultedPaymentMethodToken { get; protected set; }
+        public virtual string ImplicitlyVaultedPaymentMethodGlobalId { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -49,6 +51,8 @@ namespace Braintree
             RefundFromTransactionFeeAmount = node.GetString("refund-from-transaction-fee-amount");
             RefundFromTransactionFeeCurrencyIsoCode = node.GetString("refund-from-transaction-fee-currency-iso-code");
             Description = node.GetString("description");
+            ImplicitlyVaultedPaymentMethodToken = node.GetString("implicitly-vaulted-payment-method-token");
+            ImplicitlyVaultedPaymentMethodGlobalId = node.GetString("implicitly-vaulted-payment-method-global-id");
         }
 
         [Obsolete("Mock Use Only")]

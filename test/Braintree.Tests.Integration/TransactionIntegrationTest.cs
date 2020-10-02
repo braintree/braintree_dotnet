@@ -3190,6 +3190,31 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithApplePayParams()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ApplePayCard = new TransactionApplePayCardRequest
+                {
+                    Number = "4111111111111111",
+                    CardholderName = "Dan Schulman",
+                    Cryptogram = "AAAAAAAA/COBt84dnIEcwAA3gAAGhgEDoLABAAhAgAABAAAALnNCLw==",
+                    ExpirationMonth = "05",
+                    ExpirationYear = "10",
+                    EciIndicator = "07"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.IsNotNull(result.Target.ApplePayDetails);
+            Assert.AreEqual("Dan Schulman", result.Target.ApplePayDetails.CardholderName);
+            Assert.AreEqual("05", result.Target.ApplePayDetails.ExpirationMonth);
+            Assert.AreEqual("2010", result.Target.ApplePayDetails.ExpirationYear);
+        }
+
+        [Test]
         public void Sale_WithAndroidPayProxyCardNonce()
         {
             TransactionRequest request = new TransactionRequest
@@ -3258,6 +3283,40 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayDetails.ExpirationYear);
             Assert.IsNotNull(androidPayDetails.GoogleTransactionId);
             Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
+        }
+
+        [Test]
+        public void Sale_WithGooglePayParams()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                AndroidPayCard = new TransactionAndroidPayCardRequest
+                {
+                    Cryptogram = "AAAAAAAA/COBt84dnIEcwAA3gAAGhgEDoLABAAhAgAABAAAALnNCLw==",
+                    EciIndicator = "05",
+                    ExpirationMonth = "10",
+                    ExpirationYear = "14",
+                    GoogleTransactionId = "25469d622c1dd37cb1a403c6d438e850",
+                    Number = "4012888888881881",
+                    SourceCardLastFour = "1881",
+                    SourceCardType = "Visa"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(PaymentInstrumentType.ANDROID_PAY_CARD, result.Target.PaymentInstrumentType);
+
+            Assert.IsNotNull(result.Target.AndroidPayDetails);
+
+            Assert.IsInstanceOf(typeof(AndroidPayDetails), result.Target.AndroidPayDetails);
+            AndroidPayDetails androidPayDetails = result.Target.AndroidPayDetails;
+
+            Assert.AreEqual("Visa", androidPayDetails.SourceCardType);
+            Assert.AreEqual("1881", androidPayDetails.SourceCardLast4);
+            Assert.AreEqual("10", androidPayDetails.ExpirationMonth);
+            Assert.AreEqual("14", androidPayDetails.ExpirationYear);
+            Assert.AreEqual("25469d622c1dd37cb1a403c6d438e850", androidPayDetails.GoogleTransactionId);
         }
 
         [Test]

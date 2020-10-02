@@ -99,6 +99,7 @@ namespace Braintree.Tests
                     Node("id", "new_transaction_id"),
                     Node("amount", "101.00"),
                     NodeAttr("created-at", TYPE_DATE, "2017-06-21T20:44:41Z"),
+                    NodeAttr("installment-count", NIL_TRUE),
                     NodeAttr("order-id", NIL_TRUE),
                     NodeAttr("purchase-order-number", NIL_TRUE),
                     Node("payment-instrument-subtype", "Visa")
@@ -132,6 +133,7 @@ namespace Braintree.Tests
                     Node("id", "new_transaction_id"),
                     Node("amount", "101.00"),
                     NodeAttr("created-at", TYPE_DATE, "2017-06-21T20:44:41Z"),
+                    NodeAttr("installment-count", NIL_TRUE),
                     NodeAttr("order-id", NIL_TRUE),
                     NodeAttr("purchase-order-number", NIL_TRUE),
                     Node("payment-instrument-subtype", "Visa")
@@ -245,6 +247,7 @@ namespace Braintree.Tests
             var result = new Dispute(node);
             Assert.AreEqual("new_transaction_id", result.Transaction.Id);
             Assert.AreEqual(101m, result.Transaction.Amount);
+            Assert.IsNull(result.Transaction.InstallmentCount);
             Assert.IsNull(result.Transaction.OrderId);
             Assert.AreEqual("Visa", result.Transaction.PaymentInstrumentSubtype);
             Assert.IsNull(result.Transaction.PurchaseOrderNumber);

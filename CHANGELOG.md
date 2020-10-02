@@ -1,3 +1,7 @@
+## 5.1.0
+- Add `InstallmentCount` to `DisputeTransaction` on dispute webhooks
+- Add `ImplicitlyVaultedPaymentMethodToken` and `ImplicitlyVaultedPaymentMethodGlobalId` to `PayPalDetails`
+
 ## 5.0.0
 - Add `RequestTimeoutException` and `GatewayTimeoutException`
 - Add `RISK_THRESHOLD` to GatewayRejectionReason constants

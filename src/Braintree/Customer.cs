@@ -31,6 +31,7 @@ namespace Braintree
         public virtual CreditCard[] CreditCards { get; protected set; }
         public virtual PayPalAccount[] PayPalAccounts { get; protected set; }
         public virtual ApplePayCard[] ApplePayCards { get; protected set; }
+        // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
         public virtual AndroidPayCard[] AndroidPayCards { get; protected set; }
         public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
         public virtual VisaCheckoutCard[] VisaCheckoutCards { get; protected set; }
@@ -90,6 +91,7 @@ namespace Braintree
                 ApplePayCards[i] = new ApplePayCard(applePayXmlNodes[i], gateway);
             }
 
+            // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
             var androidPayCardXmlNodes = node.GetList("android-pay-cards/android-pay-card");
             AndroidPayCards = new AndroidPayCard[androidPayCardXmlNodes.Count];
             for (int i = 0; i < androidPayCardXmlNodes.Count; i++)
