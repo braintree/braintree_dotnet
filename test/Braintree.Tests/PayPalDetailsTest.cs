@@ -41,6 +41,7 @@ namespace Braintree.Tests
             "<description>item</description>" +
             "<implicitly-vaulted-payment-method-token>implicittoken</implicitly-vaulted-payment-method-token>" +
             "<implicitly-vaulted-payment-method-global-id>implicitglobalid</implicitly-vaulted-payment-method-global-id>" +
+            "<billing-agreement-id>billingagreementid</billing-agreement-id>" +
             "</paypal-details>";
             var node = nodeFromXml(xml);
 
@@ -69,6 +70,7 @@ namespace Braintree.Tests
             Assert.AreEqual("item", details.Description);
             Assert.AreEqual("implicittoken", details.ImplicitlyVaultedPaymentMethodToken);
             Assert.AreEqual("implicitglobalid", details.ImplicitlyVaultedPaymentMethodGlobalId);
+            Assert.AreEqual("billingagreementid", details.BillingAgreementId);
         }
     }
 }

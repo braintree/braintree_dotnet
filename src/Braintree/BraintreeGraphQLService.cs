@@ -18,6 +18,7 @@ namespace Braintree
     public class GraphQLResponse
     {
         public Dictionary<string, object> data { get; set; }
+        public Dictionary<string, object> extensions { get; set; }
         public IList<GraphQLError> errors { get; set; }
 
         public class Deserializer : CustomCreationConverter<IDictionary<string, object>>

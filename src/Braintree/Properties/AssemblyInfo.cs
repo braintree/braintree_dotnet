@@ -15,7 +15,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Braintree.Tests")]
 [assembly: CLSCompliant(true)]
-//[assembly: AssemblyKeyFileAttribute("../../braintreeSgKey.snk")]
+//[assembly: AssemblyKeyFileAttribute("../../../braintreeSgKey.snk")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("5.1.0.0")]
-[assembly: AssemblyFileVersion("5.1.0.0")]
+[assembly: AssemblyVersion("5.2.0.0")]
+[assembly: AssemblyFileVersion("5.2.0.0")]

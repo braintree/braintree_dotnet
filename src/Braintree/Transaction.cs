@@ -179,6 +179,7 @@ namespace Braintree
         public virtual string NetworkTransactionId { get; protected set; }
         public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
         public virtual string RetrievalReferenceNumber { get; protected set; }
+        public virtual string AcquirerReferenceNumber { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -382,6 +383,8 @@ namespace Braintree
             AuthorizationExpiresAt = node.GetDateTime("authorization-expires-at");
 
             RetrievalReferenceNumber = node.GetString("retrieval-reference-number");
+
+            AcquirerReferenceNumber = node.GetString("acquirer-reference-number");
         }
 
         /// <summary>

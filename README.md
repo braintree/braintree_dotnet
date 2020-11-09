@@ -22,6 +22,12 @@ Braintree employs a deprecation policy for our SDKs. For more information on the
 | 1.x.x                | Unsupported | April 2010      | March 2018   | March 2018   |
 
 
+## Documentation
+
+* [Official documentation](https://developers.braintreepayments.com/dotnet/sdk/server/overview)
+
+Updating from an Inactive, Deprecated, or Unsupported version of this SDK? Check our [Migration Guide](https://developers.braintreepayments.com/reference/general/server-sdk-migration-guide/dotnet) for tips.
+
 ## Quick Start Example
 
 ```csharp
@@ -80,10 +86,6 @@ namespace BraintreeExample
     }
 }
 ```
-
-## Documentation
-
-* [Official documentation](https://developers.braintreepayments.com/dotnet/sdk/server/overview)
 
 ## Developing and Tests
 

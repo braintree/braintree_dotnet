@@ -896,7 +896,7 @@ namespace Braintree.Tests.Integration
             {
                 disputes.Add(d);
             }
-            Assert.AreEqual(1, disputes.Count);
+            Assert.IsTrue(disputes.Count >= 1);
             Assert.AreEqual("2014", disputes[0].ReceivedDate.Value.Year.ToString());
             Assert.AreEqual("3", disputes[0].ReceivedDate.Value.Month.ToString());
             Assert.AreEqual("4", disputes[0].ReceivedDate.Value.Day.ToString());
@@ -916,7 +916,7 @@ namespace Braintree.Tests.Integration
             {
                 disputes.Add(d);
             }
-            Assert.AreEqual(1, disputes.Count);
+            Assert.IsTrue(disputes.Count >= 1);
             Assert.AreEqual("2014", disputes[0].StatusHistory[0].DisbursementDate.Value.Year.ToString());
             Assert.AreEqual("3", disputes[0].StatusHistory[0].DisbursementDate.Value.Month.ToString());
             Assert.AreEqual("5", disputes[0].StatusHistory[0].DisbursementDate.Value.Day.ToString());
@@ -936,7 +936,7 @@ namespace Braintree.Tests.Integration
             {
                 disputes.Add(d);
             }
-            Assert.AreEqual(1, disputes.Count);
+            Assert.IsTrue(disputes.Count >= 1);
             Assert.AreEqual("2014", disputes[0].StatusHistory[0].EffectiveDate.Value.Year.ToString());
             Assert.AreEqual("3", disputes[0].StatusHistory[0].EffectiveDate.Value.Month.ToString());
             Assert.AreEqual("4", disputes[0].StatusHistory[0].EffectiveDate.Value.Day.ToString());

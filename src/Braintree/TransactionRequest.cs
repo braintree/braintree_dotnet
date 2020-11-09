@@ -1,6 +1,7 @@
 #pragma warning disable 1591
 
 using System.Collections.Generic;
+using System;
 
 namespace Braintree
 {
@@ -41,6 +42,7 @@ namespace Braintree
         public string Channel { get; set; }
         public string OrderId { get; set; }
         public string ProductSku { get; set; }
+        [ObsoleteAttribute("use TransactionSource instead", false)]
         public bool? Recurring { get; set; }
         public string TransactionSource { get; set; }
         public string MerchantAccountId { get; set; }
@@ -128,7 +130,11 @@ namespace Braintree
             builder.AddElement("channel", Channel);
             builder.AddElement("device-session-id", DeviceSessionId);
             builder.AddElement("fraud-merchant-id", FraudMerchantId);
+// Remove this pragma warning when we remove Recurring param.
+// We have this so we can build the SDK without obsolete error messages
+#pragma warning disable 618
             if (Recurring.HasValue) builder.AddElement("recurring", Recurring);
+#pragma warning restore 618
             builder.AddElement("transaction-source", TransactionSource);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("payment-method-nonce", PaymentMethodNonce);

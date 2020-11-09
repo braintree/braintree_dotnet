@@ -1392,6 +1392,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("05", creditCard.ExpirationMonth);
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+            Assert.IsNull(transaction.AcquirerReferenceNumber);
         }
 
         [Test]
@@ -7185,6 +7186,14 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Find_ExposesAcquirerReferenceNumber()
+        {
+            Transaction transaction = gateway.Transaction.Find("transactionwithacquirerreferencenumber");
+
+            Assert.AreEqual(transaction.AcquirerReferenceNumber, "123456789 091019");
+        }
+
+        [Test]
         public void Find_ExposesDisputes()
         {
             Transaction transaction = gateway.Transaction.Find("disputedtransaction");
@@ -9319,6 +9328,29 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
             Assert.IsNotNull(result.Target.PayPalDetails.Token);
             Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
+
+        [Test]
+        public void CreateTransaction_WithPayPalBillingAgreementNonceAndAttemptToVault()
+        {
+            string nonce = Nonce.PayPalBillingAgreement;
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = nonce,
+                Options = new TransactionOptionsRequest
+                {
+                    StoreInVaultOnSuccess = true
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.PayerEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+            Assert.IsNotNull(result.Target.PayPalDetails.BillingAgreementId);
         }
 
         [Test]

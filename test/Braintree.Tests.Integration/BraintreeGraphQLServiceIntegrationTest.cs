@@ -36,6 +36,7 @@ namespace Braintree.Tests.Integration
             var result = service.QueryGraphQL("query {\n    ping\n}", null);
 
             Assert.AreEqual(result.data["ping"], "pong");
+            Assert.IsNotNull(result.extensions);
         }
 
         [Test]

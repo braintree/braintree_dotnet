@@ -1,3 +1,9 @@
+## 5.2.0
+- Add `AcquirerReferenceNumber` to `Transaction`
+- Add `BillingAgreementId` to `PayPalDetails`
+- Add `extensions` to `GraphQLResponse`
+- Deprecate `Recurring` in TransactionRequest
+
 ## 5.1.0
 - Add `InstallmentCount` to `DisputeTransaction` on dispute webhooks
 - Add `ImplicitlyVaultedPaymentMethodToken` and `ImplicitlyVaultedPaymentMethodGlobalId` to `PayPalDetails`
