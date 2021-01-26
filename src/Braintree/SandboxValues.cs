@@ -7,10 +7,12 @@ namespace Braintree
         public class CreditCardNumber
         {
             public const string VISA = "4111111111111111";
+            public const string VISA_COUNTRY_OF_ISSUANCE_IE = "4023490000000008";
             public const string MASTER_CARD = "5555555555554444";
             public const string AMEX = "371449635392376";
             public const string HIPER = "6370950000000005";
             public const string HIPERCARD = "6062820524845321";
+            public const string JCB = "3530111333300000";
             public const string FRAUD = "4000111111111511";
             public const string RISK_THRESHOLD = "4111130000000003";
 

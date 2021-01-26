@@ -1,3 +1,16 @@
+## 5.3.0
+- Add `scaExemption` to `Transaction`
+- Deprecate `DeviceSessionId` and `FraudMerchantId` in the `CreditCardRequest` and `TransactionRequest` classes
+- Add `currencyIsoCode` field to `TransactionRequest`
+- Add `verificationCurrencyIsoCode` field to `CreditCardOptionsRequest` and `PaymentMethodOptionsRequest`
+- Add validation error codes:
+  - `CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY`
+  - `TRANSACTION_INVALID_PRESENTMENT_CURRENCY`
+- Add `Installments` to `TransactionRequest`
+- Add `Count` to `InstallmentRequest`
+- Add `Installments` and `RefundedInstallments` to `Transaction`
+- Add `Adjustment` to `Installment`
+
 ## 5.2.0
 - Add `AcquirerReferenceNumber` to `Transaction`
 - Add `BillingAgreementId` to `PayPalDetails`

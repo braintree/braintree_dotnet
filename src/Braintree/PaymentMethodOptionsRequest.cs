@@ -10,6 +10,7 @@ namespace Braintree
         public string VerificationMerchantAccountId { get; set; }
         public string VerificationAmount { get; set; }
         public string VerificationAccountType { get; set; }
+        public string VerificationCurrencyIsoCode { get; set; }
         public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
         public UsBankAccountVerificationMethod? UsBankAccountVerificationMethod { get; set; }
 
@@ -29,6 +30,7 @@ namespace Braintree
                 AddElement("make-default", MakeDefault).
                 AddElement("verification-merchant-account-id", VerificationMerchantAccountId).
                 AddElement("verification-account-type", VerificationAccountType).
+                AddElement("verification-currency-iso-code", VerificationCurrencyIsoCode).
                 AddElement("verify-card", VerifyCard).
                 AddElement("us-bank-account-verification-method", UsBankAccountVerificationMethod.GetDescription()).
                 AddElement("verification-amount", VerificationAmount).

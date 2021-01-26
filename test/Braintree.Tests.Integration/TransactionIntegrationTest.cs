@@ -1396,6 +1396,47 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_ReturnsSuccessfulScaExemptionResponse()
+        {
+            var requestedScaExemption = "low_value";
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ScaExemption = requestedScaExemption,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA_COUNTRY_OF_ISSUANCE_IE,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(requestedScaExemption, transaction.ScaExemptionRequested);
+        }
+
+        [Test]
+        public void Sale_ReturnsFailureScaExemptionResponse()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                ScaExemption = "invalid_sca_exemption",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA_COUNTRY_OF_ISSUANCE_IE,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_SCA_EXEMPTION_REQUEST_INVALID, result.Errors.ForObject("Transaction").OnField("ScaExemption")[0].Code);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponseWithNetworkResponseCodeText()
         {
             var request = new TransactionRequest
@@ -1864,7 +1905,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                DeviceSessionId = "abc123"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -1931,7 +1972,7 @@ namespace Braintree.Tests.Integration
                     CustomerLocationZip = "91244",
                     CustomerTenure = 20
                 },
-                DeviceSessionId = "abc123"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -1962,7 +2003,7 @@ namespace Braintree.Tests.Integration
                     CustomerLocationZip = "912$4",
                     CustomerTenure = 20
                 },
-                DeviceSessionId = "abc123"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -2275,6 +2316,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Obsolete]
         public void Sale_WithSecurityParams()
         {
             var request = new TransactionRequest
@@ -4946,7 +4988,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithAmexDoesNotReturnNetworkTransactionIdentifier()
+        public void Sale_WithAmexReturnsNetworkTransactionIdentifier()
         {
             var request = new TransactionRequest
             {
@@ -4954,6 +4996,26 @@ namespace Braintree.Tests.Integration
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = SandboxValues.CreditCardNumber.AMEX,
+                    ExpirationDate = "05/2009",
+                },
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsNotNull(transaction.NetworkTransactionId);
+        }
+
+        [Test]
+        public void Sale_WithJCBDoesNotReturnNetworkTransactionIdentifier()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.JCB,
                     ExpirationDate = "05/2009",
                 },
             };
@@ -5008,7 +5070,7 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
-            Assert.IsNull(transaction.NetworkTransactionId);
+            Assert.IsNotNull(transaction.NetworkTransactionId);
         }
 
         [Test]
@@ -5032,7 +5094,7 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
-            Assert.IsNull(transaction.NetworkTransactionId);
+            Assert.IsNotNull(transaction.NetworkTransactionId);
         }
 
         [Test]
@@ -5163,32 +5225,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(
                 ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_STATUS_WITH_PREVIOUS_NETWORK_TRANSACTION_ID_IS_INVALID,
                 result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("Status")[0].Code
-            );
-        }
-
-        [Test]
-        public void Sale_WithExternalVault_ValidationErrorCardTypeIsInvalid()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.AMEX,
-                    ExpirationDate = "05/2009",
-                },
-                ExternalVault = new ExternalVaultRequest
-                {
-                    Status = "vaulted",
-                    PreviousNetworkTransactionId = "123456789012345",
-                }
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_CARD_TYPE_IS_INVALID,
-                result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("PreviousNetworkTransactionId")[0].Code
             );
         }
 
@@ -9697,6 +9733,214 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(transactionResult.IsSuccess());
             Transaction transaction = transactionResult.Target;
             Assert.IsFalse(transaction.ProcessedWithNetworkToken);
+        }
+
+        [Test]
+        public void Sale_WithMerchantCurrency()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CurrencyIsoCode = "USD",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
+            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
+            Assert.IsNotNull(transaction.ProcessorAuthorizationCode);
+            Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
+
+            CreditCard creditCard = transaction.CreditCard;
+            Assert.AreEqual("411111", creditCard.Bin);
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2009", creditCard.ExpirationYear);
+            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
+            Assert.IsNull(transaction.AcquirerReferenceNumber);
+        }
+
+        [Test]
+        public void Sale_WithInvalidMerchantCurrency()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CurrencyIsoCode = "GBP",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+               ValidationErrorCode.TRANSACTION_INVALID_PRESENTMENT_CURRENCY,
+               result.Errors.DeepAll()[0].Code
+           );
+        }
+
+        [Test]
+        public void Sale_WithNonceAndMerchantCurrency()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CurrencyIsoCode = "USD",
+                PaymentMethodNonce = TestHelper.GenerateUnlockedNonce(gateway)
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Sale_WithNonceAndInvalidMerchantCurrency()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CurrencyIsoCode = "GBP",
+                PaymentMethodNonce = TestHelper.GenerateUnlockedNonce(gateway)
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+               ValidationErrorCode.TRANSACTION_INVALID_PRESENTMENT_CURRENCY,
+               result.Errors.DeepAll()[0].Code
+           );
+        }
+
+        [Test]
+        public void Sale_WithPaymentMethodTokenAndMerchantCurrency()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodToken = creditCard.Token,
+                CurrencyIsoCode = "USD"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(creditCard.Token, transaction.CreditCard.Token);
+            Assert.AreEqual("510510", transaction.CreditCard.Bin);
+            Assert.AreEqual("05/2012", transaction.CreditCard.ExpirationDate);
+        }
+
+        [Test]
+        public void Sale_WithPaymentMethodTokenAndInvalidMerchantCurrency()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = "5105105105105100",
+                ExpirationDate = "05/12"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodToken = creditCard.Token,
+                CurrencyIsoCode = "GBP"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+               ValidationErrorCode.TRANSACTION_INVALID_PRESENTMENT_CURRENCY,
+               result.Errors.DeepAll()[0].Code
+           );
+        }
+
+        [Test]
+        public void Sale_TransactionWithInstallmentCount() {
+            var request = new TransactionRequest {
+                Amount = 100,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                   ExpirationDate = "05/2012",
+                   Number = SandboxValues.CreditCardNumber.VISA
+                },
+                MerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID,
+                InstallmentRequest = new InstallmentRequest {
+                   Count = "4"
+                } 
+           };
+
+           var transactionResult = gateway.Transaction.Sale(request);
+           Assert.IsTrue(transactionResult.IsSuccess());
+           Transaction transaction = transactionResult.Target;
+           Assert.AreEqual(4, transaction.InstallmentCount);
+        }
+
+        [Test]
+        public void Sale_TransactionWithInstallmentAdjustments() {
+            var request = new TransactionRequest {
+                Amount = 100.00M,
+                       CreditCard = new TransactionCreditCardRequest
+                       {
+                           ExpirationDate = "05/2012",
+                           Number = SandboxValues.CreditCardNumber.VISA
+                       },
+                       MerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID,
+                       InstallmentRequest = new InstallmentRequest {
+                           Count = "4"
+                       }, 
+                       Options = new TransactionOptionsRequest
+                       {
+                           SubmitForSettlement = true
+                       }
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+
+            Transaction refund = gateway.Transaction.Refund(transaction.Id, decimal.Parse("20.00")).Target;
+            for (int i = 0; i < transaction.Installments.Count; i++)
+            {
+                Assert.AreEqual($"{transaction.Id}_INST_{i+1}", transaction.Installments[i].Id);
+                Assert.AreEqual(25.00M, transaction.Installments[i].Amount);
+            }
+
+            for (int i = 0; i < refund.RefundedInstallments.Count; i++)
+            {
+                Assert.AreEqual(-5.00M, refund.RefundedInstallments[i].Adjustments[0].Amount);
+                Assert.AreEqual(Kind.REFUND, refund.RefundedInstallments[i].Adjustments[0].Kind);
+            }
         }
     }
 }

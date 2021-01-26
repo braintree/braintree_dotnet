@@ -6,6 +6,7 @@ namespace Braintree.Tests
     public class CreditCardRequestTest
     {
         [Test]
+        [System.Obsolete]
         public void ToXml_Includes_DeviceSessionId()
         {
             CreditCardRequest request = new CreditCardRequest();
@@ -15,6 +16,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [System.Obsolete]
         public void ToXml_Includes_FraudMerchantId()
         {
             CreditCardRequest request = new CreditCardRequest();

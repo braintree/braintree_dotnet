@@ -535,6 +535,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        [Obsolete]
         public void Create_withSecurityParams()
         {
             var createRequest = new CustomerRequest()
@@ -545,6 +546,25 @@ namespace Braintree.Tests.Integration
                     ExpirationDate = "05/12",
                     CVV = "123",
                     DeviceSessionId = "my_dsid"
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Create_withDeviceData()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
                 }
             };
 
@@ -1879,6 +1899,355 @@ namespace Braintree.Tests.Integration
                 PayPalAccountEmail.Is(customer.PayPalAccounts[0].Email);
 
             Assert.AreEqual(1, gateway.Customer.Search(search).MaximumCount);
+        }
+
+        [Test]
+        public void Create_WithMerchantCurrencyOption()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "USD"
+                    },
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Macau",
+                        CountryCodeAlpha2 = "MO",
+                        CountryCodeAlpha3 = "MAC",
+                        CountryCodeNumeric = "446"
+                    }
+                }
+            };
+
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+            Assert.AreEqual("Michael", customer.FirstName);
+            Assert.AreEqual("Angelo", customer.LastName);
+            Assert.AreEqual("Some Company", customer.Company);
+            Assert.AreEqual("hansolo64@example.com", customer.Email);
+            Assert.AreEqual("312.555.1111", customer.Phone);
+            Assert.AreEqual("312.555.1112", customer.Fax);
+            Assert.AreEqual("www.example.com", customer.Website);
+            Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, customer.UpdatedAt.Value.Year);
+
+            Assert.AreEqual(1, customer.CreditCards.Length);
+            Assert.AreEqual("510510", customer.CreditCards[0].Bin);
+            Assert.AreEqual("5100", customer.CreditCards[0].LastFour);
+            Assert.AreEqual("05", customer.CreditCards[0].ExpirationMonth);
+            Assert.AreEqual("2012", customer.CreditCards[0].ExpirationYear);
+
+            Address billingAddress = customer.CreditCards[0].BillingAddress;
+            Assert.AreEqual("Macau", billingAddress.CountryName);
+            Assert.AreEqual("MO", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("MAC", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("446", billingAddress.CountryCodeNumeric);
+        }
+
+        [Test]
+        public void Create_WithInvalidMerchantCurrencyOption()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "GBP"
+                    },
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Macau",
+                        CountryCodeAlpha2 = "MO",
+                        CountryCodeAlpha3 = "MAC",
+                        CountryCodeNumeric = "446"
+                    }
+                }
+            };
+
+            Result<Customer> customer = gateway.Customer.Create(createRequest);
+            Assert.IsFalse(customer.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+                customer.Errors.DeepAll()[0].Code
+            );
+        }
+
+        [Test]
+        public void Update_CustomerBySupplyingMerchantCurrencyOption()
+        {
+            string oldId = Guid.NewGuid().ToString();
+            string newId = Guid.NewGuid().ToString();
+            var createRequest = new CustomerRequest()
+            {
+                Id = oldId,
+                FirstName = "Old First",
+                LastName = "Old Last",
+                Company = "Old Company",
+                Email = "old@example.com",
+                Phone = "312.555.1111 xOld",
+                Fax = "312.555.1112 xOld",
+                Website = "old.example.com"
+            };
+
+            gateway.Customer.Create(createRequest);
+
+            var updateRequest = new CustomerRequest()
+            {
+                Id = newId,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "USD"
+                    }
+                }
+            };
+
+            Customer updatedCustomer = gateway.Customer.Update(oldId, updateRequest).Target;
+            Assert.AreEqual(newId, updatedCustomer.Id);
+            Assert.AreEqual("Michael", updatedCustomer.FirstName);
+            Assert.AreEqual("Angelo", updatedCustomer.LastName);
+            Assert.AreEqual("Some Company", updatedCustomer.Company);
+            Assert.AreEqual("hansolo64@example.com", updatedCustomer.Email);
+            Assert.AreEqual("312.555.1111", updatedCustomer.Phone);
+            Assert.AreEqual("312.555.1112", updatedCustomer.Fax);
+            Assert.AreEqual("www.example.com", updatedCustomer.Website);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.UpdatedAt.Value.Year);
+            Assert.AreEqual(1, updatedCustomer.CreditCards.Length);
+            Assert.AreEqual("510510", updatedCustomer.CreditCards[0].Bin);
+            Assert.AreEqual("5100", updatedCustomer.CreditCards[0].LastFour);
+            Assert.AreEqual("05", updatedCustomer.CreditCards[0].ExpirationMonth);
+            Assert.AreEqual("2012", updatedCustomer.CreditCards[0].ExpirationYear);
+        }
+
+        [Test]
+        public void Update_CustomerBySupplyingInvalidMerchantCurrencyOption()
+        {
+            string oldId = Guid.NewGuid().ToString();
+            string newId = Guid.NewGuid().ToString();
+            var createRequest = new CustomerRequest()
+            {
+                Id = oldId,
+                FirstName = "Old First",
+                LastName = "Old Last",
+                Company = "Old Company",
+                Email = "old@example.com",
+                Phone = "312.555.1111 xOld",
+                Fax = "312.555.1112 xOld",
+                Website = "old.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/12",
+                }
+            };
+
+            gateway.Customer.Create(createRequest);
+
+            var updateRequest = new CustomerRequest()
+            {
+                Id = newId,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/11",
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "GBP"
+                    }
+                }
+            };
+
+            Result<Customer> updatedCustomer = gateway.Customer.Update(oldId, updateRequest);
+            Assert.IsFalse(updatedCustomer.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+                updatedCustomer.Errors.DeepAll()[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_WithNonceAndMerchantCurrencyOption()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    PaymentMethodNonce = nonce,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "USD"
+                    }
+                }
+            });
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(1, result.Target.CreditCards.Length);
+        }
+
+
+        [Test]
+        public void Create_WithNonceAndInvalidMerchantCurrencyOption()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest
+                {
+                    PaymentMethodNonce = nonce,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "GBP"
+                    }
+                }
+            });
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+               ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+               result.Errors.DeepAll()[0].Code
+           );
+        }
+
+        [Test]
+        public void Update_CustomerWithNonceAndMerchantCurrencyOption()
+        {
+            string oldId = Guid.NewGuid().ToString();
+            string newId = Guid.NewGuid().ToString();
+            var createRequest = new CustomerRequest()
+            {
+                Id = oldId,
+                FirstName = "Old First",
+                LastName = "Old Last",
+                Company = "Old Company",
+                Email = "old@example.com",
+                Phone = "312.555.1111 xOld",
+                Fax = "312.555.1112 xOld",
+                Website = "old.example.com"
+            };
+
+            gateway.Customer.Create(createRequest);
+
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+
+            var updateRequest = new CustomerRequest()
+            {
+                Id = newId,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    PaymentMethodNonce = nonce,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "USD"
+                    }
+                }
+            };
+
+            Customer updatedCustomer = gateway.Customer.Update(oldId, updateRequest).Target;
+            Assert.AreEqual(newId, updatedCustomer.Id);
+            Assert.AreEqual("Michael", updatedCustomer.FirstName);
+            Assert.AreEqual("Angelo", updatedCustomer.LastName);
+            Assert.AreEqual("Some Company", updatedCustomer.Company);
+            Assert.AreEqual("hansolo64@example.com", updatedCustomer.Email);
+            Assert.AreEqual("312.555.1111", updatedCustomer.Phone);
+            Assert.AreEqual("312.555.1112", updatedCustomer.Fax);
+            Assert.AreEqual("www.example.com", updatedCustomer.Website);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, updatedCustomer.UpdatedAt.Value.Year);
+            Assert.AreEqual(1, updatedCustomer.CreditCards.Length);
+        }
+
+        [Test]
+        public void Update_CustomerWithNonceAndInvalidMerchantCurrencyOption()
+        {
+            string oldId = Guid.NewGuid().ToString();
+            string newId = Guid.NewGuid().ToString();
+            var createRequest = new CustomerRequest()
+            {
+                Id = oldId,
+                FirstName = "Old First",
+                LastName = "Old Last",
+                Company = "Old Company",
+                Email = "old@example.com",
+                Phone = "312.555.1111 xOld",
+                Fax = "312.555.1112 xOld",
+                Website = "old.example.com"
+            };
+
+            gateway.Customer.Create(createRequest);
+
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+
+            var updateRequest = new CustomerRequest()
+            {
+                Id = newId,
+                FirstName = "Michael",
+                LastName = "Angelo",
+                Company = "Some Company",
+                Email = "hansolo64@example.com",
+                Phone = "312.555.1111",
+                Fax = "312.555.1112",
+                Website = "www.example.com",
+                CreditCard = new CreditCardRequest()
+                {
+                    PaymentMethodNonce = nonce,
+                    Options = new CreditCardOptionsRequest()
+                    {
+                        VerificationCurrencyIsoCode = "GBP"
+                    }
+                }
+            };
+
+            Result<Customer> updatedCustomer = gateway.Customer.Update(oldId, updateRequest);
+            Assert.IsFalse(updatedCustomer.IsSuccess());
+            Assert.AreEqual(
+               ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+               updatedCustomer.Errors.DeepAll()[0].Code
+           );
         }
     }
 }

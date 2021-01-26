@@ -7,6 +7,7 @@ namespace Braintree.Tests
     public class TransactionRequestTest
     {
         [Test]
+        [System.Obsolete]
         public void ToXml_Includes_DeviceSessionId()
         {
             TransactionRequest request = new TransactionRequest();
@@ -16,6 +17,7 @@ namespace Braintree.Tests
         }
 
         [Test]
+        [System.Obsolete]
         public void ToXml_Includes_FraudMerchantId()
         {
             TransactionRequest request = new TransactionRequest();
@@ -61,6 +63,20 @@ namespace Braintree.Tests
             Assert.AreEqual("1.00", doc.GetElementsByTagName("shipping-amount")[0].InnerXml);
             Assert.AreEqual("2.00", doc.GetElementsByTagName("discount-amount")[0].InnerXml);
             Assert.AreEqual("12345", doc.GetElementsByTagName("ships-from-postal-code")[0].InnerXml);
+        }
+
+        [Test]
+        public void ToXml_IncludesInstallmentsCount()
+        {
+            TransactionRequest request = new TransactionRequest();
+            request.InstallmentRequest = new InstallmentRequest();
+            request.InstallmentRequest.Count = "4";
+
+            string xml = request.ToXml();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            Assert.AreEqual("4", doc.SelectSingleNode("//installments/count").InnerText);
         }
     }
 }

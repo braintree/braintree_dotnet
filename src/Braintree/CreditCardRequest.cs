@@ -1,5 +1,7 @@
 #pragma warning disable 1591
 
+using System;
+
 namespace Braintree
 {
     /// <summary>
@@ -32,7 +34,9 @@ namespace Braintree
         public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
         public string BillingAddressId { get; set; }
         public string DeviceData { get; set; }
+        [ObsoleteAttribute("use DeviceData instead", false)]
         public string DeviceSessionId { get; set; }
+        [ObsoleteAttribute("use DeviceData instead", false)]
         public string FraudMerchantId { get; set; }
         public CreditCardOptionsRequest Options { get; set; }
         public string PaymentMethodToken { get; set; }
@@ -54,8 +58,12 @@ namespace Braintree
                 AddElement("billing-address-id", BillingAddressId).
                 AddElement("device-data", DeviceData).
                 AddElement("customer-id", CustomerId).
+// Remove this pragma warning when we remove DeviceSessionId and FraudMerchantId.
+// We have this so we can build the SDK without obsolete error messages
+#pragma warning disable 618
                 AddElement("device-session-id", DeviceSessionId).
                 AddElement("fraud-merchant-id", FraudMerchantId).
+#pragma warning restore 618
                 AddElement("options", Options).
                 AddElement("payment-method-nonce", PaymentMethodNonce).
                 AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode).

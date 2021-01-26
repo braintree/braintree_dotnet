@@ -161,6 +161,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Obsolete]
         public void Create_CreatesCreditCardWithSecurityParams()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -911,7 +912,7 @@ namespace Braintree.Tests.Integration
                 {
                     VerifyCard = true
                 },
-                DeviceSessionId = "abc123"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<CreditCard> result = gateway.CreditCard.Create(request);
@@ -1697,6 +1698,158 @@ namespace Braintree.Tests.Integration
             CreditCard creditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
             CreditCard savedCreditCard = gateway.CreditCard.Find(creditCard.Token);
             Assert.IsFalse(savedCreditCard.IsNetworkTokenized);
+        }
+
+        [Test]
+        public void Update_WithMerchantCurrencyOption()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/12",
+                CVV = "123",
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "12/05",
+                CVV = "321",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerificationCurrencyIsoCode = "USD"
+                },
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest).Target;
+            Assert.AreEqual("1111", creditCard.LastFour);
+            Assert.AreEqual("12", creditCard.ExpirationMonth);
+            Assert.AreEqual("2005", creditCard.ExpirationYear);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+        }
+
+        [Test]
+        public void Update_WithInvalidMerchantCurrencyOption()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardCreateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/12",
+                CVV = "123",
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(creditCardCreateRequest).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "12/05",
+                CVV = "321",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerificationCurrencyIsoCode = "GBP"
+                },
+            };
+
+            Result<CreditCard> updateResult = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest);
+            Assert.IsFalse(updateResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+                updateResult.Errors.DeepAll()[0].Code
+            );
+        }
+
+        [Test]
+        public void Create_WithMerchantCurrencyOption()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerificationCurrencyIsoCode = "USD"
+                },
+                CardholderName = "Michael Angelo",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John",
+                    CountryName = "Chad",
+                    CountryCodeAlpha2 = "TD",
+                    CountryCodeAlpha3 = "TCD",
+                    CountryCodeNumeric = "148"
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+            Assert.AreEqual("510510", creditCard.Bin);
+            Assert.AreEqual("5100", creditCard.LastFour);
+            Assert.AreEqual("510510******5100", creditCard.MaskedNumber);
+            Assert.AreEqual("05", creditCard.ExpirationMonth);
+            Assert.AreEqual("2012", creditCard.ExpirationYear);
+            Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
+            Assert.IsTrue(creditCard.IsDefault.Value);
+            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
+            Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
+            Assert.IsNotNull(creditCard.ImageUrl);
+
+            Address billingAddress = creditCard.BillingAddress;
+            Assert.AreEqual("Chad", billingAddress.CountryName);
+            Assert.AreEqual("TD", billingAddress.CountryCodeAlpha2);
+            Assert.AreEqual("TCD", billingAddress.CountryCodeAlpha3);
+            Assert.AreEqual("148", billingAddress.CountryCodeNumeric);
+            Assert.IsTrue(Regex.IsMatch(creditCard.UniqueNumberIdentifier, "\\A\\w{32}\\z"));
+        }
+
+        [Test]
+        public void Create_WithInvalidMerchantCurrencyOption()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = "5105105105105100",
+                ExpirationDate = "05/12",
+                CVV = "123",
+                Options = new CreditCardOptionsRequest()
+                {
+                    VerificationCurrencyIsoCode = "GBP"
+                },
+                CardholderName = "Michael Angelo",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John",
+                    CountryName = "Chad",
+                    CountryCodeAlpha2 = "TD",
+                    CountryCodeAlpha3 = "TCD",
+                    CountryCodeNumeric = "148"
+                }
+            };
+
+            Result<CreditCard> creditCard = gateway.CreditCard.Create(creditCardRequest);
+            Assert.IsFalse(creditCard.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+                creditCard.Errors.DeepAll()[0].Code
+            );
         }
     }
 }

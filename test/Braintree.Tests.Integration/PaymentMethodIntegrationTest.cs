@@ -1925,5 +1925,121 @@ namespace Braintree.Tests.Integration
                 paymentMethodResult.Errors.ForObject("CreditCard").ForObject("Options").OnField("VerificationAccountType")[0].Code
             );
         }
+
+        [Test]
+        public void Create_PaymentMethodWithNonceAndMerchantCurrencyOption()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationCurrencyIsoCode = "USD"
+                }
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.AreEqual(result.Target.Id, paymentMethodResult.Target.CustomerId);
+            Assert.IsInstanceOf(typeof(CreditCard), paymentMethodResult.Target);
+        }
+
+        [Test]
+        public void Create_PaymentMethodWithNonceAndInvalidMerchantCurrencyOption()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationCurrencyIsoCode = "GBP"
+                }
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsFalse(paymentMethodResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+                paymentMethodResult.Errors.DeepAll()[0].Code
+            );
+        }
+
+        [Test]
+        public void Update_UpdatePaymentMethodWithMerchantCurrencyOption()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+            }).Target;
+
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    CVV = "456",
+                    Number = TestUtil.CreditCardNumbers.FailsSandboxVerification.MasterCard,
+                    ExpirationDate = "06/2013",
+                    Options = new PaymentMethodOptionsRequest
+                    {
+                        VerificationCurrencyIsoCode = "USD"
+                    }
+                });
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+        }
+
+        [Test]
+        public void Update_UpdatePaymentMethodWithInvalidMerchantCurrencyOption()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCard = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CardholderName = "Original Holder",
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012",
+            }).Target;
+
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Update(
+                creditCard.Token,
+                new PaymentMethodRequest
+                {
+                    CardholderName = "New Holder",
+                    CVV = "456",
+                    Number = TestUtil.CreditCardNumbers.FailsSandboxVerification.MasterCard,
+                    ExpirationDate = "06/2013",
+                    Options = new PaymentMethodOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationCurrencyIsoCode = "GBP"
+                    }
+                });
+
+            Assert.IsFalse(paymentMethodResult.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
+                paymentMethodResult.Errors.DeepAll()[0].Code
+            );
+        }
     }
 }

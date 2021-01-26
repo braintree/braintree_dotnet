@@ -12,6 +12,7 @@ namespace Braintree
         public string UpdateExistingToken { get; set; }
         public string VenmoSdkSession { get; set; }
         public string VerificationAccountType { get; set; }
+        public string VerificationCurrencyIsoCode { get; set; }
 
         public override string ToXml(string root)
         {
@@ -29,6 +30,7 @@ namespace Braintree
                 AddElement("make-default", MakeDefault).
                 AddElement("verification-merchant-account-id", VerificationMerchantAccountId).
                 AddElement("verification-account-type", VerificationAccountType).
+                AddElement("verification-currency-iso-code", VerificationCurrencyIsoCode).
                 AddElement("verify-card", VerifyCard).
                 AddElement("verification-amount", VerificationAmount).
                 AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).

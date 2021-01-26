@@ -6,6 +6,7 @@ namespace Braintree.Tests
     public class CustomerRequestTest
     {
         [Test]
+        [System.Obsolete]
         public void ToXml_Includes_DeviceSessionId()
         {
             var request = new CustomerRequest()

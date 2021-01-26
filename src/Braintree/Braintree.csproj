@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2020</Copyright>
-    <VersionPrefix>5.2.0</VersionPrefix>
+    <VersionPrefix>5.3.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <!-- We target NET standard 2.0 so that we can support NET Core 2.1. When NET Core 2.1 reaches EOL, we can update to Net Standard 2.1 -->
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
@@ -12,10 +12,17 @@
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Add `AcquirerReferenceNumber` to `Transaction`
-      - Add `BillingAgreementId` to `PayPalDetails`
-      - Add `extensions` to `GraphQLResponse`
-      - Deprecate `Recurring` in TransactionRequest
+      - Add scaExemption to Transaction
+      - Deprecate DeviceSessionId and FraudMerchantId in the CreditCardRequest and TransactionRequest classes
+      - Add currencyIsoCode field to TransactionRequest
+      - Add verificationCurrencyIsoCode field to CreditCardOptionsRequest and PaymentMethodOptionsRequest
+      - Add validation error codes:
+        - CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY
+        - TRANSACTION_INVALID_PRESENTMENT_CURRENCY
+      - Add Installments to TransactionRequest
+      - Add Count to InstallmentRequest
+      - Add Installments and RefundedInstallments to Transaction
+      - Add Adjustment to Installment
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

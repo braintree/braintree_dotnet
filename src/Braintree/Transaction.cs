@@ -173,6 +173,7 @@ namespace Braintree
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
         public virtual FacilitatedDetails FacilitatedDetails { get; protected set; }
         public virtual FacilitatorDetails FacilitatorDetails { get; protected set; }
+        public virtual string ScaExemptionRequested { get; protected set; }
         public virtual decimal? DiscountAmount { get; protected set; }
         public virtual decimal? ShippingAmount { get; protected set; }
         public virtual string ShipsFromPostalCode { get; protected set; }
@@ -180,6 +181,9 @@ namespace Braintree
         public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
         public virtual string RetrievalReferenceNumber { get; protected set; }
         public virtual string AcquirerReferenceNumber { get; protected set; }
+        public virtual decimal? InstallmentCount { get; protected set; }
+        public virtual List<Installment> Installments { get; protected set; }
+        public virtual List<Installment> RefundedInstallments { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -214,6 +218,7 @@ namespace Braintree
             }
 
             Type = node.GetEnum("type", TransactionType.UNRECOGNIZED);
+            ScaExemptionRequested = node.GetString("sca-exemption-requested");
             MerchantAccountId = node.GetString("merchant-account-id");
             ProcessedWithNetworkToken = node.GetBoolean("processed-with-network-token");
             ProcessorAuthorizationCode = node.GetString("processor-authorization-code");
@@ -385,6 +390,20 @@ namespace Braintree
             RetrievalReferenceNumber = node.GetString("retrieval-reference-number");
 
             AcquirerReferenceNumber = node.GetString("acquirer-reference-number");
+
+            InstallmentCount = node.GetDecimal("installment-count");
+            
+            Installments = new List<Installment>();
+            foreach (var installment in node.GetList("installments/installment"))
+            {
+                Installments.Add(new Installment(installment));
+            }
+
+            RefundedInstallments = new List<Installment>();
+            foreach (var installment in node.GetList("refunded-installments/refunded-installment"))
+            {
+                RefundedInstallments.Add(new Installment(installment));
+            }
         }
 
         /// <summary>

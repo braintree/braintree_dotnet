@@ -37,7 +37,9 @@ namespace Braintree
         public TransactionCreditCardRequest CreditCard { get; set; }
         public decimal Amount { get; set; }
         public string DeviceData { get; set; }
+        [ObsoleteAttribute("use DeviceData instead", false)]
         public string DeviceSessionId { get; set; }
+        [ObsoleteAttribute("use DeviceData instead", false)]
         public string FraudMerchantId { get; set; }
         public string Channel { get; set; }
         public string OrderId { get; set; }
@@ -65,6 +67,7 @@ namespace Braintree
         public string BillingAddressId { get; set; }
         public string VenmoSdkPaymentMethodCode { get; set; }
         public string PaymentMethodNonce { get; set; }
+        public string ScaExemption { get; set; }
         public decimal? ServiceFeeAmount { get; set; }
         public string SharedPaymentMethodToken { get; set; }
         public string SharedPaymentMethodNonce { get; set; }
@@ -92,6 +95,9 @@ namespace Braintree
         // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
         public TransactionAndroidPayCardRequest AndroidPayCard { get; set; }
         public TransactionApplePayCardRequest ApplePayCard { get; set; }
+        public string CurrencyIsoCode { get; set; }
+
+        public InstallmentRequest InstallmentRequest { get; set; }
 
         public TransactionRequest()
         {
@@ -128,11 +134,11 @@ namespace Braintree
             builder.AddElement("order-id", OrderId);
             builder.AddElement("product-sku", ProductSku);
             builder.AddElement("channel", Channel);
-            builder.AddElement("device-session-id", DeviceSessionId);
-            builder.AddElement("fraud-merchant-id", FraudMerchantId);
-// Remove this pragma warning when we remove Recurring param.
+// Remove this pragma warning when we remove DeviceSessionId, FraudMerchantId, and Recurring.
 // We have this so we can build the SDK without obsolete error messages
 #pragma warning disable 618
+            builder.AddElement("device-session-id", DeviceSessionId);
+            builder.AddElement("fraud-merchant-id", FraudMerchantId);
             if (Recurring.HasValue) builder.AddElement("recurring", Recurring);
 #pragma warning restore 618
             builder.AddElement("transaction-source", TransactionSource);
@@ -152,6 +158,7 @@ namespace Braintree
 
             if (CustomFields.Count != 0) builder.AddElement("custom-fields", CustomFields);
 
+            builder.AddElement("currency-iso-code", CurrencyIsoCode);
             builder.AddElement("credit-card", CreditCard);
             builder.AddElement("customer", Customer);
             builder.AddElement("descriptor", Descriptor);
@@ -163,6 +170,7 @@ namespace Braintree
             builder.AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
             builder.AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId);
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
+            builder.AddElement("sca-exemption", ScaExemption);
             builder.AddElement("shared-payment-method-token", SharedPaymentMethodToken);
             builder.AddElement("shared-payment-method-nonce", SharedPaymentMethodNonce);
             builder.AddElement("shared-customer-id", SharedCustomerId);
@@ -184,6 +192,8 @@ namespace Braintree
                 builder.AddElement("android-pay-card", AndroidPayCard);
             if (ApplePayCard != null)
                 builder.AddElement("apple-pay-card", ApplePayCard);
+            if (InstallmentRequest != null)
+                builder.AddElement("installments", InstallmentRequest);
             return builder;
         }
     }
