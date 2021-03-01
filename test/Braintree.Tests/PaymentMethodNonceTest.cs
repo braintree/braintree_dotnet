@@ -124,6 +124,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ParsesNodeCorrectlyWithOtherDetails()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<payment-method-nonce>" +
+                "  <details>" +
+                "    <bin>411111</bin>" +
+                "    <last-four>1111</last-four>" +
+                "    <card-type>Visa</card-type>" +
+                "    <expiration-month>01</expiration-month>" +
+                "    <expiration-year>9999</expiration-year>" +
+                "  </details>" +
+                "</payment-method-nonce>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
+
+            Assert.IsNotNull(result.Target);
+            Assert.IsNotNull(result.Target.Details);
+            Assert.AreEqual("1111", result.Target.Details.LastFour);
+            Assert.AreEqual("Visa", result.Target.Details.CardType);
+            Assert.AreEqual("01", result.Target.Details.ExpirationMonth);
+            Assert.AreEqual("9999", result.Target.Details.ExpirationYear);
+        }
+
+        [Test]
         public void ParsesNodeCorrectlyWithBinData()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
