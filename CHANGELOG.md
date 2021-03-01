@@ -1,5 +1,6 @@
 # unreleased
-- Add overload on `SubmitForSettlementAsync` method to include `TransactionRequest`
+- Add overload on `SubmitForSettlementAsync` method to include `TransactionRequest` (thanks @edtyl3r!)
+- Add `ExpirationMonth` and `ExpirationYear` to `PaymentMethodNonceDetails` (thanks @glennsdavis!)
 
 ## 5.3.0
 - Add `scaExemption` to `Transaction`

@@ -7,6 +7,7 @@ namespace Braintree
         public virtual string Bin { get; protected set; }
         public virtual string LastTwo { get; protected set; }
         public virtual string LastFour { get; protected set; }
+        //NEXT_MAJOR_VERSION CardType should be an enum (see CreditCard class)
         public virtual string CardType { get; protected set; }
         public virtual string ExpirationYear { get; protected set; }
         public virtual string ExpirationMonth { get; protected set; }
