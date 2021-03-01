@@ -7546,6 +7546,44 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+#if netcore
+        public async Task SubmitForSettlementAsync_WithOrderId()
+#else
+        public void SubmitForSettlementAsync_WithOrderId()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+
+            TransactionRequest submitForSettleRequest = new TransactionRequest
+            {
+                OrderId = "order-id"
+            };
+
+            Result<Transaction> result = await gateway.Transaction.SubmitForSettlementAsync(transaction.Id, submitForSettleRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual("order-id", result.Target.OrderId);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void SubmitForSettlement_WithLevel2Data()
         {
             TransactionRequest request = new TransactionRequest
