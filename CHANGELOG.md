@@ -1,3 +1,6 @@
+# unreleased
+- Add overload on `SubmitForSettlementAsync` method to include `TransactionRequest`
+
 ## 5.3.0
 - Add `scaExemption` to `Transaction`
 - Deprecate `DeviceSessionId` and `FraudMerchantId` in the `CreditCardRequest` and `TransactionRequest` classes
