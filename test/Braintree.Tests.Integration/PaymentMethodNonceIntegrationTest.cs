@@ -132,6 +132,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
             Assert.AreEqual("test_xid", info.Xid);
             Assert.IsNotNull(info.ThreeDSecureAuthenticationId);
+            Assert.IsNotNull(info.Authentication);
+            Assert.IsNotNull(info.Lookup);
         }
 
         [Test]

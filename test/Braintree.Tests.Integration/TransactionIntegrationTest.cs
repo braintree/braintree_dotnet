@@ -31,7 +31,7 @@ namespace Braintree.Tests.Integration
             service = new BraintreeService(gateway.Configuration);
         }
 
-        public void AdvancedFraudSetup()
+        public void AdvancedKountFraudSetup()
         {
             gateway = new BraintreeGateway
             {
@@ -39,6 +39,19 @@ namespace Braintree.Tests.Integration
                 MerchantId = "advanced_fraud_integration_merchant_id",
                 PublicKey = "advanced_fraud_integration_public_key",
                 PrivateKey = "advanced_fraud_integration_private_key"
+            };
+
+            service = new BraintreeService(gateway.Configuration);
+        }
+
+        public void FraudProtectionEnterpriseSetup()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "fraud_protection_enterprise_integration_merchant_id",
+                PublicKey = "fraud_protection_enterprise_integration_public_key",
+                PrivateKey = "fraud_protection_enterprise_integration_private_key"
             };
 
             service = new BraintreeService(gateway.Configuration);
@@ -1896,7 +1909,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_ReturnsSuccessfulResponseWithRiskData()
         {
-            AdvancedFraudSetup();
+            FraudProtectionEnterpriseSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -1914,6 +1927,7 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(transaction.RiskData);
             Assert.IsNotNull(transaction.RiskData.decision);
+            Assert.IsNotNull(transaction.RiskData.DecisionReasons);
             Assert.IsNotNull(transaction.RiskData.fraudServiceProvider);
         }
 
@@ -1955,7 +1969,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_WithRiskData()
         {
-            AdvancedFraudSetup();
+            AdvancedKountFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -1986,7 +2000,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_FailureResponseWithInvalidRiskData()
         {
-            AdvancedFraudSetup();
+            AdvancedKountFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3632,7 +3646,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_GatewayRejectedForFraud()
         {
-            AdvancedFraudSetup();
+            AdvancedKountFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -3654,7 +3668,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_GatewayRejectedForRiskThresholds()
         {
-            AdvancedFraudSetup();
+            AdvancedKountFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -4874,9 +4888,9 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithAdvancedFraudCheckingSkipped()
+        public void Sale_WithAdvancedKountFraudCheckingSkipped()
         {
-            AdvancedFraudSetup();
+            AdvancedKountFraudSetup();
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
@@ -7195,6 +7209,9 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
             Assert.AreEqual("xidvalue", info.Xid);
             Assert.AreEqual("dstxnid", info.DsTransactionId);
+            Assert.IsInstanceOf(typeof(ThreeDSecureLookupInfo), info.Lookup);
+            Assert.IsInstanceOf(typeof(ThreeDSecureAuthenticationInfo), info.Authentication);
+            Assert.AreEqual("Y", info.ParesStatus);
         }
 
         [Test]

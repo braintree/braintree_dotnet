@@ -1,6 +1,9 @@
-# unreleased
+## 5.4.0
+- Add missing `ExpirationMonth`, `ExpirationYear`, and `IsNetworkTokenized` fields in `PaymentMethodNonceDetails` (thanks @glennsdavis for `ExpirationMonth` and `ExpirationYear`!)
+- Add `ThreeDSecureAuthenticationInfo` and `ThreeDSecureLookupInfo` classes
+- Add `AcsTransactionId`, `ParesStatus`, `ThreeDSecureTransactionId`, `Lookup`, and `Authentication` to `ThreeDSecureInfo`
+- Add `DecisionReasons` and `TransactionRiskScore` fields to `RiskData`
 - Add overload on `SubmitForSettlementAsync` method to include `TransactionRequest` (thanks @edtyl3r!)
-- Add `ExpirationMonth` and `ExpirationYear` to `PaymentMethodNonceDetails` (thanks @glennsdavis!)
 
 ## 5.3.0
 - Add `scaExemption` to `Transaction`
