@@ -16,9 +16,7 @@ namespace Braintree
     {
         private Environment _Environment;
         public Environment Environment {
-            get {
-                return this._Environment;
-            }
+            get => this._Environment;
             set {
                 if (this.Environment != null && this.AccessToken != null && this.Environment != value) {
                     throw new ConfigurationException("AccessToken Environment does not match Environment passed in Config");
@@ -28,9 +26,7 @@ namespace Braintree
         }
         private string _AccessToken;
         public string AccessToken {
-            get {
-                return this._AccessToken;
-            }
+            get => this._AccessToken;
             set {
                 CredentialsParser parser = new CredentialsParser(value);
                 if (this.Environment != null && parser.Environment != this.Environment) {
@@ -56,8 +52,8 @@ namespace Braintree
         private int timeout;
         public int Timeout
         {
-            get { return timeout == 0 ? 60000 : timeout; }
-            set { timeout = value; }
+            get => timeout == 0 ? 60000 : timeout;
+            set => timeout = value;
         }
 
         public Configuration()
@@ -112,15 +108,9 @@ namespace Braintree
         {
         }
 
-        public bool IsClientCredentials
-        {
-            get { return ClientId != null; }
-        }
+        public bool IsClientCredentials => ClientId != null;
 
-        public bool IsAccessToken
-        {
-            get { return AccessToken != null; }
-        }
+        public bool IsAccessToken => AccessToken != null;
 
         public void AssertHasClientCredentials()
         {

@@ -20,10 +20,7 @@ namespace Braintree
         [Obsolete("Mock Use Only")]
         protected internal SettlementBatchSummary() { }
 
-        public virtual IList<IDictionary<string, string>> Records
-        {
-            get { return records; }
-        }
+        public virtual IList<IDictionary<string, string>> Records => records;
     }
 }
 

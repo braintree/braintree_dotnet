@@ -79,10 +79,7 @@ namespace Braintree
 
         public virtual string ExpirationDate
         {
-            get
-            {
-                return ExpirationMonth + "/" + ExpirationYear;
-            }
+            get => ExpirationMonth + "/" + ExpirationYear;
             protected set
             {
                 ExpirationMonth = value.Split('/')[0];
@@ -90,13 +87,7 @@ namespace Braintree
             }
         }
 
-        public string MaskedNumber
-        {
-            get
-            {
-                return string.Format("{0}******{1}", Bin, LastFour);
-            }
-        }
+        public string MaskedNumber => $"{Bin}******{LastFour}";
 
         protected internal VisaCheckoutCardDetails(NodeWrapper node)
         {

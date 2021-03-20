@@ -29,11 +29,7 @@ namespace Braintree
       public virtual MerchantAccountFundingDetails FundingDetails { get; protected set; }
       public virtual bool? IsDefault { get; protected set; }
 
-      public bool IsSubMerchant {
-        get {
-          return MasterMerchantAccount != null;
-        }
-      }
+      public bool IsSubMerchant => MasterMerchantAccount != null;
 
       protected internal MerchantAccount(NodeWrapper node)
       {
@@ -49,25 +45,13 @@ namespace Braintree
         IsDefault = node.GetBoolean("default");
 
         NodeWrapper masterNode = node.GetNode("master-merchant-account");
-        if (masterNode != null)
-            MasterMerchantAccount = new MerchantAccount(masterNode);
-        else
-            MasterMerchantAccount = null;
+        MasterMerchantAccount = masterNode != null ? new MerchantAccount(masterNode) : null;
         NodeWrapper individualNode = node.GetNode("individual");
-        if (individualNode != null)
-            IndividualDetails = new MerchantAccountIndividualDetails(individualNode);
-        else
-            IndividualDetails = null;
+        IndividualDetails = individualNode != null ? new MerchantAccountIndividualDetails(individualNode) : null;
         NodeWrapper businessNode = node.GetNode("business");
-        if (businessNode != null)
-            BusinessDetails = new MerchantAccountBusinessDetails(businessNode);
-        else
-            BusinessDetails = null;
+        BusinessDetails = businessNode != null ? new MerchantAccountBusinessDetails(businessNode) : null;
         NodeWrapper fundingNode = node.GetNode("funding");
-        if (fundingNode != null)
-            FundingDetails = new MerchantAccountFundingDetails(fundingNode);
-        else
-            FundingDetails = null;
+        FundingDetails = fundingNode != null ? new MerchantAccountFundingDetails(fundingNode) : null;
       }
 
       [Obsolete("Mock Use Only")]

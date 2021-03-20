@@ -44,7 +44,7 @@ namespace Braintree
 
         public virtual Result<Dispute> Accept(string disputeId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -62,7 +62,7 @@ namespace Braintree
 
         public virtual async Task<Result<Dispute>> AcceptAsync(string disputeId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -80,7 +80,7 @@ namespace Braintree
 
         public virtual Result<DisputeEvidence> AddFileEvidence(string disputeId, FileEvidenceRequest request)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -89,7 +89,7 @@ namespace Braintree
 
             if (request.DocumentId == null || request.DocumentId.Trim().Equals(""))
             {
-                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentId));
+                throw new NotFoundException($"document with id '{request.DocumentId}' not found");
             }
 
             try {
@@ -108,7 +108,7 @@ namespace Braintree
 
         public virtual async Task<Result<DisputeEvidence>> AddFileEvidenceAsync(string disputeId, FileEvidenceRequest request)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -117,7 +117,7 @@ namespace Braintree
 
             if (request.DocumentId == null || request.DocumentId.Trim().Equals(""))
             {
-                throw new NotFoundException(String.Format("document with id '{0}' not found", request.DocumentId));
+                throw new NotFoundException($"document with id '{request.DocumentId}' not found");
             }
 
             try {
@@ -145,7 +145,7 @@ namespace Braintree
 
         public virtual Result<DisputeEvidence> AddTextEvidence(string disputeId, TextEvidenceRequest textEvidenceRequest)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("Dispute with ID '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"Dispute with ID '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -182,7 +182,7 @@ namespace Braintree
 
         public virtual async Task<Result<DisputeEvidence>> AddTextEvidenceAsync(string disputeId, TextEvidenceRequest textEvidenceRequest)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("Dispute with ID '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"Dispute with ID '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -210,7 +210,7 @@ namespace Braintree
 
         public virtual Result<Dispute> Finalize(string disputeId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -228,7 +228,7 @@ namespace Braintree
 
         public virtual async Task<Result<Dispute>> FinalizeAsync(string disputeId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
                 throw notFoundException;
@@ -245,7 +245,7 @@ namespace Braintree
 
         public virtual Result<Dispute> Find(string disputeId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
@@ -263,7 +263,7 @@ namespace Braintree
 
         public virtual async Task<Result<Dispute>> FindAsync(string disputeId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("dispute with id '{0}' not found", disputeId));
+            NotFoundException notFoundException = new NotFoundException($"dispute with id '{disputeId}' not found");
             if (disputeId == null || disputeId.Trim().Equals(""))
             {
                 throw notFoundException;
@@ -280,7 +280,8 @@ namespace Braintree
 
         public virtual Result<Dispute> RemoveEvidence(string disputeId, string evidenceId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("evidence with id '{0}' for dispute with id '{1}' not found", evidenceId, disputeId));
+            NotFoundException notFoundException = new NotFoundException(
+                $"evidence with id '{evidenceId}' for dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals("") || evidenceId == null || evidenceId.Trim().Equals(""))
             {
@@ -298,7 +299,8 @@ namespace Braintree
 
         public virtual async Task<Result<Dispute>> RemoveEvidenceAsync(string disputeId, string evidenceId)
         {
-            NotFoundException notFoundException = new NotFoundException(String.Format("evidence with id '{0}' for dispute with id '{1}' not found", evidenceId, disputeId));
+            NotFoundException notFoundException = new NotFoundException(
+                $"evidence with id '{evidenceId}' for dispute with id '{disputeId}' not found");
 
             if (disputeId == null || disputeId.Trim().Equals("") || evidenceId == null || evidenceId.Trim().Equals(""))
             {

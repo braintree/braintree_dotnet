@@ -130,10 +130,11 @@ namespace Braintree
 #endif
 
         private string FormatGraphQLRequest(string definition, Dictionary<string, object> variables) {
-            Dictionary<string, object> body = new Dictionary<string, object>();
+            Dictionary<string, object> body = new Dictionary<string, object>
+            {
+                ["query"] = definition, ["variables"] = variables
+            };
 
-            body["query"] = definition;
-            body["variables"] = variables;
 
             return JsonConvert.SerializeObject(body, Newtonsoft.Json.Formatting.None);
         }

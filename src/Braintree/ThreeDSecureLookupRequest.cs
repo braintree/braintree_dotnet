@@ -23,10 +23,7 @@ namespace Braintree
         private dynamic _ClientMetadata;
         public virtual dynamic ClientData
         {
-            get
-            {
-                return _ClientMetadata;
-            }
+            get => _ClientMetadata;
             set
             {
                 var metadata = JsonConvert.DeserializeObject<dynamic>(value);
@@ -40,15 +37,12 @@ namespace Braintree
         }
 
         public string ToJSON() {
-            Dictionary<string, object> additionalInfo;
             var json = new Dictionary<string, object>();
             var meta = new Dictionary<string, object>();
 
-            if (AdditionalInformation != null) {
-                additionalInfo = AdditionalInformation.ToDictionary();
-            } else {
-                additionalInfo = new Dictionary<string, object>();
-            }
+            var additionalInfo = AdditionalInformation != null
+                ? AdditionalInformation.ToDictionary()
+                : new Dictionary<string, object>();
 
             meta.Add("platform", "dotnet");
 #if netcore

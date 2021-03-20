@@ -26,40 +26,19 @@ namespace Braintree
 
         protected Configuration Configuration;
 
-        public Environment Environment
-        {
-            get { return Configuration.Environment; }
-        }
+        public Environment Environment => Configuration.Environment;
 
-        public string MerchantId
-        {
-            get { return Configuration.MerchantId; }
-        }
+        public string MerchantId => Configuration.MerchantId;
 
-        public string PublicKey
-        {
-            get { return Configuration.PublicKey; }
-        }
+        public string PublicKey => Configuration.PublicKey;
 
-        public string PrivateKey
-        {
-            get { return Configuration.PrivateKey; }
-        }
+        public string PrivateKey => Configuration.PrivateKey;
 
-        public string ClientId
-        {
-            get { return Configuration.ClientId; }
-        }
+        public string ClientId => Configuration.ClientId;
 
-        public string ClientSecret
-        {
-            get { return Configuration.ClientSecret; }
-        }
+        public string ClientSecret => Configuration.ClientSecret;
 
-        public IWebProxy WebProxy
-        {
-            get { return Configuration.WebProxy;  }
-        }
+        public IWebProxy WebProxy => Configuration.WebProxy;
 
         public HttpService(Configuration configuration)
         {
@@ -347,11 +326,8 @@ namespace Braintree
                     FileStream fileToUpload = (FileStream)param.Value;
                     string filename = fileToUpload.Name;
                     string mimeType = GetMIMEType(filename);
-                    string header = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"; filename=\"{2}\"\r\nContent-Type: {3}\r\n\r\n",
-                            boundary,
-                            param.Key,
-                            filename ?? param.Key,
-                            mimeType ?? "application/octet-stream");
+                    string header =
+                        $"--{boundary}\r\nContent-Disposition: form-data; name=\"{param.Key}\"; filename=\"{filename ?? param.Key}\"\r\nContent-Type: {mimeType ?? "application/octet-stream"}\r\n\r\n";
 
                     formDataStream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
 
@@ -365,10 +341,8 @@ namespace Braintree
                 }
                 else
                 {
-                    string postData = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"{1}\"\r\n\r\n{2}",
-                            boundary,
-                            param.Key,
-                            param.Value);
+                    string postData =
+                        $"--{boundary}\r\nContent-Disposition: form-data; name=\"{param.Key}\"\r\n\r\n{param.Value}";
                     formDataStream.Write(encoding.GetBytes(postData), 0, encoding.GetByteCount(postData));
                 }
             }
@@ -407,7 +381,7 @@ namespace Braintree
 
         public static string GenerateMultipartFormBoundary()
         {
-            return String.Format("---------------------{0:N}", Guid.NewGuid());
+            return $"---------------------{Guid.NewGuid():N}";
         }
 
         public static string MultipartFormContentType(string boundary)

@@ -468,9 +468,7 @@ namespace Braintree
         /// </example>
         public virtual Customer GetVaultCustomer()
         {
-            if (CustomerDetails == null || CustomerDetails.Id == null) return null;
-
-            return new CustomerGateway(Gateway).Find(CustomerDetails.Id);
+            return CustomerDetails?.Id == null ? null : new CustomerGateway(Gateway).Find(CustomerDetails.Id);
         }
 
         /// <summary>

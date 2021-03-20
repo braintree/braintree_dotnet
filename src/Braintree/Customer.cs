@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Braintree
 {
@@ -39,20 +40,8 @@ namespace Braintree
         public virtual PaymentMethod[] PaymentMethods { get; protected set; }
         public virtual Address[] Addresses { get; protected set; }
         public virtual Dictionary<string, string> CustomFields { get; protected set; }
-        public PaymentMethod DefaultPaymentMethod
-        {
-            get
-            {
-                foreach (PaymentMethod paymentMethod in PaymentMethods)
-                {
-                    if (paymentMethod.IsDefault.Value)
-                    {
-                        return paymentMethod;
-                    }
-                }
-                return null;
-            }
-        }
+        public PaymentMethod DefaultPaymentMethod =>
+            PaymentMethods.FirstOrDefault(paymentMethod => paymentMethod.IsDefault ?? false);
 
         protected internal Customer(NodeWrapper node, IBraintreeGateway gateway)
         {

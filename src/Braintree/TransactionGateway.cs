@@ -225,8 +225,7 @@ namespace Braintree
 
         public virtual Result<Transaction> SubmitForPartialSettlement(string id, decimal amount)
         {
-            var request = new TransactionRequest();
-            request.Amount = amount;
+            var request = new TransactionRequest {Amount = amount};
 
             return SubmitForPartialSettlement(id, request);
         }
@@ -258,9 +257,7 @@ namespace Braintree
 
             if (response.GetName() == "search-results")
             {
-                return new ResourceCollection<Transaction>(response, delegate(string[] ids) {
-                    return FetchTransactions(query, ids);
-                });
+                return new ResourceCollection<Transaction>(response, ids => FetchTransactions(query, ids));
             }
             else
             {
@@ -274,9 +271,7 @@ namespace Braintree
 
             if (response.GetName() == "search-results")
             {
-                return new ResourceCollection<Transaction>(response, delegate(string[] ids) {
-                    return FetchTransactions(query, ids);
-                });
+                return new ResourceCollection<Transaction>(response, ids => FetchTransactions(query, ids));
             }
             else
             {

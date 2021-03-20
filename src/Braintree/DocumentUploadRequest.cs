@@ -11,9 +11,11 @@ namespace Braintree
 
 		public override Dictionary<string, object> ToDictionary()
 		{
-			Dictionary<string, object> dictionary = new Dictionary<string, object>();
-			dictionary.Add("document_upload[kind]", DocumentKind.GetDescription());
-			return dictionary;
+            Dictionary<string, object> dictionary = new Dictionary<string, object>
+            {
+                {"document_upload[kind]", DocumentKind.GetDescription()}
+            };
+            return dictionary;
 		}
 	}
 }

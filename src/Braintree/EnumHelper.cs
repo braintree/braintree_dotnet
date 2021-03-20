@@ -42,17 +42,11 @@ namespace Braintree
 
         public static string GetDescription(this Enum enumValue)
         {
-            if (enumValue == null)
-            {
-                return null;
-            }
-
-            DescriptionAttribute[] attributes = (DescriptionAttribute[])enumValue
-                .GetType()
+            DescriptionAttribute[] attributes = (DescriptionAttribute[]) enumValue?.GetType()
                 .GetField(enumValue.ToString())
                 .GetCustomAttributes(typeof(DescriptionAttribute), false);
 
-            return attributes.Length > 0 ? attributes[0].Description : null;
+            return attributes?.Length > 0 ? attributes[0].Description : null;
         }
     }
 }

@@ -30,15 +30,16 @@ namespace Braintree
             var currentTime = DateTime.Now.ToUniversalTime().ToString("u");
             var sourceMerchantIdXml = "";
             if (sourceMerchantId != null) {
-                sourceMerchantIdXml = string.Format("<source-merchant-id>{0}</source-merchant-id>", sourceMerchantId);
+                sourceMerchantIdXml = $"<source-merchant-id>{sourceMerchantId}</source-merchant-id>";
             }
-            var payload = string.Format("<notification><timestamp type=\"datetime\">{0}</timestamp><kind>{1}</kind>{2}<subject>{3}</subject></notification>", currentTime, kind, sourceMerchantIdXml, SubjectSampleXml(kind, id));
+            var payload =
+                $"<notification><timestamp type=\"datetime\">{currentTime}</timestamp><kind>{kind}</kind>{sourceMerchantIdXml}<subject>{SubjectSampleXml(kind, id)}</subject></notification>";
             return Convert.ToBase64String(Encoding.GetEncoding(0).GetBytes(payload)) + '\n';
         }
 
         private string BuildSignature(string payload)
         {
-            return string.Format("{0}|{1}", service.PublicKey, new Sha1Hasher().HmacHash(service.PrivateKey, payload).Trim().ToLower());
+            return $"{service.PublicKey}|{new Sha1Hasher().HmacHash(service.PrivateKey, payload).Trim().ToLower()}";
         }
 
         private string SubjectSampleXml(WebhookKind kind, string id)

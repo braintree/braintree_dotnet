@@ -35,8 +35,7 @@ namespace Braintree
 
         public ResultImpl<OAuthResult> RevokeAccessToken(string accessToken)
         {
-            OAuthRevokeAccessTokenRequest request = new OAuthRevokeAccessTokenRequest();
-            request.Token = accessToken;
+            OAuthRevokeAccessTokenRequest request = new OAuthRevokeAccessTokenRequest {Token = accessToken};
             XmlNode accessTokenXML = service.Post("/oauth/revoke_access_token", request);
 
             return new ResultImpl<OAuthResult>(new NodeWrapper(accessTokenXML), gateway);
