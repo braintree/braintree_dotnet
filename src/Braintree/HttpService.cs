@@ -26,40 +26,19 @@ namespace Braintree
 
         protected Configuration Configuration;
 
-        public Environment Environment
-        {
-            get { return Configuration.Environment; }
-        }
+        public Environment Environment => Configuration.Environment;
 
-        public string MerchantId
-        {
-            get { return Configuration.MerchantId; }
-        }
+        public string MerchantId => Configuration.MerchantId;
 
-        public string PublicKey
-        {
-            get { return Configuration.PublicKey; }
-        }
+        public string PublicKey => Configuration.PublicKey;
 
-        public string PrivateKey
-        {
-            get { return Configuration.PrivateKey; }
-        }
+        public string PrivateKey => Configuration.PrivateKey;
 
-        public string ClientId
-        {
-            get { return Configuration.ClientId; }
-        }
+        public string ClientId => Configuration.ClientId;
 
-        public string ClientSecret
-        {
-            get { return Configuration.ClientSecret; }
-        }
+        public string ClientSecret => Configuration.ClientSecret;
 
-        public IWebProxy WebProxy
-        {
-            get { return Configuration.WebProxy;  }
-        }
+        public IWebProxy WebProxy => Configuration.WebProxy;
 
         public HttpService(Configuration configuration)
         {

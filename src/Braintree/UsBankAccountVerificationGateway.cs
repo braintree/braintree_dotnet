@@ -44,18 +44,16 @@ namespace Braintree
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/us_bank_account_verifications/advanced_search_ids", query));
 
-            return new ResourceCollection<UsBankAccountVerification>(response, delegate(string[] ids) {
-                return FetchUsBankAccountVerifications(query, ids);
-            });
+            return new ResourceCollection<UsBankAccountVerification>(response,
+                ids => FetchUsBankAccountVerifications(query, ids));
         }
 
         public virtual async Task<ResourceCollection<UsBankAccountVerification>> SearchAsync(UsBankAccountVerificationSearchRequest query)
         {
             var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/us_bank_account_verifications/advanced_search_ids", query).ConfigureAwait(false));
 
-            return new ResourceCollection<UsBankAccountVerification>(response, delegate(string[] ids) {
-                return FetchUsBankAccountVerifications(query, ids);
-            });
+            return new ResourceCollection<UsBankAccountVerification>(response,
+                ids => FetchUsBankAccountVerifications(query, ids));
         }
 
         private List<UsBankAccountVerification> FetchUsBankAccountVerifications(UsBankAccountVerificationSearchRequest query, string[] ids)

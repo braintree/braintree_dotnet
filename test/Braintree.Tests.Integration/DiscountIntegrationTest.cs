@@ -45,10 +45,7 @@ namespace Braintree.Tests.Integration
 
             Discount discount = collection.Find
             (
-                delegate(Discount d)
-                {
-                    return d.Id == discountId;
-                }
+                d => d.Id == discountId
             );
 
             Assert.AreEqual(100M, discount.Amount);
@@ -88,10 +85,7 @@ namespace Braintree.Tests.Integration
 
             Discount discount = collection.Find
             (
-                delegate(Discount d)
-                {
-                    return d.Id == discountId;
-                }
+                d => d.Id == discountId
             );
 
             Assert.AreEqual(100M, discount.Amount);

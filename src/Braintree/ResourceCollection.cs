@@ -8,12 +8,7 @@ namespace Braintree
     {
         public delegate List<T> PagingDelegate(string[] ids);
 
-        public int MaximumCount {
-            get
-            {
-                return Ids.Count;
-            }
-        }
+        public int MaximumCount => Ids.Count;
         private int PageSize;
         public List<string> Ids { get; private set; }
         private PagingDelegate NextPage;

@@ -4,9 +4,6 @@ namespace Braintree
 {
     public class IdsSearchRequest : SearchRequest
     {
-        public MultipleValueNode<IdsSearchRequest, string> Ids
-        {
-            get { return new MultipleValueNode<IdsSearchRequest, string>("ids", this); }
-        }
+        public MultipleValueNode<IdsSearchRequest, string> Ids => new MultipleValueNode<IdsSearchRequest, string>("ids", this);
     }
 }

@@ -68,9 +68,8 @@ namespace Braintree.Tests
             doc.LoadXml(body);
             NodeWrapper xml = new NodeWrapper(doc.ChildNodes[0]);
 
-            ResourceCollection<string> resourceCollection = new ResourceCollection<string>(xml, delegate(string[] ids) {
-                return new List<string>();
-            });
+            ResourceCollection<string> resourceCollection = new ResourceCollection<string>(xml,
+                ids => new List<string>());
 
             List<string> assertIds = new List<string>() {"0","1","2","3","4"};
             Assert.AreEqual(resourceCollection.Ids, assertIds);
@@ -89,9 +88,8 @@ namespace Braintree.Tests
             doc.LoadXml(body);
             NodeWrapper xml = new NodeWrapper(doc.ChildNodes[0]);
 
-            ResourceCollection<string> resourceCollection = new ResourceCollection<string>(xml, delegate(string[] ids) {
-                return new List<string>();
-            });
+            ResourceCollection<string> resourceCollection = new ResourceCollection<string>(xml,
+                ids => new List<string>());
 
             List<string> assertIds = new List<string>();
             Assert.AreEqual(resourceCollection.Ids, assertIds);

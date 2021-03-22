@@ -4,7 +4,7 @@ namespace Braintree
 {
     public class PaginatedCollection<T> : IEnumerable<T> where T : class
     {
-        public int Size { get { return TotalItems; } }
+        public int Size => TotalItems;
 
         private int PageSize = 0;
         private int CurrentPage = 0;

@@ -46,10 +46,7 @@ namespace Braintree.Tests.Integration
 
             Plan plan = collection.Find
             (
-                delegate(Plan p)
-                {
-                    return p.Id == planToken;
-                }
+                p => p.Id == planToken
             );
 
             Assert.AreEqual("dotnet_plan", plan.Name);
@@ -90,10 +87,7 @@ namespace Braintree.Tests.Integration
 
             Plan plan = collection.Find
             (
-                delegate(Plan p)
-                {
-                    return p.Id == planToken;
-                }
+                p => p.Id == planToken
             );
 
             Assert.AreEqual("dotnet_plan", plan.Name);
@@ -146,10 +140,7 @@ namespace Braintree.Tests.Integration
 
             Plan plan = collection.Find
             (
-                delegate(Plan p)
-                {
-                    return p.Id == planToken;
-                }
+                p => p.Id == planToken
             );
 
             Assert.AreEqual("dotnet_plan", plan.Name);
