@@ -1382,7 +1382,7 @@ namespace Braintree.Tests.Integration
 
         private String GenerateToken()
         {
-            return String.Format("token{0}", random.Next());
+            return $"token{random.Next()}";
         }
 
         [Test]
@@ -1708,7 +1708,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Search_OnAllTextFields()
         {
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
 
             CustomerRequest request = new CustomerRequest
             {
@@ -1780,7 +1780,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
 
             CustomerRequest request = new CustomerRequest
             {

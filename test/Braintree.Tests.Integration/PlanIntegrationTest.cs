@@ -27,7 +27,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void All_ReturnsAllPlans()
         {
-            string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
+            string planToken = $"plan{new Random().Next(1000000).ToString()}";
            
             service.Post(service.MerchantPath() + "/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,
@@ -71,7 +71,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
+            string planToken = $"plan{new Random().Next(1000000).ToString()}";
 
             await service.PostAsync(service.MerchantPath() + "/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,
@@ -113,7 +113,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void All_ReturnPlansWithAddOnsAndDiscounts()
         {
-            string planToken = string.Format("plan{0}", new Random().Next(1000000).ToString());
+            string planToken = $"plan{new Random().Next(1000000).ToString()}";
 
             service.Post(service.MerchantPath() + "/plans/create_plan_for_tests", new PlanRequestForTests {
                 BillingDayOfMonth = 1,

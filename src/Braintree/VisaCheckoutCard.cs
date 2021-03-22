@@ -101,7 +101,7 @@ namespace Braintree
         {
             get
             {
-                return string.Format("{0}******{1}", Bin, LastFour);
+                return $"{Bin}******{LastFour}";
             }
         }
 

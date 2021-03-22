@@ -574,7 +574,7 @@ namespace Braintree.Tests.Integration
         public void Create_DoesntReturnErrorIfCreditCardOptionsArePresentForPayPalNonce()
         {
             var customer = gateway.Customer.Create().Target;
-            var originalToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+            var originalToken = $"paypal-account-{DateTime.Now.Ticks}";
             var nonce = TestHelper.GetNonceForPayPalAccount(
                 gateway,
                 new Params
@@ -1575,7 +1575,7 @@ namespace Braintree.Tests.Integration
         public void Update_UpdatesPayPalAccountToken()
         {
             var customer = gateway.Customer.Create().Target;
-            var originalToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks);
+            var originalToken = $"paypal-account-{DateTime.Now.Ticks}";
             var nonce = TestHelper.GetNonceForPayPalAccount(
                 gateway,
                 new Params
@@ -1591,7 +1591,7 @@ namespace Braintree.Tests.Integration
             });
 
             Assert.That(originalResult.Target, Is.InstanceOf(typeof(PayPalAccount)));
-            var updatedToken = string.Format("UPDATED_TOKEN-{0}", DateTime.Now.Ticks);
+            var updatedToken = $"UPDATED_TOKEN-{DateTime.Now.Ticks}";
             var updatedResult = gateway.PaymentMethod.Update(
                 originalToken,
                 new PaymentMethodRequest
@@ -1650,8 +1650,8 @@ namespace Braintree.Tests.Integration
         public void Update_ReturnsAnErrorIfTokenForAccountIsUsedToAttemptUpdate()
         {
             var customer = gateway.Customer.Create().Target;
-            var firstToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks + 1);
-            var secondToken = string.Format("paypal-account-{0}", DateTime.Now.Ticks + 2);
+            var firstToken = $"paypal-account-{DateTime.Now.Ticks + 1}";
+            var secondToken = $"paypal-account-{DateTime.Now.Ticks + 2}";
 
             var firstNonce = TestHelper.GetNonceForPayPalAccount(
                 gateway,

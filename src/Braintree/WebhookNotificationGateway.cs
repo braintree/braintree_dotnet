@@ -35,7 +35,7 @@ namespace Braintree
                 throw new InvalidChallengeException ("challenge contains non-hex characters");
             }
             string digest = new Sha1Hasher().HmacHash(service.PrivateKey, challenge);
-            return string.Format("{0}|{1}", service.PublicKey, digest.ToLower());
+            return $"{service.PublicKey}|{digest.ToLower()}";
         }
 
         private bool PayloadMatches(string signature, string payload)

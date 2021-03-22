@@ -38,7 +38,7 @@ namespace Braintree
             {
                 foreach (var pair in (Dictionary<string, string>)value)
                 {
-                    AppendString(string.Format("{0}[{1}]", key, pair.Key), pair.Value);
+                    AppendString($"{key}[{pair.Key}]", pair.Value);
                 }
                 return this;
             }

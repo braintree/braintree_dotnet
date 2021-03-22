@@ -28,7 +28,7 @@ namespace Braintree
             var host = System.Environment.GetEnvironmentVariable("GATEWAY_HOST") ?? "localhost";
             var port = System.Environment.GetEnvironmentVariable("GATEWAY_PORT") ?? "3000";
 
-            return string.Format("http://{0}:{1}", host, port);
+            return $"http://{host}:{port}";
         }
 
         /// <summary>
