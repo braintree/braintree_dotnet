@@ -24,8 +24,8 @@ namespace Braintree
 
         public string Category
         {
-            get { return _category; }
-            set { this._category = value; }
+            get => _category;
+            set => this._category = value;
         }
 
         public string SequenceNumber { get; set; }

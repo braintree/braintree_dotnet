@@ -115,9 +115,7 @@ namespace Braintree
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/customers/advanced_search_ids"));
             var query = new CustomerSearchRequest();
 
-            return new ResourceCollection<Customer>(response, delegate(string[] ids) {
-                return FetchCustomers(query, ids);
-            });
+            return new ResourceCollection<Customer>(response, ids => FetchCustomers(query, ids));
         }
 
         public virtual async Task<ResourceCollection<Customer>> AllAsync()
@@ -125,27 +123,21 @@ namespace Braintree
             var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/customers/advanced_search_ids").ConfigureAwait(false));
             var query = new CustomerSearchRequest();
 
-            return new ResourceCollection<Customer>(response, delegate(string[] ids) {
-                return FetchCustomers(query, ids);
-            });
+            return new ResourceCollection<Customer>(response, ids => FetchCustomers(query, ids));
         }
 
         public virtual ResourceCollection<Customer> Search(CustomerSearchRequest query)
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/customers/advanced_search_ids", query));
 
-            return new ResourceCollection<Customer>(response, delegate(string[] ids) {
-                return FetchCustomers(query, ids);
-            });
+            return new ResourceCollection<Customer>(response, ids => FetchCustomers(query, ids));
         }
 
         public virtual async Task<ResourceCollection<Customer>> SearchAsync(CustomerSearchRequest query)
         {
             var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/customers/advanced_search_ids", query).ConfigureAwait(false));
 
-            return new ResourceCollection<Customer>(response, delegate(string[] ids) {
-                return FetchCustomers(query, ids);
-            });
+            return new ResourceCollection<Customer>(response, ids => FetchCustomers(query, ids));
         }
 
         private List<Customer> FetchCustomers(CustomerSearchRequest query, string[] ids)

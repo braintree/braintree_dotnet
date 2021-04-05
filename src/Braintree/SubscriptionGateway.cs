@@ -104,18 +104,14 @@ namespace Braintree
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/subscriptions/advanced_search_ids", query));
 
-            return new ResourceCollection<Subscription>(response, delegate(string[] ids) {
-                return FetchSubscriptions(query, ids);
-            });
+            return new ResourceCollection<Subscription>(response, ids => FetchSubscriptions(query, ids));
         }
 
         public virtual async Task<ResourceCollection<Subscription>> SearchAsync(SubscriptionSearchRequest query)
         {
             var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/subscriptions/advanced_search_ids", query).ConfigureAwait(false));
 
-            return new ResourceCollection<Subscription>(response, delegate(string[] ids) {
-                return FetchSubscriptions(query, ids);
-            });
+            return new ResourceCollection<Subscription>(response, ids => FetchSubscriptions(query, ids));
         }
 
         private List<Subscription> FetchSubscriptions(SubscriptionSearchRequest query, string[] ids)

@@ -29,11 +29,7 @@ namespace Braintree
       public virtual MerchantAccountFundingDetails FundingDetails { get; protected set; }
       public virtual bool? IsDefault { get; protected set; }
 
-      public bool IsSubMerchant {
-        get {
-          return MasterMerchantAccount != null;
-        }
-      }
+      public bool IsSubMerchant => MasterMerchantAccount != null;
 
       protected internal MerchantAccount(NodeWrapper node)
       {

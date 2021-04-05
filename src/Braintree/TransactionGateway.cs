@@ -258,9 +258,7 @@ namespace Braintree
 
             if (response.GetName() == "search-results")
             {
-                return new ResourceCollection<Transaction>(response, delegate(string[] ids) {
-                    return FetchTransactions(query, ids);
-                });
+                return new ResourceCollection<Transaction>(response, ids => FetchTransactions(query, ids));
             }
             else
             {
@@ -274,9 +272,7 @@ namespace Braintree
 
             if (response.GetName() == "search-results")
             {
-                return new ResourceCollection<Transaction>(response, delegate(string[] ids) {
-                    return FetchTransactions(query, ids);
-                });
+                return new ResourceCollection<Transaction>(response, ids => FetchTransactions(query, ids));
             }
             else
             {
