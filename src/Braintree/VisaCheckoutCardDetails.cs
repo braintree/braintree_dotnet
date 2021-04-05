@@ -87,7 +87,7 @@ namespace Braintree
             }
         }
 
-        public string MaskedNumber => string.Format("{0}******{1}", Bin, LastFour);
+        public string MaskedNumber => $"{Bin}******{LastFour}";
 
         protected internal VisaCheckoutCardDetails(NodeWrapper node)
         {

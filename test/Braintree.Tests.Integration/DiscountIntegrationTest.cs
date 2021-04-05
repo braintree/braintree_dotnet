@@ -28,7 +28,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void All_ReturnsAllDiscounts()
         {
-            string discountId = string.Format("dotnet_discount{0}", new Random().Next(1000000).ToString());
+            string discountId = $"dotnet_discount{new Random().Next(1000000).ToString()}";
 
             service.Post(service.MerchantPath() + "/modifications/create_modification_for_tests", new ModificationRequestForTests {
                 Amount = 100M,
@@ -68,7 +68,7 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            string discountId = string.Format("dotnet_discount{0}", new Random().Next(1000000).ToString());
+            string discountId = $"dotnet_discount{new Random().Next(1000000).ToString()}";
 
             await service.PostAsync(service.MerchantPath() + "/modifications/create_modification_for_tests", new ModificationRequestForTests {
                 Amount = 100M,

@@ -958,7 +958,7 @@ namespace Braintree.Tests.Integration
         {
             SubscriptionRequest request1 = new SubscriptionRequest
             {
-                Id = string.Format("find_me{0}", new Random().Next(1000000)),
+                Id = $"find_me{new Random().Next(1000000)}",
                 PaymentMethodToken = creditCard.Token,
                 PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 3M
@@ -966,7 +966,7 @@ namespace Braintree.Tests.Integration
 
             SubscriptionRequest request2 = new SubscriptionRequest
             {
-                Id = string.Format("do_not_find_me{0}", new Random().Next(1000000)),
+                Id = $"do_not_find_me{new Random().Next(1000000)}",
                 PaymentMethodToken = creditCard.Token,
                 PlanId = PlanFixture.PLAN_WITH_TRIAL.Id,
                 Price = 3M
