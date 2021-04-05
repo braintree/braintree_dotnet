@@ -58,13 +58,13 @@ namespace Braintree
             var threeDSecureInfo = paymentMethodNonce.threeDSecureInfo;
             if (threeDSecureInfo != null)
             {
-               ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfo);
-           }
+                ThreeDSecureInfo = new ThreeDSecureInfo(threeDSecureInfo);
+            }
 
             var binData = paymentMethodNonce.binData;
             if (binData != null)
             {
-               BinData = new BinData(binData);
+                BinData = new BinData(binData);
             }
         }
 

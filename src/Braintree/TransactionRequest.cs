@@ -78,7 +78,7 @@ namespace Braintree
         private bool _threeDSecureTransaction;
         private string _threeDSecureToken;
         public string ThreeDSecureToken {
-            get { return _threeDSecureToken; }
+            get => _threeDSecureToken;
             set
             {
                 _threeDSecureTransaction = true;
