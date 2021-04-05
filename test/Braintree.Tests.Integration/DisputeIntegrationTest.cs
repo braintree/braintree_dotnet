@@ -975,7 +975,7 @@ namespace Braintree.Tests.Integration
         }
 
         public Dispute createSampleDispute(){
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
 
             TransactionRequest request = new TransactionRequest
             {
@@ -993,7 +993,7 @@ namespace Braintree.Tests.Integration
         }
 
         public async Task<Dispute> createSampleDisputeAsync(){
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
 
             TransactionRequest request = new TransactionRequest
             {

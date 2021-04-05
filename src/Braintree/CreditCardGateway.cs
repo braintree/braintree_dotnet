@@ -59,7 +59,7 @@ namespace Braintree
 
         public virtual ResourceCollection<CreditCard> ExpiringBetween(DateTime start, DateTime end)
         {
-            string queryString = string.Format("start={0:MMyyyy}&end={1:MMyyyy}", start, end);
+            string queryString = $"start={start:MMyyyy}&end={end:MMyyyy}";
 
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/payment_methods/all/expiring_ids?" + queryString));
 
@@ -80,7 +80,7 @@ namespace Braintree
 
         public virtual async Task<ResourceCollection<CreditCard>> ExpiringBetweenAsync(DateTime start, DateTime end)
         {
-            string queryString = string.Format("start={0:MMyyyy}&end={1:MMyyyy}", start, end);
+            string queryString = $"start={start:MMyyyy}&end={end:MMyyyy}";
 
             var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/payment_methods/all/expiring_ids?" + queryString).ConfigureAwait(false));
 

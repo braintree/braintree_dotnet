@@ -110,7 +110,7 @@ namespace Braintree
 
             foreach (var node in element.Replace("]", "").Split('['))
             {
-                fieldName = string.Format("{0}[{1}]", fieldName, node);
+                fieldName = $"{fieldName}[{node}]";
             }
 
             return fieldName;

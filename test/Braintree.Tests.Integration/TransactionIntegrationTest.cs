@@ -60,8 +60,8 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Search_OnAllTextFields()
         {
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
-            string firstName = string.Format("Tim{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
+            string firstName = $"Tim{new Random().Next(1000000).ToString()}";
 
             TransactionRequest request = new TransactionRequest
             {
@@ -173,8 +173,8 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
-            string firstName = string.Format("Tim{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
+            string firstName = $"Tim{new Random().Next(1000000).ToString()}";
 
             TransactionRequest request = new TransactionRequest
             {
@@ -868,7 +868,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Search_OnDisputeDate()
         {
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
 
             TransactionRequest request = new TransactionRequest
             {

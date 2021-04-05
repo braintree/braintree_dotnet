@@ -40,12 +40,12 @@ namespace Braintree
         {
             var builder = new StringBuilder();
 
-            builder.Append(string.Format("<{0}>", EscapeXml(Parent)));
+            builder.Append($"<{EscapeXml(Parent)}>");
             foreach (var pair in elements)
             {
                 builder.Append(BuildXMLElement(pair.Key, pair.Value));
             }
-            builder.Append(string.Format("</{0}>", EscapeXml(Parent)));
+            builder.Append($"</{EscapeXml(Parent)}>");
 
             return builder.ToString();
         }
@@ -137,21 +137,21 @@ namespace Braintree
             if (elements == null) return "";
 
             var builder = new StringBuilder();
-            builder.Append(string.Format("<{0}>", EscapeXml(root)));
+            builder.Append($"<{EscapeXml(root)}>");
 
             foreach (var element in elements)
             {
                 builder.Append(BuildXMLElement(element.Key, element.Value));
             }
 
-            builder.Append(string.Format("</{0}>", EscapeXml(root)));
+            builder.Append($"</{EscapeXml(root)}>");
 
             return builder.ToString();
         }
 
         internal static string ParentBracketChildString(string parent, string child)
         {
-            return string.Format("{0}[{1}]", parent, child);
+            return $"{parent}[{child}]";
         }
 
         internal static string EscapeXml(string xml)

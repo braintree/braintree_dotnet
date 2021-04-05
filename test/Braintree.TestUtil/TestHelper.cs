@@ -29,7 +29,8 @@ namespace Braintree.TestUtil
             var response = new Response();
             var service = new BraintreeService(gateway.Configuration);
             response["bt_payload"] = xml;
-            response["bt_signature"] = string.Format("{0}|{1}", service.PublicKey, new Sha1Hasher().HmacHash(service.PrivateKey, xml).Trim().ToLower());
+            response["bt_signature"] =
+                $"{service.PublicKey}|{new Sha1Hasher().HmacHash(service.PrivateKey, xml).Trim().ToLower()}";
             return response;
         }
 
@@ -218,7 +219,7 @@ namespace Braintree.TestUtil
 
         public static string extractParamFromJson(string keyName, string json)
         {
-            string regex = string.Format("\"{0}\":\\s?\"([^\"]+)\"", keyName);
+            string regex = $"\"{keyName}\":\\s?\"([^\"]+)\"";
             Match match = Regex.Match(json, regex);
             string keyValue = match.Groups[1].Value;
 
@@ -227,7 +228,7 @@ namespace Braintree.TestUtil
 
         public static int extractIntParamFromJson(string keyName, string json)
         {
-            string regex = string.Format("\"{0}\":\\s?(\\d+)", keyName);
+            string regex = $"\"{keyName}\":\\s?(\\d+)";
             Match match = Regex.Match(json, regex);
             int keyValue = Convert.ToInt32(match.Groups[1].Value);
 
@@ -247,7 +248,7 @@ namespace Braintree.TestUtil
             var builder = new RequestBuilder();
             builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint);
             foreach (var param in paypalAccountDetails)
-                builder.AddTopLevelElement(string.Format("paypal_account[{0}]", param.Key), param.Value.ToString());
+                builder.AddTopLevelElement($"paypal_account[{param.Key}]", param.Value.ToString());
 
             var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
 
@@ -274,10 +275,10 @@ namespace Braintree.TestUtil
                 var nested = param.Value as Params;
                 if (null != nested) {
                     foreach (var nestedParam in nested) {
-                        builder.AddTopLevelElement(string.Format("credit_card[{0}][{1}]", param.Key, nestedParam.Key), nestedParam.Value.ToString());
+                        builder.AddTopLevelElement($"credit_card[{param.Key}][{nestedParam.Key}]", nestedParam.Value.ToString());
                     }
                 } else
-                    builder.AddTopLevelElement(string.Format("credit_card[{0}]", param.Key), param.Value.ToString());
+                    builder.AddTopLevelElement($"credit_card[{param.Key}]", param.Value.ToString());
             }
 
             var response = new BraintreeTestHttpService().Post(
@@ -300,7 +301,7 @@ namespace Braintree.TestUtil
                 AddTopLevelElement("shared_customer_identifier", "test-identifier").
                 AddTopLevelElement("shared_customer_identifier_type", "testing");
             foreach (var param in @params)
-                builder.AddTopLevelElement(string.Format("{0}[{1}]", paymentMethodType, param.Key), param.Value.ToString());
+                builder.AddTopLevelElement($"{paymentMethodType}[{param.Key}]", param.Value.ToString());
 
             var response = new BraintreeTestHttpService().Post(
                 gateway.MerchantId,
