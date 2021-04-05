@@ -37,6 +37,7 @@ namespace Braintree
         public virtual string CountryCodeAlpha3 { get; protected set; }
         public virtual string CountryCodeNumeric { get; protected set; }
         public virtual string CountryName { get; protected set; }
+        public virtual string PhoneNumber { get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
 
@@ -58,6 +59,7 @@ namespace Braintree
             CountryCodeAlpha3 = node.GetString("country-code-alpha3");
             CountryCodeNumeric = node.GetString("country-code-numeric");
             CountryName = node.GetString("country-name");
+            PhoneNumber = node.GetString("phone-number");
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
         }
