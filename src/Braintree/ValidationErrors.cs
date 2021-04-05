@@ -16,13 +16,7 @@ namespace Braintree
         private Dictionary<string, List<ValidationError>> errors;
         private Dictionary<string, ValidationErrors> nestedErrors;
         
-        public int Count
-        {
-            get
-            {
-                return errors.Count;
-            }
-        }
+        public int Count => errors.Count;
 
         public int DeepCount
         {

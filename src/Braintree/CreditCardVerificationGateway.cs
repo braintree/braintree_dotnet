@@ -45,18 +45,16 @@ namespace Braintree
         {
             var response = new NodeWrapper(service.Post(service.MerchantPath() + "/verifications/advanced_search_ids", query));
 
-            return new ResourceCollection<CreditCardVerification>(response, delegate(string[] ids) {
-                return FetchCreditCardVerifications(query, ids);
-            });
+            return new ResourceCollection<CreditCardVerification>(response,
+                ids => FetchCreditCardVerifications(query, ids));
         }
 
         public virtual async Task<ResourceCollection<CreditCardVerification>> SearchAsync(CreditCardVerificationSearchRequest query)
         {
             var response = new NodeWrapper(await service.PostAsync(service.MerchantPath() + "/verifications/advanced_search_ids", query).ConfigureAwait(false));
 
-            return new ResourceCollection<CreditCardVerification>(response, delegate(string[] ids) {
-                return FetchCreditCardVerifications(query, ids);
-            });
+            return new ResourceCollection<CreditCardVerification>(response,
+                ids => FetchCreditCardVerifications(query, ids));
         }
 
         private List<CreditCardVerification> FetchCreditCardVerifications(CreditCardVerificationSearchRequest query, string[] ids)

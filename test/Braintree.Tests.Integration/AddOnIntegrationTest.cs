@@ -45,10 +45,7 @@ namespace Braintree.Tests.Integration
 
             AddOn addOn = collection.Find
             (
-                delegate(AddOn a)
-                {
-                    return a.Id == addOnId;
-                }
+                a => a.Id == addOnId
             );
 
             Assert.AreEqual(100.00M, addOn.Amount);
@@ -87,10 +84,7 @@ namespace Braintree.Tests.Integration
 
             AddOn addOn = collection.Find
             (
-                delegate(AddOn a)
-                {
-                    return a.Id == addOnId;
-                }
+                a => a.Id == addOnId
             );
 
             Assert.AreEqual(100.00M, addOn.Amount);

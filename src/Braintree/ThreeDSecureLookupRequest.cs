@@ -23,10 +23,7 @@ namespace Braintree
         private dynamic _ClientMetadata;
         public virtual dynamic ClientData
         {
-            get
-            {
-                return _ClientMetadata;
-            }
+            get => _ClientMetadata;
             set
             {
                 var metadata = JsonConvert.DeserializeObject<dynamic>(value);
