@@ -88,6 +88,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(foundNonce.Details.CardType, "Visa");
             Assert.AreEqual(foundNonce.Details.LastTwo, "81");
             Assert.AreEqual(foundNonce.Details.LastFour, "1881");
+            Assert.AreEqual(foundNonce.Details.ExpirationMonth, "12");
+            Assert.AreEqual(foundNonce.Details.ExpirationYear, "2022");
         }
 
 
@@ -130,6 +132,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
             Assert.AreEqual("test_xid", info.Xid);
             Assert.IsNotNull(info.ThreeDSecureAuthenticationId);
+            Assert.IsNotNull(info.Authentication);
+            Assert.IsNotNull(info.Lookup);
         }
 
         [Test]

@@ -37,6 +37,7 @@ namespace Braintree
         Task<Result<Transaction>> SubmitForSettlementAsync(string id);
         Result<Transaction> SubmitForSettlement(string id, decimal amount);
         Task<Result<Transaction>> SubmitForSettlementAsync(string id, decimal amount);
+        Task<Result<Transaction>> SubmitForSettlementAsync(string id, TransactionRequest request);
         Result<Transaction> SubmitForSettlement(string id, TransactionRequest request);
         Result<Transaction> UpdateDetails(string id, TransactionRequest request);
         Result<Transaction> Void(string id);

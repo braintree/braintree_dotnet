@@ -200,14 +200,19 @@ namespace Braintree
                 Amount = amount
             };
 
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request).ConfigureAwait(false);
-            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
+            return await SubmitForSettlementAsync(id, request);
         }
 
         public virtual Result<Transaction> SubmitForSettlement(string id, TransactionRequest request)
         {
             XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request);
 
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
+        }
+
+        public virtual async Task<Result<Transaction>> SubmitForSettlementAsync(string id, TransactionRequest request)
+        {
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/submit_for_settlement", request).ConfigureAwait(false);
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 

@@ -127,6 +127,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethod.ThreeDSecureInfo);
             Assert.IsTrue(paymentMethod.ThreeDSecureInfo.LiabilityShiftPossible);
             Assert.IsFalse(paymentMethod.ThreeDSecureInfo.LiabilityShifted);
+            Assert.IsNull(paymentMethod.ThreeDSecureInfo.Lookup.TransStatus);
             Assert.IsNotNull(lookup.AcsUrl);
             Assert.IsNotNull(lookup.ThreeDSecureVersion);
             Assert.IsNotNull(lookup.TransactionId);

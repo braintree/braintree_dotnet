@@ -91,6 +91,35 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ParsesNodeCorrectlyWithGooglePayDetails()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<payment-method-nonce>" +
+                "  <type>AndroidPayCard</type>" +
+                "  <nonce>fake-android-pay-nonce</nonce>" +
+                "  <description></description>" +
+                "  <consumed type=\"boolean\">false</consumed>" +
+                "  <details>" +
+                "    <is-network-tokenized>true</is-network-tokenized>" +
+                "  </details>" +
+                "</payment-method-nonce>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
+
+            Assert.IsNotNull(result.Target);
+            Assert.AreEqual("fake-android-pay-nonce", result.Target.Nonce);
+            Assert.AreEqual("AndroidPayCard", result.Target.Type);
+            Assert.IsNotNull(result.Target.Details);
+            Assert.IsTrue(result.Target.Details.IsNetworkTokenized);
+        }
+
+        [Test]
         public void ParsesNodeCorrectlyWithVenmoDetails()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
@@ -121,6 +150,41 @@ namespace Braintree.Tests
             Assert.AreEqual("99", result.Target.Details.LastTwo);
             Assert.AreEqual("venmojoe", result.Target.Details.Username);
             Assert.AreEqual("Venmo-Joe-1", result.Target.Details.VenmoUserId);
+        }
+
+        [Test]
+        public void ParsesNodeCorrectlyWithCreditCardDetails()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<payment-method-nonce>" +
+                "  <type>CreditCard</type>" +
+                "  <nonce>fake-visa-nonce</nonce>" +
+                "  <description></description>" +
+                "  <consumed type=\"boolean\">false</consumed>" +
+                "  <details>" +
+                "    <last-two>99</last-two>" +
+                "    <last-four>9999</last-four>" +
+                "    <expiration-month>12</expiration-month>" +
+                "    <expiration-year>2001</expiration-year>" +
+                "  </details>" +
+                "</payment-method-nonce>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
+
+            Assert.IsNotNull(result.Target);
+            Assert.AreEqual("fake-visa-nonce", result.Target.Nonce);
+            Assert.AreEqual("CreditCard", result.Target.Type);
+            Assert.IsNotNull(result.Target.Details);
+            Assert.AreEqual("99", result.Target.Details.LastTwo);
+            Assert.AreEqual("9999", result.Target.Details.LastFour);
+            Assert.AreEqual("12", result.Target.Details.ExpirationMonth);
+            Assert.AreEqual("2001", result.Target.Details.ExpirationYear);
         }
 
         [Test]

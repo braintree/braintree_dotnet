@@ -28,14 +28,14 @@ namespace Braintree.Tests.Integration
             service = new BraintreeService(gateway.Configuration);
         }
 
-        public void AdvancedFraudSetup()
+        public void FraudProtectionEnterpriseSetup()
         {
             gateway = new BraintreeGateway
             {
                 Environment = Environment.DEVELOPMENT,
-                MerchantId = "advanced_fraud_integration_merchant_id",
-                PublicKey = "advanced_fraud_integration_public_key",
-                PrivateKey = "advanced_fraud_integration_private_key"
+                MerchantId = "fraud_protection_enterprise_integration_merchant_id",
+                PublicKey = "fraud_protection_enterprise_integration_public_key",
+                PrivateKey = "fraud_protection_enterprise_integration_private_key"
             };
 
             service = new BraintreeService(gateway.Configuration);
@@ -899,7 +899,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void VerifyValidCreditCardWithVerificationRiskData()
         {
-            AdvancedFraudSetup();
+            FraudProtectionEnterpriseSetup();
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
             CreditCardRequest request = new CreditCardRequest
             {
@@ -925,6 +925,9 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(verification.RiskData);
             Assert.IsNotNull(verification.RiskData.decision);
+            Assert.IsNotNull(verification.RiskData.DecisionReasons);
+            Assert.IsNotNull(verification.RiskData.fraudServiceProvider);
+            Assert.IsNotNull(verification.RiskData.id);
         }
 
         [Test]
