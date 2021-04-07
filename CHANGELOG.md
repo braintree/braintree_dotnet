@@ -1,3 +1,6 @@
+## Unreleased
+* Add `PhoneNumber` to `Address` (thanks @glennsdavis!)
+
 ## 5.4.0
 - Add missing `ExpirationMonth`, `ExpirationYear`, and `IsNetworkTokenized` fields in `PaymentMethodNonceDetails` (thanks @glennsdavis for `ExpirationMonth` and `ExpirationYear`!)
 - Add `ThreeDSecureAuthenticationInfo` and `ThreeDSecureLookupInfo` classes
