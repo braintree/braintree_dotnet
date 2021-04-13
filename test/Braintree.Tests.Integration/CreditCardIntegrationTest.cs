@@ -926,7 +926,6 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(verification.RiskData);
             Assert.IsNotNull(verification.RiskData.decision);
             Assert.IsNotNull(verification.RiskData.DecisionReasons);
-            Assert.IsNotNull(verification.RiskData.fraudServiceProvider);
             Assert.IsNotNull(verification.RiskData.id);
         }
 

@@ -43,6 +43,9 @@ namespace Braintree
         public HttpService(Configuration configuration)
         {
             Configuration = configuration;
+            // NEXT_MAJOR_VERSION setting Configuration in an existing gateway instance does NOT update
+            // the underlying httpClient in this service. We should pull Proxy and Timeout settings out
+            // of the Configuration class for easier setting an existing gateway
 #if netcore
             var httpClientHandler = new HttpClientHandler
             {

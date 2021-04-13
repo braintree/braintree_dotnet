@@ -24,6 +24,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void TokenizeRawCreditCardDetailsWithGraphQL_isSuccessful()
         {
             BraintreeGateway gateway = GetGateway();
@@ -71,6 +72,7 @@ mutation ExampleServerSideSingleUseToken($input: TokenizeCreditCardInput!) {
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
 #if netcore
         public async Task TokenizeRawCreditCardDetailsWithGraphQLAsync_isSuccessful()
 #else

@@ -5,6 +5,7 @@ namespace Braintree
     public class TransactionRefundRequest : Request
     {
         public decimal Amount { get; set; }
+        public string MerchantAccountId { get; set; }
         public string OrderId { get; set; }
 
         public override string ToXml()
@@ -34,6 +35,7 @@ namespace Braintree
             if (Amount != 0)
                 builder.AddElement("amount", Amount);
 
+            builder.AddElement("merchant-account-id", MerchantAccountId);
             builder.AddElement("order-id", OrderId);
 
             return builder;

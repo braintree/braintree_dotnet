@@ -98,6 +98,8 @@ namespace Braintree
                 return PaymentMethodRevokedByCustomerSampleXml(id);
             } else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
                 return LocalPaymentCompletedSampleXml();
+            } else if (kind == WebhookKind.LOCAL_PAYMENT_REVERSED) {
+                return LocalPaymentReversedSampleXml();
             } else {
                 return SubscriptionXml(id);
             }
@@ -544,6 +546,12 @@ namespace Braintree
                         Node("amount", "10.00"),
                         Node("order-id", "order1234")
                         )
+            );
+        }
+
+        private static string LocalPaymentReversedSampleXml() {
+            return Node("local-payment-reversed",
+                    Node("payment-id", "a-payment-id")
             );
         }
 

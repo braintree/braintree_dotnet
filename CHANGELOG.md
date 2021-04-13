@@ -1,5 +1,9 @@
-## Unreleased
-* Add `PhoneNumber` to `Address` (thanks @glennsdavis!)
+## 5.5.0
+- Add `StoreId` and `StoreIds` to `TransactionSearchRequest`
+- Add support for `LocalPaymentReversed` webhook notifications
+- Add `Transaction.AdjustAuthorization` method to support for multiple authorizations for a single transaction
+- Add `MerchantAccountId` to `TransactionRefundRequest`
+- Add `PhoneNumber` to `Address` (thanks @glennsdavis!)
 
 ## 5.4.0
 - Add missing `ExpirationMonth`, `ExpirationYear`, and `IsNetworkTokenized` fields in `PaymentMethodNonceDetails` (thanks @glennsdavis for `ExpirationMonth` and `ExpirationYear`!)

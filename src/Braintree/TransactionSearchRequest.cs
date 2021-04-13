@@ -126,6 +126,10 @@ namespace Braintree
 
         public EnumMultipleValueNode<TransactionSearchRequest, TransactionSource> Source => new EnumMultipleValueNode<TransactionSearchRequest, TransactionSource>("source", this);
 
+        public TextNode<TransactionSearchRequest> StoreId => new TextNode<TransactionSearchRequest>("store-id", this);
+
+        public MultipleValueNode<TransactionSearchRequest, string> StoreIds => new MultipleValueNode<TransactionSearchRequest, string>("store-ids", this);
+
         public EnumMultipleValueNode<TransactionSearchRequest, TransactionType> Type => new EnumMultipleValueNode<TransactionSearchRequest, TransactionType>("type", this);
 
         public DateRangeNode<TransactionSearchRequest> VoidedAt => new DateRangeNode<TransactionSearchRequest>("voided-at", this);

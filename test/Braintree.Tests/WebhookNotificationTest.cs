@@ -647,6 +647,19 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForLocalPaymentReversed()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.LOCAL_PAYMENT_REVERSED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.LOCAL_PAYMENT_REVERSED, notification.Kind);
+          LocalPaymentReversed localPayment = notification.LocalPaymentReversed;
+
+          Assert.AreEqual("a-payment-id", localPayment.PaymentId);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForCheck()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.CHECK, "");

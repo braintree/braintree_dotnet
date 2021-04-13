@@ -1305,6 +1305,42 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
+        [Test]
+        public void Search_OnStoreIds()
+        {
+            string TransactionId = "contact_visa_transaction";
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(TransactionId).
+                StoreIds.IncludedIn("store-id");
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(TransactionId).
+                StoreIds.IncludedIn("invalid-store-id");
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnStoreId()
+        {
+            string TransactionId = "contact_visa_transaction";
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(TransactionId).
+                StoreId.Is("store-id");
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                Id.Is(TransactionId).
+                StoreId.Is("invalid-store-id");
+
+            Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
         [Test]        
         public void Search_ReturnsErrorOnTimeout()
         {
@@ -1928,7 +1964,6 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.RiskData);
             Assert.IsNotNull(transaction.RiskData.decision);
             Assert.IsNotNull(transaction.RiskData.DecisionReasons);
-            Assert.IsNotNull(transaction.RiskData.fraudServiceProvider);
         }
 
         [Test]
@@ -8640,6 +8675,79 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        public void Refund_WithMerchantAccountId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            gateway.TestTransaction.Settle(transaction.Id);
+
+            TransactionRefundRequest refundRequest = new TransactionRefundRequest()
+            {
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+            };
+
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, refundRequest);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.Target.MerchantAccountId);
+        }
+
+        [Test]
+#if netcore
+        public async Task RefundAsync_WithMerchantAccountId()
+#else
+        public void RefundAsync_WithMerchantAccountId()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> saleResult = await gateway.Transaction.SaleAsync(request);
+            Transaction transaction = saleResult.Target;
+            await gateway.TestTransaction.SettleAsync(transaction.Id);
+
+            TransactionRefundRequest refundRequest = new TransactionRefundRequest()
+            {
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+            };
+
+            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, refundRequest);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, result.Target.MerchantAccountId);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
         public void Refund_WithAmountOrderId()
         {
             TransactionRequest request = new TransactionRequest
@@ -9996,6 +10104,200 @@ namespace Braintree.Tests.Integration
                 Assert.AreEqual(-5.00M, refund.RefundedInstallments[i].Adjustments[0].Amount);
                 Assert.AreEqual(Kind.REFUND, refund.RefundedInstallments[i].Adjustments[0].Kind);
             }
+        }
+
+        [Test]
+        public void Successful_AdjustAuthorization() {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2012",
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("85.50"));
+
+            Assert.IsTrue(adjustAuthorizedResult.IsSuccess());
+            Transaction adjustAuthorizedTransaction = adjustAuthorizedResult.Target;
+            Assert.AreEqual(85.50M, adjustAuthorizedTransaction.Amount);
+        }
+
+        [Test]
+#if netcore
+        public async Task Successful_AdjustAuthorizationeAsync()
+#else
+        public void Successful_AdjustAuthorizationAsync()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2012",
+                },
+            };
+
+            var transactionResult = await gateway.Transaction.SaleAsync(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = await gateway.Transaction.AdjustAuthorizationAsync(transaction.Id, decimal.Parse("85.50"));
+
+            Assert.IsTrue(adjustAuthorizedResult.IsSuccess());
+            Transaction adjustAuthorizedTransaction = adjustAuthorizedResult.Target;
+            Assert.AreEqual(85.50M, adjustAuthorizedTransaction.Amount);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+        public void AdjustAuthorization_OnProcessorDoesNotSupport() {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.DEFAULT_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "06/2009",
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("85.50"));
+
+            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.PROCESSOR_DOES_NOT_SUPPORT_AUTH_ADJUSTMENT, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("base")[0].Code);
+        }
+
+        [Test]
+        public void AdjustAuthorization_OnSubmittedAmountIsSameAsAuthorizedAmount() {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2012",
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("75.50"));
+
+            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.NO_NET_AMOUNT_TO_PERFORM_AUTH_ADJUSTMENT, adjustAuthorizedResult.Errors.ForObject("AuthorizationAdjustment").OnField("Base")[0].Code);
+        }
+
+        [Test]
+        public void AdjustAuthorization_OnTransactionStatusIsNotAuthorized() {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2012",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("85.50"));
+
+            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_MUST_BE_IN_STATE_AUTHORIZED, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+        public void AdjustAuthorization_OnTransactionAuthorizationTypeIsUndefinedOrFinal() {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2012",
+                },
+                TransactionSource = "recurring_first",
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("85.50"));
+
+            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_IS_NOT_ELIGIBLE_FOR_ADJUSTMENT, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+        public void AdjustAuthorization_OnProcessorNotSupportingIncrementalAuth() {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2012",
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("85.50"));
+
+            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.PROCESSOR_DOES_NOT_SUPPORT_INCREMENTAL_AUTH, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+        public void AdjustAuthorization_OnProcessorNotSupportingAuthReversal() {
+            var request = new TransactionRequest {
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                Amount = 75.50M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2012",
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("65.50"));
+
+            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.PROCESSOR_DOES_NOT_SUPPORT_PARTIAL_AUTH_REVERSAL, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
     }
 }

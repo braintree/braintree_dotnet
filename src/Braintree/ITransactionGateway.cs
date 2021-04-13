@@ -9,6 +9,8 @@ namespace Braintree
     /// </summary>
     public interface ITransactionGateway
     {
+        Result<Transaction> AdjustAuthorization(string id, decimal amount);
+        Task<Result<Transaction>> AdjustAuthorizationAsync(string id, decimal amount);
         Result<Transaction> CancelRelease(string id);
         Task<Result<Transaction>> CancelReleaseAsync(string id);
         Result<Transaction> CloneTransaction(string id, TransactionCloneRequest cloneRequest);

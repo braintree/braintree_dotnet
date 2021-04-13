@@ -23,6 +23,28 @@ namespace Braintree
             service = gateway.Service;
         }
 
+        public virtual Result<Transaction> AdjustAuthorization(string id, decimal amount)
+        {
+            var request = new TransactionRequest
+            {
+                Amount = amount
+            };
+            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/adjust_authorization", request);
+
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
+        }
+
+        public virtual async Task<Result<Transaction>> AdjustAuthorizationAsync(string id, decimal amount)
+        {
+            var request = new TransactionRequest
+            {
+                Amount = amount
+            };
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/adjust_authorization", request).ConfigureAwait(false);
+
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
+        }
+
         public virtual Result<Transaction> CancelRelease(string id)
         {
             var request = new TransactionRequest();

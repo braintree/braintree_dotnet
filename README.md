@@ -16,11 +16,7 @@ Braintree employs a deprecation policy for our SDKs. For more information on the
 | Major version number | Status      | Released        | Deprecated   | Unsupported  |
 | -------------------- | ----------- | --------------- | ------------ | ------------ |
 | 5.x.x                | Active      | August 2020     | TBA          | TBA          |
-| 4.x.x                | Inactive    | March 2018      | June 2022    | June 2023    |
-| 3.x.x                | Unsupported | September 2016  | March 2018   | March 2018   |
-| 2.x.x                | Unsupported | April 2010      | March 2018   | March 2018   |
-| 1.x.x                | Unsupported | April 2010      | March 2018   | March 2018   |
-
+| 4.x.x                | Inactive    | March 2018      | August 2022  | August 2023  |
 
 ## Documentation
 
