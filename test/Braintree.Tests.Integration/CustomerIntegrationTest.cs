@@ -987,7 +987,7 @@ namespace Braintree.Tests.Integration
 
         [Test]
         public void Create_WithPayPalPaymentMethodNonce()
-        {            
+        {
             string nonce = TestHelper.GenerateFuturePaymentPayPalNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
                 PaymentMethodNonce = nonce
@@ -1000,7 +1000,7 @@ namespace Braintree.Tests.Integration
 
         [Test]
         public void Create_WithPayPalOrderPaymentMethodNonce()
-        {            
+        {
             string nonce = TestHelper.GenerateOrderPaymentPayPalNonce(gateway);
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
                 PaymentMethodNonce = nonce
@@ -1009,7 +1009,7 @@ namespace Braintree.Tests.Integration
             var customer = result.Target;
             Assert.AreEqual(1, customer.PayPalAccounts.Length);
             Assert.AreEqual(customer.PayPalAccounts[0].Token, customer.DefaultPaymentMethod.Token);
-               
+
          }
 
         [Test]
@@ -1500,7 +1500,7 @@ namespace Braintree.Tests.Integration
 
             Assert.IsTrue(result.IsSuccess());
         }
- 
+
         [Test]
         public void Update_AcceptsNestedBillingAddressId()
         {
@@ -2248,6 +2248,71 @@ namespace Braintree.Tests.Integration
                ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
                updatedCustomer.Errors.DeepAll()[0].Code
            );
+        }
+
+        [Test]
+        public void Create_CustomerWithTaxIdentifiers()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                TaxIdentifiers = new TaxIdentifierRequest[]
+                {
+                    new TaxIdentifierRequest
+                    {
+                        CountryCode = "US",
+                        Identifier = "123"
+                    },
+                    new TaxIdentifierRequest
+                    {
+                        CountryCode = "CL",
+                        Identifier = "456"
+                    },
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+            Assert.IsTrue(result.IsSuccess());
+        }
+
+        [Test]
+        public void Update_CustomerWithTaxIdentifiers()
+        {
+            var createRequest = new CustomerRequest()
+            {
+                TaxIdentifiers = new TaxIdentifierRequest[]
+                {
+                    new TaxIdentifierRequest
+                    {
+                        CountryCode = "US",
+                        Identifier = "123"
+                    },
+                    new TaxIdentifierRequest
+                    {
+                        CountryCode = "CL",
+                        Identifier = "456"
+                    },
+                }
+            };
+
+            Result<Customer> createResult = gateway.Customer.Create(createRequest);
+            Assert.IsTrue(createResult.IsSuccess());
+
+            var id = createResult.Target.Id;
+
+            var updateRequest = new CustomerRequest()
+            {
+                TaxIdentifiers = new TaxIdentifierRequest[]
+                {
+                    new TaxIdentifierRequest
+                    {
+                        CountryCode = "CL",
+                        Identifier = "789"
+                    },
+                }
+            };
+
+            Result<Customer> updateResult = gateway.Customer.Update(id, updateRequest);
+            Assert.IsTrue(updateResult.IsSuccess());
         }
     }
 }

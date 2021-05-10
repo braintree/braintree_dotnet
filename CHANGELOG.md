@@ -1,3 +1,8 @@
+## 5.6.0
+- Add `PayPalMessages` to `Dispute`
+- Add `TaxIdentifiers` to `CustomerRequest`
+- Add webhook sample for `GrantedPaymentMethodRevoked`
+
 ## 5.5.0
 - Add `StoreId` and `StoreIds` to `TransactionSearchRequest`
 - Add support for `LocalPaymentReversed` webhook notifications

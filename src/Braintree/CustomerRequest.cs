@@ -61,6 +61,7 @@ namespace Braintree
         public UsBankAccountRequest UsBankAccount { get; set; }
         public RiskDataRequest RiskData { get; set; }
         public CustomerOptionsRequest Options { get; set; }
+        public TaxIdentifierRequest[] TaxIdentifiers { get; set; }
 
         public override string ToXml()
         {
@@ -86,7 +87,7 @@ namespace Braintree
 
         protected virtual RequestBuilder BuildRequest(string root)
         {
-            return new RequestBuilder(root).
+            var request = new RequestBuilder(root).
                 AddElement("id", Id).
                 AddElement("first-name", FirstName).
                 AddElement("last-name", LastName).
@@ -102,7 +103,13 @@ namespace Braintree
                 AddElement("risk-data", RiskData).
                 AddElement("device-data", DeviceData).
                 AddElement("options", Options);
+
+            if (TaxIdentifiers != null && TaxIdentifiers.Length > 0)
+            {
+                request.AddElement("tax-identifiers", TaxIdentifiers);
+            }
+
+            return request;
         }
     }
 }
-

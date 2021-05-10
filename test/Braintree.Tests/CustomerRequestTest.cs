@@ -52,5 +52,32 @@ namespace Braintree.Tests
             Assert.IsTrue(request.ToXml().Contains("fraud_merchant_id"));
             Assert.IsTrue(request.ToXml().Contains("my_fmid"));
         }
+
+        [Test]
+        public void ToXml_Includes_TaxIdentifiers()
+        {
+            var request = new CustomerRequest()
+            {
+                TaxIdentifiers = new TaxIdentifierRequest[]
+                {
+                    new TaxIdentifierRequest
+                    {
+                        CountryCode = "US",
+                        Identifier = "123"
+                    },
+                    new TaxIdentifierRequest
+                    {
+                        CountryCode = "CL",
+                        Identifier = "456"
+                    }
+                }
+            };
+
+            Assert.IsTrue(request.ToXml().Contains("US"));
+            Assert.IsTrue(request.ToXml().Contains("123"));
+
+            Assert.IsTrue(request.ToXml().Contains("CL"));
+            Assert.IsTrue(request.ToXml().Contains("456"));
+        }
     }
 }

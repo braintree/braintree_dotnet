@@ -82,6 +82,13 @@ namespace Braintree.Tests
                         NodeAttr("effective-date", TYPE_DATE, "2013-04-10")
                     )
                 ),
+                NodeAttr("paypal-messages", TYPE_ARRAY,
+                    Node("paypal-messages",
+                        Node("message", "message"),
+                        Node("sender", "seller"),
+                        NodeAttr("sent-at", TYPE_DATE, "2013-04-10T10:50:39Z")
+                    )
+                ),
                 NodeAttr("evidence", TYPE_ARRAY,
                     Node("evidence",
                         NodeAttr("created-at", TYPE_DATE, "2013-04-10T10:50:39Z"),
@@ -207,6 +214,9 @@ namespace Braintree.Tests
             Assert.AreEqual(DisputeStatus.OPEN, result.StatusHistory[0].Status);
             Assert.AreEqual(DateTime.Parse("2013-04-10T10:50:39Z"), result.StatusHistory[0].Timestamp);
             Assert.AreEqual(DateTime.Parse("2013-04-10"), result.StatusHistory[0].EffectiveDate);
+            Assert.AreEqual("message", result.PayPalMessages[0].Message);
+            Assert.AreEqual("seller", result.PayPalMessages[0].Sender);
+            Assert.AreEqual(DateTime.Parse("2013-04-10T10:50:39Z"), result.PayPalMessages[0].SentAt);
             Assert.AreEqual("evidence1", result.Evidence[0].Id);
             Assert.AreEqual("url_of_file_evidence", result.Evidence[0].Url);
             Assert.AreEqual(DateTime.Parse("2013-04-10T10:50:39Z"), result.Evidence[0].CreatedAt);
@@ -232,6 +242,7 @@ namespace Braintree.Tests
             Assert.IsNull(result.DateOpened);
             Assert.IsNull(result.DateWon);
             Assert.IsEmpty(result.Evidence);
+            Assert.IsEmpty(result.PayPalMessages);
             Assert.IsNull(result.ReplyByDate);
             Assert.IsEmpty(result.StatusHistory);
         }

@@ -66,6 +66,7 @@ namespace Braintree
         public virtual DisputeTransaction Transaction { get; protected set; }
         public List<DisputeStatusHistory> StatusHistory;
         public List<DisputeEvidence> Evidence;
+        public List<DisputePayPalMessage> PayPalMessages;
 
         public Dispute(NodeWrapper node)
         {
@@ -101,6 +102,12 @@ namespace Braintree
             foreach (var evidenceResponse in node.GetList("evidence/evidence"))
             {
                 Evidence.Add(new DisputeEvidence(evidenceResponse));
+            }
+
+            PayPalMessages = new List<DisputePayPalMessage>();
+            foreach (var paypalMessageResponse in node.GetList("paypal-messages/paypal-messages"))
+            {
+                PayPalMessages.Add(new DisputePayPalMessage(paypalMessageResponse));
             }
 
             StatusHistory = new List<DisputeStatusHistory>();

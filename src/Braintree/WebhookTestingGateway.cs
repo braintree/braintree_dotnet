@@ -96,7 +96,9 @@ namespace Braintree
                 return GrantedPaymentInstrumentUpdateSampleXml();
             } else if (kind == WebhookKind.PAYMENT_METHOD_REVOKED_BY_CUSTOMER) {
                 return PaymentMethodRevokedByCustomerSampleXml(id);
-            } else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
+            } else if (kind == WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED) {
+                return GrantedPaymentMethodRevokedSampleXml(id);
+            }  else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
                 return LocalPaymentCompletedSampleXml();
             } else if (kind == WebhookKind.LOCAL_PAYMENT_REVERSED) {
                 return LocalPaymentReversedSampleXml();
@@ -533,6 +535,22 @@ namespace Braintree
                     Node("limited-use-order-id", NIL_TRUE, ""),
                     NodeAttr("revoked-at", TYPE_DATE_TIME, "2019-01-02T12:00:00Z")
                 );
+        } 
+
+        private static string GrantedPaymentMethodRevokedSampleXml(string id) {
+            return Node("venmo-account",
+                    NodeAttr("created-at", TYPE_DATE_TIME, "2021-05-05T21:28:37Z"),
+                    NodeAttr("updated-at", TYPE_DATE_TIME, "2021-05-05T21:28:37Z"),
+                    NodeAttr("default", TYPE_BOOLEAN, "true"),
+                    Node("image-url", "https://assets.braintreegateway.com/payment_method_logo/venmo.png?environment=test"),
+                    Node("token", id),
+                    Node("source-description", "Venmo Account: venmojoe"),
+                    Node("username", "venmojoe"),
+                    Node("venmo-user-id", "456"),
+                    NodeAttr("subscriptions", TYPE_ARRAY),
+                    Node("customer-id", "venmo_customer_id"),
+                    Node("global-id", "cGF5bWVudG1ldGhvZF92ZW5tb2FjY291bnQ")
+              );
         }
 
         private static string LocalPaymentCompletedSampleXml() {

@@ -615,6 +615,21 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void WebhookTesting_SampleNotification_ReturnsANotificationForGrantedVenmoAccountRevoked()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED, "granted_payment_method_revoked_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED, notification.Kind);
+          RevokedPaymentMethodMetadata metadata = notification.RevokedPaymentMethodMetadata;
+
+          Assert.AreEqual("venmo_customer_id", metadata.CustomerId);
+          Assert.AreEqual("granted_payment_method_revoked_id", metadata.Token);
+          Assert.IsTrue(metadata.RevokedPaymentMethod is VenmoAccount);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForPaymentMethodRevokedByCustomer()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PAYMENT_METHOD_REVOKED_BY_CUSTOMER, "my_payment_method_token");
