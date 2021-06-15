@@ -1031,6 +1031,60 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void CreateWithoutSkipAdvancedFraudCheckingIncludesRiskData()
+        {
+            FraudProtectionEnterpriseSetup();
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true,
+                    SkipAdvancedFraudChecking = false
+                },
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.RiskData);
+        }
+
+        [Test]
+        public void CreateWithSkipAdvancedFraudCheckingDoesNotIncludeRiskData()
+        {
+            FraudProtectionEnterpriseSetup();
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true,
+                    SkipAdvancedFraudChecking = true
+                },
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNull(verification.RiskData);
+        }
+
+        [Test]
         public void Expired()
         {
             ResourceCollection<CreditCard> collection = gateway.CreditCard.Expired();
@@ -1609,6 +1663,70 @@ namespace Braintree.Tests.Integration
                 ValidationErrorCode.VERIFICATION_THREE_D_SECURE_THREE_D_SECURE_VERSION_IS_REQUIRED,
                 result.Errors.ForObject("Verification").OnField("ThreeDSecureVersion")[0].Code
             );
+        }
+
+        [Test]
+        public void UpdateWithoutSkipAdvancedFraudCheckingIncludesRiskData()
+        {
+            FraudProtectionEnterpriseSetup();
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+            };
+            CreditCard originalCreditCard = gateway.CreditCard.Create(request).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                ExpirationDate = "05/22",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true,
+                    SkipAdvancedFraudChecking = false
+                },
+            };
+            Result<CreditCard> result = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.RiskData);
+        }
+
+        [Test]
+        public void UpdateWithSkipAdvancedFraudCheckingDoesNotIncludeRiskData()
+        {
+            FraudProtectionEnterpriseSetup();
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+            };
+            CreditCard originalCreditCard = gateway.CreditCard.Create(request).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                ExpirationDate = "05/22",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true,
+                    SkipAdvancedFraudChecking = true
+                },
+            };
+            Result<CreditCard> result = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNull(verification.RiskData);
         }
 
         [Test]

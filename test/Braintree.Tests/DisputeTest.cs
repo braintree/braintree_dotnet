@@ -61,6 +61,7 @@ namespace Braintree.Tests
                 Node("amount-disputed", "101.00"),
                 Node("amount-won", "95.00"),
                 Node("case-number", "CASE-12345"),
+                Node("chargeback-protection-level", "effortless"),
                 NodeAttr("created-at", TYPE_DATE, "2017-06-16"),
                 Node("currency-iso-code", "USD"),
                 Node("processor-comments", "Processor comments"),
@@ -203,6 +204,7 @@ namespace Braintree.Tests
             Assert.AreEqual(101m, result.AmountDisputed);
             Assert.AreEqual(95m, result.AmountWon);
             Assert.AreEqual("CASE-12345", result.CaseNumber);
+            Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, result.ChargebackProtectionLevel);
             Assert.AreEqual(DateTime.Parse("2017-06-16"), result.CreatedAt);
             Assert.AreEqual("Processor comments", result.ProcessorComments);
             Assert.AreEqual("abc123", result.MerchantAccountId);

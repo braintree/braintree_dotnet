@@ -19,6 +19,7 @@ namespace Braintree
 
 		public bool? ChallengeRequested { get; set; }
 		public bool? ExemptionRequested { get; set; }
+		public bool? DataOnlyRequested { get; set; }
 
         private dynamic _ClientMetadata;
         public virtual dynamic ClientData
@@ -67,6 +68,9 @@ namespace Braintree
             } 
             if (ExemptionRequested != null) {
                 json.Add("exemptionRequested", ExemptionRequested);
+            }
+            if (DataOnlyRequested != null) {
+                json.Add("dataOnlyRequested", DataOnlyRequested);
             }
 
             if (BillingAddress != null) {

@@ -2117,6 +2117,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.PayPalDetails.DebugId);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void Sale_WithAllAttributes()
         {
@@ -2245,6 +2246,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("MEX", shippingAddress.CountryCodeAlpha3);
             Assert.AreEqual("484", shippingAddress.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Sale_WithTransactionSourceAsRecurringFirst()
@@ -5057,7 +5059,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithJCBDoesNotReturnNetworkTransactionIdentifier()
+        public void Sale_WithJCBReturnsNetworkTransactionIdentifier()
         {
             var request = new TransactionRequest
             {
@@ -5073,7 +5075,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.IsNull(transaction.NetworkTransactionId);
+            Assert.IsNotNull(transaction.NetworkTransactionId);
         }
 
         [Test]
@@ -10104,6 +10106,44 @@ namespace Braintree.Tests.Integration
                 Assert.AreEqual(-5.00M, refund.RefundedInstallments[i].Adjustments[0].Amount);
                 Assert.AreEqual(Kind.REFUND, refund.RefundedInstallments[i].Adjustments[0].Kind);
             }
+        }
+
+        [Test]
+        public void Successful_ManualKeyEntryTransaction() {
+            var request = new TransactionRequest {
+                Amount = 100,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    PaymentReaderCardDetails = new PaymentReaderCardDetailsRequest
+                    {
+                        EncryptedCardData = "8F34DFB312DC79C24FD5320622F3E11682D79E6B0C0FD881",
+                        KeySerialNumber = "FFFFFF02000572A00005",
+                    }
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+        }
+
+        [Test]
+        public void Unsucccessful_ManualKeyEntryTransaction() {
+            var request = new TransactionRequest {
+                Amount = 100,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    PaymentReaderCardDetails = new PaymentReaderCardDetailsRequest
+                    {
+                        EncryptedCardData = "invalid",
+                        KeySerialNumber = "invalid",
+                    }
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsFalse(transactionResult.IsSuccess());
+            var transactionError = transactionResult.Errors.ForObject("Transaction").OnField("merchantAccountId")[0];
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PAYMENT_INSTRUMENT_NOT_SUPPORTED_BY_MERCHANT_ACCOUNT, transactionError.Code);
         }
 
         [Test]

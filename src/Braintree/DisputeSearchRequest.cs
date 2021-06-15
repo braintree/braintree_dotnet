@@ -16,6 +16,8 @@ namespace Braintree
 
         public EnumMultipleValueNode<DisputeSearchRequest, DisputeKind> DisputeKind => new EnumMultipleValueNode<DisputeSearchRequest, DisputeKind>("kind", this);
 
+        public EnumMultipleValueNode<DisputeSearchRequest, DisputeChargebackProtectionLevel> DisputeChargebackProtectionLevel => new EnumMultipleValueNode<DisputeSearchRequest, DisputeChargebackProtectionLevel>("chargeback_protection_level", this);
+
         public MultipleValueNode<DisputeSearchRequest, string> MerchantAccountId => new MultipleValueNode<DisputeSearchRequest, string>("merchant_account_id", this);
 
         public EnumMultipleValueNode<DisputeSearchRequest, DisputeReason> DisputeReason => new EnumMultipleValueNode<DisputeSearchRequest, DisputeReason>("reason", this);

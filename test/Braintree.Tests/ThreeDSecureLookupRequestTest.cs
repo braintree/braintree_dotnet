@@ -228,6 +228,36 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SerializesWithDataOnlyRequestedTrue()
+        {
+            var clientData = @"{
+                ""authorizationFingerprint"": ""auth-fingerprint"",
+                ""braintreeLibraryVersion"": ""braintree/web/3.44.0"",
+                ""dfReferenceId"": ""ABC-123"",
+                ""nonce"": ""FAKE-NONCE"",
+                ""clientMetadata"": {
+                     ""cardinalDeviceDataCollectionTimeElapsed"": 40,
+                     ""issuerDeviceDataCollectionResult"": true,
+                     ""issuerDeviceDataCollectionTimeElapsed"": 413,
+                     ""requestedThreeDSecureVersion"": ""2"",
+                     ""sdkVersion"": ""web/3.42.0""
+                }
+            }";
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                Amount = "10.00",
+                ClientData = clientData,
+                DataOnlyRequested = true
+            };
+
+            Assert.AreEqual(true, request.DataOnlyRequested);
+
+            var outputJSON = request.ToJSON();
+            StringAssert.Contains(@"""dataOnlyRequested"":true", outputJSON);
+        }
+
+        [Test]
         public void SerializesWithExemptionRequestedTrue()
         {
             var clientData = @"{

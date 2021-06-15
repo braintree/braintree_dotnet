@@ -38,6 +38,13 @@ namespace Braintree
         [Description("retrieval")] RETRIEVAL
     }
 
+    public enum DisputeChargebackProtectionLevel
+    {
+        [Description("effortless")] EFFORTLESS,
+        [Description("standard")] STANDARD,
+        [Description("not_protected")] NOT_PROTECTED
+    }
+
     public class Dispute
     {
         public virtual decimal? Amount { get; protected set; }
@@ -52,6 +59,7 @@ namespace Braintree
         public virtual DisputeReason Reason { get; protected set; }
         public virtual DisputeStatus Status { get; protected set; }
         public virtual DisputeKind Kind { get; protected set; }
+        public virtual DisputeChargebackProtectionLevel ChargebackProtectionLevel { get; protected set; }
         public virtual string CaseNumber { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
@@ -82,6 +90,7 @@ namespace Braintree
             Reason = node.GetEnum("reason", DisputeReason.GENERAL);
             Status = node.GetEnum("status", DisputeStatus.UNRECOGNIZED);
             Kind = node.GetEnum("kind", DisputeKind.UNRECOGNIZED);
+            ChargebackProtectionLevel = node.GetEnum("chargeback-protection-level", DisputeChargebackProtectionLevel.NOT_PROTECTED);
             CaseNumber = node.GetString("case-number");
             CurrencyIsoCode = node.GetString("currency-iso-code");
             GraphQLId = node.GetString("global-id");

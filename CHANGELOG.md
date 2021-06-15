@@ -1,3 +1,12 @@
+## 5.7.0
+- Add `PaymentReaderCardDetails` to `TransactionCreditCardRequest`
+- Add `SkipAdvancedFraudChecking` to:
+  - `Customer.create` and `Customer.update`
+  - `CreditCard.create` and `CreditCard.update`
+  - `PaymentMethod.create` and `PaymentMethod.update`
+- Add `DataOnlyRequested` to `ThreeDSecureLookupRequest`
+- Add `ChargebackProtectionLevel` to `DisputeSearch`
+
 ## 5.6.0
 - Add `PayPalMessages` to `Dispute`
 - Add `TaxIdentifiers` to `CustomerRequest`

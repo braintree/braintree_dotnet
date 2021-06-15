@@ -8,10 +8,13 @@ namespace Braintree
     public class TransactionCreditCardRequest : BaseCreditCardRequest
     {
         public string Token { get; set; }
+        public PaymentReaderCardDetailsRequest PaymentReaderCardDetails { get; set; }
 
         protected override RequestBuilder BuildRequest(string root)
         {
-            return base.BuildRequest(root).AddElement("token", Token);
+            return base.BuildRequest(root)
+                .AddElement("token", Token)
+                .AddElement("payment-reader-card-details", PaymentReaderCardDetails);
         }
     }
 

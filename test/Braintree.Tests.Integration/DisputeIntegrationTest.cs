@@ -883,6 +883,24 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Search_withChargebackProtectionLevelReturnsDispute()
+        {
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                DisputeChargebackProtectionLevel.Is(DisputeChargebackProtectionLevel.EFFORTLESS);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.IsTrue(disputes.Count == 1);
+            Assert.AreEqual("CASE-CHARGEBACK-PROTECTED", disputes[0].CaseNumber);
+            Assert.AreEqual(DisputeReason.FRAUD, disputes[0].Reason);
+            Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, disputes[0].ChargebackProtectionLevel);
+        }
+
+        [Test]
         public void Search_receivedDateRangeReturnsDispute()
         {
             DateTime startDate = DateTime.Parse("2014-03-03");
