@@ -453,6 +453,15 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(applePayCard.PaymentInstrumentName);
             Assert.IsNotNull(applePayCard.SourceDescription);
             Assert.IsNotNull(applePayCard.IsExpired);
+            Assert.IsNotNull(applePayCard.Prepaid);
+            Assert.IsNotNull(applePayCard.Healthcare);
+            Assert.IsNotNull(applePayCard.Debit);
+            Assert.IsNotNull(applePayCard.DurbinRegulated);
+            Assert.IsNotNull(applePayCard.Commercial);
+            Assert.IsNotNull(applePayCard.Payroll);
+            Assert.IsNotNull(applePayCard.IssuingBank);
+            Assert.IsNotNull(applePayCard.CountryOfIssuance);
+            Assert.IsNotNull(applePayCard.ProductId);
             Assert.AreEqual(result.Target.Id, applePayCard.CustomerId);
         }
 
@@ -490,6 +499,15 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayCard.UpdatedAt);
             Assert.IsNotNull(androidPayCard.Subscriptions);
             Assert.IsFalse(androidPayCard.IsNetworkTokenized);
+            Assert.IsNotNull(androidPayCard.Prepaid);
+            Assert.IsNotNull(androidPayCard.Healthcare);
+            Assert.IsNotNull(androidPayCard.Debit);
+            Assert.IsNotNull(androidPayCard.DurbinRegulated);
+            Assert.IsNotNull(androidPayCard.Commercial);
+            Assert.IsNotNull(androidPayCard.Payroll);
+            Assert.IsNotNull(androidPayCard.IssuingBank);
+            Assert.IsNotNull(androidPayCard.CountryOfIssuance);
+            Assert.IsNotNull(androidPayCard.ProductId);
         }
 
         [Test]
@@ -526,6 +544,15 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayCard.UpdatedAt);
             Assert.IsNotNull(androidPayCard.Subscriptions);
             Assert.IsTrue(androidPayCard.IsNetworkTokenized);
+            Assert.IsNotNull(androidPayCard.Prepaid);
+            Assert.IsNotNull(androidPayCard.Healthcare);
+            Assert.IsNotNull(androidPayCard.Debit);
+            Assert.IsNotNull(androidPayCard.DurbinRegulated);
+            Assert.IsNotNull(androidPayCard.Commercial);
+            Assert.IsNotNull(androidPayCard.Payroll);
+            Assert.IsNotNull(androidPayCard.IssuingBank);
+            Assert.IsNotNull(androidPayCard.CountryOfIssuance);
+            Assert.IsNotNull(androidPayCard.ProductId);
         }
 
         [Test]

@@ -28,6 +28,8 @@ namespace Braintree
         public virtual string ImplicitlyVaultedPaymentMethodToken { get; protected set; }
         public virtual string ImplicitlyVaultedPaymentMethodGlobalId { get; protected set; }
         public virtual string BillingAgreementId { get; protected set; }
+        public virtual string TaxId { get; protected set; }
+        public virtual string TaxIdType { get; protected set; }
 
         protected internal PayPalDetails(NodeWrapper node)
         {
@@ -55,6 +57,8 @@ namespace Braintree
             ImplicitlyVaultedPaymentMethodToken = node.GetString("implicitly-vaulted-payment-method-token");
             ImplicitlyVaultedPaymentMethodGlobalId = node.GetString("implicitly-vaulted-payment-method-global-id");
             BillingAgreementId = node.GetString("billing-agreement-id");
+            TaxId = node.GetString("tax-id");
+            TaxIdType = node.GetString("tax-id-type");
         }
 
         [Obsolete("Mock Use Only")]

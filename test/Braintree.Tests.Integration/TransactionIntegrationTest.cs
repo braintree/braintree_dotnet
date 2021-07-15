@@ -2002,6 +2002,50 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithExchangeRateQuoteId()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ExchangeRateQuoteId = "DummyExchangeRateQuoteId-DotNet",
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1000.00, transaction.Amount);
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+        }
+
+
+        [Test]
+        public void Sale_ErrorWithInvalidExchangeRateQuoteId()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                ExchangeRateQuoteId = new string('a', 4010),
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.EXCHANGE_RATE_QUOTE_ID_IS_TOO_LONG, result.Errors.ForObject("Transaction").OnField("ExchangeRateQuoteId")[0].Code);
+        }
+
+
+        [Test]
         public void Sale_WithRiskData()
         {
             AdvancedKountFraudSetup();
@@ -3281,6 +3325,8 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target.ApplePayDetails.Payroll);
             Assert.IsNotNull(result.Target.ApplePayDetails.ProductId);
             Assert.IsNotNull(result.Target.ApplePayDetails.Bin);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CountryOfIssuance);
+            Assert.IsNotNull(result.Target.ApplePayDetails.IssuingBank);
         }
 
         [Test]
@@ -3344,6 +3390,8 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayDetails.Commercial);
             Assert.IsNotNull(androidPayDetails.Payroll);
             Assert.IsNotNull(androidPayDetails.ProductId);
+            Assert.IsNotNull(androidPayDetails.CountryOfIssuance);
+            Assert.IsNotNull(androidPayDetails.IssuingBank);
             Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
         }
 
@@ -3376,6 +3424,15 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(androidPayDetails.ExpirationMonth);
             Assert.IsNotNull(androidPayDetails.ExpirationYear);
             Assert.IsNotNull(androidPayDetails.GoogleTransactionId);
+            Assert.IsNotNull(androidPayDetails.Prepaid);
+            Assert.IsNotNull(androidPayDetails.Healthcare);
+            Assert.IsNotNull(androidPayDetails.Debit);
+            Assert.IsNotNull(androidPayDetails.DurbinRegulated);
+            Assert.IsNotNull(androidPayDetails.Commercial);
+            Assert.IsNotNull(androidPayDetails.Payroll);
+            Assert.IsNotNull(androidPayDetails.ProductId);
+            Assert.IsNotNull(androidPayDetails.CountryOfIssuance);
+            Assert.IsNotNull(androidPayDetails.IssuingBank);
             Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
         }
 
@@ -9934,6 +9991,59 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2009", creditCard.ExpirationYear);
             Assert.AreEqual("05/2009", creditCard.ExpirationDate);
             Assert.IsNull(transaction.AcquirerReferenceNumber);
+        }
+
+        [Test]
+        public void Sale_CreateErrorTaxAmountIsRequiredForAibSwedish()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.AIB_SWE_MA,
+                CurrencyIsoCode = "SEK",
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2030",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+               ValidationErrorCode.TRANSACTION_TAX_AMOUNT_IS_REQUIRED_FOR_AIB_SWEDISH,
+               result.Errors.DeepAll()[0].Code
+           );
+        }
+
+        [Test]
+        public void Sale_WithPaymentMethodTokenAndCreateErrorTaxAmountIsRequiredForAibSwedish()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest creditCardRequest = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CVV = "123",
+                Number = "5105105105105100",
+                ExpirationDate = "05/2030"
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
+
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.AIB_SWE_MA,
+                PaymentMethodToken = creditCard.Token,
+                CurrencyIsoCode = "SEK"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+               ValidationErrorCode.TRANSACTION_TAX_AMOUNT_IS_REQUIRED_FOR_AIB_SWEDISH,
+               result.Errors.DeepAll()[0].Code
+           );
         }
 
         [Test]

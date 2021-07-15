@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2021</Copyright>
-    <VersionPrefix>5.7.0</VersionPrefix>
+    <VersionPrefix>5.8.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <!-- We target NET standard 2.0 so that we can support NET Core 2.1. When NET Core 2.1 reaches EOL, we can update to Net Standard 2.1 -->
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
@@ -12,13 +12,22 @@
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Add `PaymentReaderCardDetails` to `TransactionCreditCardRequest`
-      - Add `SkipAdvancedFraudChecking` to
-        - `Customer.create` and `Customer.update`
-        - `CreditCard.create` and `CreditCard.update`
-        - `PaymentMethod.create` and `PaymentMethod.update`
-      - Add `DataOnlyRequested` to `ThreeDSecureLookupRequest`
-      - Add `ChargebackProtectionLevel` to `DisputeSearch`
+      - Add error code `TRANSACTION_TAX_AMOUNT_IS_REQUIRED_FOR_AIB_SWEDISH` for attribute `tax_amount` in `transaction` key for AIB Domestic Transactions in Sweden
+      - Add `ExchangeRateQuoteId` to `TransactionRequest`
+      - Add `EXCHANGE_RATE_QUOTE_ID_IS_TOO_LONG` to `ValidationErrorCode`
+      - Add the following fields to `AndroidPayCard` and `ApplePayCard`
+        - `Commercial`
+        - `Debit`
+        - `DurbinRegulated`
+        - `Healthcare`
+        - `Payroll`
+        - `Prepaid`
+        - `ProductId`
+        - `CountryOfIssuance`
+        - `IssuingBank`
+      - Add the following fields to `PaypalDetails`
+        - `TaxId`
+        - `TaxIdType`
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

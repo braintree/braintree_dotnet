@@ -24,6 +24,15 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual Subscription[] Subscriptions { get; protected set; }
+        public virtual string Prepaid { get; protected set; }
+        public virtual string Healthcare { get; protected set; }
+        public virtual string Debit { get; protected set; }
+        public virtual string DurbinRegulated { get; protected set; }
+        public virtual string Commercial { get; protected set; }
+        public virtual string Payroll { get; protected set; }
+        public virtual string IssuingBank { get; protected set; }
+        public virtual string CountryOfIssuance { get; protected set; }
+        public virtual string ProductId { get; protected set; }
 
         protected internal AndroidPayCard(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -45,6 +54,15 @@ namespace Braintree
             CreatedAt = node.GetDateTime("created-at");
             UpdatedAt = node.GetDateTime("updated-at");
             IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
+            Prepaid = node.GetString("prepaid");
+            Healthcare = node.GetString("healthcare");
+            Debit = node.GetString("debit");
+            DurbinRegulated = node.GetString("durbin-regulated");
+            Commercial = node.GetString("commercial");
+            Payroll = node.GetString("payroll");
+            IssuingBank = node.GetString("issuing-bank");
+            CountryOfIssuance = node.GetString("country-of-issuance");
+            ProductId = node.GetString("product-id");
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];
