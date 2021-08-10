@@ -100,6 +100,10 @@ namespace Braintree
                 return GrantedPaymentMethodRevokedSampleXml(id);
             }  else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
                 return LocalPaymentCompletedSampleXml();
+            } else if (kind == WebhookKind.LOCAL_PAYMENT_EXPIRED) {
+                return LocalPaymentExpiredSampleXml();
+            } else if (kind == WebhookKind.LOCAL_PAYMENT_FUNDED) {
+                return LocalPaymentFundedSampleXml();
             } else if (kind == WebhookKind.LOCAL_PAYMENT_REVERSED) {
                 return LocalPaymentReversedSampleXml();
             } else {
@@ -535,7 +539,7 @@ namespace Braintree
                     Node("limited-use-order-id", NIL_TRUE, ""),
                     NodeAttr("revoked-at", TYPE_DATE_TIME, "2019-01-02T12:00:00Z")
                 );
-        } 
+        }
 
         private static string GrantedPaymentMethodRevokedSampleXml(string id) {
             return Node("venmo-account",
@@ -561,6 +565,26 @@ namespace Braintree
                     Node("transaction",
                         Node("id", "1"),
                         Node("status", "authorizing"),
+                        Node("amount", "10.00"),
+                        Node("order-id", "order1234")
+                        )
+            );
+        }
+
+        private static string LocalPaymentExpiredSampleXml() {
+            return Node("local-payment-expired",
+                    Node("payment-id", "a-payment-id"),
+                    Node("payment-context-id", "a-payment-context-id")
+            );
+        }
+
+        private static string LocalPaymentFundedSampleXml() {
+            return Node("local-payment-funded",
+                    Node("payment-id", "a-payment-id"),
+                    Node("payment-context-id", "a-payment-context-id"),
+                    Node("transaction",
+                        Node("id", "1"),
+                        Node("status", "settled"),
                         Node("amount", "10.00"),
                         Node("order-id", "order1234")
                         )

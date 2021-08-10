@@ -109,15 +109,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Find_ExposesThreeDSecureInfo()
         {
-            BraintreeService service = new BraintreeService(gateway.Configuration);
-            CreditCardRequest creditCardRequest = new CreditCardRequest
-            {
-                Number = SandboxValues.CreditCardNumber.VISA,
-                ExpirationMonth = "05",
-                ExpirationYear = "2020"
-            };
-            string nonce = TestHelper.Generate3DSNonce(service, creditCardRequest);
-
+            string nonce = "fake-three-d-secure-visa-full-authentication-nonce";
             PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(nonce);
             ThreeDSecureInfo info = foundNonce.ThreeDSecureInfo;
 
@@ -127,10 +119,10 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("authenticate_successful", info.Status);
             Assert.IsTrue(info.LiabilityShifted);
             Assert.IsTrue(info.LiabilityShiftPossible);
-            Assert.AreEqual("test_cavv", info.Cavv);
-            Assert.AreEqual("test_eci", info.EciFlag);
+            Assert.AreEqual("cavv_value", info.Cavv);
+            Assert.AreEqual("05", info.EciFlag);
             Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
-            Assert.AreEqual("test_xid", info.Xid);
+            Assert.AreEqual("xid_value", info.Xid);
             Assert.IsNotNull(info.ThreeDSecureAuthenticationId);
             Assert.IsNotNull(info.Authentication);
             Assert.IsNotNull(info.Lookup);

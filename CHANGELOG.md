@@ -1,3 +1,6 @@
+## 5.9.0
+- Add `LocalPaymentExpired` and `LocalPaymentFunded` webhook notification support
+
 ## 5.8.0
 - Add error code `TRANSACTION_TAX_AMOUNT_IS_REQUIRED_FOR_AIB_SWEDISH` for attribute `tax_amount` in `transaction` key for AIB:Domestic Transactions in Sweden
 - Add `ExchangeRateQuoteId` to `TransactionRequest`

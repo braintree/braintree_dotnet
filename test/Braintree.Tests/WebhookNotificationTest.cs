@@ -662,6 +662,40 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForLocalPaymentExpired()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.LOCAL_PAYMENT_EXPIRED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.LOCAL_PAYMENT_EXPIRED, notification.Kind);
+          LocalPaymentExpired localPayment = notification.LocalPaymentExpired;
+
+          Assert.AreEqual("a-payment-id", localPayment.PaymentId);
+          Assert.AreEqual("a-payment-context-id", localPayment.PaymentContextId);
+        }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForLocalPaymentFunded()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.LOCAL_PAYMENT_FUNDED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.LOCAL_PAYMENT_FUNDED, notification.Kind);
+
+          LocalPaymentFunded localPayment = notification.LocalPaymentFunded;
+          Assert.AreEqual("a-payment-id", localPayment.PaymentId);
+          Assert.AreEqual("a-payment-context-id", localPayment.PaymentContextId);
+
+          Transaction transaction = localPayment.Transaction;
+          Assert.NotNull(transaction);
+          Assert.AreEqual("1", transaction.Id);
+          Assert.AreEqual(TransactionStatus.SETTLED, transaction.Status);
+          Assert.AreEqual("order1234", transaction.OrderId);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForLocalPaymentReversed()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.LOCAL_PAYMENT_REVERSED, "my_id");

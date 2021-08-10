@@ -22,6 +22,8 @@ namespace Braintree
         [Description("grantor_updated_granted_payment_method")] GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD,
         [Description("granted_payment_method_revoked")] GRANTED_PAYMENT_METHOD_REVOKED,
         [Description("local_payment_completed")] LOCAL_PAYMENT_COMPLETED,
+        [Description("local_payment_expired")] LOCAL_PAYMENT_EXPIRED,
+        [Description("local_payment_funded")] LOCAL_PAYMENT_FUNDED,
         [Description("local_payment_reversed")] LOCAL_PAYMENT_REVERSED,
         [Description("oauth_access_revoked")] OAUTH_ACCESS_REVOKED,
         [Description("partner_merchant_connected")] PARTNER_MERCHANT_CONNECTED,
@@ -56,6 +58,8 @@ namespace Braintree
         public virtual WebhookKind Kind { get; protected set; }
         public virtual MerchantAccount MerchantAccount { get; protected set; }
         public virtual LocalPaymentCompleted LocalPaymentCompleted { get; protected set; }
+        public virtual LocalPaymentExpired LocalPaymentExpired { get; protected set; }
+        public virtual LocalPaymentFunded LocalPaymentFunded { get; protected set; }
         public virtual LocalPaymentReversed LocalPaymentReversed { get; protected set; }
         public virtual PartnerMerchant PartnerMerchant { get; protected set; }
         public virtual string Message { get; protected set; }
@@ -157,6 +161,16 @@ namespace Braintree
             {
                 LocalPaymentCompleted = new LocalPaymentCompleted(WrapperNode.GetNode("local-payment"), gateway);
             } 
+
+            if (WrapperNode.GetNode("local-payment-expired") != null)
+            {
+                LocalPaymentExpired = new LocalPaymentExpired(WrapperNode.GetNode("local-payment-expired"), gateway);
+            }
+
+            if (WrapperNode.GetNode("local-payment-funded") != null)
+            {
+                LocalPaymentFunded = new LocalPaymentFunded(WrapperNode.GetNode("local-payment-funded"), gateway);
+            }
 
             if (WrapperNode.GetNode("local-payment-reversed") != null)
             {
