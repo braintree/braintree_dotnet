@@ -9,6 +9,7 @@ namespace Braintree
     {
         CreditCardVerification CreditCardVerification { get; }
         Transaction Transaction { get; }
+        Plan Plan { get; }
         Subscription Subscription { get; }
         ValidationErrors Errors { get; }
         Dictionary<string, string> Parameters { get; }
@@ -21,6 +22,7 @@ namespace Braintree
     {
         public CreditCardVerification CreditCardVerification { get; protected set; }
         public Transaction Transaction { get; protected set; }
+        public Plan Plan { get; protected set; }
         public Subscription Subscription { get; protected set; }
         public ValidationErrors Errors { get; protected set; }
         public Dictionary<string, string> Parameters { get; protected set; }
@@ -45,6 +47,12 @@ namespace Braintree
                 if (transactionNode != null)
                 {
                     Transaction = new Transaction(transactionNode, gateway);
+                }
+
+                NodeWrapper planNode = node.GetNode("plan");
+                if (planNode != null)
+                {
+                    Plan = new Plan(planNode, gateway);
                 }
 
                 NodeWrapper subscriptionNode = node.GetNode("subscription");
@@ -107,6 +115,10 @@ namespace Braintree
             else if (typeof(T) == typeof(Transaction))
             {
                 return new Transaction(node, gateway) as T;
+            }
+            else if (typeof(T) == typeof(Plan))
+            {
+                return new Plan(node, gateway) as T;
             }
             else if (typeof(T) == typeof(Subscription))
             {

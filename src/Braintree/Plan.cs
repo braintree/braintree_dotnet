@@ -27,7 +27,7 @@ namespace Braintree
         public virtual int? TrialDuration { get; protected set; }
         public virtual PlanDurationUnit TrialDurationUnit { get; protected set; }
 
-        public Plan(NodeWrapper node)
+        public Plan(NodeWrapper node, IBraintreeGateway gateway)
         {
             if (node == null) return;
             BillingDayOfMonth = node.GetInteger("billing-day-of-month");

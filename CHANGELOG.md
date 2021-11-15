@@ -1,3 +1,7 @@
+## 5.10.0
+* Add plan create/update/find API endpoint
+* Add `TransactionReview` webhook notification support
+
 ## 5.9.0
 - Add `LocalPaymentExpired` and `LocalPaymentFunded` webhook notification support
 

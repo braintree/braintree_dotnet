@@ -41,6 +41,7 @@ namespace Braintree
         [Description("sub_merchant_account_approved")] SUB_MERCHANT_ACCOUNT_APPROVED,
         [Description("sub_merchant_account_declined")] SUB_MERCHANT_ACCOUNT_DECLINED,
         [Description("transaction_disbursed")] TRANSACTION_DISBURSED,
+        [Description("transaction_reviewed")] TRANSACTION_REVIEWED,
         [Description("transaction_settled")] TRANSACTION_SETTLED,
         [Description("transaction_settlement_declined")] TRANSACTION_SETTLEMENT_DECLINED,
         [Description("unrecognized")] UNRECOGNIZED
@@ -68,6 +69,7 @@ namespace Braintree
         public virtual Subscription Subscription { get; protected set; }
         public virtual DateTime? Timestamp { get; protected set; }
         public virtual Transaction Transaction { get; protected set; }
+        public virtual TransactionReview TransactionReview { get; protected set; }
         public virtual OAuthAccessRevocation OAuthAccessRevocation { get; protected set; }
         
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
@@ -105,6 +107,11 @@ namespace Braintree
             if (WrapperNode.GetNode("transaction") != null)
             {
                 Transaction = new Transaction(WrapperNode.GetNode("transaction"), gateway);
+            }
+
+            if (WrapperNode.GetNode("transaction-review") != null)
+            {
+                TransactionReview = new TransactionReview(WrapperNode.GetNode("transaction-review"));
             }
 
             if (WrapperNode.GetNode("disbursement") != null)

@@ -18,14 +18,14 @@ namespace Braintree.TestUtil
         new public int? TrialDuration { get; set; }
         new public PlanDurationUnit TrialDurationUnit { get; set; }
 
-        internal TestPlan(NodeWrapper node) : base(node) {
+        internal TestPlan(NodeWrapper node, IBraintreeGateway gateway) : base(node, gateway) {
         }
     }
 
 
     public class PlanFixture
     {
-        public static TestPlan ADD_ON_DISCOUNT_PLAN = new TestPlan(null)
+        public static TestPlan ADD_ON_DISCOUNT_PLAN = new TestPlan(null, null)
         {
             Description = "Plan for integration tests -- with add-ons and discounts",
             Id = "integration_plan_with_add_ons_and_discounts",
@@ -37,7 +37,7 @@ namespace Braintree.TestUtil
             TrialDurationUnit = PlanDurationUnit.DAY
         };
 
-        public static TestPlan BILLING_DAY_OF_MONTH_PLAN = new TestPlan(null)
+        public static TestPlan BILLING_DAY_OF_MONTH_PLAN = new TestPlan(null, null)
         {
             Description = "Plan for integration tests -- with billing day of month",
             Id = "integration_plan_with_billing_day_of_month",
@@ -48,7 +48,7 @@ namespace Braintree.TestUtil
             BillingDayOfMonth = 5
         };
     
-        public static TestPlan PLAN_WITHOUT_TRIAL = new TestPlan(null)
+        public static TestPlan PLAN_WITHOUT_TRIAL = new TestPlan(null, null)
         {
             Description = "Plan for integration tests -- without a trial",
             Id = "integration_trialless_plan",
@@ -58,7 +58,7 @@ namespace Braintree.TestUtil
             TrialPeriod = false
         };
     
-        public static TestPlan PLAN_WITH_TRIAL = new TestPlan(null)
+        public static TestPlan PLAN_WITH_TRIAL = new TestPlan(null, null)
         {
             Description = "Plan for integration tests -- with a trial",
             Id = "integration_trial_plan",

@@ -44,12 +44,16 @@ namespace Braintree
 
         private string SubjectSampleXml(WebhookKind kind, string id)
         {
+            // NEXT_UNDER_MAJOR_VERSION
+            // Convert to switch statement
             if (kind == WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED) {
                 return MerchantAccountApprovedSampleXml(id);
             } else if (kind == WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED) {
                 return MerchantAccountDeclinedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_DISBURSED) {
                 return TransactionDisbursedSampleXml(id);
+            } else if (kind == WebhookKind.TRANSACTION_REVIEWED) {
+                return TransactionReviewedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_SETTLED) {
                 return TransactionSettledSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_SETTLEMENT_DECLINED) {
@@ -98,7 +102,7 @@ namespace Braintree
                 return PaymentMethodRevokedByCustomerSampleXml(id);
             } else if (kind == WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED) {
                 return GrantedPaymentMethodRevokedSampleXml(id);
-            }  else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
+            } else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
                 return LocalPaymentCompletedSampleXml();
             } else if (kind == WebhookKind.LOCAL_PAYMENT_EXPIRED) {
                 return LocalPaymentExpiredSampleXml();
@@ -181,6 +185,17 @@ namespace Braintree
                     Node("descriptor"),
                     Node("shipping"),
                     Node("subscription")
+            );
+        }
+
+        private string TransactionReviewedSampleXml(string id)
+        {
+            return Node("transaction-review",
+                    Node("transaction-id", "my_id"),
+                    Node("decision", "smart_decision"),
+                    Node("reviewer-email", "hey@girl.com"),
+                    Node("reviewer-note", "I made a smart decision."),
+                    NodeAttr("reviewed-time", TYPE_DATE_TIME, "2019-01-02T00:00:00Z")
             );
         }
 
