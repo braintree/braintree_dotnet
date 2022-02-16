@@ -84,36 +84,44 @@ namespace Braintree
 #endif
 
 #if netcore
-        public HttpRequestMessage GetHttpRequest(string URL, string method) {
+        public HttpRequestMessage GetHttpRequest(string URL, string method)
+        {
             var request = Configuration.HttpRequestMessageFactory(new HttpMethod(method), URL);
             request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(GetAuthorizationSchema(), GetAuthorizationHeader());
             SetRequestHeaders(request);
             return request;
         }
 
-        public string GetHttpResponse(HttpRequestMessage request) {
-            var response = httpClient.SendAsync(request).GetAwaiter().GetResult();
-            if (response.StatusCode != (HttpStatusCode)422)
+        public string GetHttpResponse(HttpRequestMessage request)
+        {
+            using (var response = httpClient.SendAsync(request).GetAwaiter().GetResult())
             {
-                ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+                using (var responseStream = response.Content.ReadAsStreamAsync().GetAwaiter().GetResult())
+                {
+                    string responseContent = ParseResponseStream(responseStream);
+                    ThrowExceptionIfErrorStatusCode(response.StatusCode, responseContent);
+                    return responseContent;
+                }
             }
-
-            return ParseResponseStream(response.Content.ReadAsStreamAsync().GetAwaiter().GetResult());
         }
 
-        public async Task<string> GetHttpResponseAsync(HttpRequestMessage request) {
-            var response = await httpClient.SendAsync(request).ConfigureAwait(false);
-            if (response.StatusCode != (HttpStatusCode)422)
+        public async Task<string> GetHttpResponseAsync(HttpRequestMessage request)
+        {
+            using (var response = await httpClient.SendAsync(request).ConfigureAwait(false))
             {
-                ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
+                using (var responseStream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+                {
+                    string responseContent = await ParseResponseStreamAsync(responseStream);
+                    ThrowExceptionIfErrorStatusCode(response.StatusCode, responseContent);
+                    return responseContent;
+                }
             }
-
-            return await ParseResponseStreamAsync(await response.Content.ReadAsStreamAsync().ConfigureAwait(false));
         }
 #else
-        public HttpWebRequest GetHttpRequest(string URL, string method) {
+        public HttpWebRequest GetHttpRequest(string URL, string method)
+        {
             const int SecurityProtocolTypeTls12 = 3072;
-            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | ((SecurityProtocolType) SecurityProtocolTypeTls12);
+            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | ((SecurityProtocolType)SecurityProtocolTypeTls12);
 
             var request = Configuration.HttpWebRequestFactory(URL);
             SetRequestProxy(request);
@@ -126,53 +134,59 @@ namespace Braintree
             return request;
         }
 
-        public string GetHttpResponse(HttpWebRequest request) {
-            try {
-                using (var response = (HttpWebResponse) request.GetResponse())
+        public string GetHttpResponse(HttpWebRequest request)
+        {
+            try
+            {
+                using (var response = (HttpWebResponse)request.GetResponse())
                 {
-                    return ParseResponseStream(GetResponseStream(response));
+                    using (var responseStream = GetResponseStream(response))
+                    {
+                        return ParseResponseStream(responseStream);
+                    }
                 }
             }
             catch (WebException e)
             {
-                using (var response = (HttpWebResponse) e.Response)
+                using (var response = (HttpWebResponse)e.Response)
                 {
-                    if (response == null) throw e;
-
-                    if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
+                    if (response == null) throw;
+                    using (var responseStream = GetResponseStream((HttpWebResponse)e.Response))
                     {
-                        return ParseResponseStream(GetResponseStream((HttpWebResponse)e.Response));
+                        string responseContent = ParseResponseStream(responseStream);
+                        ThrowExceptionIfErrorStatusCode(response.StatusCode, responseContent);
+                        return responseContent;
                     }
-
-                    ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
                 }
-
-                throw e;
+                throw;
             }
         }
 
-        public async Task<string> GetHttpResponseAsync(HttpWebRequest request) {
-            try {
-                using (var response = (HttpWebResponse) await request.GetResponseAsync().ConfigureAwait(false))
+        public async Task<string> GetHttpResponseAsync(HttpWebRequest request)
+        {
+            try
+            {
+                using (var response = (HttpWebResponse)await request.GetResponseAsync().ConfigureAwait(false))
                 {
-                    return await ParseResponseStreamAsync(GetResponseStream(response)).ConfigureAwait(false);
+                    using (var responseStream = GetResponseStream(response))
+                    {
+                        return await ParseResponseStreamAsync(responseStream).ConfigureAwait(false);
+                    }
                 }
             }
             catch (WebException e)
             {
-                using (var response = (HttpWebResponse) e.Response)
+                using (var response = (HttpWebResponse)e.Response)
                 {
-                    if (response == null) throw e;
-
-                    if (response.StatusCode == (HttpStatusCode)422) // UnprocessableEntity
+                    if (response == null) throw;
+                    using (var responseStream = GetResponseStream((HttpWebResponse)e.Response))
                     {
-                        return await ParseResponseStreamAsync(GetResponseStream((HttpWebResponse) e.Response)).ConfigureAwait(false);
+                        string responseContent = await ParseResponseStreamAsync(responseStream).ConfigureAwait(false);
+                        ThrowExceptionIfErrorStatusCode(response.StatusCode, responseContent);
+                        return responseContent;
                     }
-
-                    ThrowExceptionIfErrorStatusCode(response.StatusCode, null);
                 }
-
-                throw e;
+                throw;
             }
         }
 #endif
@@ -283,7 +297,7 @@ namespace Braintree
         {
             if (httpStatusCode != HttpStatusCode.OK && httpStatusCode != HttpStatusCode.Created)
             {
-                switch ((int) httpStatusCode)
+                switch ((int)httpStatusCode)
                 {
                     case 401:
                         throw new AuthenticationException();
@@ -293,6 +307,8 @@ namespace Braintree
                         throw new NotFoundException();
                     case 408:
                         throw new RequestTimeoutException();
+                    case 422:
+                        throw new UnprocessableEntityException(message);
                     case 426:
                         throw new UpgradeRequiredException();
                     case 429:
@@ -304,9 +320,7 @@ namespace Braintree
                     case 504:
                         throw new GatewayTimeoutException();
                     default:
-                    var exception = new UnexpectedException();
-                    exception.Source = "Unexpected HTTP_RESPONSE " + httpStatusCode;
-                        throw exception;
+                        throw new UnexpectedException("Unexpected HTTP_RESPONSE " + httpStatusCode + ". Response: " + message);
                 }
             }
         }

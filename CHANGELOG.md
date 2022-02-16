@@ -1,3 +1,6 @@
+## 5.11.0
+* Improve handling of Unprocessable Entity (422) HTTP errors
+
 ## 5.10.0
 * Add plan create/update/find API endpoint
 * Add `TransactionReview` webhook notification support
