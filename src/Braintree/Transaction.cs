@@ -102,7 +102,7 @@ namespace Braintree
     /// <code>
     ///     Transaction transaction = gateway.Transaction.Find("transactionId");
     /// </code>
-    /// For more information about Transactions, see <a href="https://developers.braintreepayments.com/reference/response/transaction/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/transaction/dotnet</a>
+    /// For more information about Transactions, see <a href="https://developer.paypal.com/braintree/docs/reference/response/transaction/dotnet" target="_blank">https://developer.paypal.com/braintree/docs/reference/response/transaction/dotnet</a>
     /// </example>
     public class Transaction
     {

@@ -2,6 +2,7 @@ using Braintree.Exceptions;
 using Braintree.Test;
 using Braintree.TestUtil;
 using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
@@ -89,7 +90,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(foundNonce.Details.LastTwo, "81");
             Assert.AreEqual(foundNonce.Details.LastFour, "1881");
             Assert.AreEqual(foundNonce.Details.ExpirationMonth, "12");
-            Assert.AreEqual(foundNonce.Details.ExpirationYear, "2022");
+            Assert.AreEqual(foundNonce.Details.ExpirationYear, (DateTime.Now.Year + 1).ToString());
         }
 
 

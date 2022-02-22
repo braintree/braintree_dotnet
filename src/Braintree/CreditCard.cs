@@ -92,8 +92,8 @@ namespace Braintree
     /// <code>
     ///     CreditCard creditCard = gateway.CreditCard.Find("token");
     /// </code>
-    /// For more information about Credit Cards, see <a href="https://developers.braintreepayments.com/reference/response/credit-card/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/credit-card/dotnet</a><br />
-    /// For more information about Credit Card Verifications, see <a href="https://developers.braintreepayments.com/reference/response/credit-card-verification/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/credit-card-verification/dotnet</a>
+    /// For more information about Credit Cards, see <a href="https://developer.paypal.com/braintree/docs/reference/response/credit-card/dotnet" target="_blank">https://developer.paypal.com/braintree/docs/reference/response/credit-card/dotnet</a><br />
+    /// For more information about Credit Card Verifications, see <a href="https://developer.paypal.com/braintree/docs/reference/response/credit-card-verification/dotnet" target="_blank">https://developer.paypal.com/braintree/docs/reference/response/credit-card-verification/dotnet</a>
     /// </example>
     public class CreditCard : PaymentMethod
     {

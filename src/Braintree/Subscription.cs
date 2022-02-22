@@ -72,7 +72,7 @@ namespace Braintree
     /// <code>
     ///     Subscription subscription = gateway.Subscription.Find("subscriptionId");
     /// </code>
-    /// For more information about Subscriptions, see <a href="https://developers.braintreepayments.com/reference/response/subscription/dotnet" target="_blank">https://developers.braintreepayments.com/reference/response/subscription/dotnet</a>
+    /// For more information about Subscriptions, see <a href="https://developer.paypal.com/braintree/docs/reference/response/subscription/dotnet" target="_blank">https://developer.paypal.com/braintree/docs/reference/response/subscription/dotnet</a>
     /// </example>
     public class Subscription
     {

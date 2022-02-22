@@ -732,5 +732,30 @@ namespace Braintree.Tests
 
           Assert.AreEqual(WebhookKind.CHECK, notification.Kind);
         }
+
+        [Test]
+        public void SampleNotification_ReturnsAPaymentMethodCustomerDataUpdatedMetadata()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.PAYMENT_METHOD_CUSTOMER_DATA_UPDATED, "");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.PAYMENT_METHOD_CUSTOMER_DATA_UPDATED, notification.Kind);
+
+          PaymentMethodCustomerDataUpdatedMetadata paymentMethodCustomerDataUpdatedMetadata = notification.PaymentMethodCustomerDataUpdatedMetadata;
+
+          Assert.AreEqual("TOKEN12345", paymentMethodCustomerDataUpdatedMetadata.Token);
+          Assert.AreEqual("2022-01-01T21:28:37Z", paymentMethodCustomerDataUpdatedMetadata.DateTimeUpdated);
+
+          EnrichedCustomerData enrichedCustomerData = paymentMethodCustomerDataUpdatedMetadata.EnrichedCustomerData;
+          Assert.AreEqual(enrichedCustomerData.FieldsUpdated[0], "username");
+
+          VenmoProfileData  profileData = enrichedCustomerData.ProfileData;
+          Assert.AreEqual("John", profileData.FirstName);
+          Assert.AreEqual("Doe", profileData.LastName);
+          Assert.AreEqual("venmo_username", profileData.Username);
+          Assert.AreEqual("1231231234", profileData.PhoneNumber);
+          Assert.AreEqual("john.doe@paypal.com", profileData.Email);
+        }
     }
 }

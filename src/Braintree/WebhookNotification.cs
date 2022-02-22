@@ -29,6 +29,7 @@ namespace Braintree
         [Description("partner_merchant_connected")] PARTNER_MERCHANT_CONNECTED,
         [Description("partner_merchant_declined")] PARTNER_MERCHANT_DECLINED,
         [Description("partner_merchant_disconnected")] PARTNER_MERCHANT_DISCONNECTED,
+        [Description("payment_method_customer_data_updated")] PAYMENT_METHOD_CUSTOMER_DATA_UPDATED,
         [Description("payment_method_revoked_by_customer")] PAYMENT_METHOD_REVOKED_BY_CUSTOMER,
         [Description("recipient_updated_granted_payment_method")] RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD,
         [Description("subscription_canceled")] SUBSCRIPTION_CANCELED,
@@ -71,6 +72,7 @@ namespace Braintree
         public virtual Transaction Transaction { get; protected set; }
         public virtual TransactionReview TransactionReview { get; protected set; }
         public virtual OAuthAccessRevocation OAuthAccessRevocation { get; protected set; }
+        public virtual PaymentMethodCustomerDataUpdatedMetadata PaymentMethodCustomerDataUpdatedMetadata { get; protected set; }
         
         public WebhookNotification(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -182,6 +184,11 @@ namespace Braintree
             if (WrapperNode.GetNode("local-payment-reversed") != null)
             {
                 LocalPaymentReversed = new LocalPaymentReversed(WrapperNode.GetNode("local-payment-reversed"), gateway); 
+            }
+
+            if (WrapperNode.GetNode("payment-method-customer-data-updated-metadata") != null)
+            {
+                PaymentMethodCustomerDataUpdatedMetadata = new PaymentMethodCustomerDataUpdatedMetadata(WrapperNode.GetNode("payment-method-customer-data-updated-metadata"), gateway);
             }
         }
         

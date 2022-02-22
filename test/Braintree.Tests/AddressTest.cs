@@ -80,8 +80,8 @@ namespace Braintree.Tests
             Assert.AreEqual("1", address.CountryCodeNumeric);
             Assert.AreEqual("United States", address.CountryName);
             Assert.AreEqual("555-555-5555", address.PhoneNumber);
-            Assert.AreEqual("10/10/2018 10:46:41 PM", address.CreatedAt.ToString());
-            Assert.AreEqual("10/10/2020 10:46:41 PM", address.UpdatedAt.ToString());
+            Assert.AreEqual("10/10/2018 22:46:41", address.CreatedAt.ToString());
+            Assert.AreEqual("10/10/2020 22:46:41", address.UpdatedAt.ToString());
         }
     }
 }
