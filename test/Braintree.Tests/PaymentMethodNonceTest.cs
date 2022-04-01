@@ -131,7 +131,7 @@ namespace Braintree.Tests
                 "  <details>" +
                 "    <last-two>99</last-two>" +
                 "    <username>venmojoe</username>" +
-                "    <venmo-user-id>Venmo-Joe-1</venmo-user-id>" +
+                "    <venmo-user-id>1234567891234567891</venmo-user-id>" +
                 "  </details>" +
                 "</payment-method-nonce>";
 
@@ -149,7 +149,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target.Details);
             Assert.AreEqual("99", result.Target.Details.LastTwo);
             Assert.AreEqual("venmojoe", result.Target.Details.Username);
-            Assert.AreEqual("Venmo-Joe-1", result.Target.Details.VenmoUserId);
+            Assert.AreEqual("1234567891234567891", result.Target.Details.VenmoUserId);
         }
 
         [Test]

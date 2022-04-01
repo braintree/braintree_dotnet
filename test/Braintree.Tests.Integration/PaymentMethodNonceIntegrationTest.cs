@@ -23,10 +23,10 @@ namespace Braintree.Tests.Integration
                 PrivateKey = "integration_private_key"
             };
         }
-        
+
         [Test]
         public void Create_CreatesPaymentMethodNonce()
-        { 
+        {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
             Result<Customer> customerResult = gateway.Customer.Create(new CustomerRequest());
 
@@ -41,7 +41,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target);
             Assert.IsNotNull(result.Target.Nonce);
         }
-        
+
         [Test]
 #if netcore
         public async Task CreateAsync_CreatesPaymentMethodNonce()
@@ -104,7 +104,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(foundNonce.Details);
             Assert.AreEqual(foundNonce.Details.Username, "venmojoe");
             Assert.AreEqual(foundNonce.Details.LastTwo, "99");
-            Assert.AreEqual(foundNonce.Details.VenmoUserId, "Venmo-Joe-1");
+            Assert.AreEqual(foundNonce.Details.VenmoUserId, "1234567891234567891");
         }
 
         [Test]

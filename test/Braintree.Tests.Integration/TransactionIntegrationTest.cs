@@ -624,6 +624,17 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Search_ForSettlementConfirmedTransaction()
+        {
+            string TransactionId = "settlement_confirmed_txn";
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(TransactionId);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
         public void Search_OnAuthorizationExpiredStatus()
         {
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
@@ -9942,6 +9953,40 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(transactionResult.IsSuccess());
             Transaction transaction = transactionResult.Target;
             Assert.IsTrue(transaction.ProcessedWithNetworkToken);
+            Assert.IsNull(transaction.Retried);
+        }
+ 
+        [Test]
+        public void Sale_Retried_NetworkTokenizedTransaction() {
+            var request = new TransactionRequest {
+                Amount = 2000,
+                PaymentMethodToken = "network_tokenized_credit_card"
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsFalse(transactionResult.IsSuccess());
+            Assert.IsTrue(transactionResult.Transaction.Retried);
+            Assert.IsTrue(transactionResult.Transaction.ProcessedWithNetworkToken);
+        }
+
+        [Test]
+        public void Sale_NotAvailableForRetry()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 100,
+                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "06/2009",
+                }
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+            Assert.IsNull(transaction.Retried);
         }
 
         [Test]

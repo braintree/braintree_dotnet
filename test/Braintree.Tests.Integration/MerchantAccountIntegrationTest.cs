@@ -262,7 +262,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Create_HandlesInvalidValidationErrors()
+        public void Update_HandlesInvalidValidationErrors()
         {
             var request = new MerchantAccountRequest
             {
@@ -304,7 +304,7 @@ namespace Braintree.Tests.Integration
                 TosAccepted = true,
                 MasterMerchantAccountId = "sandbox_master_merchant_account"
             };
-            Result<MerchantAccount> result = gateway.MerchantAccount.Create(request);
+            Result<MerchantAccount> result = gateway.MerchantAccount.Update("sandbox_sub_merchant_account", request);
             Assert.IsFalse(result.IsSuccess());
             ValidationErrors errors = result.Errors.ForObject("merchant-account");
             Assert.AreEqual(ValidationErrorCode.MERCHANT_ACCOUNT_INDIVIDUAL_FIRST_NAME_IS_INVALID,

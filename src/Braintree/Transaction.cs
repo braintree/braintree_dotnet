@@ -177,6 +177,7 @@ namespace Braintree
         public virtual decimal? DiscountAmount { get; protected set; }
         public virtual decimal? ShippingAmount { get; protected set; }
         public virtual string ShipsFromPostalCode { get; protected set; }
+        public virtual string AchReturnCode { get; protected set; }
         public virtual string NetworkTransactionId { get; protected set; }
         public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
         public virtual string RetrievalReferenceNumber { get; protected set; }
@@ -184,6 +185,7 @@ namespace Braintree
         public virtual decimal? InstallmentCount { get; protected set; }
         public virtual List<Installment> Installments { get; protected set; }
         public virtual List<Installment> RefundedInstallments { get; protected set; }
+        public virtual bool? Retried { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -383,6 +385,8 @@ namespace Braintree
             ShippingAmount = node.GetDecimal("shipping-amount");
             ShipsFromPostalCode = node.GetString("ships-from-postal-code");
 
+            AchReturnCode = node.GetString("ach-return-code");
+
             NetworkTransactionId = node.GetString("network-transaction-id");
 
             AuthorizationExpiresAt = node.GetDateTime("authorization-expires-at");
@@ -404,6 +408,7 @@ namespace Braintree
             {
                 RefundedInstallments.Add(new Installment(installment));
             }
+            Retried = node.GetBoolean("retried");
         }
 
         /// <summary>

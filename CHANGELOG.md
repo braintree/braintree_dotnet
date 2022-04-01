@@ -1,4 +1,7 @@
 # Changelog
+## 5.12.0
+* Add `AchReturnCode` to transaction object
+* Add `Retried` to transaction object
 
 ## 5.11.0
 - Add `PaymentMethodCustomerDataUpdated` webhook notification support

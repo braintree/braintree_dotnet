@@ -121,6 +121,29 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void DeserializesAchReturnCodeFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <shipping-amount>1.00</shipping-amount>\n" +
+                "  <ach-return-code>R01</ach-return-code>\n" +
+                "  <discount-amount>2.00</discount-amount>\n" +
+                "  <ships-from-postal-code>12345</ships-from-postal-code>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <subscription></subscription>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual("R01", transaction.AchReturnCode);
+        }
+
+        [Test]
         public void DeserializesLevel3SummaryFieldsFromXml()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
