@@ -6,6 +6,8 @@ namespace Braintree
 {
     public class TransactionSearchRequest : SearchRequest
     {
+        public static string ACH_ANY_REASON_CODE = "any_reason_code";
+        
         public RangeNode<TransactionSearchRequest> Amount => new RangeNode<TransactionSearchRequest>("amount", this);
 
         public DateRangeNode<TransactionSearchRequest> AuthorizationExpiredAt => new DateRangeNode<TransactionSearchRequest>("authorization-expired-at", this);
@@ -133,6 +135,10 @@ namespace Braintree
         public EnumMultipleValueNode<TransactionSearchRequest, TransactionType> Type => new EnumMultipleValueNode<TransactionSearchRequest, TransactionType>("type", this);
 
         public DateRangeNode<TransactionSearchRequest> VoidedAt => new DateRangeNode<TransactionSearchRequest>("voided-at", this);
+
+        public DateRangeNode<TransactionSearchRequest> AchReturnResponsesCreatedAt => new DateRangeNode<TransactionSearchRequest>("ach-return-responses-created-at", this);
+
+        public MultipleValueNode<TransactionSearchRequest, string> ReasonCode => new MultipleValueNode<TransactionSearchRequest, string>("reason-code", this);
 
         public TransactionSearchRequest() : base()
         {

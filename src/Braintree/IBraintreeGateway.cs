@@ -66,6 +66,7 @@ namespace Braintree
         IDisputeGateway Dispute { get; }
         IDocumentUploadGateway DocumentUpload { get; }
         Environment Environment { get; set; }
+        IExchangeRateQuoteGateway ExchangeRateQuote {get;}
         IMerchantGateway Merchant { get; }
         IMerchantAccountGateway MerchantAccount { get; }
         string MerchantId { get; set; }

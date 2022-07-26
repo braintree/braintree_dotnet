@@ -57,6 +57,54 @@ namespace Braintree.Tests.Integration
             service = new BraintreeService(gateway.Configuration);
         }
 
+        public void EffortlessChargebackProtectionSetup()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "fraud_protection_effortless_chargeback_protection_merchant_id",
+                PublicKey = "effortless_chargeback_protection_public_key",
+                PrivateKey = "effortless_chargeback_protection_private_key"
+            };
+
+            service = new BraintreeService(gateway.Configuration);
+        }
+
+        [Test]
+        public void Search_OnAchReturnResponsesCreatedAt()
+        {
+            DateTime oneDayEarlier = DateTime.Now.AddDays(-1);
+            DateTime oneDayLater = DateTime.Now.AddDays(1);
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                AchReturnResponsesCreatedAt.
+                Between(oneDayEarlier, oneDayLater);
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(2, collection.MaximumCount);
+        }
+
+        [Test]
+        public void Search_OnReasonCodes()
+        {
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                ReasonCode.
+                IncludedIn("R01");
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(1, collection.MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                ReasonCode.
+                IncludedIn("R01", "R02");
+            collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(2, collection.MaximumCount);
+        
+            searchRequest = new TransactionSearchRequest().
+                ReasonCode.
+                IncludedIn(TransactionSearchRequest.ACH_ANY_REASON_CODE);
+            collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(2, collection.MaximumCount);
+        }
+
         [Test]
         public void Search_OnAllTextFields()
         {
@@ -1975,6 +2023,29 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.RiskData);
             Assert.IsNotNull(transaction.RiskData.decision);
             Assert.IsNotNull(transaction.RiskData.DecisionReasons);
+        }
+
+        [Test]
+        public void Sale_ReturnsSuccessfulResponseWithRiskDataForChargebackProtection()
+        {
+            EffortlessChargebackProtectionSetup();
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.IsNotNull(transaction.RiskData);
+            Assert.IsNotNull(transaction.RiskData.LiabilityShift);
         }
 
         [Test]
