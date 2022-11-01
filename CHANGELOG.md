@@ -1,4 +1,9 @@
 # Changelog
+
+## 5.14.0
+- Deprecate `ChargebackProtectionLevel` and add `ProtectionLevel` to `Dispute` and `DisputeSearch`
+- Add a check for path canonicalization in request URI creation
+
 ## 5.13.0
 - Add `AchReturnResponsesCreatedAt` to `TransactionSearchRequest` to search for specific date for transaction that have any reason codes.
 - Add `ReasonCode` to `TransactionSearchRequest` to search for transactions that have return reason codes.

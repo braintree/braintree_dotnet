@@ -235,6 +235,145 @@ namespace Braintree.Tests
             Assert.IsFalse(request.ServicePoint.Expect100Continue);
         }
 #endif
+        [Test]
+        public void Get_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Get("/open/../forbidden"));
+        }
+
+        [Test]
+        public void Get_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Get("/open/%2E%2E/forbidden"));
+        }
+
+        [Test]
+        public void GetAsync_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetAsync("/open/../forbidden"));
+        }
+
+        [Test]
+        public void GetAsync_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.GetAsync("/open/%2E%2E/forbidden"));
+        }
+
+        [Test]
+        public void Delete_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Delete("/open/../forbidden"));
+        }
+
+        [Test]
+        public void Delete_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Delete("/open/%2E%2E/forbidden"));
+        }
+
+        [Test]
+        public void DeleteAsync_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.DeleteAsync("/open/../forbidden"));
+        }
+
+        [Test]
+        public void DeleteAsync_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.DeleteAsync("/open/%2E%2E/forbidden"));
+        }
+
+        [Test]
+        public void Post_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Post("/open/../forbidden"));
+        }
+
+        [Test]
+        public void Post_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Post("/open/%2E%2E/forbidden"));
+        }
+
+        [Test]
+        public void PostAsync_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.PostAsync("/open/../forbidden"));
+        }
+
+        [Test]
+        public void PostAsync_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.PostAsync("/open/%2E%2E/forbidden"));
+        }
+
+        [Test]
+        public void PostMultipart_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.PostMultipart("/open/../forbidden", null, null));
+        }
+
+        [Test]
+        public void PostMultipart_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.PostMultipart("/open/%2E%2E/forbidden", null, null));
+        }
+
+        [Test]
+        public void PostMultipartAsync_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.PostMultipartAsync("/open/../forbidden", null, null));
+        }
+
+        [Test]
+        public void PostMultipartAsync_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.PostMultipartAsync("/open/%2E%2E/forbidden", null, null));
+        }
+
+        [Test]
+        public void Put_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Put("/open/../forbidden"));
+        }
+
+        [Test]
+        public void Put_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.Throws<ArgumentException>(() => service.Put("/open/%2E%2E/forbidden"));
+        }
+
+        [Test]
+        public void PutAsync_ExceptionPathTraversalUnencoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.PutAsync("/open/../forbidden"));
+        }
+
+        [Test]
+        public void PutAsync_ExceptionPathTraversalEncoded()
+        {
+            BraintreeService service = new BraintreeService(configuration);
+            Assert.ThrowsAsync<ArgumentException>(() => service.PutAsync("/open/%2E%2E/forbidden"));
+        }
     }
 }
 #pragma warning restore CS0618

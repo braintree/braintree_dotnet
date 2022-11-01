@@ -197,14 +197,14 @@ namespace Braintree.Tests.Integration
 
             ThreeDSecureLookupAddress billingAddress = new ThreeDSecureLookupAddress
             {
-                GivenName = "\x00",
+                GivenName = "Løst",
                 Surname = "Lést",
                 PhoneNumber = "1234567890",
                 Locality = "Oakland",
                 CountryCodeAlpha2 = "US",
                 StreetAddress = "123 Address",
                 ExtendedAddress = "Unit 2",
-                PostalCode = "94112",
+                PostalCode = "94112222222",
                 Region = "CA"
             };
 

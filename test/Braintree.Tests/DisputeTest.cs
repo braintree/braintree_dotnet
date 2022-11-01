@@ -204,7 +204,9 @@ namespace Braintree.Tests
             Assert.AreEqual(101m, result.AmountDisputed);
             Assert.AreEqual(95m, result.AmountWon);
             Assert.AreEqual("CASE-12345", result.CaseNumber);
+            // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
             Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, result.ChargebackProtectionLevel);
+            Assert.AreEqual(DisputeProtectionLevel.EFFORTLESS_CBP, result.ProtectionLevel);
             Assert.AreEqual(DateTime.Parse("2017-06-16"), result.CreatedAt);
             Assert.AreEqual("Processor comments", result.ProcessorComments);
             Assert.AreEqual("abc123", result.MerchantAccountId);
@@ -229,6 +231,66 @@ namespace Braintree.Tests
             Assert.AreEqual(DateTime.Parse("2013-04-10T10:50:39Z"), result.Evidence[1].CreatedAt);
             Assert.AreEqual(DateTime.Parse("2009-04-11"), result.Evidence[1].SentToProcessorAt);
             Assert.IsNull(result.Evidence[1].Url);
+        }
+
+        [Test]
+        public void Constructor_populatesStandardCBPLevel()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Payload_attributes());
+            XmlNode newNode = doc.DocumentElement;
+            newNode["chargeback-protection-level"].InnerText = "standard";
+
+            var node = new NodeWrapper(newNode);
+            var result = new Dispute(node);
+            // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
+            Assert.AreEqual(DisputeChargebackProtectionLevel.STANDARD, result.ChargebackProtectionLevel);
+            Assert.AreEqual(DisputeProtectionLevel.STANDARD_CBP, result.ProtectionLevel);
+        }
+
+        [Test]
+        public void Constructor_populatesNotProtectedCBPLevel()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Payload_attributes());
+            XmlNode newNode = doc.DocumentElement;
+            newNode["chargeback-protection-level"].InnerText = "not_protected";
+
+            var node = new NodeWrapper(newNode);
+            var result = new Dispute(node);
+            // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
+            Assert.AreEqual(DisputeChargebackProtectionLevel.NOT_PROTECTED, result.ChargebackProtectionLevel);
+            Assert.AreEqual(DisputeProtectionLevel.NO_PROTECTION, result.ProtectionLevel);
+        }
+
+        [Test]
+        public void Constructor_populatesnullCBPLevel()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Payload_attributes());
+            XmlNode newNode = doc.DocumentElement;
+            newNode["chargeback-protection-level"].InnerText = null;
+
+            var node = new NodeWrapper(newNode);
+            var result = new Dispute(node);
+            // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
+            Assert.AreEqual(DisputeChargebackProtectionLevel.NOT_PROTECTED, result.ChargebackProtectionLevel);
+            Assert.AreEqual(DisputeProtectionLevel.NO_PROTECTION, result.ProtectionLevel);
+        }
+
+        [Test]
+        public void Constructor_populatesEmptyCBPLevel()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Payload_attributes());
+            XmlNode newNode = doc.DocumentElement;
+            newNode["chargeback-protection-level"].InnerText = "";
+
+            var node = new NodeWrapper(newNode);
+            var result = new Dispute(node);
+            // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
+            Assert.AreEqual(DisputeChargebackProtectionLevel.NOT_PROTECTED, result.ChargebackProtectionLevel);
+            Assert.AreEqual(DisputeProtectionLevel.NO_PROTECTION, result.ProtectionLevel);
         }
 
         [Test]

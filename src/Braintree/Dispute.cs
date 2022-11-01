@@ -38,11 +38,19 @@ namespace Braintree
         [Description("retrieval")] RETRIEVAL
     }
 
+    // NEXT_MAJOR_VERSION Remove this enum
     public enum DisputeChargebackProtectionLevel
     {
         [Description("effortless")] EFFORTLESS,
         [Description("standard")] STANDARD,
         [Description("not_protected")] NOT_PROTECTED
+    }
+
+    public enum DisputeProtectionLevel
+    {
+        [Description("Effortless Chargeback Protection tool")] EFFORTLESS_CBP,
+        [Description("Chargeback Protection tool")] STANDARD_CBP,
+        [Description("No Protection")] NO_PROTECTION
     }
 
     public class Dispute
@@ -59,7 +67,10 @@ namespace Braintree
         public virtual DisputeReason Reason { get; protected set; }
         public virtual DisputeStatus Status { get; protected set; }
         public virtual DisputeKind Kind { get; protected set; }
+        // NEXT_MAJOR_VERSION Remove this attribute
+        [ObsoleteAttribute("use ProtectionLevel instead", false)]
         public virtual DisputeChargebackProtectionLevel ChargebackProtectionLevel { get; protected set; }
+        public virtual DisputeProtectionLevel ProtectionLevel { get; protected set; }
         public virtual string CaseNumber { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
@@ -90,7 +101,20 @@ namespace Braintree
             Reason = node.GetEnum("reason", DisputeReason.GENERAL);
             Status = node.GetEnum("status", DisputeStatus.UNRECOGNIZED);
             Kind = node.GetEnum("kind", DisputeKind.UNRECOGNIZED);
+            #pragma warning disable 0618
             ChargebackProtectionLevel = node.GetEnum("chargeback-protection-level", DisputeChargebackProtectionLevel.NOT_PROTECTED);
+            #pragma warning restore 0618
+            switch (node.GetString("chargeback-protection-level")) {
+                case "effortless":
+                    ProtectionLevel = DisputeProtectionLevel.EFFORTLESS_CBP;
+                    break;
+                case "standard":
+                    ProtectionLevel = DisputeProtectionLevel.STANDARD_CBP;
+                    break;
+                default:
+                    ProtectionLevel = DisputeProtectionLevel.NO_PROTECTION;
+                    break;
+            }
             CaseNumber = node.GetString("case-number");
             CurrencyIsoCode = node.GetString("currency-iso-code");
             GraphQLId = node.GetString("global-id");

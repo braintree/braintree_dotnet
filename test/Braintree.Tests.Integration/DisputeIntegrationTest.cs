@@ -897,7 +897,9 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(disputes.Count == 1);
             Assert.AreEqual("CASE-CHARGEBACK-PROTECTED", disputes[0].CaseNumber);
             Assert.AreEqual(DisputeReason.FRAUD, disputes[0].Reason);
+            // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
             Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, disputes[0].ChargebackProtectionLevel);
+            Assert.AreEqual(DisputeProtectionLevel.EFFORTLESS_CBP, disputes[0].ProtectionLevel);
         }
 
         [Test]
