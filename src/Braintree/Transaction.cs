@@ -94,6 +94,11 @@ namespace Braintree
         [Description("unknown")] UNKNOWN
     }
 
+    public enum ACHReasonCodes
+    {
+        [Description("any_reason_code")] ANY_REASON_CODE,
+    }
+
     /// <summary>
     /// A transaction returned by the Braintree Gateway
     /// </summary>

@@ -196,5 +196,7 @@ namespace Braintree
         public virtual IWebhookTestingGateway WebhookTesting => new WebhookTestingGateway(this);
 
         public virtual IPaymentMethodNonceGateway PaymentMethodNonce => new PaymentMethodNonceGateway(this);
+
+        public virtual IExchangeRateQuoteGateway ExchangeRateQuote => new ExchangeRateQuoteGateway(this);
     }
 }

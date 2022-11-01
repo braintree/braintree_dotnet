@@ -109,8 +109,19 @@ namespace Braintree
         }
 #endif
 
+        private bool IsValidURL(string URL)
+        {
+            var url = Environment.GatewayURL + URL;
+            var uri = new Uri(url);
+            return String.Equals(URL, uri.PathAndQuery);
+        }
+
         private XmlNode GetXmlResponse(string URL, string method, Request requestBody, FileStream file)
         {
+            if (!IsValidURL(URL))
+            {
+                throw new ArgumentException($"Path: {URL} is malformed.");
+            }
 #if netcore
             try
             {
@@ -188,6 +199,11 @@ namespace Braintree
 
         private async Task<XmlNode> GetXmlResponseAsync(string URL, string method, Request requestBody, FileStream file)
         {
+            if (!IsValidURL(URL))
+            {
+                throw new ArgumentException($"Path: {URL} is malformed.");
+            }
+
 #if netcore
             try
             {

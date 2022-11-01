@@ -1,5 +1,7 @@
 #pragma warning disable 1591
 
+using System;
+
 namespace Braintree
 {
     public class DisputeSearchRequest : SearchRequest
@@ -16,7 +18,11 @@ namespace Braintree
 
         public EnumMultipleValueNode<DisputeSearchRequest, DisputeKind> DisputeKind => new EnumMultipleValueNode<DisputeSearchRequest, DisputeKind>("kind", this);
 
+        // NEXT_MAJOR_VERSION Remove this attribute
+        [ObsoleteAttribute("use ProtectionLevel instead", false)]
         public EnumMultipleValueNode<DisputeSearchRequest, DisputeChargebackProtectionLevel> DisputeChargebackProtectionLevel => new EnumMultipleValueNode<DisputeSearchRequest, DisputeChargebackProtectionLevel>("chargeback_protection_level", this);
+
+        public EnumMultipleValueNode<DisputeSearchRequest, DisputeProtectionLevel> DisputeProtectionLevel => new EnumMultipleValueNode<DisputeSearchRequest, DisputeProtectionLevel>("protection_level", this);
 
         public MultipleValueNode<DisputeSearchRequest, string> MerchantAccountId => new MultipleValueNode<DisputeSearchRequest, string>("merchant_account_id", this);
 
