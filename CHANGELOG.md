@@ -1,5 +1,8 @@
 # Changelog
 
+## unreleased
+- Bump Newtonsoft.Json from 9.0.1 to 13.0.1
+
 ## 5.14.0
 - Deprecate `ChargebackProtectionLevel` and add `ProtectionLevel` to `Dispute` and `DisputeSearch`
 - Add a check for path canonicalization in request URI creation
