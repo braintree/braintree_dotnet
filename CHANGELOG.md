@@ -1,3 +1,8 @@
+# Changelog
+
+# 4.18.1
+- Add a check for path canonicalization in request URI creation
+
 # 4.18.0
 - Add `ThreeDSecurePassThru` to `CreditCard.create()`, `CreditCard.update()`, `Customer.create()`, `Customer.update()`, `PaymentMethod.create()` and `PaymentMethod.update()`
 - Add ThreeDSecure test payment method nonces

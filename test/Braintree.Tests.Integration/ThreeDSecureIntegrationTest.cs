@@ -51,7 +51,7 @@ namespace Braintree.Tests.Integration
                 CustomerId = customer.Id,
                 Number = "4111111111111111",
                 ExpirationMonth = "12",
-                ExpirationYear = "2020"
+                ExpirationYear = "2030"
             };
             CreditCard creditCard = gateway.CreditCard.Create(creditCardRequest).Target;
             var nonce = gateway.PaymentMethodNonce.Create(creditCard.Token).Target.Nonce;
@@ -196,14 +196,14 @@ namespace Braintree.Tests.Integration
 
             ThreeDSecureLookupAddress billingAddress = new ThreeDSecureLookupAddress
             {
-                GivenName = "Férst",
+                GivenName = "Løst",
                 Surname = "Lést",
                 PhoneNumber = "1234567890",
                 Locality = "Oakland",
                 CountryCodeAlpha2 = "US",
                 StreetAddress = "123 Address",
                 ExtendedAddress = "Unit 2",
-                PostalCode = "94112",
+                PostalCode = "94112222222",
                 Region = "CA"
             };
 

@@ -1000,7 +1000,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Delete_RaisesNotFoundErrorWhenTokenDoesntExist()
         {
-            Assert.Throws<NotFoundException>(() => gateway.PaymentMethod.Delete(" "));
+            Assert.Throws<NotFoundException>(() => gateway.PaymentMethod.Delete("bogus"));
         }
 
         [Test]

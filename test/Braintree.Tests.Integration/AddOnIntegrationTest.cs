@@ -29,7 +29,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void All_ReturnsAllAddOns()
         {
-            string addOnId = string.Format("dotnet_add_on{0}", new Random().Next(1000000).ToString());
+            string addOnId = $"dotnet_add_on{new Random().Next(1000000).ToString()}";
             service.Post(service.MerchantPath() + "/modifications/create_modification_for_tests", new ModificationRequestForTests {
                 Amount = 100.00M,
                 Description = "a test add-on",

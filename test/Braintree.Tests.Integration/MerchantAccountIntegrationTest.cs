@@ -154,13 +154,10 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Update_UpdatesAllFields()
         {
-            var request = deprecatedCreateRequest(null);
-            Result<MerchantAccount> result = gateway.MerchantAccount.Create(request);
-            Assert.IsTrue(result.IsSuccess());
             var updateRequest = createRequest(null);
             updateRequest.TosAccepted = null;
             updateRequest.MasterMerchantAccountId = null;
-            Result<MerchantAccount> updateResult = gateway.MerchantAccount.Update(result.Target.Id, updateRequest);
+            Result<MerchantAccount> updateResult = gateway.MerchantAccount.Update("sandbox_sub_merchant_account", updateRequest);
             Assert.IsTrue(updateResult.IsSuccess());
             MerchantAccount merchantAccount = updateResult.Target;
             Assert.AreEqual("Job", merchantAccount.IndividualDetails.FirstName);
@@ -197,13 +194,11 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            var request = deprecatedCreateRequest(null);
-            Result<MerchantAccount> result = await gateway.MerchantAccount.CreateAsync(request);
-            Assert.IsTrue(result.IsSuccess());
+            var request = createRequest(null);
             var updateRequest = createRequest(null);
             updateRequest.TosAccepted = null;
             updateRequest.MasterMerchantAccountId = null;
-            Result<MerchantAccount> updateResult = await gateway.MerchantAccount.UpdateAsync(result.Target.Id, updateRequest);
+            Result<MerchantAccount> updateResult = await gateway.MerchantAccount.UpdateAsync("sandbox_sub_merchant_account", updateRequest);
             Assert.IsTrue(updateResult.IsSuccess());
             MerchantAccount merchantAccount = updateResult.Target;
             Assert.AreEqual("Job", merchantAccount.IndividualDetails.FirstName);
@@ -267,7 +262,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Create_HandlesInvalidValidationErrors()
+        public void Update_HandlesInvalidValidationErrors()
         {
             var request = new MerchantAccountRequest
             {
@@ -309,7 +304,7 @@ namespace Braintree.Tests.Integration
                 TosAccepted = true,
                 MasterMerchantAccountId = "sandbox_master_merchant_account"
             };
-            Result<MerchantAccount> result = gateway.MerchantAccount.Create(request);
+            Result<MerchantAccount> result = gateway.MerchantAccount.Update("sandbox_sub_merchant_account", request);
             Assert.IsFalse(result.IsSuccess());
             ValidationErrors errors = result.Errors.ForObject("merchant-account");
             Assert.AreEqual(ValidationErrorCode.MERCHANT_ACCOUNT_INDIVIDUAL_FIRST_NAME_IS_INVALID,

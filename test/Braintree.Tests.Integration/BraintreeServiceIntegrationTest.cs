@@ -152,5 +152,57 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("First", customer.FirstName);
         }
 #endif
+
+        [Test]
+        public void BraintreeGateway_ExceptionIfPathTraversal()
+        {
+            var gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+
+            var batmanCustomerRequest = new CustomerRequest
+            {
+                FirstName = "Bruce",
+                LastName = "Wayne"
+            };
+
+            Customer batman = gateway.Customer.Create(batmanCustomerRequest).Target;
+
+            var batmanAddressRequest = new AddressRequest
+            {
+                Locality = "Gotham City"
+            };
+
+            Address batmanAddress = gateway.Address.Create(batman.Id, batmanAddressRequest).Target;
+
+            var supermanCustomerRequest = new CustomerRequest
+            {
+                FirstName = "Clark",
+                LastName = "Kent"
+            };
+
+            Customer superman = gateway.Customer.Create(supermanCustomerRequest).Target;
+
+            var supermanAddressRequest = new AddressRequest
+            {
+                Locality = "Smallville",
+                Region = "Kansas"
+            };
+
+            Address supermanAddress = gateway.Address.Create(superman.Id, supermanAddressRequest).Target;
+
+            Assert.Throws<ArgumentException>(() => gateway.Address.Find(batman.Id, $"../../{superman.Id}/addresses/{supermanAddress.Id}"));
+
+            Assert.Throws<ArgumentException>(() => gateway.Address.Find(batman.Id, $"%2E%2E/%2E%2E/{superman.Id}/addresses/{supermanAddress.Id}"));
+
+            Assert.ThrowsAsync<ArgumentException>(() => gateway.Address.FindAsync(superman.Id, $"../../{batman.Id}/addresses/{batmanAddress.Id}"));
+
+            Assert.ThrowsAsync<ArgumentException>(() => gateway.Address.FindAsync(superman.Id, $"%2E%2E/%2E%2E/{batman.Id}/addresses/{batmanAddress.Id}"));
+        }
     }
+    
 }

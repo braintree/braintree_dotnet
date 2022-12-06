@@ -160,8 +160,8 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
-            string firstName = string.Format("Tim{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
+            string firstName = $"Tim{new Random().Next(1000000).ToString()}";
 
             TransactionRequest request = new TransactionRequest
             {
@@ -855,7 +855,7 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Search_OnDisputeDate()
         {
-            string creditCardToken = string.Format("cc{0}", new Random().Next(1000000).ToString());
+            string creditCardToken = $"cc{new Random().Next(1000000).ToString()}";
 
             TransactionRequest request = new TransactionRequest
             {
@@ -1067,7 +1067,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(0, processingRulesGateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
-        [Test]        
+        [Test]
         public void Search_OnProcessorDeclinedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1111,7 +1111,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
-        [Test]      
+        [Test]
         public void Search_OnSettledAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1161,7 +1161,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
-        [Test]      
+        [Test]
         public void Search_OnSubmittedForSettlementAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1209,7 +1209,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
-        [Test]       
+        [Test]
         public void Search_OnVoidedAt()
         {
             TransactionRequest request = new TransactionRequest
@@ -1254,7 +1254,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
-        [Test]        
+        [Test]
         public void Search_OnMultipleStatuses()
         {
             TransactionRequest request = new TransactionRequest
@@ -1292,7 +1292,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(0, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
-        [Test]        
+        [Test]
         public void Search_ReturnsErrorOnTimeout()
         {
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
@@ -1300,7 +1300,7 @@ namespace Braintree.Tests.Integration
             Assert.Throws<DownForMaintenanceException>(() => gateway.Transaction.Search(searchRequest));
         }
 
-        [Test]      
+        [Test]
         public void Search_OnPayPalFields()
         {
             var request = new TransactionRequest
@@ -1712,6 +1712,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void Sale_WithSuccessfulAmexRewardsResponse()
         {
             var request = new TransactionRequest
@@ -1746,6 +1747,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void Sale_WithAmexRewardsResponseSucceedsEvenIfCardIsIneligible()
         {
             var request = new TransactionRequest
@@ -1780,6 +1782,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void Sale_WithAmexRewardsResponseSucceedsEvenIfCardHasInsufficientPoints()
         {
             var request = new TransactionRequest
@@ -1863,7 +1866,7 @@ namespace Braintree.Tests.Integration
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
                 },
-                DeviceSessionId = "abc123"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -1872,7 +1875,6 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(transaction.RiskData);
             Assert.IsNotNull(transaction.RiskData.decision);
-            Assert.IsNotNull(transaction.RiskData.fraudServiceProvider);
         }
 
         [Test]
@@ -1930,7 +1932,7 @@ namespace Braintree.Tests.Integration
                     CustomerLocationZip = "91244",
                     CustomerTenure = 20
                 },
-                DeviceSessionId = "abc123"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -1961,7 +1963,7 @@ namespace Braintree.Tests.Integration
                     CustomerLocationZip = "912$4",
                     CustomerTenure = 20
                 },
-                DeviceSessionId = "abc123"
+                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
             };
 
             Result<Transaction> result = gateway.Transaction.Sale(request);
@@ -2026,6 +2028,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.PayPalDetails.DebugId);
         }
 
+        #pragma warning disable 0618
         [Test]
         public void Sale_WithAllAttributes()
         {
@@ -2154,6 +2157,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("MEX", shippingAddress.CountryCodeAlpha3);
             Assert.AreEqual("484", shippingAddress.CountryCodeNumeric);
         }
+        #pragma warning restore 0618
 
         [Test]
         public void Sale_WithTransactionSourceAsRecurringFirst()
@@ -2274,6 +2278,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Obsolete]
         public void Sale_WithSecurityParams()
         {
             var request = new TransactionRequest
@@ -3260,33 +3265,6 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
         }
 
-        [Test]
-        public void Sale_WithAmexExpressCheckoutCardNonce()
-        {
-            TransactionRequest request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                MerchantAccountId = MerchantAccountIDs.FAKE_AMEX_DIRECT_MERCHANT_ACCOUNT_ID,
-                PaymentMethodNonce = Nonce.AmexExpressCheckout
-            };
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-
-            Assert.IsNotNull(result.Target.AmexExpressCheckoutDetails);
-
-            Assert.IsInstanceOf(typeof(AmexExpressCheckoutDetails), result.Target.AmexExpressCheckoutDetails);
-            AmexExpressCheckoutDetails amexExpressCheckoutDetails = result.Target.AmexExpressCheckoutDetails;
-
-            Assert.IsNull(amexExpressCheckoutDetails.Token);
-            Assert.IsNotNull(amexExpressCheckoutDetails.CardType);
-            Assert.IsNotNull(amexExpressCheckoutDetails.Bin);
-            Assert.IsNotNull(amexExpressCheckoutDetails.ExpirationMonth);
-            Assert.IsNotNull(amexExpressCheckoutDetails.ExpirationYear);
-            Assert.IsNotNull(amexExpressCheckoutDetails.CardMemberNumber);
-            Assert.IsNotNull(amexExpressCheckoutDetails.CardMemberExpiryDate);
-            Assert.IsNotNull(amexExpressCheckoutDetails.ImageUrl);
-            Assert.IsNotNull(amexExpressCheckoutDetails.SourceDescription);
-        }
 
         [Test]
         public void Sale_WithVenmoAccountNonce()
@@ -4425,40 +4403,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void ConfirmTransparentRedirect_SpecifyingDescriptor()
-        {
-            TransactionRequest trParams = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                Type = TransactionType.SALE,
-                Descriptor = new DescriptorRequest
-                {
-                  Name = "123*123456789012345678",
-                  Phone = "3334445555",
-                  Url = "ebay.com"
-                }
-            };
-
-            TransactionRequest request = new TransactionRequest
-            {
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-
-            Assert.AreEqual("123*123456789012345678", transaction.Descriptor.Name);
-            Assert.AreEqual("3334445555", transaction.Descriptor.Phone);
-            Assert.AreEqual("ebay.com", transaction.Descriptor.Url);
-        }
-
-        [Test]
         public void Sale_WithDescriptorValidation()
         {
             var request = new TransactionRequest
@@ -4926,7 +4870,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithAmexDoesNotReturnNetworkTransactionIdentifier()
+        public void Sale_WithAmexReturnsNetworkTransactionIdentifier()
         {
             var request = new TransactionRequest
             {
@@ -4942,7 +4886,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.IsNull(transaction.NetworkTransactionId);
+            Assert.IsNotNull(transaction.NetworkTransactionId);
         }
 
         [Test]
@@ -4988,7 +4932,7 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
-            Assert.IsNull(transaction.NetworkTransactionId);
+            Assert.IsNotNull(transaction.NetworkTransactionId);
         }
 
         [Test]
@@ -5012,7 +4956,7 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
-            Assert.IsNull(transaction.NetworkTransactionId);
+            Assert.IsNotNull(transaction.NetworkTransactionId);
         }
 
         [Test]
@@ -5143,32 +5087,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(
                 ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_STATUS_WITH_PREVIOUS_NETWORK_TRANSACTION_ID_IS_INVALID,
                 result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("Status")[0].Code
-            );
-        }
-
-        [Test]
-        public void Sale_WithExternalVault_ValidationErrorCardTypeIsInvalid()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.AMEX,
-                    ExpirationDate = "05/2009",
-                },
-                ExternalVault = new ExternalVaultRequest
-                {
-                    Status = "vaulted",
-                    PreviousNetworkTransactionId = "123456789012345",
-                }
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_EXTERNAL_VAULT_CARD_TYPE_IS_INVALID,
-                result.Errors.ForObject("Transaction").ForObject("ExternalVault").OnField("PreviousNetworkTransactionId")[0].Code
             );
         }
 
@@ -6880,88 +6798,6 @@ namespace Braintree.Tests.Integration
             );
         }
 
-        #pragma warning disable 0618
-        [Test]    
-        public void ConfirmTransparentRedirect_CreatesTheTransaction()
-        {
-            TransactionRequest trParams = new TransactionRequest
-            {
-                Type = TransactionType.SALE
-            };
-
-            TransactionRequest request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                },
-                BillingAddress = new CreditCardAddressRequest
-                {
-                    CountryName = "United States of America",
-                    CountryCodeAlpha2 = "US",
-                    CountryCodeAlpha3 = "USA",
-                    CountryCodeNumeric = "840"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-
-            Assert.AreEqual(1000.00, transaction.Amount);
-            Assert.AreEqual(TransactionType.SALE, transaction.Type);
-            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
-            Assert.IsNotNull(transaction.AuthorizationExpiresAt);
-            Assert.AreEqual(DateTime.Now.Year, transaction.CreatedAt.Value.Year);
-            Assert.AreEqual(DateTime.Now.Year, transaction.UpdatedAt.Value.Year);
-
-            CreditCard creditCard = transaction.CreditCard;
-            Assert.AreEqual("411111", creditCard.Bin);
-            Assert.AreEqual("1111", creditCard.LastFour);
-            Assert.AreEqual("05", creditCard.ExpirationMonth);
-            Assert.AreEqual("2009", creditCard.ExpirationYear);
-            Assert.AreEqual("05/2009", creditCard.ExpirationDate);
-
-            Address address = transaction.BillingAddress;
-            Assert.AreEqual("US", address.CountryCodeAlpha2);
-            Assert.AreEqual("USA", address.CountryCodeAlpha3);
-            Assert.AreEqual("840", address.CountryCodeNumeric);
-            Assert.AreEqual("United States of America", address.CountryName);
-        }
-        #pragma warning restore 0618
-
-        #pragma warning disable 0618
-        [Test]
-        public void ConfirmTransparentRedirect_SpecifyingMerchantAccountId()
-        {
-            TransactionRequest trParams = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                Type = TransactionType.SALE,
-                MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
-            };
-
-            TransactionRequest request = new TransactionRequest
-            {
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009"
-                }
-            };
-
-            string queryString = TestHelper.QueryStringForTR(trParams, request, gateway.TransparentRedirect.Url, service);
-            Result<Transaction> result = gateway.TransparentRedirect.ConfirmTransaction(queryString);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-
-            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, transaction.MerchantAccountId);
-        }
-        #pragma warning restore 0618
-
         [Test]
         public void Credit_WithValidParams()
         {
@@ -7703,6 +7539,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void SubmitForSettlement_WithAmexRewardsSucceeds()
         {
             TransactionRequest request = new TransactionRequest
@@ -7735,6 +7572,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void SubmitForSettlement_WithAmexRewardsSucceedsEvenIfCardIsIneligible()
         {
             TransactionRequest request = new TransactionRequest
@@ -7767,6 +7605,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void SubmitForSettlement_WithAmexRewardsSucceedsEvenIfCardBalanceIsInsufficient()
         {
             TransactionRequest request = new TransactionRequest
