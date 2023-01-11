@@ -1,7 +1,20 @@
 # Changelog
 
-## unreleased
+## 5.15.0
 - Bump Newtonsoft.Json from 9.0.1 to 13.0.1
+- Add `PreDisputeProgram` to `Dispute` and `DisputeSearchRequest`
+- Add `AUTO_ACCEPTED` to `DisputeStatus` 
+- Add `DISPUTE_AUTO_ACCEPTED` to `WebhookKind`
+- Add `EXCESSIVE_RETRY` to `GatewayRejectionReason`
+- Add `SepaDirectDebitAccount` payment method
+- Add `SepaDirectDebitAccountDetails` and `SepaDirectDebitReturnCode` to transaction object
+- Add `SepaDebitPayPalV2OrderId` to transaction search request object
+- Add `MandateType` enum to payment method nonce details object
+- Add `SEPA_DIRECT_DEBIT_ACCOUNT` to payment instrument type
+- Add SEPA Direct Debit specific error codes
+- Add SEPA Direct Debit array to customer object
+- Add `PaymentMethodNonceDetailsSepaDirectDebit` to payment method nonce details
+- Add `RequestedExemptionType` to `ThreeDSecureLookupRequest`
 
 ## 5.14.0
 - Deprecate `ChargebackProtectionLevel` and add `ProtectionLevel` to `Dispute` and `DisputeSearch`

@@ -93,6 +93,20 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(foundNonce.Details.ExpirationYear, (DateTime.Now.Year + 1).ToString());
         }
 
+        [Test]
+        public void Find_ExposesDetailsForSepaDirectDebitNonce()
+        {
+            string nonce = "fake-sepa-direct-debit-nonce";
+            PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(nonce);
+            Assert.IsNotNull(foundNonce);
+            Assert.AreEqual(foundNonce.Nonce, nonce);
+            Assert.IsNotNull(foundNonce.Details);
+            Assert.AreEqual(foundNonce.Details.SepaDirectDebit.IbanLastChars, "1234");
+            Assert.AreEqual(foundNonce.Details.SepaDirectDebit.MerchantOrPartnerCustomerId, "a-fake-mp-customer-id");
+            Assert.AreEqual(foundNonce.Details.SepaDirectDebit.MandateType, MandateType.RECURRENT);
+            Assert.AreEqual(foundNonce.Details.SepaDirectDebit.BankReferenceToken, "a-fake-bank-reference-token");
+            Assert.AreEqual(foundNonce.Details.SepaDirectDebit.CorrelationId, null);
+        }
 
         [Test]
         public void Find_ExposesDetailsForVenmoNonce()

@@ -11,6 +11,7 @@ namespace Braintree
         [Description("won")] WON,
         [Description("unrecognized")] UNRECOGNIZED,
         [Description("accepted")] ACCEPTED,
+        [Description("auto_accepted")] AUTO_ACCEPTED,
         [Description("disputed")] DISPUTED,
         [Description("expired")] EXPIRED
     }
@@ -53,6 +54,13 @@ namespace Braintree
         [Description("No Protection")] NO_PROTECTION
     }
 
+    public enum DisputePreDisputeProgram
+    {
+        [Description("none")] NONE,
+        [Description("unrecognized")] UNRECOGNIZED,
+        [Description("visa_rdr")] VISA_RDR,
+    }
+
     public class Dispute
     {
         public virtual decimal? Amount { get; protected set; }
@@ -71,6 +79,7 @@ namespace Braintree
         [ObsoleteAttribute("use ProtectionLevel instead", false)]
         public virtual DisputeChargebackProtectionLevel ChargebackProtectionLevel { get; protected set; }
         public virtual DisputeProtectionLevel ProtectionLevel { get; protected set; }
+        public virtual DisputePreDisputeProgram PreDisputeProgram { get; protected set; }
         public virtual string CaseNumber { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
@@ -115,6 +124,7 @@ namespace Braintree
                     ProtectionLevel = DisputeProtectionLevel.NO_PROTECTION;
                     break;
             }
+            PreDisputeProgram = node.GetEnum("pre-dispute-program", DisputePreDisputeProgram.UNRECOGNIZED);
             CaseNumber = node.GetString("case-number");
             CurrencyIsoCode = node.GetString("currency-iso-code");
             GraphQLId = node.GetString("global-id");

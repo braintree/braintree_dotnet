@@ -13,6 +13,7 @@ namespace Braintree
         [Description("avs_and_cvv")] AVS_AND_CVV,
         [Description("cvv")] CVV,
         [Description("duplicate")] DUPLICATE,
+        [Description("excessive_retry")] EXCESSIVE_RETRY,
         [Description("fraud")] FRAUD,
         [Description("risk_threshold")] RISK_THRESHOLD,
         [Description("three_d_secure")] THREE_D_SECURE,
@@ -79,19 +80,20 @@ namespace Braintree
 
     public enum PaymentInstrumentType
     {
+        [Description("amex_express_checkout_card")] AMEX_EXPRESS_CHECKOUT_CARD,
+        [Description("android_pay_card")] ANDROID_PAY_CARD,
+        [Description("any")] ANY,
+        [Description("apple_pay_card")] APPLE_PAY_CARD,
+        [Description("credit_card")] CREDIT_CARD,
+        [Description("local_payment")] LOCAL_PAYMENT,
         [Description("paypal_account")] PAYPAL_ACCOUNT,
         [Description("paypal_here")] PAYPAL_HERE,
-        [Description("credit_card")] CREDIT_CARD,
-        [Description("apple_pay_card")] APPLE_PAY_CARD,
-        [Description("android_pay_card")] ANDROID_PAY_CARD,
-        [Description("amex_express_checkout_card")] AMEX_EXPRESS_CHECKOUT_CARD,
-        [Description("venmo_account")] VENMO_ACCOUNT,
-        [Description("us_bank_account")] US_BANK_ACCOUNT,
-        [Description("visa_checkout_card")] VISA_CHECKOUT_CARD,
         [Description("samsung_pay_card")] SAMSUNG_PAY_CARD,
-        [Description("local_payment")] LOCAL_PAYMENT,
-        [Description("any")] ANY,
-        [Description("unknown")] UNKNOWN
+        [Description("sepa_debit_account")] SEPA_DIRECT_DEBIT_ACCOUNT,
+        [Description("unknown")] UNKNOWN,
+        [Description("us_bank_account")] US_BANK_ACCOUNT,
+        [Description("venmo_account")] VENMO_ACCOUNT,
+        [Description("visa_checkout_card")] VISA_CHECKOUT_CARD
     }
 
     public enum ACHReasonCodes
@@ -170,6 +172,7 @@ namespace Braintree
         public virtual PayPalHereDetails PayPalHereDetails { get; protected set; }
         public virtual LocalPaymentDetails LocalPaymentDetails { get; protected set; }
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
+        public virtual SepaDirectDebitAccountDetails SepaDirectDebitAccountDetails { get; protected set; }
         public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
         public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
@@ -183,6 +186,7 @@ namespace Braintree
         public virtual decimal? ShippingAmount { get; protected set; }
         public virtual string ShipsFromPostalCode { get; protected set; }
         public virtual string AchReturnCode { get; protected set; }
+        public virtual string SepaDirectDebitReturnCode { get; protected set; }
         public virtual string NetworkTransactionId { get; protected set; }
         public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
         public virtual string RetrievalReferenceNumber { get; protected set; }
@@ -309,6 +313,11 @@ namespace Braintree
             {
                 VenmoAccountDetails = new VenmoAccountDetails(venmoAccountNode);
             }
+            var sepaDirectDebitAccountDetailsNode = node.GetNode("sepa-debit-account-detail");
+            if (sepaDirectDebitAccountDetailsNode != null)
+            {
+                SepaDirectDebitAccountDetails = new SepaDirectDebitAccountDetails(sepaDirectDebitAccountDetailsNode);
+            }
             var usBankAccountNode = node.GetNode("us-bank-account");
             if (usBankAccountNode != null)
             {
@@ -391,6 +400,8 @@ namespace Braintree
             ShipsFromPostalCode = node.GetString("ships-from-postal-code");
 
             AchReturnCode = node.GetString("ach-return-code");
+
+            SepaDirectDebitReturnCode = node.GetString("sepa-direct-debit-return-code");
 
             NetworkTransactionId = node.GetString("network-transaction-id");
 

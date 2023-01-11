@@ -240,7 +240,7 @@ namespace Braintree.Tests.Integration
                     VerifyCard = true
                 },
             };
-            
+
             Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
             Assert.IsFalse(paymentMethodResult.IsSuccess());
 
@@ -581,6 +581,35 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(venmoAccount.UpdatedAt);
             Assert.IsNotNull(venmoAccount.CustomerId);
             Assert.IsNotNull(venmoAccount.Subscriptions);
+        }
+
+        [Test]
+        public void Create_CreatesSepaDirectDebitAccountWithNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.SepaDirectDebitAccount
+            };
+
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            SepaDirectDebitAccount sepaDirectDebitAccount = (SepaDirectDebitAccount) paymentMethodResult.Target;
+
+            Assert.IsNull(sepaDirectDebitAccount.MerchantAccountId);
+            Assert.IsNotNull(sepaDirectDebitAccount.Token);
+            Assert.IsNotNull(sepaDirectDebitAccount.CustomerId);
+            Assert.IsNotNull(sepaDirectDebitAccount.CustomerGlobalId);
+            Assert.IsNotNull(sepaDirectDebitAccount.GlobalId);
+            Assert.IsNotNull(sepaDirectDebitAccount.ImageUrl);
+            Assert.IsNotNull(sepaDirectDebitAccount.Last4);
+            Assert.IsNotNull(sepaDirectDebitAccount.BankReferenceToken);
+            Assert.IsNotNull(sepaDirectDebitAccount.MandateType);
+            Assert.IsNotNull(sepaDirectDebitAccount.ViewMandateUrl);
         }
 
         [Test]
@@ -1030,6 +1059,23 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Delete_DeletesSepaDirectDebitAccount()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.SepaDirectDebitAccount
+            };
+            Result<PaymentMethod> createResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(createResult.IsSuccess());
+
+            var deleteRequest = new PaymentMethodDeleteRequest { RevokeAllGrants = false};
+            Result<PaymentMethod> deleteResult = gateway.PaymentMethod.Delete(createResult.Target.Token, deleteRequest);
+
+            Assert.IsTrue(deleteResult.IsSuccess());
+        }
+
+        [Test]
         public void Delete_DeletesAndroidPayAccount()
         {
             var request = new PaymentMethodRequest
@@ -1113,7 +1159,7 @@ namespace Braintree.Tests.Integration
             var request = new PaymentMethodRequest
             {
                 CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
-                PaymentMethodNonce = Nonce.PayPalFuturePayment
+                PaymentMethodNonce = Nonce.PayPalBillingAgreement
             };
             Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
             Assert.IsTrue(result.IsSuccess());
@@ -1222,7 +1268,7 @@ namespace Braintree.Tests.Integration
                 Number = SandboxValues.CreditCardNumber.VISA,
                 ExpirationDate = "05/2012"
             }).Target;
- 
+
             ThreeDSecurePassThruRequest passThruRequestWithoutThreeDSecureVersion = new ThreeDSecurePassThruRequest()
             {
                 EciFlag = "05",
@@ -1270,7 +1316,7 @@ namespace Braintree.Tests.Integration
                 Number = SandboxValues.CreditCardNumber.VISA,
                 ExpirationDate = "05/2012"
             }).Target;
- 
+
             ThreeDSecurePassThruRequest passThruRequestWithThreeDSecureVersion = new ThreeDSecurePassThruRequest()
             {
                 EciFlag = "05",
@@ -1967,7 +2013,6 @@ namespace Braintree.Tests.Integration
             );
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
             Assert.IsTrue(result.IsSuccess());
-            Console.WriteLine("after customer create");
 
             var request = new PaymentMethodRequest
             {

@@ -52,31 +52,27 @@ namespace Braintree
     /// </example>
     public interface IBraintreeGateway
     {
-        string AccessToken { get; set; }
+        BraintreeService Service { get; }
+        Configuration Configuration { get; }
+        Environment Environment { get; set; }
         IAddOnGateway AddOn { get; }
         IAddressGateway Address { get; }
-        string ClientId { get; set; }
-        string ClientSecret { get; set; }
         IClientTokenGateway ClientToken { get; }
-        Configuration Configuration { get; }
         ICreditCardGateway CreditCard { get; }
         ICreditCardVerificationGateway CreditCardVerification { get; }
         ICustomerGateway Customer { get; }
         IDiscountGateway Discount { get; }
         IDisputeGateway Dispute { get; }
         IDocumentUploadGateway DocumentUpload { get; }
-        Environment Environment { get; set; }
         IExchangeRateQuoteGateway ExchangeRateQuote {get;}
-        IMerchantGateway Merchant { get; }
         IMerchantAccountGateway MerchantAccount { get; }
-        string MerchantId { get; set; }
+        IMerchantGateway Merchant { get; }
         IOAuthGateway OAuth { get; }
+        IPayPalAccountGateway PayPalAccount { get; }
         IPaymentMethodGateway PaymentMethod { get; }
         IPaymentMethodNonceGateway PaymentMethodNonce { get; }
-        IPayPalAccountGateway PayPalAccount { get; }
         IPlanGateway Plan { get; }
-        string PrivateKey { get; set; }
-        string PublicKey { get; set; }
+        ISepaDirectDebitAccountGateway SepaDirectDebitAccount { get; }
         ISettlementBatchSummaryGateway SettlementBatchSummary { get; }
         ISubscriptionGateway Subscription { get; }
         ITestTransactionGateway TestTransaction { get; }
@@ -84,6 +80,11 @@ namespace Braintree
         ITransactionLineItemGateway TransactionLineItem { get; }
         IWebhookNotificationGateway WebhookNotification { get; }
         IWebhookTestingGateway WebhookTesting { get; }
-        BraintreeService Service { get; }
+        string AccessToken { get; set; }
+        string ClientId { get; set; }
+        string ClientSecret { get; set; }
+        string MerchantId { get; set; }
+        string PrivateKey { get; set; }
+        string PublicKey { get; set; }
     }
 }

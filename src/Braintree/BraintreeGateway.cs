@@ -179,6 +179,8 @@ namespace Braintree
 
         public virtual IPlanGateway Plan => new PlanGateway(this);
 
+        public virtual ISepaDirectDebitAccountGateway SepaDirectDebitAccount => new SepaDirectDebitAccountGateway(this);
+
         public virtual ISettlementBatchSummaryGateway SettlementBatchSummary => new SettlementBatchSummaryGateway(this);
 
         public virtual ISubscriptionGateway Subscription => new SubscriptionGateway(this);

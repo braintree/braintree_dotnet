@@ -153,6 +153,43 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void ParsesNodeCorrectlyWithSepaDirectDebitDetails()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<payment-method-nonce>" +
+                "  <type>SepaDebitAccount</type>" +
+                "  <nonce>fake-sepa-direct-debit-account-nonce</nonce>" +
+                "  <description></description>" +
+                "  <consumed type=\"boolean\">false</consumed>" +
+                "  <details>" +
+                "    <bank-reference-token>a-bank-reference-token</bank-reference-token>" +
+                "    <mandate-type>ONE_OFF</mandate-type>" +
+                "    <merchant-or-partner-customer-id>a-mp-customer-id</merchant-or-partner-customer-id>" +
+                "    <iban-last-chars>ab12</iban-last-chars>" +
+                "    <correlation-id>a-correlation-id</correlation-id>" +
+                "  </details>" +
+                "</payment-method-nonce>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
+
+            Assert.IsNotNull(result.Target);
+            Assert.AreEqual("fake-sepa-direct-debit-account-nonce", result.Target.Nonce);
+            Assert.AreEqual("SepaDebitAccount", result.Target.Type);
+            Assert.IsNotNull(result.Target.Details);
+            Assert.AreEqual("a-bank-reference-token", result.Target.Details.SepaDirectDebit.BankReferenceToken);
+            Assert.AreEqual(MandateType.ONE_OFF, result.Target.Details.SepaDirectDebit.MandateType);
+            Assert.AreEqual("a-mp-customer-id", result.Target.Details.SepaDirectDebit.MerchantOrPartnerCustomerId);
+            Assert.AreEqual("ab12", result.Target.Details.SepaDirectDebit.IbanLastChars);
+            Assert.AreEqual("a-correlation-id", result.Target.Details.SepaDirectDebit.CorrelationId);
+        }
+
+        [Test]
         public void ParsesNodeCorrectlyWithCreditCardDetails()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +

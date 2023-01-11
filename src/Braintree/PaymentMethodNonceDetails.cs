@@ -4,6 +4,8 @@ namespace Braintree
 {
     public class PaymentMethodNonceDetails
     {
+        public virtual PaymentMethodNonceDetailsPayerInfo PayerInfo { get; protected set; }
+        public virtual PaymentMethodNonceDetailsSepaDirectDebit SepaDirectDebit { get; protected set; }
         public virtual bool? IsNetworkTokenized { get; protected set; }
         public virtual string Bin { get; protected set; }
         //NEXT_MAJOR_VERSION CardType should be an enum (see CreditCard class)
@@ -14,15 +16,14 @@ namespace Braintree
         public virtual string LastTwo { get; protected set; }
         public virtual string Username { get; protected set; }
         public virtual string VenmoUserId { get; protected set; }
-        public virtual PaymentMethodNonceDetailsPayerInfo PayerInfo { get; protected set; }
 
         protected internal PaymentMethodNonceDetails(NodeWrapper node)
         {
-            IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
             Bin = node.GetString("bin");
             CardType = node.GetString("card-type");
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");
+            IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
             LastFour = node.GetString("last-four");
             LastTwo = node.GetString("last-two");
             Username = node.GetString("username");
@@ -33,15 +34,21 @@ namespace Braintree
             {
                 PayerInfo = new PaymentMethodNonceDetailsPayerInfo(payerInfoNode);
             }
+
+            if (node.GetNode("bank-reference-token") != null && node.GetNode("iban-last-chars") != null)
+            {
+                SepaDirectDebit = new PaymentMethodNonceDetailsSepaDirectDebit(node);
+
+            }
         }
 
         protected internal PaymentMethodNonceDetails(dynamic details)
         {
-            IsNetworkTokenized = details.isNetworkTokenized;
             Bin = details.bin;
             CardType = details.cardType;
             ExpirationMonth = details.expirationMonth;
             ExpirationYear = details.expirationYear;
+            IsNetworkTokenized = details.isNetworkTokenized;
             LastFour = details.lastFour;
             LastTwo = details.lastTwo;
             Username = details.username;
@@ -51,6 +58,11 @@ namespace Braintree
             if (payerInfo != null)
             {
                 PayerInfo = new PaymentMethodNonceDetailsPayerInfo(payerInfo);
+            }
+
+            if (details.bankReferenceToken != null && details.ibanLastChars != null)
+            {
+                SepaDirectDebit = new PaymentMethodNonceDetailsSepaDirectDebit(details);
             }
         }
 

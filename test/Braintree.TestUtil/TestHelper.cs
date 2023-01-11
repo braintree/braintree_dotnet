@@ -196,7 +196,7 @@ namespace Braintree.TestUtil
             using (var reader = new StreamReader(response.Content.ReadAsStreamAsync().Result))
             return reader.ReadToEnd();
         }
-        
+
         public static string extractParamFromJson(string keyName, HttpResponseMessage response)
         {
             var param = extractParamFromJson(keyName, GetResponseContent(response));
@@ -511,7 +511,7 @@ namespace Braintree.TestUtil
                     request.Content = new StringContent(utf8_string, Encoding.UTF8,"application/x-www-form-urlencoded");
                     request.Content.Headers.ContentLength = UTF8Encoding.UTF8.GetByteCount(utf8_string);
                 }
-                    
+
                 var httpClientHandler = new HttpClientHandler
                 {
                     AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
@@ -523,7 +523,7 @@ namespace Braintree.TestUtil
                 {
                     response = client.SendAsync(request).GetAwaiter().GetResult();
                 }
-                    
+
                 return response;
             }
             catch (WebException e)

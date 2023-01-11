@@ -82,6 +82,8 @@ namespace Braintree
                 return DisputeWonSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_ACCEPTED) {
                 return DisputeAcceptedSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_AUTO_ACCEPTED) {
+                return DisputeAutoAcceptedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_DISPUTED) {
                 return DisputeDisputedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_EXPIRED) {
@@ -346,6 +348,26 @@ namespace Braintree
                     Node("currency-iso-code", "USD"),
                     Node("kind", "chargeback"),
                     Node("status", "accepted"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21")
+            );
+        }
+
+        private string DisputeAutoAcceptedSampleXml(string id) {
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
+                    Node("status", "auto_accepted"),
                     Node("reason", "fraud"),
                     Node("transaction",
                         Node("id", id),

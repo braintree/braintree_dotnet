@@ -293,6 +293,22 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForDisputeAutoAcceptedWebhook()
+        {
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_AUTO_ACCEPTED, "my_id");
+
+            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+            Assert.AreEqual(WebhookKind.DISPUTE_AUTO_ACCEPTED, notification.Kind);
+            Assert.AreEqual("my_id", notification.Dispute.Id);
+            Assert.AreEqual("my_id", notification.Dispute.TransactionDetails.Id);
+            Assert.AreEqual("250.00", notification.Dispute.TransactionDetails.Amount);
+            Assert.AreEqual(DisputeStatus.AUTO_ACCEPTED, notification.Dispute.Status);
+            Assert.AreEqual(DisputeKind.CHARGEBACK, notification.Dispute.Kind);
+            Assert.AreEqual(new DateTime(2014, 3, 21), notification.Dispute.DateOpened);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForDisputeDisputedWebhook()
         {
             Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISPUTE_DISPUTED, "my_id");

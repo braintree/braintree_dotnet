@@ -14,6 +14,7 @@ namespace Braintree
         [Description("disbursement")] DISBURSEMENT,
         [Description("disbursement_exception")] DISBURSEMENT_EXCEPTION,
         [Description("dispute_accepted")] DISPUTE_ACCEPTED,
+        [Description("dispute_auto_accepted")] DISPUTE_AUTO_ACCEPTED,
         [Description("dispute_disputed")] DISPUTE_DISPUTED,
         [Description("dispute_expired")] DISPUTE_EXPIRED,
         [Description("dispute_lost")] DISPUTE_LOST,

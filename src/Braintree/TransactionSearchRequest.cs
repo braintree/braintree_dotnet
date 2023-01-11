@@ -92,6 +92,8 @@ namespace Braintree
 
         public TextNode<TransactionSearchRequest> PayPalPaymentId => new TextNode<TransactionSearchRequest>("paypal-payment-id", this);
 
+        public TextNode<TransactionSearchRequest> SepaDebitPayPalV2OrderId => new TextNode<TransactionSearchRequest>("sepa_debit_paypal_v2_order_id", this);
+
         public TextNode<TransactionSearchRequest> PaymentMethodToken => new TextNode<TransactionSearchRequest>("payment-method-token", this);
 
         public TextNode<TransactionSearchRequest> ProcessorAuthorizationCode => new TextNode<TransactionSearchRequest>("processor-authorization-code", this);

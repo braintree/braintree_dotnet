@@ -99,6 +99,10 @@ namespace Braintree
             {
                 return new ResultImpl<PayPalAccount>(response, gateway);
             }
+            else if (response.GetName() == "sepa-debit-account")
+            {
+                return new ResultImpl<SepaDirectDebitAccount>(response, gateway);
+            }
             else if (response.GetName() == "us-bank-account")
             {
                 return new ResultImpl<UsBankAccount>(response, gateway);
