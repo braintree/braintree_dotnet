@@ -67,6 +67,7 @@ namespace Braintree.Tests
                 Node("processor-comments", "Processor comments"),
                 Node("kind", "chargeback"),
                 Node("merchant-account-id", "abc123"),
+                Node("pre-dispute-program", "visa_rdr"),
                 Node("reason", "fraud"),
                 Node("reason-code", "83"),
                 Node("reason-description", "Reason code 83 description"),
@@ -208,6 +209,7 @@ namespace Braintree.Tests
             Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, result.ChargebackProtectionLevel);
             Assert.AreEqual(DisputeProtectionLevel.EFFORTLESS_CBP, result.ProtectionLevel);
             Assert.AreEqual(DateTime.Parse("2017-06-16"), result.CreatedAt);
+            Assert.AreEqual(DisputePreDisputeProgram.VISA_RDR, result.PreDisputeProgram);
             Assert.AreEqual("Processor comments", result.ProcessorComments);
             Assert.AreEqual("abc123", result.MerchantAccountId);
             Assert.AreEqual("original_dispute_id", result.OriginalDisputeId);
@@ -291,6 +293,19 @@ namespace Braintree.Tests
             // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
             Assert.AreEqual(DisputeChargebackProtectionLevel.NOT_PROTECTED, result.ChargebackProtectionLevel);
             Assert.AreEqual(DisputeProtectionLevel.NO_PROTECTION, result.ProtectionLevel);
+        }
+
+        [Test]
+        public void Constructor_populatesUnrecognizedPreDisputeProgram()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Payload_attributes());
+            XmlNode newNode = doc.DocumentElement;
+            newNode["pre-dispute-program"].InnerText = "unrecognized_program";
+
+            var node = new NodeWrapper(newNode);
+            var result = new Dispute(node);
+            Assert.AreEqual(DisputePreDisputeProgram.UNRECOGNIZED, result.PreDisputeProgram);
         }
 
         [Test]

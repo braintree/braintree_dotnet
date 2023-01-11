@@ -1689,7 +1689,7 @@ namespace Braintree.Tests.Integration
 
             var update = new CustomerRequest
             {
-                PaymentMethodNonce = Nonce.PayPalFuturePayment
+                PaymentMethodNonce = Nonce.PayPalBillingAgreement
             };
             var updatedCustomer = gateway.Customer.Update(customer.Id, update).Target;
 
@@ -2032,7 +2032,7 @@ namespace Braintree.Tests.Integration
         {
             var request = new CustomerRequest
             {
-                PaymentMethodNonce = Nonce.PayPalFuturePayment
+                PaymentMethodNonce = Nonce.PayPalBillingAgreement
             };
 
             var customer = gateway.Customer.Create(request).Target;

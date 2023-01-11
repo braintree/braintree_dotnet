@@ -136,6 +136,10 @@ namespace Braintree
             {
                 return new PayPalAccount(node, gateway) as T;
             }
+            else if (typeof(T) == typeof(SepaDirectDebitAccount))
+            {
+                return new SepaDirectDebitAccount(node, gateway) as T;
+            }
             else if (typeof(T) == typeof(UsBankAccount))
             {
                 return new UsBankAccount(node) as T;

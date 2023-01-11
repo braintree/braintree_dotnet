@@ -15,6 +15,7 @@ namespace Braintree
 		public string AuthorizationFingerprint { get; set; }
 		public string DfReferenceId { get; set; }
 		public string BraintreeLibraryVersion { get; set; }
+		public string RequestedExemptionType { get; set; }
 		public ThreeDSecureLookupAddress BillingAddress { get; set; }
 
 		public bool? ChallengeRequested { get; set; }
@@ -68,6 +69,9 @@ namespace Braintree
             } 
             if (ExemptionRequested != null) {
                 json.Add("exemptionRequested", ExemptionRequested);
+            }
+            if (RequestedExemptionType != null) {
+                json.Add("requestedExemptionType", RequestedExemptionType);
             }
             if (DataOnlyRequested != null) {
                 json.Add("dataOnlyRequested", DataOnlyRequested);

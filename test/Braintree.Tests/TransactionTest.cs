@@ -121,6 +121,39 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void RecognizesExcessiveRetryGatewayRejectReason()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <id></id>\n" +
+                "  <status></status>\n" +
+                "  <type>sale</type>\n" +
+                "  <customer></customer>\n" +
+                "  <billing></billing>\n" +
+                "  <shipping></shipping>\n" +
+                "  <custom-fields/>\n" +
+                "  <gateway-rejection-reason>excessive_retry</gateway-rejection-reason>\n" +
+                "  <credit-card></credit-card>\n" +
+                "  <status-history type=\"array\"></status-history>\n" +
+                "  <subscription></subscription>\n" +
+                "  <descriptor></descriptor>\n" +
+                "  <escrow-status></escrow-status>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <payment-instrument-type>credit_card</payment-instrument-type>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.EXCESSIVE_RETRY, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
         public void DeserializesAchReturnCodeFromXml()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -239,6 +272,48 @@ namespace Braintree.Tests
 
             Assert.AreEqual("00", transaction.NetworkResponseCode);
             Assert.AreEqual("Approved", transaction.NetworkResponseText);
+        }
+
+        [Test]
+        public void DeserializesSepaDirectDebitReturnCode()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <sepa-direct-debit-return-code>AM04</sepa-direct-debit-return-code>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <subscription></subscription>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual("AM04", transaction.SepaDirectDebitReturnCode);
+        }
+
+        [Test]
+        public void DeserializesSepaDirectDebitAccountDetail()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <sepa-debit-account-detail>\n" +
+                "    <token>abcdef</token>\n" +
+                "  </sepa-debit-account-detail>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <subscription></subscription>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual("abcdef", transaction.SepaDirectDebitAccountDetails.Token);
         }
     }
 }

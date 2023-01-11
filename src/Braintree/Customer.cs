@@ -17,28 +17,29 @@ namespace Braintree
     /// </example>
     public class Customer
     {
-        public virtual string Id { get; protected set; }
-        public virtual string FirstName { get; protected set; }
-        public virtual string LastName { get; protected set; }
-        public virtual string Company { get; protected set; }
-        public virtual string Email { get; protected set; }
-        public virtual string Phone { get; protected set; }
-        public virtual string Fax { get; protected set; }
-        public virtual string Website { get; protected set; }
-        public virtual string GraphQLId { get; protected set; }
-        public virtual DateTime? CreatedAt { get; protected set; }
-        public virtual DateTime? UpdatedAt { get; protected set; }
-        public virtual CreditCard[] CreditCards { get; protected set; }
-        public virtual PayPalAccount[] PayPalAccounts { get; protected set; }
-        public virtual ApplePayCard[] ApplePayCards { get; protected set; }
+        public virtual Address[] Addresses { get; protected set; }
         // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
         public virtual AndroidPayCard[] AndroidPayCards { get; protected set; }
+        public virtual ApplePayCard[] ApplePayCards { get; protected set; }
+        public virtual CreditCard[] CreditCards { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual Dictionary<string, string> CustomFields { get; protected set; }
+        public virtual PayPalAccount[] PayPalAccounts { get; protected set; }
+        public virtual PaymentMethod[] PaymentMethods { get; protected set; }
+        public virtual SepaDirectDebitAccount[] SepaDirectDebitAccounts { get; protected set; }
+        public virtual UsBankAccount[] UsBankAccounts { get; protected set; }
         public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
         public virtual VisaCheckoutCard[] VisaCheckoutCards { get; protected set; }
-        public virtual UsBankAccount[] UsBankAccounts { get; protected set; }
-        public virtual PaymentMethod[] PaymentMethods { get; protected set; }
-        public virtual Address[] Addresses { get; protected set; }
-        public virtual Dictionary<string, string> CustomFields { get; protected set; }
+        public virtual string Company { get; protected set; }
+        public virtual string Email { get; protected set; }
+        public virtual string Fax { get; protected set; }
+        public virtual string FirstName { get; protected set; }
+        public virtual string GraphQLId { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual string LastName { get; protected set; }
+        public virtual string Phone { get; protected set; }
+        public virtual string Website { get; protected set; }
         public PaymentMethod DefaultPaymentMethod
         {
             get
@@ -84,6 +85,13 @@ namespace Braintree
                 PayPalAccounts[i] = new PayPalAccount(paypalXmlNodes[i], gateway);
             }
 
+            var sepaDirectDebitXmlNodes = node.GetList("sepa-debit-accounts/sepa-debit-account");
+            SepaDirectDebitAccounts = new SepaDirectDebitAccount[sepaDirectDebitXmlNodes.Count];
+            for (int i = 0; i < sepaDirectDebitXmlNodes.Count; i++)
+            {
+                SepaDirectDebitAccounts[i] = new SepaDirectDebitAccount(sepaDirectDebitXmlNodes[i], gateway);
+            }
+
             var applePayXmlNodes = node.GetList("apple-pay-cards/apple-pay-card");
             ApplePayCards = new ApplePayCard[applePayXmlNodes.Count];
             for (int i = 0; i < applePayXmlNodes.Count; i++)
@@ -121,13 +129,14 @@ namespace Braintree
             }
 
             PaymentMethods = new PaymentMethod[
-                CreditCards.Length
-                + PayPalAccounts.Length
+                AndroidPayCards.Length
                 + ApplePayCards.Length
-                + AndroidPayCards.Length
+                + CreditCards.Length
+                + PayPalAccounts.Length
+                + SepaDirectDebitAccounts.Length
+                + UsBankAccounts.Length
                 + VenmoAccounts.Length
                 + VisaCheckoutCards.Length
-                + UsBankAccounts.Length
             ];
 
             CreditCards.CopyTo(PaymentMethods, 0);
@@ -137,6 +146,8 @@ namespace Braintree
             VenmoAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + AndroidPayCards.Length);
             VisaCheckoutCards.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + AndroidPayCards.Length + VenmoAccounts.Length);
             UsBankAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + AndroidPayCards.Length + VenmoAccounts.Length + VisaCheckoutCards.Length);
+            // NEXT_MAJOR_VERSION the second argument is the index at which these get added, we can find a more elegant solution to this than adding all the lengths each time.
+            SepaDirectDebitAccounts.CopyTo(PaymentMethods, CreditCards.Length + PayPalAccounts.Length + ApplePayCards.Length + AndroidPayCards.Length + VenmoAccounts.Length + VisaCheckoutCards.Length + UsBankAccounts.Length);
 
             var addressXmlNodes = node.GetList("addresses/address");
             Addresses = new Address[addressXmlNodes.Count];

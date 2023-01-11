@@ -42,6 +42,7 @@ namespace Braintree.Tests
             StringAssert.Contains(@"""braintreeLibraryVersion"":""braintree/web/3.44.0""", outputJSON);
             StringAssert.DoesNotMatch(@"challengeRequested", outputJSON);
             StringAssert.DoesNotMatch(@"exemptionRequested", outputJSON);
+            StringAssert.DoesNotMatch(@"requestedExemptionType", outputJSON);
         }
 
         [Test]
@@ -225,6 +226,37 @@ namespace Braintree.Tests
             var outputJSON = request.ToJSON();
             
             StringAssert.Contains(@"""challengeRequested"":true", outputJSON);
+        }
+
+        [Test]
+        public void SerializesWithRequestedExemptionType()
+        {
+            var clientData = @"{
+                ""authorizationFingerprint"": ""auth-fingerprint"",
+                ""braintreeLibraryVersion"": ""braintree/web/3.44.0"",
+                ""dfReferenceId"": ""ABC-123"",
+                ""nonce"": ""FAKE-NONCE"",
+                ""clientMetadata"": {
+                     ""cardinalDeviceDataCollectionTimeElapsed"": 40,
+                     ""issuerDeviceDataCollectionResult"": true,
+                     ""issuerDeviceDataCollectionTimeElapsed"": 413,
+                     ""requestedThreeDSecureVersion"": ""2"",
+                     ""sdkVersion"": ""web/3.42.0""
+                }
+            }";
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                Amount = "10.00",
+                ClientData = clientData,
+                RequestedExemptionType = "low_value"
+            };
+
+            Assert.AreEqual("low_value", request.RequestedExemptionType);
+
+            var outputJSON = request.ToJSON();
+
+            StringAssert.Contains(@"""requestedExemptionType"":""low_value""", outputJSON);
         }
 
         [Test]

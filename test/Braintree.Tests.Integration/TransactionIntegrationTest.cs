@@ -70,6 +70,19 @@ namespace Braintree.Tests.Integration
             service = new BraintreeService(gateway.Configuration);
         }
 
+        public void DuplicateCheckingSetup()
+        {
+            gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "dup_checking_integration_merchant_id",
+                PublicKey = "dup_checking_integration_public_key",
+                PrivateKey = "dup_checking_integration_private_key"
+            };
+
+            service = new BraintreeService(gateway.Configuration);
+        }
+
         [Test]
         public void Search_OnAchReturnResponsesCreatedAt()
         {
@@ -467,6 +480,58 @@ namespace Braintree.Tests.Integration
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
 
             Assert.AreEqual(collection.FirstItem.PaymentInstrumentType, PaymentInstrumentType.LOCAL_PAYMENT);
+        }
+
+        [Test]
+        public void Search_PaymentInstrumentTypeIsSepaDirectDebit()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.SepaDirectDebitAccount,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id)
+                .PaymentInstrumentType.Is("SEPADebitAccountDetail");
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+
+            Assert.AreEqual(collection.FirstItem.PaymentInstrumentType, PaymentInstrumentType.SEPA_DIRECT_DEBIT_ACCOUNT);
+        }
+
+        [Test]
+        public void Search_SepaDirectDebitPayPalV2OrderId()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.SepaDirectDebitAccount,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            SepaDirectDebitAccountDetails sepaDirectDebitAccountDetails = transaction.SepaDirectDebitAccountDetails;
+
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest()
+                .Id.Is(transaction.Id)
+                .SepaDebitPayPalV2OrderId.Is(sepaDirectDebitAccountDetails.PayPalV2OrderId);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
         }
 
         [Test]
@@ -3820,6 +3885,34 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Transaction;
 
             Assert.AreEqual(TransactionGatewayRejectionReason.CVV, transaction.GatewayRejectionReason);
+        }
+
+        [Test]
+        public void Sale_GatewayRejectedForExcessiveRetry()
+        {
+            DuplicateCheckingSetup();
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.DECLINE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2017",
+                    CVV = "333"
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+
+            // Retry for 15 times
+            for (var i = 0; i <= 15; i++)
+            {
+                result = gateway.Transaction.Sale(request);
+            }
+
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionGatewayRejectionReason.EXCESSIVE_RETRY, transaction.GatewayRejectionReason);
         }
 
         [Test]

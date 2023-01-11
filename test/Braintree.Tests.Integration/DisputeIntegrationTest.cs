@@ -894,12 +894,49 @@ namespace Braintree.Tests.Integration
             {
                 disputes.Add(d);
             }
-            Assert.IsTrue(disputes.Count == 1);
-            Assert.AreEqual("CASE-CHARGEBACK-PROTECTED", disputes[0].CaseNumber);
-            Assert.AreEqual(DisputeReason.FRAUD, disputes[0].Reason);
-            // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
-            Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, disputes[0].ChargebackProtectionLevel);
-            Assert.AreEqual(DisputeProtectionLevel.EFFORTLESS_CBP, disputes[0].ProtectionLevel);
+            Assert.IsTrue(disputes.Count > 0);
+
+            foreach (var dispute in disputes)
+            {
+                Assert.AreEqual(DisputeReason.FRAUD, dispute.Reason);
+                // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
+                Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, dispute.ChargebackProtectionLevel);
+                Assert.AreEqual(DisputeProtectionLevel.EFFORTLESS_CBP, dispute.ProtectionLevel);
+            }
+        }
+
+        [Test]
+        public void Search_withPreDisputeProgramReturnsDispute()
+        {
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                DisputePreDisputeProgram.Is(DisputePreDisputeProgram.VISA_RDR);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.AreEqual(1, disputes.Count);
+            Assert.AreEqual(DisputePreDisputeProgram.VISA_RDR, disputes[0].PreDisputeProgram);
+        }
+
+        [Test]
+        public void Search_forNonPreDisputesReturnsDisputes()
+        {
+            DisputeSearchRequest request = new DisputeSearchRequest().
+                DisputePreDisputeProgram.IncludedIn(DisputePreDisputeProgram.NONE);
+            PaginatedCollection<Dispute> disputeCollection = gateway.Dispute.Search(request);
+
+            var disputes = new List<Dispute>();
+            foreach (var d in disputeCollection)
+            {
+                disputes.Add(d);
+            }
+            Assert.IsTrue(disputes.Count > 1);
+
+            var preDisputePrograms = disputes.Select(d => d.PreDisputeProgram).Distinct().ToArray();
+            Assert.AreEqual(new[] {DisputePreDisputeProgram.NONE}, preDisputePrograms);
         }
 
         [Test]
