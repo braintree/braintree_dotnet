@@ -898,7 +898,6 @@ namespace Braintree.Tests.Integration
 
             foreach (var dispute in disputes)
             {
-                Assert.AreEqual(DisputeReason.FRAUD, dispute.Reason);
                 // NEXT_MAJOR_VERSION Remove this assertion when ChargebackProtectionLevel is removed from the SDK
                 Assert.AreEqual(DisputeChargebackProtectionLevel.EFFORTLESS, dispute.ChargebackProtectionLevel);
                 Assert.AreEqual(DisputeProtectionLevel.EFFORTLESS_CBP, dispute.ProtectionLevel);

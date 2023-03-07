@@ -1,5 +1,13 @@
 # Changelog
 
+# 5.16.0
+- Add `IntendedTransactionSource` to `CreditCardVerificationRequest`
+- Add `PaymentMethodNonce` to `CreditCardVerificationRequest`
+- Add `ThreeDSecureAuthenticationID` to `CreditCardVerificationRequest`
+- Add `ThreeDSecurePassThru` to `CreditCardVerificationRequest`
+- Add support for Plan creation/updating with `AddOns` and `Discounts`
+
+
 ## 5.15.0
 - Bump Newtonsoft.Json from 9.0.1 to 13.0.1
 - Add `PreDisputeProgram` to `Dispute` and `DisputeSearchRequest`
@@ -156,7 +164,7 @@ Breaking changes:
 - Remove `AmexExpressCheckoutCard` payment method
 - Bump API version to support declined refund objects
 - Convert custom `Enumeration` subclasses to C# `Enum` types (fixes #86):
-  - `CreditCardCardType`
+  - `CreditCardCardType` (additionally, type MASTER_CARD was renamed to MASTERCARD)
   - `CreditCardCommercial`
   - `CreditCardCustomerLocation`
   - `CreditCardDebit`

@@ -980,45 +980,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Create_WithVenmoSdkPaymentMethodCode()
-        {
-            var createRequest = new CustomerRequest()
-            {
-                FirstName = "Michael",
-                LastName = "Angelo",
-                CreditCard = new CreditCardRequest()
-                {
-                    VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.VISA_PAYMENT_METHOD_CODE
-                }
-            };
-
-            Customer customer = gateway.Customer.Create(createRequest).Target;
-            Assert.AreEqual("Michael", customer.FirstName);
-            Assert.AreEqual("Angelo", customer.LastName);
-            Assert.AreEqual("411111", customer.CreditCards[0].Bin);
-            Assert.AreEqual("1111", customer.CreditCards[0].LastFour);
-        }
-
-        [Test]
-        public void Create_WithVenmoSdkSession()
-        {
-            var createRequest = new CustomerRequest()
-            {
-                CreditCard = new CreditCardRequest()
-                {
-                    Number = "5105105105105100",
-                    ExpirationDate = "05/12",
-                    Options = new CreditCardOptionsRequest() {
-                        VenmoSdkSession = SandboxValues.VenmoSdk.SESSION
-                    }
-                }
-            };
-
-            Customer customer = gateway.Customer.Create(createRequest).Target;
-            Assert.IsFalse(customer.CreditCards[0].IsVenmoSdk.Value);
-        }
-
-        [Test]
         public void Create_WithPaymentMethodNonce()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);

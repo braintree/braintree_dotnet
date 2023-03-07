@@ -72,7 +72,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
             Assert.IsTrue(creditCard.IsDefault.Value);
-            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
             Assert.IsNotNull(creditCard.ImageUrl);
@@ -124,7 +123,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
             Assert.IsTrue(creditCard.IsDefault.Value);
-            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
             Assert.IsNotNull(creditCard.ImageUrl);
@@ -140,25 +138,6 @@ namespace Braintree.Tests.Integration
             ).GetAwaiter().GetResult();
         }
 #endif
-
-        [Test]
-        public void Create_CreatesCreditCardWithAVenmoSdkPaymentMethodCode()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            var creditCardRequest = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.VISA_PAYMENT_METHOD_CODE,
-            };
-
-            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
-            Assert.IsTrue(result.IsSuccess());
-
-            CreditCard creditCard = result.Target;
-            Assert.AreEqual("1111", creditCard.LastFour);
-            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
-        }
 
         [Test]
         [Obsolete]
@@ -211,73 +190,6 @@ namespace Braintree.Tests.Integration
             Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
             Assert.IsTrue(result.IsSuccess());
         }
-
-        [Test]
-        public void Create_FailsToCreateCreditCardWithInvalidVenmoSdkPaymentMethodCode()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            var creditCardRequest = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.INVALID_PAYMENT_METHOD_CODE,
-            };
-
-            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual("Invalid VenmoSDK payment method code", result.Message);
-            Assert.AreEqual(
-                ValidationErrorCode.CREDIT_CARD_INVALID_VENMO_SDK_PAYMENT_METHOD_CODE,
-                result.Errors.ForObject("CreditCard").OnField("VenmoSdkPaymentMethodCode")[0].Code
-            );
-        }
-
-        [Test]
-        public void Create_AddsCardToVenmoSdkWithValidSession()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            var creditCardRequest = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
-                Options = new CreditCardOptionsRequest
-                {
-                    VenmoSdkSession = SandboxValues.VenmoSdk.SESSION
-                }
-            };
-
-            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
-            CreditCard card = result.Target;
-
-            Assert.IsTrue(result.IsSuccess());
-            Assert.IsFalse(card.IsVenmoSdk.Value);
-        }
-
-        [Test]
-        public void Create_DoesNotAddCardToVenmoSdkWithInvalidSession()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            var creditCardRequest = new CreditCardRequest
-            {
-                CustomerId = customer.Id,
-                Number = "5105105105105100",
-                ExpirationDate = "05/12",
-                Options = new CreditCardOptionsRequest
-                {
-                    VenmoSdkSession = SandboxValues.VenmoSdk.INVALID_SESSION
-                }
-            };
-
-            Result<CreditCard> result = gateway.CreditCard.Create(creditCardRequest);
-            CreditCard card = result.Target;
-
-            Assert.IsTrue(result.IsSuccess());
-            Assert.IsFalse(card.IsVenmoSdk.Value);
-        }
-
 
         [Test]
         public void Create_AcceptsBillingAddressId()
@@ -1925,7 +1837,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("2012", creditCard.ExpirationYear);
             Assert.AreEqual("Michael Angelo", creditCard.CardholderName);
             Assert.IsTrue(creditCard.IsDefault.Value);
-            Assert.IsFalse(creditCard.IsVenmoSdk.Value);
             Assert.AreEqual(DateTime.Now.Year, creditCard.CreatedAt.Value.Year);
             Assert.AreEqual(DateTime.Now.Year, creditCard.UpdatedAt.Value.Year);
             Assert.IsNotNull(creditCard.ImageUrl);

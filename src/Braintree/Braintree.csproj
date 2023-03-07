@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2021</Copyright>
-    <VersionPrefix>5.15.0</VersionPrefix>
+    <VersionPrefix>5.16.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <!-- We target NET standard 2.0 so that we can support NET Core 2.1. When NET Core 2.1 reaches EOL, we can update to Net Standard 2.1 -->
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
@@ -12,20 +12,11 @@
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Bump Newtonsoft.Json from 9.0.1 to 13.0.1
-      - Add `PreDisputeProgram` to `Dispute` and `DisputeSearchRequest`
-      - Add `AUTO_ACCEPTED` to `DisputeStatus` 
-      - Add `DISPUTE_AUTO_ACCEPTED` to `WebhookKind`
-      - Add `EXCESSIVE_RETRY` to `GatewayRejectionReason`
-      - Add `SepaDirectDebitAccount` payment method
-      - Add `SepaDirectDebitAccountDetails` and `SepaDirectDebitReturnCode` to transaction object
-      - Add `SepaDebitPayPalV2OrderId` to transaction search request object
-      - Add `MandateType` enum to payment method nonce details object
-      - Add `SEPA_DIRECT_DEBIT_ACCOUNT` to payment instrument type
-      - Add SEPA Direct Debit specific error codes
-      - Add SEPA Direct Debit array to customer object
-      - Add `PaymentMethodNonceDetailsSepaDirectDebit` to payment method nonce details
-      - Add `RequestedExemptionType` to `ThreeDSecureLookupRequest`
+      - Add `IntendedTransactionSource` to `CreditCardVerificationRequest`
+      - Add `PaymentMethodNonce` to `CreditCardVerificationRequest`
+      - Add `ThreeDSecureAuthenticationID` to `CreditCardVerificationRequest`
+      - Add `ThreeDSecurePassThru` to `CreditCardVerificationRequest`
+      - Add support for Plan creation/updating with `AddOns` and `Discounts`
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

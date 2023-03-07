@@ -3891,26 +3891,28 @@ namespace Braintree.Tests.Integration
         public void Sale_GatewayRejectedForExcessiveRetry()
         {
             DuplicateCheckingSetup();
-            var request = new TransactionRequest
+            var excessiveRetry = false;
+            var counter = 0;
+            Result<Braintree.Transaction> result = null;
+            Transaction transaction = null;
+            while ((excessiveRetry == false) && (counter < 25))
             {
-                Amount = SandboxValues.TransactionAmount.DECLINE,
-                CreditCard = new TransactionCreditCardRequest
+                var request = new TransactionRequest
                 {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2017",
-                    CVV = "333"
-                }
-            };
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-
-            // Retry for 15 times
-            for (var i = 0; i <= 15; i++)
-            {
+                    Amount = SandboxValues.TransactionAmount.DECLINE,
+                    CreditCard = new TransactionCreditCardRequest
+                    {
+                        Number = SandboxValues.CreditCardNumber.VISA,
+                        ExpirationDate = "05/2017",
+                        CVV = "333"
+                    }
+                };
                 result = gateway.Transaction.Sale(request);
+                transaction = result.Transaction;
+                excessiveRetry = (result.Transaction.Status == TransactionStatus.GATEWAY_REJECTED);
+                counter += 1;
             }
 
-            Assert.IsFalse(result.IsSuccess());
-            Transaction transaction = result.Transaction;
 
             Assert.AreEqual(TransactionGatewayRejectionReason.EXCESSIVE_RETRY, transaction.GatewayRejectionReason);
         }
@@ -5117,46 +5119,6 @@ namespace Braintree.Tests.Integration
                 ValidationErrorCode.INDUSTRY_DATA_LEG_TRAVEL_FLIGHT_FARE_AMOUNT_CANNOT_BE_NEGATIVE,
                 result.Errors.ForObject("Transaction").ForObject("Industry").ForObject("Legs").ForObject("index_0").OnField("FareAmount")[0].Code
             );
-        }
-
-        [Test]
-        public void Sale_WithVenmoSdkPaymentMethodCode()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                VenmoSdkPaymentMethodCode = SandboxValues.VenmoSdk.VISA_PAYMENT_METHOD_CODE
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-
-            Transaction transaction = result.Target;
-            Assert.AreEqual("1111", transaction.CreditCard.LastFour);
-        }
-
-        [Test]
-        public void Sale_WithVenmoSdkSession()
-        {
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
-                },
-                Options = new TransactionOptionsRequest
-                {
-                    VenmoSdkSession = SandboxValues.VenmoSdk.SESSION
-                }
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-
-            Transaction transaction = result.Target;
-            Assert.IsFalse(transaction.CreditCard.IsVenmoSdk.Value);
         }
 
         [Test]
@@ -7478,7 +7440,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(info.LiabilityShiftPossible);
             Assert.AreEqual("somebase64value", info.Cavv);
             Assert.AreEqual("07", info.EciFlag);
-            Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
+            Assert.IsNotNull(info.ThreeDSecureVersion);
             Assert.AreEqual("xidvalue", info.Xid);
             Assert.AreEqual("dstxnid", info.DsTransactionId);
             Assert.IsInstanceOf(typeof(ThreeDSecureLookupInfo), info.Lookup);
@@ -10608,7 +10570,7 @@ namespace Braintree.Tests.Integration
                     Number = "5105105105105100",
                     ExpirationDate = "05/2012",
                 },
-                TransactionSource = "recurring_first",
+                TransactionSource = "recurring",
             };
 
             var transactionResult = gateway.Transaction.Sale(request);

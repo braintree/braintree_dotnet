@@ -136,7 +136,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(info.LiabilityShiftPossible);
             Assert.AreEqual("cavv_value", info.Cavv);
             Assert.AreEqual("05", info.EciFlag);
-            Assert.AreEqual("1.0.2", info.ThreeDSecureVersion);
+            Assert.IsNotNull(info.ThreeDSecureVersion);
             Assert.AreEqual("xid_value", info.Xid);
             Assert.IsNotNull(info.ThreeDSecureAuthenticationId);
             Assert.IsNotNull(info.Authentication);

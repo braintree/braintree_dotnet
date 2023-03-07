@@ -9,6 +9,7 @@ namespace Braintree.Tests.Integration
     public class CreditCardVerificationIntegrationTest
     {
         private BraintreeGateway gateway;
+        private BraintreeService service;
 
         [SetUp]
         public void Setup()
@@ -51,6 +52,160 @@ namespace Braintree.Tests.Integration
             CreditCardVerification verification = result.Target;
             Assert.AreEqual(verification.MerchantAccountId,
                             MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+
+
+        [Test]
+        public void CreatePaymentMethodNonce_ReturnsSuccessfulResponse()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                },
+                PaymentMethodNonce = nonce
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.MerchantAccountId,
+                            MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+
+        [Test]
+        public void CreateIntendedTransSource_ReturnsSuccessfulResponse()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2029",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    Amount = "5.00"
+                },
+                IntendedTransactionSource = "installment"
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+
+        [Test]
+        public void Create3DSAuthID_ReturnsSuccessfulResponse()
+        {
+            service = new BraintreeService(gateway.Configuration);
+            var three_d_secure_auth_id = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2029",
+            });
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2029",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                },
+                ThreeDSecureAuthenticationID = three_d_secure_auth_id
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.MerchantAccountId,
+                            MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+
+        [Test]
+        public void Create3DSPassThru_ReturnsSuccessfulResponse()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2029",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                },
+                ThreeDSecurePassThru = new ThreeDSecurePassThruRequest()
+                {
+                    EciFlag = "05",
+                    Cavv = "some_cavv",
+                    Xid = "some_xid",
+                    AuthenticationResponse = "Y",
+                    DirectoryResponse = "Y",
+                    CavvAlgorithm = "2",
+                    DsTransactionId = "some_ds_transaction_id",
+                    ThreeDSecureVersion = "1.0.2"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.MerchantAccountId,
+                            MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID);
             Assert.AreEqual("1000", verification.ProcessorResponseCode);
             Assert.AreEqual("Approved", verification.ProcessorResponseText);
             Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
