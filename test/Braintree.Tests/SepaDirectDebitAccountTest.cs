@@ -30,6 +30,7 @@ namespace Braintree.Tests
                 + "<mandate-type>RECURRENT</mandate-type>"
                 + "<merchant-account-id>a-merchant-account-id</merchant-account-id>"
                 + "<merchant-or-partner-customer-id>a-mp-customer-id</merchant-or-partner-customer-id>"
+                + "<subscriptions type='array'><subscription><price>10.00</price></subscription></subscriptions>"
                 + "<token>ch6byss</token>"
                 + "<updated-at>2021-05-05T21:28:37Z</updated-at>"
                 + "<view-mandate-url>https://paypal.com/</view-mandate-url>"
@@ -50,6 +51,9 @@ namespace Braintree.Tests
             Assert.AreEqual(MandateType.RECURRENT, account.MandateType);
             Assert.AreEqual("a-merchant-account-id", account.MerchantAccountId);
             Assert.AreEqual("a-mp-customer-id", account.MerchantOrPartnerCustomerId);
+            Subscription[] subs = account.Subscriptions;
+            Assert.AreEqual(1, subs.Length);
+            Assert.AreEqual(10.00, subs[0].Price);
             Assert.AreEqual("ch6byss", account.Token);
             Assert.AreEqual("https://paypal.com/", account.ViewMandateUrl);
             Assert.NotNull(account.CreatedAt);

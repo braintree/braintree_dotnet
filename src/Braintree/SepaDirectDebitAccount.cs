@@ -23,6 +23,7 @@ namespace Braintree
         public string Last4 { get; protected set; }
         public string MerchantAccountId { get; protected set; }
         public string MerchantOrPartnerCustomerId { get; protected set; }
+        public Subscription[] Subscriptions { get; protected set; }
         public string Token { get; protected set; }
         public string ViewMandateUrl { get; protected set; }
 
@@ -39,6 +40,14 @@ namespace Braintree
             MandateType = node.GetEnum<MandateType>("mandate-type", MandateType.ONE_OFF);
             MerchantAccountId = node.GetString("merchant-account-id");
             MerchantOrPartnerCustomerId = node.GetString("merchant-or-partner-customer-id");
+
+            var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
+            Subscriptions = new Subscription[subscriptionXmlNodes.Count];
+            for (int i = 0; i < subscriptionXmlNodes.Count; i++)
+            {
+                Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
+            }
+
             Token = node.GetString("token");
             UpdatedAt = node.GetDateTime("updated-at");
             ViewMandateUrl = node.GetString("view-mandate-url");

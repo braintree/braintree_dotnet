@@ -519,6 +519,93 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        public void AddTextEvidenceAsync_shippingTrackingAddEvidenceWithCarrierNameCategory()
+        {
+            Dispute dispute = createSampleDispute();
+            var textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = "UPS",
+                Category = "CARRIER_NAME",
+                SequenceNumber = "0",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, textEvidenceRequest).Target;
+
+            Assert.NotNull(evidence);
+
+            DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
+
+            Assert.NotNull(evidence.Category);
+            Assert.AreEqual(evidence.Category, "CARRIER_NAME");
+
+            Assert.NotNull(evidence.Comment);
+            Assert.AreEqual(evidence.Comment, "UPS");
+
+            Assert.NotNull(evidence.SequenceNumber);
+            Assert.AreEqual(evidence.SequenceNumber, "0");
+
+            Assert.NotNull(foundEvidence);
+        }
+
+        [Test]
+        public void AddTextEvidenceAsync_shippingTrackingAddEvidenceWithTrackingNumberCategory()
+        {
+            Dispute dispute = createSampleDispute();
+            var textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = "3",
+                Category = "TRACKING_NUMBER",
+                SequenceNumber = "0",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, textEvidenceRequest).Target;
+
+            Assert.NotNull(evidence);
+
+            DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
+
+            Assert.NotNull(evidence.Category);
+            Assert.AreEqual(evidence.Category, "TRACKING_NUMBER");
+
+            Assert.NotNull(evidence.Comment);
+            Assert.AreEqual(evidence.Comment, "3");
+
+            Assert.NotNull(evidence.SequenceNumber);
+            Assert.AreEqual(evidence.SequenceNumber, "0");
+
+            Assert.NotNull(foundEvidence);
+        }
+
+        [Test]
+        public void AddTextEvidenceAsync_shippingTrackingAddEvidenceWithTrackingUrlCategory()
+        {
+            Dispute dispute = createSampleDispute();
+            var textEvidenceRequest = new TextEvidenceRequest
+            {
+                Content = "https://example.com/tracking-number/abc12345",
+                Category = "TRACKING_URL",
+                SequenceNumber = "1",
+            };
+
+            DisputeEvidence evidence = gateway.Dispute.AddTextEvidence(dispute.Id, textEvidenceRequest).Target;
+
+            Assert.NotNull(evidence);
+
+            DisputeEvidence foundEvidence = gateway.Dispute.Find(dispute.Id).Target.Evidence[0];
+
+            Assert.NotNull(evidence.Category);
+            Assert.AreEqual(evidence.Category, "TRACKING_URL");
+
+            Assert.NotNull(evidence.Comment);
+            Assert.AreEqual(evidence.Comment, "https://example.com/tracking-number/abc12345");
+
+            Assert.NotNull(evidence.SequenceNumber);
+            Assert.AreEqual(evidence.SequenceNumber, "1");
+
+            Assert.NotNull(foundEvidence);
+        }
+
+        [Test]
         public void Finalize_changesDisputeStatusToDisputed()
         {
             Dispute dispute = createSampleDispute();

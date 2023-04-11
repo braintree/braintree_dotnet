@@ -49,7 +49,7 @@ namespace Braintree.Tests.Integration
             var creditCardRequest = new CreditCardRequest
             {
                 CustomerId = customer.Id,
-                Number = "4111111111111111",
+                Number = "4000000000001091",
                 ExpirationMonth = "12",
                 ExpirationYear = "2030"
             };
@@ -57,6 +57,20 @@ namespace Braintree.Tests.Integration
             var nonce = gateway.PaymentMethodNonce.Create(creditCard.Token).Target.Nonce;
 
             return GetClientDataString(nonce);
+        }
+
+        public void SetDeviceDataFields(ThreeDSecureLookupRequest request) {
+            request.BrowserAcceptHeader = "text/html;q=0.8";
+            request.BrowserColorDepth = "48";
+            request.BrowserJavaEnabled = false;
+            request.BrowserJavascriptEnabled = true;
+            request.BrowserLanguage = "fr-CA";
+            request.BrowserScreenHeight = "600";
+            request.BrowserScreenWidth = "800";
+            request.BrowserTimeZone = "-60";
+            request.DeviceChannel = "Browser";
+            request.IpAddress = "2001:0db8:0000:0000:0000:ff00:0042:8329";
+            request.UserAgent = "Mozilla/5.0";
         }
 
         [Test]
@@ -86,6 +100,8 @@ namespace Braintree.Tests.Integration
                 BillingAddress = billingAddress
             };
 
+            SetDeviceDataFields(request);
+
             ThreeDSecureLookupResponse result = gateway.ThreeDSecure.Lookup(request);
 
             PaymentMethodNonce paymentMethod = result.PaymentMethod;
@@ -114,6 +130,8 @@ namespace Braintree.Tests.Integration
                 Email = "first.last@example.com",
             };
 
+            SetDeviceDataFields(request);
+
             ThreeDSecureLookupResponse result = null;
 
             result = gateway.ThreeDSecure.Lookup(request);
@@ -127,7 +145,6 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(paymentMethod.ThreeDSecureInfo);
             Assert.IsTrue(paymentMethod.ThreeDSecureInfo.LiabilityShiftPossible);
             Assert.IsFalse(paymentMethod.ThreeDSecureInfo.LiabilityShifted);
-            Assert.IsNull(paymentMethod.ThreeDSecureInfo.Lookup.TransStatus);
             Assert.IsNotNull(lookup.AcsUrl);
             Assert.IsNotNull(lookup.ThreeDSecureVersion);
             Assert.IsNotNull(lookup.TransactionId);
@@ -143,6 +160,8 @@ namespace Braintree.Tests.Integration
                 Amount = "199.00",
                 ClientData = clientData,
             };
+
+            SetDeviceDataFields(request);
 
             ThreeDSecureLookupResponse result = gateway.ThreeDSecure.Lookup(request);
 

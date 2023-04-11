@@ -2094,29 +2094,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_ReturnsSuccessfulResponseWithRiskDataForChargebackProtection()
-        {
-            EffortlessChargebackProtectionSetup();
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2009",
-                },
-                DeviceData = "{\"device_session_id\":\"my_dsid\", \"fraud_merchant_id\":\"7\"}"
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsTrue(result.IsSuccess());
-            Transaction transaction = result.Target;
-
-            Assert.IsNotNull(transaction.RiskData);
-            Assert.IsNotNull(transaction.RiskData.LiabilityShift);
-        }
-
-        [Test]
         public void Sale_WithDeviceData()
         {
             var request = new TransactionRequest

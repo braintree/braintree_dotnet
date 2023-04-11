@@ -43,6 +43,8 @@ namespace Braintree.Tests
             StringAssert.DoesNotMatch(@"challengeRequested", outputJSON);
             StringAssert.DoesNotMatch(@"exemptionRequested", outputJSON);
             StringAssert.DoesNotMatch(@"requestedExemptionType", outputJSON);
+            StringAssert.DoesNotMatch(@"browserJavaEnabled", outputJSON);
+            StringAssert.DoesNotMatch(@"browserJavascriptEnabled", outputJSON);
         }
 
         [Test]
@@ -318,6 +320,40 @@ namespace Braintree.Tests
             var outputJSON = request.ToJSON();
             
             StringAssert.Contains(@"""exemptionRequested"":true", outputJSON);
-        } 
+        }
+
+        [Test]
+        public void SerializesWithDeviceDataFields()
+        {
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                BrowserAcceptHeader = "text/html;q=0.8",
+                BrowserColorDepth = "48",
+                BrowserJavaEnabled = false,
+                BrowserJavascriptEnabled = true,
+                BrowserLanguage = "fr-CA",
+                BrowserScreenHeight = "600",
+                BrowserScreenWidth = "800",
+                BrowserTimeZone = "-60",
+                DeviceChannel = "Browser",
+                IpAddress = "2001:0db8:0000:0000:0000:ff00:0042:8329",
+                UserAgent = "Mozilla/5.0"
+            };
+
+            var outputJSON = request.ToJSON();
+
+            StringAssert.Contains(@"""browserHeader"":""text/html;q=0.8""", outputJSON);
+            StringAssert.Contains(@"""browserColorDepth"":""48""", outputJSON);
+            StringAssert.Contains(@"""browserJavaEnabled"":false", outputJSON);
+            StringAssert.Contains(@"""browserJavascriptEnabled"":true", outputJSON);
+            StringAssert.Contains(@"""browserLanguage"":""fr-CA""", outputJSON);
+            StringAssert.Contains(@"""browserScreenHeight"":""600""", outputJSON);
+            StringAssert.Contains(@"""browserScreenWidth"":""800""", outputJSON);
+            StringAssert.Contains(@"""browserTimeZone"":""-60""", outputJSON);
+            StringAssert.Contains(@"""deviceChannel"":""Browser""", outputJSON);
+            StringAssert.Contains(@"""ipAddress"":""2001:0db8:0000:0000:0000:ff00:0042:8329""", outputJSON);
+            StringAssert.Contains(@"""userAgent"":""Mozilla/5.0""", outputJSON);
+        }
     }
 }

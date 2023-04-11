@@ -1,12 +1,26 @@
 # Changelog
 
-# 5.16.0
+## 5.17.0
+- Add subscriptions for SEPA direct debit account
+- Add device data fields to `ThreeDSecureLookupRequest`
+  - `BrowserAcceptHeader`
+  - `BrowserColorDepth`
+  - `BrowserJavaEnabled`
+  - `BrowserJavascriptEnabled`
+  - `BrowserLanguage`
+  - `BrowserScreenHeight`
+  - `BrowserScreenWidth`
+  - `BrowserTimeZone`
+  - `DeviceChannel`
+  - `IpAddress`
+  - `UserAgent`
+
+## 5.16.0
 - Add `IntendedTransactionSource` to `CreditCardVerificationRequest`
 - Add `PaymentMethodNonce` to `CreditCardVerificationRequest`
 - Add `ThreeDSecureAuthenticationID` to `CreditCardVerificationRequest`
 - Add `ThreeDSecurePassThru` to `CreditCardVerificationRequest`
 - Add support for Plan creation/updating with `AddOns` and `Discounts`
-
 
 ## 5.15.0
 - Bump Newtonsoft.Json from 9.0.1 to 13.0.1

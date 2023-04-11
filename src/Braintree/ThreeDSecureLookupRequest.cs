@@ -8,19 +8,30 @@ namespace Braintree
 {
     public class ThreeDSecureLookupRequest : Request
     {
-		public ThreeDSecureLookupAdditionalInformation AdditionalInformation { get; set; }
-		public string Amount { get; set; }
-		public string Nonce { get; set; }
-		public string Email { get; set; }
-		public string AuthorizationFingerprint { get; set; }
-		public string DfReferenceId { get; set; }
-		public string BraintreeLibraryVersion { get; set; }
-		public string RequestedExemptionType { get; set; }
-		public ThreeDSecureLookupAddress BillingAddress { get; set; }
+        public ThreeDSecureLookupAdditionalInformation AdditionalInformation { get; set; }
+        public string Amount { get; set; }
+        public string AuthorizationFingerprint { get; set; }
+        public ThreeDSecureLookupAddress BillingAddress { get; set; }
+        public string BraintreeLibraryVersion { get; set; }
+        public string BrowserAcceptHeader { get; set; }
+        public string BrowserColorDepth { get; set; }
+        public bool? BrowserJavaEnabled { get; set; }
+        public bool? BrowserJavascriptEnabled { get; set; }
+        public string BrowserLanguage { get; set; }
+        public string BrowserScreenHeight { get; set; }
+        public string BrowserScreenWidth { get; set; }
+        public string BrowserTimeZone { get; set; }
+        public bool? ChallengeRequested { get; set; }
+        public bool? DataOnlyRequested { get; set; }
+        public string DeviceChannel { get; set; }
+        public string DfReferenceId { get; set; }
+        public string Email { get; set; }
+        public bool? ExemptionRequested { get; set; }
+        public string IpAddress { get; set; }
+        public string Nonce { get; set; }
+        public string RequestedExemptionType { get; set; }
+        public string UserAgent { get; set; }
 
-		public bool? ChallengeRequested { get; set; }
-		public bool? ExemptionRequested { get; set; }
-		public bool? DataOnlyRequested { get; set; }
 
         private dynamic _ClientMetadata;
         public virtual dynamic ClientData
@@ -57,24 +68,41 @@ namespace Braintree
 #endif
             meta.Add("source", "http");
 
+            json.Add("_meta", meta);
+
             json.Add("authorizationFingerprint", AuthorizationFingerprint);
-            json.Add("email", Email);
             json.Add("amount", Amount);
             json.Add("braintreeLibraryVersion", BraintreeLibraryVersion);
-            json.Add("df_reference_id", DfReferenceId);
+            json.Add("browserHeader", BrowserAcceptHeader);
+            json.Add("browserColorDepth", BrowserColorDepth);
+            json.Add("browserLanguage", BrowserLanguage);
+            json.Add("browserScreenHeight", BrowserScreenHeight);
+            json.Add("browserScreenWidth", BrowserScreenWidth);
+            json.Add("browserTimeZone", BrowserTimeZone);
             json.Add("clientMetadata", ClientData);
-            json.Add("_meta", meta);
+            json.Add("df_reference_id", DfReferenceId);
+            json.Add("deviceChannel", DeviceChannel);
+            json.Add("email", Email);
+            json.Add("ipAddress", IpAddress);
+            json.Add("userAgent", UserAgent);
+
+            if (BrowserJavaEnabled != null) {
+                json.Add("browserJavaEnabled", BrowserJavaEnabled);
+            }
+            if (BrowserJavascriptEnabled != null) {
+                json.Add("browserJavascriptEnabled", BrowserJavascriptEnabled);
+            }
             if (ChallengeRequested != null) {
                 json.Add("challengeRequested", ChallengeRequested);
             } 
+            if (DataOnlyRequested != null) {
+                json.Add("dataOnlyRequested", DataOnlyRequested);
+            }
             if (ExemptionRequested != null) {
                 json.Add("exemptionRequested", ExemptionRequested);
             }
             if (RequestedExemptionType != null) {
                 json.Add("requestedExemptionType", RequestedExemptionType);
-            }
-            if (DataOnlyRequested != null) {
-                json.Add("dataOnlyRequested", DataOnlyRequested);
             }
 
             if (BillingAddress != null) {

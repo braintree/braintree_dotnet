@@ -613,6 +613,39 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Find_FindsAssociatedSepaDirectDebitSubscriptions()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.SepaDirectDebitAccount
+            };
+
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            SepaDirectDebitAccount sepaDirectDebitAccount = (SepaDirectDebitAccount) paymentMethodResult.Target;
+
+            string id = Guid.NewGuid().ToString();
+            var subscriptionRequest = new SubscriptionRequest
+            {
+                Id = id,
+                PlanId = "integration_trialless_plan",
+                PaymentMethodToken = sepaDirectDebitAccount.Token,
+                Price = 1.00M
+            };
+            gateway.Subscription.Create(subscriptionRequest);
+
+            SepaDirectDebitAccount account = gateway.SepaDirectDebitAccount.Find(sepaDirectDebitAccount.Token);
+            Subscription subscription = account.Subscriptions[0];
+            Assert.AreEqual(id, subscription.Id);
+            Assert.AreEqual("integration_trialless_plan", subscription.PlanId);
+            Assert.AreEqual(1.00M, subscription.Price);
+        }
+
+        [Test]
         public void Create_CreatesUsBankAccountWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
