@@ -40,6 +40,7 @@ namespace Braintree.Tests
             StringAssert.Contains(@"""df_reference_id"":""ABC-123""", outputJSON);
             StringAssert.Contains(@"""authorizationFingerprint"":""auth-fingerprint""", outputJSON);
             StringAssert.Contains(@"""braintreeLibraryVersion"":""braintree/web/3.44.0""", outputJSON);
+            StringAssert.DoesNotMatch(@"cardAddChallengeRequested", outputJSON);
             StringAssert.DoesNotMatch(@"challengeRequested", outputJSON);
             StringAssert.DoesNotMatch(@"exemptionRequested", outputJSON);
             StringAssert.DoesNotMatch(@"requestedExemptionType", outputJSON);
@@ -197,6 +198,37 @@ namespace Braintree.Tests
             StringAssert.Contains(@"""purchase_date"":""11/5/1955""", outputJSON);
             StringAssert.Contains(@"""recurring_end"":""11/12/1955""", outputJSON);
             StringAssert.Contains(@"""recurring_frequency"":""1""", outputJSON);
+        }
+
+        [Test]
+        public void SerializesWithCardAddChallengeRequestedTrue()
+        {
+            var clientData = @"{
+                ""authorizationFingerprint"": ""auth-fingerprint"",
+                ""braintreeLibraryVersion"": ""braintree/web/3.44.0"",
+                ""dfReferenceId"": ""ABC-123"",
+                ""nonce"": ""FAKE-NONCE"",
+                ""clientMetadata"": {
+                     ""cardinalDeviceDataCollectionTimeElapsed"": 40,
+                     ""issuerDeviceDataCollectionResult"": true,
+                     ""issuerDeviceDataCollectionTimeElapsed"": 413,
+                     ""requestedThreeDSecureVersion"": ""2"",
+                     ""sdkVersion"": ""web/3.42.0""
+                }
+            }";
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                Amount = "10.00",
+                ClientData = clientData,
+                CardAddChallengeRequested = true
+            };
+        
+            Assert.AreEqual(true, request.CardAddChallengeRequested);
+
+            var outputJSON = request.ToJSON();
+            
+            StringAssert.Contains(@"""cardAddChallengeRequested"":true", outputJSON);
         }
 
         [Test]

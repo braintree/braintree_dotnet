@@ -195,6 +195,10 @@ namespace Braintree
         public virtual List<Installment> Installments { get; protected set; }
         public virtual List<Installment> RefundedInstallments { get; protected set; }
         public virtual bool? Retried { get; protected set; }
+        public virtual string RetriedTransactionId { get; protected set; }
+        public virtual List<String> RetryIds { get; protected set; }
+        public virtual string MerchantAdviceCode { get; protected set; }
+        public virtual string MerchantAdviceCodeText { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -245,6 +249,8 @@ namespace Braintree
             PurchaseOrderNumber = node.GetString("purchase-order-number");
             Recurring = node.GetBoolean("recurring");
             RefundedTransactionId = node.GetString("refunded-transaction-id");
+            MerchantAdviceCode = node.GetString("merchant-advice-code");
+            MerchantAdviceCodeText = node.GetString("merchant-advice-code-text");
 
             RefundIds = node.GetStrings("refund-ids/*");
             PartialSettlementTransactionIds = node.GetStrings("partial-settlement-transaction-ids/*");
@@ -424,7 +430,10 @@ namespace Braintree
             {
                 RefundedInstallments.Add(new Installment(installment));
             }
+
             Retried = node.GetBoolean("retried");
+            RetriedTransactionId = node.GetString("retried-transaction-id");
+            RetryIds = node.GetStrings("retry-ids/*");
         }
 
         /// <summary>

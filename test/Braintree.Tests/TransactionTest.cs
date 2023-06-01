@@ -275,6 +275,25 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void DeserializesMerchantAdviceCodeAndTextFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <merchant-advice-code>01</merchant-advice-code>\n" +
+                "  <merchant-advice-code-text>New account information available</merchant-advice-code-text>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+            Assert.AreEqual("01", transaction.MerchantAdviceCode);
+            Assert.AreEqual("New account information available", transaction.MerchantAdviceCodeText);
+        }
+
+        [Test]
         public void DeserializesSepaDirectDebitReturnCode()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -314,6 +333,47 @@ namespace Braintree.Tests
             Transaction transaction = new Transaction(node, gateway);
 
             Assert.AreEqual("abcdef", transaction.SepaDirectDebitAccountDetails.Token);
+        }
+
+        [Test]
+        public void DeserializesRetryIdsFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "<retry-ids>\n" + 
+                    "<value>123ccs</value>\n" +
+                    "<value>8cnu3d</value>\n" +
+                "</retry-ids>\n" +
+                "<retried>true</retried>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+            Assert.AreEqual(transaction.RetryIds.Count, 2);
+            Assert.IsTrue(transaction.Retried);
+        }
+
+        [Test]
+        public void DeserializesRetriedTransactionIdFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "<retried>true</retried>\n" +
+                "<retried-transaction-id>32fi8x</retried-transaction-id>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+            Assert.IsNotNull(transaction.RetriedTransactionId);
+            Assert.IsTrue(transaction.Retried);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Braintree
         public string BrowserScreenHeight { get; set; }
         public string BrowserScreenWidth { get; set; }
         public string BrowserTimeZone { get; set; }
+        public bool? CardAddChallengeRequested { get; set; }
         public bool? ChallengeRequested { get; set; }
         public bool? DataOnlyRequested { get; set; }
         public string DeviceChannel { get; set; }
@@ -91,6 +92,9 @@ namespace Braintree
             }
             if (BrowserJavascriptEnabled != null) {
                 json.Add("browserJavascriptEnabled", BrowserJavascriptEnabled);
+            }
+            if (CardAddChallengeRequested != null) {
+                json.Add("cardAddChallengeRequested", CardAddChallengeRequested);
             }
             if (ChallengeRequested != null) {
                 json.Add("challengeRequested", ChallengeRequested);

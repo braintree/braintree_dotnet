@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.18.0
+- Add `MerchantAdviceCode` and `MerchantAdviceCodeText` to `Transaction`
+- Add `cardAddChallengeRequested` to `ThreeDSecureLookupRequest`
+- Add `RetryIds` and `RetriedTransactionId` to `Transaction`
+
 ## 5.17.0
 - Add subscriptions for SEPA direct debit account
 - Add device data fields to `ThreeDSecureLookupRequest`

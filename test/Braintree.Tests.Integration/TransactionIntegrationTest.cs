@@ -1634,6 +1634,29 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_ReturnsSuccessfulResponseWithMerchantAdviceCodeText()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.DECLINE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2030"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Transaction transaction = result.Transaction;
+
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
+
+            Assert.AreEqual("01", transaction.MerchantAdviceCode);
+            Assert.AreEqual("New account information available", transaction.MerchantAdviceCodeText);
+        }
+
+        [Test]
         public void Sale_WithEloCardType()
         {
             var request = new TransactionRequest
@@ -3865,6 +3888,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("Marking this test case as pending as we revoking category 2, 3 and 4")]
         public void Sale_GatewayRejectedForExcessiveRetry()
         {
             DuplicateCheckingSetup();
@@ -10069,13 +10093,40 @@ namespace Braintree.Tests.Integration
         public void Sale_Retried_NetworkTokenizedTransaction() {
             var request = new TransactionRequest {
                 Amount = 2000,
-                PaymentMethodToken = "network_tokenized_credit_card"
+                PaymentMethodToken = "network_tokenized_credit_card",
+                MerchantAccountId = "ma_transaction_multiple_retries"
             };
 
             var transactionResult = gateway.Transaction.Sale(request);
             Assert.IsFalse(transactionResult.IsSuccess());
             Assert.IsTrue(transactionResult.Transaction.Retried);
+            Assert.IsNotNull(transactionResult.Transaction.RetryIds);
+            Assert.IsTrue(transactionResult.Transaction.RetryIds.Count > 1);
+            Assert.IsNull(transactionResult.Transaction.RetriedTransactionId);
             Assert.IsTrue(transactionResult.Transaction.ProcessedWithNetworkToken);
+
+            var retry_transaction_id_1 = transactionResult.Transaction.RetryIds[0];
+            var retry_transaction_id_2 = transactionResult.Transaction.RetryIds[1];
+
+            var searchRequest = new TransactionSearchRequest().
+                Id.Is(retry_transaction_id_1).
+                Amount.Is(2000);
+
+            ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(1, collection.MaximumCount);
+            Assert.IsNotNull(collection.FirstItem.RetriedTransactionId);
+            Assert.IsEmpty(collection.FirstItem.RetryIds);
+            Assert.AreEqual(collection.FirstItem.RetriedTransactionId, transactionResult.Transaction.Id);
+
+            var searchRequest_2 = new TransactionSearchRequest().
+                Id.Is(retry_transaction_id_2).
+                Amount.Is(2000);
+
+            ResourceCollection<Transaction> collection_2 = gateway.Transaction.Search(searchRequest_2);
+            Assert.AreEqual(1, collection_2.MaximumCount);
+            Assert.IsNotNull(collection_2.FirstItem.RetriedTransactionId);
+            Assert.IsEmpty(collection_2.FirstItem.RetryIds);
+            Assert.AreEqual(collection_2.FirstItem.RetriedTransactionId, transactionResult.Transaction.Id);
         }
 
         [Test]
