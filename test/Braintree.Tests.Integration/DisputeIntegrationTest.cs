@@ -134,7 +134,6 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
         public void AddFileEvidence_addsEvidence()
         {
             DocumentUpload document = createSampleDocumentUpload();
@@ -152,7 +151,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
         public void AddFileEvidence_addsEvidenceWithCategory()
         {
             DocumentUpload document = createSampleDocumentUpload();
@@ -177,7 +175,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
 #if netcore
         public async Task AddFileEvidenceAsync_addsEvidence()
 #else
@@ -234,7 +231,6 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
         public void AddFileEvidence_whenDisputeNotOpenErrors()
         {
             DocumentUpload document = createSampleDocumentUpload();
@@ -251,7 +247,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
 #if netcore
         public async Task AddFileEvidenceAsync_whenDisputeNotOpenErrors()
 #else
@@ -278,7 +273,6 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
         public void AddFileEvidence_failsToAddEvidenceWithUnSupportedCategory()
         {
             DocumentUpload document = createSampleDocumentUpload();
@@ -296,7 +290,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
 #if netcore
         public async Task AddFileEvidenceAsync_failsToAddEvidenceWithUnsupportedCategory()
 #else

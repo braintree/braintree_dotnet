@@ -79,5 +79,18 @@ namespace Braintree.Tests
             Assert.IsTrue(request.ToXml().Contains("CL"));
             Assert.IsTrue(request.ToXml().Contains("456"));
         }
+
+        [Test]
+        public void ToXml_Includes_ThreeDSecureAuthenticationId()
+        {
+            var request = new CustomerRequest
+            {
+                ThreeDSecureAuthenticationId = "some-authentication-id"
+            };
+
+            var xml = request.ToXml();
+
+            Assert.IsTrue(xml.Contains("<three-d-secure-authentication-id>some-authentication-id</three-d-secure-authentication-id>"));
+        }
     }
 }

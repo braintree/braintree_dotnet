@@ -6,6 +6,7 @@ namespace Braintree.Test
         public const string ApplePayVisa = "fake-apple-pay-visa-nonce";
         public const string ApplePayMastercard = "fake-apple-pay-mastercard-nonce";
         public const string ApplePayAmex = "fake-apple-pay-amex-nonce";
+        public const string ApplePayMpan = "fake-apple-pay-mpan-nonce";
         public const string AndroidPay = "fake-android-pay-nonce";
         public const string AndroidPayAmEx = "fake-android-pay-amex-nonce";
         public const string AndroidPayDiscover = "fake-android-pay-discover-nonce";

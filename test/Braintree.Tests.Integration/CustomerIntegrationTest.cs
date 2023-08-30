@@ -2418,5 +2418,56 @@ namespace Braintree.Tests.Integration
             Result<Customer> updateResult = gateway.Customer.Update(id, updateRequest);
             Assert.IsTrue(updateResult.IsSuccess());
         }
+
+        [Test]
+        public void Create_WithPaymentMethodNonceAndThreeDSecureAuthenticationId()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(
+                gateway,
+                SandboxValues.CreditCardNumber.VISA,
+                null
+            );
+
+            string three_d_secure_authentication_id = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2009"
+            });
+
+            CustomerRequest createRequest = new CustomerRequest()
+            {
+                PaymentMethodNonce = nonce,
+                ThreeDSecureAuthenticationId = three_d_secure_authentication_id,
+                CreditCard = new CreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "05",
+                    ExpirationYear = "2009",
+                    Options = new CreditCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationMerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(createRequest);
+            Assert.IsTrue(result.IsSuccess());
+
+            Customer customer = result.Target;
+
+            CreditCard creditCard = customer.CreditCards[0];
+            CreditCardVerification verification = creditCard.Verification;
+            ThreeDSecureInfo threeDSecureInfo = verification.ThreeDSecureInfo;
+
+            Assert.AreEqual("Y", threeDSecureInfo.Enrolled);
+            Assert.AreEqual("test_cavv", threeDSecureInfo.Cavv);
+            Assert.AreEqual("test_eci", threeDSecureInfo.EciFlag);
+            Assert.AreEqual("authenticate_successful", threeDSecureInfo.Status);
+            Assert.AreEqual("1.0.2", threeDSecureInfo.ThreeDSecureVersion);
+            Assert.AreEqual("test_xid", threeDSecureInfo.Xid);
+            Assert.IsTrue(threeDSecureInfo.LiabilityShifted);
+            Assert.IsTrue(threeDSecureInfo.LiabilityShiftPossible);
+        }
     }
 }

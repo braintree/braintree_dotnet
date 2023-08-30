@@ -21,6 +21,7 @@ namespace Braintree
         public TransactionOptionsAmexRewardsRequest AmexRewards { get; set; }
         public TransactionOptionsVenmoRequest Venmo { get; set; }
         public TransactionOptionsCreditCardRequest CreditCard { get; set; }
+        public TransactionOptionsProcessingOverridesRequest ProcessingOverrides { get; set; }
 
         public override string ToXml(string root)
         {
@@ -51,7 +52,8 @@ namespace Braintree
                 AddElement("paypal", PayPal).
                 AddElement("credit-card", CreditCard).
                 AddElement("amex-rewards", AmexRewards).
-                AddElement("venmo", Venmo);
+                AddElement("venmo", Venmo).
+                AddElement("processing-overrides", ProcessingOverrides);
         }
     }
 }

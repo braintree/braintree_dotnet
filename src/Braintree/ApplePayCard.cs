@@ -28,6 +28,8 @@ namespace Braintree
         public virtual string IssuingBank { get; protected set; }
         public virtual string CountryOfIssuance { get; protected set; }
         public virtual string ProductId { get; protected set; }
+        public virtual string MerchantTokenIdentifier { get; protected set; }
+        public virtual string SourceCardLast4 { get; protected set; }
 
         protected internal ApplePayCard(NodeWrapper node, IBraintreeGateway gateway)
         {
@@ -54,6 +56,8 @@ namespace Braintree
             IssuingBank = node.GetString("issuing-bank");
             CountryOfIssuance = node.GetString("country-of-issuance");
             ProductId = node.GetString("product-id");
+            MerchantTokenIdentifier = node.GetString("merchant-token-identifier");
+            SourceCardLast4 = node.GetString("source-card-last4");
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];

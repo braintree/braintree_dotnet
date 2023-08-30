@@ -466,6 +466,48 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Create_CreatesApplePayCardWithMpanNonce()
+        {
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = Nonce.ApplePayMpan
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+            Assert.IsNotNull(paymentMethodResult.Target.Token);
+            Assert.IsNotNull(paymentMethodResult.Target.ImageUrl);
+            Assert.IsInstanceOf(typeof(ApplePayCard), paymentMethodResult.Target);
+            ApplePayCard applePayCard = (ApplePayCard) paymentMethodResult.Target;
+            Assert.IsNotNull(applePayCard.Bin);
+            Assert.IsNotNull(applePayCard.CardType);
+            Assert.IsNotNull(applePayCard.ExpirationMonth);
+            Assert.IsNotNull(applePayCard.ExpirationYear);
+            Assert.IsNotNull(applePayCard.CreatedAt);
+            Assert.IsNotNull(applePayCard.UpdatedAt);
+            Assert.IsNotNull(applePayCard.Subscriptions);
+            Assert.IsNotNull(applePayCard.PaymentInstrumentName);
+            Assert.IsNotNull(applePayCard.SourceDescription);
+            Assert.IsNotNull(applePayCard.IsExpired);
+            Assert.IsNotNull(applePayCard.Prepaid);
+            Assert.IsNotNull(applePayCard.Healthcare);
+            Assert.IsNotNull(applePayCard.Debit);
+            Assert.IsNotNull(applePayCard.DurbinRegulated);
+            Assert.IsNotNull(applePayCard.Commercial);
+            Assert.IsNotNull(applePayCard.Payroll);
+            Assert.IsNotNull(applePayCard.IssuingBank);
+            Assert.IsNotNull(applePayCard.CountryOfIssuance);
+            Assert.IsNotNull(applePayCard.ProductId);
+            Assert.AreEqual(result.Target.Id, applePayCard.CustomerId);
+            Assert.IsNotNull(applePayCard.MerchantTokenIdentifier);
+            Assert.IsNotNull(applePayCard.SourceCardLast4);
+        }
+
+        [Test]
         public void Create_CreatesAndroidPayProxyCardWithNonce()
         {
             Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
@@ -1215,6 +1257,25 @@ namespace Braintree.Tests.Integration
             PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
             Assert.AreEqual(result.Target.Token, found.Token);
             Assert.IsInstanceOf(typeof(ApplePayCard), found);
+        }
+
+        [Test]
+        public void Find_FindsApplePayMpanCard()
+        {
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = gateway.Customer.Create(new CustomerRequest()).Target.Id,
+                PaymentMethodNonce = Nonce.ApplePayMpan
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethod found = gateway.PaymentMethod.Find(result.Target.Token);
+            ApplePayCard applePayCard = (ApplePayCard) found;
+            Assert.AreEqual(result.Target.Token, found.Token);
+            Assert.IsInstanceOf(typeof(ApplePayCard), found);
+            Assert.AreEqual(applePayCard.MerchantTokenIdentifier, "DNITHE302308980427388297");
+            Assert.AreEqual(applePayCard.SourceCardLast4, "2006");
         }
 
         [Test]
@@ -2281,6 +2342,53 @@ namespace Braintree.Tests.Integration
                 ValidationErrorCode.CREDIT_CARD_OPTIONS_VERIFICATION_INVALID_PRESENTMENT_CURRENCY,
                 paymentMethodResult.Errors.DeepAll()[0].Code
             );
+        }
+
+        [Test]
+        public void Create_PaymentMethodWithNonceAndThreeAuthenticationId()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+
+            var service = new BraintreeService(gateway.Configuration);
+
+            string three_d_secure_authentication_id = TestHelper.Create3DSVerification(service, MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID, new ThreeDSecureRequestForTests() {
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2026"
+            });
+
+            PaymentMethodRequest request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = nonce,
+                ThreeDSecureAuthenticationId = three_d_secure_authentication_id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationMonth = "05",
+                ExpirationYear = "2026",
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    VerifyCard = true,
+                    VerificationMerchantAccountId = MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID
+                }
+            };
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCard creditCard = (CreditCard) result.Target;
+            CreditCardVerification verification = creditCard.Verification;
+            ThreeDSecureInfo threeDSecureInfo = verification.ThreeDSecureInfo;
+
+            Assert.AreEqual("Y", threeDSecureInfo.Enrolled);
+            Assert.AreEqual("test_cavv", threeDSecureInfo.Cavv);
+            Assert.AreEqual("test_eci", threeDSecureInfo.EciFlag);
+            Assert.AreEqual("authenticate_successful", threeDSecureInfo.Status);
+            Assert.AreEqual("1.0.2", threeDSecureInfo.ThreeDSecureVersion);
+            Assert.AreEqual("test_xid", threeDSecureInfo.Xid);
+            Assert.IsTrue(threeDSecureInfo.LiabilityShifted);
+            Assert.IsTrue(threeDSecureInfo.LiabilityShiftPossible);
         }
     }
 }

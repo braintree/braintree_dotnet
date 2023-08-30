@@ -68,7 +68,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
         public void Create_returnsSuccessfulWithValidRequest()
         {
 			FileStream fs = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read);
@@ -84,7 +83,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("unpend when we can fixup file location")]
 #if netcore
         public async Task CreateAsync_returnsSuccessfulWithValidRequest()
 #else

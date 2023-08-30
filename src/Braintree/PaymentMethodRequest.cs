@@ -5,6 +5,7 @@ namespace Braintree
         public string CustomerId { get; set; }
         public string Token { get; set; }
         public string PaymentMethodNonce { get; set; }
+        public string ThreeDSecureAuthenticationId { get; set; }
         public PaymentMethodOptionsRequest Options { get; set; }
         public PaymentMethodAddressRequest BillingAddress { get; set; }
         public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
@@ -45,6 +46,7 @@ namespace Braintree
                 AddElement("expiration-year", ExpirationYear).
                 AddElement("number", Number).
                 AddElement("paypal-refresh-token", PayPalRefreshToken).
+                AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId).
                 AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
         }
     }

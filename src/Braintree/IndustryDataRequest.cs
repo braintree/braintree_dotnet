@@ -6,36 +6,36 @@ namespace Braintree
 {
     public class IndustryDataRequest : Request
     {
-        public string FolioNumber { get; set; }
+        public bool? AdvancedDeposit { get; set; }
+        public DateTime? ArrivalDate { get; set; }
         public string CheckInDate { get; set; }
         public string CheckOutDate { get; set; }
-        public Decimal RoomRate { get; set; }
-        public decimal? RoomTax { get; set; }
-
-        public string TravelPackage { get; set; }
+        public string CustomerCode { get; set; }
         public string DepartureDate { get; set; }
+        public decimal? FareAmount { get; set; }
+        public decimal? FeeAmount { get; set; }
+        public bool? FireSafe { get; set; }
+        public string FolioNumber { get; set; }
+        public DateTime? IssuedDate { get; set; }
+        public string IssuingCarrierCode { get; set; }
         public string LodgingCheckInDate { get; set; }
         public string LodgingCheckOutDate { get; set; }
         public string LodgingName { get; set; }
-
+        public bool? NoShow { get; set; }
         public string PassengerFirstName { get; set; }
         public string PassengerLastName { get; set; }
         public string PassengerMiddleInitial { get; set; }
         public string PassengerTitle { get; set; }
-        public DateTime? IssuedDate { get; set; }
-        public string TravelAgencyName { get; set; }
-        public string TravelAgencyCode { get; set; }
-        public string TicketNumber { get; set; }
-        public string IssuingCarrierCode { get; set; }
-        public string CustomerCode { get; set; }
-        public decimal? FareAmount { get; set; }
-        public decimal? FeeAmount { get; set; }
-        public decimal? TaxAmount { get; set; }
-        public bool? RestrictedTicket { get; set; }
-        public bool? NoShow { get; set; }
-        public bool? AdvancedDeposit { get; set; }
-        public bool? FireSafe { get; set; }
         public string PropertyPhone { get; set; }
+        public bool? RestrictedTicket { get; set; }
+        public Decimal RoomRate { get; set; }
+        public decimal? RoomTax { get; set; }
+        public decimal? TaxAmount { get; set; }
+        public string TicketIssuerAddress { get; set; }
+        public string TicketNumber { get; set; }
+        public string TravelAgencyCode { get; set; }
+        public string TravelAgencyName { get; set; }
+        public string TravelPackage { get; set; }
 
         public IndustryDataLegRequest[] Legs { get; set; }
         public IndustryDataAdditionalChargeRequest[] AdditionalCharges { get; set; }
@@ -101,6 +101,10 @@ namespace Braintree
                 builder.AddElement("legs", Legs);
             if (AdditionalCharges != null)
                 builder.AddElement("additional-charges", AdditionalCharges);
+            if (ArrivalDate != null)
+                builder.AddElement("arrival-date", ArrivalDate);
+            if (TicketIssuerAddress != null)
+                builder.AddElement("ticket-issuer-address", TicketIssuerAddress);
             return builder;
         }
     }

@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.19.0
+- Add `MerchantTokenIdentifier`, `SourceCardLast4` to `ApplePayCard` and `ApplePayDetails`
+- Add `ThreeDSecureAuthenticationId` to `CustomerRequest` and `PaymentMethodRequest`
+- Add `processing_overrides` to `Transaction.sale` options
+- Add industry data fields to `TransactionRequest`
+    - `ArrivalDate`
+    - `TicketIssuerAddress`
+- Remove `byte[]` to `String` content conversion for requests containing files in `BraintreeService`
+
 ## 5.18.0
 - Add `MerchantAdviceCode` and `MerchantAdviceCodeText` to `Transaction`
 - Add `cardAddChallengeRequested` to `ThreeDSecureLookupRequest`

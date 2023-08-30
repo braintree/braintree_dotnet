@@ -24,6 +24,8 @@ namespace Braintree
         public virtual string ProductId { get; protected set; }
         public virtual string Bin { get; protected set; }
         public virtual string GlobalId { get; protected set; }
+        public virtual string MerchantTokenIdentifier { get; protected set; }
+        public virtual string SourceCardLast4 { get; protected set; }
 
         protected internal ApplePayDetails(NodeWrapper node)
         {
@@ -47,6 +49,8 @@ namespace Braintree
             ProductId = node.GetString("product-id");
             Bin = node.GetString("bin");
             GlobalId = node.GetString("global-id");
+            MerchantTokenIdentifier = node.GetString("merchant-token-identifier");
+            SourceCardLast4 = node.GetString("source-card-last4");
         }
 
         [Obsolete("Mock Use Only")]

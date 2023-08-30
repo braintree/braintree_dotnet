@@ -56,6 +56,7 @@ namespace Braintree
         public string Website { get; set; }
         public string PaymentMethodNonce { get; set; }
         public string DefaultPaymentMethodToken { get; set; }
+        public string ThreeDSecureAuthenticationId { get; set; }
         public Dictionary<string, string> CustomFields { get; set; }
         public CreditCardRequest CreditCard { get; set; }
         public UsBankAccountRequest UsBankAccount { get; set; }
@@ -102,6 +103,7 @@ namespace Braintree
                 AddElement("custom-fields", CustomFields).
                 AddElement("risk-data", RiskData).
                 AddElement("device-data", DeviceData).
+                AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId).
                 AddElement("options", Options);
 
             if (TaxIdentifiers != null && TaxIdentifiers.Length > 0)

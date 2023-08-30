@@ -144,11 +144,10 @@ namespace Braintree
                     postParameters.Add("file", file);
 
                     byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
-                    var ascii_string = Encoding.ASCII.GetString(formData);
-                    request.Content = new StringContent(ascii_string);
+                    request.Content = new ByteArrayContent(formData);
                     request.Content.Headers.Remove("Content-Type");
                     request.Content.Headers.TryAddWithoutValidation("Content-Type", MultipartFormContentType(formDataBoundary));
-                    request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(ascii_string);
+                    request.Content.Headers.ContentLength = formData.Length;
                 }
                 var response = GetHttpResponse(request);
 
@@ -226,11 +225,10 @@ namespace Braintree
                     postParameters.Add("file", file);
 
                     byte[] formData = GetMultipartFormData(postParameters, formDataBoundary);
-                    var ascii_string = Encoding.ASCII.GetString(formData);
-                    request.Content = new StringContent(ascii_string);
+                    request.Content = new ByteArrayContent(formData);
                     request.Content.Headers.Remove("Content-Type");
                     request.Content.Headers.TryAddWithoutValidation("Content-Type", MultipartFormContentType(formDataBoundary));
-                    request.Content.Headers.ContentLength = System.Text.UTF8Encoding.UTF8.GetByteCount(ascii_string);
+                    request.Content.Headers.ContentLength = formData.Length;
                 }
 
                 var response = await GetHttpResponseAsync(request).ConfigureAwait(false);

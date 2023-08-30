@@ -5030,6 +5030,8 @@ namespace Braintree.Tests.Integration
                         FeeAmount = 1000M,
                         TaxAmount = 2000M,
                         RestrictedTicket = false,
+                        ArrivalDate = new DateTime(2018, 1, 1),
+                        TicketIssuerAddress = "tkt-issuer-address",
                         Legs = new IndustryDataLegRequest[]
                         {
                             new IndustryDataLegRequest
@@ -5123,6 +5125,97 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void SubmitForSettlement_WithTravelFlightIndustryDataCreditCard_ReturnsSuccessfulResponse()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2008"
+                }
+            };
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            TransactionRequest submitForSettlementRequest = new TransactionRequest
+            {
+                Industry = new IndustryRequest
+                {
+                    IndustryType = TransactionIndustryType.TRAVEL_AND_FLIGHT,
+                    IndustryData = new IndustryDataRequest
+                    {
+                        PassengerFirstName = "John",
+                        PassengerLastName = "Doe",
+                        PassengerMiddleInitial = "M",
+                        PassengerTitle = "Mr.",
+                        IssuedDate = new DateTime(2018, 1, 1),
+                        TravelAgencyName = "Expedia",
+                        TravelAgencyCode = "12345678",
+                        TicketNumber = "ticket-number",
+                        IssuingCarrierCode = "AA",
+                        CustomerCode = "customer-code",
+                        FareAmount = 7000M,
+                        FeeAmount = 1000M,
+                        TaxAmount = 2000M,
+                        RestrictedTicket = false,
+                        ArrivalDate = new DateTime(2018, 1, 1),
+                        TicketIssuerAddress = "tkt-issuer-address",
+                        Legs = new IndustryDataLegRequest[]
+                        {
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0001",
+                                ExchangeTicket = "ET0001",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA100",
+                                DepartureDate = new DateTime(2018, 1, 2),
+                                DepartureAirportCode = "MDW",
+                                DepartureTime = "08:00",
+                                ArrivalAirportCode = "ATX",
+                                ArrivalTime = "10:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            },
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0002",
+                                ExchangeTicket = "ET0002",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA200",
+                                DepartureDate = new DateTime(2018, 1, 3),
+                                DepartureAirportCode = "ATX",
+                                DepartureTime = "12:00",
+                                ArrivalAirportCode = "MDW",
+                                ArrivalTime = "14:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            }
+                        }
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+        }
+
+        [Test]
         public void Sale_WithAdvancedKountFraudCheckingSkipped()
         {
             AdvancedKountFraudSetup();
@@ -5145,6 +5238,38 @@ namespace Braintree.Tests.Integration
 
             Transaction transaction = result.Target;
             Assert.Null(transaction.RiskData);
+        }
+
+        [Test]
+        public void Sale_WithProcessingOverrides()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2016",
+                },
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                    ProcessingOverrides = new TransactionOptionsProcessingOverridesRequest
+                    {
+                        CustomerEmail = "dotnetSDK@example.com",
+                        CustomerFirstName = "dotnetSDK_test_first_name",
+                        CustomerLastName = "dotnetSDK_test_last_name",
+                        CustomerTaxIdentifier = "1.2.3.4.5.6"
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
         }
 
         [Test]
@@ -10609,50 +10734,6 @@ namespace Braintree.Tests.Integration
 
             Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_IS_NOT_ELIGIBLE_FOR_ADJUSTMENT, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
-        }
-
-        [Test]
-        public void AdjustAuthorization_OnProcessorNotSupportingIncrementalAuth() {
-            var request = new TransactionRequest {
-                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
-                Amount = 75.50M,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2012",
-                },
-            };
-
-            var transactionResult = gateway.Transaction.Sale(request);
-            Assert.IsTrue(transactionResult.IsSuccess());
-            Transaction transaction = transactionResult.Target;
-
-            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("85.50"));
-
-            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.PROCESSOR_DOES_NOT_SUPPORT_INCREMENTAL_AUTH, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
-        }
-
-        [Test]
-        public void AdjustAuthorization_OnProcessorNotSupportingAuthReversal() {
-            var request = new TransactionRequest {
-                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
-                Amount = 75.50M,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = SandboxValues.CreditCardNumber.VISA,
-                    ExpirationDate = "05/2012",
-                },
-            };
-
-            var transactionResult = gateway.Transaction.Sale(request);
-            Assert.IsTrue(transactionResult.IsSuccess());
-            Transaction transaction = transactionResult.Target;
-
-            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("65.50"));
-
-            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.PROCESSOR_DOES_NOT_SUPPORT_PARTIAL_AUTH_REVERSAL, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
     }
 }
