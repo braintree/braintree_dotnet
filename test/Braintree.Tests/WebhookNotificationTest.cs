@@ -436,6 +436,20 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void SampleNotification_ReturnsANotificationForSubscriptionBillingSkipped()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_BILLING_SKIPPED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.SUBSCRIPTION_BILLING_SKIPPED, notification.Kind);
+          Assert.AreEqual("my_id", notification.Subscription.Id);
+          Assert.AreEqual(0, notification.Subscription.Transactions.Count);
+          Assert.AreEqual(0, notification.Subscription.Discounts.Count);
+          Assert.AreEqual(0, notification.Subscription.AddOns.Count);
+        }
+
+        [Test]
         public void SampleNotification_ReturnsANotificationForSubscriptionChargedSuccessfully()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY, "my_id");

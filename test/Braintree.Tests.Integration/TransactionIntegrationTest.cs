@@ -10211,7 +10211,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(transactionResult.IsSuccess());
             Transaction transaction = transactionResult.Target;
             Assert.IsTrue(transaction.ProcessedWithNetworkToken);
-            Assert.IsNull(transaction.Retried);
+            Assert.IsFalse(transaction.Retried);
         }
  
         [Test]
@@ -10271,7 +10271,7 @@ namespace Braintree.Tests.Integration
             var transactionResult = gateway.Transaction.Sale(request);
             Assert.IsTrue(transactionResult.IsSuccess());
             Transaction transaction = transactionResult.Target;
-            Assert.IsNull(transaction.Retried);
+            Assert.IsFalse(transaction.Retried);
         }
 
         [Test]

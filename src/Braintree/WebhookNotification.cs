@@ -33,6 +33,7 @@ namespace Braintree
         [Description("payment_method_customer_data_updated")] PAYMENT_METHOD_CUSTOMER_DATA_UPDATED,
         [Description("payment_method_revoked_by_customer")] PAYMENT_METHOD_REVOKED_BY_CUSTOMER,
         [Description("recipient_updated_granted_payment_method")] RECIPIENT_UPDATED_GRANTED_PAYMENT_METHOD,
+        [Description("subscription_billing_skipped")] SUBSCRIPTION_BILLING_SKIPPED,
         [Description("subscription_canceled")] SUBSCRIPTION_CANCELED,
         [Description("subscription_expired")] SUBSCRIPTION_EXPIRED,
         [Description("subscription_charged_successfully")] SUBSCRIPTION_CHARGED_SUCCESSFULLY,

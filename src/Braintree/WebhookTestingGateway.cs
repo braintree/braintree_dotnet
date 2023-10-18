@@ -88,6 +88,8 @@ namespace Braintree
                 return DisputeDisputedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_EXPIRED) {
                 return DisputeExpiredSampleXml(id);
+            } else if (kind == WebhookKind.SUBSCRIPTION_BILLING_SKIPPED) {
+                return SubscriptionBillingSkippedSampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY) {
                 return SubscriptionChargedSuccessfullySampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_UNSUCCESSFULLY) {
@@ -418,6 +420,16 @@ namespace Braintree
         }
 
         private string SubscriptionXml(string id)
+        {
+            return Node("subscription",
+                    Node("id", id),
+                    NodeAttr("transactions", TYPE_ARRAY),
+                    NodeAttr("add_ons", TYPE_ARRAY),
+                    NodeAttr("discounts", TYPE_ARRAY)
+            );
+        }
+
+        private string SubscriptionBillingSkippedSampleXml(string id)
         {
             return Node("subscription",
                     Node("id", id),

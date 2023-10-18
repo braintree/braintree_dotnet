@@ -9,6 +9,8 @@ namespace Braintree
         public virtual string DebugId { get; protected set; }
         public virtual string Description { get; protected set; }
         public virtual string FundingSource { get; protected set; }
+        public virtual string ImplicitlyVaultedPaymentMethodGlobalId { get; protected set; }
+        public virtual string ImplicitlyVaultedPaymentMethodToken { get; protected set; }
         public virtual string PayerId { get; protected set; }
         public virtual string PaymentId { get; protected set; }
         public virtual string RefundFromTransactionFeeAmount { get; protected set; }
@@ -24,6 +26,8 @@ namespace Braintree
             DebugId = node.GetString("debug-id");
             Description = node.GetString("description");
             FundingSource = node.GetString("funding-source");
+            ImplicitlyVaultedPaymentMethodGlobalId = node.GetString("implicitly-vaulted-payment-method-global-id");
+            ImplicitlyVaultedPaymentMethodToken = node.GetString("implicitly-vaulted-payment-method-token");
             PayerId = node.GetString("payer-id");
             PaymentId = node.GetString("payment-id");
             RefundFromTransactionFeeAmount = node.GetString("refund-from-transaction-fee-amount");

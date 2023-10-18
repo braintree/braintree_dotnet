@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.20.0
+- Add `SUBSCRIPTIONBILLINGSKIPPED` webhook notification support
+- Add `implicitlyVaultedPaymentMethodToken` and `implicitlyVaultedPaymentMethodGlobalId` to `LocalPaymentDetails`
+
 ## 5.19.0
 - Add `MerchantTokenIdentifier`, `SourceCardLast4` to `ApplePayCard` and `ApplePayDetails`
 - Add `ThreeDSecureAuthenticationId` to `CustomerRequest` and `PaymentMethodRequest`
