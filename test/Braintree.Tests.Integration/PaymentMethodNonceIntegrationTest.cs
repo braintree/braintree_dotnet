@@ -94,6 +94,36 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Find_MetaCheckoutCardNonce()
+        {
+            PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(Nonce.MetaCheckoutCard);
+            Assert.IsNotNull(foundNonce);
+            Assert.AreEqual(foundNonce.Nonce, Nonce.MetaCheckoutCard);
+            Assert.IsNotNull(foundNonce.Details);
+            Assert.AreEqual(foundNonce.Details.Bin, "401288");
+            Assert.AreEqual(foundNonce.Details.CardType, "Visa");
+            Assert.AreEqual(foundNonce.Details.LastTwo, "81");
+            Assert.AreEqual(foundNonce.Details.LastFour, "1881");
+            Assert.AreEqual(foundNonce.Details.ExpirationMonth, "12");
+            Assert.AreEqual(foundNonce.Details.ExpirationYear, "2024");
+        }
+
+        [Test]
+        public void Find_MetaCheckoutTokenNonce()
+        {
+            PaymentMethodNonce foundNonce = gateway.PaymentMethodNonce.Find(Nonce.MetaCheckoutToken);
+            Assert.IsNotNull(foundNonce);
+            Assert.AreEqual(foundNonce.Nonce, Nonce.MetaCheckoutToken);
+            Assert.IsNotNull(foundNonce.Details);
+            Assert.AreEqual(foundNonce.Details.Bin, "401288");
+            Assert.AreEqual(foundNonce.Details.CardType, "Visa");
+            Assert.AreEqual(foundNonce.Details.LastTwo, "81");
+            Assert.AreEqual(foundNonce.Details.LastFour, "1881");
+            Assert.AreEqual(foundNonce.Details.ExpirationMonth, "12");
+            Assert.AreEqual(foundNonce.Details.ExpirationYear, "2024");
+        }
+
+        [Test]
         public void Find_ExposesDetailsForSepaDirectDebitNonce()
         {
             string nonce = "fake-sepa-direct-debit-nonce";

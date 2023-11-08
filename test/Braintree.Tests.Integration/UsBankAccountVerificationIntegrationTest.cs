@@ -1,4 +1,5 @@
 using Braintree.TestUtil;
+using Braintree.Test;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
@@ -190,7 +191,7 @@ namespace Braintree.Tests.Integration
             var request = new PaymentMethodRequest
             {
                 CustomerId = customer.Target.Id,
-                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway),
+                PaymentMethodNonce = Nonce.UsBankAccount,
                 Options = new PaymentMethodOptionsRequest
                 {
                     VerificationMerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
@@ -209,6 +210,78 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(UsBankAccountVerificationStatus.VERIFIED, verification.Status);
             Assert.NotNull(verification.Id);
             Assert.NotNull(verification.VerificationDeterminedAt);
+        }
+
+        [Test]
+        public void CreateWithAddOns_ReturnsSuccessfulResponse()
+        {
+            Result<Customer> customer = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customer.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Target.Id,
+                PaymentMethodNonce = Nonce.UsBankAccount,
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerificationMerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                    UsBankAccountVerificationMethod = UsBankAccountVerificationMethod.NETWORK_CHECK,
+                    VerificationAddOns = VerificationAddOns.CUSTOMER_VERIFICATION
+                }
+            };
+
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            UsBankAccount usBankAccount = (UsBankAccount) result.Target;
+
+            Assert.AreEqual("0000", usBankAccount.Last4);
+            Assert.AreEqual("Wells Fargo", usBankAccount.BankName);
+            Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
+
+            Assert.IsNotNull(usBankAccount.Token);
+            UsBankAccountVerification verification = usBankAccount.Verifications[0];
+
+            Assert.AreEqual(UsBankAccountVerificationMethod.NETWORK_CHECK, verification.VerificationMethod);
+            Assert.AreEqual(UsBankAccountVerificationStatus.VERIFIED, verification.Status);
+            Assert.NotNull(verification.Id);
+            Assert.NotNull(verification.VerificationDeterminedAt);
+            Assert.AreEqual(verification.ProcessorResponseCode, "1000");
+        }
+
+        [Test]
+        public void Create_ReturnsAdditionalProcessorResponse()
+        {
+            Result<Customer> customer = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(customer.IsSuccess());
+
+            var request = new PaymentMethodRequest
+            {
+                CustomerId = customer.Target.Id,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway, "1000000005"),
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerificationMerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                    UsBankAccountVerificationMethod = UsBankAccountVerificationMethod.NETWORK_CHECK
+                }
+            };
+
+            Result<PaymentMethod> result = gateway.PaymentMethod.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            UsBankAccount usBankAccount = (UsBankAccount) result.Target;
+
+            Assert.AreEqual("0005", usBankAccount.Last4);
+            Assert.AreEqual("JPMORGAN CHASE", usBankAccount.BankName);
+            Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
+
+            Assert.IsNotNull(usBankAccount.Token);
+            UsBankAccountVerification verification = usBankAccount.Verifications[0];
+
+            Assert.AreEqual(UsBankAccountVerificationMethod.NETWORK_CHECK, verification.VerificationMethod);
+            Assert.AreEqual(UsBankAccountVerificationStatus.PROCESSOR_DECLINED, verification.Status);
+            Assert.NotNull(verification.Id);
+            Assert.NotNull(verification.VerificationDeterminedAt);
+            Assert.AreEqual(verification.ProcessorResponseCode, "2061");
+            Assert.AreEqual(verification.AdditionalProcessorResponse, "Invalid routing number");
         }
 
         [Test]

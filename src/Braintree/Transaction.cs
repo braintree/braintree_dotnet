@@ -86,6 +86,8 @@ namespace Braintree
         [Description("apple_pay_card")] APPLE_PAY_CARD,
         [Description("credit_card")] CREDIT_CARD,
         [Description("local_payment")] LOCAL_PAYMENT,
+        [Description("meta_checkout_card")] META_CHECKOUT_CARD,
+        [Description("meta_checkout_token")] META_CHECKOUT_TOKEN,
         [Description("paypal_account")] PAYPAL_ACCOUNT,
         [Description("paypal_here")] PAYPAL_HERE,
         [Description("samsung_pay_card")] SAMSUNG_PAY_CARD,
@@ -174,6 +176,8 @@ namespace Braintree
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
         public virtual SepaDirectDebitAccountDetails SepaDirectDebitAccountDetails { get; protected set; }
         public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
+        public virtual MetaCheckoutCardDetails MetaCheckoutCardDetails { get; protected set; }
+        public virtual MetaCheckoutTokenDetails MetaCheckoutTokenDetails { get; protected set; }
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
         public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
@@ -328,6 +332,16 @@ namespace Braintree
             if (usBankAccountNode != null)
             {
                 UsBankAccountDetails = new UsBankAccountDetails(usBankAccountNode);
+            }
+            var metaCheckoutCardNode = node.GetNode("meta-checkout-card");
+            if (metaCheckoutCardNode != null)
+            {
+                MetaCheckoutCardDetails = new MetaCheckoutCardDetails(metaCheckoutCardNode);
+            }
+            var metaCheckoutTokenNode = node.GetNode("meta-checkout-token");
+            if (metaCheckoutTokenNode != null)
+            {
+                MetaCheckoutTokenDetails = new MetaCheckoutTokenDetails(metaCheckoutTokenNode);
             }
             var visaCheckoutNode = node.GetNode("visa-checkout-card");
             if (visaCheckoutNode != null)

@@ -650,7 +650,21 @@ namespace Braintree
                             Node("last-name", "Doe"),
                             Node("phone-number", "1231231234"),
                             Node("email", "john.doe@paypal.com"),
-                            Node("username", "venmo_username")
+                            Node("username", "venmo_username"),
+                            Node("billing-address",
+                                Node("street-address", "billing-street-address"),
+                                Node("extended-address", "billing-extended-address"),
+                                Node("locality", "billing-locality"),
+                                Node("region", "billing-region"),
+                                Node("postal-code", "billing-code")
+                            ),
+                            Node("shipping-address",
+                                Node("street-address", "shipping-street-address"),
+                                Node("extended-address", "shipping-extended-address"),
+                                Node("locality", "shipping-locality"),
+                                Node("region", "shipping-region"),
+                                Node("postal-code", "shipping-code")
+                            )
                         )
                     )
             );

@@ -4,6 +4,9 @@ namespace Braintree
 {
     public class PaymentMethodOptionsRequest : Request
     {
+        public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
+        public UsBankAccountVerificationMethod? UsBankAccountVerificationMethod { get; set; }
+        public VerificationAddOns? VerificationAddOns { get; set; }
         public bool? FailOnDuplicatePaymentMethod { get; set; }
         public bool? MakeDefault { get; set; }
         public bool? SkipAdvancedFraudChecking { get; set; }
@@ -12,8 +15,6 @@ namespace Braintree
         public string VerificationAmount { get; set; }
         public string VerificationCurrencyIsoCode { get; set; }
         public string VerificationMerchantAccountId { get; set; }
-        public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
-        public UsBankAccountVerificationMethod? UsBankAccountVerificationMethod { get; set; }
 
         public override string ToXml(string root)
         {
@@ -34,6 +35,7 @@ namespace Braintree
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).
                 AddElement("us-bank-account-verification-method", UsBankAccountVerificationMethod.GetDescription()).
                 AddElement("verification-account-type", VerificationAccountType).
+                AddElement("verification-add-ons", VerificationAddOns.GetDescription()).
                 AddElement("verification-amount", VerificationAmount).
                 AddElement("verification-currency-iso-code", VerificationCurrencyIsoCode).
                 AddElement("verification-merchant-account-id", VerificationMerchantAccountId).

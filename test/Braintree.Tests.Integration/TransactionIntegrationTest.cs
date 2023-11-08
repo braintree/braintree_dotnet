@@ -3480,6 +3480,66 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithMetaCheckoutCardNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.MetaCheckoutCard
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.AreEqual(PaymentInstrumentType.META_CHECKOUT_CARD, result.Target.PaymentInstrumentType);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.CardType);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ExpirationMonth);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ExpirationYear);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.CardholderName);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.LastFour);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ImageUrl);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Bin);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Prepaid);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Healthcare);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Debit);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.DurbinRegulated);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Commercial);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Payroll);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ProductId);
+        }
+
+        [Test]
+        public void Sale_WithMetaCheckoutTokenNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.MetaCheckoutToken
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.AreEqual(PaymentInstrumentType.META_CHECKOUT_TOKEN, result.Target.PaymentInstrumentType);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.CardType);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Cryptogram);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ECommerceIndicator);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ExpirationMonth);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ExpirationYear);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.CardholderName);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.LastFour);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ImageUrl);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Bin);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Prepaid);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Healthcare);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Debit);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.DurbinRegulated);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Commercial);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Payroll);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ProductId);
+        }
+
+        [Test]
         public void Sale_WithApplePayParams()
         {
             TransactionRequest request = new TransactionRequest
@@ -5032,6 +5092,8 @@ namespace Braintree.Tests.Integration
                         RestrictedTicket = false,
                         ArrivalDate = new DateTime(2018, 1, 1),
                         TicketIssuerAddress = "tkt-issuer-address",
+                        DateOfBirth = "2012-12-12",
+                        CountryCode = "US",
                         Legs = new IndustryDataLegRequest[]
                         {
                             new IndustryDataLegRequest
@@ -5162,6 +5224,8 @@ namespace Braintree.Tests.Integration
                         RestrictedTicket = false,
                         ArrivalDate = new DateTime(2018, 1, 1),
                         TicketIssuerAddress = "tkt-issuer-address",
+                        DateOfBirth = "2012-12-12",
+                        CountryCode = "US",
                         Legs = new IndustryDataLegRequest[]
                         {
                             new IndustryDataLegRequest
@@ -8481,6 +8545,192 @@ namespace Braintree.Tests.Integration
 
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual(50.00, result.Target.Amount);
+        }
+
+        [Test]
+        public void SubmitForSettlement_WithTravelFlightIndustryData()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = false
+                }
+            };
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                Industry = new IndustryRequest
+                {
+                    IndustryType = TransactionIndustryType.TRAVEL_AND_FLIGHT,
+                    IndustryData = new IndustryDataRequest
+                    {
+                        PassengerFirstName = "John",
+                        PassengerLastName = "Doe",
+                        PassengerMiddleInitial = "M",
+                        PassengerTitle = "Mr.",
+                        IssuedDate = new DateTime(2018, 1, 1),
+                        TravelAgencyName = "Expedia",
+                        TravelAgencyCode = "12345678",
+                        TicketNumber = "ticket-number",
+                        IssuingCarrierCode = "AA",
+                        CustomerCode = "customer-code",
+                        FareAmount = 7000M,
+                        FeeAmount = 1000M,
+                        TaxAmount = 2000M,
+                        RestrictedTicket = false,
+                        ArrivalDate = new DateTime(2018, 1, 1),
+                        TicketIssuerAddress = "tkt-issuer-address",
+                        DateOfBirth = "2012-12-12",
+                        CountryCode = "US",
+                        Legs = new IndustryDataLegRequest[]
+                        {
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0001",
+                                ExchangeTicket = "ET0001",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA100",
+                                DepartureDate = new DateTime(2018, 1, 2),
+                                DepartureAirportCode = "MDW",
+                                DepartureTime = "08:00",
+                                ArrivalAirportCode = "ATX",
+                                ArrivalTime = "10:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            },
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0002",
+                                ExchangeTicket = "ET0002",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA200",
+                                DepartureDate = new DateTime(2018, 1, 3),
+                                DepartureAirportCode = "ATX",
+                                DepartureTime = "12:00",
+                                ArrivalAirportCode = "MDW",
+                                ArrivalTime = "14:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            }
+                        }
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SETTLING, result.Target.Status);
+            Assert.AreEqual(SandboxValues.TransactionAmount.AUTHORIZE, result.Target.Amount);
+        }
+
+        [Test]
+        public void SubmitForPartialSettlement_WithTravelFlightIndustryData()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = false
+                }
+            };
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            request = new TransactionRequest
+            {
+                Amount = decimal.Parse("50.00"),
+                Industry = new IndustryRequest
+                {
+                    IndustryType = TransactionIndustryType.TRAVEL_AND_FLIGHT,
+                    IndustryData = new IndustryDataRequest
+                    {
+                        PassengerFirstName = "John",
+                        PassengerLastName = "Doe",
+                        PassengerMiddleInitial = "M",
+                        PassengerTitle = "Mr.",
+                        IssuedDate = new DateTime(2018, 1, 1),
+                        TravelAgencyName = "Expedia",
+                        TravelAgencyCode = "12345678",
+                        TicketNumber = "ticket-number",
+                        IssuingCarrierCode = "AA",
+                        CustomerCode = "customer-code",
+                        FareAmount = 7000M,
+                        FeeAmount = 1000M,
+                        TaxAmount = 2000M,
+                        RestrictedTicket = false,
+                        ArrivalDate = new DateTime(2018, 1, 1),
+                        TicketIssuerAddress = "tkt-issuer-address",
+                        DateOfBirth = "2012-12-12",
+                        CountryCode = "US",
+                        Legs = new IndustryDataLegRequest[]
+                        {
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0001",
+                                ExchangeTicket = "ET0001",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA100",
+                                DepartureDate = new DateTime(2018, 1, 2),
+                                DepartureAirportCode = "MDW",
+                                DepartureTime = "08:00",
+                                ArrivalAirportCode = "ATX",
+                                ArrivalTime = "10:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            },
+                            new IndustryDataLegRequest
+                            {
+                                ConjunctionTicket = "CJ0002",
+                                ExchangeTicket = "ET0002",
+                                CouponNumber = "1",
+                                ServiceClass = "Y",
+                                CarrierCode = "AA",
+                                FareBasisCode = "W",
+                                FlightNumber = "AA200",
+                                DepartureDate = new DateTime(2018, 1, 3),
+                                DepartureAirportCode = "ATX",
+                                DepartureTime = "12:00",
+                                ArrivalAirportCode = "MDW",
+                                ArrivalTime = "14:00",
+                                StopoverPermitted = false,
+                                FareAmount = 3500M,
+                                FeeAmount = 500M,
+                                TaxAmount = 1000M,
+                                EndorsementOrRestrictions = "NOT REFUNDABLE",
+                            }
+                        }
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.SubmitForPartialSettlement(transaction.Id, request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionStatus.SETTLING, result.Target.Status);
             Assert.AreEqual(50.00, result.Target.Amount);
         }
 

@@ -10,7 +10,9 @@ namespace Braintree
         public DateTime? ArrivalDate { get; set; }
         public string CheckInDate { get; set; }
         public string CheckOutDate { get; set; }
+        public string CountryCode { get; set; }
         public string CustomerCode { get; set; }
+        public string DateOfBirth { get; set; }
         public string DepartureDate { get; set; }
         public decimal? FareAmount { get; set; }
         public decimal? FeeAmount { get; set; }
@@ -75,7 +77,9 @@ namespace Braintree
                 AddElement("ticket-number", TicketNumber).
                 AddElement("issuing-carrier-code", IssuingCarrierCode).
                 AddElement("customer-code", CustomerCode).
-                AddElement("property-phone", PropertyPhone);
+                AddElement("property-phone", PropertyPhone).
+                AddElement("date-of-birth", DateOfBirth).
+                AddElement("country-code", CountryCode);
 
             if (RoomRate != null)
                 builder.AddElement("room-rate", RoomRate.ToString());

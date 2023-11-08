@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2021</Copyright>
-    <VersionPrefix>5.20.0</VersionPrefix>
+    <VersionPrefix>5.21.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <!-- We target NET standard 2.0 so that we can support NET Core 2.1. When NET Core 2.1 reaches EOL, we can update to Net Standard 2.1 -->
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
@@ -12,8 +12,11 @@
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Add `SUBSCRIPTIONBILLINGSKIPPED` webhook notification support
-      - Add `implicitlyVaultedPaymentMethodToken` and `implicitlyVaultedPaymentMethodGlobalId` to `LocalPaymentDetails`
+      - Add `DateOfBirth` and `CountryCode` to `IndustryDataRequest`
+      - Add `BillingAddress` and `ShippingAddress` to `VenmoProfileData`
+      - Add `VerificationAddOns` and `AdditionalProcessorResponse` to `UsBankAccountVerification`
+      - Add `MetaCheckoutCard` and `MetaCheckoutToken` to payment method
+      - Add `MetaCheckoutCardDetails` nd `MetaCheckoutTokenDetails` to Transaction
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

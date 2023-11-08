@@ -18,6 +18,14 @@ namespace Braintree
             {
                 return new CreditCard(response, gateway);
             }
+            else if (response.GetName() == "meta-checkout-card")
+            {
+                return new MetaCheckoutCard(response, gateway);
+            }
+            else if (response.GetName() == "meta-checkout-token")
+            {
+                return new MetaCheckoutToken(response, gateway);
+            }
             else if (response.GetName() == "paypal-account")
             {
                 return new PayPalAccount(response, gateway);

@@ -786,6 +786,20 @@ namespace Braintree.Tests
           Assert.AreEqual("venmo_username", profileData.Username);
           Assert.AreEqual("1231231234", profileData.PhoneNumber);
           Assert.AreEqual("john.doe@paypal.com", profileData.Email);
+
+          Assert.NotNull(profileData.BillingAddress);
+          Assert.AreEqual("billing-street-address", profileData.BillingAddress.StreetAddress);
+          Assert.AreEqual("billing-extended-address", profileData.BillingAddress.ExtendedAddress);
+          Assert.AreEqual("billing-locality", profileData.BillingAddress.Locality);
+          Assert.AreEqual("billing-region", profileData.BillingAddress.Region);
+          Assert.AreEqual("billing-code", profileData.BillingAddress.PostalCode);
+
+          Assert.NotNull(profileData.ShippingAddress);
+          Assert.AreEqual("shipping-street-address", profileData.ShippingAddress.StreetAddress);
+          Assert.AreEqual("shipping-extended-address", profileData.ShippingAddress.ExtendedAddress);
+          Assert.AreEqual("shipping-locality", profileData.ShippingAddress.Locality);
+          Assert.AreEqual("shipping-region", profileData.ShippingAddress.Region);
+          Assert.AreEqual("shipping-code", profileData.ShippingAddress.PostalCode);
         }
     }
 }

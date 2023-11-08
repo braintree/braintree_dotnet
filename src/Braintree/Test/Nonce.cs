@@ -17,6 +17,8 @@ namespace Braintree.Test
         public const string GatewayRejectedTokenIssuance = "fake-token-issuance-error-venmo-account-nonce";
         public const string LocalPayment = "fake-local-payment-method-nonce";
         public const string LuhnInvalid = "fake-luhn-invalid-nonce";
+        public const string MetaCheckoutCard = "fake-meta-checkout-card-nonce";
+        public const string MetaCheckoutToken = "fake-meta-checkout-token-nonce";
         public const string PayPalBillingAgreement = "fake-paypal-billing-agreement-nonce";
         // NEXT_MAJOR_VERSION - no longer supported in the Gateway, remove this constant
         public const string PayPalFuturePayment = "fake-paypal-future-nonce";
@@ -66,6 +68,7 @@ namespace Braintree.Test
         public const string TransactablePrepaid = "fake-valid-prepaid-nonce";
         public const string TransactableUnknownIndicators = "fake-valid-unknown-indicators-nonce";
         public const string TransactableVisa = "fake-valid-visa-nonce";
+        public const string UsBankAccount = "fake-us-bank-account-nonce";
         public const string VenmoAccount = "fake-venmo-account-nonce";
         public const string VisaCheckoutAmEx = "fake-visa-checkout-amex-nonce";
         public const string VisaCheckoutDiscover = "fake-visa-checkout-discover-nonce";

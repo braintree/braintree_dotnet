@@ -46,6 +46,8 @@ namespace Braintree.Tests
                     RestrictedTicket = false,
                     ArrivalDate = new DateTime(2018, 1, 1),
                     TicketIssuerAddress = "tkt-issuer-address",
+                    DateOfBirth = "2012-12-12",
+                    CountryCode = "US",
                     Legs = new IndustryDataLegRequest[]
                     {
                         new IndustryDataLegRequest
@@ -74,6 +76,8 @@ namespace Braintree.Tests
 
             Assert.IsTrue(request.ToXml().Contains("<arrival-date type=\"datetime\">2018-01-01 00:00:00Z</arrival-date>"));
             Assert.IsTrue(request.ToXml().Contains("<ticket-issuer-address>tkt-issuer-address</ticket-issuer-address>"));
+            Assert.IsTrue(request.ToXml().Contains("<country-code>US</country-code>"));
+            Assert.IsTrue(request.ToXml().Contains("<date-of-birth>2012-12-12</date-of-birth>"));
         }
     }
 }
