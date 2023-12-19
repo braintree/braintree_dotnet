@@ -1,11 +1,17 @@
 # Changelog
 
+## 5.22.0
+- Deprecate `threeDSecureToken` in favor of `threeDSecureAuthenticationId`
+- Deprecate `VenmoSdkSession`, `VenmoSdkPaymentMethodCode`, and `IsVenmoSdk`
+- Add `PICKUP_IN_STORE` to `ShippingMethod` enum
+- Add `ExternalVault` and `RiskData` to `CreditCardVerificationRequest`
+
 ## 5.21.0
 - Add `DateOfBirth` and `CountryCode` to `IndustryDataRequest`
 - Add `BillingAddress` and `ShippingAddress` to `VenmoProfileData`
 - Add `VerificationAddOns` and `AdditionalProcessorResponse` to `UsBankAccountVerification`
 - Add `MetaCheckoutCard` and `MetaCheckoutToken` to payment method
-- Add `MetaCheckoutCardDetails` nd `MetaCheckoutTokenDetails` to Transaction
+- Add `MetaCheckoutCardDetails` and `MetaCheckoutTokenDetails` to Transaction
 
 ## 5.20.0
 - Add `SUBSCRIPTIONBILLINGSKIPPED` webhook notification support

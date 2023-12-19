@@ -49,6 +49,8 @@ namespace Braintree
             public const string APPLE_PAY_AMEX = "fake-apple-pay-amex-nonce";
         }
 
+        // NEXT_MAJOR_VERSION remove this class
+        // The old Venmo SDK integration has been deprecated
         public class VenmoSdk
         {
             public const string VISA_PAYMENT_METHOD_CODE = "stub-4111111111111111";

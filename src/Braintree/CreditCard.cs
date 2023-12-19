@@ -107,6 +107,9 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual string CustomerId { get; protected set; }
         public virtual bool? IsDefault { get; protected set; }
+        // NEXT_MAJOR_VERSION Remove IsVenmoSdk
+        // The old venmo SDK class has been deprecated
+        [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
         public virtual bool? IsVenmoSdk { get; protected set; }
         public virtual bool? IsExpired { get; protected set; }
         public virtual bool? IsNetworkTokenized { get; protected set; }
@@ -201,7 +204,11 @@ namespace Braintree
             CardType = node.GetEnum("card-type", CreditCardCardType.UNRECOGNIZED);
             CustomerId = node.GetString("customer-id");
             IsDefault = node.GetBoolean("default");
+            // NEXT_MAJOR_VERSION Remove this pragma warning when we remove IsVenmoSdk
+            // We have this so we can build the SDK without obsolete error messages
+            #pragma warning disable 618
             IsVenmoSdk = node.GetBoolean("venmo-sdk");
+            #pragma warning restore 618
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");
             IsExpired = node.GetBoolean("expired");

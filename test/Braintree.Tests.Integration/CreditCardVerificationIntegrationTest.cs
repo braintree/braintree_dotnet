@@ -126,6 +126,83 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void CreateExternalVault_ReturnsSuccessfulResponse()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                ExternalVault = new ExternalVaultRequest 
+                {
+                    Status = "will_vault"
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                }
+            };
+            
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.MerchantAccountId,
+                            MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+        
+        [Test]
+        public void CreateRiskData_ReturnsSuccessfulResponse()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        CountryName = "Greece",
+                        CountryCodeAlpha2 = "GR",
+                        CountryCodeAlpha3 = "GRC",
+                        CountryCodeNumeric = "300"
+                    }
+                },
+                RiskData = new RiskDataRequest 
+                {
+                    CustomerBrowser = "IE6",
+                    CustomerIP = "192.168.0.1",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                }
+            };
+            
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(verification.MerchantAccountId,
+                            MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+        
+        [Test]
         public void Create3DSAuthID_ReturnsSuccessfulResponse()
         {
             service = new BraintreeService(gateway.Configuration);

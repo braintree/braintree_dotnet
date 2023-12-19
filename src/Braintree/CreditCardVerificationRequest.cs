@@ -8,9 +8,11 @@ namespace Braintree
 
     public class CreditCardVerificationRequest : Request {
         public CreditCardVerificationCreditCardRequest CreditCard { get; set; }
-        public CreditCardVerificationOptionsRequest Options { get; set; }
+        public ExternalVaultRequest ExternalVault { get; set; }
         public string IntendedTransactionSource { get; set; }
+        public CreditCardVerificationOptionsRequest Options { get; set; }
         public string PaymentMethodNonce { get; set; }
+        public RiskDataRequest RiskData { get; set; }
         public string ThreeDSecureAuthenticationID { get; set; }
         public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
 
@@ -28,9 +30,11 @@ namespace Braintree
         {
             return new RequestBuilder(root).
                 AddElement("credit-card", CreditCard).
+                AddElement("external-vault", ExternalVault).
                 AddElement("intendedTransactionSource", IntendedTransactionSource).
                 AddElement("options", Options).
                 AddElement("paymentMethodNonce", PaymentMethodNonce).
+                AddElement("risk-data", RiskData).
                 AddElement("threeDSecureAuthenticationID", ThreeDSecureAuthenticationID).
                 AddElement("threeDSecurePassThru", ThreeDSecurePassThru);
         }

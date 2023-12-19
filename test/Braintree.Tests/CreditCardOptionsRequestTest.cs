@@ -15,6 +15,8 @@ namespace Braintree.Tests
                 MakeDefault = false,
                 SkipAdvancedFraudChecking = false,
                 UpdateExistingToken = "foo",
+                // NEXT_MAJOR_VERSION Remove VenmoSdkSession
+                // The old venmo SDK integration has been deprecated
                 VenmoSdkSession = "session",
                 VerificationAccountType = "type",
                 VerificationAmount = "0.01",
@@ -27,6 +29,7 @@ namespace Braintree.Tests
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<make-default>false</make-default>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<skip-advanced-fraud-checking>false</skip-advanced-fraud-checking>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<update-existing-token>foo</update-existing-token>"));
+            // NEXT_MAJOR_VERSION Remove this assertion
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<venmo-sdk-session>session</venmo-sdk-session>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<verification-account-type>type</verification-account-type>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<verification-amount>0.01</verification-amount>"));

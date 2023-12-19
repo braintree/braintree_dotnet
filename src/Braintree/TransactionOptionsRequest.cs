@@ -1,5 +1,7 @@
 #pragma warning disable 1591
 
+using System;
+
 namespace Braintree
 {
     public class TransactionOptionsRequest : Request
@@ -10,6 +12,9 @@ namespace Braintree
         public bool? AddBillingAddressToPaymentMethod { get; set; }
         public bool? StoreShippingAddressInVault { get; set; }
         public bool? SubmitForSettlement { get; set; }
+        // NEXT_MAJOR_VERSION Remove VenmoSdkSession
+        // The old venmo SDK class has been deprecated
+        [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
         public string VenmoSdkSession { get; set; }
         public string PayeeId { get; set; }
         public string PayeeEmail { get; set; }
@@ -42,7 +47,11 @@ namespace Braintree
                 AddElement("add-billing-address-to-payment-method", AddBillingAddressToPaymentMethod).
                 AddElement("store-shipping-address-in-vault", StoreShippingAddressInVault).
                 AddElement("submit-for-settlement", SubmitForSettlement).
+                // NEXT_MAJOR_VERSION Remove this pragma warning when we remove VenmoSdkSession
+                // We have this so we can build the SDK without obsolete error messages
+                #pragma warning disable 618
                 AddElement("venmo-sdk-session", VenmoSdkSession).
+                #pragma warning restore 618
                 AddElement("payee-id", PayeeId).
                 AddElement("payee-email", PayeeEmail).
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).

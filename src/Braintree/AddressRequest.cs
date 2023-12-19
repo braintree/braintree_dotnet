@@ -11,7 +11,8 @@ namespace Braintree
         [Description("priority")] PRIORITY,
         [Description("ground")] GROUND,
         [Description("electronic")] ELECTRONIC,
-        [Description("ship_to_store")] SHIP_TO_STORE
+        [Description("ship_to_store")] SHIP_TO_STORE,
+        [Description("pickup_in_store")] PICKUP_IN_STORE 
     }
 
     /// <summary>

@@ -3061,6 +3061,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_AUTHENTICATION_ID_WITH_THREE_D_SECURE_PASS_THRU_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Authentication-Id")[0].Code);
         }
 
+        // NEXT_MAJOR_VERSION remove this test
+        // threeDSecureToken has been deprecated in favor of threeDSecureAuthenticationId
         [Test]
         public void Sale_WithThreeDSecureToken()
         {
@@ -3097,6 +3099,8 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShiftPossible);
         }
 
+        // NEXT_MAJOR_VERSION remove this test
+        // threeDSecureToken has been deprecated in favor of threeDSecureAuthenticationId
         [Test]
         public void Sale_ErrorThreeDSecureTransactionDataDoesNotMatch()
         {
@@ -3123,6 +3127,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_THREE_D_SECURE_TRANSACTION_DATA_DOESNT_MATCH_VERIFY, result.Errors.ForObject("Transaction").OnField("Three-D-Secure-Token")[0].Code);
         }
 
+        // NEXT_MAJOR_VERSION replace ThreeDSecureToken with ThreeDSecureAuthenticationId
+        // threeDSecureToken has been deprecated in favor of threeDSecureAuthenticationId
         [Test]
         public void Sale_ErrorWithNullThreeDSecureToken()
         {

@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Braintree")]
 [assembly: AssemblyProduct("Braintree Payment Gateway Client API")]
-[assembly: AssemblyCopyright("Copyright © Braintree, a division of PayPal, Inc. 2021")]
+[assembly: AssemblyCopyright("Copyright © Braintree, a division of PayPal, Inc. 2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Braintree.Tests")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-[assembly: AssemblyVersion("5.21.0.0")]
-[assembly: AssemblyFileVersion("5.21.0.0")]
+[assembly: AssemblyVersion("5.22.0.0")]
+[assembly: AssemblyFileVersion("5.22.0.0")]

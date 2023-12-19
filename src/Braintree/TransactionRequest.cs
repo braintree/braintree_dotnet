@@ -35,6 +35,8 @@ namespace Braintree
     /// };
     /// </code>
     /// </example>
+
+    // NEXT_MAJOR_VERSION Remove ObsoleteAttributes
     public class TransactionRequest : Request
     {
         public TransactionCreditCardRequest CreditCard { get; set; }
@@ -69,6 +71,7 @@ namespace Braintree
         public string CustomerId { get; set; }
         public string ShippingAddressId { get; set; }
         public string BillingAddressId { get; set; }
+        [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
         public string VenmoSdkPaymentMethodCode { get; set; }
         public string PaymentMethodNonce { get; set; }
         public string ScaExemption { get; set; }
@@ -80,7 +83,10 @@ namespace Braintree
         public string SharedBillingAddressId { get; set; }
         public string ThreeDSecureAuthenticationId { get; set; }
         private bool _threeDSecureTransaction;
+        // NEXT_MAJOR_VERSION replace ThreeDSecureToken with ThreeDSecureAuthenticationId
+        // threeDSecureToken has been deprecated in favor of threeDSecureAuthenticationId
         private string _threeDSecureToken;
+        [ObsoleteAttribute("use threeDSecureAuthenticationId instead", false)]
         public string ThreeDSecureToken {
             get => _threeDSecureToken;
             set
@@ -139,13 +145,13 @@ namespace Braintree
             builder.AddElement("product-sku", ProductSku);
             builder.AddElement("channel", Channel);
             builder.AddElement("exchange-rate-quote-id",ExchangeRateQuoteId);
-// Remove this pragma warning when we remove DeviceSessionId, FraudMerchantId, and Recurring.
-// We have this so we can build the SDK without obsolete error messages
-#pragma warning disable 618
+            // Remove this pragma warning when we remove DeviceSessionId, FraudMerchantId, and Recurring.
+            // We have this so we can build the SDK without obsolete error messages
+            #pragma warning disable 618
             builder.AddElement("device-session-id", DeviceSessionId);
             builder.AddElement("fraud-merchant-id", FraudMerchantId);
             if (Recurring.HasValue) builder.AddElement("recurring", Recurring);
-#pragma warning restore 618
+            #pragma warning restore 618
             builder.AddElement("transaction-source", TransactionSource);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("payment-method-nonce", PaymentMethodNonce);
@@ -174,15 +180,23 @@ namespace Braintree
             builder.AddElement("options", Options);
             builder.AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
             builder.AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId);
+            // NEXT_MAJOR_VERSION Remove this pragma warning when we remove VenmoSdkPaymentMethodCode
+            // We have this so we can build the SDK without obsolete error messages
+            #pragma warning disable 618
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
+            #pragma warning restore 618
             builder.AddElement("sca-exemption", ScaExemption);
             builder.AddElement("shared-payment-method-token", SharedPaymentMethodToken);
             builder.AddElement("shared-payment-method-nonce", SharedPaymentMethodNonce);
             builder.AddElement("shared-customer-id", SharedCustomerId);
             builder.AddElement("shared-shipping-address-id", SharedShippingAddressId);
             builder.AddElement("shared-billing-address-id", SharedBillingAddressId);
+            // NEXT_MAJOR_VERSION Remove this pragma warning and ThreeDSecureToken
+            // We have this so we can build the SDK without obsolete error messages
+            #pragma warning disable 618
             if (_threeDSecureTransaction)
                 builder.AddElement("three-d-secure-token", ThreeDSecureToken ?? "");
+            #pragma warning restore 618
             builder.AddElement("risk-data", RiskData);
             if (ShippingAmount.HasValue)
                 builder.AddElement("shipping-amount", ShippingAmount);
