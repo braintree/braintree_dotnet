@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2021</Copyright>
-    <VersionPrefix>5.22.0</VersionPrefix>
+    <VersionPrefix>5.23.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <!-- We target NET standard 2.0 so that we can support NET Core 2.1. When NET Core 2.1 reaches EOL, we can update to Net Standard 2.1 -->
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
@@ -12,10 +12,9 @@
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Deprecate `threeDSecureToken` in favor of `threeDSecureAuthenticationId`
-      - Deprecate `VenmoSdkSession`, `VenmoSdkPaymentMethodCode`, and `IsVenmoSdk`
-      - Add `PICKUP_IN_STORE` to `ShippingMethod` enum  
-      - Add `ExternalVault` and `RiskData` to `CreditCardVerificationRequest`
+      - Add `PackageTracking` and `PackageTrackingAsync` methods to `TransactionGateway` to make request to add tracking information to transactions
+      - Add `PackageDetails` and `PackageTrackingRequest` classes
+      - Add `UpcCode`, `UpcType`, `ImageUrl` to `TransactionLineItem` and `TransactionLineItemRequest`
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

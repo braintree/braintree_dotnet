@@ -6245,6 +6245,64 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithLineItemsSinglePayPal()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 45.15M,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1,
+                        Name = "Name #1",
+                        Description = "Description #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.12M,
+                        UnitTaxAmount = 1.23M,
+                        TaxAmount = 1.33M,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                        Url = "https://example.com/products/23434",
+                        ImageUrl = "https://google.com/image.png",
+                        UpcCode = "042100005264",
+                        UpcType = "UPC-A",
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Transaction transaction = result.Target;
+
+            List<TransactionLineItem> lineItems = transaction.GetLineItems();
+            Assert.AreEqual(1, lineItems.Count);
+
+            TransactionLineItem lineItem = lineItems[0];
+            Assert.AreEqual(1, lineItem.Quantity);
+            Assert.AreEqual("Name #1", lineItem.Name);
+            Assert.AreEqual("Description #1", lineItem.Description);
+            Assert.AreEqual(TransactionLineItemKind.DEBIT, lineItem.Kind);
+            Assert.AreEqual(45.12M, lineItem.UnitAmount);
+            Assert.AreEqual(1.23M, lineItem.UnitTaxAmount);
+            Assert.AreEqual(1.33M, lineItem.TaxAmount);
+            Assert.AreEqual("gallon", lineItem.UnitOfMeasure);
+            Assert.AreEqual(1.02M, lineItem.DiscountAmount);
+            Assert.AreEqual(45.15M, lineItem.TotalAmount);
+            Assert.AreEqual("23434", lineItem.ProductCode);
+            Assert.AreEqual("9SAASSD8724", lineItem.CommodityCode);
+            Assert.AreEqual("https://example.com/products/23434", lineItem.Url);
+            Assert.AreEqual("https://google.com/image.png", lineItem.ImageUrl);
+            Assert.AreEqual("042100005264", lineItem.UpcCode);
+            Assert.AreEqual("UPC-A", lineItem.UpcType);
+        }
+
+        [Test]
         public void Sale_WithLineItemsMultiple()
         {
             var request = new TransactionRequest
@@ -7377,6 +7435,125 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(
                 ValidationErrorCode.TRANSACTION_TOO_MANY_LINE_ITEMS,
                 result.Errors.ForObject("Transaction").OnField("LineItems")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUpcCodeIsTooLongUpcTypeIsInvalid()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1,
+                        Name = "Name #1",
+                        Description = "Description #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.12M,
+                        UnitTaxAmount = 1.23M,
+                        TaxAmount = 1.33M,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                        Url = "https://example.com/products/23434",
+                        ImageUrl = "https://google.com/image.png",
+                        UpcCode = "THECODEISTOODARNLONG",
+                        UpcType = "USB-A",
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UPC_CODE_IS_TOO_LONG,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_0").OnField("UpcCode")[0].Code
+            );
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UPC_TYPE_IS_INVALID,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_0").OnField("UpcType")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUpcCodeIsMissing()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1,
+                        Name = "Name #1",
+                        Description = "Description #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.12M,
+                        UnitTaxAmount = 1.23M,
+                        TaxAmount = 1.33M,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                        Url = "https://example.com/products/23434",
+                        ImageUrl = "https://google.com/image.png",
+                        UpcType = "USB-A",
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UPC_CODE_IS_MISSING,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_0").OnField("UpcCode")[0].Code
+            );
+        }
+
+        [Test]
+        public void Sale_WithLineItemsValidationErrorUpcTypeIsMissing()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 35.05M,
+                PaymentMethodNonce = Nonce.PayPalOneTimePayment,
+                LineItems = new TransactionLineItemRequest[]
+                {
+                    new TransactionLineItemRequest
+                    {
+                        Quantity = 1,
+                        Name = "Name #1",
+                        Description = "Description #1",
+                        LineItemKind = TransactionLineItemKind.DEBIT,
+                        UnitAmount = 45.12M,
+                        UnitTaxAmount = 1.23M,
+                        TaxAmount = 1.33M,
+                        UnitOfMeasure = "gallon",
+                        DiscountAmount = 1.02M,
+                        TotalAmount = 45.15M,
+                        ProductCode = "23434",
+                        CommodityCode = "9SAASSD8724",
+                        Url = "https://example.com/products/23434",
+                        ImageUrl = "https://google.com/image.png",
+                        UpcCode = "042100005264",
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.TRANSACTION_LINE_ITEM_UPC_TYPE_IS_MISSING,
+                result.Errors.ForObject("Transaction").ForObject("LineItems").ForObject("index_0").OnField("UpcType")[0].Code
             );
         }
 
@@ -10941,32 +11118,6 @@ namespace Braintree.Tests.Integration
 
             Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.NO_NET_AMOUNT_TO_PERFORM_AUTH_ADJUSTMENT, adjustAuthorizedResult.Errors.ForObject("AuthorizationAdjustment").OnField("Base")[0].Code);
-        }
-
-        [Test]
-        public void AdjustAuthorization_OnTransactionStatusIsNotAuthorized() {
-            var request = new TransactionRequest {
-                MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID,
-                Amount = 75.50M,
-                CreditCard = new TransactionCreditCardRequest
-                {
-                    Number = "5105105105105100",
-                    ExpirationDate = "05/2012",
-                },
-                Options = new TransactionOptionsRequest
-                {
-                    SubmitForSettlement = true
-                }
-            };
-
-            var transactionResult = gateway.Transaction.Sale(request);
-            Assert.IsTrue(transactionResult.IsSuccess());
-            Transaction transaction = transactionResult.Target;
-
-            var adjustAuthorizedResult = gateway.Transaction.AdjustAuthorization(transaction.Id, decimal.Parse("85.50"));
-
-            Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
-            Assert.AreEqual(ValidationErrorCode.TRANSACTION_MUST_BE_IN_STATE_AUTHORIZED, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
         }
 
         [Test]

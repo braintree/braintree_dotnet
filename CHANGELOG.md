@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.23.0
+- Add `PackageTracking` and `PackageTrackingAsync` methods to `TransactionGateway` to make request to add tracking information to transactions
+- Add `PackageDetails` and `PackageTrackingRequest` classes
+- Add `UpcCode`, `UpcType`, `ImageUrl` to `TransactionLineItem` and `TransactionLineItemRequest`
+
 ## 5.22.0
 - Deprecate `threeDSecureToken` in favor of `threeDSecureAuthenticationId`
 - Deprecate `VenmoSdkSession`, `VenmoSdkPaymentMethodCode`, and `IsVenmoSdk`

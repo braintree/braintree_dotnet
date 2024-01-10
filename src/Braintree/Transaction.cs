@@ -180,6 +180,7 @@ namespace Braintree
         public virtual MetaCheckoutTokenDetails MetaCheckoutTokenDetails { get; protected set; }
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
         public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
+        public virtual PackageDetails[] Packages { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
@@ -234,6 +235,13 @@ namespace Braintree
             for (int i = 0; i < statusNodes.Count; i++)
             {
                 StatusHistory[i] = new StatusEvent(statusNodes[i]);
+            }
+
+            List<NodeWrapper> packageDetails = node.GetList("shipments/shipment");
+            Packages = new PackageDetails[packageDetails.Count];
+            for(int i = 0; i < packageDetails.Count; i++) 
+            {
+                Packages[i] = new PackageDetails(packageDetails[i]);
             }
 
             Type = node.GetEnum("type", TransactionType.UNRECOGNIZED);

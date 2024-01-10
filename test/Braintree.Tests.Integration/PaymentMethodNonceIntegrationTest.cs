@@ -105,7 +105,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(foundNonce.Details.LastTwo, "81");
             Assert.AreEqual(foundNonce.Details.LastFour, "1881");
             Assert.AreEqual(foundNonce.Details.ExpirationMonth, "12");
-            Assert.AreEqual(foundNonce.Details.ExpirationYear, "2024");
+            Assert.AreEqual(foundNonce.Details.ExpirationYear, (DateTime.Now.Year + 1).ToString());
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(foundNonce.Details.LastTwo, "81");
             Assert.AreEqual(foundNonce.Details.LastFour, "1881");
             Assert.AreEqual(foundNonce.Details.ExpirationMonth, "12");
-            Assert.AreEqual(foundNonce.Details.ExpirationYear, "2024");
+            Assert.AreEqual(foundNonce.Details.ExpirationYear, (DateTime.Now.Year + 1).ToString());
         }
 
         [Test]

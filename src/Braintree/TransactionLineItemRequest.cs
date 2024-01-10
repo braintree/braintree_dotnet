@@ -22,18 +22,21 @@ namespace Braintree
     /// </example>
     public class TransactionLineItemRequest : Request
     {
-        public virtual decimal? Quantity { get; set; }
-        public virtual string Name { get; set; }
-        public virtual string Description { get; set; }
         public virtual TransactionLineItemKind? LineItemKind { get; set; }
+        public virtual decimal? DiscountAmount { get; set; }
+        public virtual decimal? Quantity { get; set; }
+        public virtual decimal? TaxAmount { get; set; }
+        public virtual decimal? TotalAmount { get; set; }
         public virtual decimal? UnitAmount { get; set; }
         public virtual decimal? UnitTaxAmount { get; set; }
-        public virtual decimal? TotalAmount { get; set; }
-        public virtual decimal? DiscountAmount { get; set; }
-        public virtual decimal? TaxAmount { get; set; }
-        public virtual string UnitOfMeasure { get; set; }
-        public virtual string ProductCode { get; set; }
         public virtual string CommodityCode { get; set; }
+        public virtual string Description { get; set; }
+        public virtual string ImageUrl { get; set; }
+        public virtual string Name { get; set; }
+        public virtual string ProductCode { get; set; }
+        public virtual string UnitOfMeasure { get; set; }
+        public virtual string UpcCode { get; set; }
+        public virtual string UpcType { get; set; }
         public virtual string Url { get; set; }
 
         public TransactionLineItemRequest() {}
@@ -52,18 +55,21 @@ namespace Braintree
         {
             var builder = new RequestBuilder(root);
 
-            builder.AddElement("quantity", Quantity);
-            builder.AddElement("name", Name);
-            builder.AddElement("description", Description);
-            builder.AddElement("kind", LineItemKind.GetDescription());
-            builder.AddElement("unit-amount", UnitAmount);
-            builder.AddElement("unit-tax-amount", UnitTaxAmount);
-            builder.AddElement("total-amount", TotalAmount);
-            builder.AddElement("discount-amount", DiscountAmount);
-            builder.AddElement("tax-amount", TaxAmount);
-            builder.AddElement("unit-of-measure", UnitOfMeasure);
-            builder.AddElement("product-code", ProductCode);
             builder.AddElement("commodity-code", CommodityCode);
+            builder.AddElement("description", Description);
+            builder.AddElement("discount-amount", DiscountAmount);
+            builder.AddElement("image-url", ImageUrl);
+            builder.AddElement("kind", LineItemKind.GetDescription());
+            builder.AddElement("name", Name);
+            builder.AddElement("product-code", ProductCode);
+            builder.AddElement("quantity", Quantity);
+            builder.AddElement("tax-amount", TaxAmount);
+            builder.AddElement("total-amount", TotalAmount);
+            builder.AddElement("unit-amount", UnitAmount);
+            builder.AddElement("unit-of-measure", UnitOfMeasure);
+            builder.AddElement("unit-tax-amount", UnitTaxAmount);
+            builder.AddElement("upc-code", UpcCode);
+            builder.AddElement("upc-type", UpcType);
             builder.AddElement("url", Url);
             return builder;
         }

@@ -245,6 +245,20 @@ namespace Braintree
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
+        public virtual Result<Transaction> PackageTracking(string id, PackageTrackingRequest request)
+        {
+            XmlNode response = service.Post(service.MerchantPath() + "/transactions/" + id + "/shipments", request);
+
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
+        }
+
+        public virtual async Task<Result<Transaction>> PackageTrackingAsync(string id, PackageTrackingRequest request)
+        {
+            XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions/" + id + "/shipments", request).ConfigureAwait(false);;
+
+            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
+        }
+
         public virtual Result<Transaction> SubmitForPartialSettlement(string id, decimal amount)
         {
             var request = new TransactionRequest();

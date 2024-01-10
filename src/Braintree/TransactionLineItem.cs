@@ -12,34 +12,40 @@ namespace Braintree
 
     public class TransactionLineItem
     {
-        public virtual decimal? Quantity { get; protected set; }
-        public virtual string Name { get; protected set; }
-        public virtual string Description { get; protected set; }
         public virtual TransactionLineItemKind Kind { get; protected set; }
+        public virtual decimal? DiscountAmount { get; protected set; }
+        public virtual decimal? Quantity { get; protected set; }
+        public virtual decimal? TaxAmount { get; protected set; }
+        public virtual decimal? TotalAmount { get; protected set; }
         public virtual decimal? UnitAmount { get; protected set; }
         public virtual decimal? UnitTaxAmount { get; protected set; }
-        public virtual decimal? TotalAmount { get; protected set; }
-        public virtual decimal? DiscountAmount { get; protected set; }
-        public virtual decimal? TaxAmount { get; protected set; }
-        public virtual string UnitOfMeasure { get; protected set; }
-        public virtual string ProductCode { get; protected set; }
         public virtual string CommodityCode { get; protected set; }
+        public virtual string Description { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual string Name { get; protected set; }
+        public virtual string ProductCode { get; protected set; }
+        public virtual string UnitOfMeasure { get; protected set; }
+        public virtual string UpcCode { get; protected set; }
+        public virtual string UpcType { get; protected set; }
         public virtual string Url { get; protected set; }
 
         protected internal TransactionLineItem(NodeWrapper node)
         {
-            Quantity = node.GetDecimal("quantity");
-            Name = node.GetString("name");
-            Description = node.GetString("description");
-            Kind = node.GetEnum("kind", TransactionLineItemKind.UNRECOGNIZED);
-            UnitAmount = node.GetDecimal("unit-amount");
-            UnitTaxAmount = node.GetDecimal("unit-tax-amount");
-            TotalAmount = node.GetDecimal("total-amount");
-            DiscountAmount = node.GetDecimal("discount-amount");
-            TaxAmount = node.GetDecimal("tax-amount");
-            UnitOfMeasure = node.GetString("unit-of-measure");
-            ProductCode = node.GetString("product-code");
             CommodityCode = node.GetString("commodity-code");
+            Description = node.GetString("description");
+            DiscountAmount = node.GetDecimal("discount-amount");
+            ImageUrl = node.GetString("image-url");
+            Kind = node.GetEnum("kind", TransactionLineItemKind.UNRECOGNIZED);
+            Name = node.GetString("name");
+            ProductCode = node.GetString("product-code");
+            Quantity = node.GetDecimal("quantity");
+            TaxAmount = node.GetDecimal("tax-amount");
+            TotalAmount = node.GetDecimal("total-amount");
+            UnitAmount = node.GetDecimal("unit-amount");
+            UnitOfMeasure = node.GetString("unit-of-measure");
+            UnitTaxAmount = node.GetDecimal("unit-tax-amount");
+            UpcCode = node.GetString("upc-code");
+            UpcType = node.GetString("upc-type");
             Url = node.GetString("url");
         }
 

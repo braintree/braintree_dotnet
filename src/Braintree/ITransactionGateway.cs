@@ -33,6 +33,8 @@ namespace Braintree
         Task<Result<Transaction>> SaleAsync(TransactionRequest request);
         ResourceCollection<Transaction> Search(TransactionSearchRequest query);
         Task<ResourceCollection<Transaction>> SearchAsync(TransactionSearchRequest query);
+        Result<Transaction> PackageTracking(string id, PackageTrackingRequest request);
+        Task<Result<Transaction>> PackageTrackingAsync(string id, PackageTrackingRequest request);
         Result<Transaction> SubmitForPartialSettlement(string id, TransactionRequest request);
         Result<Transaction> SubmitForPartialSettlement(string id, decimal amount);
         Result<Transaction> SubmitForSettlement(string id);
