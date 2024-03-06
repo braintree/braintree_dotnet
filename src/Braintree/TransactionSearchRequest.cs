@@ -70,6 +70,8 @@ namespace Braintree
 
         public TextNode<TransactionSearchRequest> CustomerWebsite => new TextNode<TransactionSearchRequest>("customer-website", this);
 
+        public EnumMultipleValueNode<TransactionSearchRequest, Braintree.TransactionDebitNetwork> DebitNetwork => new EnumMultipleValueNode<TransactionSearchRequest, Braintree.TransactionDebitNetwork>("debit-network", this);
+        
         public DateRangeNode<TransactionSearchRequest> DisbursementDate => new DateRangeNode<TransactionSearchRequest>("disbursement-date", this);
 
         public DateRangeNode<TransactionSearchRequest> DisputeDate => new DateRangeNode<TransactionSearchRequest>("dispute-date", this);

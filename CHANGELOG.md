@@ -1,5 +1,13 @@
 # Changelog
 
+## 5.24.0
+- Add `UNDER_REVIEW` to `DisputeStatus`
+- Add `DISPUTE_UNDER_REVIEW` to `WebhookKind`
+- Add `DebitNetwork` to `Transaction`
+- Add `TransactionDebitNetwork` enum to `Transaction`
+- Add `DebitNetwork` to `TransactionSearchRequest` to search by debitNetworks
+- Add `ProcessDebitAsCredit` to `TransactionOptionsCreditCardRequest`
+
 ## 5.23.0
 - Add `PackageTracking` and `PackageTrackingAsync` methods to `TransactionGateway` to make request to add tracking information to transactions
 - Add `PackageDetails` and `PackageTrackingRequest` classes

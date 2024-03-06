@@ -6,14 +6,15 @@ namespace Braintree
 {
     public enum DisputeStatus
     {
-        [Description("open")] OPEN,
-        [Description("lost")] LOST,
-        [Description("won")] WON,
-        [Description("unrecognized")] UNRECOGNIZED,
         [Description("accepted")] ACCEPTED,
         [Description("auto_accepted")] AUTO_ACCEPTED,
         [Description("disputed")] DISPUTED,
-        [Description("expired")] EXPIRED
+        [Description("expired")] EXPIRED,
+        [Description("lost")] LOST,
+        [Description("open")] OPEN,
+        [Description("under_review")] UNDER_REVIEW,
+        [Description("won")] WON,
+        [Description("unrecognized")] UNRECOGNIZED
     }
 
     public enum DisputeKind

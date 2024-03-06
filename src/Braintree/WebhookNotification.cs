@@ -19,6 +19,7 @@ namespace Braintree
         [Description("dispute_expired")] DISPUTE_EXPIRED,
         [Description("dispute_lost")] DISPUTE_LOST,
         [Description("dispute_opened")] DISPUTE_OPENED,
+        [Description("dispute_under_review")] DISPUTE_UNDER_REVIEW,
         [Description("dispute_won")] DISPUTE_WON,
         [Description("grantor_updated_granted_payment_method")] GRANTOR_UPDATED_GRANTED_PAYMENT_METHOD,
         [Description("granted_payment_method_revoked")] GRANTED_PAYMENT_METHOD_REVOKED,

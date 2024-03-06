@@ -6,6 +6,16 @@ using System.ComponentModel;
 
 namespace Braintree
 {
+    public enum TransactionDebitNetwork
+    {
+        [Description("ACCEL")] ACCEL,
+        [Description("MAESTRO")] MAESTRO,
+        [Description("NYCE")] NYCE,
+        [Description("PULSE")] PULSE,
+        [Description("STAR")] STAR,
+        [Description("STAR_ACCESS")] STAR_ACCESS,
+        [Description("unrecognized")] UNRECOGNIZED
+    }
     public enum TransactionGatewayRejectionReason
     {
         [Description("application_incomplete")] APPLICATION_INCOMPLETE,
@@ -128,6 +138,7 @@ namespace Braintree
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual CustomerDetails CustomerDetails { get; protected set; }
         public virtual string CvvResponseCode { get; protected set; }
+        public virtual TransactionDebitNetwork DebitNetwork { get; protected set; }
         public virtual Descriptor Descriptor { get; protected set; }
         public virtual List<Discount> Discounts { get; protected set; }
         public virtual List<Dispute> Disputes { get; protected set; }
@@ -204,7 +215,6 @@ namespace Braintree
         public virtual List<String> RetryIds { get; protected set; }
         public virtual string MerchantAdviceCode { get; protected set; }
         public virtual string MerchantAdviceCodeText { get; protected set; }
-
         private IBraintreeGateway Gateway;
 
         [Obsolete("Mock Use Only")]
@@ -456,6 +466,7 @@ namespace Braintree
             Retried = node.GetBoolean("retried");
             RetriedTransactionId = node.GetString("retried-transaction-id");
             RetryIds = node.GetStrings("retry-ids/*");
+            DebitNetwork = node.GetEnum("debit-network", TransactionDebitNetwork.UNRECOGNIZED);
         }
 
         /// <summary>

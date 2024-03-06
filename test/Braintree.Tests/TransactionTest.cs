@@ -375,5 +375,26 @@ namespace Braintree.Tests
             Assert.IsNotNull(transaction.RetriedTransactionId);
             Assert.IsTrue(transaction.Retried);
         }
+
+        [Test]
+        public void TestDebitNetwork()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <id>recognized_transaction_id</id>\n" +
+                "  <type>sale</type>\n" +
+                "  <payment-method-nonce>fake-pinless-debit-visa-nonce</payment-method-nonce>\n" +
+                "  <merchant-account-id>pinless_debit</merchant-account-id>\n" +
+                "  <debit-network>STAR</debit-network>\n" +
+                "</transaction>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+            Assert.AreEqual(Braintree.TransactionDebitNetwork.STAR,transaction.DebitNetwork);
+        }
     }
 }

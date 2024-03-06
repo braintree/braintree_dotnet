@@ -65,6 +65,7 @@ namespace Braintree.Test
         public const string TransactableMasterCard = "fake-valid-mastercard-nonce";
         public const string TransactableNoIndicators = "fake-valid-no-indicators-nonce";
         public const string TransactablePayroll = "fake-valid-payroll-nonce";
+        public const string TransactablePinlessDebitVisa = "fake-pinless-debit-visa-nonce";
         public const string TransactablePrepaid = "fake-valid-prepaid-nonce";
         public const string TransactableUnknownIndicators = "fake-valid-unknown-indicators-nonce";
         public const string TransactableVisa = "fake-valid-visa-nonce";

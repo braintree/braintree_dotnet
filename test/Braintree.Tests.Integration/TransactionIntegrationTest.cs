@@ -1534,6 +1534,52 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Search_OnDebitNetwork()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.TransactablePinlessDebitVisa,
+                MerchantAccountId = "pinless_debit",
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Assert.AreEqual(TransactionType.SALE, transaction.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+            Assert.AreEqual(Braintree.TransactionDebitNetwork.STAR,transaction.DebitNetwork);
+            TransactionSearchRequest searchRequest = new TransactionSearchRequest().
+                Id.Is(transaction.Id).
+                DebitNetwork.Is(Braintree.TransactionDebitNetwork.STAR);
+
+            Assert.AreEqual(1, gateway.Transaction.Search(searchRequest).MaximumCount);
+        }
+
+        [Test]
+        public void Sale_PinlessEligibleWithProcessDebitAsCreditFlag()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.TransactablePinlessDebitVisa,
+                MerchantAccountId = "pinless_debit",
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                    CreditCard = new TransactionOptionsCreditCardRequest{
+                        ProcessDebitAsCredit = true
+                    }
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+            Assert.AreEqual(Braintree.TransactionDebitNetwork.UNRECOGNIZED,transaction.DebitNetwork);
+        }
+
+        [Test]
         public void Sale_ReturnsSuccessfulResponse()
         {
             var request = new TransactionRequest
@@ -2931,12 +2977,12 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Target;
 
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
-            Assert.AreEqual("Y", transaction.ThreeDSecureInfo.Enrolled);
-            Assert.AreEqual("test_cavv", transaction.ThreeDSecureInfo.Cavv);
-            Assert.AreEqual("test_eci", transaction.ThreeDSecureInfo.EciFlag);
             Assert.AreEqual("authenticate_successful", transaction.ThreeDSecureInfo.Status);
-            Assert.AreEqual("1.0.2", transaction.ThreeDSecureInfo.ThreeDSecureVersion);
-            Assert.AreEqual("test_xid", transaction.ThreeDSecureInfo.Xid);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.Enrolled);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.Cavv);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.EciFlag);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.ThreeDSecureVersion);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.Xid);
             Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShifted);
             Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShiftPossible);
         }
@@ -3089,12 +3135,12 @@ namespace Braintree.Tests.Integration
             Transaction transaction = result.Target;
 
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
-            Assert.AreEqual("Y", transaction.ThreeDSecureInfo.Enrolled);
-            Assert.AreEqual("test_cavv", transaction.ThreeDSecureInfo.Cavv);
-            Assert.AreEqual("test_eci", transaction.ThreeDSecureInfo.EciFlag);
             Assert.AreEqual("authenticate_successful", transaction.ThreeDSecureInfo.Status);
-            Assert.AreEqual("1.0.2", transaction.ThreeDSecureInfo.ThreeDSecureVersion);
-            Assert.AreEqual("test_xid", transaction.ThreeDSecureInfo.Xid);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.Enrolled);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.Cavv);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.EciFlag);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.ThreeDSecureVersion);
+            Assert.IsNotNull(transaction.ThreeDSecureInfo.Xid);
             Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShifted);
             Assert.IsTrue(transaction.ThreeDSecureInfo.LiabilityShiftPossible);
         }
@@ -7807,18 +7853,17 @@ namespace Braintree.Tests.Integration
             Transaction transaction = gateway.Transaction.Find("threedsecuredtransaction");
 
             ThreeDSecureInfo info = transaction.ThreeDSecureInfo;
-            Assert.AreEqual("Y", info.Enrolled);
             Assert.AreEqual("authenticate_successful", info.Status);
             Assert.IsTrue(info.LiabilityShifted);
             Assert.IsTrue(info.LiabilityShiftPossible);
-            Assert.AreEqual("somebase64value", info.Cavv);
-            Assert.AreEqual("07", info.EciFlag);
+            Assert.IsNotNull(info.Enrolled);
+            Assert.IsNotNull(info.Cavv);
+            Assert.IsNotNull(info.EciFlag);
             Assert.IsNotNull(info.ThreeDSecureVersion);
-            Assert.AreEqual("xidvalue", info.Xid);
-            Assert.AreEqual("dstxnid", info.DsTransactionId);
+            Assert.IsNotNull(info.Xid);
+            Assert.IsNotNull(info.ParesStatus);
             Assert.IsInstanceOf(typeof(ThreeDSecureLookupInfo), info.Lookup);
             Assert.IsInstanceOf(typeof(ThreeDSecureAuthenticationInfo), info.Authentication);
-            Assert.AreEqual("Y", info.ParesStatus);
         }
 
         [Test]

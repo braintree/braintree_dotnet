@@ -5,6 +5,7 @@ namespace Braintree
     public class TransactionOptionsCreditCardRequest : Request
     {
         public string AccountType { get; set; }
+        public bool? ProcessDebitAsCredit { get; set; }
 
         public TransactionOptionsCreditCardRequest()
         {
@@ -23,7 +24,8 @@ namespace Braintree
         private RequestBuilder BuildRequest(string root)
         {
             var builder = new RequestBuilder(root).
-                AddElement("account-type", AccountType);
+                AddElement("account-type", AccountType).
+                AddElement("process-debit-as-credit",ProcessDebitAsCredit);
 
             return builder;
         }

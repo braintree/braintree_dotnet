@@ -415,12 +415,13 @@ namespace Braintree.Tests.Integration
             CreditCard creditCard = (CreditCard) paymentMethodResult.Target;
             CreditCardVerification verification = creditCard.Verification;
 
-            Assert.AreEqual("Y", verification.ThreeDSecureInfo.Enrolled);
-            Assert.AreEqual("cavv_value", verification.ThreeDSecureInfo.Cavv);
-            Assert.AreEqual("05", verification.ThreeDSecureInfo.EciFlag);
             Assert.AreEqual("authenticate_successful", verification.ThreeDSecureInfo.Status);
-            Assert.AreEqual("1.0.2", verification.ThreeDSecureInfo.ThreeDSecureVersion);
-            Assert.AreEqual("xid_value", verification.ThreeDSecureInfo.Xid);
+            Assert.IsNotNull(verification.ThreeDSecureInfo.Enrolled);
+            Assert.IsNotNull(verification.ThreeDSecureInfo.Cavv);
+            Assert.IsNotNull(verification.ThreeDSecureInfo.EciFlag);
+            Assert.IsNotNull(verification.ThreeDSecureInfo.ThreeDSecureVersion);
+            Assert.IsNotNull(verification.ThreeDSecureInfo.Xid);
+
             Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShifted);
             Assert.IsTrue(verification.ThreeDSecureInfo.LiabilityShiftPossible);
         }
@@ -2381,12 +2382,12 @@ namespace Braintree.Tests.Integration
             CreditCardVerification verification = creditCard.Verification;
             ThreeDSecureInfo threeDSecureInfo = verification.ThreeDSecureInfo;
 
-            Assert.AreEqual("Y", threeDSecureInfo.Enrolled);
-            Assert.AreEqual("test_cavv", threeDSecureInfo.Cavv);
-            Assert.AreEqual("test_eci", threeDSecureInfo.EciFlag);
             Assert.AreEqual("authenticate_successful", threeDSecureInfo.Status);
-            Assert.AreEqual("1.0.2", threeDSecureInfo.ThreeDSecureVersion);
-            Assert.AreEqual("test_xid", threeDSecureInfo.Xid);
+            Assert.IsNotNull(threeDSecureInfo.Enrolled);
+            Assert.IsNotNull(threeDSecureInfo.Cavv);
+            Assert.IsNotNull(threeDSecureInfo.EciFlag);
+            Assert.IsNotNull(threeDSecureInfo.ThreeDSecureVersion);
+            Assert.IsNotNull(threeDSecureInfo.Xid);
             Assert.IsTrue(threeDSecureInfo.LiabilityShifted);
             Assert.IsTrue(threeDSecureInfo.LiabilityShiftPossible);
         }

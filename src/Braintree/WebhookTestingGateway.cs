@@ -74,12 +74,6 @@ namespace Braintree
                 return PartnerMerchantDeclinedSampleXml(id);
             } else if (kind == WebhookKind.OAUTH_ACCESS_REVOKED) {
                 return OAuthAccessRevokedSampleXml(id);
-            } else if (kind == WebhookKind.DISPUTE_OPENED) {
-                return DisputeOpenedSampleXml(id);
-            } else if (kind == WebhookKind.DISPUTE_LOST) {
-                return DisputeLostSampleXml(id);
-            } else if (kind == WebhookKind.DISPUTE_WON) {
-                return DisputeWonSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_ACCEPTED) {
                 return DisputeAcceptedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_AUTO_ACCEPTED) {
@@ -88,6 +82,14 @@ namespace Braintree
                 return DisputeDisputedSampleXml(id);
             } else if (kind == WebhookKind.DISPUTE_EXPIRED) {
                 return DisputeExpiredSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_LOST) {
+                return DisputeLostSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_OPENED) {
+                return DisputeOpenedSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_UNDER_REVIEW) {
+                return DisputeUnderReviewSampleXml(id);
+            } else if (kind == WebhookKind.DISPUTE_WON) {
+                return DisputeWonSampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_BILLING_SKIPPED) {
                 return SubscriptionBillingSkippedSampleXml(id);
             } else if (kind == WebhookKind.SUBSCRIPTION_CHARGED_SUCCESSFULLY) {
@@ -275,6 +277,26 @@ namespace Braintree
                         Node("item", "asdf"),
                         Node("item", "qwer")
                     )
+            );
+        }
+
+        private string DisputeUnderReviewSampleXml(string id) {
+            return Node("dispute",
+                    Node("id", id),
+                    Node("amount", "250.00"),
+                    Node("amount-disputed", "250.00"),
+                    Node("amount-won", "245.00"),
+                    NodeAttr("received-date", TYPE_DATE, "2014-03-21"),
+                    NodeAttr("reply-by-date", TYPE_DATE, "2014-03-21"),
+                    Node("currency-iso-code", "USD"),
+                    Node("kind", "chargeback"),
+                    Node("status", "under_review"),
+                    Node("reason", "fraud"),
+                    Node("transaction",
+                        Node("id", id),
+                        Node("amount", "250.00")
+                    ),
+                    NodeAttr("date-opened", TYPE_DATE, "2014-03-21")
             );
         }
 

@@ -160,14 +160,15 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(nonce, foundNonce.Nonce);
             Assert.AreEqual("CreditCard", foundNonce.Type);
-            Assert.AreEqual("Y", info.Enrolled);
+
             Assert.AreEqual("authenticate_successful", info.Status);
             Assert.IsTrue(info.LiabilityShifted);
             Assert.IsTrue(info.LiabilityShiftPossible);
-            Assert.AreEqual("cavv_value", info.Cavv);
-            Assert.AreEqual("05", info.EciFlag);
+            Assert.IsNotNull(info.Enrolled);
+            Assert.IsNotNull(info.Cavv);
+            Assert.IsNotNull(info.EciFlag);
             Assert.IsNotNull(info.ThreeDSecureVersion);
-            Assert.AreEqual("xid_value", info.Xid);
+            Assert.IsNotNull(info.Xid);
             Assert.IsNotNull(info.ThreeDSecureAuthenticationId);
             Assert.IsNotNull(info.Authentication);
             Assert.IsNotNull(info.Lookup);

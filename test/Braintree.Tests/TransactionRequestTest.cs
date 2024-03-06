@@ -78,5 +78,29 @@ namespace Braintree.Tests
 
             Assert.AreEqual("4", doc.SelectSingleNode("//installments/count").InnerText);
         }
+
+        [Test]
+
+        public void ToXml_IncludesProcessDebitAsCredit()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = "pinless_debit",
+                Options = new TransactionOptionsRequest
+                {
+                    CreditCard = new TransactionOptionsCreditCardRequest{
+                        ProcessDebitAsCredit = true
+                    }
+                }
+            };
+
+            string xml=request.ToXml();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            Assert.AreEqual("true",doc.GetElementsByTagName("process-debit-as-credit")[0].InnerXml);
+
+        }
     }
 }
