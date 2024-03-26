@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.25.0
+- Add `domains` parameter support to `ClientTokenRequest`
+
 ## 5.24.0
 - Add `UNDER_REVIEW` to `DisputeStatus`
 - Add `DISPUTE_UNDER_REVIEW` to `WebhookKind`

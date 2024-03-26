@@ -26,6 +26,46 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Generate_ValidDomainsAccepted()
+        {
+            var ClientTokenRequest = new ClientTokenRequest
+            {
+                Domains = new string[] {"example.com"}
+            };
+            var encodedClientToken = gateway.ClientToken.Generate(ClientTokenRequest);
+            Assert.NotNull(encodedClientToken);
+        }
+
+        [Test]
+        public void Generate_InvalidDomainsNotAccepted()
+        {
+            var ClientTokenRequest = new ClientTokenRequest
+            {
+                Domains = new string[] {"example"}
+            };
+            ArgumentException invalidFormatException = Assert.Throws<ArgumentException>(() =>  gateway.ClientToken.Generate(ClientTokenRequest));
+            Assert.AreEqual(invalidFormatException.Message, "Client token domains must be valid domain names (RFC 1035), e.g. example.com");
+        }
+
+        [Test]
+        public void Generate_TooManyDomainsNotAccepted()
+        {
+            var ClientTokenRequest = new ClientTokenRequest
+            {
+                Domains = new string[] {
+                    "example1.com",
+                    "example2.com",
+                    "example3.com",
+                    "example4.com",
+                    "example5.com",
+                    "example6.com"
+                }
+            };
+            ArgumentException tooManyException = Assert.Throws<ArgumentException>(() =>  gateway.ClientToken.Generate(ClientTokenRequest));
+            Assert.AreEqual(tooManyException.Message, "Cannot specify more than 5 client token domains");
+        }
+
+        [Test]
         public void Generate_GeneratesFingerprintAcceptedByGateway()
         {
             var encodedClientToken = gateway.ClientToken.Generate();

@@ -11,9 +11,10 @@ namespace Braintree
         private readonly int DEFAULT_VERSION = 2;
 
         public string CustomerId { get; set; }
-        public int Version { get; set; }
-        public ClientTokenOptionsRequest Options { get; set; }
+        public string[] Domains { get; set; }
         public string MerchantAccountId { get; set; }
+        public ClientTokenOptionsRequest Options { get; set; }
+        public int Version { get; set; }
 
         public ClientTokenRequest()
         {
@@ -35,9 +36,10 @@ namespace Braintree
             var builder = new RequestBuilder(root);
 
             if (CustomerId != null) builder.AddElement("customer-id", CustomerId);
-            if (Version != 0) builder.AddElement("version", Version);
+            if (Domains != null) builder.AddElement("domains", Domains);
             if (MerchantAccountId != null) builder.AddElement("merchant-account-id", MerchantAccountId);
             if (Options != null) builder.AddElement("options", Options);
+            if (Version != 0) builder.AddElement("version", Version);
 
             return builder;
         }
