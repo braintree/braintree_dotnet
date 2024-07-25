@@ -1,5 +1,6 @@
 using Braintree.Exceptions;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -44,6 +45,8 @@ namespace Braintree.Tests
             StringAssert.DoesNotMatch(@"challengeRequested", outputJSON);
             StringAssert.DoesNotMatch(@"exemptionRequested", outputJSON);
             StringAssert.DoesNotMatch(@"requestedExemptionType", outputJSON);
+            StringAssert.DoesNotMatch(@"merchantInitiatedRequestType", outputJSON);
+            StringAssert.DoesNotMatch(@"priorAuthenticationId", outputJSON);
             StringAssert.DoesNotMatch(@"browserJavaEnabled", outputJSON);
             StringAssert.DoesNotMatch(@"browserJavascriptEnabled", outputJSON);
         }
@@ -254,11 +257,11 @@ namespace Braintree.Tests
                 ClientData = clientData,
                 ChallengeRequested = true
             };
-        
+
             Assert.AreEqual(true, request.ChallengeRequested);
 
             var outputJSON = request.ToJSON();
-            
+
             StringAssert.Contains(@"""challengeRequested"":true", outputJSON);
         }
 
@@ -291,6 +294,138 @@ namespace Braintree.Tests
             var outputJSON = request.ToJSON();
 
             StringAssert.Contains(@"""requestedExemptionType"":""low_value""", outputJSON);
+        }
+
+        [Test]
+        public void SerializesWithMerchantInitiatedRequestType()
+        {
+            var clientData = @"{
+                ""authorizationFingerprint"": ""auth-fingerprint"",
+                ""braintreeLibraryVersion"": ""braintree/web/3.44.0"",
+                ""dfReferenceId"": ""ABC-123"",
+                ""nonce"": ""FAKE-NONCE"",
+                ""clientMetadata"": {
+                     ""cardinalDeviceDataCollectionTimeElapsed"": 40,
+                     ""issuerDeviceDataCollectionResult"": true,
+                     ""issuerDeviceDataCollectionTimeElapsed"": 413,
+                     ""requestedThreeDSecureVersion"": ""2"",
+                     ""sdkVersion"": ""web/3.42.0""
+                }
+            }";
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                Amount = "10.00",
+                ClientData = clientData,
+                MerchantInitiatedRequestType = "split_shipment"
+            };
+
+            Assert.AreEqual("split_shipment", request.MerchantInitiatedRequestType);
+
+            var outputJSON = request.ToJSON();
+
+            StringAssert.Contains(@"""merchantInitiatedRequestType"":""split_shipment""", outputJSON);
+        }
+
+        [Test]
+        public void SerializesWithMerchantOnRecordName()
+        {
+            var clientData = @"{
+                ""authorizationFingerprint"": ""auth-fingerprint"",
+                ""braintreeLibraryVersion"": ""braintree/web/3.44.0"",
+                ""dfReferenceId"": ""ABC-123"",
+                ""nonce"": ""FAKE-NONCE"",
+                ""clientMetadata"": {
+                     ""cardinalDeviceDataCollectionTimeElapsed"": 40,
+                     ""issuerDeviceDataCollectionResult"": true,
+                     ""issuerDeviceDataCollectionTimeElapsed"": 413,
+                     ""requestedThreeDSecureVersion"": ""2"",
+                     ""sdkVersion"": ""web/3.42.0""
+                }
+            }";
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                Amount = "10.00",
+                ClientData = clientData,
+                MerchantOnRecordName = "some_merchant"
+            };
+
+            Assert.AreEqual("some_merchant", request.MerchantOnRecordName);
+
+            var outputJSON = request.ToJSON();
+
+            StringAssert.Contains(@"""merchantOnRecordName"":""some_merchant""", outputJSON);
+        }
+
+        [Test]
+        public void SerializesWithPriorThreeDSecureAuthId()
+        {
+            var clientData = @"{
+                ""authorizationFingerprint"": ""auth-fingerprint"",
+                ""braintreeLibraryVersion"": ""braintree/web/3.44.0"",
+                ""dfReferenceId"": ""ABC-123"",
+                ""nonce"": ""FAKE-NONCE"",
+                ""clientMetadata"": {
+                    ""cardinalDeviceDataCollectionTimeElapsed"": 40,
+                    ""issuerDeviceDataCollectionResult"": true,
+                    ""issuerDeviceDataCollectionTimeElapsed"": 413,
+                    ""requestedThreeDSecureVersion"": ""2"",
+                    ""sdkVersion"": ""web/3.42.0""
+                }
+            }";
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                Amount = "10.00",
+                ClientData = clientData,
+                PriorAuthenticationId = "threedsecureverification"
+            };
+
+            Assert.AreEqual("threedsecureverification", request.PriorAuthenticationId);
+
+            var outputJSON = request.ToJSON();
+
+            StringAssert.Contains(@"""priorAuthenticationId"":""threedsecureverification""", outputJSON);
+        }
+
+        [Test]
+        public void SerializesPriorAuthenticationDetails()
+        {
+            var clientData = @"{
+                ""authorizationFingerprint"": ""auth-fingerprint"",
+                ""braintreeLibraryVersion"": ""braintree/web/3.44.0"",
+                ""dfReferenceId"": ""ABC-123"",
+                ""nonce"": ""FAKE-NONCE"",
+                ""clientMetadata"": {
+                     ""cardinalDeviceDataCollectionTimeElapsed"": 40,
+                     ""issuerDeviceDataCollectionResult"": true,
+                     ""issuerDeviceDataCollectionTimeElapsed"": 413,
+                     ""requestedThreeDSecureVersion"": ""2"",
+                     ""sdkVersion"": ""web/3.42.0""
+                }
+            }";
+
+            ThreeDSecureLookupPriorAuthenticationDetails priorAuthenticationDetails = new ThreeDSecureLookupPriorAuthenticationDetails{
+                DsTransactionId = "some_ds_transaction_id",
+                AcsTransactionId = "some_acs_transaction_id",
+                AuthenticationMethod = "01",
+                AuthenticationTime = new DateTime(2024, 4, 12)
+            };
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest
+            {
+                Amount = "10.00",
+                ClientData = clientData,
+                PriorAuthenticationDetails = priorAuthenticationDetails
+            };
+
+            var outputJSON = request.ToJSON();
+
+            StringAssert.Contains(@"""ds_transaction_id"":""some_ds_transaction_id""", outputJSON);
+            StringAssert.Contains(@"""acs_transaction_id"":""some_acs_transaction_id""", outputJSON);
+            StringAssert.Contains(@"""authentication_method"":""01""", outputJSON);
+            StringAssert.Contains(@"""authentication_time"":""2024-04-12T00:00:00""", outputJSON);
         }
 
         [Test]

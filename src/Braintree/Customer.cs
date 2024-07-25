@@ -21,25 +21,27 @@ namespace Braintree
         // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
         public virtual AndroidPayCard[] AndroidPayCards { get; protected set; }
         public virtual ApplePayCard[] ApplePayCards { get; protected set; }
-        public virtual CreditCard[] CreditCards { get; protected set; }
-        public virtual DateTime? CreatedAt { get; protected set; }
-        public virtual DateTime? UpdatedAt { get; protected set; }
-        public virtual Dictionary<string, string> CustomFields { get; protected set; }
-        public virtual PayPalAccount[] PayPalAccounts { get; protected set; }
-        public virtual PaymentMethod[] PaymentMethods { get; protected set; }
-        public virtual SepaDirectDebitAccount[] SepaDirectDebitAccounts { get; protected set; }
-        public virtual UsBankAccount[] UsBankAccounts { get; protected set; }
-        public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
-        public virtual VisaCheckoutCard[] VisaCheckoutCards { get; protected set; }
         public virtual string Company { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual CreditCard[] CreditCards { get; protected set; }
+        public virtual Dictionary<string, string> CustomFields { get; protected set; }
         public virtual string Email { get; protected set; }
         public virtual string Fax { get; protected set; }
         public virtual string FirstName { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
         public virtual string Id { get; protected set; }
+        public virtual InternationalPhone InternationalPhone { get; protected set; }
         public virtual string LastName { get; protected set; }
+        public virtual PayPalAccount[] PayPalAccounts { get; protected set; }
+        public virtual PaymentMethod[] PaymentMethods { get; protected set; }
         public virtual string Phone { get; protected set; }
+        public virtual SepaDirectDebitAccount[] SepaDirectDebitAccounts { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual UsBankAccount[] UsBankAccounts { get; protected set; }
+        public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
+        public virtual VisaCheckoutCard[] VisaCheckoutCards { get; protected set; }
         public virtual string Website { get; protected set; }
+
         public PaymentMethod DefaultPaymentMethod
         {
             get
@@ -59,17 +61,22 @@ namespace Braintree
         {
             if (node == null) return;
 
-            Id = node.GetString("id");
-            FirstName = node.GetString("first-name");
-            LastName = node.GetString("last-name");
             Company = node.GetString("company");
-            Email = node.GetString("email");
-            Phone = node.GetString("phone");
-            Fax = node.GetString("fax");
-            Website = node.GetString("website");
-            GraphQLId = node.GetString("global-id");
             CreatedAt = node.GetDateTime("created-at");
+            Email = node.GetString("email");
+            Fax = node.GetString("fax");
+            FirstName = node.GetString("first-name");
+            GraphQLId = node.GetString("global-id");
+            Id = node.GetString("id");
+            var internationalPhoneNode = node.GetNode("international-phone");
+            if (internationalPhoneNode != null)
+            {
+                InternationalPhone = new InternationalPhone(internationalPhoneNode);
+            }
+            LastName = node.GetString("last-name");
+            Phone = node.GetString("phone");
             UpdatedAt = node.GetDateTime("updated-at");
+            Website = node.GetString("website");
 
             var creditCardXmlNodes = node.GetList("credit-cards/credit-card");
             CreditCards = new CreditCard[creditCardXmlNodes.Count];

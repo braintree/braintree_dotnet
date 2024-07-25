@@ -39,53 +39,58 @@ namespace Braintree
     // NEXT_MAJOR_VERSION Remove ObsoleteAttributes
     public class TransactionRequest : Request
     {
-        public TransactionCreditCardRequest CreditCard { get; set; }
         public decimal Amount { get; set; }
+        // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
+        public TransactionAndroidPayCardRequest AndroidPayCard { get; set; }
+        public TransactionApplePayCardRequest ApplePayCard { get; set; }
+        public AddressRequest BillingAddress { get; set; }
+        public string BillingAddressId { get; set; }
+        public string Channel { get; set; }
+        public TransactionCreditCardRequest CreditCard { get; set; }
+        public string CurrencyIsoCode { get; set; }
+        public CustomerRequest Customer { get; set; }
+        public string CustomerId { get; set; }
+        public Dictionary<string, string> CustomFields { get; set; }
+        public DescriptorRequest Descriptor { get; set; }
         public string DeviceData { get; set; }
         [ObsoleteAttribute("use DeviceData instead", false)]
         public string DeviceSessionId { get; set; }
+        public decimal? DiscountAmount { get; set; }
+        public string ExchangeRateQuoteId { get; set; }
+        public ExternalVaultRequest ExternalVault { get; set; }
+        public bool? FinalCapture { get; set; }
+        public bool? ForeignRetailer { get; set; }
         [ObsoleteAttribute("use DeviceData instead", false)]
         public string FraudMerchantId { get; set; }
-        public string Channel { get; set; }
-        public string ExchangeRateQuoteId { get; set; }
+        public IndustryRequest Industry { get; set; }
+        public InstallmentRequest InstallmentRequest { get; set; }
+        public TransactionLineItemRequest[] LineItems { get; set; }
+        public string MerchantAccountId { get; set; }
+        public TransactionOptionsRequest Options { get; set; }
         public string OrderId { get; set; }
+        public string PaymentMethodNonce { get; set; }
+        public string PaymentMethodToken { get; set; }
+        public TransactionPayPalRequest PayPalAccount { get; set; }
         public string ProductSku { get; set; }
+        public string PurchaseOrderNumber { get; set; }
         [ObsoleteAttribute("use TransactionSource instead", false)]
         public bool? Recurring { get; set; }
-        public string TransactionSource { get; set; }
-        public string MerchantAccountId { get; set; }
-        public string PurchaseOrderNumber { get; set; }
-        public CustomerRequest Customer { get; set; }
-        public DescriptorRequest Descriptor { get; set; }
-        public IndustryRequest Industry { get; set; }
-        public AddressRequest BillingAddress { get; set; }
-        public AddressRequest ShippingAddress { get; set; }
-        public TransactionPayPalRequest PayPalAccount { get; set; }
-        public decimal? TaxAmount { get; set; }
-        public bool? TaxExempt { get; set; }
-        public TransactionType? Type { get; set; }
-        public Dictionary<string, string> CustomFields { get; set; }
-        public TransactionOptionsRequest Options { get; set; }
-        public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
-        public string PaymentMethodToken { get; set; }
-        public string CustomerId { get; set; }
-        public string ShippingAddressId { get; set; }
-        public string BillingAddressId { get; set; }
-        [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
-        public string VenmoSdkPaymentMethodCode { get; set; }
-        public string PaymentMethodNonce { get; set; }
+        public RiskDataRequest RiskData { get; set; }
         public string ScaExemption { get; set; }
         public decimal? ServiceFeeAmount { get; set; }
-        public string SharedPaymentMethodToken { get; set; }
-        public string SharedPaymentMethodNonce { get; set; }
-        public string SharedCustomerId { get; set; }
-        public string SharedShippingAddressId { get; set; }
         public string SharedBillingAddressId { get; set; }
+        public string SharedCustomerId { get; set; }
+        public string SharedPaymentMethodNonce { get; set; }
+        public string SharedPaymentMethodToken { get; set; }
+        public string SharedShippingAddressId { get; set; }
+        public AddressRequest ShippingAddress { get; set; }
+        public string ShippingAddressId { get; set; }
+        public decimal? ShippingAmount { get; set; }
+        public string ShipsFromPostalCode { get; set; }
+        public decimal? TaxAmount { get; set; }
+        public bool? TaxExempt { get; set; }
         public string ThreeDSecureAuthenticationId { get; set; }
-        private bool _threeDSecureTransaction;
-        // NEXT_MAJOR_VERSION replace ThreeDSecureToken with ThreeDSecureAuthenticationId
-        // threeDSecureToken has been deprecated in favor of threeDSecureAuthenticationId
-        private string _threeDSecureToken;
+        public ThreeDSecurePassThruRequest ThreeDSecurePassThru { get; set; }
         [ObsoleteAttribute("use threeDSecureAuthenticationId instead", false)]
         public string ThreeDSecureToken {
             get => _threeDSecureToken;
@@ -95,19 +100,15 @@ namespace Braintree
                 _threeDSecureToken = value;
             }
         }
-
-        public RiskDataRequest RiskData { get; set; }
-        public decimal? DiscountAmount { get; set; }
-        public decimal? ShippingAmount { get; set; }
-        public string ShipsFromPostalCode { get; set; }
-        public TransactionLineItemRequest[] LineItems { get; set; }
-        public ExternalVaultRequest ExternalVault { get; set; }
-        // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
-        public TransactionAndroidPayCardRequest AndroidPayCard { get; set; }
-        public TransactionApplePayCardRequest ApplePayCard { get; set; }
-        public string CurrencyIsoCode { get; set; }
-
-        public InstallmentRequest InstallmentRequest { get; set; }
+        public string TransactionSource { get; set; }
+        public TransactionType? Type { get; set; }
+        [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
+        public string VenmoSdkPaymentMethodCode { get; set; }
+    
+        // NEXT_MAJOR_VERSION replace ThreeDSecureToken with ThreeDSecureAuthenticationId
+        // threeDSecureToken has been deprecated in favor of threeDSecureAuthenticationId
+        private string _threeDSecureToken;
+        private bool _threeDSecureTransaction;
 
         public TransactionRequest()
         {
@@ -139,12 +140,34 @@ namespace Braintree
             var builder = new RequestBuilder(root);
 
             if (Amount != 0) builder.AddElement("amount", Amount);
-            builder.AddElement("device-data", DeviceData);
-            builder.AddElement("customer-id", CustomerId);
-            builder.AddElement("order-id", OrderId);
-            builder.AddElement("product-sku", ProductSku);
+            if (AndroidPayCard != null) builder.AddElement("android-pay-card", AndroidPayCard);
+            if (ApplePayCard != null) builder.AddElement("apple-pay-card", ApplePayCard);
+            builder.AddElement("billing", BillingAddress);
+            builder.AddElement("billing-address-id", BillingAddressId);
             builder.AddElement("channel", Channel);
+            builder.AddElement("credit-card", CreditCard);
+            builder.AddElement("currency-iso-code", CurrencyIsoCode);
+            builder.AddElement("customer", Customer);
+            builder.AddElement("customer-id", CustomerId);
+            if (CustomFields.Count != 0) builder.AddElement("custom-fields", CustomFields);
+            builder.AddElement("descriptor", Descriptor);
+            builder.AddElement("device-data", DeviceData);
+            if (DiscountAmount.HasValue) builder.AddElement("discount-amount", DiscountAmount);
             builder.AddElement("exchange-rate-quote-id",ExchangeRateQuoteId);
+            if (ExternalVault != null) builder.AddElement("external-vault", ExternalVault);
+            builder.AddElement("final-capture", FinalCapture);
+            if (ForeignRetailer.HasValue) builder.AddElement("foreign-retailer", ForeignRetailer);
+            builder.AddElement("industry", Industry);
+            if (InstallmentRequest != null) builder.AddElement("installments", InstallmentRequest);
+            if (LineItems != null) builder.AddElement("line-items", LineItems);
+            builder.AddElement("merchant-account-id", MerchantAccountId);
+            builder.AddElement("options", Options);
+            builder.AddElement("order-id", OrderId);
+            builder.AddElement("payment-method-nonce", PaymentMethodNonce);
+            builder.AddElement("payment-method-token", PaymentMethodToken);
+            builder.AddElement("paypal-account", PayPalAccount);
+            builder.AddElement("product-sku", ProductSku);
+            builder.AddElement("purchase-order-number", PurchaseOrderNumber);
             // Remove this pragma warning when we remove DeviceSessionId, FraudMerchantId, and Recurring.
             // We have this so we can build the SDK without obsolete error messages
             #pragma warning disable 618
@@ -152,67 +175,36 @@ namespace Braintree
             builder.AddElement("fraud-merchant-id", FraudMerchantId);
             if (Recurring.HasValue) builder.AddElement("recurring", Recurring);
             #pragma warning restore 618
-            builder.AddElement("transaction-source", TransactionSource);
-            builder.AddElement("payment-method-token", PaymentMethodToken);
-            builder.AddElement("payment-method-nonce", PaymentMethodNonce);
-            builder.AddElement("purchase-order-number", PurchaseOrderNumber);
-            builder.AddElement("shipping-address-id", ShippingAddressId);
-            builder.AddElement("billing-address-id", BillingAddressId);
-            if (TaxAmount.HasValue)
-                builder.AddElement("tax-amount", TaxAmount);
-            if (TaxExempt.HasValue)
-                builder.AddElement("tax-exempt", TaxExempt);
-            builder.AddElement("merchant-account-id", MerchantAccountId);
-            if (ServiceFeeAmount.HasValue) builder.AddElement("service-fee-amount", ServiceFeeAmount);
-
-            if (Type != null) builder.AddElement("type", Type.GetDescription());
-
-            if (CustomFields.Count != 0) builder.AddElement("custom-fields", CustomFields);
-
-            builder.AddElement("currency-iso-code", CurrencyIsoCode);
-            builder.AddElement("credit-card", CreditCard);
-            builder.AddElement("customer", Customer);
-            builder.AddElement("descriptor", Descriptor);
-            builder.AddElement("industry", Industry);
-            builder.AddElement("billing", BillingAddress);
-            builder.AddElement("shipping", ShippingAddress);
-            builder.AddElement("paypal-account", PayPalAccount);
-            builder.AddElement("options", Options);
-            builder.AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
-            builder.AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId);
-            // NEXT_MAJOR_VERSION Remove this pragma warning when we remove VenmoSdkPaymentMethodCode
-            // We have this so we can build the SDK without obsolete error messages
-            #pragma warning disable 618
-            builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
-            #pragma warning restore 618
+            builder.AddElement("risk-data", RiskData);
             builder.AddElement("sca-exemption", ScaExemption);
-            builder.AddElement("shared-payment-method-token", SharedPaymentMethodToken);
-            builder.AddElement("shared-payment-method-nonce", SharedPaymentMethodNonce);
-            builder.AddElement("shared-customer-id", SharedCustomerId);
-            builder.AddElement("shared-shipping-address-id", SharedShippingAddressId);
+            if (ServiceFeeAmount.HasValue) builder.AddElement("service-fee-amount", ServiceFeeAmount);
             builder.AddElement("shared-billing-address-id", SharedBillingAddressId);
+            builder.AddElement("shared-customer-id", SharedCustomerId);
+            builder.AddElement("shared-payment-method-nonce", SharedPaymentMethodNonce);
+            builder.AddElement("shared-payment-method-token", SharedPaymentMethodToken);
+            builder.AddElement("shared-shipping-address-id", SharedShippingAddressId);
+            builder.AddElement("shipping", ShippingAddress);
+            builder.AddElement("shipping-address-id", ShippingAddressId);
+            if (ShippingAmount.HasValue) builder.AddElement("shipping-amount", ShippingAmount);
+            builder.AddElement("ships-from-postal-code", ShipsFromPostalCode);
+            if (TaxAmount.HasValue) builder.AddElement("tax-amount", TaxAmount);
+            if (TaxExempt.HasValue) builder.AddElement("tax-exempt", TaxExempt);
+            builder.AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId);
+            builder.AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
             // NEXT_MAJOR_VERSION Remove this pragma warning and ThreeDSecureToken
             // We have this so we can build the SDK without obsolete error messages
             #pragma warning disable 618
             if (_threeDSecureTransaction)
                 builder.AddElement("three-d-secure-token", ThreeDSecureToken ?? "");
             #pragma warning restore 618
-            builder.AddElement("risk-data", RiskData);
-            if (ShippingAmount.HasValue)
-                builder.AddElement("shipping-amount", ShippingAmount);
-            if (DiscountAmount.HasValue)
-                builder.AddElement("discount-amount", DiscountAmount);
-            builder.AddElement("ships-from-postal-code", ShipsFromPostalCode);
-            if (LineItems != null)
-                builder.AddElement("line-items", LineItems);
-            if (ExternalVault != null)
-                builder.AddElement("external-vault", ExternalVault);
-            if (AndroidPayCard != null)
-                builder.AddElement("android-pay-card", AndroidPayCard);
-            if (ApplePayCard != null)
-                builder.AddElement("apple-pay-card", ApplePayCard);
-            if (InstallmentRequest != null)
-                builder.AddElement("installments", InstallmentRequest);
+            builder.AddElement("transaction-source", TransactionSource);
+            if (Type != null) builder.AddElement("type", Type.GetDescription());
+            // NEXT_MAJOR_VERSION Remove this pragma warning when we remove VenmoSdkPaymentMethodCode
+            // We have this so we can build the SDK without obsolete error messages
+            #pragma warning disable 618
+            builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
+            #pragma warning restore 618
+
             return builder;
         }
     }

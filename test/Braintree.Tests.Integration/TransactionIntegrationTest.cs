@@ -2398,7 +2398,12 @@ namespace Braintree.Tests.Integration
                     CountryName = "United States of America",
                     CountryCodeAlpha2 = "US",
                     CountryCodeAlpha3 = "USA",
-                    CountryCodeNumeric = "840"
+                    CountryCodeNumeric = "840",
+                    InternationalPhone = new InternationalPhoneRequest
+                    {
+                        CountryCode = "1",
+                        NationalNumber = "3121234567" 
+                    }
                 },
                 ShippingAddress = new AddressRequest
                 {
@@ -2415,7 +2420,12 @@ namespace Braintree.Tests.Integration
                     CountryCodeAlpha2 = "MX",
                     CountryCodeAlpha3 = "MEX",
                     CountryCodeNumeric = "484",
-                    ShippingMethod = ShippingMethod.ELECTRONIC
+                    ShippingMethod = ShippingMethod.ELECTRONIC,
+                    InternationalPhone = new InternationalPhoneRequest
+                    {
+                        CountryCode = "1",
+                        NationalNumber = "3121234567" 
+                    }
                 }
             };
 
@@ -2470,6 +2480,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("US", billingAddress.CountryCodeAlpha2);
             Assert.AreEqual("USA", billingAddress.CountryCodeAlpha3);
             Assert.AreEqual("840", billingAddress.CountryCodeNumeric);
+            Assert.AreEqual("1", billingAddress.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", billingAddress.InternationalPhone.NationalNumber);
 
             Assert.IsNull(transaction.GetVaultShippingAddress());
             Address shippingAddress = transaction.ShippingAddress;
@@ -2485,6 +2497,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("MX", shippingAddress.CountryCodeAlpha2);
             Assert.AreEqual("MEX", shippingAddress.CountryCodeAlpha3);
             Assert.AreEqual("484", shippingAddress.CountryCodeNumeric);
+            Assert.AreEqual("1", shippingAddress.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", shippingAddress.InternationalPhone.NationalNumber);
         }
         #pragma warning restore 0618
 
@@ -8756,6 +8770,47 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void SubmitForPartialSettlement_WithFinalCapture()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                       CreditCard = new TransactionCreditCardRequest
+                       {
+                           Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                           ExpirationDate = "05/2027",
+                       }
+            };
+
+            Transaction authorizedTransaction = gateway.Transaction.Sale(request).Target;
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, authorizedTransaction.Status);
+
+            var partialSettlementTransaction1 = gateway.Transaction.SubmitForPartialSettlement(authorizedTransaction.Id, 400).Target;
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, partialSettlementTransaction1.Status);
+            Assert.AreEqual(authorizedTransaction.Id, partialSettlementTransaction1.AuthorizedTransactionId);
+
+            var refreshedAuthorizedTransaction1 = gateway.Transaction.Find(authorizedTransaction.Id);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, refreshedAuthorizedTransaction1.Status);
+            var partialSettlementTransactionIds = new string[] { partialSettlementTransaction1.Id };
+            Assert.AreEqual(refreshedAuthorizedTransaction1.PartialSettlementTransactionIds, partialSettlementTransactionIds);
+
+            var submitForPartialSettlementRequest = new TransactionRequest
+            {
+                Amount = decimal.Parse("300.00"),
+                FinalCapture = true
+            };
+            
+            var partialSettlementTransaction2 = gateway.Transaction.SubmitForPartialSettlement(authorizedTransaction.Id, submitForPartialSettlementRequest).Target;
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, partialSettlementTransaction2.Status);
+            Assert.AreEqual(authorizedTransaction.Id, partialSettlementTransaction2.AuthorizedTransactionId);
+
+            var refreshedAuthorizedTransaction2 = gateway.Transaction.Find(authorizedTransaction.Id);
+            Assert.AreEqual(TransactionStatus.SETTLEMENT_PENDING, refreshedAuthorizedTransaction2.Status);
+            partialSettlementTransactionIds = new string[] { partialSettlementTransaction1.Id, partialSettlementTransaction2.Id };
+            CollectionAssert.AreEquivalent(refreshedAuthorizedTransaction2.PartialSettlementTransactionIds, partialSettlementTransactionIds); 
+        }
+
+        [Test]
         public void SubmitForPartialSettlement_WithAmount()
         {
             TransactionRequest request = new TransactionRequest
@@ -11186,6 +11241,71 @@ namespace Braintree.Tests.Integration
 
             Assert.IsFalse(adjustAuthorizedResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_IS_NOT_ELIGIBLE_FOR_ADJUSTMENT, adjustAuthorizedResult.Errors.ForObject("Transaction").OnField("Base")[0].Code);
+        }
+
+        [Test]
+        public void Sale_ReturnsSuccessfulResponseWithForeignRetailerWhenSetAsTrueInTheRequest()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2030"
+                },
+                ForeignRetailer = true
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsTrue(transaction.ForeignRetailer);
+        }
+
+        [Test]
+        public void Sale_ReturnsSuccessfulResponseWithoutForeignRetailerWhenSetAsFalseInTheRequest()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2030"
+                },
+                ForeignRetailer = false
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNull(transaction.ForeignRetailer);
+        }
+
+        [Test]
+        public void Sale_ReturnsSuccessfulResponseWithoutForeignRetailerWhenNotSetInTheRequest()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2030"
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
+            Assert.IsNull(transaction.ForeignRetailer);
         }
     }
 }

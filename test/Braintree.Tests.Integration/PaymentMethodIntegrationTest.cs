@@ -102,6 +102,7 @@ namespace Braintree.Tests.Integration
             Assert.IsInstanceOf(typeof(PayPalAccount), paymentMethodResult.Target);
             PayPalAccount paypalAccount = (PayPalAccount) paymentMethodResult.Target;
             Assert.IsNotNull(paypalAccount.PayerId);
+            Assert.IsNull(paypalAccount.FundingSourceDescription);
         }
 
         [Test]

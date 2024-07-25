@@ -1,5 +1,19 @@
 # Changelog
 
+## 5.26.0
+- Add attributes to `ThreeDSecureLookupRequest`
+  - `MerchantInitiatedRequestType`
+  - `PriorAuthenticationId`
+  - `MerchantOnRecordName`
+  - `PriorAuthenticationDetails`
+- Add `ForeignRetailer` to `Transaction` and `TransactionRequest`
+- Add `InternationalPhone` to `Address` and `Customer`
+- Add `fundingSourceDescription` to `PayPalAccount`
+- Add missing `AndroidPayCard` error code
+- Add `REFUND_FAILED` to `WebhookKind`
+- Add `FinalCapture` to Transaction `TransactionRequest`
+- Deprecate `paypal_tracking_id` in favor of `paypal_tracker_id` in PackageDetails
+
 ## 5.25.0
 - Add `domains` parameter support to `ClientTokenRequest`
 

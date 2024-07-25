@@ -30,6 +30,12 @@ namespace Braintree
     ///      ExtendedAddress = "Apt 3",
     ///      Locality = "Chicago",
     ///      Region = "IL",
+    ///      Phone = "312.555.1111",
+    ///      InternationalPhone = new InternationalPhone()
+    ///      {
+    ///         CountryCode = "1",
+    ///         NationalNumber = "3121234567"
+    ///      }
     ///      PostalCode = "60622",
     ///      CountryName = "United States of America"
     /// };
@@ -37,20 +43,21 @@ namespace Braintree
     /// </example>
     public class AddressRequest : Request
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
         public string Company { get; set; }
-        public string StreetAddress { get; set; }
-        public string ExtendedAddress { get; set; }
-        public string Locality { get; set; }
-        public string Region { get; set; }
-        public string PhoneNumber { get; set; }
-        public string PostalCode { get; set; }
         public string CountryCodeAlpha2 { get; set; }
         public string CountryCodeAlpha3 { get; set; }
         public string CountryCodeNumeric { get; set; }
         public string CountryName { get; set; }
+        public string ExtendedAddress { get; set; }
+        public string FirstName { get; set; }
+        public InternationalPhoneRequest InternationalPhone { get; set; }
+        public string LastName { get; set; }
+        public string Locality { get; set; }
+        public string PhoneNumber { get; set; }
+        public string PostalCode { get; set; }
+        public string Region { get; set; }
         public ShippingMethod? ShippingMethod { get; set; }
+        public string StreetAddress { get; set; }
 
         public override string ToXml()
         {
@@ -75,20 +82,21 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
-                AddElement("first-name", FirstName).
-                AddElement("last-name", LastName).
                 AddElement("company", Company).
-                AddElement("street-address", StreetAddress).
-                AddElement("extended-address", ExtendedAddress).
-                AddElement("locality", Locality).
-                AddElement("region", Region).
-                AddElement("phone-number", PhoneNumber).
-                AddElement("postal-code", PostalCode).
                 AddElement("country-code-alpha2", CountryCodeAlpha2).
                 AddElement("country-code-alpha3", CountryCodeAlpha3).
                 AddElement("country-code-numeric", CountryCodeNumeric).
                 AddElement("country-name", CountryName).
-                AddElement("shipping-method", ShippingMethod.GetDescription());
+                AddElement("extended-address", ExtendedAddress).
+                AddElement("first-name", FirstName).
+                AddElement("international-phone", InternationalPhone).
+                AddElement("last-name", LastName).
+                AddElement("locality", Locality).
+                AddElement("phone-number", PhoneNumber).
+                AddElement("postal-code", PostalCode).
+                AddElement("region", Region).
+                AddElement("shipping-method", ShippingMethod.GetDescription()).
+                AddElement("street-address", StreetAddress);
         }
     }
 }

@@ -82,6 +82,9 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(txnWithFirstPackageTracking.Packages[0].Id);
             Assert.AreEqual(txnWithFirstPackageTracking.Packages[0].Carrier, "UPS");
             Assert.AreEqual(txnWithFirstPackageTracking.Packages[0].TrackingNumber, "tracking_number_1");
+            Assert.IsNull(txnWithFirstPackageTracking.Packages[0].PaypalTrackerId);
+            // NEXT_MAJOR_VERSION Remove PaypalTrackingId assertion
+            Assert.IsNull(txnWithFirstPackageTracking.Packages[0].PaypalTrackingId);
 
             // Create second package with 1 product
             var secondRequest = new PackageTrackingRequest
@@ -109,10 +112,43 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(txnWithSecondPackageTracking.Packages[1].Id);
             Assert.AreEqual(txnWithSecondPackageTracking.Packages[1].Carrier, "FEDEX");
             Assert.AreEqual(txnWithSecondPackageTracking.Packages[1].TrackingNumber, "tracking_number_2");
+            Assert.IsNull(txnWithSecondPackageTracking.Packages[1].PaypalTrackerId);
+            // NEXT_MAJOR_VERSION Remove PaypalTrackingId assertion
+            Assert.IsNull(txnWithSecondPackageTracking.Packages[1].PaypalTrackingId);
 
             // Find transction gives both pckges
             Transaction findTransaction = gateway.Transaction.Find(transaction.Id);
             Assert.AreEqual(findTransaction.Packages.Length, 2);
+
+            Assert.IsNotNull(findTransaction.Packages[0].Id);
+            Assert.AreEqual(findTransaction.Packages[0].Carrier, "UPS");
+            Assert.AreEqual(findTransaction.Packages[0].TrackingNumber, "tracking_number_1");
+            Assert.IsNull(findTransaction.Packages[0].PaypalTrackerId);
+            // NEXT_MAJOR_VERSION Remove PaypalTrackingId assertion
+            Assert.IsNull(findTransaction.Packages[0].PaypalTrackingId);
+
+            Assert.IsNotNull(findTransaction.Packages[1].Id);
+            Assert.AreEqual(findTransaction.Packages[1].Carrier, "FEDEX");
+            Assert.AreEqual(findTransaction.Packages[1].TrackingNumber, "tracking_number_2");
+            Assert.IsNull(findTransaction.Packages[1].PaypalTrackerId);
+            // NEXT_MAJOR_VERSION Remove PaypalTrackingId assertion
+            Assert.IsNull(findTransaction.Packages[1].PaypalTrackingId);
+        }
+
+        [Test]
+        public void PackageTracking_Retrieve_Works()
+        {
+            // Find transction with previously created packages
+            Transaction findTransaction = gateway.Transaction.Find("package_tracking_tx");
+            Assert.AreEqual(findTransaction.Packages.Length, 2);
+
+            // NEXT_MAJOR_VERSION Remove PaypalTrackingId assertion
+            Assert.IsNull(findTransaction.Packages[0].PaypalTrackingId);
+            Assert.AreEqual(findTransaction.Packages[0].PaypalTrackerId, "paypal_tracker_id_1");
+
+            // NEXT_MAJOR_VERSION Remove PaypalTrackingId assertion
+            Assert.IsNull(findTransaction.Packages[1].PaypalTrackingId);
+            Assert.AreEqual(findTransaction.Packages[1].PaypalTrackerId, "paypal_tracker_id_2");
         }
 
         [Test]

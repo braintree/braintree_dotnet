@@ -102,5 +102,18 @@ namespace Braintree.Tests
             Assert.AreEqual("true",doc.GetElementsByTagName("process-debit-as-credit")[0].InnerXml);
 
         }
+
+        [Test]
+        public void ToXml_IncludesFinalCapture()
+        {
+            TransactionRequest request = new TransactionRequest();
+            request.FinalCapture = true;
+
+            string xml = request.ToXml();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            Assert.AreEqual("true",doc.GetElementsByTagName("final-capture")[0].InnerXml);
+        }
     }
 }

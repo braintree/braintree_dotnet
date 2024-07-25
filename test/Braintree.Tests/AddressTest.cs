@@ -57,6 +57,7 @@ namespace Braintree.Tests
             builder.Append("<country-code-numeric>1</country-code-numeric>");
             builder.Append("<country-name>United States</country-name>");
             builder.Append("<phone-number>555-555-5555</phone-number>");
+            builder.Append("<international-phone><country-code>1</country-code><national-number>3121234567</national-number></international-phone>");
             builder.Append("<created-at type='datetime'>2018-10-10T22:46:41Z</created-at>");
             builder.Append("<updated-at type='datetime'>2020-10-10T22:46:41Z</updated-at>");
             builder.Append("</address>");
@@ -81,6 +82,8 @@ namespace Braintree.Tests
             Assert.AreEqual("1", address.CountryCodeNumeric);
             Assert.AreEqual("United States", address.CountryName);
             Assert.AreEqual("555-555-5555", address.PhoneNumber);
+            Assert.AreEqual("1", address.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", address.InternationalPhone.NationalNumber);
             Assert.AreEqual("10/10/2018 10:46:41 PM",
                     address.CreatedAt?.ToString(CultureInfo.GetCultureInfo("en-US")));
             Assert.AreEqual("10/10/2020 10:46:41 PM",

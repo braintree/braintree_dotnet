@@ -33,7 +33,9 @@ namespace Braintree.Tests
             "  <id>recognized_transaction_id</id>\n" +
             "  <shipments><shipment>\n" +
             "  <id>track_id</id><tracking-number>tracking_number_1</tracking-number>\n" +
+            // NEXT_MAJOR_VERSION Remove paypal-tracking-id from this response
             "  <carrier>UPS</carrier><paypal-tracking-id>pp_tracking_number_1</paypal-tracking-id>" +
+            "  <paypal-tracker-id>pp_tracker_id</paypal-tracker-id>" +
             "  </shipment></shipments>\n" +
             "</transaction>\n";
 
@@ -46,7 +48,9 @@ namespace Braintree.Tests
             Assert.AreEqual(transaction.Packages[0].Id, "track_id");
             Assert.AreEqual(transaction.Packages[0].TrackingNumber, "tracking_number_1");
             Assert.AreEqual(transaction.Packages[0].Carrier, "UPS");
+            // NEXT_MAJOR_VERSION Remove PaypalTrackingId assertion
             Assert.AreEqual(transaction.Packages[0].PaypalTrackingId, "pp_tracking_number_1");
+            Assert.AreEqual(transaction.Packages[0].PaypalTrackerId, "pp_tracker_id");
         }
 
         [Test]

@@ -29,7 +29,11 @@ namespace Braintree
         public string Email { get; set; }
         public bool? ExemptionRequested { get; set; }
         public string IpAddress { get; set; }
+        public string MerchantInitiatedRequestType { get; set; }
+        public string MerchantOnRecordName { get; set; }
         public string Nonce { get; set; }
+        public ThreeDSecureLookupPriorAuthenticationDetails PriorAuthenticationDetails { get; set; }
+        public string PriorAuthenticationId { get; set; }
         public string RequestedExemptionType { get; set; }
         public string UserAgent { get; set; }
 
@@ -52,6 +56,7 @@ namespace Braintree
 
         public string ToJSON() {
             Dictionary<string, object> additionalInfo;
+            Dictionary<string, object> priorAuthenticationDetails;
             var json = new Dictionary<string, object>();
             var meta = new Dictionary<string, object>();
 
@@ -59,6 +64,12 @@ namespace Braintree
                 additionalInfo = AdditionalInformation.ToDictionary();
             } else {
                 additionalInfo = new Dictionary<string, object>();
+            }
+
+            if (PriorAuthenticationDetails != null) {
+                priorAuthenticationDetails = PriorAuthenticationDetails.ToDictionary();
+            } else {
+                priorAuthenticationDetails = new Dictionary<string, object>();
             }
 
             meta.Add("platform", "dotnet");
@@ -98,12 +109,21 @@ namespace Braintree
             }
             if (ChallengeRequested != null) {
                 json.Add("challengeRequested", ChallengeRequested);
-            } 
+            }
             if (DataOnlyRequested != null) {
                 json.Add("dataOnlyRequested", DataOnlyRequested);
             }
             if (ExemptionRequested != null) {
                 json.Add("exemptionRequested", ExemptionRequested);
+            }
+            if (MerchantInitiatedRequestType != null) {
+                json.Add("merchantInitiatedRequestType", MerchantInitiatedRequestType);
+            }
+            if (MerchantOnRecordName != null) {
+                json.Add("merchantOnRecordName", MerchantOnRecordName);
+            }
+            if (PriorAuthenticationId != null) {
+                json.Add("priorAuthenticationId", PriorAuthenticationId);
             }
             if (RequestedExemptionType != null) {
                 json.Add("requestedExemptionType", RequestedExemptionType);
@@ -122,6 +142,7 @@ namespace Braintree
             }
 
             json.Add("additional_info", additionalInfo);
+            json.Add("priorAuthenticationDetails", priorAuthenticationDetails);
 
             return JsonConvert.SerializeObject(json, Newtonsoft.Json.Formatting.None);
         }

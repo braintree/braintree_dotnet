@@ -40,7 +40,13 @@ namespace Braintree.Tests.Integration
                 CountryCodeAlpha2 = "US",
                 CountryCodeAlpha3 = "USA",
                 CountryCodeNumeric = "840",
-                CountryName = "United States of America"
+                CountryName = "United States of America",
+                PhoneNumber = "312-123-4567",
+                InternationalPhone = new InternationalPhoneRequest
+                {
+                    CountryCode = "1",
+                    NationalNumber = "3121234567" 
+                }
             };
 
             Address address = gateway.Address.Create(customer.Id, addressRequest).Target;
@@ -57,6 +63,9 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("USA", address.CountryCodeAlpha3);
             Assert.AreEqual("840", address.CountryCodeNumeric);
             Assert.AreEqual("United States of America", address.CountryName);
+            Assert.AreEqual("312-123-4567", address.PhoneNumber);
+            Assert.AreEqual("1", address.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", address.InternationalPhone.NationalNumber);
             Assert.IsNotNull(address.CreatedAt);
             Assert.IsNotNull(address.UpdatedAt);
         }
@@ -224,7 +233,13 @@ namespace Braintree.Tests.Integration
                 CountryName = "United States of America",
                 CountryCodeAlpha2 = "US",
                 CountryCodeAlpha3 = "USA",
-                CountryCodeNumeric = "840"
+                CountryCodeNumeric = "840",
+                PhoneNumber = "312-123-4567",
+                InternationalPhone = new InternationalPhoneRequest
+                {
+                    CountryCode = "1",
+                    NationalNumber = "3121234567" 
+                }
             };
 
             Address address = gateway.Address.Update(customer.Id, originalAddress.Id, addressUpdateRequest).Target;
@@ -241,6 +256,9 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("US", address.CountryCodeAlpha2);
             Assert.AreEqual("USA", address.CountryCodeAlpha3);
             Assert.AreEqual("840", address.CountryCodeNumeric);
+            Assert.AreEqual("312-123-4567", address.PhoneNumber);
+            Assert.AreEqual("1", address.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", address.InternationalPhone.NationalNumber);
         }
 
         [Test]

@@ -215,6 +215,8 @@ namespace Braintree
         public virtual List<String> RetryIds { get; protected set; }
         public virtual string MerchantAdviceCode { get; protected set; }
         public virtual string MerchantAdviceCodeText { get; protected set; }
+        public virtual bool? ForeignRetailer { get; protected set; }
+
         private IBraintreeGateway Gateway;
 
         [Obsolete("Mock Use Only")]
@@ -249,7 +251,7 @@ namespace Braintree
 
             List<NodeWrapper> packageDetails = node.GetList("shipments/shipment");
             Packages = new PackageDetails[packageDetails.Count];
-            for(int i = 0; i < packageDetails.Count; i++) 
+            for(int i = 0; i < packageDetails.Count; i++)
             {
                 Packages[i] = new PackageDetails(packageDetails[i]);
             }
@@ -283,6 +285,8 @@ namespace Braintree
             TaxAmount = node.GetDecimal("tax-amount");
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
+            ForeignRetailer = node.GetBoolean("foreign-retailer");
+
             var creditCardNode = node.GetNode("credit-card");
             if (creditCardNode != null)
             {

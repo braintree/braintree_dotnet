@@ -55,6 +55,11 @@ namespace Braintree.Tests.Integration
                 Company = "Some Company",
                 Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
+                InternationalPhone = new InternationalPhoneRequest
+                {
+                    CountryCode = "1",
+                    NationalNumber = "3121234567" 
+                },
                 Fax = "312.555.1112",
                 Website = "www.example.com",
                 CreditCard = new CreditCardRequest
@@ -86,6 +91,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Some Company", customer.Company);
             Assert.AreEqual("hansolo64@example.com", customer.Email);
             Assert.AreEqual("312.555.1111", customer.Phone);
+            Assert.AreEqual("1", customer.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", customer.InternationalPhone.NationalNumber);
             Assert.AreEqual("312.555.1112", customer.Fax);
             Assert.AreEqual("www.example.com", customer.Website);
             Assert.AreEqual(DateTime.Now.Year, customer.CreatedAt.Value.Year);
@@ -1187,6 +1194,11 @@ namespace Braintree.Tests.Integration
                 Company = "Some Company",
                 Email = "hansolo64@example.com",
                 Phone = "312.555.1111",
+                InternationalPhone = new InternationalPhoneRequest
+                {
+                    CountryCode = "1",
+                    NationalNumber = "3121234567" 
+                },
                 Fax = "312.555.1112",
                 Website = "www.example.com"
             };
@@ -1198,6 +1210,8 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Some Company", updatedCustomer.Company);
             Assert.AreEqual("hansolo64@example.com", updatedCustomer.Email);
             Assert.AreEqual("312.555.1111", updatedCustomer.Phone);
+            Assert.AreEqual("1", updatedCustomer.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", updatedCustomer.InternationalPhone.NationalNumber);
             Assert.AreEqual("312.555.1112", updatedCustomer.Fax);
             Assert.AreEqual("www.example.com", updatedCustomer.Website);
             Assert.AreEqual(DateTime.Now.Year, updatedCustomer.CreatedAt.Value.Year);

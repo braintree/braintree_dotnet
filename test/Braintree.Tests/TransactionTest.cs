@@ -340,7 +340,7 @@ namespace Braintree.Tests
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<transaction>\n" +
-                "<retry-ids>\n" + 
+                "<retry-ids>\n" +
                     "<value>123ccs</value>\n" +
                     "<value>8cnu3d</value>\n" +
                 "</retry-ids>\n" +
@@ -395,6 +395,23 @@ namespace Braintree.Tests
 
             Transaction transaction = new Transaction(node, gateway);
             Assert.AreEqual(Braintree.TransactionDebitNetwork.STAR,transaction.DebitNetwork);
+        }
+
+        [Test]
+        public void DeserializesForeignRetailerFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <foreign-retailer>true</foreign-retailer>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+            Assert.IsTrue(transaction.ForeignRetailer);
         }
     }
 }

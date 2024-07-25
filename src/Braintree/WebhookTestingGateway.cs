@@ -118,6 +118,8 @@ namespace Braintree
                 return LocalPaymentReversedSampleXml();
             } else if (kind == WebhookKind.PAYMENT_METHOD_CUSTOMER_DATA_UPDATED) {
                 return PaymentMethodCustomerDataUpdatedMetadataSampleXml(id);
+            } else if (kind == WebhookKind.REFUND_FAILED) {
+                return RefundFailedSampleXml(id);
             } else {
                 return SubscriptionXml(id);
             }
@@ -708,6 +710,14 @@ namespace Braintree
               );
         }
 
+        private static string RefundFailedSampleXml(string id) {
+            return Node("transaction",
+                    Node("id", id),
+                    Node("status", "processor_declined"),
+                    Node("credit-card"),
+                    Node("refunded_transaction_fk")
+                );
+        }
         private static string Node(string name, params string[] contents) {
             return NodeAttr(name, null, contents);
         }

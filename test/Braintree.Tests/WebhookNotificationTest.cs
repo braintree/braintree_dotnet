@@ -817,5 +817,19 @@ namespace Braintree.Tests
           Assert.AreEqual("shipping-region", profileData.ShippingAddress.Region);
           Assert.AreEqual("shipping-code", profileData.ShippingAddress.PostalCode);
         }
+
+        [Test]
+        public void SampleNotification_ReturnsANotificationForRefundFailed()
+        {
+            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.REFUND_FAILED, "my_id");
+
+            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+            Assert.AreEqual(WebhookKind.REFUND_FAILED, notification.Kind);
+
+            Transaction transaction = notification.Transaction;
+            Assert.AreEqual("my_id", transaction.Id);
+            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, transaction.Status);
+        }
     }
 }

@@ -248,5 +248,90 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Error);
             StringAssert.Contains("format is invalid", (string)result.Error.message);
         }
+
+        [Test]
+        public void ThreeRIPriorAuthenticationIdIsPassed()
+        {
+            var gateway = GetGateway();
+
+            var clientData = GetClientDataString(gateway);
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest{
+                Amount = "10.00",
+                ClientData = clientData,
+                Email = "first.last@example.com",
+
+                MerchantInitiatedRequestType = "split_shipment",
+                // This prior authentication, from the populate_data script, doesn't have enough fields set to be a 3RI CIT.
+                PriorAuthenticationId = "threedsecureverification"
+            };
+
+            SetDeviceDataFields(request);
+            ThreeDSecureLookupResponse result = gateway.ThreeDSecure.Lookup(request);
+
+            PaymentMethodNonce paymentMethod = result.PaymentMethod;
+            ThreeDSecureLookup lookup = result.Lookup;
+
+            Assert.IsNull(result.Error);
+        }
+
+        [Test]
+        public void ThreeRIPriorAuthenticationDetailsIsPassed()
+        {
+            var gateway = GetGateway();
+
+            var clientData = GetClientDataString(gateway);
+
+
+            ThreeDSecureLookupPriorAuthenticationDetails priorAuthenticationDetails = new ThreeDSecureLookupPriorAuthenticationDetails{
+                DsTransactionId = "some_ds_transaction_id",
+                AcsTransactionId = "some_acs_transaction_id",
+                AuthenticationMethod = "01",
+                AuthenticationTime = new DateTime(2024, 4, 12)
+            };
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest{
+                Amount = "10.00",
+                ClientData = clientData,
+                Email = "first.last@example.com",
+
+                MerchantInitiatedRequestType = "split_shipment",
+                PriorAuthenticationDetails = priorAuthenticationDetails
+            };
+
+            SetDeviceDataFields(request);
+            ThreeDSecureLookupResponse result = gateway.ThreeDSecure.Lookup(request);
+
+            PaymentMethodNonce paymentMethod = result.PaymentMethod;
+            ThreeDSecureLookup lookup = result.Lookup;
+
+            Assert.IsNull(result.Error);
+        }
+      
+        [Test]
+        public void ThreeRIPaymentWithMultipleMerchants()
+        {
+            var gateway = GetGateway();
+
+            var clientData = GetClientDataString(gateway);
+
+            ThreeDSecureLookupRequest request = new ThreeDSecureLookupRequest{
+                Amount = "10.00",
+                ClientData = clientData,
+                Email = "first.last@example.com",
+
+                MerchantInitiatedRequestType = "payment_with_multiple_merchants",
+                PriorAuthenticationId = "threedsecureverification",
+                MerchantOnRecordName = "some_merchant"
+            };
+
+            SetDeviceDataFields(request);
+            ThreeDSecureLookupResponse result = gateway.ThreeDSecure.Lookup(request);
+
+            PaymentMethodNonce paymentMethod = result.PaymentMethod;
+            ThreeDSecureLookup lookup = result.Lookup;
+
+            Assert.IsNull(result.Error);
+        }
     }
 }
