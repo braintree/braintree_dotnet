@@ -7,6 +7,7 @@ namespace Braintree
         public virtual string BillingAgreementId { get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual string CustomerId { get; protected set; }
+        public virtual string EditPayPalVaultId {get; protected set;}
         public virtual string Email { get; protected set; }
         public virtual string FundingSourceDescription { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
@@ -22,6 +23,7 @@ namespace Braintree
             BillingAgreementId = node.GetString("billing-agreement-id");
             CreatedAt = node.GetDateTime("created-at");
             CustomerId = node.GetString("customer-id");
+            EditPayPalVaultId = node.GetString("edit-paypal-vault-id");
             Email = node.GetString("email");
             FundingSourceDescription = node.GetString("funding-source-description");
             ImageUrl = node.GetString("image-url");

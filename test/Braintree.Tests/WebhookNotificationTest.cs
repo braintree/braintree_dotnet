@@ -716,8 +716,11 @@ namespace Braintree.Tests
           Assert.AreEqual(WebhookKind.LOCAL_PAYMENT_COMPLETED, notification.Kind);
           LocalPaymentCompleted localPayment = notification.LocalPaymentCompleted;
 
-          Assert.AreEqual("a-payment-id", localPayment.PaymentId);
           Assert.AreEqual("a-payer-id", localPayment.PayerId);
+          Assert.AreEqual("a-bic", localPayment.Bic);
+          Assert.AreEqual("1234", localPayment.IbanLastChars);
+          Assert.AreEqual("a-payer-name", localPayment.PayerName);
+          Assert.AreEqual("a-payment-id", localPayment.PaymentId);
           Assert.AreEqual("ee257d98-de40-47e8-96b3-a6954ea7a9a4", localPayment.PaymentMethodNonce);
           Assert.NotNull(localPayment.Transaction);
         }

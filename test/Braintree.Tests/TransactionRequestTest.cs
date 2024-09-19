@@ -115,5 +115,23 @@ namespace Braintree.Tests
 
             Assert.AreEqual("true",doc.GetElementsByTagName("final-capture")[0].InnerXml);
         }
+        
+        public void ToXml_Includes_ShippingTaxAmount()
+        {
+            TransactionRequest request = new TransactionRequest();
+            request.ShippingAmount = 1.00M;
+            request.DiscountAmount = 2.00M;
+            request.ShippingTaxAmount = 3.00M;
+            request.ShipsFromPostalCode = "12345";
+            
+            string xml = request.ToXml();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            Assert.AreEqual("1.00", doc.GetElementsByTagName("shipping-amount")[0].InnerXml);
+            Assert.AreEqual("2.00", doc.GetElementsByTagName("discount-amount")[0].InnerXml);
+            Assert.AreEqual("12345", doc.GetElementsByTagName("ships-from-postal-code")[0].InnerXml);
+            Assert.AreEqual("3.00", doc.GetElementsByTagName("shipping-tax-amount")[0].InnerXml);
+        }
     }
 }

@@ -7,14 +7,16 @@ namespace Braintree
 {
     public class TransactionCreditCardRequest : BaseCreditCardRequest
     {
-        public string Token { get; set; }
+        public NetworkTokenizationAttributesRequest NetworkTokenizationAttributes { get; set; }
         public PaymentReaderCardDetailsRequest PaymentReaderCardDetails { get; set; }
+        public string Token { get; set; }
 
         protected override RequestBuilder BuildRequest(string root)
         {
             return base.BuildRequest(root)
-                .AddElement("token", Token)
-                .AddElement("payment-reader-card-details", PaymentReaderCardDetails);
+                .AddElement("network-tokenization-attributes", NetworkTokenizationAttributes)
+                .AddElement("payment-reader-card-details", PaymentReaderCardDetails)
+                .AddElement("token", Token);
         }
     }
 
@@ -86,6 +88,7 @@ namespace Braintree
         public AddressRequest ShippingAddress { get; set; }
         public string ShippingAddressId { get; set; }
         public decimal? ShippingAmount { get; set; }
+        public decimal? ShippingTaxAmount { get; set; }
         public string ShipsFromPostalCode { get; set; }
         public decimal? TaxAmount { get; set; }
         public bool? TaxExempt { get; set; }
@@ -186,6 +189,7 @@ namespace Braintree
             builder.AddElement("shipping", ShippingAddress);
             builder.AddElement("shipping-address-id", ShippingAddressId);
             if (ShippingAmount.HasValue) builder.AddElement("shipping-amount", ShippingAmount);
+            if (ShippingTaxAmount.HasValue) builder.AddElement("shipping-tax-amount", ShippingTaxAmount);
             builder.AddElement("ships-from-postal-code", ShipsFromPostalCode);
             if (TaxAmount.HasValue) builder.AddElement("tax-amount", TaxAmount);
             if (TaxExempt.HasValue) builder.AddElement("tax-exempt", TaxExempt);

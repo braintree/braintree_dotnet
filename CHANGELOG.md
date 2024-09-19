@@ -1,5 +1,15 @@
 # Changelog
 
+## 5.27.0 
+- Add `PayerName`, `Bic` and `IbanLastChars` to LocalPaymentCompleted webhook
+- Add `edit_paypal_vault_id` to `PayPalAccount`
+- Add `AniFirstNameResponseCode` and `AniLastNameResponseCode` to `CreditCardVerification`
+- Add `ShippingTaxAmount` to `Transaction` and `TransactionRequest`
+- Add `networkTokenizationAttributes` to `TransactionCreditCardRequest`
+- Add `NetworkTokenizationAttributesRequest` class
+- Add validation error codes:
+  - `CREDIT_CARD_NETWORK_TOKENIZATION_ATTRIBUTE_CRYPTOGRAM_IS_REQUIRED`
+
 ## 5.26.0
 - Add attributes to `ThreeDSecureLookupRequest`
   - `MerchantInitiatedRequestType`

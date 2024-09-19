@@ -18,33 +18,37 @@ namespace Braintree
     public class CreditCardVerification
     {
         public virtual decimal? Amount { get; protected set; }
+        public virtual string AniFirstNameResponseCode { get; protected set; }
+        public virtual string AniLastNameResponseCode { get; protected set; }
         public virtual string AvsErrorResponseCode { get; protected set; }
         public virtual string AvsPostalCodeResponseCode { get; protected set; }
         public virtual string AvsStreetAddressResponseCode { get; protected set; }
+        public virtual Address BillingAddress { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual CreditCard CreditCard { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual string CvvResponseCode { get; protected set; }
         public virtual TransactionGatewayRejectionReason? GatewayRejectionReason { get; protected set; }
-        public virtual string ProcessorResponseCode { get; protected set; }
-        public virtual string ProcessorResponseText { get; protected set; }
-        public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
+        public virtual string GraphQLId { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual string MerchantAccountId { get; protected set; }
         public virtual string NetworkResponseCode { get; protected set; }
         public virtual string NetworkResponseText { get; protected set; }
         public virtual string NetworkTransactionId { get; protected set; }
-        public virtual string MerchantAccountId { get; protected set; }
-        public virtual VerificationStatus? Status { get; protected set; }
-        public virtual string GraphQLId { get; protected set; }
-        public virtual string Id { get; protected set; }
-        public virtual Address BillingAddress { get; protected set; }
-        public virtual CreditCard CreditCard { get; protected set; }
-        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual string ProcessorResponseCode { get; protected set; }
+        public virtual string ProcessorResponseText { get; protected set; }
+        public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
+        public virtual VerificationStatus? Status { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
-
+        
         public CreditCardVerification(NodeWrapper node, IBraintreeGateway gateway)
         {
             if (node == null) return;
 
             Amount = node.GetDecimal("amount");
+            AniFirstNameResponseCode = node.GetString("ani-first-name-response-code");
+            AniLastNameResponseCode = node.GetString("ani-last-name-response-code");
             AvsErrorResponseCode = node.GetString("avs-error-response-code");
             AvsPostalCodeResponseCode = node.GetString("avs-postal-code-response-code");
             AvsStreetAddressResponseCode = node.GetString("avs-street-address-response-code");

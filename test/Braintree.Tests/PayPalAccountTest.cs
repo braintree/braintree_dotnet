@@ -33,6 +33,7 @@ namespace Braintree.Tests
             builder.Append("<billing-agreement-id>billingagreementid</billing-agreement-id>");
             builder.Append("<created-at type=\"datetime\">2018-04-12T19:54:16Z</created-at>");
             builder.Append("<customer-id>1396526238</customer-id>");
+            builder.Append("<edit-paypal-vault-id>BA-ID1</edit-paypal-vault-id>");
             builder.Append("<email>some-email</email>");
             builder.Append("<funding-source-description>VISA 1234</funding-source-description>");
             builder.Append("<image-url>https://google.com/image.png</image-url>");
@@ -53,6 +54,7 @@ namespace Braintree.Tests
             Assert.AreEqual("billingagreementid", paypalAccount.BillingAgreementId);
             Assert.AreEqual("4/12/2018 7:54:16 PM", paypalAccount.CreatedAt?.ToString(CultureInfo.GetCultureInfo("en-US")));
             Assert.AreEqual("1396526238", paypalAccount.CustomerId);
+            Assert.AreEqual("BA-ID1", paypalAccount.EditPayPalVaultId);
             Assert.AreEqual("some-email", paypalAccount.Email);
             Assert.AreEqual("VISA 1234", paypalAccount.FundingSourceDescription);
             Assert.AreEqual("https://google.com/image.png", paypalAccount.ImageUrl);

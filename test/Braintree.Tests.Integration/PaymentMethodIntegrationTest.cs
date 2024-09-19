@@ -103,6 +103,7 @@ namespace Braintree.Tests.Integration
             PayPalAccount paypalAccount = (PayPalAccount) paymentMethodResult.Target;
             Assert.IsNotNull(paypalAccount.PayerId);
             Assert.IsNull(paypalAccount.FundingSourceDescription);
+            Assert.IsNull(paypalAccount.EditPayPalVaultId);
         }
 
         [Test]

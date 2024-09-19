@@ -4,15 +4,21 @@ namespace Braintree
 {
     public class LocalPaymentCompleted
     {
-        public virtual string PaymentId { get; protected set; }
+        public virtual string Bic { get; protected set; }
+        public virtual string IbanLastChars { get; protected set; }
         public virtual string PayerId { get; protected set; }
+        public virtual string PayerName { get; protected set; }
+        public virtual string PaymentId { get; protected set; }
         public virtual string PaymentMethodNonce { get; protected set; }
         public virtual Transaction Transaction { get; protected set; }
 
         protected internal LocalPaymentCompleted(NodeWrapper node, IBraintreeGateway gateway)
         {
-            PaymentId = node.GetString("payment-id");
+            Bic = node.GetString("bic");
+            IbanLastChars = node.GetString("iban-last-chars");
             PayerId = node.GetString("payer-id");
+            PayerName = node.GetString("payer-name");
+            PaymentId = node.GetString("payment-id");
             PaymentMethodNonce = node.GetString("payment-method-nonce");
 
             var transactionNode = node.GetNode("transaction");

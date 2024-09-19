@@ -622,8 +622,11 @@ namespace Braintree
 
         private static string LocalPaymentCompletedSampleXml() {
             return Node("local-payment",
-                    Node("payment-id", "a-payment-id"),
+                    Node("bic", "a-bic"),
+                    Node("iban-last-chars", "1234"),
                     Node("payer-id", "a-payer-id"),
+                    Node("payer-name", "a-payer-name"),
+                    Node("payment-id", "a-payment-id"),
                     Node("payment-method-nonce", "ee257d98-de40-47e8-96b3-a6954ea7a9a4"),
                     Node("transaction",
                         Node("id", "1"),

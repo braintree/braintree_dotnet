@@ -89,5 +89,25 @@ namespace Braintree.Tests
             Assert.AreEqual(null, verification.ProcessorResponseText);
             Assert.AreEqual(null, verification.CvvResponseCode);
         }
+
+        [Test]
+        public void DeserializesVisaAniResponseCodeFromXml()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            builder.Append("<verification>\n");
+            builder.Append("  <ani-first-name-response-code>M</ani-first-name-response-code>\n");
+            builder.Append("  <ani-last-name-response-code>M</ani-last-name-response-code>\n");
+            builder.Append("</verification>\n");
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(builder.ToString());
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            CreditCardVerification verification = new CreditCardVerification(node, gateway);
+            Assert.AreEqual("M", verification.AniFirstNameResponseCode);
+            Assert.AreEqual("M", verification.AniLastNameResponseCode);
+        }
     }
 }

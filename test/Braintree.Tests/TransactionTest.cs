@@ -182,6 +182,7 @@ namespace Braintree.Tests
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "<transaction>\n" +
                 "  <shipping-amount>1.00</shipping-amount>\n" +
+                "  <shipping-tax-amount>1.00</shipping-tax-amount>\n" +
                 "  <discount-amount>2.00</discount-amount>\n" +
                 "  <ships-from-postal-code>12345</ships-from-postal-code>\n" +
                 "  <disbursement-details></disbursement-details>\n" +
@@ -196,6 +197,7 @@ namespace Braintree.Tests
             Transaction transaction = new Transaction(node, gateway);
 
             Assert.AreEqual(1.00M, transaction.ShippingAmount);
+            Assert.AreEqual(1.00M, transaction.ShippingTaxAmount);
             Assert.AreEqual(2.00M, transaction.DiscountAmount);
             Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
         }
@@ -412,6 +414,26 @@ namespace Braintree.Tests
 
             Transaction transaction = new Transaction(node, gateway);
             Assert.IsTrue(transaction.ForeignRetailer);
+        }
+
+        [Test]
+        public void DeserializesExternalNetworkTokenResponseFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "<network-token>\n" +
+                "  <is-network-tokenized>true</is-network-tokenized>\n" +
+                "</network-token>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.IsTrue(transaction.NetworkToken.IsNetworkTokenized);
         }
     }
 }

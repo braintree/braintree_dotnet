@@ -56,7 +56,28 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Approved", verification.ProcessorResponseText);
             Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
         }
+ 
+        [Test]
+        public void Create_ReturnsSuccessfulResponseForVisaANI()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+            };
 
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual("I", verification.AniFirstNameResponseCode);
+            Assert.AreEqual("I", verification.AniLastNameResponseCode);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
 
         [Test]
         public void CreatePaymentMethodNonce_ReturnsSuccessfulResponse()

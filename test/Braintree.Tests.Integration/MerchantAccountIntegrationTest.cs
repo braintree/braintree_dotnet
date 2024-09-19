@@ -387,13 +387,13 @@ namespace Braintree.Tests.Integration
         public void CreateForCurrency()
         {
             gateway = new BraintreeGateway(
-                "client_id$development$signup_client_id",
-                "client_secret$development$signup_client_secret"
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
             );
 
             ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] {"credit_card", "paypal"},
                 CompanyName = "Ziarog LTD"
             });
@@ -402,13 +402,13 @@ namespace Braintree.Tests.Integration
 
             gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
-                Currency = "GBP",
+                Currency = "USD",
                 Id = "testId",
             });
 
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual("testId", result.Target.Id);
-            Assert.AreEqual("GBP", result.Target.CurrencyIsoCode);
+            Assert.AreEqual("USD", result.Target.CurrencyIsoCode);
         }
 
         [Test]
@@ -421,13 +421,13 @@ namespace Braintree.Tests.Integration
 #endif
         {
             gateway = new BraintreeGateway(
-                "client_id$development$signup_client_id",
-                "client_secret$development$signup_client_secret"
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
             );
 
             ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] {"credit_card", "paypal"},
                 CompanyName = "Ziarog LTD"
             });
@@ -436,13 +436,13 @@ namespace Braintree.Tests.Integration
 
             gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = await gateway.MerchantAccount.CreateForCurrencyAsync(new MerchantAccountCreateForCurrencyRequest {
-                Currency = "GBP",
+                Currency = "USD",
                 Id = "testId",
             });
 
             Assert.IsTrue(result.IsSuccess());
             Assert.AreEqual("testId", result.Target.Id);
-            Assert.AreEqual("GBP", result.Target.CurrencyIsoCode);
+            Assert.AreEqual("USD", result.Target.CurrencyIsoCode);
         }
 #if net452
             ).GetAwaiter().GetResult();
@@ -453,13 +453,13 @@ namespace Braintree.Tests.Integration
         public void CreateForCurrency_HandlesAlreadyExistingMerchantAccountForCurrency()
         {
             gateway = new BraintreeGateway(
-                "client_id$development$signup_client_id",
-                "client_secret$development$signup_client_secret"
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
             );
 
             ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] {"credit_card", "paypal"},
                 CompanyName = "Ziarog LTD"
             });
@@ -468,7 +468,7 @@ namespace Braintree.Tests.Integration
 
             gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
-                Currency = "USD",
+                Currency = "GBP",
             });
 
             Assert.IsFalse(result.IsSuccess());
@@ -481,13 +481,13 @@ namespace Braintree.Tests.Integration
         public void CreateForCurrency_HandlesCurrencyRequirement()
         {
             gateway = new BraintreeGateway(
-                "client_id$development$signup_client_id",
-                "client_secret$development$signup_client_secret"
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
             );
 
             ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] {"credit_card", "paypal"},
                 CompanyName = "Ziarog LTD"
             });
@@ -507,13 +507,13 @@ namespace Braintree.Tests.Integration
         public void CreateForCurrency_HandlesInvalidCurrency()
         {
             gateway = new BraintreeGateway(
-                "client_id$development$signup_client_id",
-                "client_secret$development$signup_client_secret"
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
             );
 
             ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] {"credit_card", "paypal"},
                 CompanyName = "Ziarog LTD"
             });
@@ -535,13 +535,13 @@ namespace Braintree.Tests.Integration
         public void CreateForCurrency_HandlesExistingMerchantAccountForId()
         {
             gateway = new BraintreeGateway(
-                "client_id$development$signup_client_id",
-                "client_secret$development$signup_client_secret"
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
             );
 
             ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] {"credit_card", "paypal"},
                 CompanyName = "Ziarog LTD"
             });
@@ -597,7 +597,7 @@ namespace Braintree.Tests.Integration
 
             ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] {"credit_card", "paypal"},
                 Scope = "read_write,shared_vault_transactions",
             });
@@ -613,7 +613,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(1, merchantAccounts.Count);
 
             MerchantAccount merchantAccount = merchantAccounts[0];
-            Assert.AreEqual("USD", merchantAccount.CurrencyIsoCode);
+            Assert.AreEqual("GBP", merchantAccount.CurrencyIsoCode);
             Assert.AreEqual(MerchantAccountStatus.ACTIVE, merchantAccount.Status);
             Assert.IsTrue(merchantAccount.IsDefault);
         }

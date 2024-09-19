@@ -3896,7 +3896,7 @@ namespace Braintree.Tests.Integration
             ResultImpl<Merchant> merchantResult = oauthGateway.Merchant.Create(new MerchantRequest
             {
                 Email = "name@email.com",
-                CountryCodeAlpha3 = "USA",
+                CountryCodeAlpha3 = "GBR",
                 PaymentMethods = new string[] { "credit_card", "paypal" }
             });
 
@@ -5651,21 +5651,18 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_WithExternalVault_ValidationErrorPaymentInstrumentIsInvalid()
         {
-            CustomerRequest customerRequest = new CustomerRequest
-            {
-                CreditCard = new CreditCardRequest
-                {
-                    CardholderName = "Fred Jones",
-                    Number = "5105105105105100",
-                    ExpirationDate = "05/12"
-                }
-            };
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
-            CreditCard creditCard = gateway.Customer.Create(customerRequest).Target.CreditCards[0];
+            var paypalCreateRequest = new PaymentMethodRequest
+            {
+                CustomerId = customer.Id,
+                PaymentMethodNonce = Nonce.PayPalBillingAgreement,
+            };
+            PaymentMethod paypalPaymentMethod = gateway.PaymentMethod.Create(paypalCreateRequest).Target;
             var request = new TransactionRequest
             {
                 Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                PaymentMethodToken = creditCard.Token,
+                PaymentMethodToken = paypalPaymentMethod.Token,
                 ExternalVault = new ExternalVaultRequest
                 {
                     Status = "vaulted",
@@ -5916,6 +5913,33 @@ namespace Braintree.Tests.Integration
          Transaction transaction = result.Target;
 
          Assert.AreEqual(1.00, transaction.ShippingAmount);
+         Assert.AreEqual(2.00, transaction.DiscountAmount);
+         Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
+     }
+
+     [Test]
+     public void Sale_WithShippingTaxAmount()
+     {
+         var request = new TransactionRequest
+         {
+             Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+             CreditCard = new TransactionCreditCardRequest
+             {
+                 Number = SandboxValues.CreditCardNumber.VISA,
+                 ExpirationDate = "05/2009",
+             },
+             ShippingAmount = 1.00M,
+             ShippingTaxAmount = 3.00M,
+             DiscountAmount = 2.00M,
+             ShipsFromPostalCode = "12345",
+         };
+
+         Result<Transaction> result = gateway.Transaction.Sale(request);
+         Assert.IsTrue(result.IsSuccess());
+         Transaction transaction = result.Target;
+
+         Assert.AreEqual(1.00, transaction.ShippingAmount);
+         Assert.AreEqual(3.00, transaction.ShippingTaxAmount);
          Assert.AreEqual(2.00, transaction.DiscountAmount);
          Assert.AreEqual("12345", transaction.ShipsFromPostalCode);
      }
@@ -8315,6 +8339,7 @@ namespace Braintree.Tests.Integration
                 TaxAmount = 1.12M,
                 TaxExempt = true,
                 ShippingAmount = 1.00M,
+                ShippingTaxAmount = 0.23M,
                 DiscountAmount = 2.00M,
                 ShipsFromPostalCode = "12345",
                 LineItems = new TransactionLineItemRequest[]
@@ -8341,6 +8366,7 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.SubmitForSettlement(transaction.Id, submitForSettlementRequest);
 
             Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(0.23, result.Target.ShippingTaxAmount);
             Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
         }
 
@@ -11117,6 +11143,56 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(transactionResult.IsSuccess());
             var transactionError = transactionResult.Errors.ForObject("Transaction").OnField("merchantAccountId")[0];
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_PAYMENT_INSTRUMENT_NOT_SUPPORTED_BY_MERCHANT_ACCOUNT, transactionError.Code);
+        }
+
+        [Test]
+        public void Successful_ExternalNetworkTokenTransaction() {
+            var request = new TransactionRequest {
+                Amount = 100,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2012",
+                    NetworkTokenizationAttributes = new NetworkTokenizationAttributesRequest
+                    {
+                        Cryptogram = "8F34DFB312DC79C24FD5320622F3E11682D79E6B0C0FD881",
+                        EcommerceIndicator = "05",
+                        TokenRequestorId = "1234567"
+                    }
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsTrue(transactionResult.IsSuccess());
+            Transaction transaction = transactionResult.Target;
+
+            Assert.IsTrue(transaction.ProcessedWithNetworkToken);
+            Assert.IsTrue(transaction.NetworkToken.IsNetworkTokenized);
+        }
+
+        [Test]
+        public void Unsuccessful_ExternalNetworkTokenTransaction() {
+            var request = new TransactionRequest {
+                Amount = 100,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2012",
+                    NetworkTokenizationAttributes = new NetworkTokenizationAttributesRequest
+                    {
+                        EcommerceIndicator = "05",
+                        TokenRequestorId = "1234567"
+                    }
+                },
+            };
+
+            var transactionResult = gateway.Transaction.Sale(request);
+            Assert.IsFalse(transactionResult.IsSuccess());
+            var transactionError = transactionResult.Errors.ForObject("Transaction").ForObject("CreditCard").OnField("NetworkTokenizationAttributes")[0];
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_NETWORK_TOKENIZATION_ATTRIBUTE_CRYPTOGRAM_IS_REQUIRED,
+                transactionError.Code
+            );
         }
 
         [Test]

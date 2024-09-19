@@ -125,9 +125,17 @@ namespace Braintree
     /// </example>
     public class Transaction
     {
-        public virtual string Id { get; protected set; }
+
+        public virtual string AchReturnCode { get; protected set; }
+        public virtual string AcquirerReferenceNumber { get; protected set; }
+        public virtual string AdditionalProcessorResponse { get; protected set; }
         public virtual List<AddOn> AddOns { get; protected set; }
         public virtual decimal? Amount { get; protected set; }
+        public virtual AndroidPayDetails AndroidPayDetails { get; protected set; }
+        public virtual ApplePayDetails ApplePayDetails { get; protected set; }
+        public virtual List<AuthorizationAdjustment> AuthorizationAdjustments { get; protected set; }
+        public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
+        public virtual string AuthorizedTransactionId { get; protected set; }
         public virtual string AvsErrorResponseCode { get; protected set; }
         public virtual string AvsPostalCodeResponseCode { get; protected set; }
         public virtual string AvsStreetAddressResponseCode { get; protected set; }
@@ -137,85 +145,80 @@ namespace Braintree
         public virtual CreditCard CreditCard { get; protected set; }
         public virtual string CurrencyIsoCode { get; protected set; }
         public virtual CustomerDetails CustomerDetails { get; protected set; }
+        public virtual Dictionary<string, string> CustomFields { get; protected set; }
         public virtual string CvvResponseCode { get; protected set; }
         public virtual TransactionDebitNetwork DebitNetwork { get; protected set; }
         public virtual Descriptor Descriptor { get; protected set; }
+        public virtual DisbursementDetails DisbursementDetails { get; protected set; }
+        public virtual decimal? DiscountAmount { get; protected set; }
         public virtual List<Discount> Discounts { get; protected set; }
         public virtual List<Dispute> Disputes { get; protected set; }
+        public virtual TransactionEscrowStatus EscrowStatus { get; protected set; }
+        public virtual FacilitatedDetails FacilitatedDetails { get; protected set; }
+        public virtual FacilitatorDetails FacilitatorDetails { get; protected set; }
+        public virtual bool? ForeignRetailer { get; protected set; }
         public virtual TransactionGatewayRejectionReason GatewayRejectionReason { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
+        public virtual string Id { get; protected set; }
+        public virtual decimal? InstallmentCount { get; protected set; }
+        public virtual List<Installment> Installments { get; protected set; }
+        public virtual LocalPaymentDetails LocalPaymentDetails { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
+        public virtual string MerchantAdviceCode { get; protected set; }
+        public virtual string MerchantAdviceCodeText { get; protected set; }
+        public virtual MetaCheckoutCardDetails MetaCheckoutCardDetails { get; protected set; }
+        public virtual MetaCheckoutTokenDetails MetaCheckoutTokenDetails { get; protected set; }
+        public virtual string NetworkResponseCode { get; protected set; }
+        public virtual string NetworkResponseText { get; protected set; }
+        public virtual CreditCard NetworkToken { get; protected set; }
+        public virtual string NetworkTransactionId { get; protected set; }
         public virtual string OrderId { get; protected set; }
+        public virtual PackageDetails[] Packages { get; protected set; }
+        public virtual List<string> PartialSettlementTransactionIds { get; protected set; }
+        public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
+        public virtual PayPalDetails PayPalDetails { get; protected set; }
+        public virtual PayPalHereDetails PayPalHereDetails { get; protected set; }
         public virtual string PlanId { get; protected set; }
         public virtual bool? ProcessedWithNetworkToken { get; protected set; }
         public virtual string ProcessorAuthorizationCode { get; protected set; }
-        public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
         public virtual string ProcessorResponseCode { get; protected set; }
         public virtual string ProcessorResponseText { get; protected set; }
+        public virtual ProcessorResponseType ProcessorResponseType { get; protected set; }
         public virtual string ProcessorSettlementResponseCode { get; protected set; }
         public virtual string ProcessorSettlementResponseText { get; protected set; }
-        public virtual string AdditionalProcessorResponse { get; protected set; }
-        public virtual string NetworkResponseCode { get; protected set; }
-        public virtual string NetworkResponseText { get; protected set; }
-        public virtual string VoiceReferralNumber { get; protected set; }
         public virtual string PurchaseOrderNumber { get; protected set; }
         public virtual bool? Recurring { get; protected set; }
+        public virtual List<Installment> RefundedInstallments { get; protected set; }
         public virtual string RefundedTransactionId { get; protected set; }
         public virtual List<string> RefundIds { get; protected set; }
-        public virtual List<string> PartialSettlementTransactionIds { get; protected set; }
-        public virtual string AuthorizedTransactionId { get; protected set; }
-        public virtual string SettlementBatchId { get; protected set; }
-        public virtual Address ShippingAddress { get; protected set; }
-        public virtual TransactionEscrowStatus EscrowStatus { get; protected set; }
-        public virtual TransactionStatus Status { get; protected set; }
-        public virtual StatusEvent[] StatusHistory { get; protected set; }
-        public virtual List<AuthorizationAdjustment> AuthorizationAdjustments { get; protected set; }
-        public virtual string SubscriptionId { get; protected set; }
-        public virtual SubscriptionDetails SubscriptionDetails { get; protected set; }
-        public virtual decimal? TaxAmount { get; protected set; }
-        public virtual bool? TaxExempt { get; protected set; }
-        public virtual TransactionType Type { get; protected set; }
-        public virtual DateTime? UpdatedAt { get; protected set; }
-        public virtual Dictionary<string, string> CustomFields { get; protected set; }
-        public virtual decimal? ServiceFeeAmount { get; protected set; }
-        public virtual DisbursementDetails DisbursementDetails { get; protected set; }
-        public virtual ApplePayDetails ApplePayDetails { get; protected set; }
-        public virtual AndroidPayDetails AndroidPayDetails { get; protected set; }
-        public virtual PayPalDetails PayPalDetails { get; protected set; }
-        public virtual PayPalHereDetails PayPalHereDetails { get; protected set; }
-        public virtual LocalPaymentDetails LocalPaymentDetails { get; protected set; }
-        public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
-        public virtual SepaDirectDebitAccountDetails SepaDirectDebitAccountDetails { get; protected set; }
-        public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
-        public virtual MetaCheckoutCardDetails MetaCheckoutCardDetails { get; protected set; }
-        public virtual MetaCheckoutTokenDetails MetaCheckoutTokenDetails { get; protected set; }
-        public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
-        public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
-        public virtual PackageDetails[] Packages { get; protected set; }
-        public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
-        public virtual RiskData RiskData { get; protected set; }
-        public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
-        public virtual FacilitatedDetails FacilitatedDetails { get; protected set; }
-        public virtual FacilitatorDetails FacilitatorDetails { get; protected set; }
-        public virtual string ScaExemptionRequested { get; protected set; }
-        public virtual decimal? DiscountAmount { get; protected set; }
-        public virtual decimal? ShippingAmount { get; protected set; }
-        public virtual string ShipsFromPostalCode { get; protected set; }
-        public virtual string AchReturnCode { get; protected set; }
-        public virtual string SepaDirectDebitReturnCode { get; protected set; }
-        public virtual string NetworkTransactionId { get; protected set; }
-        public virtual DateTime? AuthorizationExpiresAt { get; protected set; }
-        public virtual string RetrievalReferenceNumber { get; protected set; }
-        public virtual string AcquirerReferenceNumber { get; protected set; }
-        public virtual decimal? InstallmentCount { get; protected set; }
-        public virtual List<Installment> Installments { get; protected set; }
-        public virtual List<Installment> RefundedInstallments { get; protected set; }
         public virtual bool? Retried { get; protected set; }
         public virtual string RetriedTransactionId { get; protected set; }
+        public virtual string RetrievalReferenceNumber { get; protected set; }
         public virtual List<String> RetryIds { get; protected set; }
-        public virtual string MerchantAdviceCode { get; protected set; }
-        public virtual string MerchantAdviceCodeText { get; protected set; }
-        public virtual bool? ForeignRetailer { get; protected set; }
+        public virtual RiskData RiskData { get; protected set; }
+        public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
+        public virtual string ScaExemptionRequested { get; protected set; }
+        public virtual SepaDirectDebitAccountDetails SepaDirectDebitAccountDetails { get; protected set; }
+        public virtual string SepaDirectDebitReturnCode { get; protected set; }
+        public virtual decimal? ServiceFeeAmount { get; protected set; }
+        public virtual string SettlementBatchId { get; protected set; }
+        public virtual Address ShippingAddress { get; protected set; }
+        public virtual decimal? ShippingAmount { get; protected set; }
+        public virtual decimal? ShippingTaxAmount { get; protected set; }
+        public virtual string ShipsFromPostalCode { get; protected set; }
+        public virtual TransactionStatus Status { get; protected set; }
+        public virtual StatusEvent[] StatusHistory { get; protected set; }
+        public virtual SubscriptionDetails SubscriptionDetails { get; protected set; }
+        public virtual string SubscriptionId { get; protected set; }
+        public virtual decimal? TaxAmount { get; protected set; }
+        public virtual bool? TaxExempt { get; protected set; }
+        public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
+        public virtual TransactionType Type { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
+        public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
+        public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
+        public virtual string VoiceReferralNumber { get; protected set; }
 
         private IBraintreeGateway Gateway;
 
@@ -291,6 +294,11 @@ namespace Braintree
             if (creditCardNode != null)
             {
                 CreditCard = new CreditCard(creditCardNode, gateway);
+            }
+            var networkTokenNode = node.GetNode("network-token");
+            if (networkTokenNode != null)
+            {
+                NetworkToken = new CreditCard(networkTokenNode, gateway);
             }
             var subscriptionNode = node.GetNode("subscription");
             if (subscriptionNode != null)
@@ -439,6 +447,7 @@ namespace Braintree
 
             DiscountAmount = node.GetDecimal("discount-amount");
             ShippingAmount = node.GetDecimal("shipping-amount");
+            ShippingTaxAmount = node.GetDecimal("shipping-tax-amount");
             ShipsFromPostalCode = node.GetString("ships-from-postal-code");
 
             AchReturnCode = node.GetString("ach-return-code");
