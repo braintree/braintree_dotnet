@@ -707,6 +707,40 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Update_CheckDuplicateCreditCardForCustomer()
+        {
+            var customer = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                }
+            };
+
+            var dupCustomer = new CustomerRequest
+            {
+                CreditCard = new CreditCardRequest {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                    Options = new CreditCardOptionsRequest
+                    {
+                        FailOnDuplicatePaymentMethodForCustomer = true
+                    }
+                }
+            };
+
+            var createResult = gateway.Customer.Create(customer);
+            Assert.IsTrue(createResult.IsSuccess());
+            var updateResult = gateway.Customer.Update(createResult.Target.Id, dupCustomer);
+            Assert.IsFalse(updateResult.IsSuccess());
+
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS_FOR_CUSTOMER,
+                updateResult.Errors.ForObject("Customer").ForObject("CreditCard").OnField("Number")[0].Code
+            );
+        }
+
+        [Test]
         public void Delete_DeletesTheCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -761,7 +795,6 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-
         public void CheckDuplicateCreditCard()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -783,6 +816,32 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(
                 ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS,
+                result.Errors.ForObject("CreditCard").OnField("Number")[0].Code
+            );
+        }
+        
+        [Test]
+        public void CheckDuplicateCreditCardForCustomer()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    FailOnDuplicatePaymentMethodForCustomer = true
+                }
+            };
+
+            gateway.CreditCard.Create(request);
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(
+                ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS_FOR_CUSTOMER,
                 result.Errors.ForObject("CreditCard").OnField("Number")[0].Code
             );
         }
@@ -1432,7 +1491,7 @@ namespace Braintree.Tests.Integration
                 Options = new CreditCardOptionsRequest()
                 {
                     VerifyCard = true,
-                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationMerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID,
                     VerificationAccountType = "debit",
                 },
             };
@@ -1698,7 +1757,7 @@ namespace Braintree.Tests.Integration
                 Options = new CreditCardOptionsRequest()
                 {
                     VerifyCard = true,
-                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationMerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID,
                     VerificationAccountType = "debit",
                 },
             };

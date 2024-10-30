@@ -152,10 +152,13 @@ namespace Braintree
             {
                 return new VisaCheckoutCard(node, gateway) as T;
             }
+            #pragma warning disable 618
             else if (typeof(T) == typeof(SamsungPayCard))
             {
+                // NEXT_MAJOR_VERSION remove SamsungPayCard
                 return new SamsungPayCard(node, gateway) as T;
             }
+            #pragma warning restore 618
             else if (typeof(T) == typeof(UnknownPaymentMethod))
             {
                 return new UnknownPaymentMethod(node) as T;

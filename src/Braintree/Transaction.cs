@@ -196,7 +196,10 @@ namespace Braintree
         public virtual string RetrievalReferenceNumber { get; protected set; }
         public virtual List<String> RetryIds { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
+        // NEXT_MAJOR_VERSION remove SamsungPayCardDetails
+        #pragma warning disable 618
         public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
+        #pragma warning restore 618
         public virtual string ScaExemptionRequested { get; protected set; }
         public virtual SepaDirectDebitAccountDetails SepaDirectDebitAccountDetails { get; protected set; }
         public virtual string SepaDirectDebitReturnCode { get; protected set; }
@@ -378,10 +381,13 @@ namespace Braintree
             {
                 VisaCheckoutCardDetails = new VisaCheckoutCardDetails(visaCheckoutNode);
             }
+            // NEXT_MAJOR_VERSION SamsungPayCard has been deprecated, remove all associated references
             var samsungPayNode = node.GetNode("samsung-pay-card");
             if (samsungPayNode != null)
             {
+                #pragma warning disable 618
                 SamsungPayCardDetails = new SamsungPayCardDetails(samsungPayNode);
+                #pragma warning restore 618
             }
 
             var billingAddressNode = node.GetNode("billing");

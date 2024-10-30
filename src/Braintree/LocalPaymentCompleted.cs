@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 
 namespace Braintree
 {
     public class LocalPaymentCompleted
     {
         public virtual string Bic { get; protected set; }
+        public virtual List<BlikAlias> BlikAliases { get; protected set; }
         public virtual string IbanLastChars { get; protected set; }
         public virtual string PayerId { get; protected set; }
         public virtual string PayerName { get; protected set; }
@@ -25,6 +27,11 @@ namespace Braintree
             if(transactionNode != null)
             {
                 Transaction = new Transaction(transactionNode, gateway);
+            }
+
+            BlikAliases = new List<BlikAlias>();
+            foreach (var blikAliasNode in node.GetList("blik-aliases/blik-alias")) {
+                BlikAliases.Add(new BlikAlias(blikAliasNode));
             }
         }
 

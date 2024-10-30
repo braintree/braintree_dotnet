@@ -26,7 +26,10 @@ namespace Braintree.Tests
             "<credit-card>" +
                 "<expiration-date>05/2029</expiration-date>" +
                 "<number>4111111111111111</number>" +
-            "</credit-card>"  +
+            "<billing-address>" +
+                "<country-code-alpha2>GR</country-code-alpha2>" +
+            "</billing-address>" +
+            "</credit-card>"  + 
             "<external-vault>" +
                 "<status>vaulted</status>" +
                 "<previous-network-transaction-id>1234</previous-network-transaction-id>" +
@@ -61,10 +64,7 @@ namespace Braintree.Tests
                      ExpirationDate = "05/2029",
                      BillingAddress = new CreditCardAddressRequest
                      {
-                         CountryName = "Greece",
                          CountryCodeAlpha2 = "GR",
-                         CountryCodeAlpha3 = "GRC",
-                         CountryCodeNumeric = "300"
                      }
                 },
                 ExternalVault = new ExternalVaultRequest()

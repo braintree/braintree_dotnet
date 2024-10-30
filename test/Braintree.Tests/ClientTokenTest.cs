@@ -93,5 +93,34 @@ namespace Braintree.Tests
             Assert.IsTrue(Regex.Match(exception.Message, @"FailOnDuplicatePaymentMethod").Success);
             Assert.IsInstanceOf(typeof(ArgumentException), exception);
         }
+
+        [Test]
+        public void Generate_RaisesExceptionIfFailOnDuplicatePaymentMethodForCustomerIsIncludedWithoutCustomerId()
+        {
+            BraintreeGateway gateway = new BraintreeGateway
+            {
+                Environment = Environment.DEVELOPMENT,
+                MerchantId = "integration_merchant_id",
+                PublicKey = "integration_public_key",
+                PrivateKey = "integration_private_key"
+            };
+            Exception exception = null;
+            try {
+                gateway.ClientToken.Generate(
+                    new ClientTokenRequest
+                    {
+                        Options = new ClientTokenOptionsRequest
+                        {
+                            FailOnDuplicatePaymentMethodForCustomer = true
+                        }
+                    }
+                );
+            } catch (Exception tempException) {
+                exception = tempException;
+            }
+            Assert.IsNotNull(exception);
+            Assert.IsTrue(Regex.Match(exception.Message, @"FailOnDuplicatePaymentMethodForCustomer").Success);
+            Assert.IsInstanceOf(typeof(ArgumentException), exception);
+        }
     }
 }

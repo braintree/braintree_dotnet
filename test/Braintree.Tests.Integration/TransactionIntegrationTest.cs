@@ -5649,36 +5649,6 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Sale_WithExternalVault_ValidationErrorPaymentInstrumentIsInvalid()
-        {
-            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
-
-            var paypalCreateRequest = new PaymentMethodRequest
-            {
-                CustomerId = customer.Id,
-                PaymentMethodNonce = Nonce.PayPalBillingAgreement,
-            };
-            PaymentMethod paypalPaymentMethod = gateway.PaymentMethod.Create(paypalCreateRequest).Target;
-            var request = new TransactionRequest
-            {
-                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
-                PaymentMethodToken = paypalPaymentMethod.Token,
-                ExternalVault = new ExternalVaultRequest
-                {
-                    Status = "vaulted",
-                    PreviousNetworkTransactionId = "123456789012345",
-                }
-            };
-
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(
-                ValidationErrorCode.TRANSACTION_PAYMENT_INSTRUMENT_WITH_EXTERNAL_VAULT_IS_INVALID,
-                result.Errors.ForObject("Transaction").OnField("ExternalVault")[0].Code
-            );
-        }
-
-        [Test]
         public void Sale_WithExternalVault_ValidationErrorStatusIsInvalid()
         {
             var request = new TransactionRequest

@@ -29,6 +29,7 @@ namespace Braintree.Test
         public const string ProcessorDeclinedMasterCard = "fake-processor-declined-mastercard-nonce";
         public const string ProcessorDeclinedVisa = "fake-processor-declined-visa-nonce";
         public const string ProcessorFailureJCB = "fake-processor-failure-jcb-nonce";
+        // NEXT_MAJOR_VERSION SamsungPayCard has been deprecated, remove all associated nonces
         public const string SamsungPayAmEx = "tokensam_fake_american_express";
         public const string SamsungPayDiscover = "tokensam_fake_discover";
         public const string SamsungPayMasterCard = "tokensam_fake_mastercard";

@@ -32,7 +32,10 @@ namespace Braintree
             }
             else if (response.GetName() == "samsung-pay-card")
             {
+                // NEXT_MAJOR_VERSION remove SamsungPayCard
+                #pragma warning disable 618
                 return new SamsungPayCard(response, gateway);
+                #pragma warning restore 618
             }
             else if (response.GetName() == "sepa-debit-account")
             {

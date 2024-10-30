@@ -4,9 +4,10 @@ namespace Braintree
 {
     public class ClientTokenOptionsRequest : Request
     {
+        public bool? FailOnDuplicatePaymentMethod { get; set; }
+        public bool? FailOnDuplicatePaymentMethodForCustomer { get; set; }
         public bool? MakeDefault { get; set; }
         public bool? VerifyCard { get; set; }
-        public bool? FailOnDuplicatePaymentMethod { get; set; }
 
         public override string ToXml(string root)
         {
@@ -21,9 +22,10 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
+                AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).
+                AddElement("fail-on-duplicate-payment-method-for-customer", FailOnDuplicatePaymentMethodForCustomer).
                 AddElement("make-default", MakeDefault).
-                AddElement("verify-card", VerifyCard).
-                AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod);
+                AddElement("verify-card", VerifyCard);
         }
     }
 }

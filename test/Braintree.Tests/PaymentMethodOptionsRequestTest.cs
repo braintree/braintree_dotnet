@@ -12,6 +12,7 @@ namespace Braintree.Tests
             var request = new PaymentMethodOptionsRequest()
             {
                 FailOnDuplicatePaymentMethod = false,
+                FailOnDuplicatePaymentMethodForCustomer = false,
                 MakeDefault = false,
                 SkipAdvancedFraudChecking = false,
                 VerificationAccountType = "type",
@@ -22,6 +23,7 @@ namespace Braintree.Tests
             };
             
             Assert.IsTrue(request.ToXml("payment-method-options").Contains("<fail-on-duplicate-payment-method>false</fail-on-duplicate-payment-method>"));
+            Assert.IsTrue(request.ToXml("payment-method-options").Contains("<fail-on-duplicate-payment-method-for-customer>false</fail-on-duplicate-payment-method-for-customer>"));
             Assert.IsTrue(request.ToXml("payment-method-options").Contains("<make-default>false</make-default>"));
             Assert.IsTrue(request.ToXml("payment-method-options").Contains("<skip-advanced-fraud-checking>false</skip-advanced-fraud-checking>"));
             Assert.IsTrue(request.ToXml("payment-method-options").Contains("<verification-account-type>type</verification-account-type>"));

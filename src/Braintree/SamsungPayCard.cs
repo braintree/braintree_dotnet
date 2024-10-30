@@ -3,8 +3,11 @@
 using System;
 using System.Collections.Generic;
 
+// NEXT_MAJOR_VERSION remove this class
+// SamsungPayCard has been deprecated
 namespace Braintree
 {
+    [Obsolete("SamsungPayCard has been deprecated", false)]
     public class SamsungPayCard : PaymentMethod
     {
         public virtual string Bin { get; protected set; }

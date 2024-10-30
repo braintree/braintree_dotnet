@@ -18,7 +18,12 @@ namespace Braintree.Tests
         public void IncludesFields()
         {
             string xml = "<local-payment>" +
-
+            "<blik-aliases>" +
+                "<blik-alias>" +
+                    "<key>unique-key-1</key>" +
+                    "<label>unique-label-1</label>" +
+                "</blik-alias>" +
+            "</blik-aliases>" +
             "<capture-id>CAT-1234</capture-id>" +
             "<custom-field>whatever</custom-field>" +
             "<debug-id>DEB-1234</debug-id>" +
@@ -38,6 +43,8 @@ namespace Braintree.Tests
 
             LocalPaymentDetails details = new LocalPaymentDetails(node);
 
+            Assert.AreEqual("unique-key-1", details.BlikAliases[0].Key);
+            Assert.AreEqual("unique-label-1", details.BlikAliases[0].Label);
             Assert.AreEqual("CAT-1234", details.CaptureId);
             Assert.AreEqual("whatever", details.CustomField);
             Assert.AreEqual("DEB-1234", details.DebugId);

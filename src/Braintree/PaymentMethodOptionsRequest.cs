@@ -4,17 +4,18 @@ namespace Braintree
 {
     public class PaymentMethodOptionsRequest : Request
     {
-        public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
-        public UsBankAccountVerificationMethod? UsBankAccountVerificationMethod { get; set; }
-        public VerificationAddOns? VerificationAddOns { get; set; }
         public bool? FailOnDuplicatePaymentMethod { get; set; }
+        public bool? FailOnDuplicatePaymentMethodForCustomer { get; set; }
         public bool? MakeDefault { get; set; }
+        public PaymentMethodOptionsPayPalRequest OptionsPayPal { get; set; }
         public bool? SkipAdvancedFraudChecking { get; set; }
-        public bool? VerifyCard { get; set; }
+        public UsBankAccountVerificationMethod? UsBankAccountVerificationMethod { get; set; }
         public string VerificationAccountType { get; set; } // NEXT_MAJOR_VERSION - This should be an enum with [credit, debit]
+        public VerificationAddOns? VerificationAddOns { get; set; }
         public string VerificationAmount { get; set; }
         public string VerificationCurrencyIsoCode { get; set; }
         public string VerificationMerchantAccountId { get; set; }
+        public bool? VerifyCard { get; set; }
 
         public override string ToXml(string root)
         {
@@ -30,6 +31,7 @@ namespace Braintree
         {
             return new RequestBuilder(root).
                 AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).
+                AddElement("fail-on-duplicate-payment-method-for-customer", FailOnDuplicatePaymentMethodForCustomer).
                 AddElement("make-default", MakeDefault).
                 AddElement("paypal", OptionsPayPal).
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).

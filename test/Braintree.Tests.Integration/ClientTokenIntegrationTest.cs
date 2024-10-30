@@ -87,6 +87,23 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Generate_FailOnDuplicatePaymentMethodForCustomer()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var ClientTokenRequest = new ClientTokenRequest
+            {
+                CustomerId = customer.Id,
+                Options = new ClientTokenOptionsRequest
+                {
+                    FailOnDuplicatePaymentMethodForCustomer = true
+                }
+
+            };
+            var encodedClientToken = gateway.ClientToken.Generate(ClientTokenRequest);
+            Assert.NotNull(encodedClientToken);
+        }
+
+        [Test]
 #if netcore
         public async Task GenerateAsync_GeneratesFingerprintAcceptedByGateway()
 #else

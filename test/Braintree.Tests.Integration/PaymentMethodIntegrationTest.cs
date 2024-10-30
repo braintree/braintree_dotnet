@@ -795,6 +795,7 @@ namespace Braintree.Tests.Integration
                 {
                     VerifyCard = true,
                     FailOnDuplicatePaymentMethod = true,
+                    FailOnDuplicatePaymentMethodForCustomer = true,
                     VerificationMerchantAccountId = "not_a_real_merchant_account_id"
                 }
             });
@@ -899,6 +900,42 @@ namespace Braintree.Tests.Integration
 
             Assert.IsFalse(paypalResult.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS, paypalResult.Errors.DeepAll().First().Code);
+        }
+
+        [Test]
+        public void Create_RespectsFailOnDuplicatePaymentMethodForCustomerWhenIncludedOutsideNonce()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var creditCardResult = gateway.CreditCard.Create(new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                Number = SandboxValues.CreditCardNumber.VISA,
+                ExpirationDate = "05/2012"
+            });
+
+            Assert.IsTrue(creditCardResult.IsSuccess());
+            var nonce = TestHelper.GetNonceForNewPaymentMethod(
+                gateway,
+                new Params
+                {
+                    { "number", SandboxValues.CreditCardNumber.VISA },
+                    { "expiration_date", "05/2012" }
+                },
+                isCreditCard : true
+            );
+
+            var paypalResult = gateway.PaymentMethod.Create(new PaymentMethodRequest
+            {
+                PaymentMethodNonce = nonce,
+                CustomerId = customer.Id,
+                Options = new PaymentMethodOptionsRequest
+                {
+                    FailOnDuplicatePaymentMethodForCustomer = true
+                }
+            });
+
+            Assert.IsFalse(paypalResult.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.CREDIT_CARD_DUPLICATE_CARD_EXISTS_FOR_CUSTOMER, paypalResult.Errors.DeepAll().First().Code);
         }
 
         [Test]
@@ -2055,7 +2092,7 @@ namespace Braintree.Tests.Integration
                     Options = new PaymentMethodOptionsRequest()
                     {
                         VerifyCard = true,
-                        VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                        VerificationMerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID,
                         VerificationAccountType = "debit",
                     },
                 });
@@ -2151,7 +2188,7 @@ namespace Braintree.Tests.Integration
                 Options = new PaymentMethodOptionsRequest()
                 {
                     VerifyCard = true,
-                    VerificationMerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    VerificationMerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID,
                     VerificationAccountType = "debit",
                 },
             };

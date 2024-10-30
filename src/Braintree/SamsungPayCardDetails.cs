@@ -1,7 +1,10 @@
 using System;
 
+// NEXT_MAJOR_VERSION remove this class
+// SamsungPayCard has been deprecated
 namespace Braintree
 {
+    [Obsolete("SamsungPayCard has been deprecated", false)]
     public class SamsungPayCardDetails
     {
         public virtual string Bin { get; protected set; }

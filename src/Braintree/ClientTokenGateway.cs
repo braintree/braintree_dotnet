@@ -71,6 +71,10 @@ namespace Braintree
                 {
                     invalidOptions.Add("FailOnDuplicatePaymentMethod");
                 }
+                if (request.Options.FailOnDuplicatePaymentMethodForCustomer != null)
+                {
+                    invalidOptions.Add("FailOnDuplicatePaymentMethodForCustomer");
+                }
 
                 if (invalidOptions.Count != 0)
                 {

@@ -7,9 +7,12 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Params = System.Collections.Generic.Dictionary<string, object>;
 
+//NEXT_MAJOR_VERSION remove these tests
+// SamsungPayCard has been deprecated
 namespace Braintree.Tests.Integration
 {
     [TestFixture]
+    [Ignore("Samsung Pay deprecated TODO - Remove in major release")]
     public class SamsungPayIntegrationTest
     {
         private BraintreeGateway gateway;

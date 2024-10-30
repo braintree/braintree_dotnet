@@ -1,5 +1,14 @@
 # Changelog
 
+## 5.28.0
+- Add `fail_on_duplicate_payment_method_for_customer` option to 
+  - `ClientToken`
+  - `PaymentMethod`
+  - `CreditCard`
+- Fix billing address bug for credit card verification.
+- Add `blik_aliases` to LocalPaymentCompleted webhook and LocalPaymentDetail
+- Deprecate `SamsungPayCard`
+
 ## 5.27.0 
 - Add `PayerName`, `Bic` and `IbanLastChars` to LocalPaymentCompleted webhook
 - Add `edit_paypal_vault_id` to `PayPalAccount`

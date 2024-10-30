@@ -4,6 +4,12 @@ namespace Braintree
 {
     public class CreditCardVerificationCreditCardRequest : BaseCreditCardRequest {
         public CreditCardAddressRequest BillingAddress { get; set; }
+
+        protected override RequestBuilder BuildRequest(string root)
+        {
+            return base.BuildRequest(root).
+                AddElement("billing-address", BillingAddress);
+        }
     }
 
     public class CreditCardVerificationRequest : Request {

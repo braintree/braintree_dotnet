@@ -12,6 +12,7 @@ namespace Braintree.Tests
             var request = new CreditCardOptionsRequest()
             {
                 FailOnDuplicatePaymentMethod = false,
+                FailOnDuplicatePaymentMethodForCustomer = false,
                 MakeDefault = false,
                 SkipAdvancedFraudChecking = false,
                 UpdateExistingToken = "foo",
@@ -26,6 +27,7 @@ namespace Braintree.Tests
             };
 
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<fail-on-duplicate-payment-method>false</fail-on-duplicate-payment-method>"));
+            Assert.IsTrue(request.ToXml("credit-card-options").Contains("<fail-on-duplicate-payment-method-for-customer>false</fail-on-duplicate-payment-method-for-customer>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<make-default>false</make-default>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<skip-advanced-fraud-checking>false</skip-advanced-fraud-checking>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<update-existing-token>foo</update-existing-token>"));

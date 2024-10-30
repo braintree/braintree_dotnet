@@ -66,14 +66,25 @@ namespace Braintree.Tests.Integration
                 {
                     Number = SandboxValues.CreditCardNumber.VISA,
                     ExpirationDate = "05/2009",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        FirstName = "John",
+                        LastName = "Doe"
+                    }
                 },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID
+                }
             };
 
             Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
             Assert.IsTrue(result.IsSuccess());
             CreditCardVerification verification = result.Target;
-            Assert.AreEqual("I", verification.AniFirstNameResponseCode);
-            Assert.AreEqual("I", verification.AniLastNameResponseCode);
+            Assert.AreEqual("M", verification.AniFirstNameResponseCode);
+            Assert.AreEqual("M", verification.AniLastNameResponseCode);
+            Assert.AreEqual("John", verification.BillingAddress.FirstName);
+            Assert.AreEqual("Doe", verification.BillingAddress.LastName);
             Assert.AreEqual("1000", verification.ProcessorResponseCode);
             Assert.AreEqual("Approved", verification.ProcessorResponseText);
             Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
@@ -624,7 +635,7 @@ namespace Braintree.Tests.Integration
                 },
                 Options = new CreditCardVerificationOptionsRequest
                 {
-                    MerchantAccountId = MerchantAccountIDs.BRAZIL_MERCHANT_ACCOUNT_ID,
+                    MerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID,
                     AccountType = "debit",
                 }
             };

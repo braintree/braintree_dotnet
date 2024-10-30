@@ -109,7 +109,7 @@ namespace Braintree
             } else if (kind == WebhookKind.GRANTED_PAYMENT_METHOD_REVOKED) {
                 return GrantedPaymentMethodRevokedSampleXml(id);
             } else if (kind == WebhookKind.LOCAL_PAYMENT_COMPLETED) {
-                return LocalPaymentCompletedSampleXml();
+                return LocalPaymentCompletedSampleXml(id);
             } else if (kind == WebhookKind.LOCAL_PAYMENT_EXPIRED) {
                 return LocalPaymentExpiredSampleXml();
             } else if (kind == WebhookKind.LOCAL_PAYMENT_FUNDED) {
@@ -620,7 +620,16 @@ namespace Braintree
             return VenmoAccountSampleXml(id);
         }
 
-        private static string LocalPaymentCompletedSampleXml() {
+        private static string LocalPaymentCompletedSampleXml(string id) {
+            if(id == "blik_one_click_id")
+            {
+                return BlikOneClickLocalPaymentCompletedSampleXml();
+            } else {
+                return DefaultLocalPaymentCompletedSampleXml();
+            }
+        }
+
+        private static string DefaultLocalPaymentCompletedSampleXml() {
             return Node("local-payment",
                     Node("bic", "a-bic"),
                     Node("iban-last-chars", "1234"),
@@ -637,6 +646,28 @@ namespace Braintree
             );
         }
 
+        private static string BlikOneClickLocalPaymentCompletedSampleXml() {
+            return Node("local-payment",
+                    Node("bic", "a-bic"),
+                    Node("blik-aliases", TYPE_ARRAY,
+                        Node("blik-alias",
+                            Node("key", "unique-key-1"),
+                            Node("label", "unique-label-1")
+                            )
+                        ),
+                    Node("iban-last-chars", "1234"),
+                    Node("payer-id", "a-payer-id"),
+                    Node("payer-name", "a-payer-name"),
+                    Node("payment-id", "a-payment-id"),
+                    Node("payment-method-nonce", "ee257d98-de40-47e8-96b3-a6954ea7a9a4"),
+                    Node("transaction",
+                        Node("id", "1"),
+                        Node("status", "authorizing"),
+                        Node("amount", "10.00"),
+                        Node("order-id", "order1234")
+                        )
+            );
+        }
         private static string LocalPaymentExpiredSampleXml() {
             return Node("local-payment-expired",
                     Node("payment-id", "a-payment-id"),

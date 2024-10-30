@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace Braintree
 {
     public class LocalPaymentDetails
     {
+        public virtual List<BlikAlias> BlikAliases { get; protected set; }
         public virtual string CaptureId { get; protected set; }
         public virtual string CustomField { get; protected set; }
         public virtual string DebugId { get; protected set; }
@@ -35,6 +37,11 @@ namespace Braintree
             RefundId = node.GetString("refund-id");
             TransactionFeeAmount = node.GetString("transaction-fee-amount");
             TransactionFeeCurrencyIsoCode = node.GetString("transaction-fee-currency-iso-code");
+
+            BlikAliases = new List<BlikAlias>();
+            foreach (var blikAliasNode in node.GetList("blik-aliases/blik-alias")) {
+                BlikAliases.Add(new BlikAlias(blikAliasNode));
+            }
         }
 
         [Obsolete("Mock Use Only")]

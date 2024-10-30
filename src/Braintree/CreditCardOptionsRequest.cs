@@ -7,6 +7,7 @@ namespace Braintree
     public class CreditCardOptionsRequest : Request
     {
         public bool? FailOnDuplicatePaymentMethod { get; set; }
+        public bool? FailOnDuplicatePaymentMethodForCustomer { get; set; }
         public bool? MakeDefault { get; set; }
         public bool? SkipAdvancedFraudChecking { get; set; }
         public bool? VerifyCard { get; set; }
@@ -34,6 +35,7 @@ namespace Braintree
         {
             return new RequestBuilder(root).
                 AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).
+                AddElement("fail-on-duplicate-payment-method-for-customer", FailOnDuplicatePaymentMethodForCustomer).
                 AddElement("make-default", MakeDefault).
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).
                 AddElement("update-existing-token", UpdateExistingToken).

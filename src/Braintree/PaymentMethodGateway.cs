@@ -129,7 +129,10 @@ namespace Braintree
             }
             else if (response.GetName() == "samsung-pay-card")
             {
+                // NEXT_MAJOR_VERSION remove SamsungPayCard
+                #pragma warning disable 618
                 return new ResultImpl<SamsungPayCard>(response, gateway);
+                #pragma warning restore 618
             }
             else
             {
