@@ -11353,5 +11353,32 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
             Assert.IsNull(transaction.ForeignRetailer);
         }
+       
+        [Test]
+        public void ContactDetails_ReturnedFromTransaction()
+        {
+            string nonce = TestHelper.GenerateOneTimePayPalNonce(gateway);
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = 10.0M,
+                PaymentMethodNonce = nonce,
+                PayPalAccount = new TransactionPayPalRequest()
+                {
+                },
+                Options = new TransactionOptionsRequest()
+                {},
+            
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.IsNotNull(result.Target.PayPalDetails.RecipientEmail);
+            Assert.IsNotNull(result.Target.PayPalDetails.RecipientPhone);
+            Assert.IsNotNull(result.Target.PayPalDetails.PaymentId);
+            Assert.IsNotNull(result.Target.PayPalDetails.AuthorizationId);
+            Assert.IsNotNull(result.Target.PayPalDetails.ImageUrl);
+            Assert.AreEqual("test@paypal.com", result.Target.PayPalDetails.RecipientEmail);
+            Assert.IsNull(result.Target.PayPalDetails.Token);
+            Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
+        }
     }
 }

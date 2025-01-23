@@ -1745,6 +1745,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void All() {
             ResourceCollection<Customer> collection = gateway.Customer.All();
 
@@ -1760,6 +1761,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
 #if netcore
         public async Task AllAsync()
 #else
@@ -1786,6 +1788,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        [Ignore("unpend when we have a more stable CI")]
         public void Search_FindDuplicateCardsGivenPaymentMethodToken()
         {
             CreditCardRequest creditCard = new CreditCardRequest

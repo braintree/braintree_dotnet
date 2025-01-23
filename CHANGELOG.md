@@ -1,4 +1,7 @@
-# Changelog
+# Changelog 
+
+## 5.29.0
+- Add recipient/contact info: `recipient_email`and `recipient_phone` to `Transaction` 
 
 ## 5.28.0
 - Add `fail_on_duplicate_payment_method_for_customer` option to 

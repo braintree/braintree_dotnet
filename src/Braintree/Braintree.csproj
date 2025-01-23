@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Description>Braintree Client Library</Description>
     <Copyright>Copyright © Braintree, a division of PayPal, Inc. 2021</Copyright>
-    <VersionPrefix>5.28.0</VersionPrefix>
+    <VersionPrefix>5.29.0</VersionPrefix>
     <Authors>Braintree</Authors>
     <!-- We target NET standard 2.0 so that we can support NET Core 2.1. When NET Core 2.1 reaches EOL, we can update to Net Standard 2.1 -->
     <TargetFrameworks>net452;netstandard2.0</TargetFrameworks>
@@ -12,13 +12,7 @@
     <PackageId>Braintree</PackageId>
     <PackageTags>braintree;paypal;venmo;intenational;payments;gateway;currencies;money;visa;mastercard;bitcoin;maestro;apple pay;android pay;amex;jcb;diners club;discover;american express</PackageTags>
     <PackageReleaseNotes>
-      - Add `fail_on_duplicate_payment_method_for_customer` option to 
-        - `ClientToken`
-        - `PaymentMethod`
-        - `CreditCard`
-      - Fix billing address bug for credit card verification.
-      - Add `blik_aliases` to LocalPaymentCompleted webhook and LocalPaymentDetail
-      - Deprecate `SamsungPayCard`
+      - Add recipient/contact info: `recipient_email`and `recipient_phone` to `Transaction` 
     </PackageReleaseNotes>
     <PackageProjectUrl>https://github.com/braintree/braintree_dotnet</PackageProjectUrl>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>

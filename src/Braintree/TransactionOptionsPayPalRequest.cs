@@ -4,8 +4,8 @@ namespace Braintree
 {
     public class TransactionOptionsPayPalRequest : Request
     {
-        public string Description { get; set; }
         public string CustomField { get; set; }
+        public string Description { get; set; }
         public string PayeeId { get; set; }
         public string PayeeEmail { get; set; }
         public Dictionary<string, string> SupplementaryData { get; set; }
@@ -28,8 +28,8 @@ namespace Braintree
         private RequestBuilder BuildRequest(string root)
         {
             var builder = new RequestBuilder(root).
-                AddElement("description", Description).
                 AddElement("custom-field", CustomField).
+                AddElement("description", Description).
                 AddElement("payee-id", PayeeId).
                 AddElement("payee-email", PayeeEmail);
 
