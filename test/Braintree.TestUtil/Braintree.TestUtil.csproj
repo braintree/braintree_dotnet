@@ -35,4 +35,10 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
     <DefineConstants>$(DefineConstants);netcore</DefineConstants>
   </PropertyGroup>
+   <ItemGroup>
+    <None Include="../Resources/**/*.*"
+    Link="Resources/%(RecursiveDir)%(Filename)%(Extension)"
+    CopyToOutputDirectory="Always"
+    />
+  </ItemGroup>
 </Project>

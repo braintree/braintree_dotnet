@@ -17,6 +17,9 @@ test/Braintree.TestUtil/bin/*
 Thumbs.db
 tags
 .vs/
+.vscode/
 **/*.lock.json
 large_file.png
 test/fixtures/empty_file.png
+.idea/
+.fake

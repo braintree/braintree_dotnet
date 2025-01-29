@@ -21,6 +21,40 @@ namespace Braintree
         public Dictionary<string, object> extensions { get; set; }
         public IList<GraphQLError> errors { get; set; }
 
+        public ValidationErrors GetValidationErrors()
+        {
+            ValidationErrors validationErrors = new ValidationErrors();
+            if (errors != null)
+            {
+                foreach (GraphQLError error in errors)
+                {
+                    if (error.message != null)
+                    {
+                        var validationalidateErrorCode = GetValidationErrorCode(error.extensions);
+                        if (validationalidateErrorCode != null)
+                        {
+                            validationErrors.AddError(
+                                "",
+                                new ValidationError("", validationalidateErrorCode, error.message)
+                            );
+                        }
+                    }
+                }
+            }
+            return validationErrors;
+        }
+
+        private static string GetValidationErrorCode(Dictionary<string, object> extensions)
+        {
+
+            if (extensions != null && extensions.ContainsKey("legacyCode"))
+            {
+                return extensions["legacyCode"].ToString();
+            }
+            return "99999";
+        }
+
+
         public class Deserializer : CustomCreationConverter<IDictionary<string, object>>
         {
             public override IDictionary<string, object> Create(Type objectType)
@@ -78,7 +112,7 @@ namespace Braintree
         {
             var request = GetGraphQLHttpRequest(definition, variables);
             var response = GetHttpResponse(request);
-            var result = JsonConvert.DeserializeObject<GraphQLResponse>(response, new JsonConverter[] {new GraphQLResponse.Deserializer()});
+            var result = JsonConvert.DeserializeObject<GraphQLResponse>(response, new JsonConverter[] { new GraphQLResponse.Deserializer() });
 
             ThrowExceptionIfGraphQLErrorResponseHasError(result);
 
@@ -89,7 +123,7 @@ namespace Braintree
         {
             var request = GetGraphQLHttpRequest(definition, variables);
             var response = await GetHttpResponseAsync(request).ConfigureAwait(false);
-            var result = JsonConvert.DeserializeObject<GraphQLResponse>(response, new JsonConverter[] {new GraphQLResponse.Deserializer()});
+            var result = JsonConvert.DeserializeObject<GraphQLResponse>(response, new JsonConverter[] { new GraphQLResponse.Deserializer() });
 
             ThrowExceptionIfGraphQLErrorResponseHasError(result);
 
@@ -129,7 +163,8 @@ namespace Braintree
         }
 #endif
 
-        private string FormatGraphQLRequest(string definition, Dictionary<string, object> variables) {
+        private string FormatGraphQLRequest(string definition, Dictionary<string, object> variables)
+        {
             Dictionary<string, object> body = new Dictionary<string, object>();
 
             body["query"] = definition;
@@ -138,21 +173,26 @@ namespace Braintree
             return JsonConvert.SerializeObject(body, Newtonsoft.Json.Formatting.None);
         }
 
-        public static void ThrowExceptionIfGraphQLErrorResponseHasError(GraphQLResponse response) {
+        public static void ThrowExceptionIfGraphQLErrorResponseHasError(GraphQLResponse response)
+        {
             var errors = response.errors;
 
-            if (errors == null) {
+            if (errors == null)
+            {
                 return;
             }
 
-            foreach (var error in errors) {
+            foreach (var error in errors)
+            {
                 var message = error.message;
 
-                if (error.extensions == null) {
+                if (error.extensions == null)
+                {
                     throw new UnexpectedException();
                 }
 
-                switch ((string)error.extensions["errorClass"]) {
+                switch ((string)error.extensions["errorClass"])
+                {
                     case "VALIDATION":
                         continue;
                     case "AUTHENTICATION":

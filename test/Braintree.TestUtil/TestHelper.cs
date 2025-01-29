@@ -1,24 +1,27 @@
-using Braintree;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Reflection;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml;
+using Braintree;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using System.Runtime.InteropServices;
+using Params = System.Collections.Generic.Dictionary<string, object>;
+using Response = System.Collections.Generic.Dictionary<string, string>;
 #if netcore
 using System.Net.Http;
 #else
 using System.Web;
 #endif
-using System.Reflection;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Xml;
-using Params = System.Collections.Generic.Dictionary<string, object>;
-using Response = System.Collections.Generic.Dictionary<string, string>;
-using System.Diagnostics;
 
 namespace Braintree.TestUtil
 {
@@ -34,29 +37,40 @@ namespace Braintree.TestUtil
             return response;
         }
 
-        public static string GenerateDecodedClientToken(BraintreeGateway gateway, ClientTokenRequest request = null)
+        public static string GenerateDecodedClientToken(
+            BraintreeGateway gateway,
+            ClientTokenRequest request = null
+        )
         {
             var encodedClientToken = gateway.ClientToken.Generate(request);
-            var decodedClientToken = Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
+            var decodedClientToken = Encoding.UTF8.GetString(
+                Convert.FromBase64String(encodedClientToken)
+            );
             var unescapedClientToken = Regex.Unescape(decodedClientToken);
             return unescapedClientToken;
         }
 
-        public static string GenerateValidUsBankAccountNonce(BraintreeGateway gateway, string accountNumber = "1000000000")
+        public static string GenerateValidUsBankAccountNonce(
+            BraintreeGateway gateway,
+            string accountNumber = "1000000000"
+        )
         {
             var clientToken = GenerateDecodedClientToken(gateway);
-            var def =  new {
-                braintree_api = new {
+            var def = new
+            {
+                braintree_api = new
+                {
                     url = "",
                     access_token = "",
                     port = "",
-                }
+                },
             };
             var config = JsonConvert.DeserializeAnonymousType(clientToken, def);
             var url = config.braintree_api.url + "/graphql";
             var accessToken = config.braintree_api.access_token;
 
-            string query = @"
+            string query =
+                @"
                 mutation tokenizeUsBankAccount($input: TokenizeUsBankAccountInput!) {
                     tokenizeUsBankAccount(input: $input) {
                         paymentMethod {
@@ -65,25 +79,42 @@ namespace Braintree.TestUtil
                     }
                 }";
 
-            var variables = new Dictionary<string, object> {
-                {"input", new Dictionary<string, object> {
-                    {"usBankAccount", new Dictionary<string, object> {
-                        {"accountNumber", accountNumber},
-                        {"routingNumber", "021000021"},
-                        {"accountType", "CHECKING"},
-                        {"billingAddress", new Dictionary<string, object> {
-                            {"streetAddress", "123 Ave"},
-                            {"city", "San Francisco"},
-                            {"state", "CA"},
-                            {"zipCode", "94112"}
-                        }},
-                        {"individualOwner", new Dictionary<string, object> {
-                            {"firstName", "Dan"},
-                            {"lastName", "Schulman"}
-                        }},
-                        {"achMandate", "cl mandate text"}
-                    }}
-                }}
+            var variables = new Dictionary<string, object>
+            {
+                {
+                    "input",
+                    new Dictionary<string, object>
+                    {
+                        {
+                            "usBankAccount",
+                            new Dictionary<string, object>
+                            {
+                                { "accountNumber", accountNumber },
+                                { "routingNumber", "021000021" },
+                                { "accountType", "CHECKING" },
+                                {
+                                    "billingAddress",
+                                    new Dictionary<string, object>
+                                    {
+                                        { "streetAddress", "123 Ave" },
+                                        { "city", "San Francisco" },
+                                        { "state", "CA" },
+                                        { "zipCode", "94112" },
+                                    }
+                                },
+                                {
+                                    "individualOwner",
+                                    new Dictionary<string, object>
+                                    {
+                                        { "firstName", "Dan" },
+                                        { "lastName", "Schulman" },
+                                    }
+                                },
+                                { "achMandate", "cl mandate text" },
+                            }
+                        },
+                    }
+                },
             };
 
             Dictionary<string, object> body = new Dictionary<string, object>();
@@ -99,43 +130,45 @@ namespace Braintree.TestUtil
             request.Headers.Add("Braintree-Version", "2016-10-07");
             request.Headers.Add("Authorization", "Bearer " + accessToken);
 
-            var httpClientHandler = new HttpClientHandler{};
+            var httpClientHandler = new HttpClientHandler { };
 
             HttpResponseMessage response;
             using (var client = new HttpClient(httpClientHandler))
             {
                 response = client.SendAsync(request).GetAwaiter().GetResult();
             }
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            StreamReader reader = new StreamReader(
+                response.Content.ReadAsStreamAsync().Result,
+                Encoding.UTF8
+            );
             string responseBody = reader.ReadToEnd();
 #else
-            string curlCommand = $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2016-10-07"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPOST ""{url}""";
-            Process process = new Process {
-                StartInfo = new ProcessStartInfo {
+            string curlCommand =
+                $@"-s -H ""Content-type: application/json"" -H ""Braintree-Version: 2016-10-07"" -H ""Authorization: Bearer {accessToken}"" -d '{postData}' -XPOST ""{url}""";
+            Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
                     FileName = "curl",
-                             Arguments = curlCommand,
-                             UseShellExecute = false,
-                             RedirectStandardOutput = true,
-                }
+                    Arguments = curlCommand,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                },
             };
             process.Start();
 
             StringBuilder responseBodyBuilder = new StringBuilder();
-            while (!process.HasExited) {
+            while (!process.HasExited)
+            {
                 responseBodyBuilder.Append(process.StandardOutput.ReadToEnd());
             }
             responseBodyBuilder.Append(process.StandardOutput.ReadToEnd());
             string responseBody = responseBodyBuilder.ToString();
 #endif
 
-            var resDef =  new {
-                data = new {
-                    tokenizeUsBankAccount = new {
-                        paymentMethod = new {
-                            id = "",
-                        }
-                    }
-                }
+            var resDef = new
+            {
+                data = new { tokenizeUsBankAccount = new { paymentMethod = new { id = "" } } },
             };
             var json = JsonConvert.DeserializeAnonymousType(responseBody, resDef);
             return json.data.tokenizeUsBankAccount.paymentMethod.id;
@@ -146,10 +179,12 @@ namespace Braintree.TestUtil
             var valid_characters = "bcdfghjkmnpqrstvwxyz23456789";
             var token = "tokenusbankacct";
             Random rnd = new Random();
-            for(int i=0; i<4; i++) {
+            for (int i = 0; i < 4; i++)
+            {
                 token += "_";
-                for(int j=0; j<6; j++) {
-                    token += valid_characters[rnd.Next(0,valid_characters.ToCharArray().Length)];
+                for (int j = 0; j < 6; j++)
+                {
+                    token += valid_characters[rnd.Next(0, valid_characters.ToCharArray().Length)];
                 }
             }
             return token + "_xxx";
@@ -169,10 +204,16 @@ namespace Braintree.TestUtil
 
         public static void AssertIncludes(string expected, string all)
         {
-            Assert.IsTrue(all.IndexOf(expected) >= 0, "Expected:\n" + all + "\nto include:\n" + expected);
+            Assert.IsTrue(
+                all.IndexOf(expected) >= 0,
+                "Expected:\n" + all + "\nto include:\n" + expected
+            );
         }
 
-        public static bool IncludesSubscription(ResourceCollection<Subscription> collection, Subscription subscription)
+        public static bool IncludesSubscription(
+            ResourceCollection<Subscription> collection,
+            Subscription subscription
+        )
         {
             foreach (Subscription item in collection)
             {
@@ -186,15 +227,116 @@ namespace Braintree.TestUtil
 
         public static void Escrow(BraintreeService service, string transactionId)
         {
-            NodeWrapper response = new NodeWrapper(service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/escrow"));
+            NodeWrapper response = new NodeWrapper(
+                service.Put(service.MerchantPath() + "/transactions/" + transactionId + "/escrow")
+            );
             Assert.IsTrue(response.IsSuccess());
+        }
+
+        public static void PrintNestedDictionary(Dictionary<string, object> dict, int indentLevel)
+        {
+            string indent = new string(' ', indentLevel * 4); // Indentation for nested levels
+            foreach (KeyValuePair<string, object> kvp in dict)
+            {
+                Console.WriteLine($"{indent}{kvp.Key}");
+                if (kvp.Value is Dictionary<string, object>)
+                {
+                    PrintNestedDictionary((Dictionary<string, object>)kvp.Value, indentLevel + 1);
+                }
+                else if (kvp.Value is IList)
+                {
+                    var list = (List<Dictionary<string, object>>)kvp.Value;
+                    foreach (var item in list)
+                    {
+                        PrintNestedDictionary(item, indentLevel + 1);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{indent}{kvp.Key}: {kvp.Value}");
+                }
+            }
+        }
+
+
+
+        public static Dictionary<string, object> ReadJsonFile(string filePath = "", bool isPayload = false)
+        {
+            var directory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            var path = System.IO.Path.Combine(directory, $"Resources/{filePath}");
+            var jsonString = File.ReadAllText(path);
+            // TODO: Resolve need to use different deserializers
+            var dict = (isPayload) ? JsonConvert.DeserializeObject<Dictionary<string, object>>(
+                jsonString,
+                new JsonConverter[] { new GraphQLResponse.Deserializer() }
+
+            ) :
+            JsonConvert.DeserializeObject<Dictionary<string, object>>(
+                jsonString,
+                new JsonToDictionaryDeserializer()
+            )
+            ;
+            return dict;
+        }
+
+        public static GraphQLResponse ReadGraphQLResponse(string filePath = "", bool isPayload = false)
+        {
+            var dict = ReadJsonFile(filePath, isPayload);
+            GraphQLResponse response = new GraphQLResponse();
+            if (dict.ContainsKey("data"))
+            {
+                response.data = (Dictionary<string, object>)dict["data"];
+            }
+            if (dict.ContainsKey("errors"))
+            {
+                var errorList = (List<Dictionary<string, object>>)dict["errors"];
+                response.errors = new List<GraphQLError>();
+                foreach (var err in errorList)
+                {
+                    var gqlError = new GraphQLError();
+                    if (err.ContainsKey("message"))
+                    {
+                        gqlError.message = err["message"].ToString();
+                    }
+                    if (err.ContainsKey("extensions"))
+                    {
+                        gqlError.extensions = (Dictionary<string, object>)err["extensions"];
+
+                    }
+                    response.errors.Add(gqlError);
+                }
+            }
+            return response;
+        }
+
+
+
+
+        public static JObject ReadResponseFromJsonResource(string resourcePath)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            var adjustedResourcePath = resourcePath.Replace("/", "."); //Replaces '/' with '.'
+            using (var stream = assembly.GetManifestResourceStream(adjustedResourcePath))
+            {
+                if (stream == null)
+                {
+                    throw new FileNotFoundException($"Resource not found: {resourcePath}");
+                }
+
+                using (var reader = new StreamReader(stream))
+                {
+                    var jsonString = reader.ReadToEnd();
+                    return JObject.Parse(jsonString);
+                }
+            }
         }
 
 #if netcore
         public static string GetResponseContent(HttpResponseMessage response)
         {
             using (var reader = new StreamReader(response.Content.ReadAsStreamAsync().Result))
-            return reader.ReadToEnd();
+                return reader.ReadToEnd();
         }
 
         public static string extractParamFromJson(string keyName, HttpResponseMessage response)
@@ -235,14 +377,22 @@ namespace Braintree.TestUtil
             return keyValue;
         }
 
-        public static string GenerateAuthorizationFingerprint(BraintreeGateway gateway, string customerId = null) {
-            var clientTokenRequest = customerId == null ? null : new ClientTokenRequest { CustomerId = customerId };
+        public static string GenerateAuthorizationFingerprint(
+            BraintreeGateway gateway,
+            string customerId = null
+        )
+        {
+            var clientTokenRequest =
+                customerId == null ? null : new ClientTokenRequest { CustomerId = customerId };
             var clientToken = GenerateDecodedClientToken(gateway, clientTokenRequest);
 
             return extractParamFromJson("authorizationFingerprint", clientToken);
         }
 
-        public static string GetNonceForPayPalAccount(BraintreeGateway gateway, Params paypalAccountDetails)
+        public static string GetNonceForPayPalAccount(
+            BraintreeGateway gateway,
+            Params paypalAccountDetails
+        )
         {
             var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             var builder = new RequestBuilder();
@@ -250,10 +400,17 @@ namespace Braintree.TestUtil
             foreach (var param in paypalAccountDetails)
                 builder.AddTopLevelElement($"paypal_account[{param.Key}]", param.Value.ToString());
 
-            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+            var response = new BraintreeTestHttpService().Post(
+                gateway.MerchantId,
+                "v1/payment_methods/paypal_accounts",
+                builder.ToQueryString()
+            );
 
 #if netcore
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            StreamReader reader = new StreamReader(
+                response.Content.ReadAsStreamAsync().Result,
+                Encoding.UTF8
+            );
             string responseBody = reader.ReadToEnd();
             return extractParamFromJson("nonce", responseBody);
 #else
@@ -261,55 +418,78 @@ namespace Braintree.TestUtil
 #endif
         }
 
-        public static string GetNonceForNewCreditCard(BraintreeGateway gateway, Params creditCardDetails, string customerId = null)
+        public static string GetNonceForNewCreditCard(
+            BraintreeGateway gateway,
+            Params creditCardDetails,
+            string customerId = null
+        )
         {
             var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway, customerId);
 
             var builder = new RequestBuilder();
-            builder.
-                AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-                AddTopLevelElement("shared_customer_identifier", "test-identifier").
-                AddTopLevelElement("shared_customer_identifier_type", "testing");
+            builder
+                .AddTopLevelElement("authorization_fingerprint", authorizationFingerprint)
+                .AddTopLevelElement("shared_customer_identifier", "test-identifier")
+                .AddTopLevelElement("shared_customer_identifier_type", "testing");
 
-            foreach (var param in creditCardDetails) {
+            foreach (var param in creditCardDetails)
+            {
                 var nested = param.Value as Params;
-                if (null != nested) {
-                    foreach (var nestedParam in nested) {
-                        builder.AddTopLevelElement($"credit_card[{param.Key}][{nestedParam.Key}]", nestedParam.Value.ToString());
+                if (null != nested)
+                {
+                    foreach (var nestedParam in nested)
+                    {
+                        builder.AddTopLevelElement(
+                            $"credit_card[{param.Key}][{nestedParam.Key}]",
+                            nestedParam.Value.ToString()
+                        );
                     }
-                } else
+                }
+                else
                     builder.AddTopLevelElement($"credit_card[{param.Key}]", param.Value.ToString());
             }
 
             var response = new BraintreeTestHttpService().Post(
                 gateway.MerchantId,
                 "v1/payment_methods/credit_cards",
-                builder.ToQueryString());
+                builder.ToQueryString()
+            );
 
             return extractParamFromJson("nonce", response);
         }
 
-        public static string GetNonceForNewPaymentMethod(BraintreeGateway gateway, Params @params, bool isCreditCard)
+        public static string GetNonceForNewPaymentMethod(
+            BraintreeGateway gateway,
+            Params @params,
+            bool isCreditCard
+        )
         {
             var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
 
             var paymentMethodType = isCreditCard ? "credit_card" : "paypal_account";
             var paymentMethodTypePlural = paymentMethodType + "s";
             var builder = new RequestBuilder();
-            builder.
-                AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-                AddTopLevelElement("shared_customer_identifier", "test-identifier").
-                AddTopLevelElement("shared_customer_identifier_type", "testing");
+            builder
+                .AddTopLevelElement("authorization_fingerprint", authorizationFingerprint)
+                .AddTopLevelElement("shared_customer_identifier", "test-identifier")
+                .AddTopLevelElement("shared_customer_identifier_type", "testing");
             foreach (var param in @params)
-                builder.AddTopLevelElement($"{paymentMethodType}[{param.Key}]", param.Value.ToString());
+                builder.AddTopLevelElement(
+                    $"{paymentMethodType}[{param.Key}]",
+                    param.Value.ToString()
+                );
 
             var response = new BraintreeTestHttpService().Post(
                 gateway.MerchantId,
                 "v1/payment_methods/" + paymentMethodTypePlural,
-                builder.ToQueryString());
+                builder.ToQueryString()
+            );
 
 #if netcore
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            StreamReader reader = new StreamReader(
+                response.Content.ReadAsStreamAsync().Result,
+                Encoding.UTF8
+            );
             string responseBody = reader.ReadToEnd();
             return extractParamFromJson("nonce", responseBody);
 #else
@@ -317,23 +497,35 @@ namespace Braintree.TestUtil
 #endif
         }
 
-        public static string GenerateUnlockedNonce(BraintreeGateway gateway, string creditCardNumber, string customerId)
+        public static string GenerateUnlockedNonce(
+            BraintreeGateway gateway,
+            string creditCardNumber,
+            string customerId
+        )
         {
             var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway, customerId);
 
             RequestBuilder builder = new RequestBuilder("");
-            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-            AddTopLevelElement("shared_customer_identifier_type", "testing").
-            AddTopLevelElement("shared_customer_identifier", "test-identifier").
-            AddTopLevelElement("credit_card[number]", creditCardNumber).
-            AddTopLevelElement("share", "true").
-            AddTopLevelElement("credit_card[expiration_month]", "11").
-            AddTopLevelElement("credit_card[expiration_year]", "2099");
+            builder
+                .AddTopLevelElement("authorization_fingerprint", authorizationFingerprint)
+                .AddTopLevelElement("shared_customer_identifier_type", "testing")
+                .AddTopLevelElement("shared_customer_identifier", "test-identifier")
+                .AddTopLevelElement("credit_card[number]", creditCardNumber)
+                .AddTopLevelElement("share", "true")
+                .AddTopLevelElement("credit_card[expiration_month]", "11")
+                .AddTopLevelElement("credit_card[expiration_year]", "2099");
 
-            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/credit_cards", builder.ToQueryString());
+            var response = new BraintreeTestHttpService().Post(
+                gateway.MerchantId,
+                "v1/payment_methods/credit_cards",
+                builder.ToQueryString()
+            );
 
 #if netcore
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            StreamReader reader = new StreamReader(
+                response.Content.ReadAsStreamAsync().Result,
+                Encoding.UTF8
+            );
 #else
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
 #endif
@@ -353,17 +545,25 @@ namespace Braintree.TestUtil
         {
             var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             RequestBuilder builder = new RequestBuilder("");
-            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-                AddTopLevelElement("shared_customer_identifier_type", "testing").
-                AddTopLevelElement("shared_customer_identifier", "test-identifier").
-                AddTopLevelElement("paypal_account[access_token]", "access_token").
-                AddTopLevelElement("paypal_account[correlation_id]", Guid.NewGuid().ToString()).
-                AddTopLevelElement("paypal_account[options][validate]", "false");
+            builder
+                .AddTopLevelElement("authorization_fingerprint", authorizationFingerprint)
+                .AddTopLevelElement("shared_customer_identifier_type", "testing")
+                .AddTopLevelElement("shared_customer_identifier", "test-identifier")
+                .AddTopLevelElement("paypal_account[access_token]", "access_token")
+                .AddTopLevelElement("paypal_account[correlation_id]", Guid.NewGuid().ToString())
+                .AddTopLevelElement("paypal_account[options][validate]", "false");
 
-            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+            var response = new BraintreeTestHttpService().Post(
+                gateway.MerchantId,
+                "v1/payment_methods/paypal_accounts",
+                builder.ToQueryString()
+            );
 
 #if netcore
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            StreamReader reader = new StreamReader(
+                response.Content.ReadAsStreamAsync().Result,
+                Encoding.UTF8
+            );
 #else
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
 #endif
@@ -380,17 +580,25 @@ namespace Braintree.TestUtil
         {
             var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             RequestBuilder builder = new RequestBuilder("");
-            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-                AddTopLevelElement("shared_customer_identifier_type", "testing").
-                AddTopLevelElement("shared_customer_identifier", "test-identifier").
-                AddTopLevelElement("paypal_account[consent_code]", "consent").
-                AddTopLevelElement("paypal_account[correlation_id]", Guid.NewGuid().ToString()).
-                AddTopLevelElement("paypal_account[options][validate]", "false");
+            builder
+                .AddTopLevelElement("authorization_fingerprint", authorizationFingerprint)
+                .AddTopLevelElement("shared_customer_identifier_type", "testing")
+                .AddTopLevelElement("shared_customer_identifier", "test-identifier")
+                .AddTopLevelElement("paypal_account[consent_code]", "consent")
+                .AddTopLevelElement("paypal_account[correlation_id]", Guid.NewGuid().ToString())
+                .AddTopLevelElement("paypal_account[options][validate]", "false");
 
-            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+            var response = new BraintreeTestHttpService().Post(
+                gateway.MerchantId,
+                "v1/payment_methods/paypal_accounts",
+                builder.ToQueryString()
+            );
 
 #if netcore
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            StreamReader reader = new StreamReader(
+                response.Content.ReadAsStreamAsync().Result,
+                Encoding.UTF8
+            );
 #else
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
 #endif
@@ -407,17 +615,25 @@ namespace Braintree.TestUtil
         {
             var authorizationFingerprint = GenerateAuthorizationFingerprint(gateway);
             RequestBuilder builder = new RequestBuilder("");
-            builder.AddTopLevelElement("authorization_fingerprint", authorizationFingerprint).
-                AddTopLevelElement("shared_customer_identifier_type", "testing").
-                AddTopLevelElement("shared_customer_identifier", "test-identifier").
-                AddTopLevelElement("paypal_account[intent]", "order").
-                AddTopLevelElement("paypal_account[payment_token]", Guid.NewGuid().ToString()).
-                AddTopLevelElement("paypal_account[payer_id]", "false");
+            builder
+                .AddTopLevelElement("authorization_fingerprint", authorizationFingerprint)
+                .AddTopLevelElement("shared_customer_identifier_type", "testing")
+                .AddTopLevelElement("shared_customer_identifier", "test-identifier")
+                .AddTopLevelElement("paypal_account[intent]", "order")
+                .AddTopLevelElement("paypal_account[payment_token]", Guid.NewGuid().ToString())
+                .AddTopLevelElement("paypal_account[payer_id]", "false");
 
-            var response = new BraintreeTestHttpService().Post(gateway.MerchantId, "v1/payment_methods/paypal_accounts", builder.ToQueryString());
+            var response = new BraintreeTestHttpService().Post(
+                gateway.MerchantId,
+                "v1/payment_methods/paypal_accounts",
+                builder.ToQueryString()
+            );
 
 #if netcore
-            StreamReader reader = new StreamReader(response.Content.ReadAsStreamAsync().Result, Encoding.UTF8);
+            StreamReader reader = new StreamReader(
+                response.Content.ReadAsStreamAsync().Result,
+                Encoding.UTF8
+            );
 #else
             StreamReader reader = new StreamReader(response.GetResponseStream(), Encoding.UTF8);
 #endif
@@ -430,18 +646,28 @@ namespace Braintree.TestUtil
             return match.Groups["nonce"].Value;
         }
 
-        public static string Create3DSVerification(BraintreeService service, string merchantAccountId, ThreeDSecureRequestForTests request)
+        public static string Create3DSVerification(
+            BraintreeService service,
+            string merchantAccountId,
+            ThreeDSecureRequestForTests request
+        )
         {
             string url = "/three_d_secure/create_verification/" + merchantAccountId;
-            NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + url, request));
+            NodeWrapper response = new NodeWrapper(
+                service.Post(service.MerchantPath() + url, request)
+            );
             Assert.IsTrue(response.IsSuccess());
             return response.GetString("three-d-secure-authentication-id");
         }
 
         public static string Generate3DSNonce(BraintreeService service, CreditCardRequest request)
         {
-            string url = "/three_d_secure/create_nonce/" + MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID;
-            NodeWrapper response = new NodeWrapper(service.Post(service.MerchantPath() + url, request));
+            string url =
+                "/three_d_secure/create_nonce/"
+                + MerchantAccountIDs.THREE_D_SECURE_MERCHANT_ACCOUNT_ID;
+            NodeWrapper response = new NodeWrapper(
+                service.Post(service.MerchantPath() + url, request)
+            );
             Assert.IsTrue(response.IsSuccess());
             return response.GetString("nonce");
         }
@@ -466,11 +692,10 @@ namespace Braintree.TestUtil
         public static string CreateGrant(BraintreeGateway gateway, string merchantId, string scope)
         {
             var service = new BraintreeService(gateway.Configuration);
-            XmlNode node = service.Post("/oauth_testing/grants", new OAuthGrantRequest
-            {
-                MerchantId = merchantId,
-                Scope = scope
-            });
+            XmlNode node = service.Post(
+                "/oauth_testing/grants",
+                new OAuthGrantRequest { MerchantId = merchantId, Scope = scope }
+            );
 
             return node["code"].InnerText;
         }
@@ -491,15 +716,30 @@ namespace Braintree.TestUtil
             return GetJsonResponse(MerchantId, URL, "POST", requestBody);
         }
 
-        private HttpResponseMessage GetJsonResponse(string MerchantId, string Path, string method, string requestBody)
+        private HttpResponseMessage GetJsonResponse(
+            string MerchantId,
+            string Path,
+            string method,
+            string requestBody
+        )
         {
-
             try
             {
-                var request = new HttpRequestMessage(new HttpMethod(method), Environment.DEVELOPMENT.GatewayURL + "/merchants/" + MerchantId + "/client_api/" + Path);
+                var request = new HttpRequestMessage(
+                    new HttpMethod(method),
+                    Environment.DEVELOPMENT.GatewayURL
+                        + "/merchants/"
+                        + MerchantId
+                        + "/client_api/"
+                        + Path
+                );
                 request.Headers.Add("X-ApiVersion", ApiVersion);
                 request.Headers.Add("Accept", "application/xml");
-                request.Headers.Add("UserAgent", "Braintree .NET " + typeof(TestHelper).GetTypeInfo().Assembly.GetName().Version.ToString());
+                request.Headers.Add(
+                    "UserAgent",
+                    "Braintree .NET "
+                        + typeof(TestHelper).GetTypeInfo().Assembly.GetName().Version.ToString()
+                );
                 request.Headers.Add("KeepAlive", "false");
                 request.Headers.Add("Timeout", "60000");
                 request.Headers.Add("ReadWriteTimeout", "60000");
@@ -508,13 +748,20 @@ namespace Braintree.TestUtil
                 {
                     var content = requestBody;
                     var utf8_string = Encoding.UTF8.GetString(Encoding.UTF8.GetBytes(requestBody));
-                    request.Content = new StringContent(utf8_string, Encoding.UTF8,"application/x-www-form-urlencoded");
-                    request.Content.Headers.ContentLength = UTF8Encoding.UTF8.GetByteCount(utf8_string);
+                    request.Content = new StringContent(
+                        utf8_string,
+                        Encoding.UTF8,
+                        "application/x-www-form-urlencoded"
+                    );
+                    request.Content.Headers.ContentLength = UTF8Encoding.UTF8.GetByteCount(
+                        utf8_string
+                    );
                 }
 
                 var httpClientHandler = new HttpClientHandler
                 {
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    AutomaticDecompression =
+                        DecompressionMethods.GZip | DecompressionMethods.Deflate,
                 };
 
                 HttpResponseMessage response;
@@ -530,8 +777,13 @@ namespace Braintree.TestUtil
             {
                 var errorWebResponse = e.Response as HttpWebResponse;
                 var errorResponseMessage = new HttpResponseMessage(errorWebResponse.StatusCode);
-                errorResponseMessage.Content = new StringContent(e.Response.ToString(), Encoding.UTF8, "application/json");
-                if (errorWebResponse == null) throw e;
+                errorResponseMessage.Content = new StringContent(
+                    e.Response.ToString(),
+                    Encoding.UTF8,
+                    "application/json"
+                );
+                if (errorWebResponse == null)
+                    throw e;
                 return errorResponseMessage;
             }
         }
@@ -546,14 +798,28 @@ namespace Braintree.TestUtil
             return GetJsonResponse(MerchantId, URL, "POST", requestBody);
         }
 
-        private HttpWebResponse GetJsonResponse(string MerchantId, string Path, string method, string requestBody)
+        private HttpWebResponse GetJsonResponse(
+            string MerchantId,
+            string Path,
+            string method,
+            string requestBody
+        )
         {
             try
             {
-                var request = WebRequest.Create(Environment.DEVELOPMENT.GatewayURL + "/merchants/" + MerchantId + "/client_api/" + Path) as HttpWebRequest;
+                var request =
+                    WebRequest.Create(
+                        Environment.DEVELOPMENT.GatewayURL
+                            + "/merchants/"
+                            + MerchantId
+                            + "/client_api/"
+                            + Path
+                    ) as HttpWebRequest;
                 request.Headers.Add("X-ApiVersion", ApiVersion);
                 request.Accept = "application/json";
-                request.UserAgent = "Braintree .NET " + typeof(BraintreeService).Assembly.GetName().Version.ToString();
+                request.UserAgent =
+                    "Braintree .NET "
+                    + typeof(BraintreeService).Assembly.GetName().Version.ToString();
                 request.Method = method;
                 request.KeepAlive = false;
                 request.Timeout = 60000;
@@ -571,15 +837,96 @@ namespace Braintree.TestUtil
                 var response = request.GetResponse() as HttpWebResponse;
                 return response;
             }
-
             catch (WebException e)
             {
                 var response = (HttpWebResponse)e.Response;
-                if (response == null) throw e;
+                if (response == null)
+                    throw e;
                 return response;
             }
         }
 #endif
+    }
 
+    public class JsonToDictionaryDeserializer : CustomCreationConverter<IDictionary<string, object>>
+    {
+        public override IDictionary<string, object> Create(Type objectType)
+        {
+            return new Dictionary<string, object>();
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(object)
+                || objectType == typeof(Dictionary<string, object>)
+                || objectType.IsGenericType
+                    && objectType.GetGenericTypeDefinition() == typeof(List<Dictionary<string, object>>)
+                || objectType.IsGenericType
+                    && objectType.GetGenericTypeDefinition() == typeof(List<>);
+        }
+
+
+        public override object ReadJson(
+            JsonReader reader,
+            Type objectType,
+            object existingValue,
+            JsonSerializer serializer
+        )
+        {
+            if (reader.TokenType == JsonToken.Null)
+            {
+                return null;
+            }
+            if (reader.TokenType == JsonToken.StartObject)
+            {
+                JObject jObject = JObject.Load(reader);
+                return ConvertJObject(jObject);
+            }
+            else if (reader.TokenType == JsonToken.StartArray)
+            {
+                JArray jArray = JArray.Load(reader);
+                return ConvertJArray(jArray);
+            }
+
+            return serializer.Deserialize(reader);
+        }
+
+        private List<Dictionary<string, object>> ConvertJArray(JArray array)
+        {
+            List<Dictionary<string, object>> converted = new List<Dictionary<string, object>>();
+            foreach (var elem in array)
+            {
+                Dictionary<string, object> dict = ConvertJObject((JObject)elem);
+                converted.Add(dict);
+            }
+            return converted;
+        }
+
+        private Dictionary<string, object> ConvertJObject(JObject jObject)
+        {
+            var dict = new Dictionary<string, object>();
+            foreach (var prop in jObject.Properties())
+            {
+                dict.Add(prop.Name, ConvertJToken(prop.Value));
+            }
+
+            return dict;
+        }
+
+        private object ConvertJToken(JToken token)
+        {
+            switch (token.Type)
+            {
+                case JTokenType.Object:
+                    var ret = ConvertJObject((JObject)token);
+                    return ret;
+
+                case JTokenType.Array:
+                    var retArray = ConvertJArray((JArray)token);
+                    return retArray;
+                default:
+                    return token.Value<object>();
+            }
+        }
     }
 }

@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- We can target one version of Net Core, so we're choosing the latest, NET Core 3.1. The library targets Net Standard 2.0 to continue supporting NET Core 2.1. -->
-		<TargetFrameworks>net452;netcoreapp3.1</TargetFrameworks>
+    <!-- We can target one version of Net Core, so we're choosing the latest, NET Core 3.1. The
+    library targets Net Standard 2.0 to continue supporting NET Core 2.1. -->
+    <TargetFrameworks>net452;netcoreapp3.1</TargetFrameworks>
     <AssemblyName>Braintree.Tests</AssemblyName>
     <PackageId>Braintree.Tests</PackageId>
     <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
@@ -24,6 +25,7 @@
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit.Console" Version="3.11.1" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
+    <PackageReference Include="Moq" Version="4.14.5" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">

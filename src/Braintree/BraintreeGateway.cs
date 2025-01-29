@@ -150,6 +150,8 @@ namespace Braintree
 
         public virtual ICustomerGateway Customer => new CustomerGateway(this);
 
+        public virtual ICustomerSessionGateway CustomerSession => new CustomerSessionGateway(this.GraphQLClient);
+
         public virtual IAddressGateway Address => new AddressGateway(this);
 
         public virtual IAddOnGateway AddOn => new AddOnGateway(this);

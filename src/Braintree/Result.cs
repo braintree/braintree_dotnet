@@ -20,6 +20,8 @@ namespace Braintree
 
     public class ResultImpl<T> : Result<T> where T : class
     {
+        private List<ValidationError> validationErrors;
+
         public CreditCardVerification CreditCardVerification { get; protected set; }
         public Transaction Transaction { get; protected set; }
         public Plan Plan { get; protected set; }
@@ -63,6 +65,21 @@ namespace Braintree
                 Parameters = node.GetNode("params").GetFormParameters();
                 Message = node.GetString("message");
             }
+        }
+
+        public ResultImpl(T target)
+        {
+            Target = target;
+        }
+
+        public ResultImpl(ValidationErrors errors)
+        {
+            Errors = errors;
+        }
+
+        public ResultImpl(List<ValidationError> validationErrors)
+        {
+            this.validationErrors = validationErrors;
         }
 
         public virtual bool IsSuccess()

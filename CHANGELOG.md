@@ -1,5 +1,9 @@
 # Changelog 
 
+## 5.30.0
+- Add support for creating and updating PayPal customer session
+- Add support for getting PayPal customer recommendations
+
 ## 5.29.0
 - Add recipient/contact info: `recipient_email`and `recipient_phone` to `Transaction` 
 

@@ -1,13 +1,15 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Braintree
 {
-    public class GraphQLClient
+    public class GraphQLClient: IGraphQLClient
     {
         private readonly BraintreeGraphQLService service;
 
-        public GraphQLClient(Configuration configuration) {
+        public GraphQLClient(Configuration configuration)
+        {
             service = new BraintreeGraphQLService(configuration);
         }
 
@@ -26,7 +28,10 @@ namespace Braintree
             return await QueryAsync(definition, null).ConfigureAwait(false);
         }
 
-        public async Task<GraphQLResponse> QueryAsync(string definition, Dictionary<string, object> variables)
+        public async Task<GraphQLResponse> QueryAsync(
+            string definition,
+            Dictionary<string, object> variables
+        )
         {
             return await service.QueryGraphQLAsync(definition, variables).ConfigureAwait(false);
         }
