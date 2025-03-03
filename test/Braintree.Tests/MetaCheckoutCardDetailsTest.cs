@@ -44,6 +44,7 @@ namespace Braintree.Tests
             builder.Append("<created-at>2023-05-05T21:28:37Z</created-at>");
             builder.Append("<updated-at>2023-05-05T21:28:37Z</updated-at>");
             builder.Append("<prepaid>NO</prepaid>");
+            builder.Append("<prepaid-reloadable>NO</prepaid-reloadable>");
             builder.Append("<payroll>NO</payroll>");
             builder.Append("<debit>NO</debit>");
             builder.Append("<commercial>NO</commercial>");
@@ -57,23 +58,24 @@ namespace Braintree.Tests
 
             MetaCheckoutCardDetails details = new MetaCheckoutCardDetails(new NodeWrapper(doc).GetNode("transaction"));
 
-            Assert.AreEqual("a-bin", details.Bin);
-            Assert.AreEqual("Cardholder", details.CardholderName);
-            Assert.AreEqual("Visa", details.CardType.GetDescription());
             Assert.AreEqual("11", details.ExpirationMonth);
-            Assert.AreEqual("2024", details.ExpirationYear);
-            Assert.AreEqual("us", details.CustomerLocation.GetDescription());
-            Assert.AreEqual(false, details.IsExpired);
+            Assert.AreEqual("1234", details.LastFour);
             Assert.AreEqual("1234", details.UniqueNumberIdentifier);
-            Assert.AreEqual("token1", details.Token);
-            Assert.AreEqual("No", details.Prepaid.GetDescription());
-            Assert.AreEqual("No", details.Payroll.GetDescription());
+            Assert.AreEqual("2024", details.ExpirationYear);
+            Assert.AreEqual("a-bin", details.Bin);
+            Assert.AreEqual("a-container-id", details.ContainerId);
+            Assert.AreEqual("Cardholder", details.CardholderName);
             Assert.AreEqual("No", details.Commercial.GetDescription());
             Assert.AreEqual("No", details.Healthcare.GetDescription());
+            Assert.AreEqual("No", details.Payroll.GetDescription());
+            Assert.AreEqual("No", details.Prepaid.GetDescription());
+            Assert.AreEqual("No", details.PrepaidReloadable.GetDescription());
+            Assert.AreEqual("token1", details.Token);
+            Assert.AreEqual("us", details.CustomerLocation.GetDescription());
+            Assert.AreEqual("Visa", details.CardType.GetDescription());
             Assert.AreEqual(DateTime.Parse("2023-05-05T21:28:37Z"), details.CreatedAt);
             Assert.AreEqual(DateTime.Parse("2023-05-05T21:28:37Z"), details.UpdatedAt);
-            Assert.AreEqual("a-container-id", details.ContainerId);
-            Assert.AreEqual("1234", details.LastFour);
+            Assert.AreEqual(false, details.IsExpired);
         }
     }
 }

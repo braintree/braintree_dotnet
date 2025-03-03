@@ -193,6 +193,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(nonce.BinData.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
             Assert.AreEqual(nonce.BinData.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
             Assert.AreEqual(nonce.BinData.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
+            Assert.AreEqual(nonce.BinData.PrepaidReloadable, Braintree.CreditCardPrepaidReloadable.UNKNOWN);
             Assert.AreEqual(nonce.BinData.CountryOfIssuance, "Unknown");
             Assert.AreEqual(nonce.BinData.IssuingBank, "Unknown");
             Assert.AreEqual(nonce.BinData.ProductId,"Unknown");
@@ -216,6 +217,26 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(nonce.Nonce, inputNonce);
             Assert.IsNotNull(nonce.BinData);
             Assert.AreEqual(nonce.BinData.Prepaid, Braintree.CreditCardPrepaid.YES);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+#if netcore
+        public async Task FindAsync_ExposesBinDataPrepaidReloadableValue()
+#else
+        public void FindAsync_ExposesBinDataPrepaidReloadableValue()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            string inputNonce = Nonce.TransactablePrepaidReloadable;
+            PaymentMethodNonce nonce = await gateway.PaymentMethodNonce.FindAsync(inputNonce);
+            Assert.AreEqual(nonce.Nonce, inputNonce);
+            Assert.IsNotNull(nonce.BinData);
+            Assert.AreEqual(nonce.BinData.PrepaidReloadable, Braintree.CreditCardPrepaidReloadable.YES);
         }
 #if net452
             ).GetAwaiter().GetResult();

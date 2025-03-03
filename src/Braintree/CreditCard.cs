@@ -21,6 +21,13 @@ namespace Braintree
         [Description("Unknown")] UNKNOWN
     }
 
+    public enum CreditCardPrepaidReloadable
+    {
+        [Description("Yes")] YES,
+        [Description("No")] NO,
+        [Description("Unknown")] UNKNOWN
+    }
+
     public enum CreditCardPayroll
     {
         [Description("Yes")] YES,
@@ -97,42 +104,43 @@ namespace Braintree
     /// </example>
     public class CreditCard : PaymentMethod
     {
+
+
+        private string _CountryOfIssuance;
         public static readonly string CountryOfIssuanceUnknown = "Unknown";
         public static readonly string IssuingBankUnknown = "Unknown";
         public static readonly string ProductIdUnknown = "Unknown";
-
-        public virtual string Bin { get; protected set; }
-        public virtual string CardholderName { get; protected set; }
-        public virtual CreditCardCardType CardType { get; protected set; }
-        public virtual DateTime? CreatedAt { get; protected set; }
-        public virtual string CustomerId { get; protected set; }
+        public virtual Address BillingAddress { get; protected set; }
         public virtual bool? IsDefault { get; protected set; }
-        // NEXT_MAJOR_VERSION Remove IsVenmoSdk
+        public virtual bool? IsExpired { get; protected set; }
+        public virtual bool? IsNetworkTokenized { get; protected set; }
+         // NEXT_MAJOR_VERSION Remove IsVenmoSdk
         // The old venmo SDK class has been deprecated
         [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
         public virtual bool? IsVenmoSdk { get; protected set; }
-        public virtual bool? IsExpired { get; protected set; }
-        public virtual bool? IsNetworkTokenized { get; protected set; }
+        public virtual CreditCardCardType CardType { get; protected set; }
+        public virtual CreditCardCommercial Commercial { get; protected set; }
         public virtual CreditCardCustomerLocation CustomerLocation { get; protected set; }
-        public virtual string LastFour { get; protected set; }
-        public virtual string UniqueNumberIdentifier { get; protected set; }
-        public virtual Subscription[] Subscriptions { get; protected set; }
-        public virtual string Token { get; protected set; }
+        public virtual CreditCardDebit Debit { get; protected set; }
+        public virtual CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
+        public virtual CreditCardHealthcare Healthcare { get; protected set; }
+        public virtual CreditCardPayroll Payroll { get; protected set; }
+        public virtual CreditCardPrepaid Prepaid { get; protected set; }
+        public virtual CreditCardPrepaidReloadable PrepaidReloadable { get; protected set; }
+        public virtual CreditCardVerification Verification { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
-        public virtual Address BillingAddress { get; protected set; }
+        public virtual string AccountType { get; protected set; }
+        public virtual string Bin { get; protected set; }
+        public virtual string CardholderName { get; protected set; }
+        public virtual string CustomerId { get; protected set; }
         public virtual string ExpirationMonth { get; protected set; }
         public virtual string ExpirationYear { get; protected set; }
-        public virtual CreditCardPrepaid Prepaid { get; protected set; }
-        public virtual CreditCardPayroll Payroll { get; protected set; }
-        public virtual CreditCardDebit Debit { get; protected set; }
-        public virtual CreditCardCommercial Commercial { get; protected set; }
-        public virtual CreditCardHealthcare Healthcare { get; protected set; }
-        public virtual CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
-        public virtual CreditCardVerification Verification { get; protected set; }
-        public virtual string AccountType { get; protected set; }
-
-        private string _CountryOfIssuance;
+        public virtual string LastFour { get; protected set; }
+        public virtual string Token { get; protected set; }
+        public virtual string UniqueNumberIdentifier { get; protected set; }
+        public virtual Subscription[] Subscriptions { get; protected set; }
 
         public virtual string CountryOfIssuance
         {
@@ -199,38 +207,39 @@ namespace Braintree
         {
             if (node == null) return;
 
+            _CountryOfIssuance = node.GetString("country-of-issuance");
+            _IssuingBank = node.GetString("issuing-bank");
+            _ProductId = node.GetString("product-id");
+            AccountType = node.GetString("account-type");
+            BillingAddress = new Address(node.GetNode("billing-address"));
             Bin = node.GetString("bin");
             CardholderName = node.GetString("cardholder-name");
             CardType = node.GetEnum("card-type", CreditCardCardType.UNRECOGNIZED);
+            Commercial = node.GetEnum("commercial", CreditCardCommercial.UNKNOWN);
+            CreatedAt = node.GetDateTime("created-at");
             CustomerId = node.GetString("customer-id");
+            CustomerLocation = node.GetEnum("customer-location", CreditCardCustomerLocation.UNRECOGNIZED);
+            Debit = node.GetEnum("debit", CreditCardDebit.UNKNOWN);
+            DurbinRegulated = node.GetEnum("durbin-regulated", CreditCardDurbinRegulated.UNKNOWN);
+            ExpirationMonth = node.GetString("expiration-month");
+            ExpirationYear = node.GetString("expiration-year");
+            Healthcare = node.GetEnum("healthcare", CreditCardHealthcare.UNKNOWN);
+            ImageUrl = node.GetString("image-url");
             IsDefault = node.GetBoolean("default");
+            IsExpired = node.GetBoolean("expired");
+            IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
             // NEXT_MAJOR_VERSION Remove this pragma warning when we remove IsVenmoSdk
             // We have this so we can build the SDK without obsolete error messages
             #pragma warning disable 618
             IsVenmoSdk = node.GetBoolean("venmo-sdk");
             #pragma warning restore 618
-            ExpirationMonth = node.GetString("expiration-month");
-            ExpirationYear = node.GetString("expiration-year");
-            IsExpired = node.GetBoolean("expired");
-            IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
-            CustomerLocation = node.GetEnum("customer-location", CreditCardCustomerLocation.UNRECOGNIZED);
             LastFour = node.GetString("last-4");
-            UniqueNumberIdentifier = node.GetString("unique-number-identifier");
-            Token = node.GetString("token");
-            CreatedAt = node.GetDateTime("created-at");
-            UpdatedAt = node.GetDateTime("updated-at");
-            BillingAddress = new Address(node.GetNode("billing-address"));
-            Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
             Payroll = node.GetEnum("payroll", CreditCardPayroll.UNKNOWN);
-            DurbinRegulated = node.GetEnum("durbin-regulated", CreditCardDurbinRegulated.UNKNOWN);
-            Debit = node.GetEnum("debit", CreditCardDebit.UNKNOWN);
-            Commercial = node.GetEnum("commercial", CreditCardCommercial.UNKNOWN);
-            Healthcare = node.GetEnum("healthcare", CreditCardHealthcare.UNKNOWN);
-            AccountType = node.GetString("account-type");
-            _CountryOfIssuance = node.GetString("country-of-issuance");
-            _IssuingBank = node.GetString("issuing-bank");
-            _ProductId = node.GetString("product-id");
-            ImageUrl = node.GetString("image-url");
+            Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
+            PrepaidReloadable = node.GetEnum("prepaid-reloadable", CreditCardPrepaidReloadable.UNKNOWN);
+            Token = node.GetString("token");
+            UniqueNumberIdentifier = node.GetString("unique-number-identifier");
+            UpdatedAt = node.GetDateTime("updated-at");
 
             var subscriptionXmlNodes = node.GetList("subscriptions/subscription");
             Subscriptions = new Subscription[subscriptionXmlNodes.Count];

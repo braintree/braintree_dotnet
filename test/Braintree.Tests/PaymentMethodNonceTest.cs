@@ -97,11 +97,9 @@ namespace Braintree.Tests
                 "<payment-method-nonce>" +
                 "  <type>AndroidPayCard</type>" +
                 "  <nonce>fake-android-pay-nonce</nonce>" +
-                "  <description></description>" +
-                "  <consumed type=\"boolean\">false</consumed>" +
-                "  <details>" +
-                "    <is-network-tokenized>true</is-network-tokenized>" +
-                "  </details>" +
+                "  <bin-data>" +
+                "    <prepaid-reloadable>NO</prepaid-reloadable>" +
+                "  </bin-data>" +
                 "</payment-method-nonce>";
 
             XmlDocument doc = new XmlDocument();
@@ -115,8 +113,7 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target);
             Assert.AreEqual("fake-android-pay-nonce", result.Target.Nonce);
             Assert.AreEqual("AndroidPayCard", result.Target.Type);
-            Assert.IsNotNull(result.Target.Details);
-            Assert.IsTrue(result.Target.Details.IsNetworkTokenized);
+            Assert.AreEqual(Braintree.CreditCardPrepaidReloadable.NO, result.Target.BinData.PrepaidReloadable);
         }
 
         [Test]
@@ -242,6 +239,7 @@ namespace Braintree.Tests
                 "    <commercial>Unknown</commercial>" +
                 "    <payroll>Unknown</payroll>" +
                 "    <prepaid>NO</prepaid>" +
+                "    <prepaid-reloadable>NO</prepaid-reloadable>" +
                 "    <issuing-bank>Unknown</issuing-bank>" +
                 "    <country-of-issuance>Something</country-of-issuance>" +
                 "    <product-id>123</product-id>" +
@@ -256,21 +254,22 @@ namespace Braintree.Tests
 
             var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
 
-            Assert.IsNotNull(result.Target);
-            Assert.AreEqual("fake-valid-nonce", result.Target.Nonce);
+            Assert.AreEqual("123", result.Target.BinData.ProductId);
             Assert.AreEqual("CreditCard", result.Target.Type);
-            Assert.IsNull(result.Target.ThreeDSecureInfo);
-            Assert.IsNull(result.Target.Details);
-            Assert.IsNotNull(result.Target.BinData);
+            Assert.AreEqual("fake-valid-nonce", result.Target.Nonce);
+            Assert.AreEqual("Something", result.Target.BinData.CountryOfIssuance);
+            Assert.AreEqual("Unknown", result.Target.BinData.IssuingBank);
             Assert.AreEqual(Braintree.CreditCardCommercial.UNKNOWN, result.Target.BinData.Commercial);
             Assert.AreEqual(Braintree.CreditCardDebit.NO, result.Target.BinData.Debit);
             Assert.AreEqual(Braintree.CreditCardDurbinRegulated.UNKNOWN, result.Target.BinData.DurbinRegulated);
             Assert.AreEqual(Braintree.CreditCardHealthcare.YES, result.Target.BinData.Healthcare);
             Assert.AreEqual(Braintree.CreditCardPayroll.UNKNOWN, result.Target.BinData.Payroll);
             Assert.AreEqual(Braintree.CreditCardPrepaid.NO, result.Target.BinData.Prepaid);
-            Assert.AreEqual("Something", result.Target.BinData.CountryOfIssuance);
-            Assert.AreEqual("123", result.Target.BinData.ProductId);
-            Assert.AreEqual("Unknown", result.Target.BinData.IssuingBank);
+            Assert.AreEqual(Braintree.CreditCardPrepaidReloadable.NO, result.Target.BinData.PrepaidReloadable);
+            Assert.IsNotNull(result.Target.BinData);
+            Assert.IsNotNull(result.Target);
+            Assert.IsNull(result.Target.Details);
+            Assert.IsNull(result.Target.ThreeDSecureInfo);
         }
 
         [Test]
@@ -366,6 +365,32 @@ namespace Braintree.Tests
             Assert.IsNotNull(result.Target);
             Assert.AreEqual("foo", result.Target.AuthenticationInsight.ScaIndicator);
             Assert.AreEqual("bar", result.Target.AuthenticationInsight.RegulationEnvironment);
+        }
+
+        [Test]
+        public void ParsesPrepaidReloadableWithVisaCheckoutCardDetails()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                "<payment-method-nonce>" +
+                "  <type>VisaCheckoutCard</type>" +
+                "  <nonce>fake-visa-checkout-visa-nonce</nonce>" +
+                "  <bin-data>" +
+                "    <prepaid-reloadable>NO</prepaid-reloadable>" +
+                "  </bin-data>" +
+                "</payment-method-nonce>";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+
+            var result = new ResultImpl<PaymentMethodNonce>(node, gateway);
+
+            Assert.IsNotNull(result.Target);
+            Assert.AreEqual("fake-visa-checkout-visa-nonce", result.Target.Nonce);
+            Assert.AreEqual("VisaCheckoutCard", result.Target.Type);
+            Assert.AreEqual(Braintree.CreditCardPrepaidReloadable.NO, result.Target.BinData.PrepaidReloadable);
         }
     }
 }

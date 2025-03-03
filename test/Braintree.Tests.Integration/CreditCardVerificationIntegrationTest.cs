@@ -547,14 +547,15 @@ namespace Braintree.Tests.Integration
 
             CreditCardVerification verification = collection.FirstItem;
 
-            Assert.AreEqual(verification.CreditCard.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.CountryOfIssuance, Braintree.CreditCard.CountryOfIssuanceUnknown);
             Assert.AreEqual(verification.CreditCard.Debit, Braintree.CreditCardDebit.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.DurbinRegulated, Braintree.CreditCardDurbinRegulated.UNKNOWN);
-            Assert.AreEqual(verification.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
-            Assert.AreEqual(verification.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
-            Assert.AreEqual(verification.CreditCard.CountryOfIssuance, Braintree.CreditCard.CountryOfIssuanceUnknown);
             Assert.AreEqual(verification.CreditCard.IssuingBank, Braintree.CreditCard.IssuingBankUnknown);
+            Assert.AreEqual(verification.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.PrepaidReloadable, Braintree.CreditCardPrepaidReloadable.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.ProductId, Braintree.CreditCard.ProductIdUnknown);
 
         }

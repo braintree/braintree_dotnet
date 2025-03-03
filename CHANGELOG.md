@@ -1,4 +1,8 @@
-# Changelog 
+# Changelog
+
+## 5.31.0
+- Add support for `PayPalPaymentResource` requests
+- Add `prepaid_reloadable` from the bin data to credit card responses
 
 ## 5.30.0
 - Add support for creating and updating PayPal customer session

@@ -3524,25 +3524,26 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsTrue(result.IsSuccess());
 
-            Assert.IsNotNull(result.Target.ApplePayDetails);
-            Assert.IsNotNull(result.Target.ApplePayDetails.CardType);
-            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationMonth);
-            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Bin);
             Assert.IsNotNull(result.Target.ApplePayDetails.CardholderName);
-            Assert.IsNotNull(result.Target.ApplePayDetails.LastFour);
-            Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
-            Assert.IsNotNull(result.Target.ApplePayDetails.SourceDescription);
-            Assert.IsNotNull(result.Target.ApplePayDetails.ImageUrl);
-            Assert.IsNotNull(result.Target.ApplePayDetails.Prepaid);
-            Assert.IsNotNull(result.Target.ApplePayDetails.Healthcare);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CardType);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Commercial);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CountryOfIssuance);
             Assert.IsNotNull(result.Target.ApplePayDetails.Debit);
             Assert.IsNotNull(result.Target.ApplePayDetails.DurbinRegulated);
-            Assert.IsNotNull(result.Target.ApplePayDetails.Commercial);
-            Assert.IsNotNull(result.Target.ApplePayDetails.Payroll);
-            Assert.IsNotNull(result.Target.ApplePayDetails.ProductId);
-            Assert.IsNotNull(result.Target.ApplePayDetails.Bin);
-            Assert.IsNotNull(result.Target.ApplePayDetails.CountryOfIssuance);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationMonth);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Healthcare);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ImageUrl);
             Assert.IsNotNull(result.Target.ApplePayDetails.IssuingBank);
+            Assert.IsNotNull(result.Target.ApplePayDetails.LastFour);
+            Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Payroll);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Prepaid);
+            Assert.IsNotNull(result.Target.ApplePayDetails.PrepaidReloadable);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ProductId);
+            Assert.IsNotNull(result.Target.ApplePayDetails.SourceDescription);
+            Assert.IsNotNull(result.Target.ApplePayDetails);
         }
 
         [Test]
@@ -3558,19 +3559,20 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual(PaymentInstrumentType.META_CHECKOUT_CARD, result.Target.PaymentInstrumentType);
             Assert.IsNotNull(result.Target.MetaCheckoutCardDetails);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.CardType);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ExpirationMonth);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ExpirationYear);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.CardholderName);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.LastFour);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ImageUrl);
             Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Bin);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Prepaid);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Healthcare);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.CardholderName);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.CardType);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Commercial);
             Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Debit);
             Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.DurbinRegulated);
-            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Commercial);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ExpirationMonth);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ExpirationYear);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Healthcare);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ImageUrl);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.LastFour);
             Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Payroll);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.Prepaid);
+            Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.PrepaidReloadable);
             Assert.IsNotNull(result.Target.MetaCheckoutCardDetails.ProductId);
         }
 
@@ -3586,23 +3588,24 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
 
             Assert.AreEqual(PaymentInstrumentType.META_CHECKOUT_TOKEN, result.Target.PaymentInstrumentType);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Bin);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.CardholderName);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.CardType);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Commercial);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Cryptogram);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Debit);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.DurbinRegulated);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ECommerceIndicator);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ExpirationMonth);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ExpirationYear);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.CardholderName);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.LastFour);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ImageUrl);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Bin);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Prepaid);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Healthcare);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Debit);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.DurbinRegulated);
-            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Commercial);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ImageUrl);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.LastFour);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Payroll);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.Prepaid);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.PrepaidReloadable);
             Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails.ProductId);
+            Assert.IsNotNull(result.Target.MetaCheckoutTokenDetails);
         }
 
         [Test]
@@ -3646,29 +3649,30 @@ namespace Braintree.Tests.Integration
             Assert.IsInstanceOf(typeof(AndroidPayDetails), result.Target.AndroidPayDetails);
             AndroidPayDetails androidPayDetails = (AndroidPayDetails)result.Target.AndroidPayDetails;
 
-            Assert.IsNull(androidPayDetails.Token);
-            Assert.IsNotNull(androidPayDetails.ImageUrl);
-            Assert.IsNotNull(androidPayDetails.CardType);
-            Assert.IsNotNull(androidPayDetails.VirtualCardType);
-            Assert.IsNotNull(androidPayDetails.SourceCardType);
-            Assert.IsNotNull(androidPayDetails.Last4);
-            Assert.IsNotNull(androidPayDetails.VirtualCardLast4);
-            Assert.IsNotNull(androidPayDetails.SourceCardLast4);
-            Assert.IsNotNull(androidPayDetails.SourceDescription);
+            Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
             Assert.IsNotNull(androidPayDetails.Bin);
+            Assert.IsNotNull(androidPayDetails.CardType);
+            Assert.IsNotNull(androidPayDetails.Commercial);
+            Assert.IsNotNull(androidPayDetails.CountryOfIssuance);
+            Assert.IsNotNull(androidPayDetails.Debit);
+            Assert.IsNotNull(androidPayDetails.DurbinRegulated);
             Assert.IsNotNull(androidPayDetails.ExpirationMonth);
             Assert.IsNotNull(androidPayDetails.ExpirationYear);
             Assert.IsNotNull(androidPayDetails.GoogleTransactionId);
-            Assert.IsNotNull(androidPayDetails.Prepaid);
             Assert.IsNotNull(androidPayDetails.Healthcare);
-            Assert.IsNotNull(androidPayDetails.Debit);
-            Assert.IsNotNull(androidPayDetails.DurbinRegulated);
-            Assert.IsNotNull(androidPayDetails.Commercial);
-            Assert.IsNotNull(androidPayDetails.Payroll);
-            Assert.IsNotNull(androidPayDetails.ProductId);
-            Assert.IsNotNull(androidPayDetails.CountryOfIssuance);
+            Assert.IsNotNull(androidPayDetails.ImageUrl);
             Assert.IsNotNull(androidPayDetails.IssuingBank);
-            Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
+            Assert.IsNotNull(androidPayDetails.Last4);
+            Assert.IsNotNull(androidPayDetails.Payroll);
+            Assert.IsNotNull(androidPayDetails.Prepaid);
+            Assert.IsNotNull(androidPayDetails.PrepaidReloadable);
+            Assert.IsNotNull(androidPayDetails.ProductId);
+            Assert.IsNotNull(androidPayDetails.SourceCardLast4);
+            Assert.IsNotNull(androidPayDetails.SourceCardType);
+            Assert.IsNotNull(androidPayDetails.SourceDescription);
+            Assert.IsNotNull(androidPayDetails.VirtualCardLast4);
+            Assert.IsNotNull(androidPayDetails.VirtualCardType);
+            Assert.IsNull(androidPayDetails.Token);
         }
 
         [Test]
@@ -3687,29 +3691,30 @@ namespace Braintree.Tests.Integration
             Assert.IsInstanceOf(typeof(AndroidPayDetails), result.Target.AndroidPayDetails);
             AndroidPayDetails androidPayDetails = result.Target.AndroidPayDetails;
 
-            Assert.IsNull(androidPayDetails.Token);
-            Assert.IsNotNull(androidPayDetails.ImageUrl);
-            Assert.IsNotNull(androidPayDetails.CardType);
-            Assert.IsNotNull(androidPayDetails.VirtualCardType);
-            Assert.IsNotNull(androidPayDetails.SourceCardType);
-            Assert.IsNotNull(androidPayDetails.Last4);
-            Assert.IsNotNull(androidPayDetails.VirtualCardLast4);
-            Assert.IsNotNull(androidPayDetails.SourceCardLast4);
-            Assert.IsNotNull(androidPayDetails.SourceDescription);
+            Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
             Assert.IsNotNull(androidPayDetails.Bin);
+            Assert.IsNotNull(androidPayDetails.CardType);
+            Assert.IsNotNull(androidPayDetails.Commercial);
+            Assert.IsNotNull(androidPayDetails.CountryOfIssuance);
+            Assert.IsNotNull(androidPayDetails.Debit);
+            Assert.IsNotNull(androidPayDetails.DurbinRegulated);
             Assert.IsNotNull(androidPayDetails.ExpirationMonth);
             Assert.IsNotNull(androidPayDetails.ExpirationYear);
             Assert.IsNotNull(androidPayDetails.GoogleTransactionId);
-            Assert.IsNotNull(androidPayDetails.Prepaid);
             Assert.IsNotNull(androidPayDetails.Healthcare);
-            Assert.IsNotNull(androidPayDetails.Debit);
-            Assert.IsNotNull(androidPayDetails.DurbinRegulated);
-            Assert.IsNotNull(androidPayDetails.Commercial);
-            Assert.IsNotNull(androidPayDetails.Payroll);
-            Assert.IsNotNull(androidPayDetails.ProductId);
-            Assert.IsNotNull(androidPayDetails.CountryOfIssuance);
+            Assert.IsNotNull(androidPayDetails.ImageUrl);
             Assert.IsNotNull(androidPayDetails.IssuingBank);
-            Assert.IsFalse(androidPayDetails.IsNetworkTokenized);
+            Assert.IsNotNull(androidPayDetails.Last4);
+            Assert.IsNotNull(androidPayDetails.Payroll);
+            Assert.IsNotNull(androidPayDetails.Prepaid);
+            Assert.IsNotNull(androidPayDetails.PrepaidReloadable);
+            Assert.IsNotNull(androidPayDetails.ProductId);
+            Assert.IsNotNull(androidPayDetails.SourceCardLast4);
+            Assert.IsNotNull(androidPayDetails.SourceCardType);
+            Assert.IsNotNull(androidPayDetails.SourceDescription);
+            Assert.IsNotNull(androidPayDetails.VirtualCardLast4);
+            Assert.IsNotNull(androidPayDetails.VirtualCardType);
+            Assert.IsNull(androidPayDetails.Token);
         }
 
         [Test]
@@ -10000,12 +10005,13 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             Transaction transaction = result.Target;
 
-            Assert.AreEqual(transaction.CreditCard.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
+            Assert.AreEqual(transaction.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.Debit, Braintree.CreditCardDebit.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.DurbinRegulated, Braintree.CreditCardDurbinRegulated.UNKNOWN);
-            Assert.AreEqual(transaction.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.Healthcare, Braintree.CreditCardHealthcare.UNKNOWN);
             Assert.AreEqual(transaction.CreditCard.Payroll, Braintree.CreditCardPayroll.UNKNOWN);
+            Assert.AreEqual(transaction.CreditCard.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
+            Assert.AreEqual(transaction.CreditCard.PrepaidReloadable, Braintree.CreditCardPrepaidReloadable.UNKNOWN);
         }
 
         [Test]

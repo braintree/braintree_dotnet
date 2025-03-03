@@ -5,6 +5,7 @@ namespace Braintree.TestUtil
         public class CardTypeIndicators
         {
             public static readonly string Prepaid           = "4111111111111210";
+            public static readonly string PrepaidReloadable = "4229989900000002";
             public static readonly string Commercial        = "4111111111131010";
             public static readonly string Payroll           = "4111111114101010";
             public static readonly string Healthcare        = "4111111510101010";

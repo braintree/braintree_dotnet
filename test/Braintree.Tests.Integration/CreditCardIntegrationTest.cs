@@ -1144,6 +1144,27 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void PrepaidReloadable()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = TestUtil.CreditCardNumbers.CardTypeIndicators.PrepaidReloadable,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(CreditCardPrepaidReloadable.YES, creditCard.PrepaidReloadable);
+        }
+
+        [Test]
         public void Commercial()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;

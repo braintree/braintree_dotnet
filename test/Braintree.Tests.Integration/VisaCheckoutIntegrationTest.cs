@@ -55,19 +55,20 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(visaCheckoutCard.CustomerId);
             Assert.IsNotNull(visaCheckoutCard.CustomerLocation);
             Assert.IsNotNull(visaCheckoutCard.Debit);
-            Assert.IsNotNull(visaCheckoutCard.IsDefault);
             Assert.IsNotNull(visaCheckoutCard.DurbinRegulated);
             Assert.IsNotNull(visaCheckoutCard.ExpirationDate);
             Assert.IsNotNull(visaCheckoutCard.ExpirationMonth);
             Assert.IsNotNull(visaCheckoutCard.ExpirationYear);
-            Assert.IsNotNull(visaCheckoutCard.IsExpired);
             Assert.IsNotNull(visaCheckoutCard.Healthcare);
             Assert.IsNotNull(visaCheckoutCard.ImageUrl);
+            Assert.IsNotNull(visaCheckoutCard.IsDefault);
+            Assert.IsNotNull(visaCheckoutCard.IsExpired);
             Assert.IsNotNull(visaCheckoutCard.IssuingBank);
             Assert.IsNotNull(visaCheckoutCard.LastFour);
             Assert.IsNotNull(visaCheckoutCard.MaskedNumber);
             Assert.IsNotNull(visaCheckoutCard.Payroll);
             Assert.IsNotNull(visaCheckoutCard.Prepaid);
+            Assert.IsNotNull(visaCheckoutCard.PrepaidReloadable);
             Assert.IsNotNull(visaCheckoutCard.ProductId);
             Assert.IsNotNull(visaCheckoutCard.Subscriptions);
             Assert.IsNotNull(visaCheckoutCard.Token);
@@ -158,6 +159,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(visaCheckoutCardDetails.MaskedNumber);
             Assert.IsNotNull(visaCheckoutCardDetails.Payroll);
             Assert.IsNotNull(visaCheckoutCardDetails.Prepaid);
+            Assert.IsNotNull(visaCheckoutCardDetails.PrepaidReloadable);
             Assert.IsNotNull(visaCheckoutCardDetails.ProductId);
             Assert.IsNotNull(visaCheckoutCardDetails.Token);
         }

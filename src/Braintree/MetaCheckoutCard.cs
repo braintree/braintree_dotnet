@@ -7,29 +7,30 @@ namespace Braintree
 {
     public class MetaCheckoutCard : PaymentMethod
     {
-        public virtual string Bin { get; protected set; }
-        public virtual string CardholderName { get; protected set; }
+        public virtual bool? IsDefault { get; protected set; }
+        public virtual bool? IsExpired { get; protected set; }
         public virtual CreditCardCardType CardType { get; protected set; }
         public virtual CreditCardCommercial Commercial { get; protected set; }
-        public virtual string ContainerId { get; protected set; }
-        public virtual DateTime? CreatedAt { get; protected set; }
-        public virtual string CustomerId { get; protected set; }
         public virtual CreditCardCustomerLocation CustomerLocation { get; protected set; }
         public virtual CreditCardDebit Debit { get; protected set; }
         public virtual CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
-        public virtual string ExpirationMonth { get; protected set; }
-        public virtual string ExpirationYear { get; protected set; }
         public virtual CreditCardHealthcare Healthcare { get; protected set; }
-        public virtual string ImageUrl { get; protected set; }
-        public virtual bool? IsDefault { get; protected set; }
-        public virtual bool? IsExpired { get; protected set; }
-        public virtual string LastFour { get; protected set; }
         public virtual CreditCardPayroll Payroll { get; protected set; }
         public virtual CreditCardPrepaid Prepaid { get; protected set; }
+        public virtual CreditCardPrepaidReloadable PrepaidReloadable { get; protected set; }
+        public virtual CreditCardVerification Verification { get; protected set; }
+        public virtual DateTime? CreatedAt { get; protected set; }
+        public virtual DateTime? UpdatedAt { get; protected set; }
+        public virtual string Bin { get; protected set; }
+        public virtual string CardholderName { get; protected set; }
+        public virtual string ContainerId { get; protected set; }
+        public virtual string CustomerId { get; protected set; }
+        public virtual string ExpirationMonth { get; protected set; }
+        public virtual string ExpirationYear { get; protected set; }
+        public virtual string ImageUrl { get; protected set; }
+        public virtual string LastFour { get; protected set; }
         public virtual string Token { get; protected set; }
         public virtual string UniqueNumberIdentifier { get; protected set; }
-        public virtual DateTime? UpdatedAt { get; protected set; }
-        public virtual CreditCardVerification Verification { get; protected set; }
 
         private string _CountryOfIssuance;
 
@@ -99,31 +100,32 @@ namespace Braintree
         {
             if (node == null) return;
 
+            _CountryOfIssuance = node.GetString("country-of-issuance");
+            _IssuingBank = node.GetString("issuing-bank");
+            _ProductId = node.GetString("product-id");
             Bin = node.GetString("bin");
             CardholderName = node.GetString("cardholder-name");
             CardType = node.GetEnum("card-type", CreditCardCardType.UNRECOGNIZED);
             Commercial = node.GetEnum("commercial", CreditCardCommercial.UNKNOWN);
             ContainerId = node.GetString("container-id");
+            CreatedAt = node.GetDateTime("created-at");
             CustomerId = node.GetString("customer-id");
             CustomerLocation = node.GetEnum("customer-location", CreditCardCustomerLocation.UNRECOGNIZED);
-            CreatedAt = node.GetDateTime("created-at");
             Debit = node.GetEnum("debit", CreditCardDebit.UNKNOWN);
             DurbinRegulated = node.GetEnum("durbin-regulated", CreditCardDurbinRegulated.UNKNOWN);
             ExpirationMonth = node.GetString("expiration-month");
             ExpirationYear = node.GetString("expiration-year");
+            Healthcare = node.GetEnum("healthcare", CreditCardHealthcare.UNKNOWN);
+            ImageUrl = node.GetString("image-url");
             IsDefault = node.GetBoolean("default");
             IsExpired = node.GetBoolean("expired");
             LastFour = node.GetString("last-4");
-            Token = node.GetString("token");
-            UpdatedAt = node.GetDateTime("updated-at");
-            Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
             Payroll = node.GetEnum("payroll", CreditCardPayroll.UNKNOWN);
-            Healthcare = node.GetEnum("healthcare", CreditCardHealthcare.UNKNOWN);
+            Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
+            PrepaidReloadable = node.GetEnum("prepaid-reloadable", CreditCardPrepaidReloadable.UNKNOWN);
+            Token = node.GetString("token");
             UniqueNumberIdentifier = node.GetString("unique-number-identifier");
-            _CountryOfIssuance = node.GetString("country-of-issuance");
-            _IssuingBank = node.GetString("issuing-bank");
-            _ProductId = node.GetString("product-id");
-            ImageUrl = node.GetString("image-url");
+            UpdatedAt = node.GetDateTime("updated-at");
 
             var verificationNodes = node.GetList("verifications/verification");
             Verification = FindLatestVerification(verificationNodes, gateway);

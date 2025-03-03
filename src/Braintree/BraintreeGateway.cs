@@ -179,6 +179,8 @@ namespace Braintree
 
         public virtual IPayPalAccountGateway PayPalAccount => new PayPalAccountGateway(this);
 
+        public virtual IPayPalPaymentResourceGateway PayPalPaymentResource => new PayPalPaymentResourceGateway(this);
+
         public virtual IPlanGateway Plan => new PlanGateway(this);
 
         public virtual ISepaDirectDebitAccountGateway SepaDirectDebitAccount => new SepaDirectDebitAccountGateway(this);

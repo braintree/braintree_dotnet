@@ -42,5 +42,26 @@ namespace Braintree.Tests
             Assert.AreEqual("merchant-token-123", card.MerchantTokenIdentifier);
             Assert.AreEqual("1234", card.SourceCardLast4);
         }
+
+        [Test]
+        public void testPrepaidReloadableFromXMLResponse()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+            builder.Append("<payment-method>");
+            builder.Append("<merchant-token-identifier>merchant-token-123</merchant-token-identifier>");
+            builder.Append("<source-card-last4>1234</source-card-last4>");
+            builder.Append("<prepaid-reloadable>No</prepaid-reloadable>");
+            builder.Append("</payment-method>");
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(builder.ToString());
+
+            ApplePayCard card = new ApplePayCard(new NodeWrapper(doc).GetNode("payment-method"), gateway);
+
+            Assert.AreEqual("merchant-token-123", card.MerchantTokenIdentifier);
+            Assert.AreEqual("1234", card.SourceCardLast4);
+            Assert.AreEqual("No", card.PrepaidReloadable);
+        }
     }
 }
