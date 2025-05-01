@@ -31,16 +31,6 @@ namespace Braintree
         [Description("unrecognized")] UNRECOGNIZED
     }
 
-    public enum TransactionEscrowStatus
-    {
-        [Description("hold_pending")] HOLD_PENDING,
-        [Description("held")] HELD,
-        [Description("release_pending")] RELEASE_PENDING,
-        [Description("released")] RELEASED,
-        [Description("refunded")] REFUNDED,
-        [Description("unrecognized")] UNRECOGNIZED
-    }
-
     public enum TransactionStatus
     {
         [Description("authorization_expired")] AUTHORIZATION_EXPIRED,
@@ -153,7 +143,6 @@ namespace Braintree
         public virtual decimal? DiscountAmount { get; protected set; }
         public virtual List<Discount> Discounts { get; protected set; }
         public virtual List<Dispute> Disputes { get; protected set; }
-        public virtual TransactionEscrowStatus EscrowStatus { get; protected set; }
         public virtual FacilitatedDetails FacilitatedDetails { get; protected set; }
         public virtual FacilitatorDetails FacilitatorDetails { get; protected set; }
         public virtual bool? ForeignRetailer { get; protected set; }
@@ -246,7 +235,6 @@ namespace Braintree
             GraphQLId = node.GetString("global-id");
             OrderId = node.GetString("order-id");
             Status = node.GetEnum("status", TransactionStatus.UNRECOGNIZED);
-            EscrowStatus = node.GetEnum("escrow-status", TransactionEscrowStatus.UNRECOGNIZED);
 
             List<NodeWrapper> statusNodes = node.GetList("status-history/status-event");
             StatusHistory = new StatusEvent[statusNodes.Count];

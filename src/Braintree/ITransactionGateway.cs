@@ -19,16 +19,12 @@ namespace Braintree
         Task<Result<Transaction>> CreditAsync(TransactionRequest request);
         Transaction Find(string id);
         Task<Transaction> FindAsync(string id);
-        Result<Transaction> HoldInEscrow(string id);
-        Task<Result<Transaction>> HoldInEscrowAsync(string id);
         Result<Transaction> Refund(string id);
         Task<Result<Transaction>> RefundAsync(string id);
         Result<Transaction> Refund(string id, decimal amount);
         Task<Result<Transaction>> RefundAsync(string id, decimal amount);
         Result<Transaction> Refund(string id, TransactionRefundRequest refundRequest);
         Task<Result<Transaction>> RefundAsync(string id, TransactionRefundRequest refundRequest);
-        Result<Transaction> ReleaseFromEscrow(string id);
-        Task<Result<Transaction>> ReleaseFromEscrowAsync(string id);
         Result<Transaction> Sale(TransactionRequest request);
         Task<Result<Transaction>> SaleAsync(TransactionRequest request);
         ResourceCollection<Transaction> Search(TransactionSearchRequest query);

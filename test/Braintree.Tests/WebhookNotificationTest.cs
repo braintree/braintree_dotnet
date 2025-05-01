@@ -115,34 +115,6 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void SampleNotification_ReturnsANotificationForAMerchantAccountApprovedWebhook()
-        {
-            Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED, "my_id");
-
-            WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
-
-            Assert.AreEqual(WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED, notification.Kind);
-            Assert.AreEqual("my_id", notification.MerchantAccount.Id);
-            Assert.AreEqual(MerchantAccountStatus.ACTIVE, notification.MerchantAccount.Status);
-            Assert.AreEqual("master_ma_for_my_id", notification.MerchantAccount.MasterMerchantAccount.Id);
-            Assert.AreEqual(MerchantAccountStatus.ACTIVE, notification.MerchantAccount.MasterMerchantAccount.Status);
-            TestHelper.AreDatesEqual(DateTime.Now.ToUniversalTime(), notification.Timestamp.Value);
-        }
-
-        [Test]
-        public void SampleNotification_ReturnsANotificationForAMerchantAccountDeclinedWebhook()
-        {
-          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED, "my_id");
-
-          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
-
-          Assert.AreEqual(WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED, notification.Kind);
-          Assert.AreEqual("my_id", notification.MerchantAccount.Id);
-          Assert.AreEqual(ValidationErrorCode.MERCHANT_ACCOUNT_APPLICANT_DETAILS_DECLINED_OFAC, notification.Errors.ForObject("merchant-account").OnField("base")[0].Code);
-          Assert.AreEqual("Applicant declined due to OFAC.", notification.Message);
-        }
-
-        [Test]
         public void SampleNotification_ReturnsANotificationForATransactionDisbursedWebhook()
         {
           Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_DISBURSED, "my_id");
@@ -194,25 +166,6 @@ namespace Braintree.Tests
           Assert.AreEqual("1234", usBankAccountDetails.Last4);
           Assert.AreEqual("checking", usBankAccountDetails.AccountType);
           Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
-        }
-
-        [Test]
-        public void SampleNotification_ReturnsANotificationForADisbursementExceptionWebhook()
-        {
-          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.DISBURSEMENT_EXCEPTION, "my_id");
-
-          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
-
-          Assert.AreEqual(WebhookKind.DISBURSEMENT_EXCEPTION, notification.Kind);
-          Assert.AreEqual("my_id", notification.Disbursement.Id);
-          Assert.AreEqual(100.00, notification.Disbursement.Amount);
-          Assert.AreEqual("bank_rejected", notification.Disbursement.ExceptionMessage);
-          Assert.AreEqual(DateTime.Parse("2014-02-10"), notification.Disbursement.DisbursementDate);
-          Assert.AreEqual("update_funding_information", notification.Disbursement.FollowUpAction);
-          Assert.AreEqual("merchant_account_id", notification.Disbursement.MerchantAccount.Id);
-          Assert.AreEqual(new string[] {"asdf", "qwer"}, notification.Disbursement.TransactionIds);
-          Assert.AreEqual(false, notification.Disbursement.Success);
-          Assert.AreEqual(false, notification.Disbursement.Retry);
         }
 
         public void SampleNotification_ReturnsANotificationForADisbursementWebhook()

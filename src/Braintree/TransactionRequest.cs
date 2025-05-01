@@ -70,6 +70,7 @@ namespace Braintree
         public string MerchantAccountId { get; set; }
         public TransactionOptionsRequest Options { get; set; }
         public string OrderId { get; set; }
+        public PaymentFacilitatorRequest PaymentFacilitator { get; set; }
         public string PaymentMethodNonce { get; set; }
         public string PaymentMethodToken { get; set; }
         public TransactionPayPalRequest PayPalAccount { get; set; }
@@ -165,7 +166,8 @@ namespace Braintree
             if (LineItems != null) builder.AddElement("line-items", LineItems);
             builder.AddElement("merchant-account-id", MerchantAccountId);
             builder.AddElement("options", Options);
-            builder.AddElement("order-id", OrderId);
+            builder.AddElement("order-id", OrderId); 
+            if (PaymentFacilitator != null) builder.AddElement("payment-facilitator", PaymentFacilitator);
             builder.AddElement("payment-method-nonce", PaymentMethodNonce);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("paypal-account", PayPalAccount);

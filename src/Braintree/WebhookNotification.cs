@@ -43,8 +43,6 @@ namespace Braintree
         [Description("subscription_trial_ended")] SUBSCRIPTION_TRIAL_ENDED,
         [Description("subscription_went_active")] SUBSCRIPTION_WENT_ACTIVE,
         [Description("subscription_went_past_due")] SUBSCRIPTION_WENT_PAST_DUE,
-        [Description("sub_merchant_account_approved")] SUB_MERCHANT_ACCOUNT_APPROVED,
-        [Description("sub_merchant_account_declined")] SUB_MERCHANT_ACCOUNT_DECLINED,
         [Description("transaction_disbursed")] TRANSACTION_DISBURSED,
         [Description("transaction_reviewed")] TRANSACTION_REVIEWED,
         [Description("transaction_settled")] TRANSACTION_SETTLED,

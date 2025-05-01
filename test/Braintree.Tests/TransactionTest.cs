@@ -67,7 +67,6 @@ namespace Braintree.Tests
                 "  <status-history type=\"array\"></status-history>\n" +
                 "  <subscription></subscription>\n" +
                 "  <descriptor></descriptor>\n" +
-                "  <escrow-status>unrecognizable escrow status</escrow-status>\n" +
                 "  <disbursement-details></disbursement-details>\n" +
                 "  <payment-instrument-type>credit_card</payment-instrument-type>\n" +
                 "</transaction>\n";
@@ -81,7 +80,6 @@ namespace Braintree.Tests
             Transaction transaction = new Transaction(node, gateway);
 
             Assert.AreEqual(TransactionGatewayRejectionReason.UNRECOGNIZED, transaction.GatewayRejectionReason);
-            Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
             Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
         }
 
@@ -102,7 +100,6 @@ namespace Braintree.Tests
                 "  <status-history type=\"array\"></status-history>\n" +
                 "  <subscription></subscription>\n" +
                 "  <descriptor></descriptor>\n" +
-                "  <escrow-status></escrow-status>\n" +
                 "  <disbursement-details></disbursement-details>\n" +
                 "  <payment-instrument-type>credit_card</payment-instrument-type>\n" +
                 "</transaction>\n";
@@ -116,7 +113,6 @@ namespace Braintree.Tests
             Transaction transaction = new Transaction(node, gateway);
 
             Assert.AreEqual(TransactionGatewayRejectionReason.TOKEN_ISSUANCE, transaction.GatewayRejectionReason);
-            Assert.AreEqual(TransactionEscrowStatus.UNRECOGNIZED, transaction.EscrowStatus);
             Assert.AreEqual(TransactionStatus.UNRECOGNIZED, transaction.Status);
         }
 
@@ -137,7 +133,6 @@ namespace Braintree.Tests
                 "  <status-history type=\"array\"></status-history>\n" +
                 "  <subscription></subscription>\n" +
                 "  <descriptor></descriptor>\n" +
-                "  <escrow-status></escrow-status>\n" +
                 "  <disbursement-details></disbursement-details>\n" +
                 "  <payment-instrument-type>credit_card</payment-instrument-type>\n" +
                 "</transaction>\n";
@@ -434,6 +429,71 @@ namespace Braintree.Tests
             Transaction transaction = new Transaction(node, gateway);
 
             Assert.IsTrue(transaction.NetworkToken.IsNetworkTokenized);
+        }
+        [Test]
+        public void BuildRequest_PaymentFacilitator_IncludedWhenNotNull()
+        {
+        
+            var transactionRequest = new TransactionRequest
+            {
+                PaymentFacilitator = new PaymentFacilitatorRequest
+                {
+                    
+                    PaymentFacilitatorId = "4321",
+                    SubMerchant = new TransactionSubMerchantRequest
+                    {
+                        Address = new AddressRequest
+                        {   
+                            CountryCodeAlpha2 = " BR",
+                            ExtendedAddress = "Ibitinga",
+                            Locality = "Araraquara",
+                            PostalCode = "13525000",
+                            Region = "SP",
+                            StreetAddress = "10880 Ibitinga",
+                            InternationalPhone = new InternationalPhoneRequest
+                            {
+                                CountryCode = "55",
+                                NationalNumber = "9876543210"
+                            },
+                        },
+                        LegalName = "Sub Tony Stark",
+                        ReferenceNumber = "123456789012345",
+                        TaxId = "ACSD1234567890"
+                    }
+                }
+            };
+
+            
+            string xml = transactionRequest.ToXml();
+            
+            Assert.IsTrue(xml.Contains("<payment-facilitator>"));
+            Assert.IsTrue(xml.Contains("<legal-name>Sub Tony Stark</legal-name>"));
+
+            Assert.IsTrue(xml.Contains("<sub-merchant>"));
+            Assert.IsTrue(xml.Contains("<address>"));
+            Assert.IsTrue(xml.Contains("<extended-address>Ibitinga</extended-address>"));
+            Assert.IsTrue(xml.Contains("<locality>Araraquara</locality>"));
+            Assert.IsTrue(xml.Contains("<postal-code>13525000</postal-code>"));
+            Assert.IsTrue(xml.Contains("<region>SP</region>"));
+            Assert.IsTrue(xml.Contains("<street-address>10880 Ibitinga</street-address>"));
+            Assert.IsTrue(xml.Contains("<international-phone>"));
+            Assert.IsTrue(xml.Contains("<country-code>55</country-code>"));
+            Assert.IsTrue(xml.Contains("<national-number>9876543210</national-number>"));
+            Assert.IsTrue(xml.Contains("<reference-number>123456789012345</reference-number>"));
+            Assert.IsTrue(xml.Contains("<tax-id>ACSD1234567890</tax-id>"));
+        }
+
+        [Test]
+        public void BuildRequest_PaymentFacilitator_NotIncludedWhenNull()
+        {
+            var transactionRequest = new TransactionRequest
+            {
+                PaymentFacilitator = null 
+            };
+            
+            var xml = transactionRequest.ToXml();
+
+            Assert.IsFalse(xml.Contains("<payment-facilitator>"));
         }
     }
 }

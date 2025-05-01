@@ -31,14 +31,11 @@ namespace Braintree.Tests.Integration
             builder.Append("<disbursement>");
             builder.Append("<id>123456</id>");
             builder.Append("<transaction-ids type=\"array\">");
-            builder.Append("<item>sub_merchant_transaction</item>");
             builder.Append("</transaction-ids>");
             builder.Append("<success type=\"boolean\">false</success>");
             builder.Append("<retry type=\"boolean\">false</retry>");
             builder.Append("<merchant-account>");
-            builder.Append("<id>sandbox_sub_merchant_account</id>");
             builder.Append("<currency-iso-code>usd</currency-iso-code>");
-            builder.Append("<sub-merchant-account type=\"boolean\">false</sub-merchant-account>");
             builder.Append("<status>active</status>");
             builder.Append("</merchant-account>");
             builder.Append("<amount>100.00</amount>");
@@ -59,8 +56,6 @@ namespace Braintree.Tests.Integration
           Disbursement disbursement = new Disbursement(attributes, gateway);
           ResourceCollection<Transaction> transactions = disbursement.Transactions();
           Assert.IsNotNull(transactions);
-          Assert.AreEqual(1, transactions.MaximumCount);
-          Assert.AreEqual("sub_merchant_transaction", transactions.FirstItem.Id);
         }
     }
 }

@@ -63,24 +63,6 @@ namespace Braintree
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
-        public virtual Result<Transaction> HoldInEscrow(string id)
-        {
-            var request = new TransactionRequest();
-
-            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/hold_in_escrow", request);
-
-            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
-        }
-
-        public virtual async Task<Result<Transaction>> HoldInEscrowAsync(string id)
-        {
-            var request = new TransactionRequest();
-
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/hold_in_escrow", request).ConfigureAwait(false);
-
-            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
-        }
-
         public virtual Result<Transaction> Credit(TransactionRequest request)
         {
             request.Type = TransactionType.CREDIT;
@@ -173,24 +155,6 @@ namespace Braintree
         {
             request.Type = TransactionType.SALE;
             XmlNode response = await service.PostAsync(service.MerchantPath() + "/transactions", request).ConfigureAwait(false);
-
-            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
-        }
-
-        public virtual Result<Transaction> ReleaseFromEscrow(string id)
-        {
-            var request = new TransactionRequest();
-
-            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/release_from_escrow", request);
-
-            return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
-        }
-
-        public virtual async Task<Result<Transaction>> ReleaseFromEscrowAsync(string id)
-        {
-            var request = new TransactionRequest();
-
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/release_from_escrow", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }

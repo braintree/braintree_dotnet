@@ -46,11 +46,7 @@ namespace Braintree
         {
             // NEXT_UNDER_MAJOR_VERSION
             // Convert to switch statement
-            if (kind == WebhookKind.SUB_MERCHANT_ACCOUNT_APPROVED) {
-                return MerchantAccountApprovedSampleXml(id);
-            } else if (kind == WebhookKind.SUB_MERCHANT_ACCOUNT_DECLINED) {
-                return MerchantAccountDeclinedSampleXml(id);
-            } else if (kind == WebhookKind.TRANSACTION_DISBURSED) {
+            if (kind == WebhookKind.TRANSACTION_DISBURSED) {
                 return TransactionDisbursedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_REVIEWED) {
                 return TransactionReviewedSampleXml(id);
@@ -58,9 +54,8 @@ namespace Braintree
                 return TransactionSettledSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_SETTLEMENT_DECLINED) {
                 return TransactionSettlementDeclinedSampleXml(id);
-            } else if (kind == WebhookKind.DISBURSEMENT_EXCEPTION) {
-                return DisbursementExceptionSampleXml(id);
-            } else if (kind == WebhookKind.DISBURSEMENT) {
+            } 
+            else if (kind == WebhookKind.DISBURSEMENT) {
                 return DisbursementSampleXml(id);
             } else if (kind == WebhookKind.PARTNER_MERCHANT_CONNECTED) {
                 return PartnerMerchantConnectedSampleXml(id);
@@ -229,31 +224,6 @@ namespace Braintree
                     Node("descriptor"),
                     Node("shipping"),
                     Node("subscription")
-            );
-        }
-
-        private string DisbursementExceptionSampleXml(string id)
-        {
-            return Node("disbursement",
-                    Node("id", id),
-                    Node("amount", "100.00"),
-                    Node("exception-message", "bank_rejected"),
-                    NodeAttr("disbursement-date", TYPE_DATE, "2014-02-10"),
-                    Node("follow-up-action", "update_funding_information"),
-                    NodeAttr("success", TYPE_BOOLEAN, "false"),
-                    NodeAttr("retry", TYPE_BOOLEAN, "false"),
-                    Node("merchant-account",
-                        Node("id", "merchant_account_id"),
-                        Node("master-merchant-account",
-                            Node("id", "master_ma"),
-                            Node("status", "active")
-                        ),
-                        Node("status", "active")
-                    ),
-                    NodeAttr("transaction-ids", TYPE_ARRAY,
-                        Node("item", "asdf"),
-                        Node("item", "qwer")
-                    )
             );
         }
 
