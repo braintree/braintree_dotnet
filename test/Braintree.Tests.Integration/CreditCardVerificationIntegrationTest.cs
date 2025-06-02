@@ -91,6 +91,39 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void CreateAniResponseWhenAccountInformationInquiryIsPresent()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        FirstName = "John",
+                        LastName = "Doe"
+                    }
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    AccountInformationInquiry = "send_data"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual("M", verification.AniFirstNameResponseCode);
+            Assert.AreEqual("M", verification.AniLastNameResponseCode);
+            Assert.AreEqual("John", verification.BillingAddress.FirstName);
+            Assert.AreEqual("Doe", verification.BillingAddress.LastName);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+        }
+
+        [Test]
         public void CreatePaymentMethodNonce_ReturnsSuccessfulResponse()
         {
             string nonce = TestHelper.GenerateUnlockedNonce(gateway);
@@ -547,7 +580,10 @@ namespace Braintree.Tests.Integration
 
             CreditCardVerification verification = collection.FirstItem;
 
+            Assert.AreEqual(verification.CreditCard.Business, Braintree.CreditCardBusiness.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.Commercial, Braintree.CreditCardCommercial.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Consumer, Braintree.CreditCardConsumer.UNKNOWN);
+            Assert.AreEqual(verification.CreditCard.Corporate, Braintree.CreditCardCorporate.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.CountryOfIssuance, Braintree.CreditCard.CountryOfIssuanceUnknown);
             Assert.AreEqual(verification.CreditCard.Debit, Braintree.CreditCardDebit.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.DurbinRegulated, Braintree.CreditCardDurbinRegulated.UNKNOWN);
@@ -557,7 +593,7 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(verification.CreditCard.Prepaid, Braintree.CreditCardPrepaid.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.PrepaidReloadable, Braintree.CreditCardPrepaidReloadable.UNKNOWN);
             Assert.AreEqual(verification.CreditCard.ProductId, Braintree.CreditCard.ProductIdUnknown);
-
+            Assert.AreEqual(verification.CreditCard.Purchase, Braintree.CreditCardPurchase.UNKNOWN);
         }
 
         [Test]

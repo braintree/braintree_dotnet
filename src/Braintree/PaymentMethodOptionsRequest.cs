@@ -4,6 +4,7 @@ namespace Braintree
 {
     public class PaymentMethodOptionsRequest : Request
     {
+        public string AccountInformationInquiry { get; set; }
         public bool? FailOnDuplicatePaymentMethod { get; set; }
         public bool? FailOnDuplicatePaymentMethodForCustomer { get; set; }
         public bool? MakeDefault { get; set; }
@@ -30,6 +31,7 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
+                AddElement("account-information-inquiry", AccountInformationInquiry).
                 AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).
                 AddElement("fail-on-duplicate-payment-method-for-customer", FailOnDuplicatePaymentMethodForCustomer).
                 AddElement("make-default", MakeDefault).

@@ -9,6 +9,9 @@ using System.Runtime.InteropServices;
 
 namespace Braintree.GraphQL
 {
+    /// <remarks>
+    /// <b>Experimental:</b> This class is experimental and may change in future releases.
+    /// </remarks>
     /// <summary>
     /// Represents the customer recommendations information associated with a PayPal customer session.
     /// </summary>
@@ -17,18 +20,11 @@ namespace Braintree.GraphQL
         public virtual bool IsInPayPalNetwork { get; protected set; }
         public virtual CustomerRecommendations Recommendations { get; protected set; }
 
-        public CustomerRecommendationsPayload(bool isPayPalNetwork, CustomerRecommendations customerRecommendations)
-        {
-            IsInPayPalNetwork = isPayPalNetwork;
-            Recommendations = customerRecommendations;
-        }
-
         public CustomerRecommendationsPayload(Dictionary<string, object> data)
         {
-
             if (
-                data.ContainsKey("customerRecommendations")
-                && data["customerRecommendations"] is Dictionary<string, object> customerRecommendations
+                data.ContainsKey("generateCustomerRecommendations")
+                && data["generateCustomerRecommendations"] is Dictionary<string, object> customerRecommendations
             )
             {
                 object objValue;
@@ -40,48 +36,40 @@ namespace Braintree.GraphQL
                 )
                 {
                     IsInPayPalNetwork = boolValue;
-                }
-                CustomerRecommendations recommendations = ExtractCustomerRecommendations(customerRecommendations);
-                if (recommendations != null)
+                } else
                 {
-                    Recommendations = recommendations;
+                    throw new ServerException();
                 }
-            }
-            else
-            {
-                throw new UnexpectedException();
+
+                var paymentRecommendations = ExtractPaymentRecommendations(customerRecommendations);
+                Recommendations = new CustomerRecommendations(
+                    paymentRecommendations
+                );
+            } else {
+                throw new ServerException();
             }
         }
 
-        private static CustomerRecommendations ExtractCustomerRecommendations(
-            Dictionary<string, object> customerRecommendations
+        private List<PaymentRecommendation> ExtractPaymentRecommendations(
+            Dictionary<string, object> data
         )
         {
-            var paymentOptions = new List<PaymentOptions>();
-
-            if (
-                customerRecommendations.ContainsKey("recommendations") 
-                && customerRecommendations["recommendations"] != null
-                && customerRecommendations["recommendations"] is Dictionary<string, object> recommendationsData
-            )
+            var paymentRecommendations = new List<PaymentRecommendation>();
+            if (data.ContainsKey("paymentRecommendations"))
             {
                 var recommendationObjs = new List<Dictionary<string, object>>();
-                if (recommendationsData.ContainsKey("paymentOptions"))
+                var recommendationsList = ((JArray)data["paymentRecommendations"]).ToList();
+                foreach (var recommendation in recommendationsList)
                 {
-                    var recommendationsList = ((JArray)recommendationsData["paymentOptions"]).ToList();
-                    foreach (var recommendation in recommendationsList)
-                    {
-                        recommendationObjs.Add(recommendation.ToObject<Dictionary<string, object>>());
-                    }
+                    recommendationObjs.Add(recommendation.ToObject<Dictionary<string, object>>());
                 }
-
                 foreach (var recommendationObj in recommendationObjs)
                 {
                     if (
                         recommendationObj.ContainsKey("recommendedPriority")
-                        && recommendationObj["paymentOption"] != null
-                        && recommendationObj.ContainsKey("paymentOption")
                         && recommendationObj["recommendedPriority"] != null
+                        && recommendationObj.ContainsKey("paymentOption")
+                        && recommendationObj["paymentOption"] != null
                     )
                     {
                         var paymentOptionString = recommendationObj["paymentOption"].ToString();
@@ -94,15 +82,16 @@ namespace Braintree.GraphQL
                             )
                         )
                         {
-                            paymentOptions.Add(
-                                new PaymentOptions(priorityValue, paymentOption)
+                            paymentRecommendations.Add(
+                                new PaymentRecommendation(paymentOption, priorityValue)
                             );
                         }
                     }
                 }
-            }
 
-            return new CustomerRecommendations(paymentOptions);
+            }
+            return paymentRecommendations;
+            
         }
     }
 }

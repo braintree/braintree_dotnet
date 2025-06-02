@@ -11,7 +11,6 @@ namespace Braintree.Tests.GraphQL
         [Test]
         public void ToGraphQLVariables()
         {
-            var recommendations = new List<Recommendations> { Recommendations.PAYMENT_RECOMMENDATIONS };
 
             var phoneInput = PhoneInput.Builder()
             .CountryPhoneCode("1")
@@ -27,22 +26,47 @@ namespace Braintree.Tests.GraphQL
             .VenmoAppInstalled(true)
             .Build();
 
-            var input = CustomerRecommendationsInput.Builder("session-id", recommendations)
-            .MerchantAccountId("merchant-account-id")
-            .Customer(customerSessionInput)
+            var payee = PayPalPayeeInput.Builder()
+            .EmailAddress("test@example.com")
+            .ClientId("merchant-public-id")
             .Build();
 
+            var amount = new MonetaryAmountInput("300.0", "USD");
 
+            var purchaseUnit = PayPalPurchaseUnitInput.Builder(amount)
+            .Payee(payee)
+            .Build();
+
+            var purchaseUnits = new List<PayPalPurchaseUnitInput>
+            {
+                purchaseUnit
+            };
+
+            var input = CustomerRecommendationsInput.Builder()
+            .SessionId("session-id")
+            .Customer(customerSessionInput)
+            .PurchaseUnits(purchaseUnits)
+            .Domain("test.com")
+            .MerchantAccountId("merchant-account-id")
+            .Build();
 
             var dict = input.ToGraphQLVariables();
 
-            Assert.AreEqual("merchant-account-id", dict["merchantAccountId"]);
             Assert.AreEqual("session-id", dict["sessionId"]);
-            CollectionAssert.AreEqual(recommendations[0].ToString(), ((System.Collections.IList)dict["recommendations"])[0].ToString()); 
+
             CollectionAssert.AreEquivalent(
                 customerSessionInput.ToGraphQLVariables(),
                 (System.Collections.IEnumerable)dict["customer"]
             );
+
+            CollectionAssert.AreEquivalent(
+                purchaseUnits[0].ToGraphQLVariables(),
+                (System.Collections.IEnumerable)((System.Collections.IList)dict["purchaseUnits"])[0]
+            );
+
+            Assert.AreEqual("test.com", dict["domain"]);
+
+            Assert.AreEqual("merchant-account-id", dict["merchantAccountId"]);
         }
     }
 }

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Braintree.GraphQL
 {
+    /// <remarks>
+    /// <b>Experimental:</b> This class is experimental and may change in future releases.
+    /// </remarks>
     /// <summary>
     /// Phone number input for PayPal customer session.
     /// </summary>

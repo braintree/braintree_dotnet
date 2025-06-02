@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Braintree.Tests
 {
@@ -51,6 +52,7 @@ namespace Braintree.Tests
                         It.IsAny<Dictionary<string, object>>()
                     ),
                     Times.Once);
+
                 Assert.AreEqual(createCustomerSessionInput.ToGraphQLVariables(), parameters[0]["input"]);
             }
 
@@ -106,7 +108,7 @@ namespace Braintree.Tests
                     .Builder()
                     .Build();
 
-                Assert.Throws<UnexpectedException>(() => customerSessionGateway.CreateCustomerSession(createCustomerSessionInput));
+                Assert.Throws<ServerException>(() => customerSessionGateway.CreateCustomerSession(createCustomerSessionInput));
 
             }
         }
@@ -203,7 +205,7 @@ namespace Braintree.Tests
                     .Builder("customer-session-id")
                     .Build();
 
-                Assert.Throws<UnexpectedException>(() => customerSessionGateway.UpdateCustomerSession(updateCustomerSessionInput));
+                Assert.Throws<ServerException>(() => customerSessionGateway.UpdateCustomerSession(updateCustomerSessionInput));
 
             }
         }
@@ -228,15 +230,17 @@ namespace Braintree.Tests
                 var successResponse = TestHelper.ReadGraphQLResponse("CustomerSession/customer_recommendations_successful_response.json", true);
 
                 var parameters = new List<Dictionary<string, object>>();
+                var capturedQuery = string.Empty;
+                var match = new CaptureMatch<string>(x => capturedQuery = x);
                 mockGraphQLClient.Setup(x => x.Query(
-                    It.IsAny<string>(),
+                    Capture.With(match),
                     Capture.In(parameters)
                    )
                 ).Returns(successResponse);
 
-                var recommendations = new List<Recommendations> { Recommendations.PAYMENT_RECOMMENDATIONS };
                 var customerRecommendationsInput = CustomerRecommendationsInput
-                    .Builder("session-id", recommendations)
+                    .Builder()
+                    .SessionId("session-id")
                     .Build();
 
                 customerSessionGateway.GetCustomerRecommendations(customerRecommendationsInput);
@@ -246,7 +250,30 @@ namespace Braintree.Tests
                         It.IsAny<Dictionary<string, object>>()
                     ),
                     Times.Once);
+                
+            string expectedQuery  = 
+                @"mutation GenerateCustomerRecommendations($input: GenerateCustomerRecommendationsInput!) {
+                    generateCustomerRecommendations(input: $input) {
+                        sessionId
+                        isInPayPalNetwork
+                        paymentRecommendations {
+                            paymentOption
+                            recommendedPriority
+                        }
+                    }
+                }
+                ";
+
+                Assert.AreEqual(removeNewLines(expectedQuery), removeNewLines(capturedQuery));
                 Assert.AreEqual(customerRecommendationsInput.ToGraphQLVariables(), parameters[0]["input"]);
+            }
+
+            private string removeNewLines(string input)
+            {
+                return string.Join(" ", input.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                                             .Select(line => line.Trim())
+                                             .Where(line => !string.IsNullOrWhiteSpace(line)));
+
             }
 
             [Test]
@@ -261,7 +288,8 @@ namespace Braintree.Tests
 
                 var recommendations = new List<Recommendations> { Recommendations.PAYMENT_RECOMMENDATIONS };
                 var customerRecommendationsInput = CustomerRecommendationsInput
-                    .Builder("session-id", recommendations)
+                    .Builder()
+                    .SessionId("session-id")
                     .Build();
 
                 var result = customerSessionGateway.GetCustomerRecommendations(customerRecommendationsInput);
@@ -282,7 +310,8 @@ namespace Braintree.Tests
 
                 var recommendations = new List<Recommendations> { Recommendations.PAYMENT_RECOMMENDATIONS };
                 var customerRecommendationsInput = CustomerRecommendationsInput
-                    .Builder("session-id", recommendations)
+                    .Builder()
+                    .SessionId("session-id")
                     .Build();
 
                 var result = customerSessionGateway.GetCustomerRecommendations(customerRecommendationsInput);
@@ -302,11 +331,11 @@ namespace Braintree.Tests
 
                 var recommendations = new List<Recommendations> { Recommendations.PAYMENT_RECOMMENDATIONS };
                 var customerRecommendationsInput = CustomerRecommendationsInput
-                    .Builder("session-id", recommendations)
+                    .Builder()
+                    .SessionId("session-id")
                     .Build();
 
-                Assert.Throws<UnexpectedException>(() => customerSessionGateway.GetCustomerRecommendations(customerRecommendationsInput));
-
+                Assert.Throws<ServerException>(() => customerSessionGateway.GetCustomerRecommendations(customerRecommendationsInput));
             }
         }
     }

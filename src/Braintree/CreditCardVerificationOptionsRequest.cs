@@ -9,6 +9,7 @@ namespace Braintree
         public string Amount { get; set; }
         public string MerchantAccountId { get; set; }
         public string AccountType { get; set; }
+        public string AccountInformationInquiry { get; set; }
 
         public override string ToXml()
         {
@@ -25,7 +26,8 @@ namespace Braintree
             return new RequestBuilder(root).
                 AddElement("amount", Amount).
                 AddElement("merchant-account-id", MerchantAccountId).
-                AddElement("account-type", AccountType);
+                AddElement("account-type", AccountType).
+                AddElement("account-information-inquiry", AccountInformationInquiry);
         }
     }
 }

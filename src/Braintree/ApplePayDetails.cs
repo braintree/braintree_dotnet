@@ -5,9 +5,12 @@ namespace Braintree
     public class ApplePayDetails
     {
         public virtual string Bin { get; protected set; }
+        public virtual string Business { get; protected set; }
         public virtual string CardholderName { get; protected set; }
         public virtual string CardType { get; protected set; }
         public virtual string Commercial { get; protected set; }
+        public virtual string Consumer { get; protected set; }
+        public virtual string Corporate { get; protected set; }
         public virtual string CountryOfIssuance { get; protected set; }
         public virtual string Debit { get; protected set; }
         public virtual string DurbinRegulated { get; protected set; }
@@ -24,6 +27,7 @@ namespace Braintree
         public virtual string Prepaid { get; protected set; }
         public virtual String PrepaidReloadable { get; protected set; }
         public virtual string ProductId { get; protected set; }
+        public virtual string Purchase { get; protected set; }
         public virtual string SourceCardLast4 { get; protected set; }
         public virtual string SourceDescription { get; protected set; }
         public virtual string Token { get; protected set; }
@@ -31,9 +35,12 @@ namespace Braintree
         protected internal ApplePayDetails(NodeWrapper node)
         {
             Bin = node.GetString("bin");
+            Business = node.GetString("business");
             CardholderName = node.GetString("cardholder-name");
             CardType = node.GetString("card-type");
             Commercial = node.GetString("commercial");
+            Consumer = node.GetString("consumer");
+            Corporate = node.GetString("corporate");
             CountryOfIssuance = node.GetString("country-of-issuance");
             Debit = node.GetString("debit");
             DurbinRegulated = node.GetString("durbin-regulated");
@@ -50,6 +57,7 @@ namespace Braintree
             Prepaid = node.GetString("prepaid");
             PrepaidReloadable = node.GetString("prepaid-reloadable");
             ProductId = node.GetString("product-id");
+            Purchase = node.GetString("purchase");
             SourceCardLast4 = node.GetString("source-card-last4");
             SourceDescription = node.GetString("source-description");
             Token = node.GetString("token");

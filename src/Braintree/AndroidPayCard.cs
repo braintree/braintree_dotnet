@@ -10,8 +10,11 @@ namespace Braintree
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual string Bin { get; protected set; }
+        public virtual string Business { get; protected set; }
         public virtual string CardType { get; protected set; }
         public virtual string Commercial { get; protected set; }
+        public virtual string Consumer { get; protected set; }
+        public virtual string Corporate { get; protected set; }
         public virtual string CountryOfIssuance { get; protected set; }
         public virtual string CustomerId { get; protected set; }
         public virtual string Debit { get; protected set; }
@@ -27,6 +30,7 @@ namespace Braintree
         public virtual string Prepaid { get; protected set; }
         public virtual string PrepaidReloadable { get; protected set; }
         public virtual string ProductId { get; protected set; }
+        public virtual string Purchase { get; protected set; }
         public virtual string SourceCardLast4 { get; protected set; }
         public virtual string SourceCardType { get; protected set; }
         public virtual string SourceDescription { get; protected set; }
@@ -38,8 +42,11 @@ namespace Braintree
         protected internal AndroidPayCard(NodeWrapper node, IBraintreeGateway gateway)
         {
             Bin = node.GetString("bin");
+            Business = node.GetString("business");
             CardType = node.GetString("virtual-card-type");
             Commercial = node.GetString("commercial");
+            Consumer = node.GetString("consumer");
+            Corporate = node.GetString("corporate");
             CountryOfIssuance = node.GetString("country-of-issuance");
             CreatedAt = node.GetDateTime("created-at");
             CustomerId = node.GetString("customer-id");
@@ -58,6 +65,7 @@ namespace Braintree
             Prepaid = node.GetString("prepaid");
             PrepaidReloadable = node.GetString("prepaid-reloadable");
             ProductId = node.GetString("product-id");
+            Purchase = node.GetString("purchase");
             SourceCardLast4 = node.GetString("source-card-last-4");
             SourceCardType = node.GetString("source-card-type");
             SourceDescription = node.GetString("source-description");

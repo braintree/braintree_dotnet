@@ -28,7 +28,26 @@ namespace Braintree.Tests.GraphQL
             .VenmoAppInstalled(false)
             .Build();
 
-            var input = UpdateCustomerSessionInput.Builder("session-id").Build();
+            var payee = PayPalPayeeInput.Builder()
+            .EmailAddress("test@example.com")
+            .ClientId("merchant-public-id")
+            .Build();
+
+            var amount = new MonetaryAmountInput("300.0", "USD");
+
+            var purchaseUnit = PayPalPurchaseUnitInput.Builder(amount)
+            .Payee(payee)
+            .Build();
+
+            var purchaseUnits = new List<PayPalPurchaseUnitInput>
+            {
+                purchaseUnit
+            };
+
+            var input = UpdateCustomerSessionInput.Builder("session-id")
+            .PurchaseUnits(purchaseUnits)
+            .Build();
+            
             input.Customer = customerSessionInput;
             input.MerchantAccountId = "merchant-account-id";
 
@@ -36,7 +55,7 @@ namespace Braintree.Tests.GraphQL
 
             Assert.AreEqual("merchant-account-id", dict["merchantAccountId"]);
             Assert.AreEqual("session-id", dict["sessionId"]);
-
+ 
             CollectionAssert.AreEquivalent(
                 customerSessionInput.ToGraphQLVariables(),
                 (System.Collections.IEnumerable)dict["customer"]
@@ -48,6 +67,10 @@ namespace Braintree.Tests.GraphQL
                 (System.Collections.IEnumerable)((Dictionary<string, object>)dict["customer"])["phone"]
             );
 
+            CollectionAssert.AreEquivalent(
+                purchaseUnits[0].ToGraphQLVariables(),
+                (System.Collections.IEnumerable)((System.Collections.IList)dict["purchaseUnits"])[0]
+            );
         }
     }
 }

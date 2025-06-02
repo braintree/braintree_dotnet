@@ -2,17 +2,22 @@ using System.Collections.Generic;
 
 namespace Braintree.GraphQL
 {
+    /// <remarks>
+    /// <b>Experimental:</b> This class is experimental and may change in future releases.
+    /// </remarks>
     /// <summary>
     /// Customer identifying information for a PayPal customer session.
     /// </summary>
     public class CustomerSessionInput
     {
-        public string Email { get; protected set; }
-        public PhoneInput Phone { get; set; }
-        public string DeviceFingerprintId { get; protected set; }
-        public bool PaypalAppInstalled { get; protected set; }
-        public bool VenmoAppInstalled { get; protected set; }
-        public string UserAgent { get; protected set; }
+        public virtual string Email { get; protected set; }
+        public virtual PhoneInput Phone { get; set; }
+        public virtual string HashedEmail { get; protected set; }
+        public virtual string HashedPhoneNumber { get; protected set; }
+        public virtual string DeviceFingerprintId { get; protected set; }
+        public virtual bool PaypalAppInstalled { get; protected set; }
+        public virtual bool VenmoAppInstalled { get; protected set; }
+        public virtual string UserAgent { get; protected set; }
 
         /// <returns>
         /// A dictionary representing the input object, to pass as variables to a GraphQL mutation
@@ -25,9 +30,17 @@ namespace Braintree.GraphQL
             {
                 variables.Add("email", Email);
             }
+            if (HashedEmail != null)
+            {
+                variables.Add("hashedEmail", HashedEmail);
+            }
             if (Phone != null)
             {
                 variables.Add("phone", Phone.ToGraphQLVariables());
+            }
+            if (HashedPhoneNumber != null)
+            {
+                variables.Add("hashedPhoneNumber", HashedPhoneNumber);
             }
             if (DeviceFingerprintId != null)
             {
@@ -82,6 +95,28 @@ namespace Braintree.GraphQL
             public CustomerSessionInputBuilder Phone(PhoneInput phone)
             {
                 customerSessionInput.Phone = phone;
+                return this;
+            }
+
+            /// <summary>
+            /// Sets the hashed customer email address.
+            /// </summary>
+            /// <param name="hashedEmail">The hashed customer email address.</param>
+            /// <returns>The builder instance.</returns>
+            public CustomerSessionInputBuilder HashedEmail(string hashedEmail)
+            {
+                customerSessionInput.HashedEmail = hashedEmail;
+                return this;
+            }
+
+            /// <summary>
+            /// Sets the hashed customer phone number.
+            /// </summary>
+            /// <param name="hashedPhoneNumber">The hashed customer phone number.</param>
+            /// <returns>The builder instance.</returns>
+            public CustomerSessionInputBuilder HashedPhoneNumber(string hashedPhoneNumber)
+            {
+                customerSessionInput.HashedPhoneNumber = hashedPhoneNumber;
                 return this;
             }
 

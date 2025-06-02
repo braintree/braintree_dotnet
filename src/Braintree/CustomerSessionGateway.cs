@@ -5,32 +5,32 @@ using System.Collections.Generic;
 
 namespace Braintree
 {
+    /// <remarks>
+    /// <b>Experimental:</b> This class is experimental and may change in future releases.
+    /// </remarks>
     /// <summary>
     /// Creates and manages PayPal customer sessions.
     /// </summary>
     public class CustomerSessionGateway : ICustomerSessionGateway
     {
-        private const string CreateCustomerSessionMutation =
+        private const string CREATE_CUSTOMER_SESSION_MUTATION =
             @"mutation CreateCustomerSession($input: CreateCustomerSessionInput!) { 
                 createCustomerSession(input: $input) { sessionId }
             }";
 
-        private const string UpdateCustomerSessionMutation =
+        private const string UPDATE_CUSTOMER_SESSION_MUTATION =
             @"mutation UpdateCustomerSession($input: UpdateCustomerSessionInput!) {
                 updateCustomerSession(input: $input) { sessionId }
             }";
 
-        private const string GetCustomerRecommendationsQuery =
-            @"query CustomerRecommendations($input: CustomerRecommendationsInput!) {
-                customerRecommendations(input: $input) {
+        private const string GENERATE_CUSTOMER_RECOMMENDATIONS_MUTATION =
+            @"mutation GenerateCustomerRecommendations($input: GenerateCustomerRecommendationsInput!) {
+                generateCustomerRecommendations(input: $input) {
+                    sessionId
                     isInPayPalNetwork
-                    recommendations {
-                        ... on PaymentRecommendations {
-                            paymentOptions {
-                                paymentOption
-                                recommendedPriority
-                            }
-                        }
+                    paymentRecommendations {
+                        paymentOption
+                        recommendedPriority
                     }
                 }
             }";
@@ -65,7 +65,7 @@ namespace Braintree
         /// .Customer(customer)
         /// .Build();
         ///
-        /// var result = PwppGateway().CustomerSession.CreateCustomerSession(input);
+        /// var result = gateway.CustomerSession.CreateCustomerSession(input);
         ///
         /// if (result.IsSuccess())
         /// {
@@ -75,14 +75,14 @@ namespace Braintree
         /// </example>
         /// <param name="input">The input object representing the customer session creation request.</param>
         /// <returns>A <see cref="Result{T}"/> containing the session ID if successful, or validation errors otherwise.</returns>
-        /// <exception cref="UnexpectedException">Thrown if the response from the GraphQL server is unexpected.</exception>
+        /// <exception cref="ServerException">Thrown if the response from the GraphQL server is unexpected.</exception>
         public Result<string> CreateCustomerSession(CreateCustomerSessionInput input)
         {
             var variables = new Dictionary<string, object>
             {
                 { "input", input.ToGraphQLVariables() },
             };
-            return executeMutation(CreateCustomerSessionMutation, variables, "createCustomerSession");
+            return executeMutation(CREATE_CUSTOMER_SESSION_MUTATION, variables, "createCustomerSession");
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Braintree
         /// .Customer(customer)
         /// .Build();
         ///
-        /// var result = PwppGateway().CustomerSession.UpdateCustomerSession(input);
+        /// var result = gateway.CustomerSession.UpdateCustomerSession(input);
         ///
         /// if (result.IsSuccess())
         /// {
@@ -118,27 +118,27 @@ namespace Braintree
         /// </example>
         /// <param name="input">The input object representing the customer session update request.</param>
         /// <returns>A <see cref="Result{T}"/> containing the session ID if successful, or validation errors otherwise.</returns>
-        /// <exception cref="UnexpectedException">Thrown if the response from the GraphQL server is unexpected.</exception>
+        /// <exception cref="ServerException">Thrown if the response from the GraphQL server is unexpected.</exception>
         public Result<string> UpdateCustomerSession(UpdateCustomerSessionInput input)
         {
             var variables = new Dictionary<string, object>
             {
                 { "input", input.ToGraphQLVariables() },
             };
-            return executeMutation(UpdateCustomerSessionMutation, variables, "updateCustomerSession");
+            return executeMutation(UPDATE_CUSTOMER_SESSION_MUTATION, variables, "updateCustomerSession");
         }
 
         /// <summary>
-        /// Retrieves PayPal customer session recommendations.
+        /// Retrieves PayPal customer session recommendations, creating or updating the customer session as necessary.
         /// </summary>
         /// <example>
         /// For example
         /// <code>
-        /// var input = CustomerRecommendationsInput.Builder(sessionId,  new List<Recommendations> { Recommendations.PAYMENT_RECOMMENDATIONS })
-        /// .Customer(customer)
+        /// var input = CustomerRecommendationsInput.Builder()
+        /// .SessionId(sessionId)
         /// .Build();
         ///
-        /// var result = PwppGateway().CustomerSession.GetCustomerRecommendations(input);
+        /// var result = gateway.CustomerSession.GetCustomerRecommendations(input);
         ///
         /// if (result.IsSuccess())
         /// {
@@ -149,14 +149,14 @@ namespace Braintree
         /// </example>
         /// /// <param name="input">The input object representing the customer recommendations request.</param>
         /// <returns>A <see cref="Result{T}"/> containing the customer recommendations payload if successful, or validation errors otherwise.</returns>
-        /// <exception cref="UnexpectedException">Thrown if the response from the GraphQL server is unexpected.</exception>
+        /// <exception cref="ServerException">Thrown if the response from the GraphQL server is unexpected.</exception>
         public Result<CustomerRecommendationsPayload> GetCustomerRecommendations(CustomerRecommendationsInput input)
         {
             var variables = new Dictionary<string, object>
             {
                 { "input", input.ToGraphQLVariables() },
             };
-            var response = graphQLClient.Query(GetCustomerRecommendationsQuery, variables);
+            var response = graphQLClient.Query(GENERATE_CUSTOMER_RECOMMENDATIONS_MUTATION, variables);
             if (response.errors != null)
             {
                 return new ResultImpl<CustomerRecommendationsPayload>(response.GetValidationErrors());
@@ -193,14 +193,14 @@ namespace Braintree
             {
                 if (!result.ContainsKey("sessionId"))
                 {
-                    throw new UnexpectedException();
+                    throw new ServerException("Couldn't parse response.");
                 }
                 var sessionId = result["sessionId"].ToString();
                 return new ResultImpl<string>(sessionId);
             }
-            else
+            else 
             {
-                throw new UnexpectedException();
+                throw new ServerException("Couldn't parse response.");
             }
         }
     }

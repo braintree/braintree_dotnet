@@ -52,7 +52,10 @@ namespace Braintree.Test
         public const string ThreeDSecureVisaUnavailable = "fake-three-d-secure-visa-unavailable-nonce";
         public const string Transactable = "fake-valid-nonce";
         public const string TransactableAmEx = "fake-valid-amex-nonce";
+        public const string TransactableBusiness = "fake-valid-business-nonce";
         public const string TransactableCommercial = "fake-valid-commercial-nonce";
+        public const string TransactableConsumer = "fake-valid-consumer-nonce";
+        public const string TransactableCorporate = "fake-valid-corporate-nonce";
         public const string TransactableCountryOfIssuanceCAD = "fake-valid-country-of-issuance-cad-nonce";
         public const string TransactableCountryOfIssuanceUSA = "fake-valid-country-of-issuance-usa-nonce";
         public const string TransactableDebit = "fake-valid-debit-nonce";
@@ -69,6 +72,7 @@ namespace Braintree.Test
         public const string TransactablePinlessDebitVisa = "fake-pinless-debit-visa-nonce";
         public const string TransactablePrepaid = "fake-valid-prepaid-nonce";
         public const string TransactablePrepaidReloadable = "fake-valid-prepaid-reloadable-nonce";
+        public const string TransactablePurchase = "fake-valid-purchase-nonce";
         public const string TransactableUnknownIndicators = "fake-valid-unknown-indicators-nonce";
         public const string TransactableVisa = "fake-valid-visa-nonce";
         public const string UsBankAccount = "fake-us-bank-account-nonce";

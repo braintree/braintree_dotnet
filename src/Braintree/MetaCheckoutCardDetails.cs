@@ -7,8 +7,11 @@ namespace Braintree
 
         private string _CountryOfIssuance;
         public virtual bool? IsExpired { get; protected set; }
+        public virtual CreditCardBusiness Business { get; protected set; }
         public virtual CreditCardCardType CardType { get; protected set; }
         public virtual CreditCardCommercial Commercial { get; protected set; }
+        public virtual CreditCardConsumer Consumer { get; protected set; }
+        public virtual CreditCardCorporate Corporate { get; protected set; }
         public virtual CreditCardCustomerLocation CustomerLocation { get; protected set; }
         public virtual CreditCardDebit Debit { get; protected set; }
         public virtual CreditCardDurbinRegulated DurbinRegulated { get; protected set; }
@@ -16,6 +19,7 @@ namespace Braintree
         public virtual CreditCardPayroll Payroll { get; protected set; }
         public virtual CreditCardPrepaid Prepaid { get; protected set; }
         public virtual CreditCardPrepaidReloadable PrepaidReloadable { get; protected set; }
+        public virtual CreditCardPurchase Purchase{ get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual string Bin { get; protected set; }
@@ -98,9 +102,12 @@ namespace Braintree
             _IssuingBank = node.GetString("issuing-bank");
             _ProductId = node.GetString("product-id");
             Bin = node.GetString("bin");
+            Business = node.GetEnum("business", CreditCardBusiness.UNKNOWN);
             CardholderName = node.GetString("cardholder-name");
             CardType = node.GetEnum("card-type", CreditCardCardType.UNRECOGNIZED);
             Commercial = node.GetEnum("commercial", CreditCardCommercial.UNKNOWN);
+            Consumer = node.GetEnum("consumer", CreditCardConsumer.UNKNOWN);
+            Corporate = node.GetEnum("corporate", CreditCardCorporate.UNKNOWN);
             ContainerId = node.GetString("container-id");
             CreatedAt = node.GetDateTime("created-at");
             CustomerLocation = node.GetEnum("customer-location", CreditCardCustomerLocation.UNRECOGNIZED);
@@ -115,6 +122,7 @@ namespace Braintree
             Payroll = node.GetEnum("payroll", CreditCardPayroll.UNKNOWN);
             Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
             PrepaidReloadable = node.GetEnum("prepaid-reloadable", CreditCardPrepaidReloadable.UNKNOWN);
+            Purchase = node.GetEnum("purchase", CreditCardPurchase.UNKNOWN);
             Token = node.GetString("token");
             UniqueNumberIdentifier = node.GetString("unique-number-identifier");
             UpdatedAt = node.GetDateTime("updated-at");

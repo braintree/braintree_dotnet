@@ -11,6 +11,7 @@ namespace Braintree
         public bool? MakeDefault { get; set; }
         public bool? SkipAdvancedFraudChecking { get; set; }
         public bool? VerifyCard { get; set; }
+        public string AccountInformationInquiry { get; set; }
         public string UpdateExistingToken { get; set; }
         // NEXT_MAJOR_VERSION Remove VenmoSdkSession
         // The old venmo SDK class has been deprecated
@@ -34,6 +35,7 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(string root)
         {
             return new RequestBuilder(root).
+                AddElement("account-information-inquiry", AccountInformationInquiry).
                 AddElement("fail-on-duplicate-payment-method", FailOnDuplicatePaymentMethod).
                 AddElement("fail-on-duplicate-payment-method-for-customer", FailOnDuplicatePaymentMethodForCustomer).
                 AddElement("make-default", MakeDefault).

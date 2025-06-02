@@ -1054,6 +1054,38 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(verification);
             Assert.IsNull(verification.RiskData);
         }
+        
+        [Test]
+        public void CreateAniResponseWhenAccountInformationInquiryIsPresent()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                },
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true,
+                    AccountInformationInquiry = "send_data",
+                },
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.AniFirstNameResponseCode);
+            Assert.IsNotNull(verification.AniLastNameResponseCode);
+        }
 
         [Test]
         public void Expired()
@@ -1165,6 +1197,27 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Business()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = TestUtil.CreditCardNumbers.CardTypeIndicators.Business,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(CreditCardBusiness.YES, creditCard.Business);
+        }
+
+        [Test]
         public void Commercial()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
@@ -1183,6 +1236,48 @@ namespace Braintree.Tests.Integration
 
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
             Assert.AreEqual(CreditCardCommercial.YES, creditCard.Commercial);
+        }
+
+        [Test]
+        public void Consumer()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = TestUtil.CreditCardNumbers.CardTypeIndicators.Consumer,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(CreditCardConsumer.YES, creditCard.Consumer);
+        }
+
+        [Test]
+        public void Corporate()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = TestUtil.CreditCardNumbers.CardTypeIndicators.Corporate,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(CreditCardCorporate.YES, creditCard.Corporate);
         }
 
         [Test]
@@ -1248,6 +1343,27 @@ namespace Braintree.Tests.Integration
             CreditCard creditCard = gateway.CreditCard.Create(request).Target;
             Assert.AreEqual(CreditCardPayroll.YES, creditCard.Payroll);
             Assert.AreEqual("MSA", creditCard.ProductId);
+        }
+
+        [Test]
+        public void Purchase()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = TestUtil.CreditCardNumbers.CardTypeIndicators.Purchase,
+                ExpirationDate = "05/12",
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true
+                }
+            };
+
+            CreditCard creditCard = gateway.CreditCard.Create(request).Target;
+            Assert.AreEqual(CreditCardPurchase.YES, creditCard.Purchase);
         }
 
         [Test]
@@ -1719,6 +1835,44 @@ namespace Braintree.Tests.Integration
             CreditCardVerification verification = result.Target.Verification;
             Assert.IsNotNull(verification);
             Assert.IsNull(verification.RiskData);
+        }
+
+        [Test]
+        public void UpdateAniResponseWhenAccountInformationInquiryIsPresent()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                },
+            };
+
+            CreditCard originalCreditCard = gateway.CreditCard.Create(request).Target;
+
+            var creditCardUpdateRequest = new CreditCardRequest
+            {
+                Options = new CreditCardOptionsRequest
+                {
+                    VerifyCard = true,
+                    AccountInformationInquiry = "send_data",
+                },
+            };
+
+            Result<CreditCard> result = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.AniFirstNameResponseCode);
+            Assert.IsNotNull(verification.AniLastNameResponseCode);
         }
 
         [Test]

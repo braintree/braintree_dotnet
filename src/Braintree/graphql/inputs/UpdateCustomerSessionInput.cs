@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Braintree.GraphQL
 {
+    /// <remarks>
+    /// <b>Experimental:</b> This class is experimental and may change in future releases.
+    /// </remarks>
     /// <summary>
     /// Represents the input to request an update to a PayPal customer session.
     /// </summary>
@@ -10,6 +13,7 @@ namespace Braintree.GraphQL
         public virtual string MerchantAccountId { get; set; }
         public virtual string SessionId { get; protected set; }
         public virtual CustomerSessionInput Customer { get; set; }
+        public virtual List<PayPalPurchaseUnitInput> PurchaseUnits { get; protected set; }
 
         protected UpdateCustomerSessionInput(string sessionId)
         {
@@ -31,6 +35,14 @@ namespace Braintree.GraphQL
             if (Customer != null)
             {
                 variables.Add("customer", Customer.ToGraphQLVariables());
+            }
+            if (PurchaseUnits != null) {
+                var purchaseUnits = new List<Dictionary<string, object>>();
+                foreach (var purchaseUnit in PurchaseUnits)
+                {
+                    purchaseUnits.Add(purchaseUnit.ToGraphQLVariables());
+                }
+                variables.Add("purchaseUnits", purchaseUnits);
             }
             return variables;
         }
@@ -75,6 +87,17 @@ namespace Braintree.GraphQL
             public UpdateCustomerSessionInputBuilder Customer(CustomerSessionInput customer)
             {
                 updateCustomerSessionInput.Customer = customer;
+                return this;
+            }
+
+            /// <summary>
+            /// Sets the Purchase Units for the items purchased.
+            /// </summary>
+            /// <param name="purchaseUnits">Purchase units.</param>
+            /// <returns>The builder instance.</returns>
+            public UpdateCustomerSessionInputBuilder PurchaseUnits(List<PayPalPurchaseUnitInput> purchaseUnits)
+            {
+                updateCustomerSessionInput.PurchaseUnits = purchaseUnits;
                 return this;
             }
 

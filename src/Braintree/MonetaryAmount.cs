@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Braintree
 {
     public class MonetaryAmount
@@ -8,6 +10,21 @@ namespace Braintree
         {
             Value = value;
             CurrencyCode = currencyCode;
+        }
+
+        /// <returns>
+        /// A dictionary representing the monetary amount, to pass as variables to a GraphQL mutation
+        /// </returns>
+        public Dictionary<string, object> ToGraphQLVariables()
+        {
+            var variables = new Dictionary<string, object>();
+            variables["value"] = Value;
+            if (CurrencyCode != null)
+            {
+                variables["currencyCode"] = CurrencyCode;
+            }
+
+            return variables;
         }
     }
 }

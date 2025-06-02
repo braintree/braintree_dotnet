@@ -44,14 +44,18 @@ namespace Braintree.Tests
         }
 
         [Test]
-        public void testPrepaidReloadableFromXMLResponse()
+        public void testBinFieldsFromXMLResponse()
         {
             StringBuilder builder = new StringBuilder();
             builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             builder.Append("<payment-method>");
             builder.Append("<merchant-token-identifier>merchant-token-123</merchant-token-identifier>");
             builder.Append("<source-card-last4>1234</source-card-last4>");
+            builder.Append("<business>No</business>");
+            builder.Append("<consumer>No</consumer>");
+            builder.Append("<corporate>No</corporate>");
             builder.Append("<prepaid-reloadable>No</prepaid-reloadable>");
+            builder.Append("<purchase>Yes</purchase>");
             builder.Append("</payment-method>");
 
             XmlDocument doc = new XmlDocument();
@@ -61,7 +65,11 @@ namespace Braintree.Tests
 
             Assert.AreEqual("merchant-token-123", card.MerchantTokenIdentifier);
             Assert.AreEqual("1234", card.SourceCardLast4);
+            Assert.AreEqual("No", card.Business);
+            Assert.AreEqual("No", card.Consumer);
+            Assert.AreEqual("No", card.Corporate);
             Assert.AreEqual("No", card.PrepaidReloadable);
+            Assert.AreEqual("Yes", card.Purchase);
         }
     }
 }

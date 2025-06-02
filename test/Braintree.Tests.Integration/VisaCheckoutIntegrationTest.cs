@@ -47,9 +47,12 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("abc123", visaCheckoutCard.CallId);
             Assert.IsNotNull(visaCheckoutCard.BillingAddress);
             Assert.IsNotNull(visaCheckoutCard.Bin);
+            Assert.IsNotNull(visaCheckoutCard.Business);
             Assert.IsNotNull(visaCheckoutCard.CardType);
             Assert.IsNotNull(visaCheckoutCard.CardholderName);
             Assert.IsNotNull(visaCheckoutCard.Commercial);
+            Assert.IsNotNull(visaCheckoutCard.Consumer);
+            Assert.IsNotNull(visaCheckoutCard.Corporate);
             Assert.IsNotNull(visaCheckoutCard.CountryOfIssuance);
             Assert.IsNotNull(visaCheckoutCard.CreatedAt);
             Assert.IsNotNull(visaCheckoutCard.CustomerId);
@@ -70,6 +73,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(visaCheckoutCard.Prepaid);
             Assert.IsNotNull(visaCheckoutCard.PrepaidReloadable);
             Assert.IsNotNull(visaCheckoutCard.ProductId);
+            Assert.IsNotNull(visaCheckoutCard.Purchase);
             Assert.IsNotNull(visaCheckoutCard.Subscriptions);
             Assert.IsNotNull(visaCheckoutCard.Token);
             Assert.IsNotNull(visaCheckoutCard.UniqueNumberIdentifier);

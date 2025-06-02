@@ -885,6 +885,41 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void CreateAniResponseWhenAccountInformationInquiryIsPresent()
+        {
+            CustomerRequest request = new CustomerRequest
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    CardholderName = "John Doe",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        FirstName = "John",
+                        LastName = "Doe",
+                    },
+                    Options = new CreditCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        AccountInformationInquiry = "send_data",
+                    },
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.CreditCards[0].Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.AniFirstNameResponseCode);
+            Assert.IsNotNull(verification.AniLastNameResponseCode);
+        }
+
+        [Test]
         public void Create_CreateCustomerUsingAccessToken()
         {
             var createRequest = new CustomerRequest()
@@ -1619,6 +1654,45 @@ namespace Braintree.Tests.Integration
             Assert.IsNull(verification.RiskData);
         }
 
+        [Test]
+        public void UpdateAniResponseWhenAccountInformationInquiryIsPresent()
+        {
+            CustomerRequest createRequest = new CustomerRequest()
+            {
+                FirstName = "John",
+                LastName = "Doe",
+            };
+            Customer customer = gateway.Customer.Create(createRequest).Target;
+
+            CustomerRequest updateRequest = new CustomerRequest()
+            {
+                CreditCard = new CreditCardRequest()
+                {
+                    Number = "4111111111111111",
+                    ExpirationDate = "05/12",
+                    CVV = "123",
+                    CardholderName = "John Doe",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        FirstName = "John",
+                        LastName = "Doe",
+                    },
+                    Options = new CreditCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        AccountInformationInquiry = "send_data",
+                    },
+                }
+            };
+
+            Result<Customer> result = gateway.Customer.Update(customer.Id, updateRequest);
+            Assert.IsTrue(result.IsSuccess());
+
+            CreditCardVerification verification = result.Target.CreditCards[0].Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.AniFirstNameResponseCode);
+            Assert.IsNotNull(verification.AniLastNameResponseCode);
+        }
         [Test]
         public void Update_AcceptsNestedBillingAddressId()
         {

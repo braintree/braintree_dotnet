@@ -11,6 +11,7 @@ namespace Braintree.Tests
         {
             var request = new CreditCardOptionsRequest()
             {
+                AccountInformationInquiry = "send_data",
                 FailOnDuplicatePaymentMethod = false,
                 FailOnDuplicatePaymentMethodForCustomer = false,
                 MakeDefault = false,
@@ -26,6 +27,7 @@ namespace Braintree.Tests
                 VerifyCard = true
             };
 
+            Assert.IsTrue(request.ToXml("credit-card-options").Contains("<account-information-inquiry>send_data</account-information-inquiry>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<fail-on-duplicate-payment-method>false</fail-on-duplicate-payment-method>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<fail-on-duplicate-payment-method-for-customer>false</fail-on-duplicate-payment-method-for-customer>"));
             Assert.IsTrue(request.ToXml("credit-card-options").Contains("<make-default>false</make-default>"));

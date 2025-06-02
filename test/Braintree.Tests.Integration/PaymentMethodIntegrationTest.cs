@@ -314,6 +314,39 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void CreateAniResponseWhenAccountInformationInquiryIsPresent()
+        {
+            string nonce = TestHelper.GenerateUnlockedNonce(gateway);
+            Result<Customer> result = gateway.Customer.Create(new CustomerRequest());
+            Assert.IsTrue(result.IsSuccess());
+
+            PaymentMethodRequest request = new PaymentMethodRequest()
+            {
+                CustomerId = result.Target.Id,
+                PaymentMethodNonce = nonce,
+                BillingAddress = new PaymentMethodAddressRequest
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                },
+                Options = new PaymentMethodOptionsRequest()
+                {
+                    AccountInformationInquiry = "send_data", 
+                    VerifyCard = true
+                },
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Create(request);
+
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            CreditCard creditCard = (CreditCard) paymentMethodResult.Target;
+            CreditCardVerification verification = creditCard.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.AniFirstNameResponseCode);
+            Assert.IsNotNull(verification.AniLastNameResponseCode);
+        }
+
+        [Test]
         public void CreateWithSkipAdvancedFraudCheckingDoesNotIncludeRiskData()
         {
             FraudProtectionEnterpriseSetup();
@@ -1545,6 +1578,44 @@ namespace Braintree.Tests.Integration
             CreditCardVerification verification = creditCard.Verification;
             Assert.IsNotNull(verification);
             Assert.IsNull(verification.RiskData);
+        }
+
+        [Test]
+        public void UpdateAniResponseWhenAccountInformationInquiryIsPresent()
+        {
+            Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
+            CreditCardRequest request = new CreditCardRequest
+            {
+                CustomerId = customer.Id,
+                CardholderName = "John Doe",
+                CVV = "123",
+                Number = "4111111111111111",
+                ExpirationDate = "05/12",
+                BillingAddress = new CreditCardAddressRequest
+                {
+                    FirstName = "John",
+                    LastName = "Doe",
+                },
+            };
+            CreditCard originalCreditCard = gateway.CreditCard.Create(request).Target;
+
+            PaymentMethodRequest paymentMethodUpdateRequest = new PaymentMethodRequest()
+            {
+                ExpirationDate = "05/22",
+                Options = new PaymentMethodOptionsRequest
+                {
+                    VerifyCard = true,
+                    AccountInformationInquiry = "send_data",
+                },
+            };
+            Result<PaymentMethod> paymentMethodResult = gateway.PaymentMethod.Update(originalCreditCard.Token, paymentMethodUpdateRequest);
+            Assert.IsTrue(paymentMethodResult.IsSuccess());
+
+            CreditCard creditCard = (CreditCard) paymentMethodResult.Target;
+            CreditCardVerification verification = creditCard.Verification;
+            Assert.IsNotNull(verification);
+            Assert.IsNotNull(verification.AniFirstNameResponseCode);
+            Assert.IsNotNull(verification.AniLastNameResponseCode);
         }
 
         [Test]

@@ -22,7 +22,9 @@ namespace Braintree.Tests.GraphQL
 
             var customerSessionInput = CustomerSessionInput.Builder()
             .Email("nobody@nowehwere.com")
+            .HashedEmail("a-hashed-email-address")
             .Phone(phoneInput)
+            .HashedPhoneNumber("a-hashed-phone-number")
             .DeviceFingerprintId("device-fingerprint-id")
             .PaypalAppInstalled(false)
             .VenmoAppInstalled(true)
@@ -36,7 +38,8 @@ namespace Braintree.Tests.GraphQL
                 phoneInput.ToGraphQLVariables(),
                 (System.Collections.IEnumerable)dict["phone"]
             );
-            Assert.AreEqual("device-fingerprint-id", dict["deviceFingerprintId"]);
+            Assert.AreEqual("a-hashed-email-address", dict["hashedEmail"]);
+            Assert.AreEqual("a-hashed-phone-number", dict["hashedPhoneNumber"]);
             Assert.IsFalse((bool)dict["paypalAppInstalled"]);
             Assert.IsTrue((bool)dict["venmoAppInstalled"]);
             Assert.AreEqual("Mozilla", dict["userAgent"]);

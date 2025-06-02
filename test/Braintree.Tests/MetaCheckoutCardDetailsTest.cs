@@ -49,6 +49,10 @@ namespace Braintree.Tests
             builder.Append("<debit>NO</debit>");
             builder.Append("<commercial>NO</commercial>");
             builder.Append("<healthcare>NO</healthcare>");
+            builder.Append("<business>NO</business>");
+            builder.Append("<consumer>NO</consumer>");
+            builder.Append("<corporate>NO</corporate>");
+            builder.Append("<purchase>NO</purchase>");
             builder.Append("<container-id>a-container-id</container-id>" );
             builder.Append("<last-4>1234</last-4>");
             builder.Append("</transaction>");
@@ -65,11 +69,15 @@ namespace Braintree.Tests
             Assert.AreEqual("a-bin", details.Bin);
             Assert.AreEqual("a-container-id", details.ContainerId);
             Assert.AreEqual("Cardholder", details.CardholderName);
+            Assert.AreEqual("No", details.Business.GetDescription());
             Assert.AreEqual("No", details.Commercial.GetDescription());
+            Assert.AreEqual("No", details.Consumer.GetDescription());
+            Assert.AreEqual("No", details.Corporate.GetDescription());
             Assert.AreEqual("No", details.Healthcare.GetDescription());
             Assert.AreEqual("No", details.Payroll.GetDescription());
             Assert.AreEqual("No", details.Prepaid.GetDescription());
             Assert.AreEqual("No", details.PrepaidReloadable.GetDescription());
+            Assert.AreEqual("No", details.Purchase.GetDescription());
             Assert.AreEqual("token1", details.Token);
             Assert.AreEqual("us", details.CustomerLocation.GetDescription());
             Assert.AreEqual("Visa", details.CardType.GetDescription());

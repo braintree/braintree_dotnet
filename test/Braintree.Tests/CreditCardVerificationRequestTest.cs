@@ -38,6 +38,7 @@ namespace Braintree.Tests
             "<options>" +
                 "<amount>5.00</amount>" +
                 "<merchant-account-id>123456</merchant-account-id>" +
+                "<account-information-inquiry>send_data</account-information-inquiry>" +
             "</options>" +
             "<paymentMethodNonce>payment-method-nonce</paymentMethodNonce>" +
             "<risk-data>" +
@@ -77,7 +78,8 @@ namespace Braintree.Tests
                 Options = new CreditCardVerificationOptionsRequest
                 {
                     MerchantAccountId = "123456", 
-                    Amount = "5.00"
+                    Amount = "5.00",
+                    AccountInformationInquiry = "send_data"
                 },
                 RiskData = new RiskDataRequest()
                 {

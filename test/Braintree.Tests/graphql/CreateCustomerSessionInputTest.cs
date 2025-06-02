@@ -27,10 +27,28 @@ namespace Braintree.Tests.GraphQL
             .PaypalAppInstalled(false)
             .VenmoAppInstalled(false)
             .Build();
+
+            var payee = PayPalPayeeInput.Builder()
+            .EmailAddress("test@example.com")
+            .ClientId("merchant-public-id")
+            .Build();
+
+            var amount = new MonetaryAmountInput("300.0", "USD");
+
+            var purchaseUnit = PayPalPurchaseUnitInput.Builder(amount)
+            .Payee(payee)
+            .Build();
+
+            var purchaseUnits = new List<PayPalPurchaseUnitInput>
+            {
+                purchaseUnit
+            };
+
             var input = CreateCustomerSessionInput.Builder()
                         .MerchantAccountId("merchant-account-id")
                         .SessionId("session-id")
                         .Customer(customerSessionInput)
+                        .PurchaseUnits(purchaseUnits)
                         .Domain("a-domain")
                         .Build();
 
@@ -44,10 +62,14 @@ namespace Braintree.Tests.GraphQL
                 (System.Collections.IEnumerable)dict["customer"]
             );
 
-
             CollectionAssert.AreEquivalent(
                 customerSessionInput.Phone.ToGraphQLVariables(),
                 (System.Collections.IEnumerable)((Dictionary<string, object>)dict["customer"])["phone"]
+            );
+
+            CollectionAssert.AreEquivalent(
+                purchaseUnits[0].ToGraphQLVariables(),
+                (System.Collections.IEnumerable)((System.Collections.IList)dict["purchaseUnits"])[0]
             );
 
             Assert.AreEqual("a-domain", dict["domain"]);

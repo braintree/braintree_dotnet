@@ -15,6 +15,10 @@ namespace Braintree.TestUtil
             public static readonly string No                = "4111111111310101";
             public static readonly string IssuingBank       = "4111111141010101";
             public static readonly string CountryOfIssuance = "4111111111121102";
+            public static readonly string Business = "4229989800000003";
+            public static readonly string Consumer = "4229989700000004";
+            public static readonly string Corporate = "4229989100000000";
+            public static readonly string Purchase = "4229989500000006";
         }
         public class FailsSandboxVerification
         {
