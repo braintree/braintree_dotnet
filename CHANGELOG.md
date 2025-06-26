@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.34.0
+- Add Session Id to Customer Recommendations Payload
+
 ## 5.33.0
 - Add `AccountInformationInquiry` to:
   - `Customer.create` and `Customer.update`

@@ -23,6 +23,7 @@ namespace Braintree.Tests.GraphQL
 
 
             Assert.IsTrue(payload.IsInPayPalNetwork);
+            Assert.AreEqual("a-customer-session-id", payload.SessionId);
             var paymentOptions = payload.Recommendations.PaymentOptions;
             Assert.AreEqual(RecommendedPaymentOption.PAYPAL, paymentOptions[0].PaymentOption);
             Assert.AreEqual(1, paymentOptions[0].RecommendedPriority);

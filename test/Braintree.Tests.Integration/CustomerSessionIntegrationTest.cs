@@ -125,6 +125,7 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(result.IsSuccess());
             var payload = result.Target;
             Assert.IsTrue(payload.IsInPayPalNetwork);
+            Assert.AreEqual("94f0b2db-5323-4d86-add3-paypal000000", payload.SessionId);
 
             var recommendation = payload.Recommendations.PaymentRecommendations[0];
             Assert.AreEqual(RecommendedPaymentOption.PAYPAL, recommendation.PaymentOption);

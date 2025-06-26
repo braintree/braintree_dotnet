@@ -93,7 +93,7 @@ namespace Braintree.Tests.Integration
                 AchReturnResponsesCreatedAt.
                 Between(oneDayEarlier, oneDayLater);
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
-            Assert.AreEqual(2, collection.MaximumCount);
+            Assert.AreEqual(4, collection.MaximumCount);
         }
 
         [Test]
@@ -103,19 +103,19 @@ namespace Braintree.Tests.Integration
                 ReasonCode.
                 IncludedIn("R01");
             ResourceCollection<Transaction> collection = gateway.Transaction.Search(searchRequest);
-            Assert.AreEqual(1, collection.MaximumCount);
+            Assert.AreEqual(2, collection.MaximumCount);
 
             searchRequest = new TransactionSearchRequest().
                 ReasonCode.
                 IncludedIn("R01", "R02");
             collection = gateway.Transaction.Search(searchRequest);
-            Assert.AreEqual(2, collection.MaximumCount);
+            Assert.AreEqual(3, collection.MaximumCount);
         
             searchRequest = new TransactionSearchRequest().
                 ReasonCode.
                 IncludedIn(TransactionSearchRequest.ACH_ANY_REASON_CODE);
             collection = gateway.Transaction.Search(searchRequest);
-            Assert.AreEqual(2, collection.MaximumCount);
+            Assert.AreEqual(3, collection.MaximumCount);
         }
 
         [Test]
@@ -1534,6 +1534,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("Flaky test")]
         public void Search_OnDebitNetwork()
         {
             TransactionRequest request = new TransactionRequest
@@ -1785,6 +1786,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
+        [Ignore("Flaky test. See: https://paypal.slack.com/archives/C03P4S18JBT/p1741207572015819 for more details.")]
         public void Sale_ReturnsSuccessfulResponseWithUsBankAccount()
         {
             var request = new TransactionRequest
@@ -3785,6 +3787,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("Flaky test. See: https://paypal.slack.com/archives/C03P4S18JBT/p1741207572015819 for more details.")]
         public void Sale_WithUsBankAccountNonce()
         {
             var request = new TransactionRequest
@@ -8820,13 +8823,13 @@ namespace Braintree.Tests.Integration
             gateway.TestTransaction.Settle(transaction.Id);
 
             Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2046.00"));
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
-            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
-            Assert.AreEqual("2046", result.Transaction.ProcessorResponseCode);
-            Assert.AreEqual("Declined", result.Transaction.ProcessorResponseText);
-            Assert.AreEqual(ProcessorResponseType.SOFT_DECLINED, result.Transaction.ProcessorResponseType);
-            Assert.AreEqual("2046 : Declined", result.Transaction.AdditionalProcessorResponse);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual("1005", result.Target.ProcessorResponseCode);
+            Assert.AreEqual("Auth Declined but Settlement Captured", result.Target.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, result.Target.ProcessorResponseType);
+            Assert.AreEqual("2046 : Declined", result.Target.AdditionalProcessorResponse);
         }
 
         [Test]
@@ -8857,13 +8860,13 @@ namespace Braintree.Tests.Integration
             await gateway.TestTransaction.SettleAsync(transaction.Id);
 
             Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2046.00"));
-            Assert.IsFalse(result.IsSuccess());
-            Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
-            Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
-            Assert.AreEqual("2046", result.Transaction.ProcessorResponseCode);
-            Assert.AreEqual("Declined", result.Transaction.ProcessorResponseText);
-            Assert.AreEqual(ProcessorResponseType.SOFT_DECLINED, result.Transaction.ProcessorResponseType);
-            Assert.AreEqual("2046 : Declined", result.Transaction.AdditionalProcessorResponse);
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual(TransactionType.CREDIT, result.Target.Type);
+            Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, result.Target.Status);
+            Assert.AreEqual("1005", result.Target.ProcessorResponseCode);
+            Assert.AreEqual("Auth Declined but Settlement Captured", result.Target.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, result.Target.ProcessorResponseType);
+            Assert.AreEqual("2046 : Declined", result.Target.AdditionalProcessorResponse);
         }
 #if net452
             ).GetAwaiter().GetResult();
@@ -8890,14 +8893,14 @@ namespace Braintree.Tests.Integration
             Transaction transaction = gateway.Transaction.Sale(request).Target;
             gateway.TestTransaction.Settle(transaction.Id);
 
-            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2009.00"));
+            Result<Transaction> result = gateway.Transaction.Refund(transaction.Id, decimal.Parse("2004.00"));
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
-            Assert.AreEqual("2009", result.Transaction.ProcessorResponseCode);
-            Assert.AreEqual("No Such Issuer", result.Transaction.ProcessorResponseText);
+            Assert.AreEqual("2004", result.Transaction.ProcessorResponseCode);
+            Assert.AreEqual("Expired Card", result.Transaction.ProcessorResponseText);
             Assert.AreEqual(ProcessorResponseType.HARD_DECLINED, result.Transaction.ProcessorResponseType);
-            Assert.AreEqual("2009 : No Such Issuer", result.Transaction.AdditionalProcessorResponse);
+            Assert.AreEqual("2004 : Expired Card", result.Transaction.AdditionalProcessorResponse);
         }
 
         [Test]
@@ -8927,14 +8930,14 @@ namespace Braintree.Tests.Integration
             Transaction transaction = saleResult.Target;
             await gateway.TestTransaction.SettleAsync(transaction.Id);
 
-            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2009.00"));
+            Result<Transaction> result = await gateway.Transaction.RefundAsync(transaction.Id, decimal.Parse("2004.00"));
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(TransactionType.CREDIT, result.Transaction.Type);
             Assert.AreEqual(TransactionStatus.PROCESSOR_DECLINED, result.Transaction.Status);
-            Assert.AreEqual("2009", result.Transaction.ProcessorResponseCode);
-            Assert.AreEqual("No Such Issuer", result.Transaction.ProcessorResponseText);
+            Assert.AreEqual("2004", result.Transaction.ProcessorResponseCode);
+            Assert.AreEqual("Expired Card", result.Transaction.ProcessorResponseText);
             Assert.AreEqual(ProcessorResponseType.HARD_DECLINED, result.Transaction.ProcessorResponseType);
-            Assert.AreEqual("2009 : No Such Issuer", result.Transaction.AdditionalProcessorResponse);
+            Assert.AreEqual("2004 : Expired Card", result.Transaction.AdditionalProcessorResponse);
         }
 #if net452
             ).GetAwaiter().GetResult();

@@ -17,6 +17,7 @@ namespace Braintree.GraphQL
     /// </summary>
     public class CustomerRecommendationsPayload
     {
+        public virtual string SessionId { get; protected set; }
         public virtual bool IsInPayPalNetwork { get; protected set; }
         public virtual CustomerRecommendations Recommendations { get; protected set; }
 
@@ -27,6 +28,17 @@ namespace Braintree.GraphQL
                 && data["generateCustomerRecommendations"] is Dictionary<string, object> customerRecommendations
             )
             {
+                object sessionIdObjValue;
+                if (
+                    customerRecommendations.TryGetValue("sessionId", out sessionIdObjValue)
+                    && sessionIdObjValue != null
+                )
+                {
+                    SessionId = sessionIdObjValue.ToString();
+                } else {
+                    SessionId = null;
+                } 
+
                 object objValue;
                 bool boolValue = false;
                 if (
