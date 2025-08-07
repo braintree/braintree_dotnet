@@ -355,6 +355,23 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void DeserializesUpcomingRetryDateFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "<upcoming-retry-date>2024-12-31</upcoming-retry-date>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+            Assert.AreEqual("2024-12-31", transaction.UpcomingRetryDate);
+        }
+
+        [Test]
         public void DeserializesRetriedTransactionIdFromXml()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

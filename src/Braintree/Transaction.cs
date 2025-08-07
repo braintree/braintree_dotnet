@@ -116,6 +116,7 @@ namespace Braintree
     public class Transaction
     {
 
+        public virtual bool? AccountFundingTransaction { get; protected set; }
         public virtual string AchReturnCode { get; protected set; }
         public virtual string AcquirerReferenceNumber { get; protected set; }
         public virtual string AdditionalProcessorResponse { get; protected set; }
@@ -185,6 +186,7 @@ namespace Braintree
         public virtual string RetrievalReferenceNumber { get; protected set; }
         public virtual List<String> RetryIds { get; protected set; }
         public virtual RiskData RiskData { get; protected set; }
+        public virtual string UpcomingRetryDate { get; protected set; }
         // NEXT_MAJOR_VERSION remove SamsungPayCardDetails
         #pragma warning disable 618
         public virtual SamsungPayCardDetails SamsungPayCardDetails { get; protected set; }
@@ -225,6 +227,7 @@ namespace Braintree
                 return;
 
             Id = node.GetString("id");
+            AccountFundingTransaction = node.GetBoolean("account-funding-transaction");
             Amount = node.GetDecimal("amount");
             AvsErrorResponseCode = node.GetString("avs-error-response-code");
             AvsPostalCodeResponseCode = node.GetString("avs-postal-code-response-code");
@@ -473,6 +476,7 @@ namespace Braintree
             Retried = node.GetBoolean("retried");
             RetriedTransactionId = node.GetString("retried-transaction-id");
             RetryIds = node.GetStrings("retry-ids/*");
+            UpcomingRetryDate = node.GetString("upcoming-retry-date");
             DebitNetwork = node.GetEnum("debit-network", TransactionDebitNetwork.UNRECOGNIZED);
         }
 

@@ -151,6 +151,22 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void AddFileEvidence_updatesRemainingFileEvidenceStorage()
+        {
+            DocumentUpload document = createSampleDocumentUpload();
+            Dispute dispute = createSampleDispute();
+            decimal? initialStorage = dispute.RemainingFileEvidenceStorage;
+
+            Assert.NotNull(initialStorage);
+
+            DisputeEvidence evidence = gateway.Dispute.AddFileEvidence(dispute.Id, document.Id).Target;
+
+            Dispute updatedDispute = gateway.Dispute.Find(dispute.Id).Target;
+            decimal? updatedStorage = updatedDispute.RemainingFileEvidenceStorage;
+            Assert.Less(updatedStorage, initialStorage);
+        }
+
+        [Test]
         public void AddFileEvidence_addsEvidenceWithCategory()
         {
             DocumentUpload document = createSampleDocumentUpload();

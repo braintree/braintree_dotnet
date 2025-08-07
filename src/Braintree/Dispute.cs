@@ -91,6 +91,7 @@ namespace Braintree
         public virtual string ReasonCode { get; protected set; }
         public virtual string ReasonDescription { get; protected set; }
         public virtual string ReferenceNumber { get; protected set; }
+        public virtual decimal? RemainingFileEvidenceStorage { get; protected set; }
         public virtual TransactionDetails TransactionDetails { get; protected set; }
         public virtual DisputeTransaction Transaction { get; protected set; }
         public List<DisputeStatusHistory> StatusHistory;
@@ -136,6 +137,7 @@ namespace Braintree
             ReasonCode = node.GetString("reason-code");
             ReasonDescription = node.GetString("reason-description");
             ReferenceNumber = node.GetString("reference-number");
+            RemainingFileEvidenceStorage = node.GetDecimal("remaining-file-evidence-storage");
 
             if (node.GetNode("transaction") != null) {
                 TransactionDetails = new TransactionDetails(node.GetNode("transaction"));

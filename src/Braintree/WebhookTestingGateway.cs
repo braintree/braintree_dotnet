@@ -48,6 +48,8 @@ namespace Braintree
             // Convert to switch statement
             if (kind == WebhookKind.TRANSACTION_DISBURSED) {
                 return TransactionDisbursedSampleXml(id);
+            } else if (kind == WebhookKind.TRANSACTION_RETRIED) {
+                return TransactionRetriedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_REVIEWED) {
                 return TransactionReviewedSampleXml(id);
             } else if (kind == WebhookKind.TRANSACTION_SETTLED) {
@@ -167,6 +169,18 @@ namespace Braintree
                     Node("descriptor"),
                     Node("shipping"),
                     Node("subscription")
+            );
+        }
+
+        private string TransactionRetriedSampleXml(string id)
+        {
+            return Node("transaction",
+                    Node("id", id),
+                    Node("amount", "100.00"),
+                    Node("status", "submitted_for_settlement"),
+                    Node("type", "sale"),
+                    Node("currency-iso-code", "USD"),
+                    Node("retried-transaction-id", "original_txn_id")
             );
         }
 

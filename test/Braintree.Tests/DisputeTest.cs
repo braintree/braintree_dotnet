@@ -74,6 +74,7 @@ namespace Braintree.Tests
                 NodeAttr("received-date", TYPE_DATE, "2016-02-22"),
                 NodeAttr("reply-by-date", TYPE_DATE, "2016-02-22"),
                 Node("reference-number", "123456"),
+                Node("remaining-file-evidence-storage", "31902983"),
                 Node("status", "open"),
                 NodeAttr("updated-at", TYPE_DATE, "2013-04-10"),
                 Node("original-dispute-id", "original_dispute_id"),
@@ -306,6 +307,19 @@ namespace Braintree.Tests
             var node = new NodeWrapper(newNode);
             var result = new Dispute(node);
             Assert.AreEqual(DisputePreDisputeProgram.UNRECOGNIZED, result.PreDisputeProgram);
+        }
+
+
+        [Test]
+        public void Constructor_populatesRemainingFileEvidenceStorage()
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(Payload_attributes());
+            XmlNode newNode = doc.DocumentElement;
+
+            var node = new NodeWrapper(newNode);
+            var result = new Dispute(node);
+            Assert.AreEqual(31902983, result.RemainingFileEvidenceStorage);
         }
 
         [Test]

@@ -106,6 +106,7 @@ namespace Braintree
         }
         public string TransactionSource { get; set; }
         public TransactionType? Type { get; set; }
+        public TransferRequest Transfer { get; set; }
         [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
         public string VenmoSdkPaymentMethodCode { get; set; }
     
@@ -204,6 +205,7 @@ namespace Braintree
                 builder.AddElement("three-d-secure-token", ThreeDSecureToken ?? "");
             #pragma warning restore 618
             builder.AddElement("transaction-source", TransactionSource);
+            if (Transfer != null) builder.AddElement("transfer", Transfer);
             if (Type != null) builder.AddElement("type", Type.GetDescription());
             // NEXT_MAJOR_VERSION Remove this pragma warning when we remove VenmoSdkPaymentMethodCode
             // We have this so we can build the SDK without obsolete error messages

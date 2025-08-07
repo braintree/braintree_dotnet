@@ -127,6 +127,22 @@ namespace Braintree.Tests
           Assert.IsTrue(notification.Transaction.DisbursementDetails.IsValid());
         }
 
+        [Test]
+        public void SampleNotification_ReturnsANotificationForATransactionRetriedWebhook()
+        {
+          Dictionary<string, string> sampleNotification = gateway.WebhookTesting.SampleNotification(WebhookKind.TRANSACTION_RETRIED, "my_id");
+
+          WebhookNotification notification = gateway.WebhookNotification.Parse(sampleNotification["bt_signature"], sampleNotification["bt_payload"]);
+
+          Assert.AreEqual(WebhookKind.TRANSACTION_RETRIED, notification.Kind);
+          Transaction transaction = notification.Transaction;
+          Assert.AreEqual("my_id", transaction.Id);
+          Assert.AreEqual(100.00, transaction.Amount);
+          Assert.AreEqual(TransactionStatus.SUBMITTED_FOR_SETTLEMENT, transaction.Status);
+          Assert.AreEqual(TransactionType.SALE, transaction.Type);
+          Assert.AreEqual("USD", transaction.CurrencyIsoCode);
+          Assert.AreEqual("original_txn_id", transaction.RetriedTransactionId);
+        }
 
         [Test]
         public void SampleNotification_ReturnsANotificationForATransactionSettledWebHook()

@@ -10872,5 +10872,14 @@ namespace Braintree.Tests.Integration
             Assert.IsNull(result.Target.PayPalDetails.Token);
             Assert.IsNotNull(result.Target.PayPalDetails.DebugId);
         }
+
+        [Test]
+        public void Find_ReturnsUpcomingRetryDateForTestTransaction()
+        {
+            Transaction transaction = gateway.Transaction.Find("first_attempted_ach_transaction");
+            Assert.IsNotNull(transaction.UpcomingRetryDate);
+            string expectedTomorrowDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+            Assert.AreEqual(expectedTomorrowDate, transaction.UpcomingRetryDate);
+        }
     }
 }
