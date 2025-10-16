@@ -1,19 +1,19 @@
-FROM debian:buster
+FROM debian:bullseye
 
 RUN apt-get update
 RUN apt-get -y install rake gnupg curl apt-transport-https dirmngr gnupg ca-certificates
-RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-RUN echo "deb http://download.mono-project.com/repo/debian buster main" | tee /etc/apt/sources.list.d/mono-official.list
+RUN mkdir -p /tmp/gpg
+RUN gpg --homedir /tmp/gpg --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+RUN rm -rf /tmp/gpg
+RUN echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/debian stable-bullseye main" | tee /etc/apt/sources.list.d/mono-official-stable.list
 RUN apt-get update
 
 RUN apt-get -y install mono-devel mono-complete mono-dbg referenceassemblies-pcl ca-certificates-mono mono-xsp4 mono-xbuild mono-vbnc binutils fsharp nuget libnewtonsoft-json-cil-dev libnewtonsoft-json5.0-cil
 
 RUN apt-get -y install curl libunwind8 gettext apt-transport-https
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-RUN mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 
-RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-buster-prod buster main" | tee /etc/apt/sources.list.d/dotnetdev.list
-RUN apt-get update
-RUN apt-get -y install dotnet-sdk-3.1
+# Install .NET Core 3.1 using the script method since it's no longer officially supported on Bullseye
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 3.1 --install-dir /usr/share/dotnet
+RUN ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
 
 WORKDIR /home/admin/bt/braintree-dotnet

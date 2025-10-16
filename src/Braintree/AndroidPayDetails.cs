@@ -22,6 +22,7 @@ namespace Braintree
         public virtual string ImageUrl { get; protected set; }
         public virtual string IssuingBank { get; protected set; }
         public virtual string Last4 { get; protected set; }
+        public virtual string PaymentAccountReference { get; protected set; }
         public virtual string Payroll { get; protected set; }
         public virtual string Prepaid { get; protected set; }
         public virtual string PrepaidReloadable { get; protected set; }
@@ -54,6 +55,7 @@ namespace Braintree
             IsNetworkTokenized = node.GetBoolean("is-network-tokenized");
             IssuingBank = node.GetString("issuing-bank");
             Last4 = node.GetString("virtual-card-last-4");
+            PaymentAccountReference = node.GetString("payment-account-reference");
             Payroll = node.GetString("payroll");
             Prepaid = node.GetString("prepaid");
             PrepaidReloadable = node.GetString("prepaid-reloadable");

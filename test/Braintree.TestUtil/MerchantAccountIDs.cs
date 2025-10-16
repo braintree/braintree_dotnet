@@ -13,6 +13,7 @@ namespace Braintree.TestUtil
         public static string BRAZIL_MERCHANT_ACCOUNT_ID = "hiper_brl";
         public static string CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID = "card_processor_brl";
         public static string CARD_PROCESSOR_BRAZIL_PAYFAC_MERCHANT_ACCOUNT_ID = "card_processor_brl_payfac";
+        public static string CARD_PROCESSOR_BRAZIL_SDWO_MERCHANT_ACCOUNT_ID = "card_processor_brl_sdwo";
         public static string FAKE_FIRST_DATA_MERCHANT_ACCOUNT_ID = "fake_first_data_merchant_account";
         public static string AIB_SWE_MA = "aib_swe_ma";
     }

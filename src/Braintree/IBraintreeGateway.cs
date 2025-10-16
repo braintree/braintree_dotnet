@@ -57,6 +57,7 @@ namespace Braintree
         Environment Environment { get; set; }
         IAddOnGateway AddOn { get; }
         IAddressGateway Address { get; }
+        IBankAccountInstantVerificationGateway BankAccountInstantVerification { get; }
         IClientTokenGateway ClientToken { get; }
         ICreditCardGateway CreditCard { get; }
         ICreditCardVerificationGateway CreditCardVerification { get; }

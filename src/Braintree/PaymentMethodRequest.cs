@@ -19,6 +19,18 @@ namespace Braintree
         public string DeviceData { get; set; }
         public string PayPalRefreshToken { get; set; }
 
+        private PaymentMethodUsBankAccountRequest usBankAccountRequest;
+
+        /// <summary>
+        /// Creates a new PaymentMethodUsBankAccountRequest for configuring US bank account details.
+        /// </summary>
+        /// <returns>a PaymentMethodUsBankAccountRequest</returns>
+        public PaymentMethodUsBankAccountRequest UsBankAccount()
+        {
+            usBankAccountRequest = new PaymentMethodUsBankAccountRequest(this);
+            return usBankAccountRequest;
+        }
+
         public override string ToXml()
         {
             return ToXml("payment-method");
@@ -47,7 +59,8 @@ namespace Braintree
                 AddElement("number", Number).
                 AddElement("paypal-refresh-token", PayPalRefreshToken).
                 AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId).
-                AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru);
+                AddElement("three-d-secure-pass-thru", ThreeDSecurePassThru).
+                AddElement("us-bank-account", usBankAccountRequest);
         }
     }
 }

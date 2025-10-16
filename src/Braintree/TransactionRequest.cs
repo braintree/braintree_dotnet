@@ -109,6 +109,18 @@ namespace Braintree
         public TransferRequest Transfer { get; set; }
         [ObsoleteAttribute("the Venmo SDK integration is deprecated. Use Pay with Venmo instead https://developer.paypal.com/braintree/docs/guides/venmo/overview", false)]
         public string VenmoSdkPaymentMethodCode { get; set; }
+        
+        private TransactionUsBankAccountRequest usBankAccountRequest;
+
+        /// <summary>
+        /// Creates a new TransactionUsBankAccountRequest for configuring US bank account details.
+        /// </summary>
+        /// <returns>a TransactionUsBankAccountRequest</returns>
+        public TransactionUsBankAccountRequest UsBankAccount()
+        {
+            usBankAccountRequest = new TransactionUsBankAccountRequest(this);
+            return usBankAccountRequest;
+        }
     
         // NEXT_MAJOR_VERSION replace ThreeDSecureToken with ThreeDSecureAuthenticationId
         // threeDSecureToken has been deprecated in favor of threeDSecureAuthenticationId
@@ -212,6 +224,7 @@ namespace Braintree
             #pragma warning disable 618
             builder.AddElement("venmo-sdk-payment-method-code", VenmoSdkPaymentMethodCode);
             #pragma warning restore 618
+            builder.AddElement("usBankAccount", usBankAccountRequest);
 
             return builder;
         }

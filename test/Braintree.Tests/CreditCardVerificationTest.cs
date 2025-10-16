@@ -109,5 +109,27 @@ namespace Braintree.Tests
             Assert.AreEqual("M", verification.AniFirstNameResponseCode);
             Assert.AreEqual("M", verification.AniLastNameResponseCode);
         }
+
+        [Test]
+        public void PaymentAccountReference_AccessibleThroughCreditCardDetails()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            builder.Append("<verification>\n");
+            builder.Append("  <credit-card>\n");
+            builder.Append("    <last-4>1234</last-4>\n");
+            builder.Append("    <payment-account-reference>V0010013019339005665779448477</payment-account-reference>\n");
+            builder.Append("  </credit-card>\n");
+            builder.Append("</verification>\n");
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(builder.ToString());
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            CreditCardVerification verification = new CreditCardVerification(node, gateway);
+            Assert.AreEqual("V0010013019339005665779448477", verification.CreditCard.PaymentAccountReference);
+        }
+
     }
 }

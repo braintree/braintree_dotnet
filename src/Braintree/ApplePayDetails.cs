@@ -4,6 +4,7 @@ namespace Braintree
 {
     public class ApplePayDetails
     {
+        public virtual bool? IsDeviceToken { get; protected set; }
         public virtual string Bin { get; protected set; }
         public virtual string Business { get; protected set; }
         public virtual string CardholderName { get; protected set; }
@@ -22,6 +23,7 @@ namespace Braintree
         public virtual string IssuingBank { get; protected set; }
         public virtual string LastFour { get; protected set; }
         public virtual string MerchantTokenIdentifier { get; protected set; }
+        public virtual string PaymentAccountReference { get; protected set; }
         public virtual string PaymentInstrumentName { get; protected set; }
         public virtual string Payroll { get; protected set; }
         public virtual string Prepaid { get; protected set; }
@@ -49,9 +51,11 @@ namespace Braintree
             GlobalId = node.GetString("global-id");
             Healthcare = node.GetString("healthcare");
             ImageUrl = node.GetString("image-url");
+            IsDeviceToken = node.GetBoolean("is-device-token");
             IssuingBank = node.GetString("issuing-bank");
             LastFour = node.GetString("last-4");
             MerchantTokenIdentifier = node.GetString("merchant-token-identifier");
+            PaymentAccountReference = node.GetString("payment-account-reference");
             PaymentInstrumentName = node.GetString("payment-instrument-name");
             Payroll = node.GetString("payroll");
             Prepaid = node.GetString("prepaid");

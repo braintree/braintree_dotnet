@@ -204,5 +204,7 @@ namespace Braintree
         public virtual IPaymentMethodNonceGateway PaymentMethodNonce => new PaymentMethodNonceGateway(this);
 
         public virtual IExchangeRateQuoteGateway ExchangeRateQuote => new ExchangeRateQuoteGateway(this);
+
+        public virtual IBankAccountInstantVerificationGateway BankAccountInstantVerification => new BankAccountInstantVerificationGateway(Service, GraphQLClient);
     }
 }

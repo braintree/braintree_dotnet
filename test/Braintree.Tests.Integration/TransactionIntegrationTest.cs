@@ -110,12 +110,18 @@ namespace Braintree.Tests.Integration
                 IncludedIn("R01", "R02");
             collection = gateway.Transaction.Search(searchRequest);
             Assert.AreEqual(3, collection.MaximumCount);
+
+            searchRequest = new TransactionSearchRequest().
+                ReasonCode.
+                IncludedIn("RJCT");
+            collection = gateway.Transaction.Search(searchRequest);
+            Assert.AreEqual(2, collection.MaximumCount);
         
             searchRequest = new TransactionSearchRequest().
                 ReasonCode.
                 IncludedIn(TransactionSearchRequest.ACH_ANY_REASON_CODE);
             collection = gateway.Transaction.Search(searchRequest);
-            Assert.AreEqual(3, collection.MaximumCount);
+            Assert.AreEqual(5, collection.MaximumCount);
         }
 
         [Test]
@@ -3509,6 +3515,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
             Assert.IsNotNull(result.Target.ApplePayDetails.Healthcare);
             Assert.IsNotNull(result.Target.ApplePayDetails.ImageUrl);
+            Assert.IsTrue(result.Target.ApplePayDetails.IsDeviceToken);
             Assert.IsNotNull(result.Target.ApplePayDetails.IssuingBank);
             Assert.IsNotNull(result.Target.ApplePayDetails.LastFour);
             Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
@@ -3519,6 +3526,45 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Target.ApplePayDetails.Purchase);
             Assert.IsNotNull(result.Target.ApplePayDetails.SourceDescription);
             Assert.IsNotNull(result.Target.ApplePayDetails);
+        }
+
+        [Test]
+        public void Sale_WithApplePayMpanNonce()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                PaymentMethodNonce = Nonce.ApplePayMpan
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.IsNotNull(result.Target.ApplePayDetails.Bin);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Business);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CardholderName);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CardType);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Commercial);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Consumer);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Corporate);
+            Assert.IsNotNull(result.Target.ApplePayDetails.CountryOfIssuance);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Debit);
+            Assert.IsNotNull(result.Target.ApplePayDetails.DurbinRegulated);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationMonth);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ExpirationYear);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Healthcare);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ImageUrl);
+            Assert.IsNotNull(result.Target.ApplePayDetails.IssuingBank);
+            Assert.IsNotNull(result.Target.ApplePayDetails.LastFour);
+            Assert.IsNotNull(result.Target.ApplePayDetails.PaymentInstrumentName);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Payroll);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Prepaid);
+            Assert.IsNotNull(result.Target.ApplePayDetails.PrepaidReloadable);
+            Assert.IsNotNull(result.Target.ApplePayDetails.ProductId);
+            Assert.IsNotNull(result.Target.ApplePayDetails.Purchase);
+            Assert.IsNotNull(result.Target.ApplePayDetails.SourceDescription);
+            Assert.IsNotNull(result.Target.ApplePayDetails);
+            Assert.IsFalse(result.Target.ApplePayDetails.IsDeviceToken);
+            Assert.IsNotNull(result.Target.ApplePayDetails.MerchantTokenIdentifier);
         }
 
         [Test]
@@ -10880,6 +10926,42 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.UpcomingRetryDate);
             string expectedTomorrowDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
             Assert.AreEqual(expectedTomorrowDate, transaction.UpcomingRetryDate);
+        }
+
+        [Test]
+        public void Find_ReturnsTransactionWithPaymentAccountReference()
+        {
+            Transaction transaction = gateway.Transaction.Find("aft_txn");
+
+            Assert.IsNotNull(transaction.CreditCard);
+            Assert.That(transaction.CreditCard, Has.Property("PaymentAccountReference"));
+        }
+
+        [Test]
+        public void Find_ReturnsTransactionWithPaymentAccountReferenceInApplePayDetails()
+        {
+            Transaction transaction = gateway.Transaction.Find("apple_pay_transaction");
+
+            Assert.IsNotNull(transaction.ApplePayDetails);
+            Assert.That(transaction.ApplePayDetails, Has.Property("PaymentAccountReference"));
+        }
+
+        [Test]
+        public void Find_ReturnsTransactionWithPaymentAccountReferenceInAndroidPayDetails()
+        {
+            Transaction transaction = gateway.Transaction.Find("android_pay_card_transaction");
+
+            Assert.IsNotNull(transaction.AndroidPayDetails);
+            Assert.That(transaction.AndroidPayDetails, Has.Property("PaymentAccountReference"));
+        }
+
+        [Test]
+        public void Find_ReturnsTransactionWithPaymentAccountReferenceInGooglePayDetails()
+        {
+            Transaction transaction = gateway.Transaction.Find("android_pay_network_token_transaction");
+
+            Assert.IsNotNull(transaction.AndroidPayDetails);
+            Assert.That(transaction.AndroidPayDetails, Has.Property("PaymentAccountReference"));
         }
     }
 }

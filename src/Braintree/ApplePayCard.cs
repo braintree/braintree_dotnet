@@ -6,6 +6,7 @@ namespace Braintree
     {
         public virtual bool? IsDefault { get; protected set; }
         public virtual bool? IsExpired { get; protected set; }
+        public virtual bool? IsDeviceToken { get; protected set; }
         public virtual DateTime? CreatedAt { get; protected set; }
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual string Bin { get; protected set; }
@@ -55,6 +56,7 @@ namespace Braintree
             ImageUrl = node.GetString("image-url");
             IsDefault = node.GetBoolean("default");
             IsExpired = node.GetBoolean("expired");
+            IsDeviceToken = node.GetBoolean("is-device-token");
             IssuingBank = node.GetString("issuing-bank");
             Last4 = node.GetString("last-4");
             MerchantTokenIdentifier = node.GetString("merchant-token-identifier");

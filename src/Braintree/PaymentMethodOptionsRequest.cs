@@ -37,7 +37,7 @@ namespace Braintree
                 AddElement("make-default", MakeDefault).
                 AddElement("paypal", OptionsPayPal).
                 AddElement("skip-advanced-fraud-checking", SkipAdvancedFraudChecking).
-                AddElement("us-bank-account-verification-method", UsBankAccountVerificationMethod.GetDescription()).
+                AddElement("us-bank-account-verification-method", UsBankAccountVerificationMethod?.GetDescription()).
                 AddElement("verification-account-type", VerificationAccountType).
                 AddElement("verification-add-ons", VerificationAddOns.GetDescription()).
                 AddElement("verification-amount", VerificationAmount).

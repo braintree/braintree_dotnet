@@ -9,6 +9,8 @@ namespace Braintree
     public class TransferRequest : Request
     {
 
+        public SenderRequest Sender { get; set; }
+        public ReceiverRequest Receiver { get; set; }
         public string Type { get; set; }
 
         public override string ToXml()
@@ -37,6 +39,15 @@ namespace Braintree
             if (Type != null) {
                 builder.AddElement("type", Type);
             }
+
+            if (Sender != null) {
+                builder.AddElement("sender", Sender);
+            }
+
+            if (Receiver != null) {
+                builder.AddElement("receiver", Receiver);
+            }
+
             return builder;
         }
     }

@@ -171,6 +171,7 @@ namespace Braintree
         public virtual string ExpirationYear { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
         public virtual string LastFour { get; protected set; }
+        public virtual string PaymentAccountReference { get; protected set; }
         public virtual string Token { get; protected set; }
         public virtual string UniqueNumberIdentifier { get; protected set; }
         public virtual Subscription[] Subscriptions { get; protected set; }
@@ -270,6 +271,7 @@ namespace Braintree
             IsVenmoSdk = node.GetBoolean("venmo-sdk");
             #pragma warning restore 618
             LastFour = node.GetString("last-4");
+            PaymentAccountReference = node.GetString("payment-account-reference");
             Payroll = node.GetEnum("payroll", CreditCardPayroll.UNKNOWN);
             Prepaid = node.GetEnum("prepaid", CreditCardPrepaid.UNKNOWN);
             PrepaidReloadable = node.GetEnum("prepaid-reloadable", CreditCardPrepaidReloadable.UNKNOWN);

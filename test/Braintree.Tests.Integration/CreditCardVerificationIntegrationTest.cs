@@ -775,5 +775,14 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(verification.NetworkTransactionId);
         }
+
+        [Test]
+        public void Find_ReturnsVerificationWithPaymentAccountReference()
+        {
+            CreditCardVerification verification = gateway.CreditCardVerification.Find("threedsecuredverification");
+
+            Assert.IsNotNull(verification.CreditCard);
+            Assert.That(verification.CreditCard, Has.Property("PaymentAccountReference"));
+        }
     }
 }

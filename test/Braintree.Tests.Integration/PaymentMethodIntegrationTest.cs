@@ -495,6 +495,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(applePayCard.DurbinRegulated);
             Assert.IsNotNull(applePayCard.Commercial);
             Assert.IsNotNull(applePayCard.Payroll);
+            Assert.IsTrue(applePayCard.IsDeviceToken);
             Assert.IsNotNull(applePayCard.IssuingBank);
             Assert.IsNotNull(applePayCard.CountryOfIssuance);
             Assert.IsNotNull(applePayCard.ProductId);
@@ -539,6 +540,7 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(applePayCard.CountryOfIssuance);
             Assert.IsNotNull(applePayCard.ProductId);
             Assert.AreEqual(result.Target.Id, applePayCard.CustomerId);
+            Assert.IsFalse(applePayCard.IsDeviceToken);
             Assert.IsNotNull(applePayCard.MerchantTokenIdentifier);
             Assert.IsNotNull(applePayCard.SourceCardLast4);
         }

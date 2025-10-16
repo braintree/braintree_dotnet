@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.36.0
+- Add Bank Account Instant Verification functionality
+- Add `BankAccountInstantVerificationGateway` for creating JWT tokens
+- Add `BankAccountInstantVerificationJwt` response object
+- Add `BankAccountInstantVerificationJwtRequest` for JWT creation
+- Add `AchMandate` and `AchMandateAcceptedAt` fields to `TransactionRequest`
+- Add `INSTANT_VERIFICATION_ACCOUNT_VALIDATION` method to `UsBankAccountVerificationMethod`
+- Add `AchRejectReason` field to `Transaction`
+- Add `sender` and `receiver` to `transfer` in `Transaction`
+- Add `IsDeviceToken` to `ApplePayCard` and `ApplePayDetails`
+- Add `PaymentAccountReference` to `ApplePayDetails`, `AndroidPayDetails`, `CreditCard`, and `CreditCardVerification`
+
 ## 5.35.0
 - Add `UpcomingRetryDate` field to `Transaction`
 - Add `RemainingFileEvidenceStorage` to Dispute

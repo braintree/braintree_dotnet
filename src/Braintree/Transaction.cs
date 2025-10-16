@@ -117,6 +117,7 @@ namespace Braintree
     {
 
         public virtual bool? AccountFundingTransaction { get; protected set; }
+        public virtual string AchRejectReason { get; protected set; }
         public virtual string AchReturnCode { get; protected set; }
         public virtual string AcquirerReferenceNumber { get; protected set; }
         public virtual string AdditionalProcessorResponse { get; protected set; }
@@ -447,6 +448,7 @@ namespace Braintree
             ShippingTaxAmount = node.GetDecimal("shipping-tax-amount");
             ShipsFromPostalCode = node.GetString("ships-from-postal-code");
 
+            AchRejectReason = node.GetString("ach-reject-reason");
             AchReturnCode = node.GetString("ach-return-code");
 
             SepaDirectDebitReturnCode = node.GetString("sepa-direct-debit-return-code");

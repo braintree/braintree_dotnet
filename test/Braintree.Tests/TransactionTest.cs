@@ -172,6 +172,31 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void DeserializesAchRejectReasonFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <shipping-amount>1.00</shipping-amount>\n" +
+                "  <ach-return-code>RJCT</ach-return-code>\n" +
+                "  <ach-reject-reason>Reject Reason</ach-reject-reason>\n" +
+                "  <discount-amount>2.00</discount-amount>\n" +
+                "  <ships-from-postal-code>12345</ships-from-postal-code>\n" +
+                "  <disbursement-details></disbursement-details>\n" +
+                "  <subscription></subscription>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual("RJCT", transaction.AchReturnCode);
+            Assert.AreEqual("Reject Reason", transaction.AchRejectReason);
+        }
+
+        [Test]
         public void DeserializesLevel3SummaryFieldsFromXml()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -511,6 +536,115 @@ namespace Braintree.Tests
             var xml = transactionRequest.ToXml();
 
             Assert.IsFalse(xml.Contains("<payment-facilitator>"));
+        }
+
+        [Test]
+        public void BuildRequest_Transfer_IncludedWhenNotNull()
+        {
+            string[] transferTypes = { "account_to_account", "boleto_ticket", "person_to_person", "wallet_transfer" };
+            
+            foreach (string transferType in transferTypes)
+            {
+                var transactionRequest = new TransactionRequest
+                {
+                    Amount = 100.00m,
+                    Transfer = new TransferRequest
+                    {
+                        Type = transferType,
+                        Sender = new SenderRequest
+                        {
+                            FirstName = "Alice",
+                            LastName = "Silva",
+                            AccountReferenceNumber = "1000012345",
+                            TaxId = "12345678900",
+                            Address = new AddressRequest
+                            {
+                                StreetAddress = "Rua das Flores, 100",
+                                ExtendedAddress = "2B",
+                                Locality = "São Paulo",
+                                Region = "SP",
+                                PostalCode = "01001-000",
+                                CountryCodeAlpha2 = "BR",
+                                InternationalPhone = new InternationalPhoneRequest
+                                {
+                                    CountryCode = "55",
+                                    NationalNumber = "1234567890"
+                                }
+                            }
+                        },
+                        Receiver = new ReceiverRequest
+                        {
+                            FirstName = "Bob",
+                            LastName = "Souza",
+                            AccountReferenceNumber = "2000012345",
+                            TaxId = "98765432100",
+                            Address = new AddressRequest
+                            {
+                                StreetAddress = "Avenida Brasil, 200",
+                                ExtendedAddress = "2B",
+                                Locality = "Rio de Janeiro",
+                                Region = "RJ",
+                                PostalCode = "20040-002",
+                                CountryCodeAlpha2 = "BR",
+                                InternationalPhone = new InternationalPhoneRequest
+                                {
+                                    CountryCode = "55",
+                                    NationalNumber = "9876543210"
+                                }
+                            }
+                        }
+                    }
+                };
+
+                string xml = transactionRequest.ToXml();
+
+                Assert.IsTrue(xml.Contains("<transfer>"));
+                Assert.IsTrue(xml.Contains($"<type>{transferType}</type>"));
+                Assert.IsTrue(xml.Contains("<sender>"));
+                Assert.IsTrue(xml.Contains("<first-name>Alice</first-name>"));
+                Assert.IsTrue(xml.Contains("<last-name>Silva</last-name>"));
+                Assert.IsTrue(xml.Contains("<account-reference-number>1000012345</account-reference-number>"));
+                Assert.IsTrue(xml.Contains("<tax-id>12345678900</tax-id>"));
+                Assert.IsTrue(xml.Contains("<address>"));
+                Assert.IsTrue(xml.Contains("<street-address>Rua das Flores, 100</street-address>"));
+                Assert.IsTrue(xml.Contains("<extended-address>2B</extended-address>"));
+                Assert.IsTrue(xml.Contains("<locality>São Paulo</locality>"));
+                Assert.IsTrue(xml.Contains("<region>SP</region>"));
+                Assert.IsTrue(xml.Contains("<postal-code>01001-000</postal-code>"));
+                Assert.IsTrue(xml.Contains("<country-code-alpha2>BR</country-code-alpha2>"));
+                Assert.IsTrue(xml.Contains("<international-phone>"));
+                Assert.IsTrue(xml.Contains("<country-code>55</country-code>"));
+                Assert.IsTrue(xml.Contains("<national-number>1234567890</national-number>"));
+
+                Assert.IsTrue(xml.Contains("<receiver>"));
+                Assert.IsTrue(xml.Contains("<first-name>Bob</first-name>"));
+                Assert.IsTrue(xml.Contains("<last-name>Souza</last-name>"));
+                Assert.IsTrue(xml.Contains("<account-reference-number>2000012345</account-reference-number>"));
+                Assert.IsTrue(xml.Contains("<tax-id>98765432100</tax-id>"));
+                Assert.IsTrue(xml.Contains("<address>"));
+                Assert.IsTrue(xml.Contains("<street-address>Avenida Brasil, 200</street-address>"));
+                Assert.IsTrue(xml.Contains("<extended-address>2B</extended-address>"));
+                Assert.IsTrue(xml.Contains("<locality>Rio de Janeiro</locality>"));
+                Assert.IsTrue(xml.Contains("<region>RJ</region>"));
+                Assert.IsTrue(xml.Contains("<postal-code>20040-002</postal-code>"));
+                Assert.IsTrue(xml.Contains("<country-code-alpha2>BR</country-code-alpha2>"));
+                Assert.IsTrue(xml.Contains("<international-phone>"));
+                Assert.IsTrue(xml.Contains("<country-code>55</country-code>"));
+                Assert.IsTrue(xml.Contains("<national-number>9876543210</national-number>"));
+            }
+        }
+
+        [Test]
+        public void BuildRequest_Transfer_NotIncludedWhenNull()
+        {
+            var transactionRequest = new TransactionRequest
+            {
+                Transfer = null
+            };
+
+            var xml = transactionRequest.ToXml();
+
+            Assert.IsFalse(xml.Contains("<transfer>"));
         }
     }
 }
