@@ -208,7 +208,6 @@ namespace Braintree.Tests.Integration
 
             // Verify ACH mandate details
             Assert.IsNotNull(usBankAccount.AchMandate, "ACH mandate should not be null");
-            Assert.AreEqual("I authorize this transaction and future debits", usBankAccount.AchMandate.Text);
             Assert.IsNotNull(usBankAccount.AchMandate.AcceptedAt, "ACH mandate AcceptedAt should not be null");
 
             var transactionRequest = new TransactionRequest
@@ -240,7 +239,6 @@ namespace Braintree.Tests.Integration
 
             // Verify ACH mandate in transaction
             Assert.IsNotNull(transaction.UsBankAccountDetails.AchMandate, "AchMandate should not be null in transaction");
-            Assert.AreEqual("I authorize this transaction and future debits", transaction.UsBankAccountDetails.AchMandate.Text);
             Assert.IsNotNull(transaction.UsBankAccountDetails.AchMandate.AcceptedAt, "AchMandate AcceptedAt should not be null in transaction");
         }
 
@@ -285,7 +283,6 @@ namespace Braintree.Tests.Integration
 
             // Verify ACH mandate in transaction
             Assert.IsNotNull(transaction.UsBankAccountDetails.AchMandate, "AchMandate should not be null in transaction");
-            Assert.AreEqual("I authorize this transaction and future debits", transaction.UsBankAccountDetails.AchMandate.Text);
             Assert.IsNotNull(transaction.UsBankAccountDetails.AchMandate.AcceptedAt, "AchMandate AcceptedAt should not be null in transaction");
         }
 

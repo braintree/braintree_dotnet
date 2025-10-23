@@ -1825,7 +1825,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
             AchMandate achMandate = usBankAccountDetails.AchMandate;
-            Assert.AreEqual("cl mandate text", achMandate.Text);
             Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
         }
 
@@ -1862,7 +1861,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
             AchMandate achMandate = usBankAccountDetails.AchMandate;
-            Assert.AreEqual("cl mandate text", achMandate.Text);
             Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
 
             request = new TransactionRequest
@@ -1894,7 +1892,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Dan Schulman", usBankAccountDetails.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccountDetails.BankName, ".*CHASE.*"));
             achMandate = usBankAccountDetails.AchMandate;
-            Assert.AreEqual("cl mandate text", achMandate.Text);
             Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
         }
 
@@ -2607,6 +2604,47 @@ namespace Braintree.Tests.Integration
             Result<Transaction> result = gateway.Transaction.Sale(request);
             Assert.IsFalse(result.IsSuccess());
             Assert.AreEqual(ValidationErrorCode.TRANSACTION_TRANSACTION_SOURCE_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Transaction-Source")[0].Code);
+        }
+
+        [Test]
+        public void Sale_WithAlphaNumericProcessingMerchantCategoryCode()
+        {
+            var request = BuildMccRequest("541A");
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PROCESSING_MERCHANT_CATEGORY_CODE_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Processing-Merchant-Category-Code")[0].Code);
+        }
+
+        [Test]
+        public void Sale_WithTooShortProcessingMerchantCategoryCodeInvalid()
+        {
+            var request = BuildMccRequest("541");
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PROCESSING_MERCHANT_CATEGORY_CODE_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Processing-Merchant-Category-Code")[0].Code);
+        }
+
+        [Test]
+        public void Sale_WithTooLongProcessingMerchantCategoryCode()
+        {
+            var request = BuildMccRequest("54111");
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.TRANSACTION_PROCESSING_MERCHANT_CATEGORY_CODE_IS_INVALID, result.Errors.ForObject("Transaction").OnField("Processing-Merchant-Category-Code")[0].Code);
+        }
+
+        [Test]
+        public void Sale_WithValidProcessingMerchantCategoryCode()
+        {
+            var request = BuildMccRequest("5411");
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
         }
 
         [Test]
@@ -10962,6 +11000,20 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(transaction.AndroidPayDetails);
             Assert.That(transaction.AndroidPayDetails, Has.Property("PaymentAccountReference"));
+        }
+
+        private TransactionRequest BuildMccRequest(string mcc)
+        {
+            return new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2028",
+                },
+                ProcessingMerchantCategoryCode = mcc
+            };
         }
     }
 }

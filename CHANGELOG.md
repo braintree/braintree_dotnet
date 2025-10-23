@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.37.0
+- Add `ProcessingMerchantCategoryCode` to `TransactionRequest`
+- Add missing `transfer` validation error codes in `Transaction`
+
 ## 5.36.0
 - Add Bank Account Instant Verification functionality
 - Add `BankAccountInstantVerificationGateway` for creating JWT tokens

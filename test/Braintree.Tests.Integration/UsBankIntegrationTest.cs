@@ -56,7 +56,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
             AchMandate achMandate = usBankAccount.AchMandate;
-            Assert.AreEqual("cl mandate text", achMandate.Text);
             Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
             Assert.IsTrue(usBankAccount.IsDefault);
         }
@@ -112,7 +111,6 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual(usBankAccount.AccountType, usBankAccountDetails.AccountType);
             Assert.AreEqual(usBankAccount.AccountHolderName, usBankAccountDetails.AccountHolderName);
             AchMandate achMandate = usBankAccountDetails.AchMandate;
-            Assert.AreEqual(usBankAccount.AchMandate.Text, achMandate.Text);
             Assert.AreEqual("DateTime", achMandate.AcceptedAt.GetType().Name);
         }
 

@@ -51,6 +51,22 @@ namespace Braintree.Tests
         }
 
         [Test]
+        public void TransactionRequest_ToXml_Includes_ProcessingMerchantCategoryCode()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2028",
+                },
+                ProcessingMerchantCategoryCode = "5411"
+            };
+            Assert.IsTrue(request.ToXml().Contains("<processing-merchant-category-code>5411</processing-merchant-category-code>"));
+        }
+
+        [Test]
         public void UnrecognizedValuesAreCategorizedAsSuch()
         {
             string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +

@@ -74,6 +74,7 @@ namespace Braintree
         public string PaymentMethodNonce { get; set; }
         public string PaymentMethodToken { get; set; }
         public TransactionPayPalRequest PayPalAccount { get; set; }
+        public string ProcessingMerchantCategoryCode { get; set; }
         public string ProductSku { get; set; }
         public string PurchaseOrderNumber { get; set; }
         [ObsoleteAttribute("use TransactionSource instead", false)]
@@ -184,6 +185,7 @@ namespace Braintree
             builder.AddElement("payment-method-nonce", PaymentMethodNonce);
             builder.AddElement("payment-method-token", PaymentMethodToken);
             builder.AddElement("paypal-account", PayPalAccount);
+            builder.AddElement("processing-merchant-category-code", ProcessingMerchantCategoryCode);
             builder.AddElement("product-sku", ProductSku);
             builder.AddElement("purchase-order-number", PurchaseOrderNumber);
             // Remove this pragma warning when we remove DeviceSessionId, FraudMerchantId, and Recurring.
