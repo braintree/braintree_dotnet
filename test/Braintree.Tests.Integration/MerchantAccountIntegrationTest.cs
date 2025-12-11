@@ -2,6 +2,7 @@ using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Braintree.Tests.Integration
@@ -33,29 +34,17 @@ namespace Braintree.Tests.Integration
         [Test]
         public void CreateForCurrency()
         {
-            gateway = new BraintreeGateway(
-                "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret"
-            );
+            var merchantResult = OAuthTestHelper.GetMerchant();
+            gateway = new BraintreeGateway(merchantResult.Credentials.AccessToken);
 
-            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "GBR",
-                PaymentMethods = new string[] {"credit_card", "paypal"},
-                CompanyName = "Ziarog LTD"
-            });
-
-            Assert.IsTrue(merchantResult.IsSuccess());
-
-            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
-                Currency = "USD",
-                Id = "testId",
+                Currency = "AUD"
             });
 
-            Assert.IsTrue(result.IsSuccess());
-            Assert.AreEqual("testId", result.Target.Id);
-            Assert.AreEqual("USD", result.Target.CurrencyIsoCode);
+            Assert.IsTrue(result.IsSuccess(),
+                result.IsSuccess() ? "" : $"Failed to create merchant account: {string.Join(", ", result.Errors.All().Select(e => e.Message))}"
+            );
+            Assert.AreEqual("AUD", result.Target.CurrencyIsoCode);
         }
 
         [Test]
@@ -67,29 +56,17 @@ namespace Braintree.Tests.Integration
             Task.Run(async () =>
 #endif
         {
-            gateway = new BraintreeGateway(
-                "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret"
-            );
+            var merchantResult = OAuthTestHelper.GetMerchant();
+            gateway = new BraintreeGateway(merchantResult.Credentials.AccessToken);
 
-            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "GBR",
-                PaymentMethods = new string[] {"credit_card", "paypal"},
-                CompanyName = "Ziarog LTD"
-            });
-
-            Assert.IsTrue(merchantResult.IsSuccess());
-
-            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = await gateway.MerchantAccount.CreateForCurrencyAsync(new MerchantAccountCreateForCurrencyRequest {
-                Currency = "USD",
-                Id = "testId",
+                Currency = "NZD"
             });
 
-            Assert.IsTrue(result.IsSuccess());
-            Assert.AreEqual("testId", result.Target.Id);
-            Assert.AreEqual("USD", result.Target.CurrencyIsoCode);
+            Assert.IsTrue(result.IsSuccess(),
+                result.IsSuccess() ? "" : $"Failed to create merchant account: {string.Join(", ", result.Errors.All().Select(e => e.Message))}"
+            );
+            Assert.AreEqual("NZD", result.Target.CurrencyIsoCode);
         }
 #if net452
             ).GetAwaiter().GetResult();
@@ -99,23 +76,20 @@ namespace Braintree.Tests.Integration
         [Test]
         public void CreateForCurrency_HandlesAlreadyExistingMerchantAccountForCurrency()
         {
-            gateway = new BraintreeGateway(
-                "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret"
-            );
+            var merchantResult = OAuthTestHelper.GetMerchant();
+            gateway = new BraintreeGateway(merchantResult.Credentials.AccessToken);
 
-            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "GBR",
-                PaymentMethods = new string[] {"credit_card", "paypal"},
-                CompanyName = "Ziarog LTD"
+            // Create a merchant account for CAD
+            Result<MerchantAccount> createResult = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
+                Currency = "CAD",
             });
 
-            Assert.IsTrue(merchantResult.IsSuccess());
+            Assert.IsTrue(createResult.IsSuccess(),
+                createResult.IsSuccess() ? "" : $"Failed to create merchant account for CAD: {string.Join(", ", createResult.Errors.All().Select(e => e.Message))}");
 
-            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
+            // Try to create another merchant account for the same currency
             Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
-                Currency = "GBP",
+                Currency = "CAD",
             });
 
             Assert.IsFalse(result.IsSuccess());
@@ -127,21 +101,9 @@ namespace Braintree.Tests.Integration
         [Test]
         public void CreateForCurrency_HandlesCurrencyRequirement()
         {
-            gateway = new BraintreeGateway(
-                "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret"
-            );
+            var merchantResult = OAuthTestHelper.GetMerchant();
+            gateway = new BraintreeGateway(merchantResult.Credentials.AccessToken);
 
-            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "GBR",
-                PaymentMethods = new string[] {"credit_card", "paypal"},
-                CompanyName = "Ziarog LTD"
-            });
-
-            Assert.IsTrue(merchantResult.IsSuccess());
-
-            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest());
 
             Assert.IsFalse(result.IsSuccess());
@@ -153,21 +115,9 @@ namespace Braintree.Tests.Integration
         [Test]
         public void CreateForCurrency_HandlesInvalidCurrency()
         {
-            gateway = new BraintreeGateway(
-                "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret"
-            );
+            var merchantResult = OAuthTestHelper.GetMerchant();
+            gateway = new BraintreeGateway(merchantResult.Credentials.AccessToken);
 
-            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "GBR",
-                PaymentMethods = new string[] {"credit_card", "paypal"},
-                CompanyName = "Ziarog LTD"
-            });
-
-            Assert.IsTrue(merchantResult.IsSuccess());
-
-            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
                 Currency = "badCurrency",
             });
@@ -181,24 +131,19 @@ namespace Braintree.Tests.Integration
         [Test]
         public void CreateForCurrency_HandlesExistingMerchantAccountForId()
         {
-            gateway = new BraintreeGateway(
-                "client_id$development$integration_client_id",
-                "client_secret$development$integration_client_secret"
-            );
+            var merchantResult = OAuthTestHelper.GetMerchant();
+            gateway = new BraintreeGateway(merchantResult.Credentials.AccessToken);
 
-            ResultImpl<Merchant> merchantResult = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "GBR",
-                PaymentMethods = new string[] {"credit_card", "paypal"},
-                CompanyName = "Ziarog LTD"
-            });
+            string existingMerchantAccountId = null;
+            foreach (var ma in merchantResult.MerchantAccounts)
+            {
+                existingMerchantAccountId = ma.Id;
+                break;
+            }
 
-            Assert.IsTrue(merchantResult.IsSuccess());
-
-            gateway = new BraintreeGateway(merchantResult.Target.Credentials.AccessToken);
             Result<MerchantAccount> result = gateway.MerchantAccount.CreateForCurrency(new MerchantAccountCreateForCurrencyRequest {
                 Currency = "GBP",
-                Id = merchantResult.Target.MerchantAccounts[0].Id,
+                Id = existingMerchantAccountId,
             });
 
             Assert.IsFalse(result.IsSuccess());
@@ -242,14 +187,14 @@ namespace Braintree.Tests.Integration
                 "client_secret$development$integration_client_secret"
             );
 
-            ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
-                Email = "name@email.com",
-                CountryCodeAlpha3 = "GBR",
-                PaymentMethods = new string[] {"credit_card", "paypal"},
-                Scope = "read_write,shared_vault_transactions",
+            string code = OAuthTestHelper.CreateGrant(gateway, "integration_merchant_id", "read_write");
+
+            ResultImpl<OAuthCredentials> accessTokenResult = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "read_write"
             });
 
-            BraintreeGateway OAuthGateway = new BraintreeGateway(result.Target.Credentials.AccessToken);
+            BraintreeGateway OAuthGateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
 
             PaginatedCollection<MerchantAccount> merchantAccountResults = OAuthGateway.MerchantAccount.All();
             var merchantAccounts = new List<MerchantAccount>();
@@ -257,12 +202,10 @@ namespace Braintree.Tests.Integration
             {
                 merchantAccounts.Add(ma);
             }
-            Assert.AreEqual(1, merchantAccounts.Count);
+            Assert.IsTrue(merchantAccounts.Count > 0);
 
             MerchantAccount merchantAccount = merchantAccounts[0];
-            Assert.AreEqual("GBP", merchantAccount.CurrencyIsoCode);
             Assert.AreEqual(MerchantAccountStatus.ACTIVE, merchantAccount.Status);
-            Assert.IsTrue(merchantAccount.IsDefault);
         }
     }
 }

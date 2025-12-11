@@ -19,6 +19,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("Merchant creation no longer supported")]
         public void Create_ReturnsMerchantAndCredentials()
         {
             ResultImpl<Merchant> result = gateway.Merchant.Create(new MerchantRequest {
@@ -61,6 +62,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("Merchant creation no longer supported")]
         public void Create_MultiCurrencyMerchant()
         {
             gateway = new BraintreeGateway(
@@ -102,6 +104,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("Merchant creation no longer supported")]
         public void Create_PayPalOnlyMultiCurrencyMerchant()
         {
             gateway = new BraintreeGateway(

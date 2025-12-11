@@ -1,5 +1,8 @@
 # Changelog
 
+## 5.38.0
+- Add `MiddleName` to sender and receiver, and `DateOfBirth` to sender in transfer on Transaction
+
 ## 5.37.0
 - Add `ProcessingMerchantCategoryCode` to `TransactionRequest`
 - Add missing `transfer` validation error codes in `Transaction`

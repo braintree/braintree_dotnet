@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+#if netcore
 using System.Net.Http;
+#endif
 using System.Text;
 using NUnit.Framework;
 using Braintree.TestUtil;
@@ -169,8 +171,14 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(result.Errors);
         }
 
+#if netcore
         [Test]
         public void TokenizesBankAccountViaOpenFinanceApiVaultsWithAndCharges()
+#else
+        [Test]
+        [Ignore("Open Banking tokenization not implemented for .NET Framework")]
+        public void TokenizesBankAccountViaOpenFinanceApiVaultsWithAndCharges()
+#endif
         {
             string nonce = GenerateUsBankAccountNonceViaOpenBanking();
 
@@ -242,8 +250,14 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(transaction.UsBankAccountDetails.AchMandate.AcceptedAt, "AchMandate AcceptedAt should not be null in transaction");
         }
 
+#if netcore
         [Test]
         public void ChargeUsBankWithAchMandateInstantVerification()
+#else
+        [Test]
+        [Ignore("Open Banking tokenization not implemented for .NET Framework")]
+        public void ChargeUsBankWithAchMandateInstantVerification()
+#endif
         {
             string nonce = GenerateUsBankAccountNonceViaOpenBanking();
 

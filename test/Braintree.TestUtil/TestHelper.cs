@@ -699,6 +699,36 @@ namespace Braintree.TestUtil
 
             return node["code"].InnerText;
         }
+
+        public static MerchantResult GetMerchant(string merchantId = "partner_merchant_id")
+        {
+            var gateway = new BraintreeGateway(
+                "client_id$development$integration_client_id",
+                "client_secret$development$integration_client_secret"
+            );
+
+            string code = CreateGrant(gateway, merchantId, "read_write");
+
+            var accessTokenResult = gateway.OAuth.CreateTokenFromCode(new OAuthCredentialsRequest {
+                Code = code,
+                Scope = "read_write"
+            });
+
+            var merchantGateway = new BraintreeGateway(accessTokenResult.Target.AccessToken);
+            var merchantAccounts = merchantGateway.MerchantAccount.All();
+
+            return new MerchantResult
+            {
+                Credentials = accessTokenResult.Target,
+                MerchantAccounts = merchantAccounts
+            };
+        }
+
+        public class MerchantResult
+        {
+            public OAuthCredentials Credentials { get; set; }
+            public PaginatedCollection<MerchantAccount> MerchantAccounts { get; set; }
+        }
     }
 
     public class BraintreeTestHttpService

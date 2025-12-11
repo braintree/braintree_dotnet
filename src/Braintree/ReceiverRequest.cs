@@ -7,11 +7,12 @@ namespace Braintree
 {
     public class ReceiverRequest: Request 
     {
+        public string AccountReferenceNumber { get; set; }
+        public AddressRequest Address { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string AccountReferenceNumber { get; set; }
+        public string MiddleName { get; set; }
         public string TaxId { get; set; }
-        public AddressRequest Address { get; set; }
 
         public override string ToXml()
         {
@@ -44,6 +45,10 @@ namespace Braintree
             if (LastName != null) {
                 builder.AddElement("last-name", LastName);
             }
+
+            if (MiddleName != null) {
+                builder.AddElement("middle-name", MiddleName);
+            } 
             
             if (AccountReferenceNumber != null) {
                 builder.AddElement("account-reference-number", AccountReferenceNumber);

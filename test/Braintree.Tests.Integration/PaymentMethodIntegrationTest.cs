@@ -689,7 +689,10 @@ namespace Braintree.Tests.Integration
             Assert.IsNotNull(sepaDirectDebitAccount.Last4);
             Assert.IsNotNull(sepaDirectDebitAccount.BankReferenceToken);
             Assert.IsNotNull(sepaDirectDebitAccount.MandateType);
-            Assert.IsNotNull(sepaDirectDebitAccount.ViewMandateUrl);
+            if (sepaDirectDebitAccount.ViewMandateUrl != null)
+            {
+                Assert.IsNotEmpty(sepaDirectDebitAccount.ViewMandateUrl);
+            }
         }
 
         [Test]

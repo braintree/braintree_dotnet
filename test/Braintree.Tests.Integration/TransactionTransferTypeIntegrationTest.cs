@@ -34,10 +34,10 @@ namespace Braintree.Tests.Integration
         [Test]
         public void Sale_ShouldCreateTransactionWithTransferType()
         {
-            TransactionRequest request = new TransactionRequest
+            TransactionRequest transactionRequest = new TransactionRequest
             {
                 Amount = 100.00M,
-                MerchantAccountId = "aft_first_data_wallet_transfer",
+                MerchantAccountId = MerchantAccountIDs.AFT_FIRST_DATA_WALLET_TRANSFER,
                 CreditCard = new TransactionCreditCardRequest
                 {
                     Number = "4111111111111111",
@@ -47,13 +47,40 @@ namespace Braintree.Tests.Integration
                 Transfer = new TransferRequest
                 {
                     Type = "wallet_transfer",
+                    Sender = new SenderRequest
+                    {
+                        FirstName = "Alice",
+                        LastName = "Silva",
+                        MiddleName = "A",
+                        DateOfBirth = new DateTime(2009, 1, 1),
+                        AccountReferenceNumber = "1000012345",
+                        Address = new AddressRequest
+                        {
+                            StreetAddress = "1st Main, door 12th",
+                            Locality = "LA",
+                            Region = "CA",
+                            CountryCodeAlpha2 = "US"
+                        }
+                    },
+                    Receiver = new ReceiverRequest
+                    {
+                        FirstName = "Bob",
+                        LastName = "Souza",
+                        MiddleName = "A",
+                        Address = new AddressRequest
+                        {
+                            StreetAddress = "1st Main, door 12th",
+                            Locality = "LA",
+                            Region = "CA",
+                            CountryCodeAlpha2 = "US"
+                        }
+                    }
                 }
             };
 
-            Result<Transaction> result = gateway.Transaction.Sale(request);
-            Transaction transaction = result.Target;
-
+            var result = gateway.Transaction.Sale(transactionRequest);
             Assert.IsTrue(result.IsSuccess());
+            var transaction = result.Target;
             Assert.AreEqual(TransactionStatus.AUTHORIZED, transaction.Status);
             Assert.IsTrue(transaction.AccountFundingTransaction);
         }
