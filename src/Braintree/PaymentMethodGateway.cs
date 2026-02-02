@@ -125,7 +125,10 @@ namespace Braintree
             }
             else if (response.GetName() == "visa-checkout-card")
             {
+                // VisaCheckoutCard has been deprecated for transactions
+                #pragma warning disable 618
                 return new ResultImpl<VisaCheckoutCard>(response, gateway);
+                #pragma warning restore 618
             }
             else if (response.GetName() == "samsung-pay-card")
             {

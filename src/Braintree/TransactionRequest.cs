@@ -41,6 +41,7 @@ namespace Braintree
     // NEXT_MAJOR_VERSION Remove ObsoleteAttributes
     public class TransactionRequest : Request
     {
+        public bool? AcceptPartialAuthorization { get; set; }
         public decimal Amount { get; set; }
         // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
         public TransactionAndroidPayCardRequest AndroidPayCard { get; set; }
@@ -157,6 +158,7 @@ namespace Braintree
         {
             var builder = new RequestBuilder(root);
 
+            builder.AddElement("accept-partial-authorization", AcceptPartialAuthorization);
             if (Amount != 0) builder.AddElement("amount", Amount);
             if (AndroidPayCard != null) builder.AddElement("android-pay-card", AndroidPayCard);
             if (ApplePayCard != null) builder.AddElement("apple-pay-card", ApplePayCard);

@@ -236,7 +236,7 @@ namespace Braintree.Tests.Integration
 
             Assert.AreEqual("0000", usBankAccount.Last4);
             Assert.AreEqual("Wells Fargo", usBankAccount.BankName);
-            Assert.AreEqual("Dan Schulman", usBankAccount.AccountHolderName);
+            Assert.AreEqual("Marty McFly", usBankAccount.AccountHolderName);
 
             Assert.IsNotNull(usBankAccount.Token);
             UsBankAccountVerification verification = usBankAccount.Verifications[0];

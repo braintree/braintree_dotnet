@@ -3912,6 +3912,37 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Sale_WithUsBankAccountOptionsAndAchType()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                MerchantAccountId = MerchantAccountIDs.US_BANK_MERCHANT_ACCOUNT_ID,
+                PaymentMethodNonce = TestHelper.GenerateValidUsBankAccountNonce(gateway),
+                Options = new TransactionOptionsRequest
+                {
+                    SubmitForSettlement = true,
+                    UsBankAccount = new TransactionOptionsUsBankAccountRequest
+                    {
+                        AchType = "standard"
+                    }
+                }
+            };
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+
+            Assert.AreEqual(PaymentInstrumentType.US_BANK_ACCOUNT, result.Target.PaymentInstrumentType);
+            Assert.IsNotNull(result.Target.UsBankAccountDetails);
+
+            Assert.AreEqual("standard", result.Target.AchType);
+            Assert.AreEqual("standard", result.Target.RequestedAchType);
+
+            Transaction foundTransaction = gateway.Transaction.Find(result.Target.Id);
+            Assert.AreEqual("standard", foundTransaction.AchType);
+            Assert.AreEqual("standard", foundTransaction.RequestedAchType);
+        }
+
+        [Test]
         public void Sale_Declined()
         {
             TransactionRequest request = new TransactionRequest
@@ -10985,6 +11016,33 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Find_ReturnsTransactionWithSamedayAchSamedayRequested()
+        {
+            Transaction transaction = gateway.Transaction.Find("sameday_ach_sameday_requested");
+
+            Assert.AreEqual("same_day", transaction.AchType);
+            Assert.AreEqual("same_day", transaction.RequestedAchType);
+        }
+
+        [Test]
+        public void Find_ReturnsTransactionWithStandardAchSamedayRequested()
+        {
+            Transaction transaction = gateway.Transaction.Find("standard_ach_sameday_requested");
+
+            Assert.AreEqual("standard", transaction.AchType);
+            Assert.AreEqual("same_day", transaction.RequestedAchType);
+        }
+
+        [Test]
+        public void Find_ReturnsTransactionWithStandardAchStandardRequested()
+        {
+            Transaction transaction = gateway.Transaction.Find("standard_ach_standard_requested");
+
+            Assert.AreEqual("standard", transaction.AchType);
+            Assert.AreEqual("standard", transaction.RequestedAchType);
+        }
+
+        [Test]
         public void Find_ReturnsTransactionWithPaymentAccountReference()
         {
             Transaction transaction = gateway.Transaction.Find("aft_txn");
@@ -11032,6 +11090,27 @@ namespace Braintree.Tests.Integration
                 },
                 ProcessingMerchantCategoryCode = mcc
             };
+        }
+
+        [Test]
+        public void TestPartiallyAuthorizedSet()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.PARTIALLY_AUTHORIZED,
+                AcceptPartialAuthorization = true,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2010"
+                }
+            };
+
+            Transaction transaction = gateway.Transaction.Sale(request).Target;
+
+            Assert.IsTrue(transaction.PartiallyAuthorized);
+            Assert.AreEqual(transaction.ProcessorResponseCode, "1004");
+
         }
     }
 }

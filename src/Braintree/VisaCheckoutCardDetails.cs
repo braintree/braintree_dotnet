@@ -2,6 +2,11 @@ using System;
 
 namespace Braintree
 {
+    /// <summary>
+    /// DEPRECATED: Visa Checkout is no longer supported for creating new transactions.
+    /// This class is retained for search functionality and historical transaction data only.
+    /// </summary>
+    [Obsolete("VisaCheckoutCardDetails has been deprecated", false)]
     public class VisaCheckoutCardDetails
     {
 

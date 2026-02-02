@@ -1133,48 +1133,6 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(Regex.IsMatch(usBankAccount.BankName, ".*CHASE.*"));
         }
 
-        [Test]
-        public void Create_WithVisaCheckoutCardPaymentMethodNonce()
-        {
-            string nonce = Braintree.Test.Nonce.VisaCheckoutMasterCard;
-            Result<Customer> result = gateway.Customer.Create(new CustomerRequest{
-                PaymentMethodNonce = nonce
-            });
-            Assert.IsTrue(result.IsSuccess());
-            Assert.AreEqual(1, result.Target.PaymentMethods.Length);
-            Assert.AreEqual("VisaCheckoutCard", result.Target.PaymentMethods[0].GetType().Name);
-
-            VisaCheckoutCard visaCheckoutCard = result.Target.VisaCheckoutCards[0];
-            Assert.AreEqual("abc123", visaCheckoutCard.CallId);
-            Assert.IsNotNull(visaCheckoutCard.BillingAddress);
-            Assert.IsNotNull(visaCheckoutCard.Bin);
-            Assert.IsNotNull(visaCheckoutCard.CardType);
-            Assert.IsNotNull(visaCheckoutCard.CardholderName);
-            Assert.IsNotNull(visaCheckoutCard.Commercial);
-            Assert.IsNotNull(visaCheckoutCard.CountryOfIssuance);
-            Assert.IsNotNull(visaCheckoutCard.CreatedAt);
-            Assert.IsNotNull(visaCheckoutCard.CustomerId);
-            Assert.IsNotNull(visaCheckoutCard.CustomerLocation);
-            Assert.IsNotNull(visaCheckoutCard.Debit);
-            Assert.IsNotNull(visaCheckoutCard.IsDefault);
-            Assert.IsNotNull(visaCheckoutCard.DurbinRegulated);
-            Assert.IsNotNull(visaCheckoutCard.ExpirationDate);
-            Assert.IsNotNull(visaCheckoutCard.ExpirationMonth);
-            Assert.IsNotNull(visaCheckoutCard.ExpirationYear);
-            Assert.IsNotNull(visaCheckoutCard.IsExpired);
-            Assert.IsNotNull(visaCheckoutCard.Healthcare);
-            Assert.IsNotNull(visaCheckoutCard.ImageUrl);
-            Assert.IsNotNull(visaCheckoutCard.IssuingBank);
-            Assert.IsNotNull(visaCheckoutCard.LastFour);
-            Assert.IsNotNull(visaCheckoutCard.MaskedNumber);
-            Assert.IsNotNull(visaCheckoutCard.Payroll);
-            Assert.IsNotNull(visaCheckoutCard.Prepaid);
-            Assert.IsNotNull(visaCheckoutCard.ProductId);
-            Assert.IsNotNull(visaCheckoutCard.Subscriptions);
-            Assert.IsNotNull(visaCheckoutCard.Token);
-            Assert.IsNotNull(visaCheckoutCard.UniqueNumberIdentifier);
-            Assert.IsNotNull(visaCheckoutCard.UpdatedAt);
-        }
 
         [Test]
         public void Create_WithAccountTypeCredit()

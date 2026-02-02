@@ -51,7 +51,9 @@ namespace Braintree
             }
             else if (response.GetName() == "visa-checkout-card")
             {
+                #pragma warning disable 618
                 return new VisaCheckoutCard(response, gateway);
+                #pragma warning restore 618
             }
             else
             {

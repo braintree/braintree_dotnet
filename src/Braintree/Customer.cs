@@ -39,7 +39,9 @@ namespace Braintree
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual UsBankAccount[] UsBankAccounts { get; protected set; }
         public virtual VenmoAccount[] VenmoAccounts { get; protected set; }
+        #pragma warning disable 618
         public virtual VisaCheckoutCard[] VisaCheckoutCards { get; protected set; }
+        #pragma warning restore 618
         public virtual string Website { get; protected set; }
 
         public PaymentMethod DefaultPaymentMethod
@@ -122,11 +124,14 @@ namespace Braintree
             }
 
             var visaCheckoutCardsXmlNodes = node.GetList("visa-checkout-cards/visa-checkout-card");
+            // VisaCheckoutCard has been deprecated for transactions
+            #pragma warning disable 618
             VisaCheckoutCards = new VisaCheckoutCard[visaCheckoutCardsXmlNodes.Count];
             for (int i = 0; i < visaCheckoutCardsXmlNodes.Count; i++)
             {
                 VisaCheckoutCards[i] = new VisaCheckoutCard(visaCheckoutCardsXmlNodes[i], gateway);
             }
+            #pragma warning restore 618
 
             var usBankAccountXmlNodes = node.GetList("us-bank-accounts/us-bank-account");
             UsBankAccounts = new UsBankAccount[usBankAccountXmlNodes.Count];

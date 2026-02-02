@@ -662,5 +662,26 @@ namespace Braintree.Tests
 
             Assert.IsFalse(xml.Contains("<transfer>"));
         }
+
+        [Test]
+        public void TestPartiallyAuthorizedSet()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "      <amount>10.00</amount>\n" +
+                "      <processor-response-code>1004</processor-response-code>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual(true, transaction.PartiallyAuthorized);
+            Assert.AreEqual("1004", transaction.ProcessorResponseCode);
+
+        }
     }
 }

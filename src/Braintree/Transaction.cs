@@ -119,6 +119,7 @@ namespace Braintree
         public virtual bool? AccountFundingTransaction { get; protected set; }
         public virtual string AchRejectReason { get; protected set; }
         public virtual string AchReturnCode { get; protected set; }
+        public virtual string AchType { get; protected set; }
         public virtual string AcquirerReferenceNumber { get; protected set; }
         public virtual string AdditionalProcessorResponse { get; protected set; }
         public virtual List<AddOn> AddOns { get; protected set; }
@@ -165,6 +166,7 @@ namespace Braintree
         public virtual string NetworkTransactionId { get; protected set; }
         public virtual string OrderId { get; protected set; }
         public virtual PackageDetails[] Packages { get; protected set; }
+        public virtual bool? PartiallyAuthorized { get; protected set; }
         public virtual List<string> PartialSettlementTransactionIds { get; protected set; }
         public virtual PaymentInstrumentType PaymentInstrumentType { get; protected set; }
         public virtual PayPalDetails PayPalDetails { get; protected set; }
@@ -182,6 +184,7 @@ namespace Braintree
         public virtual List<Installment> RefundedInstallments { get; protected set; }
         public virtual string RefundedTransactionId { get; protected set; }
         public virtual List<string> RefundIds { get; protected set; }
+        public virtual string RequestedAchType { get; protected set; }
         public virtual bool? Retried { get; protected set; }
         public virtual string RetriedTransactionId { get; protected set; }
         public virtual string RetrievalReferenceNumber { get; protected set; }
@@ -212,7 +215,9 @@ namespace Braintree
         public virtual DateTime? UpdatedAt { get; protected set; }
         public virtual UsBankAccountDetails UsBankAccountDetails { get; protected set; }
         public virtual VenmoAccountDetails VenmoAccountDetails { get; protected set; }
+        #pragma warning disable 618
         public virtual VisaCheckoutCardDetails VisaCheckoutCardDetails { get; protected set; }
+        #pragma warning restore 618
         public virtual string VoiceReferralNumber { get; protected set; }
 
         private IBraintreeGateway Gateway;
@@ -284,6 +289,10 @@ namespace Braintree
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");
             ForeignRetailer = node.GetBoolean("foreign-retailer");
+            if (ProcessorResponseCode != null)
+            {
+                PartiallyAuthorized = ProcessorResponseCode.Equals("1004");
+            }
 
             var creditCardNode = node.GetNode("credit-card");
             if (creditCardNode != null)
@@ -371,7 +380,9 @@ namespace Braintree
             var visaCheckoutNode = node.GetNode("visa-checkout-card");
             if (visaCheckoutNode != null)
             {
+                #pragma warning disable 618
                 VisaCheckoutCardDetails = new VisaCheckoutCardDetails(visaCheckoutNode);
+                #pragma warning restore 618
             }
             // NEXT_MAJOR_VERSION SamsungPayCard has been deprecated, remove all associated references
             var samsungPayNode = node.GetNode("samsung-pay-card");
@@ -450,6 +461,8 @@ namespace Braintree
 
             AchRejectReason = node.GetString("ach-reject-reason");
             AchReturnCode = node.GetString("ach-return-code");
+            AchType = node.GetString("ach-type");
+            RequestedAchType = node.GetString("requested-ach-type");
 
             SepaDirectDebitReturnCode = node.GetString("sepa-direct-debit-return-code");
 

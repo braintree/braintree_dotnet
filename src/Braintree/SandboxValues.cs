@@ -37,6 +37,7 @@ namespace Braintree
         public class TransactionAmount
         {
             public const decimal AUTHORIZE = 1000;
+            public const decimal PARTIALLY_AUTHORIZED = 1004;
             public const decimal DECLINE = 2000;
             public const decimal HARD_DECLINE = 2015;
             public const decimal FAILED = 3000;

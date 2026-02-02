@@ -165,10 +165,13 @@ namespace Braintree
             {
                 return new UsBankAccountVerification(node) as T;
             }
+            // VisaCheckoutCard has been deprecated for transactions
+            #pragma warning disable 618
             else if (typeof(T) == typeof(VisaCheckoutCard))
             {
                 return new VisaCheckoutCard(node, gateway) as T;
             }
+            #pragma warning restore 618
             #pragma warning disable 618
             else if (typeof(T) == typeof(SamsungPayCard))
             {

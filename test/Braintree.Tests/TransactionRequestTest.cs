@@ -115,7 +115,29 @@ namespace Braintree.Tests
 
             Assert.AreEqual("true",doc.GetElementsByTagName("final-capture")[0].InnerXml);
         }
-        
+
+        [Test]
+        public void ToXml_IncludesUsBankAccountOptions()
+        {
+            TransactionRequest request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                Options = new TransactionOptionsRequest
+                {
+                    UsBankAccount = new TransactionOptionsUsBankAccountRequest
+                    {
+                        AchType = "standard"
+                    }
+                }
+            };
+
+            string xml = request.ToXml();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            Assert.AreEqual("standard", doc.SelectSingleNode("//us-bank-account/ach-type").InnerText);
+        }
+
         public void ToXml_Includes_ShippingTaxAmount()
         {
             TransactionRequest request = new TransactionRequest();
@@ -132,6 +154,21 @@ namespace Braintree.Tests
             Assert.AreEqual("2.00", doc.GetElementsByTagName("discount-amount")[0].InnerXml);
             Assert.AreEqual("12345", doc.GetElementsByTagName("ships-from-postal-code")[0].InnerXml);
             Assert.AreEqual("3.00", doc.GetElementsByTagName("shipping-tax-amount")[0].InnerXml);
+        }
+
+        [Test]
+        public void ToXml_IncludesAcceptPartialAuthorization()
+        {
+            TransactionRequest request = new TransactionRequest();
+                
+            request.Amount = SandboxValues.TransactionAmount.PARTIALLY_AUTHORIZED;
+            request.AcceptPartialAuthorization = true;
+
+            string xml=request.ToXml();
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+
+            Assert.AreEqual("true",doc.GetElementsByTagName("accept-partial-authorization")[0].InnerXml);
         }
     }
 }
