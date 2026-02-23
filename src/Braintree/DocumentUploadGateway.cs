@@ -30,15 +30,15 @@ namespace Braintree
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.FileStream == null && request.File == null)
+            if (request.ContentStream == null && request.File == null)
             {
-                throw new ArgumentException("Either FileStream or File must not be null");
+                throw new ArgumentException("Either ContentStream or File must not be null");
             }
 
             XmlNode documentUploadXML;
-            if (request.FileStream != null)
+            if (request.ContentStream != null)
             {
-                documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.FileStream, request.FileName);
+                documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.ContentStream, request.FileName);
             }
             else
             {
@@ -55,15 +55,15 @@ namespace Braintree
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.FileStream == null && request.File == null)
+            if (request.ContentStream == null && request.File == null)
             {
-                throw new ArgumentException("Either FileStream or File must not be null");
+                throw new ArgumentException("Either ContentStream or File must not be null");
             }
 
             XmlNode documentUploadXML;
-            if (request.FileStream != null)
+            if (request.ContentStream != null)
             {
-                documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.FileStream, request.FileName).ConfigureAwait(false);
+                documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.ContentStream, request.FileName).ConfigureAwait(false);
             }
             else
             {

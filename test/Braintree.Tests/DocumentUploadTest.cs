@@ -220,7 +220,7 @@ namespace Braintree.Tests
             };
 
             var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
-            Assert.AreEqual("Either FileStream or File must not be null", exception.Message);
+            Assert.AreEqual("Either ContentStream or File must not be null", exception.Message);
         }
 
         [Test]
@@ -228,7 +228,7 @@ namespace Braintree.Tests
         {
             var request = new DocumentUploadRequest
             {
-                FileStream = new System.IO.MemoryStream(),
+                ContentStream = new System.IO.MemoryStream(),
                 FileName = "test.png"
             };
 

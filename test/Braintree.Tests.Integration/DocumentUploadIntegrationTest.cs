@@ -151,7 +151,7 @@ namespace Braintree.Tests.Integration
             DocumentUploadRequest request = new DocumentUploadRequest();
             request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT;
             ArgumentException nullException = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
-            Assert.AreEqual(nullException.Message, "Either FileStream or File must not be null");
+            Assert.AreEqual(nullException.Message, "Either ContentStream or File must not be null");
         }
 
         [Test]
@@ -172,7 +172,7 @@ namespace Braintree.Tests.Integration
             }
             catch (ArgumentException exception)
             {
-                Assert.AreEqual(exception.Message, "Either FileStream or File must not be null");
+                Assert.AreEqual(exception.Message, "Either ContentStream or File must not be null");
             }
         }
 #if net452
@@ -403,7 +403,7 @@ namespace Braintree.Tests.Integration
             {
                 DocumentUploadRequest request = new DocumentUploadRequest
                 {
-                    FileStream = memoryStream,
+                    ContentStream = memoryStream,
                     FileName = "bt_logo.png",
                     DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
                 };
@@ -438,7 +438,7 @@ namespace Braintree.Tests.Integration
             {
                 DocumentUploadRequest request = new DocumentUploadRequest
                 {
-                    FileStream = memoryStream,
+                    ContentStream = memoryStream,
                     FileName = "bt_logo.png",
                     DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
                 };
@@ -474,7 +474,7 @@ namespace Braintree.Tests.Integration
                 DocumentUploadRequest request = new DocumentUploadRequest
                 {
                     File = dummyFile,
-                    FileStream = memoryStream,
+                    ContentStream = memoryStream,
                     FileName = "from_memory_stream.png",
                     DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
                 };
@@ -497,7 +497,7 @@ namespace Braintree.Tests.Integration
             };
 
             ArgumentException nullException = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
-            Assert.AreEqual("Either FileStream or File must not be null", nullException.Message);
+            Assert.AreEqual("Either ContentStream or File must not be null", nullException.Message);
         }
 
         [Test]
@@ -521,7 +521,7 @@ namespace Braintree.Tests.Integration
             }
             catch (ArgumentException exception)
             {
-                Assert.AreEqual("Either FileStream or File must not be null", exception.Message);
+                Assert.AreEqual("Either ContentStream or File must not be null", exception.Message);
             }
         }
 #if net452
@@ -543,7 +543,7 @@ namespace Braintree.Tests.Integration
             {
                 DocumentUploadRequest request = new DocumentUploadRequest
                 {
-                    FileStream = memoryStream,
+                    ContentStream = memoryStream,
                     FileName = "test.gif",
                     DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
                 };
@@ -575,7 +575,7 @@ namespace Braintree.Tests.Integration
             {
                 DocumentUploadRequest request = new DocumentUploadRequest
                 {
-                    FileStream = memoryStream,
+                    ContentStream = memoryStream,
                     FileName = "test.gif",
                     DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
                 };
