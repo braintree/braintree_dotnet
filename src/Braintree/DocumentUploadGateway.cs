@@ -30,12 +30,20 @@ namespace Braintree
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.File == null)
+            if (request.FileStream == null && request.File == null)
             {
-                throw new ArgumentException("File must not be null");
+                throw new ArgumentException("Either FileStream or File must not be null");
             }
 
-            XmlNode documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.File);
+            XmlNode documentUploadXML;
+            if (request.FileStream != null)
+            {
+                documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.FileStream, request.FileName);
+            }
+            else
+            {
+                documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.File);
+            }
 
             return new ResultImpl<DocumentUpload>(new NodeWrapper(documentUploadXML), Gateway);
         }
@@ -47,12 +55,20 @@ namespace Braintree
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.File == null)
+            if (request.FileStream == null && request.File == null)
             {
-                throw new ArgumentException("File must not be null");
+                throw new ArgumentException("Either FileStream or File must not be null");
             }
 
-            XmlNode documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.File).ConfigureAwait(false);
+            XmlNode documentUploadXML;
+            if (request.FileStream != null)
+            {
+                documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.FileStream, request.FileName).ConfigureAwait(false);
+            }
+            else
+            {
+                documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.File).ConfigureAwait(false);
+            }
 
             return new ResultImpl<DocumentUpload>(new NodeWrapper(documentUploadXML), Gateway);
         }

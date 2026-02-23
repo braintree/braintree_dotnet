@@ -342,6 +342,32 @@ namespace Braintree
                     }
                     formDataStream.Write(fileData, 0, fileData.Length);
                 }
+                else if (param.Value?.GetType().Name == "StreamWithName")
+                {
+                    // Handle StreamWithName using reflection
+                    var streamProperty = param.Value.GetType().GetProperty("Stream");
+                    var nameProperty = param.Value.GetType().GetProperty("Name");
+
+                    Stream streamToUpload = streamProperty?.GetValue(param.Value) as Stream;
+                    string filename = nameProperty?.GetValue(param.Value) as string;
+
+                    if (streamToUpload != null)
+                    {
+                        string mimeType = GetMIMEType(filename);
+                        string header =
+                            $"--{boundary}\r\nContent-Disposition: form-data; name=\"{param.Key}\"; filename=\"{filename ?? param.Key}\"\r\nContent-Type: {mimeType ?? "application/octet-stream"}\r\n\r\n";
+
+                        formDataStream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
+
+                        byte[] fileData = null;
+                        using (var memStream = new MemoryStream())
+                        {
+                            streamToUpload.CopyTo(memStream);
+                            fileData = memStream.ToArray();
+                        }
+                        formDataStream.Write(fileData, 0, fileData.Length);
+                    }
+                }
                 else
                 {
                     string postData =

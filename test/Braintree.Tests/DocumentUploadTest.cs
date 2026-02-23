@@ -210,5 +210,30 @@ namespace Braintree.Tests
             + "  </params>\n"
             + "  <message>PDF page length is limited to 50 pages</message>\n"
             + "</api-error-response>";
+
+        [Test]
+        public void Create_ThrowsExceptionWhenBothFileAndFileStreamAreNull()
+        {
+            var request = new DocumentUploadRequest
+            {
+                DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+            Assert.AreEqual("Either FileStream or File must not be null", exception.Message);
+        }
+
+        [Test]
+        public void Create_ThrowsExceptionWhenDocumentKindIsNull()
+        {
+            var request = new DocumentUploadRequest
+            {
+                FileStream = new System.IO.MemoryStream(),
+                FileName = "test.png"
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+            Assert.AreEqual("DocumentKind must not be null", exception.Message);
+        }
     }
 }

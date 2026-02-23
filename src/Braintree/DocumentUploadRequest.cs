@@ -7,6 +7,8 @@ namespace Braintree
 	public class DocumentUploadRequest : Request
 	{
 		public FileStream File { get; set; }
+		public Stream FileStream { get; set; }
+		public string FileName { get; set; }
 		public DocumentUploadKind? DocumentKind { get; set; }
 
 		public override Dictionary<string, object> ToDictionary()
