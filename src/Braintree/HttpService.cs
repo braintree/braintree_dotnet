@@ -353,6 +353,12 @@ namespace Braintree
 
                     if (streamToUpload != null)
                     {
+                        // Reset stream position to beginning if seekable
+                        if (streamToUpload.CanSeek && streamToUpload.Position != 0)
+                        {
+                            streamToUpload.Position = 0;
+                        }
+
                         string mimeType = GetMIMEType(filename);
                         string header =
                             $"--{boundary}\r\nContent-Disposition: form-data; name=\"{param.Key}\"; filename=\"{filename ?? param.Key}\"\r\nContent-Type: {mimeType ?? "application/octet-stream"}\r\n\r\n";
