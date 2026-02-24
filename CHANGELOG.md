@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+- Add `Stream` support to `DocumentUpload.Create` and `DocumentUpload.CreateAsync` methods
+- Add `ContentStream` property to `DocumentUploadRequest` for uploading documents from any Stream source
+- Add `FileName` property to `DocumentUploadRequest` for specifying filename when using Stream
+- Stream position is automatically reset to beginning before upload if seekable
+
 ## 5.39.0
 - Add `acceptPartialAuthorization` in `TransactionRequest` and `PartiallyAuthorized` in `Transaction`
 - Deprecate transactions for `visa_checkout_card` and maintain search functionality
