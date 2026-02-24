@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using static Braintree.BraintreeService;
 
 namespace Braintree
 {
@@ -342,21 +343,16 @@ namespace Braintree
                     }
                     formDataStream.Write(fileData, 0, fileData.Length);
                 }
-                else if (param.Value?.GetType().Name == "StreamWithName")
+                else if (param.Value is StreamWithName streamToUpload)
                 {
-                    // Handle StreamWithName using reflection
-                    var streamProperty = param.Value.GetType().GetProperty("Stream");
-                    var nameProperty = param.Value.GetType().GetProperty("Name");
-
-                    Stream streamToUpload = streamProperty?.GetValue(param.Value) as Stream;
-                    string filename = nameProperty?.GetValue(param.Value) as string;
+                    var stream = streamToUpload.Stream;
+                    string filename = streamToUpload.Name;
 
                     if (streamToUpload != null)
                     {
-                        // Reset stream position to beginning if seekable
-                        if (streamToUpload.CanSeek && streamToUpload.Position != 0)
+                        if (stream.CanSeek && stream.Position != 0)
                         {
-                            streamToUpload.Position = 0;
+                            stream.Position = 0;
                         }
 
                         string mimeType = GetMIMEType(filename);
@@ -368,7 +364,7 @@ namespace Braintree
                         byte[] fileData = null;
                         using (var memStream = new MemoryStream())
                         {
-                            streamToUpload.CopyTo(memStream);
+                            stream.CopyTo(memStream);
                             fileData = memStream.ToArray();
                         }
                         formDataStream.Write(fileData, 0, fileData.Length);
