@@ -39,6 +39,31 @@ pipeline {
             }
           }
         }
+
+        stage("SonarQube") {
+          agent {
+            node {
+              label ""
+              customWorkspace "workspace/${REPO_NAME}-sonar"
+            }
+          }
+
+          steps {
+            script {
+              sh "docker build -t braintree-dotnet -f Dockerfile-core3 ."
+              sh "docker run --rm -v \"\$(pwd):\$(pwd)\" -w \"\$(pwd)\" braintree-dotnet /bin/bash -l -c 'dotnet test test/Braintree.Tests/Braintree.Tests.csproj --framework netcoreapp3.1 /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=./coverage/'"
+              executeSonarQubeScan()
+            }
+          }
+
+          post {
+            failure {
+              script {
+                FAILED_STAGE = env.STAGE_NAME
+              }
+            }
+          }
+        }
       }
     }
 

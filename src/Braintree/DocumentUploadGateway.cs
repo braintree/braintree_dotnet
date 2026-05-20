@@ -30,12 +30,30 @@ namespace Braintree
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.File == null)
+            if (request.ContentStream == null && request.File == null)
             {
-                throw new ArgumentException("File must not be null");
+                throw new ArgumentException("Either File or ContentStream must not be null");
             }
 
-            XmlNode documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.File);
+            if (request.ContentStream != null && request.File != null)
+            {
+                throw new ArgumentException("File and ContentStream are mutually exclusive; set only one.");
+            }
+
+            if (request.ContentStream != null && string.IsNullOrWhiteSpace(request.FileName))
+            {
+                throw new ArgumentException("FileName must not be null or empty when ContentStream is provided");
+            }
+
+            XmlNode documentUploadXML;
+            if (request.ContentStream != null)
+            {
+                documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.ContentStream, request.FileName);
+            }
+            else
+            {
+                documentUploadXML = Service.PostMultipart(Service.MerchantPath() + "/document_uploads", request, request.File);
+            }
 
             return new ResultImpl<DocumentUpload>(new NodeWrapper(documentUploadXML), Gateway);
         }
@@ -47,12 +65,30 @@ namespace Braintree
                 throw new ArgumentException("DocumentKind must not be null");
             }
 
-            if (request.File == null)
+            if (request.ContentStream == null && request.File == null)
             {
-                throw new ArgumentException("File must not be null");
+                throw new ArgumentException("Either File or ContentStream must not be null");
             }
 
-            XmlNode documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.File).ConfigureAwait(false);
+            if (request.ContentStream != null && request.File != null)
+            {
+                throw new ArgumentException("File and ContentStream are mutually exclusive; set only one.");
+            }
+
+            if (request.ContentStream != null && string.IsNullOrWhiteSpace(request.FileName))
+            {
+                throw new ArgumentException("FileName must not be null or empty when ContentStream is provided");
+            }
+
+            XmlNode documentUploadXML;
+            if (request.ContentStream != null)
+            {
+                documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.ContentStream, request.FileName).ConfigureAwait(false);
+            }
+            else
+            {
+                documentUploadXML = await Service.PostMultipartAsync(Service.MerchantPath() + "/document_uploads", request, request.File).ConfigureAwait(false);
+            }
 
             return new ResultImpl<DocumentUpload>(new NodeWrapper(documentUploadXML), Gateway);
         }

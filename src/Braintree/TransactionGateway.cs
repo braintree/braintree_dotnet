@@ -240,14 +240,24 @@ namespace Braintree
 
         public virtual Result<Transaction> Void(string id)
         {
-            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/void");
+            return Void(id, null);
+        }
+
+        public virtual Result<Transaction> Void(string id, TransactionVoidRequest request)
+        {
+            XmlNode response = service.Put(service.MerchantPath() + "/transactions/" + id + "/void", request);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }
 
         public virtual async Task<Result<Transaction>> VoidAsync(string id)
         {
-            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/void").ConfigureAwait(false);
+            return await VoidAsync(id, null).ConfigureAwait(false);
+        }
+
+        public virtual async Task<Result<Transaction>> VoidAsync(string id, TransactionVoidRequest request)
+        {
+            XmlNode response = await service.PutAsync(service.MerchantPath() + "/transactions/" + id + "/void", request).ConfigureAwait(false);
 
             return new ResultImpl<Transaction>(new NodeWrapper(response), gateway);
         }

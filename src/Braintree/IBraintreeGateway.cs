@@ -1,5 +1,7 @@
 #pragma warning disable 1591
 
+using System;
+
 namespace Braintree
 {
     /// <summary>
@@ -66,8 +68,13 @@ namespace Braintree
         IDisputeGateway Dispute { get; }
         IDocumentUploadGateway DocumentUpload { get; }
         IExchangeRateQuoteGateway ExchangeRateQuote {get;}
-        IMerchantAccountGateway MerchantAccount { get; }
+        ILocalPaymentContextGateway LocalPaymentContext { get; }
+        // NEXT_MAJOR_VERSION remove this property
+#pragma warning disable CS0618
+        [Obsolete("MerchantGateway has been deprecated and will be removed in a future version.")]
         IMerchantGateway Merchant { get; }
+#pragma warning restore CS0618
+        IMerchantAccountGateway MerchantAccount { get; }
         IOAuthGateway OAuth { get; }
         IPayPalAccountGateway PayPalAccount { get; }
         IPaymentMethodGateway PaymentMethod { get; }

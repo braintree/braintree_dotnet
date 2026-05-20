@@ -12,6 +12,7 @@ namespace Braintree
         public virtual string Company { get; protected set; }
         public virtual string Email { get; protected set; }
         public virtual string Phone { get; protected set; }
+        public virtual InternationalPhone InternationalPhone { get; protected set; }
         public virtual string Fax { get; protected set; }
         public virtual string Website { get; protected set; }
 
@@ -27,6 +28,12 @@ namespace Braintree
             Phone = node.GetString("phone");
             Fax = node.GetString("fax");
             Website = node.GetString("website");
+
+            var internationalPhoneNode = node.GetNode("international-phone");
+            if (internationalPhoneNode != null)
+            {
+                InternationalPhone = new InternationalPhone(internationalPhoneNode);
+            }
         }
 
         protected internal CustomerDetails() { }

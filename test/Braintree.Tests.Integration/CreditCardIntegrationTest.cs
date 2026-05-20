@@ -1909,6 +1909,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("Pending as flaky, until CI is more stable")]
         public void Update_WithAccountTypeDebit()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;

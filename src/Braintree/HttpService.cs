@@ -112,8 +112,11 @@ namespace Braintree
         }
 #else
         public HttpWebRequest GetHttpRequest(string URL, string method) {
-            const int SecurityProtocolTypeTls12 = 3072;
-            ServicePointManager.SecurityProtocol = ServicePointManager.SecurityProtocol | ((SecurityProtocolType) SecurityProtocolTypeTls12);
+            var currentSecurityProtocol = ServicePointManager.SecurityProtocol;
+            if (currentSecurityProtocol != 0 && (currentSecurityProtocol & SecurityProtocolType.Tls12) == 0)
+            {
+                ServicePointManager.SecurityProtocol = currentSecurityProtocol | SecurityProtocolType.Tls12;
+            }
 
             var request = Configuration.HttpWebRequestFactory(URL);
             SetRequestProxy(request);
@@ -324,10 +327,16 @@ namespace Braintree
                 }
                 needsCLRF = true;
 
-                if (param.Value is FileStream)
+                if (param.Value is StreamWithName streamToUpload)
                 {
-                    FileStream fileToUpload = (FileStream)param.Value;
-                    string filename = fileToUpload.Name;
+                    var stream = streamToUpload.Stream;
+                    string filename = SanitizeFileName(streamToUpload.Name);
+
+                    if (stream.CanSeek && stream.Position != 0)
+                    {
+                        stream.Position = 0;
+                    }
+
                     string mimeType = GetMIMEType(filename);
                     string header =
                         $"--{boundary}\r\nContent-Disposition: form-data; name=\"{param.Key}\"; filename=\"{filename ?? param.Key}\"\r\nContent-Type: {mimeType ?? "application/octet-stream"}\r\n\r\n";
@@ -335,10 +344,10 @@ namespace Braintree
                     formDataStream.Write(encoding.GetBytes(header), 0, encoding.GetByteCount(header));
 
                     byte[] fileData = null;
-                    using (FileStream fs = fileToUpload)
+                    using (var memStream = new MemoryStream())
                     {
-                        var binaryReader = new BinaryReader(fs, encoding);
-                        fileData = binaryReader.ReadBytes((int)fs.Length);
+                        stream.CopyTo(memStream);
+                        fileData = memStream.ToArray();
                     }
                     formDataStream.Write(fileData, 0, fileData.Length);
                 }
@@ -371,6 +380,46 @@ namespace Braintree
                 {"png", "image/png"}
         };
 
+        internal static string SanitizeFileName(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return "file";
+            }
+
+            // Strip directory path components. Treat '/' as a separator unconditionally;
+            // treat '\' as a separator only when followed by a letter or digit (Windows paths
+            // like "C:\path\file.png") so that "file\.png" isn't misread as a path.
+            int lastSep = -1;
+            for (int i = 0; i < fileName.Length - 1; i++)
+            {
+                char c = fileName[i];
+                if (c == '/' || (c == '\\' && char.IsLetterOrDigit(fileName[i + 1])))
+                {
+                    lastSep = i;
+                }
+            }
+            if (fileName.Length > 0 && fileName[fileName.Length - 1] == '/')
+            {
+                lastSep = fileName.Length - 1;
+            }
+            string name = lastSep >= 0 ? fileName.Substring(lastSep + 1) : fileName;
+
+            // Remove characters that enable CRLF injection or break the quoted-string in
+            // Content-Disposition headers.
+            name = name.Replace("\"", "")
+                       .Replace("\\", "")
+                       .Replace("\r", "")
+                       .Replace("\n", "");
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = "file";
+            }
+
+            return name;
+        }
+
         public static string GetMIMEType(string fileName)
         {
             string extension = Path.GetExtension(fileName).ToLowerInvariant();
@@ -390,6 +439,12 @@ namespace Braintree
         public static string MultipartFormContentType(string boundary)
         {
             return "multipart/form-data; boundary=" + boundary;
+        }
+
+        internal class StreamWithName
+        {
+            public Stream Stream { get; set; }
+            public string Name { get; set; }
         }
     }
 }

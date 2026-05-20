@@ -1,3 +1,5 @@
+require 'rexml/document'
+
 task :default => "test"
 
 def red(mytext) ; "\e[31m#{mytext}\e[0m" ; end
@@ -6,16 +8,63 @@ def use_verbose_mode
   ENV["USE_VERBOSE_MODE"] ? " -v n" : ""
 end
 
+def junit_logger(filename)
+  return "" unless ENV["JUNIT"] == "1"
+  FileUtils.mkdir_p("tmp/build")
+  " --logger:'junit;LogFilePath=#{File.expand_path("tmp/build/#{filename}")}'"
+end
+
+def mono_junit_result(filename)
+  return "" unless ENV["JUNIT"] == "1"
+  FileUtils.mkdir_p("tmp/build")
+  " --result=#{File.expand_path("tmp/build/#{filename}")}"
+end
+
+def nunit3_to_junit(path)
+  return unless File.exist?(path)
+  doc = REXML::Document.new(File.read(path))
+  output = REXML::Document.new
+  output << REXML::XMLDecl.new('1.0', 'utf-8')
+  testsuites = output.add_element('testsuites')
+  REXML::XPath.each(doc, '//test-suite[@type="TestFixture"]') do |suite|
+    ts = testsuites.add_element('testsuite', {
+      'name'     => suite.attributes['fullname'] || suite.attributes['name'],
+      'tests'    => suite.attributes['testcasecount'] || suite.attributes['total'],
+      'failures' => suite.attributes['failed'],
+      'errors'   => '0',
+      'skipped'  => suite.attributes['skipped'],
+      'time'     => suite.attributes['duration'],
+    })
+    suite.elements.each('test-case') do |tc|
+      tc_el = ts.add_element('testcase', {
+        'name'      => tc.attributes['name'],
+        'classname' => tc.attributes['classname'],
+        'time'      => tc.attributes['duration'],
+      })
+      case tc.attributes['result']
+      when 'Failed'
+        failure = tc.elements['failure']
+        msg   = failure && failure.elements['message']   ? failure.elements['message'].text   : ''
+        trace = failure && failure.elements['stack-trace'] ? failure.elements['stack-trace'].text : ''
+        tc_el.add_element('failure', { 'message' => msg }).text = trace
+      when 'Skipped', 'Ignored'
+        tc_el.add_element('skipped')
+      end
+    end
+  end
+  File.open(path, 'w') { |f| output.write(f, 2) }
+end
+
 def dotnet_test_unit
-  "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj --logger:'console;verbosity=detailed'"
+  "dotnet test #{use_verbose_mode} test/Braintree.Tests/Braintree.Tests.csproj --logger:'console;verbosity=detailed'#{junit_logger("TEST-dotnet-unit.xml")}"
 end
 
 def dotnet_test_integration
-  "dotnet test #{use_verbose_mode} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj --logger:'console;verbosity=detailed'"
+  "dotnet test #{use_verbose_mode} test/Braintree.Tests.Integration/Braintree.Tests.Integration.csproj --logger:'console;verbosity=detailed'#{junit_logger("TEST-dotnet-integration.xml")}"
 end
 
 def mono_test_unit
-  "mono test/lib/NUnit-3.12.0/bin/net45/nunitlite-runner.exe test/Braintree.Tests/bin/Debug/net452/Braintree.Tests.dll --labels=After"
+  "mono test/lib/NUnit-3.12.0/bin/net45/nunitlite-runner.exe test/Braintree.Tests/bin/Debug/net452/Braintree.Tests.dll --labels=After#{mono_junit_result("TEST-mono-unit.xml")}"
 end
 
 def mono_test_integration
@@ -93,12 +142,16 @@ namespace :mono do
     #   rake mono:test:unit[ConfigurationTest,ConfigurationWithStringEnvironment_Initializes]
     desc "run mono unit tests"
     task :unit, [:class_name, :test_name] => [:compile] do |task, args|
-      if args.class_name.nil?
-        sh "#{mono_test_unit}"
-      elsif args.test_name.nil?
-        sh "#{mono_test_unit} --test=Braintree.Tests.#{args.class_name}"
-      else
-        sh "#{mono_test_unit} --test=Braintree.Tests.#{args.class_name}.#{args.test_name}"
+      begin
+        if args.class_name.nil?
+          sh "#{mono_test_unit}"
+        elsif args.test_name.nil?
+          sh "#{mono_test_unit} --test=Braintree.Tests.#{args.class_name}"
+        else
+          sh "#{mono_test_unit} --test=Braintree.Tests.#{args.class_name}.#{args.test_name}"
+        end
+      ensure
+        nunit3_to_junit(File.expand_path("tmp/build/TEST-mono-unit.xml")) if ENV["JUNIT"] == "1"
       end
     end
 
@@ -118,9 +171,11 @@ namespace :mono do
         end
         integration_tests_to_run.map { |testfile| testfile[0..testfile.size-4] }.each do |testname|
             begin
-              sh "#{mono_test_integration} --test=Braintree.Tests.Integration.#{testname}"
+              sh "#{mono_test_integration} --test=Braintree.Tests.Integration.#{testname}#{mono_junit_result("TEST-mono-integration-#{testname}.xml")}"
             rescue
               atLeastOneTestFailed = true
+            ensure
+              nunit3_to_junit(File.expand_path("tmp/build/TEST-mono-integration-#{testname}.xml")) if ENV["JUNIT"] == "1"
             end
         end
 
@@ -128,9 +183,17 @@ namespace :mono do
           raise Exception.new red("Some of the integration tests failed. Scroll up for details.")
         end
       elsif args.test_name.nil?
-        sh "#{mono_test_integration} --test=Braintree.Tests.Integration.#{args.class_name}"
+        begin
+          sh "#{mono_test_integration} --test=Braintree.Tests.Integration.#{args.class_name}#{mono_junit_result("TEST-mono-integration-#{args.class_name}.xml")}"
+        ensure
+          nunit3_to_junit(File.expand_path("tmp/build/TEST-mono-integration-#{args.class_name}.xml")) if ENV["JUNIT"] == "1"
+        end
       else
-        sh "#{mono_test_integration} --test=Braintree.Tests.Integration.#{args.class_name}.#{args.test_name}"
+        begin
+          sh "#{mono_test_integration} --test=Braintree.Tests.Integration.#{args.class_name}.#{args.test_name}#{mono_junit_result("TEST-mono-integration-#{args.class_name}.xml")}"
+        ensure
+          nunit3_to_junit(File.expand_path("tmp/build/TEST-mono-integration-#{args.class_name}.xml")) if ENV["JUNIT"] == "1"
+        end
       end
     end
 

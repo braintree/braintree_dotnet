@@ -1,5 +1,17 @@
 # Changelog
 
+## 5.40.0
+- Add Local Payment Context support with `LocalPaymentContextGateway.Create` and `LocalPaymentContextGateway.Find` methods
+- Add support for MBWAY and CRYPTO payment types
+- Add `acquirerReferenceNumber` to transaction search object
+- Add `InternationalPhone` to `CustomerDetails` in `Transaction`
+- Deprecate merchant create functionality
+- Add `ApiRequestKey` (idempotency) in `TransactionRequest` and `TransactionRefundRequest`
+- Add `surchargeAmount` to transaction object
+- Add Apple Pay verification functionality for customer and payment method creation
+- Add support for in-memory stream-based document uploads via new `ContentStream` and `FileName` properties on `DocumentUploadRequest`
+- Add `MastercardTransactionLinkId` to transaction and creditCardVerification object
+
 ## 5.39.0
 - Add `acceptPartialAuthorization` in `TransactionRequest` and `PartiallyAuthorized` in `Transaction`
 - Deprecate transactions for `visa_checkout_card` and maintain search functionality

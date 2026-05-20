@@ -131,5 +131,23 @@ namespace Braintree.Tests
             Assert.AreEqual("V0010013019339005665779448477", verification.CreditCard.PaymentAccountReference);
         }
 
+        [Test]
+        public void TestMastercardTransactionLinkId()
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+            builder.Append("<verification>\n");
+            builder.Append("  <mastercard-transaction-link-id>ZairABg6CIFekPMsnK0cJ2</mastercard-transaction-link-id>\n");
+            builder.Append("</verification>\n");
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(builder.ToString());
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            CreditCardVerification verification = new CreditCardVerification(node, gateway);
+            Assert.AreEqual("ZairABg6CIFekPMsnK0cJ2", verification.MastercardTransactionLinkId);
+        }
+
     }
 }

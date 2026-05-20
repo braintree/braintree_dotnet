@@ -191,6 +191,7 @@ namespace Braintree.Tests.Integration
 
             TransactionSearchRequest searchRequest = new TransactionSearchRequest().
                 Id.Is(transaction.Id).
+                AcquirerReferenceNumber.Is(transaction.AcquirerReferenceNumber).
                 BillingCompany.Is("Braintree").
                 BillingCountryName.Is("United States of America").
                 BillingExtendedAddress.Is("Suite 123").
@@ -1803,7 +1804,7 @@ namespace Braintree.Tests.Integration
 #endif
 
         [Test]
-        [Ignore("Flaky test. See: https://paypal.slack.com/archives/C03P4S18JBT/p1741207572015819 for more details.")]
+        [Ignore("Flaky test")]
         public void Sale_ReturnsSuccessfulResponseWithUsBankAccount()
         {
             var request = new TransactionRequest
@@ -2517,6 +2518,97 @@ namespace Braintree.Tests.Integration
             Assert.AreEqual("3121234567", shippingAddress.InternationalPhone.NationalNumber);
         }
         #pragma warning restore 0618
+
+        [Test]
+        public void Sale_WithCustomerInternationalPhone()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 100.00M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2011",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Dan",
+                    LastName = "Smith",
+                    InternationalPhone = new InternationalPhoneRequest
+                    {
+                        CountryCode = "1",
+                        NationalNumber = "3121234567"
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.AreEqual("Dan", transaction.CustomerDetails.FirstName);
+            Assert.AreEqual("Smith", transaction.CustomerDetails.LastName);
+            Assert.AreEqual("1", transaction.CustomerDetails.InternationalPhone.CountryCode);
+            Assert.AreEqual("3121234567", transaction.CustomerDetails.InternationalPhone.NationalNumber);
+        }
+
+        [Test]
+        public void Sale_WithInvalidCustomerCountryCode()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 100.00M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2011",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Dan",
+                    LastName = "Smith",
+                    InternationalPhone = new InternationalPhoneRequest
+                    {
+                        CountryCode = "1111",
+                        NationalNumber = "3121234567"
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.CUSTOMER_INTERNATIONAL_PHONE_COUNTRY_CODE_IS_INVALID, result.Errors.DeepAll()[0].Code);
+
+        }
+
+        [Test]
+        public void Sale_WithInvalidCustomerNationalNumber()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = 100.00M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = "5105105105105100",
+                    ExpirationDate = "05/2011",
+                },
+                Customer = new CustomerRequest
+                {
+                    FirstName = "Dan",
+                    LastName = "Smith",
+                    InternationalPhone = new InternationalPhoneRequest
+                    {
+                        CountryCode = "1",
+                        NationalNumber = "312123456711122"
+                    }
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsFalse(result.IsSuccess());
+            Assert.AreEqual(ValidationErrorCode.CUSTOMER_INTERNATIONAL_PHONE_NATIONAL_NUMBER_IS_INVALID, result.Errors.DeepAll()[0].Code);
+
+
+        }
 
         [Test]
         public void Sale_WithTransactionSourceAsRecurringFirst()
@@ -3882,7 +3974,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("Flaky test. See: https://paypal.slack.com/archives/C03P4S18JBT/p1741207572015819 for more details.")]
+        [Ignore("Flaky test")]
         public void Sale_WithUsBankAccountNonce()
         {
             var request = new TransactionRequest
@@ -11111,6 +11203,65 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(transaction.PartiallyAuthorized);
             Assert.AreEqual(transaction.ProcessorResponseCode, "1004");
 
+        }
+
+        [Test]
+        public void Sale_WithSurchareAmount()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                SurchargeAmount = 1M,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+
+            Assert.AreEqual(1M, transaction.SurchargeAmount.Value);
+        }
+
+        [Test]
+        public void TestMastercardTransactionLinkId()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsTrue(Regex.IsMatch(transaction.MastercardTransactionLinkId, "^[a-zA-Z0-9]{22}$"));
+        }
+
+        [Test]
+        public void TestMastercardTransactionLinkIdNotPresentForNonMasterCard()
+        {
+            var request = new TransactionRequest
+            {
+                Amount = SandboxValues.TransactionAmount.AUTHORIZE,
+                CreditCard = new TransactionCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                }
+            };
+
+            Result<Transaction> result = gateway.Transaction.Sale(request);
+            Assert.IsTrue(result.IsSuccess());
+            Transaction transaction = result.Target;
+            Assert.IsNull(transaction.MastercardTransactionLinkId);
         }
     }
 }

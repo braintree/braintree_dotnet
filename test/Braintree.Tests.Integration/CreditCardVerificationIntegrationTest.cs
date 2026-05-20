@@ -2,6 +2,7 @@ using Braintree.TestUtil;
 using NUnit.Framework;
 using System;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace Braintree.Tests.Integration
 {
@@ -783,6 +784,62 @@ namespace Braintree.Tests.Integration
 
             Assert.IsNotNull(verification.CreditCard);
             Assert.That(verification.CreditCard, Has.Property("PaymentAccountReference"));
+        }
+
+        [Test]
+        public void VerifyMastercardTransactionLinkId()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.MASTER_CARD,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(VerificationStatus.VERIFIED, verification.Status);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+            Assert.IsTrue(Regex.IsMatch(verification.MastercardTransactionLinkId, "^[a-zA-Z0-9]{22}$"));
+
+        }
+
+        [Test]
+        public void VerifyMastercardTransactionLinkIdNotPresentForNonMasterCard()
+        {
+            var request = new CreditCardVerificationRequest
+            {
+                CreditCard = new CreditCardVerificationCreditCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationDate = "05/2009",
+                },
+                Options = new CreditCardVerificationOptionsRequest
+                {
+                    MerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                    Amount = "5.00"
+                }
+            };
+
+            Result<CreditCardVerification> result = gateway.CreditCardVerification.Create(request);
+            Assert.IsTrue(result.IsSuccess());
+            CreditCardVerification verification = result.Target;
+            Assert.AreEqual(VerificationStatus.VERIFIED, verification.Status);
+            Assert.AreEqual("1000", verification.ProcessorResponseCode);
+            Assert.AreEqual("Approved", verification.ProcessorResponseText);
+            Assert.AreEqual(ProcessorResponseType.APPROVED, verification.ProcessorResponseType);
+            Assert.IsNull(verification.MastercardTransactionLinkId);
+
         }
     }
 }

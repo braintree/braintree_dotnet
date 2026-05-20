@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace Braintree
 {
     public class ApplePayCard : PaymentMethod
     {
+        public virtual Address BillingAddress { get; protected set; }
         public virtual bool? IsDefault { get; protected set; }
         public virtual bool? IsExpired { get; protected set; }
         public virtual bool? IsDeviceToken { get; protected set; }
@@ -36,9 +38,11 @@ namespace Braintree
         public virtual string SourceDescription { get; protected set; }
         public virtual string Token { get; protected set; }
         public virtual Subscription[] Subscriptions { get; protected set; }
+        public virtual CreditCardVerification Verification { get; protected set; }
 
         protected internal ApplePayCard(NodeWrapper node, IBraintreeGateway gateway)
         {
+            BillingAddress = new Address(node.GetNode("billing-address"));
             Bin = node.GetString("bin");
             Business = node.GetString("business");
             CardType = node.GetString("card-type");
@@ -77,9 +81,28 @@ namespace Braintree
             {
                 Subscriptions[i] = new Subscription(subscriptionXmlNodes[i], gateway);
             }
+
+            var verificationNodes = node.GetList("verifications/verification");
+            Verification = FindLatestVerification(verificationNodes, gateway);
         }
 
         [Obsolete("Mock Use Only")]
         protected internal ApplePayCard() { }
+
+        private CreditCardVerification FindLatestVerification(List<NodeWrapper> verificationNodes, IBraintreeGateway gateway) {
+            if(verificationNodes.Count > 0)
+            {
+                verificationNodes.Sort(delegate(NodeWrapper first, NodeWrapper second) {
+                    DateTime time1 = (DateTime)first.GetDateTime("created-at");
+                    DateTime time2 = (DateTime)second.GetDateTime("created-at");
+
+                    return DateTime.Compare(time2, time1);
+                });
+
+                return new CreditCardVerification(verificationNodes[0], gateway);
+            }
+
+            return null;
+        }
     }
 }

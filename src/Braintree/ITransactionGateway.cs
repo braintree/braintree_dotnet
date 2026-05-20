@@ -41,6 +41,8 @@ namespace Braintree
         Result<Transaction> SubmitForSettlement(string id, TransactionRequest request);
         Result<Transaction> UpdateDetails(string id, TransactionRequest request);
         Result<Transaction> Void(string id);
+        Result<Transaction> Void(string id, TransactionVoidRequest request);
         Task<Result<Transaction>> VoidAsync(string id);
+        Task<Result<Transaction>> VoidAsync(string id, TransactionVoidRequest request);
     }
 }

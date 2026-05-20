@@ -49,6 +49,7 @@ namespace Braintree
     /// </example>
     public class CustomerRequest : Request
     {
+        public ApplePayCardRequest ApplePayCard { get; set; }
         public string Company { get; set; }
         public CreditCardRequest CreditCard { get; set; }
         public string CustomerId { get; set; }
@@ -95,6 +96,7 @@ namespace Braintree
         protected virtual RequestBuilder BuildRequest(string root)
         {
             var request = new RequestBuilder(root).
+                AddElement("apple-pay-card", ApplePayCard).
                 AddElement("company", Company).
                 AddElement("credit-card", CreditCard).
                 AddElement("custom-fields", CustomFields).

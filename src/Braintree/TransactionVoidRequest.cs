@@ -2,12 +2,9 @@
 
 namespace Braintree
 {
-    public class TransactionRefundRequest : Request
+    public class TransactionVoidRequest : Request
     {
-        public decimal Amount { get; set; }
         public string ApiRequestKey { get; set; }
-        public string MerchantAccountId { get; set; }
-        public string OrderId { get; set; }
 
         public override string ToXml()
         {
@@ -31,16 +28,7 @@ namespace Braintree
 
         protected virtual RequestBuilder BuildRequest(string root)
         {
-            var builder = new RequestBuilder(root);
-
-            if (Amount != 0)
-                builder.AddElement("amount", Amount);
-
-            builder.AddElement("api-request-key", ApiRequestKey);
-            builder.AddElement("merchant-account-id", MerchantAccountId);
-            builder.AddElement("order-id", OrderId);
-
-            return builder;
+            return new RequestBuilder(root).AddElement("api-request-key", ApiRequestKey);
         }
     }
 }

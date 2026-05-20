@@ -31,6 +31,7 @@ namespace Braintree
         public virtual TransactionGatewayRejectionReason? GatewayRejectionReason { get; protected set; }
         public virtual string GraphQLId { get; protected set; }
         public virtual string Id { get; protected set; }
+        public virtual string MastercardTransactionLinkId { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual string NetworkResponseCode { get; protected set; }
         public virtual string NetworkResponseText { get; protected set; }
@@ -47,6 +48,7 @@ namespace Braintree
             if (node == null) return;
 
             Amount = node.GetDecimal("amount");
+            MastercardTransactionLinkId = node.GetString("mastercard-transaction-link-id");
             AniFirstNameResponseCode = node.GetString("ani-first-name-response-code");
             AniLastNameResponseCode = node.GetString("ani-last-name-response-code");
             AvsErrorResponseCode = node.GetString("avs-error-response-code");

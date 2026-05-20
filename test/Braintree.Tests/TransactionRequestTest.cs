@@ -160,7 +160,7 @@ namespace Braintree.Tests
         public void ToXml_IncludesAcceptPartialAuthorization()
         {
             TransactionRequest request = new TransactionRequest();
-                
+
             request.Amount = SandboxValues.TransactionAmount.PARTIALLY_AUTHORIZED;
             request.AcceptPartialAuthorization = true;
 
@@ -169,6 +169,26 @@ namespace Braintree.Tests
             doc.LoadXml(xml);
 
             Assert.AreEqual("true",doc.GetElementsByTagName("accept-partial-authorization")[0].InnerXml);
+        }
+
+        [Test]
+        public void ToXml_IncludesApiRequestKey()
+        {
+            TransactionRequest request = new TransactionRequest();
+            request.ApiRequestKey = "test-api-key-123";
+
+            string xml = request.ToXml();
+            Assert.IsTrue(xml.Contains("<api-request-key>test-api-key-123</api-request-key>"));
+        }
+
+        [Test]
+        public void ToXml_ExcludesApiRequestKeyWhenNull()
+        {
+            TransactionRequest request = new TransactionRequest();
+            request.ApiRequestKey = null;
+
+            string xml = request.ToXml();
+            Assert.IsFalse(xml.Contains("api-request-key"));
         }
     }
 }

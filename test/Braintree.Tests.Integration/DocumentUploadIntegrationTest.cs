@@ -149,9 +149,9 @@ namespace Braintree.Tests.Integration
         public void Create_throwsWithEmptyFile()
         {
             DocumentUploadRequest request = new DocumentUploadRequest();
-            request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT; 
+            request.DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT;
             ArgumentException nullException = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
-            Assert.AreEqual(nullException.Message, "File must not be null");
+            Assert.AreEqual(nullException.Message, "Either File or ContentStream must not be null");
         }
 
         [Test]
@@ -172,7 +172,7 @@ namespace Braintree.Tests.Integration
             }
             catch (ArgumentException exception)
             {
-                Assert.AreEqual(exception.Message, "File must not be null");
+                Assert.AreEqual(exception.Message, "Either File or ContentStream must not be null");
             }
         }
 #if net452
@@ -382,6 +382,143 @@ namespace Braintree.Tests.Integration
             Assert.IsFalse(result.IsSuccess());
 
             Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_IS_TOO_LONG, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+        public void Create_WithMemoryStream_ReturnsSuccessful()
+        {
+            byte[] fileBytes = File.ReadAllBytes(BT_LOGO_PATH);
+
+            using (MemoryStream memoryStream = new MemoryStream(fileBytes))
+            {
+                DocumentUploadRequest request = new DocumentUploadRequest
+                {
+                    ContentStream = memoryStream,
+                    FileName = "bt_logo.png",
+                    DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+                };
+
+                DocumentUpload documentUpload = gateway.DocumentUpload.Create(request).Target;
+
+                Assert.NotNull(documentUpload);
+                Assert.AreEqual(DocumentUploadKind.EVIDENCE_DOCUMENT, documentUpload.Kind);
+                Assert.AreEqual("bt_logo.png", documentUpload.Name);
+                Assert.AreEqual("image/png", documentUpload.ContentType);
+                Assert.AreEqual(2443m, documentUpload.Size);
+            }
+        }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_WithMemoryStream_ReturnsSuccessful()
+#else
+        public void CreateAsync_WithMemoryStream_ReturnsSuccessful()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            byte[] fileBytes = File.ReadAllBytes(BT_LOGO_PATH);
+
+            using (MemoryStream memoryStream = new MemoryStream(fileBytes))
+            {
+                DocumentUploadRequest request = new DocumentUploadRequest
+                {
+                    ContentStream = memoryStream,
+                    FileName = "bt_logo.png",
+                    DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+                };
+
+                Result<DocumentUpload> documentUploadResult = await gateway.DocumentUpload.CreateAsync(request);
+                DocumentUpload documentUpload = documentUploadResult.Target;
+
+                Assert.NotNull(documentUpload);
+                Assert.AreEqual(DocumentUploadKind.EVIDENCE_DOCUMENT, documentUpload.Kind);
+                Assert.AreEqual("bt_logo.png", documentUpload.Name);
+                Assert.AreEqual("image/png", documentUpload.ContentType);
+                Assert.AreEqual(2443m, documentUpload.Size);
+            }
+        }
+#if net452
+            ).GetAwaiter().GetResult();
+        }
+#endif
+
+        [Test]
+        public void Create_WithBothFileAndContentStream_ThrowsException()
+        {
+            byte[] fileBytes = File.ReadAllBytes(BT_LOGO_PATH);
+
+            using (MemoryStream memoryStream = new MemoryStream(fileBytes))
+            using (FileStream dummyFile = new FileStream(BT_LOGO_PATH, FileMode.Open, FileAccess.Read))
+            {
+                DocumentUploadRequest request = new DocumentUploadRequest
+                {
+                    File = dummyFile,
+                    ContentStream = memoryStream,
+                    FileName = "from_memory_stream.png",
+                    DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+                };
+
+                var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+                Assert.AreEqual("File and ContentStream are mutually exclusive; set only one.", exception.Message);
+            }
+        }
+
+        [Test]
+        public void Create_WithMemoryStream_ReturnsErrorWithUnsupportedFileType()
+        {
+            byte[] fileBytes = File.ReadAllBytes(GIF_EXTENSION_FILE_PATH);
+
+            using (MemoryStream memoryStream = new MemoryStream(fileBytes))
+            {
+                DocumentUploadRequest request = new DocumentUploadRequest
+                {
+                    ContentStream = memoryStream,
+                    FileName = "test.gif",
+                    DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+                };
+
+                var result = gateway.DocumentUpload.Create(request);
+
+                Assert.IsFalse(result.IsSuccess());
+                Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_TYPE_IS_INVALID, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
+            }
+        }
+
+        [Test]
+#if netcore
+        public async Task CreateAsync_WithMemoryStream_ReturnsErrorWithUnsupportedFileType()
+#else
+        public void CreateAsync_WithMemoryStream_ReturnsErrorWithUnsupportedFileType()
+        {
+            Task.Run(async () =>
+#endif
+        {
+            byte[] fileBytes;
+            using (FileStream fs = new FileStream(GIF_EXTENSION_FILE_PATH, FileMode.Open, FileAccess.Read))
+            {
+                fileBytes = new byte[fs.Length];
+                fs.Read(fileBytes, 0, (int)fs.Length);
+            }
+
+            using (MemoryStream memoryStream = new MemoryStream(fileBytes))
+            {
+                DocumentUploadRequest request = new DocumentUploadRequest
+                {
+                    ContentStream = memoryStream,
+                    FileName = "test.gif",
+                    DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+                };
+
+                var result = await gateway.DocumentUpload.CreateAsync(request);
+
+                Assert.IsFalse(result.IsSuccess());
+                Assert.AreEqual(ValidationErrorCode.DOCUMENT_UPLOAD_FILE_TYPE_IS_INVALID, result.Errors.ForObject("DocumentUpload").OnField("File")[0].Code);
+            }
         }
 #if net452
             ).GetAwaiter().GetResult();

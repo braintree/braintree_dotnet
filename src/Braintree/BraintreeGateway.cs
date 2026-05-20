@@ -1,5 +1,7 @@
 #pragma warning disable 1591
 
+using System;
+
 namespace Braintree
 {
     /// <summary>
@@ -169,11 +171,15 @@ namespace Braintree
 
         public virtual IDocumentUploadGateway DocumentUpload => new DocumentUploadGateway(this);
 
+        // NEXT_MAJOR_VERSION remove this property
+#pragma warning disable CS0618
+        [Obsolete("MerchantGateway has been deprecated and will be removed in a future version.")]
+        public virtual IMerchantGateway Merchant => new MerchantGateway(this);
+#pragma warning restore CS0618
+
         public virtual IMerchantAccountGateway MerchantAccount => new MerchantAccountGateway(this);
 
         public virtual IOAuthGateway OAuth => new OAuthGateway(this);
-
-        public virtual IMerchantGateway Merchant => new MerchantGateway(this);
 
         public virtual IPaymentMethodGateway PaymentMethod => new PaymentMethodGateway(this);
 
@@ -206,5 +212,7 @@ namespace Braintree
         public virtual IExchangeRateQuoteGateway ExchangeRateQuote => new ExchangeRateQuoteGateway(this);
 
         public virtual IBankAccountInstantVerificationGateway BankAccountInstantVerification => new BankAccountInstantVerificationGateway(Service, GraphQLClient);
+
+        public virtual ILocalPaymentContextGateway LocalPaymentContext => new LocalPaymentContextGateway(Service, GraphQLClient);
     }
 }

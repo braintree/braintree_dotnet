@@ -8,6 +8,8 @@ namespace Braintree
     {
         public static string ACH_ANY_REASON_CODE = "any_reason_code";
         
+        public TextNode<TransactionSearchRequest> AcquirerReferenceNumber => new TextNode<TransactionSearchRequest>("acquirer-reference-number", this);
+
         public RangeNode<TransactionSearchRequest> Amount => new RangeNode<TransactionSearchRequest>("amount", this);
 
         public DateRangeNode<TransactionSearchRequest> AuthorizationExpiredAt => new DateRangeNode<TransactionSearchRequest>("authorization-expired-at", this);

@@ -210,5 +210,134 @@ namespace Braintree.Tests
             + "  </params>\n"
             + "  <message>PDF page length is limited to 50 pages</message>\n"
             + "</api-error-response>";
+
+        [Test]
+        public void Create_ThrowsExceptionWhenBothFileAndContentStreamAreSet()
+        {
+            var tempFile = System.IO.Path.GetTempFileName();
+            try
+            {
+                var request = new DocumentUploadRequest
+                {
+                    File = new System.IO.FileStream(tempFile, System.IO.FileMode.Open),
+                    ContentStream = new System.IO.MemoryStream(),
+                    FileName = "test.png",
+                    DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+                };
+
+                var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+                Assert.AreEqual("File and ContentStream are mutually exclusive; set only one.", exception.Message);
+                request.File.Dispose();
+            }
+            finally
+            {
+                System.IO.File.Delete(tempFile);
+            }
+        }
+
+        [Test]
+        public void CreateAsync_ThrowsExceptionWhenBothFileAndContentStreamAreSet()
+        {
+            var tempFile = System.IO.Path.GetTempFileName();
+            try
+            {
+                var request = new DocumentUploadRequest
+                {
+                    File = new System.IO.FileStream(tempFile, System.IO.FileMode.Open),
+                    ContentStream = new System.IO.MemoryStream(),
+                    FileName = "test.png",
+                    DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+                };
+
+                var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.CreateAsync(request).GetAwaiter().GetResult());
+                Assert.AreEqual("File and ContentStream are mutually exclusive; set only one.", exception.Message);
+                request.File.Dispose();
+            }
+            finally
+            {
+                System.IO.File.Delete(tempFile);
+            }
+        }
+
+        [Test]
+        public void Create_ThrowsExceptionWhenBothFileAndContentStreamAreNull()
+        {
+            var request = new DocumentUploadRequest
+            {
+                DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+            Assert.AreEqual("Either File or ContentStream must not be null", exception.Message);
+        }
+
+        [Test]
+        public void Create_ThrowsExceptionWhenDocumentKindIsNull()
+        {
+            var request = new DocumentUploadRequest
+            {
+                ContentStream = new System.IO.MemoryStream(),
+                FileName = "test.png"
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+            Assert.AreEqual("DocumentKind must not be null", exception.Message);
+        }
+
+        [Test]
+        public void Create_ThrowsExceptionWhenContentStreamProvidedButFileNameIsNull()
+        {
+            var request = new DocumentUploadRequest
+            {
+                ContentStream = new System.IO.MemoryStream(),
+                FileName = null,
+                DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+            Assert.AreEqual("FileName must not be null or empty when ContentStream is provided", exception.Message);
+        }
+
+        [Test]
+        public void Create_ThrowsExceptionWhenContentStreamProvidedButFileNameIsWhitespace()
+        {
+            var request = new DocumentUploadRequest
+            {
+                ContentStream = new System.IO.MemoryStream(),
+                FileName = "   ",
+                DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.Create(request));
+            Assert.AreEqual("FileName must not be null or empty when ContentStream is provided", exception.Message);
+        }
+
+        [Test]
+        public void CreateAsync_ThrowsExceptionWhenContentStreamProvidedButFileNameIsNull()
+        {
+            var request = new DocumentUploadRequest
+            {
+                ContentStream = new System.IO.MemoryStream(),
+                FileName = null,
+                DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.CreateAsync(request).GetAwaiter().GetResult());
+            Assert.AreEqual("FileName must not be null or empty when ContentStream is provided", exception.Message);
+        }
+
+        [Test]
+        public void CreateAsync_ThrowsExceptionWhenContentStreamProvidedButFileNameIsWhitespace()
+        {
+            var request = new DocumentUploadRequest
+            {
+                ContentStream = new System.IO.MemoryStream(),
+                FileName = "   ",
+                DocumentKind = DocumentUploadKind.EVIDENCE_DOCUMENT
+            };
+
+            var exception = Assert.Throws<ArgumentException>(() => gateway.DocumentUpload.CreateAsync(request).GetAwaiter().GetResult());
+            Assert.AreEqual("FileName must not be null or empty when ContentStream is provided", exception.Message);
+        }
     }
 }

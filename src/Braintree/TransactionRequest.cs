@@ -45,6 +45,7 @@ namespace Braintree
         public decimal Amount { get; set; }
         // NEXT_MAJOR_VERSION Rename Android Pay to Google Pay
         public TransactionAndroidPayCardRequest AndroidPayCard { get; set; }
+        public string ApiRequestKey { get; set; }
         public TransactionApplePayCardRequest ApplePayCard { get; set; }
         public AddressRequest BillingAddress { get; set; }
         public string BillingAddressId { get; set; }
@@ -93,6 +94,7 @@ namespace Braintree
         public decimal? ShippingAmount { get; set; }
         public decimal? ShippingTaxAmount { get; set; }
         public string ShipsFromPostalCode { get; set; }
+        public decimal? SurchargeAmount { get; set; }
         public decimal? TaxAmount { get; set; }
         public bool? TaxExempt { get; set; }
         public string ThreeDSecureAuthenticationId { get; set; }
@@ -161,6 +163,7 @@ namespace Braintree
             builder.AddElement("accept-partial-authorization", AcceptPartialAuthorization);
             if (Amount != 0) builder.AddElement("amount", Amount);
             if (AndroidPayCard != null) builder.AddElement("android-pay-card", AndroidPayCard);
+            builder.AddElement("api-request-key", ApiRequestKey);
             if (ApplePayCard != null) builder.AddElement("apple-pay-card", ApplePayCard);
             builder.AddElement("billing", BillingAddress);
             builder.AddElement("billing-address-id", BillingAddressId);
@@ -210,6 +213,7 @@ namespace Braintree
             if (ShippingAmount.HasValue) builder.AddElement("shipping-amount", ShippingAmount);
             if (ShippingTaxAmount.HasValue) builder.AddElement("shipping-tax-amount", ShippingTaxAmount);
             builder.AddElement("ships-from-postal-code", ShipsFromPostalCode);
+            if (SurchargeAmount.HasValue) builder.AddElement("surcharge-amount", SurchargeAmount);
             if (TaxAmount.HasValue) builder.AddElement("tax-amount", TaxAmount);
             if (TaxExempt.HasValue) builder.AddElement("tax-exempt", TaxExempt);
             builder.AddElement("three-d-secure-authentication-id", ThreeDSecureAuthenticationId);

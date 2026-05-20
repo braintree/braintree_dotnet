@@ -683,5 +683,40 @@ namespace Braintree.Tests
             Assert.AreEqual("1004", transaction.ProcessorResponseCode);
 
         }
+
+        [Test]
+        public void DeserializesSurchargeAmountFromXml()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <surcharge-amount>1.00</surcharge-amount>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+
+            Assert.AreEqual(1.00M, transaction.SurchargeAmount);
+        }
+
+        [Test]
+        public void TestMastercardTransactionLinkId()
+        {
+            string xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+                "<transaction>\n" +
+                "  <mastercard-transaction-link-id>ZairABg6CIFekPMsnK0cJ2</mastercard-transaction-link-id>\n" +
+                "</transaction>\n";
+
+            XmlDocument doc = new XmlDocument();
+            doc.LoadXml(xml);
+            XmlNode newNode = doc.DocumentElement;
+            var node = new NodeWrapper(newNode);
+
+            Transaction transaction = new Transaction(node, gateway);
+            Assert.AreEqual("ZairABg6CIFekPMsnK0cJ2", transaction.MastercardTransactionLinkId);
+        }
     }
 }

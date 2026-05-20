@@ -155,6 +155,7 @@ namespace Braintree
         public virtual decimal? InstallmentCount { get; protected set; }
         public virtual List<Installment> Installments { get; protected set; }
         public virtual LocalPaymentDetails LocalPaymentDetails { get; protected set; }
+        public virtual string MastercardTransactionLinkId { get; protected set; }
         public virtual string MerchantAccountId { get; protected set; }
         public virtual string MerchantAdviceCode { get; protected set; }
         public virtual string MerchantAdviceCodeText { get; protected set; }
@@ -208,6 +209,7 @@ namespace Braintree
         public virtual StatusEvent[] StatusHistory { get; protected set; }
         public virtual SubscriptionDetails SubscriptionDetails { get; protected set; }
         public virtual string SubscriptionId { get; protected set; }
+        public virtual decimal? SurchargeAmount { get; protected set; }
         public virtual decimal? TaxAmount { get; protected set; }
         public virtual bool? TaxExempt { get; protected set; }
         public virtual ThreeDSecureInfo ThreeDSecureInfo { get; protected set; }
@@ -235,6 +237,7 @@ namespace Braintree
             Id = node.GetString("id");
             AccountFundingTransaction = node.GetBoolean("account-funding-transaction");
             Amount = node.GetDecimal("amount");
+            MastercardTransactionLinkId = node.GetString("mastercard-transaction-link-id");
             AvsErrorResponseCode = node.GetString("avs-error-response-code");
             AvsPostalCodeResponseCode = node.GetString("avs-postal-code-response-code");
             AvsStreetAddressResponseCode = node.GetString("avs-street-address-response-code");
@@ -285,6 +288,7 @@ namespace Braintree
             SettlementBatchId = node.GetString("settlement-batch-id");
             PlanId = node.GetString("plan-id");
             SubscriptionId = node.GetString("subscription-id");
+            SurchargeAmount = node.GetDecimal("surcharge-amount");
             TaxAmount = node.GetDecimal("tax-amount");
             TaxExempt = node.GetBoolean("tax-exempt");
             CustomFields = node.GetDictionary("custom-fields");

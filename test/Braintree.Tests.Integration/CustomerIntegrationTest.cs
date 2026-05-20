@@ -2518,5 +2518,708 @@ namespace Braintree.Tests.Integration
             Assert.IsTrue(threeDSecureInfo.LiabilityShifted);
             Assert.IsTrue(threeDSecureInfo.LiabilityShiftPossible);
         }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenAmountIsNegative()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "-10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_CANNOT_BE_NEGATIVE, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationSucceedsWithMultipleOptions()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "15.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            var applePayCard = result.Target.ApplePayCards[0];
+            var verification = applePayCard.Verification;
+            Assert.AreEqual(VerificationStatus.VERIFIED, verification.Status);
+            Assert.AreEqual("15.00", verification.Amount.Value.ToString("F2"));
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, verification.MerchantAccountId);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationWhenOnlyVerifyCardIsTrue()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true
+                    }
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            var applePayCard = result.Target.ApplePayCards[0];
+            Assert.IsInstanceOf<ApplePayCard>(applePayCard);
+            var verification = applePayCard.Verification;
+            Assert.IsNotNull(verification);
+        }
+
+        [Test]
+        public void Create_WithApplePayDoesNotVerifyWhenVerifyCardIsFalse()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = false,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            var applePayCard = result.Target.ApplePayCards[0];
+            Assert.IsInstanceOf<ApplePayCard>(applePayCard);
+            var verification = applePayCard.Verification;
+            Assert.IsNull(verification);
+        }
+
+        [Test]
+        public void Create_WithRawApplePayParametersAndVerification()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    EciIndicator = "7",
+                    CardholderName = "John Doe",
+                    BillingAddress = new CreditCardAddressRequest
+                    {
+                        FirstName = "John",
+                        LastName = "Doe",
+                        StreetAddress = "123 Apple Street",
+                        Locality = "Cupertino",
+                        Region = "CA",
+                        PostalCode = "95014",
+                        CountryName = "United States of America"
+                    },
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "15.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual("John", result.Target.FirstName);
+            Assert.AreEqual("Doe", result.Target.LastName);
+            Assert.IsNotNull(result.Target.ApplePayCards);
+
+            var applePayCard = result.Target.ApplePayCards[0];
+            Assert.IsInstanceOf<ApplePayCard>(applePayCard);
+            Assert.IsNotNull(applePayCard.Token);
+            Assert.AreEqual("1111", applePayCard.Last4);
+
+            var verification = applePayCard.Verification;
+            Assert.AreEqual(VerificationStatus.VERIFIED, verification.Status);
+            Assert.AreEqual("15.00", verification.Amount.Value.ToString("F2"));
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, verification.MerchantAccountId);
+        }
+
+        [Test]
+        public void Update_WithApplePayCardVerificationAndMakeDefault()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe",
+                LastName = "Cool"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                FirstName = "Updated Joe",
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "05",
+                    ExpirationYear = "2025",
+                    Cryptogram = "some_cryptogram",
+                    EciIndicator = "7",
+                    CardholderName = "Updated Joe Cardholder",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "3.50",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                        MakeDefault = true
+                    }
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            Assert.AreEqual("Updated Joe", result.Target.FirstName);
+
+            var applePayCard = result.Target.ApplePayCards[0];
+            Assert.IsNotNull(applePayCard);
+            Assert.AreEqual("1111", applePayCard.Last4);
+            Assert.IsTrue(applePayCard.IsDefault.Value);
+
+            var verification = applePayCard.Verification;
+            Assert.AreEqual(VerificationStatus.VERIFIED, verification.Status);
+            Assert.AreEqual("3.50", verification.Amount.Value.ToString("F2"));
+            Assert.AreEqual(MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID, verification.MerchantAccountId);
+        }
+
+        [Test]
+        public void Update_WithApplePayCardVerificationErrorsOnNegativeAmount()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe",
+                LastName = "Cool"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                FirstName = "Updated Joe",
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "05",
+                    ExpirationYear = "2025",
+                    Cryptogram = "some_cryptogram",
+                    EciIndicator = "7",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "-1.00"
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_CANNOT_BE_NEGATIVE, errors[0].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationWhenOnlyVerifyCardIsTrue()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true
+                    }
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            var applePayCard = result.Target.ApplePayCards[0];
+            Assert.IsInstanceOf<ApplePayCard>(applePayCard);
+            var verification = applePayCard.Verification;
+            Assert.IsNotNull(verification);
+        }
+
+        [Test]
+        public void Update_WithApplePayDoesNotVerifyWhenVerifyCardIsFalse()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = false,
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                        VerificationAmount = "10.00"
+                    }
+                }
+            });
+
+            Assert.IsTrue(result.IsSuccess());
+            var applePayCard = result.Target.ApplePayCards[0];
+            Assert.IsInstanceOf<ApplePayCard>(applePayCard);
+            var verification = applePayCard.Verification;
+            Assert.IsNull(verification);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenAmountFormatIsInvalid()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "0.001",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_FORMAT_IS_INVALID, errors[0].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenAmountNotSupportedByProcessor()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "0.01",
+                        VerificationMerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_NOT_SUPPORTED_BY_PROCESSOR, errors[0].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenAmountIsTooLarge()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = (Math.Pow(2, 31) / 100.0).ToString(),
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_IS_TOO_LARGE, errors[0].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenMerchantAccountIdIsInvalid()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = "BAD_MERCHANT_ACCOUNT"
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationMerchantAccountId");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_MERCHANT_ACCOUNT_ID_IS_INVALID, errors[0].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenMerchantAccountIsSuspended()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.SUSPENDED_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationMerchantAccountId");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_MERCHANT_ACCOUNT_IS_SUSPENDED, errors[1].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenNetworkTransactionIdIsPresent()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    NetworkTransactionId = "test123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").OnField("NetworkTransactionIdNotAllowed");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_NETWORK_TRANSACTION_ID_NOT_ALLOWED, errors[0].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenAccountTypeIsInvalid()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                        VerificationAccountType = "ach"
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").OnField("VerificationAccountType");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_ACCOUNT_TYPE_IS_INVALID, errors[0].Code);
+        }
+
+        [Test]
+        public void Update_WithApplePayVerificationErrorsWhenAccountTypeNotSupported()
+        {
+            var customer = gateway.Customer.Create(new CustomerRequest
+            {
+                FirstName = "Joe"
+            }).Target;
+
+            var result = gateway.Customer.Update(customer.Id, new CustomerRequest
+            {
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Number = SandboxValues.CreditCardNumber.VISA,
+                    ExpirationMonth = "12",
+                    ExpirationYear = "2025",
+                    Cryptogram = "ApplePayCryptogram123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                        VerificationAccountType = "credit"
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAccountType");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_ACCOUNT_TYPE_NOT_SUPPORTED, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenAmountFormatIsInvalid()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "0.001",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_FORMAT_IS_INVALID, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenAmountNotSupportedByProcessor()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "0.01",
+                        VerificationMerchantAccountId = MerchantAccountIDs.CARD_PROCESSOR_BRAZIL_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_NOT_SUPPORTED_BY_PROCESSOR, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenAmountIsTooLarge()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = (Math.Pow(2, 31) / 100.0).ToString(),
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAmount");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_AMOUNT_IS_TOO_LARGE, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenMerchantAccountIdIsInvalid()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = "BAD_MERCHANT_ACCOUNT"
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationMerchantAccountId");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_MERCHANT_ACCOUNT_ID_IS_INVALID, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenNetworkTransactionIdIsPresent()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    NetworkTransactionId = "test123",
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").OnField("NetworkTransactionIdNotAllowed");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_NETWORK_TRANSACTION_ID_NOT_ALLOWED, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenAccountTypeIsInvalid()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                        VerificationAccountType = "ach"
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").OnField("VerificationAccountType");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_ACCOUNT_TYPE_IS_INVALID, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenAccountTypeNotSupported()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.NON_DEFAULT_MERCHANT_ACCOUNT_ID,
+                        VerificationAccountType = "credit"
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationAccountType");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_ACCOUNT_TYPE_NOT_SUPPORTED, errors[0].Code);
+        }
+
+        [Test]
+        public void Create_WithApplePayVerificationErrorsWhenMerchantAccountIsSuspended()
+        {
+            var result = gateway.Customer.Create(new CustomerRequest
+            {
+                PaymentMethodNonce = Nonce.ApplePayVisa,
+                ApplePayCard = new ApplePayCardRequest
+                {
+                    Options = new ApplePayCardOptionsRequest
+                    {
+                        VerifyCard = true,
+                        VerificationAmount = "10.00",
+                        VerificationMerchantAccountId = MerchantAccountIDs.SUSPENDED_MERCHANT_ACCOUNT_ID
+                    }
+                }
+            });
+
+            Assert.IsFalse(result.IsSuccess());
+            var errors = result.Errors.ForObject("ApplePay").ForObject("Options").OnField("VerificationMerchantAccountId");
+            Assert.AreEqual(ValidationErrorCode.APPLE_PAY_OPTIONS_VERIFICATION_MERCHANT_ACCOUNT_IS_SUSPENDED, errors[1].Code);
+        }
     }
 }

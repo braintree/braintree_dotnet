@@ -234,6 +234,54 @@ namespace Braintree.Tests
             Assert.AreEqual(configuration.Timeout, request.ReadWriteTimeout);
             Assert.IsFalse(request.ServicePoint.Expect100Continue);
         }
+
+        [Test]
+        public void GetHttpRequest_DoesNotMutateSecurityProtocol_WhenSystemDefault()
+        {
+            var originalProtocol = ServicePointManager.SecurityProtocol;
+            try
+            {
+                ServicePointManager.SecurityProtocol = (SecurityProtocolType)0; // SystemDefault
+                service.GetHttpRequest("https://www.example.com", "GET");
+                Assert.AreEqual((SecurityProtocolType)0, ServicePointManager.SecurityProtocol);
+            }
+            finally
+            {
+                ServicePointManager.SecurityProtocol = originalProtocol;
+            }
+        }
+
+        [Test]
+        public void GetHttpRequest_AddsTls12_WhenSecurityProtocolIsExplicit()
+        {
+            var originalProtocol = ServicePointManager.SecurityProtocol;
+            try
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11;
+                service.GetHttpRequest("https://www.example.com", "GET");
+                Assert.IsTrue((ServicePointManager.SecurityProtocol & SecurityProtocolType.Tls12) != 0);
+            }
+            finally
+            {
+                ServicePointManager.SecurityProtocol = originalProtocol;
+            }
+        }
+
+        [Test]
+        public void GetHttpRequest_DoesNotMutateSecurityProtocol_WhenTls12AlreadySet()
+        {
+            var originalProtocol = ServicePointManager.SecurityProtocol;
+            try
+            {
+                ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+                service.GetHttpRequest("https://www.example.com", "GET");
+                Assert.AreEqual(SecurityProtocolType.Tls12, ServicePointManager.SecurityProtocol);
+            }
+            finally
+            {
+                ServicePointManager.SecurityProtocol = originalProtocol;
+            }
+        }
 #endif
         [Test]
         public void Get_ExceptionPathTraversalUnencoded()
