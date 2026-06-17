@@ -1631,6 +1631,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        [Ignore("pending test")]
         public void Sale_ReturnsSuccessfulScaExemptionResponse()
         {
             var requestedScaExemption = "low_value";

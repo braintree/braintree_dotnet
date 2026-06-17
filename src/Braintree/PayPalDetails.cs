@@ -8,6 +8,8 @@ namespace Braintree
         public virtual string BillingAgreementId { get; protected set; }
         public virtual string CaptureId { get; protected set; }
         public virtual string CustomField { get; protected set; }
+        // NEXT_MAJOR_VERSION Remove DebugId
+        [ObsoleteAttribute("the attribute DebugId has been deprecated.", false)]
         public virtual string DebugId { get; protected set; }
         public virtual string Description { get; protected set; }
         public virtual string ImageUrl { get; protected set; }
@@ -39,7 +41,10 @@ namespace Braintree
             BillingAgreementId = node.GetString("billing-agreement-id");
             CaptureId = node.GetString("capture-id");
             CustomField = node.GetString("custom-field");
+            // NEXT_MAJOR_VERSION Remove this pragma warning when we remove DebugId
+            #pragma warning disable 618
             DebugId = node.GetString("debug-id");
+            #pragma warning restore 618
             Description = node.GetString("description");
             ImageUrl = node.GetString("image-url");
             ImplicitlyVaultedPaymentMethodGlobalId = node.GetString("implicitly-vaulted-payment-method-global-id");

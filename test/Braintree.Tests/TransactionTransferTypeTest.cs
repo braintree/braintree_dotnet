@@ -38,7 +38,8 @@ namespace Braintree.Tests
                         FirstName = "Alice",
                         LastName = "Silva",
                         MiddleName = "A",
-                        AccountReferenceNumber = "1000012345",
+                        AccountReferenceNumber = "9876543210",
+                        AccountReferenceNumberType = "PHONE_NUMBER",
                         DateOfBirth = new DateTime(2009, 1, 1),
                         Address = new AddressRequest
                         {
@@ -53,6 +54,8 @@ namespace Braintree.Tests
                         FirstName = "Bob",
                         LastName = "Souza",
                         MiddleName = "A",
+                        AccountReferenceNumber = "1444241-313452",
+                        AccountReferenceNumberType = "IBAN",
                         Address = new AddressRequest
                         {
                             StreetAddress = "Door 10, 10th Main",
@@ -72,13 +75,16 @@ namespace Braintree.Tests
             Assert.IsTrue(xml.Contains("<last-name>Silva</last-name>"));
             Assert.IsTrue(xml.Contains("<middle-name>A</middle-name>"));
             Assert.IsTrue(xml.Contains("<date-of-birth type=\"datetime\">2009-01-01 00:00:00Z</date-of-birth>"));
-            Assert.IsTrue(xml.Contains("<account-reference-number>1000012345</account-reference-number>"));
+            Assert.IsTrue(xml.Contains("<account-reference-number>9876543210</account-reference-number>"));
+            Assert.IsTrue(xml.Contains("<account-reference-number-type>PHONE_NUMBER</account-reference-number-type>"));
             Assert.IsTrue(xml.Contains("<address>"));
             Assert.IsTrue(xml.Contains("</sender>"));
             Assert.IsTrue(xml.Contains("<receiver>"));
             Assert.IsTrue(xml.Contains("<first-name>Bob</first-name>"));
             Assert.IsTrue(xml.Contains("<last-name>Souza</last-name>"));
             Assert.IsTrue(xml.Contains("<middle-name>A</middle-name>"));
+            Assert.IsTrue(xml.Contains("<account-reference-number>1444241-313452</account-reference-number>"));
+            Assert.IsTrue(xml.Contains("<account-reference-number-type>IBAN</account-reference-number-type>"));
             Assert.IsTrue(xml.Contains("</receiver>"));
             Assert.IsTrue(xml.Contains("</transfer>"));
         }

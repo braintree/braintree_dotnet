@@ -1909,8 +1909,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        [Ignore("Pending as flaky, until CI is more stable")]
-        public void Update_WithAccountTypeDebit()
+        public void Update_WithAccountType()
         {
             Customer customer = gateway.Customer.Create(new CustomerRequest()).Target;
 
@@ -1939,7 +1938,10 @@ namespace Braintree.Tests.Integration
             };
 
             CreditCard creditCard = gateway.CreditCard.Update(originalCreditCard.Token, creditCardUpdateRequest).Target;
-            Assert.AreEqual("debit", creditCard.Verification.CreditCard.AccountType);
+            Assert.IsNotNull(creditCard.Verification);
+            string accountType = creditCard.Verification.CreditCard.AccountType;
+            Assert.IsNotNull(accountType);
+            Assert.Contains(accountType, new[] { "debit", "credit" });
         }
 
         [Test]

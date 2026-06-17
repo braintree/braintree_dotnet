@@ -8,6 +8,7 @@ namespace Braintree
     public class ReceiverRequest: Request 
     {
         public string AccountReferenceNumber { get; set; }
+        public string AccountReferenceNumberType { get; set; }
         public AddressRequest Address { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -52,6 +53,10 @@ namespace Braintree
             
             if (AccountReferenceNumber != null) {
                 builder.AddElement("account-reference-number", AccountReferenceNumber);
+            }
+
+            if (AccountReferenceNumberType != null) {
+                builder.AddElement("account-reference-number-type", AccountReferenceNumberType);
             }
             
             if (TaxId != null) {

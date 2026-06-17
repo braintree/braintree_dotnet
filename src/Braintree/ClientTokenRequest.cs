@@ -14,6 +14,7 @@ namespace Braintree
         public string[] Domains { get; set; }
         public string MerchantAccountId { get; set; }
         public ClientTokenOptionsRequest Options { get; set; }
+        public string PreferredPaymentMethodToken { get; set; }
         public int Version { get; set; }
 
         public ClientTokenRequest()
@@ -39,6 +40,7 @@ namespace Braintree
             if (Domains != null) builder.AddElement("domains", Domains);
             if (MerchantAccountId != null) builder.AddElement("merchant-account-id", MerchantAccountId);
             if (Options != null) builder.AddElement("options", Options);
+            if (PreferredPaymentMethodToken != null) builder.AddElement("payment-method-id", PreferredPaymentMethodToken);
             if (Version != 0) builder.AddElement("version", Version);
 
             return builder;

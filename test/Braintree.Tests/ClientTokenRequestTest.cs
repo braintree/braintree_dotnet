@@ -24,5 +24,24 @@ namespace Braintree.Tests
             Assert.IsTrue(request.ToXml().Contains("<merchant-account-id>987654321</merchant-account-id>"));
             Assert.IsTrue(request.ToXml().Contains("<version>2</version>"));
         }
+
+        [Test]
+        public void ToXml_Includes_PreferredPaymentMethodToken()
+        {
+            var request = new ClientTokenRequest()
+            {
+                PreferredPaymentMethodToken = "token123"
+            };
+
+            Assert.IsTrue(request.ToXml().Contains("<payment-method-id>token123</payment-method-id>"));
+        }
+
+        [Test]
+        public void ToXml_Omits_PreferredPaymentMethodToken_When_Null()
+        {
+            var request = new ClientTokenRequest();
+
+            Assert.IsFalse(request.ToXml().Contains("payment-method-id"));
+        }
     }
 }

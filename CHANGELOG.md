@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.41.0
+- Add `PreferredPaymentMethodToken` to `ClientTokenRequest`
+- Deprecate `DebugId` on `PayPalDetails`, `LocalPaymentDetails`, and `SepaDirectDebitAccountDetails`
+- Add `accountReferenceNumberType` to sender and receiver in transfer on `Transaction`
+- Add `CannotCloneThirdPartyCofNetworkTokenTransaction (915274)` transaction validation error code
+
 ## 5.40.0
 - Add Local Payment Context support with `LocalPaymentContextGateway.Create` and `LocalPaymentContextGateway.Find` methods
 - Add support for MBWAY and CRYPTO payment types

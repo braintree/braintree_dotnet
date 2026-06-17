@@ -15,6 +15,8 @@ namespace Braintree
         public virtual SettlementType SettlementType { get; protected set; }
         public virtual string BankReferenceToken { get; protected set; }
         public virtual string CaptureId { get; protected set; }
+        // NEXT_MAJOR_VERSION Remove DebugId
+        [ObsoleteAttribute("the attribute DebugId has been deprecated.", false)]
         public virtual string DebugId { get; protected set; }
         public virtual string MerchantOrPartnerCustomerId { get; protected set; }
         public virtual string PayPalV2OrderId{ get; protected set; }
@@ -29,7 +31,10 @@ namespace Braintree
         {
             BankReferenceToken = node.GetString("bank-reference-token");
             CaptureId = node.GetString("capture-id");
+            // NEXT_MAJOR_VERSION Remove this pragma warning when we remove DebugId
+            #pragma warning disable 618
             DebugId = node.GetString("debug-id");
+            #pragma warning restore 618
             MandateType = node.GetEnum<MandateType>("mandate-type", MandateType.ONE_OFF);
             MerchantOrPartnerCustomerId = node.GetString("merchant-or-partner-customer-id");
             PayPalV2OrderId = node.GetString("paypal-v2-order-id");

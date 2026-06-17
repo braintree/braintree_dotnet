@@ -87,6 +87,29 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
+        public void Generate_CanPassPreferredPaymentMethodToken()
+        {
+            var customer = gateway.Customer.Create().Target;
+            var clientTokenRequest = new ClientTokenRequest
+            {
+                CustomerId = customer.Id,
+                PreferredPaymentMethodToken = "a-pmt"
+            };
+            var encodedClientToken = gateway.ClientToken.Generate(clientTokenRequest);
+            var decodedClientToken = Encoding.UTF8.GetString(Convert.FromBase64String(encodedClientToken));
+            var clientToken = Regex.Unescape(decodedClientToken);
+
+            var paymentMethodIdJwt = TestHelper.extractParamFromJson("paymentMethodIdJwt", clientToken);
+            Assert.IsNotEmpty(paymentMethodIdJwt);
+
+            var jwtSegment = paymentMethodIdJwt.Split('.')[1];
+            var padding = jwtSegment.Length % 4;
+            if (padding != 0) jwtSegment += new string('=', 4 - padding);
+            var jwtPayload = Encoding.UTF8.GetString(Convert.FromBase64String(jwtSegment.Replace('-', '+').Replace('_', '/')));
+            Assert.AreEqual("a-pmt", TestHelper.extractParamFromJson("pmid", jwtPayload));
+        }
+
+        [Test]
         public void Generate_FailOnDuplicatePaymentMethodForCustomer()
         {
             var customer = gateway.Customer.Create().Target;

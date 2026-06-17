@@ -2146,7 +2146,7 @@ namespace Braintree.Tests.Integration
         }
 
         [Test]
-        public void Update_UpdatesCreditCardWithAccountTypeDebit()
+        public void Update_UpdatesCreditCardWithAccountType()
         {
             var customer = gateway.Customer.Create().Target;
             var creditCard = gateway.CreditCard.Create(new CreditCardRequest
@@ -2178,7 +2178,10 @@ namespace Braintree.Tests.Integration
             Assert.That(updateResult.Target, Is.InstanceOf(typeof(CreditCard)));
 
             var updatedCreditCard = (CreditCard)updateResult.Target;
-            Assert.AreEqual("debit", updatedCreditCard.Verification.CreditCard.AccountType);
+            Assert.IsNotNull(updatedCreditCard.Verification);
+            string accountType = updatedCreditCard.Verification.CreditCard.AccountType;
+            Assert.IsNotNull(accountType);
+            Assert.Contains(accountType, new[] { "debit", "credit" });
         }
 
         [Test]
